@@ -1,0 +1,54 @@
+xPLHal Release Notes
+====================
+
+Version 1.60
+Release Date: 15th July 2007
+
+Fixes:
+- Updated to build against .Net 2.0 and modified to install and run under Windows Vista.
+
+________________________________________
+
+Version 1.54
+Release Date: 6th February 2007
+
+New Features:
+- Support for new system variables in determinators:
+SYS_DATE_UK, SYS_DATE_US, SYS_DATE_YMD, SYS_HOUR, SYS_MINUTE and SYS_SECOND.
+
+Modifications:
+- Compliance with XHCP 1.5 specification (see below)
+- XHCP: CAPABILITIES command now conforms to XHCP 1.5 spec
+- XHCP: Support for 0/1 as well as N/Y in ADDEVENT command for day of week specification
+- XHCP: Removed GETSUB command
+- XHCP: Replaced RUNSCRIPT command with RUNSUB
+
+Version 1.53
+Release Date: 20 January 2006
+
+Fixes:
+- Fix to a number of issues surrounding support for grouping determinators.
+  Users are advised to also upgrade to xPLHal Manager 1.53 or later.
+
+Version 1.52
+Release Date: 1 January 2006
+
+New Features:
+- Support for groups of determinators (requires xPLHal Manager v1.52 or later)
+
+________________________________________
+
+Version 1.5
+Release Date: 21st November 2005
+
+Special Considerations:
+- xPLHal no longer includes a built-in xPL hub.
+  Users must ensure they are running a stand-alone hub before upgrading to this
+  version of xPLHal.
+
+New Features:
+- xPLHal is built with the latest xPL .NET library (v4.1).
+
+Fixes:
+- Fix to "Delete Stored Configuration" not deleting all related files from the xPLHal data directory.
+- Improved service shutdown times in certain situations.

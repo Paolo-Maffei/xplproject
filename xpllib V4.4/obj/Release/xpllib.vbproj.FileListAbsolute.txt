@@ -1,0 +1,5 @@
+H:\Visual Studio 2008\Projects\xpllib_Source_V4.4\bin\xpllib.dll
+H:\Visual Studio 2008\Projects\xpllib_Source_V4.4\bin\xpllib.xml
+H:\Visual Studio 2008\Projects\xpllib_Source_V4.4\obj\Release\ResolveAssemblyReference.cache
+H:\Visual Studio 2008\Projects\xpllib_Source_V4.4\obj\Release\xpllib.dll
+H:\Visual Studio 2008\Projects\xpllib_Source_V4.4\obj\Release\xpllib.xml

@@ -1,0 +1,55 @@
+<html>
+
+<head>
+  <title>xAP Language Extensions</title>
+</head>
+
+<body>
+<h2>xAP Language Extensions</h2>
+The xAP class provides xAP-specific extensions to VBScript, and can be used from any of your scripts when running under xPLHal.
+<br>
+The <b>section</b> parameters refer to a zero-based index, where 0=header, 1=1st body section and so on.
+<br>
+The following xAP-specific functions are currently available:
+<br>
+
+<h4>To return the number of bodies in a xAP message</h4>
+<pre>bodycount = xap.BodyCount(xapmsg)</pre>
+This returns the number of body sections, not including the header.
+<br>
+
+<h4>To retrieve a named value from a xAP message</h4>
+<pre>Myvar = xap.GetParam(xapmsg,section,param)</pre>
+This returns the value of the given param name from the specified section.
+<br>
+
+<h4>To retrieve the number of name/value pairs from a particular section of a xAP message</h4>
+<pre>Myvar = xap.GetParamCount(xapmsg,section)</pre>
+This returns the number of name/value pairs in the section.
+<br>
+
+<h4>To retrieve a parameter name by index from a xAP message</h4>
+<pre>Myvar = xap.GetParamName(xapmsg,section,index)</pre>
+This returns the name of the parameter by it's index in the specified section. Use the GetParamCount function to determine the number of values in a section.
+<br>
+
+<h4>To retrieve a parameter value by index from a xAP message</h4>
+<pre>Myvar = xap.GetParamValue(xapmsg,section,index)</pre>
+This returns the value of the parameter by it's index in the specified section. Use the GetParamCount function to determine the number of values in a section.
+<br>
+
+<h4>To retrieve the name of a body section</h4>
+<pre>Myvar = xap.GetSection(xapmsg,section)</pre>
+This returns the name of the specified section.
+<br>
+
+<h4>To send a xAP message</h4>
+<pre>Call xap.SendMsg(uid, class, source, target, bodies)</pre>
+XPLHal builds the full xAP header from the supplied parameters.<br>
+If the <b>target</b> parameter is an empty string (""), the target= element will be omitted from the header.<br>
+The <b>bodies</b> parameter must contain all required delimiters such as { and }.
+<br>
+
+
+</body>
+</html>

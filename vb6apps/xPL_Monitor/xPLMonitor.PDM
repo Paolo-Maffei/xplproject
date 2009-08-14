@@ -1,0 +1,103 @@
+[Root]
+Most Recent Package=xPL Monitor
+
+[Package|xPL Monitor|xPL Monitor]
+Icon1=xPLMonitor.exe
+Title1=xPL Monitor
+StartIn1=$(AppPath)
+Key1=Icon2
+
+
+[Package|xPL Monitor|xP LMonitor]
+Icon1=xPLMonitor.exe
+Title1=xP LMonitor
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|xPL Monitor|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\xplhalnet\Modules VB6\xPL_Monitor\Package
+
+[Package|xPL Monitor|Configure DAO ISAMs]
+Applicable=No
+
+[Package|xPL Monitor|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|xPL Monitor|Files Found]
+
+[Package|xPL Monitor|Files Released]
+
+[Package|xPL Monitor|Missing Dependency Information]
+
+[Package|xPL Monitor|Out-of-Date Dependency Information]
+
+[Package|xPL Monitor|Files Added]
+
+[Package|xPL Monitor|Files Removed]
+
+[Package|xPL Monitor|Files In Project]
+C:\xplhalnet\Modules VB6\xPL_Monitor\xPLMonitor.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=Yes
+
+[Package|xPL Monitor|Configure Registry Files]
+Applicable=No
+
+[Package|xPL Monitor|Configure Remote Servers]
+Applicable=No
+
+[Package|xPL Monitor|Install Locations]
+C:\xplhalnet\Modules VB6\xPL_Monitor\xPLMonitor.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\xplhalnet\Modules VB6\xPL_WM918\xPL.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=$(WinSysPath)
+
+[Package|xPL Monitor|Configure Shared Files]
+Applicable=Yes
+C:\xplhalnet\Modules VB6\xPL_Monitor\xPLMonitor.exe=No
+
+[Package|xPL Monitor|Distribution]
+Type=single
+Size=
+Title=xPL Monitor
+
+[Package|xPL Monitor|IconGroups]
+Group0=xPL
+PrivateGroup0=0
+Parent0=$(Programs)
+
+[Package|xPL Monitor|xPL]
+Icon1=xPLMonitor.exe
+Title1=xPL Monitor
+StartIn1=$(AppPath)
+Key1=Icon2
+
+[Package|xPL Monitor|Package]
+PackageFolder=C:\xplhalnet\Modules VB6\xPL_Monitor\Package
+ProjectFolder=C:\xplhalnet\Modules VB6\xPL_Monitor
+ServerSideCab=
+File1=C:\xplhalnet\Modules VB6\xPL_Monitor\Package\setup.exe
+File2=C:\xplhalnet\Modules VB6\xPL_Monitor\Package\Setup.Lst
+File3=C:\xplhalnet\Modules VB6\xPL_Monitor\Package\xPLMonitor.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

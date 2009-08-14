@@ -1,0 +1,46 @@
+<html>
+
+<head>
+  <title>Global Variables</title>
+</head>
+
+<body>
+<h2>Global Variables</h2>
+Global variables (also referred to as `globals') are a collection of user-defined variables that are maintained by xPLHal. If you need to maintain any state information in your scripts, you should store it in the globals collection.<br>
+The globals collection is non-volatile, meaning it is written to disk to ensure that the state of all globals is maintained across system restarts. The globals collection is also replicated to other xPLHal servers that are configured as slaves in a replicated environment.
+<br>
+<h4>To set the value of a global</h4>
+The following code demonstrates setting the value of a global.<br>
+Note that if a global does not exist, it will be created the first time you attempt to write a value to it.<br>
+<pre>sys.value("MyGlobal") = "my string"
+</pre>
+Although you can store any value in a global, it is recommended that you store only strings and numbers. Attempting to store references to complex data types, or ActiveX objects could result in unexpected behaviour.
+<br>
+<h4>To retrieve the value of a global</h4>
+The following code retrieves the value of the global MyGlobal:<br>
+<pre>Dim s
+s = sys.value("MyGlobal")
+</pre>
+<br>
+<h4>Listing all globals</h4>
+In the xPLHal Manager, clicking on the Globals node in the tree will display a list of all current globals and their associated values.
+<br>
+<h4>Important Notes</h4>
+In order to maintain state across system restarts, xPLHal stores the Mode and Period settings in two global variables called Mode and Period.<br>
+In order to avoid conflicts, you should not use either Mode or Period as a global name, nor should you use sys.value("Mode") or sys.value("Period") to read or set the current mode or period.
+Instead you should use sys.setting("Mode") and sys.setting("Period"). For more information, 
+see the topics on <a href="modes.htm">Modes</a> and <a href="periods.htm">Periods</a>.
+<br>
+<h4>Detecting changes in the value of a global variable</h4>
+You can write a sub-routine that will be executed whenever the value of a particular global changes.
+<br>
+The sub-routine name should be in the following format:
+&lt;global_name&gt;_global()<br>
+For example, the following sub-routine will be executed whenever the value of the global variable "BoilerTemp" changes, and the code will transmit an xPL message announcing the new value to any TTS-enabled applications on the xPL network.<br>
+<pre>
+Sub BoilerTemp_global()
+  call xpl.SendMsg("","","tts.basic","speech=The boiler temperature is now " &amp; sys.value("BoilerTemp") &amp; " degrees.")
+End Sub
+</pre>
+</body>
+</html>

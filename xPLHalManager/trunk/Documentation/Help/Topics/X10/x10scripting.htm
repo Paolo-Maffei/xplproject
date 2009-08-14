@@ -1,0 +1,42 @@
+<html>
+
+<head>
+  <title>X10 Scripting</title>
+</head>
+
+<body>
+<h2>X10 Scripting</h2>
+When an incoming X10 signal is received by xPLHal, the following sub-routines will be searched for a match, in addition to the standard sub-routines discussed in the <a href="../scripting/execution.htm">Sub-routine Execution</a> topic:<br>
+<br>
+X10_&lt;device/house&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;command&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;mode&gt;_&lt;command&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;mode&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;period&gt;_&lt;command&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;command&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+X10_&lt;device/house&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+e.g. X10_EVENT_A1_Occupied_Day_ON_Trigger(xPLMessage)<br>
+e.g. X10_H_ON_Command(xPLMessage)<br>
+<br>
+Note: Only the subs matching the selected schema are considered in the search.<br>
+IF NO MATCH IS FOUND, THEN NO SCRIPT IS EXECUTED.<br>
+<br>
+Additionally if a device of type MOTION is set with a timeout value in the x10 attributes,
+then when the x10 device timeout is reached, the device state is set to off and the routine:
+X10_&lt;device&gt;_Timeout() is executed, if it exists
+Also, for a motion device (e.g. A1) the standard x10 routine OFF is executed when the motion
+sensor sends it's own preprogrammed off event.<br>
+<br>
+It may be desirable for motion devices to use the xPLHAl timeout's for controlling lights etc,
+and use the device preprogrammed timeout for alarm cancellation etc.<br>
+<br>
+Also, if a device is activated (which should be under motion detector timeout control) outside of a 
+motion detector routine, the motion detector timeout will NOT be activated.
+To activate a device manually, outside of a motion detector script, simply send an X10 command
+that activates the motion detector device. xPLHal will recognise this scenario, and activate
+the appropriate motion detector script in response.
+Alternatively, use the x10.attrib() command to set the motion device's state to on.
+
+</body>
+</html>

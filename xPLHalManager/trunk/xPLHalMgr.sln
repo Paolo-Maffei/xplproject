@@ -1,0 +1,37 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLHalMgr", "xPLHalMgr.vbproj", "{CA565FD9-CEFD-4EBC-B2CF-451841864209}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "xPLHalMgrMerge", "xPLHalMgrMerge\xPLHalMgrMerge.vdproj", "{672E2CA6-92DE-4CB4-A022-D37771C1F8DC}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "Setup\Setup.vdproj", "{7E97AF73-627E-44EF-AEFF-69DD2E78330A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{672E2CA6-92DE-4CB4-A022-D37771C1F8DC} = {672E2CA6-92DE-4CB4-A022-D37771C1F8DC}
+		{CA565FD9-CEFD-4EBC-B2CF-451841864209} = {CA565FD9-CEFD-4EBC-B2CF-451841864209}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CA565FD9-CEFD-4EBC-B2CF-451841864209}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CA565FD9-CEFD-4EBC-B2CF-451841864209}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CA565FD9-CEFD-4EBC-B2CF-451841864209}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CA565FD9-CEFD-4EBC-B2CF-451841864209}.Release|Any CPU.Build.0 = Release|Any CPU
+		{672E2CA6-92DE-4CB4-A022-D37771C1F8DC}.Debug|Any CPU.ActiveCfg = Debug
+		{672E2CA6-92DE-4CB4-A022-D37771C1F8DC}.Debug|Any CPU.Build.0 = Debug
+		{672E2CA6-92DE-4CB4-A022-D37771C1F8DC}.Release|Any CPU.ActiveCfg = Release
+		{672E2CA6-92DE-4CB4-A022-D37771C1F8DC}.Release|Any CPU.Build.0 = Release
+		{7E97AF73-627E-44EF-AEFF-69DD2E78330A}.Debug|Any CPU.ActiveCfg = Debug
+		{7E97AF73-627E-44EF-AEFF-69DD2E78330A}.Release|Any CPU.ActiveCfg = Release
+		{7E97AF73-627E-44EF-AEFF-69DD2E78330A}.Release|Any CPU.Build.0 = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		VisualSVNWorkingCopyRoot = .
+	EndGlobalSection
+EndGlobal

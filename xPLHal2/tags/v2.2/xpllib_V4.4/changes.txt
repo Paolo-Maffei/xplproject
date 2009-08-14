@@ -1,0 +1,150 @@
+xPL Library for .NET Release Information
+========================================
+
+Authors:
+  Tom Van den Panhuyzen
+  tomvdp at gmail(dot)com
+  http://blog.boxedbits.com/xpl
+  
+  and 
+  
+  John Bent john at xplproject(dot)org(dot)uk
+ 
+ 
+Version 4.4, 18th of May 2008
+
+Modifications:
+--------------
+
+- Configuration items must be defined  before they can be used, but  they remain
+available throughout the lifetime of the  Listener object.  (There used to be  a
+problem  with   empty  multi-valued   configuration  items   after  receiving  a
+configuration from xPLHAL.)
+- The  XplConfigDone event  is raised  when either  the configuration was loaded
+from a local XML  file or when it  was received from an  xpl manager application
+like xPLHAL.  Examine the event parameter if it matters what the source was.
+- XplMsg:  completely rewritten.   It enforces  correct xpl  messages.  The  old
+interface is kept for compatibility reasons  but please do not use the  obsolete
+properties in new code.
+
+See the readme file for an example on how to use the xPLListener and XpMsg objects.
+The usage differs slightly from previous versions.
+
+_______________________________________________________________________________
+
+Version 4.3, 30th June 2007
+
+Fixes:
+- Fix to socket binding problems under Windows Vista.
+
+_______________________________________________________________________________
+
+Version 4.2, 24th December 2005
+
+Modifications:
+- The resolution of the timer in the xPL Listener object has been improved.
+
+_______________________________________________________________________________
+
+Version 4.1, 27th September 2005
+
+New Features
+------------
+
+- The xPL listener will now respond to hbeat.request messages with a heartbeat message (either config.app or hbeat.app as appropriate).  The response will be between 1 and 3 seconds after the request was received.
+- The version number of the calling application is now included in all heartbeat messages.
+
+_______________________________________________________________________________
+
+Version 4.0, 19th September 2005
+
+New Features:
+------------
+
+- The xPL Listener will now send out hbeat/config messages at a 3 second interval to probe for a hub.
+- If a hub is not detected within 120 seconds, this interval changes to 30 seconds.
+- A new property of the xPLListener object called JoinedXplNetwork can be used by applications
+  to determine whether a hub has been detected.
+- A new event called xPLJoinedXplNetwork is raised whenever a hub is detected.
+
+Modifications:
+--------------
+
+- A built-in hub is no longer included.
+- The SuppressHub parameter has been removed from the constructor of the xPLListener object.
+
+Fixes:
+-----
+
+- Heartbeat messages were being sent out at interval+1 minutes.
+
+_______________________________________________________________________________
+
+Version 3.1, 3rd January 2005
+
+New Features
+------------
+
+- Added a property to the filters object called AlwaysPassMessages - set to false by default.
+If set to true, the listener object will always raise the XplMessageReceived event
+when an xPL message is received, even if the listener is waiting to be configured.
+This behaviour can be useful for applications such as xPLHal that need to act
+as configuration managers.
+
+_______________________________________________________________________________
+
+Version 3.0, 2nd January 2004
+
+New Features
+------------
+
+** No more need for an xPL Hub **
+
+** Configurable Filters **
+
+Use xPLHal to set the filters of the xPL applications.
+
+
+** Multi-valued Properties **
+
+You have filters[16] and groups[16], now you can have your own myproperty[x].
+
+
+** Security "ListenOn/ListenTo" **
+
+ListenOn:  Configure the  xPL applications  to listen  on a  specific IP.   This
+allows computers  with multiple  IP addresses  (multiple network  cards, virtual
+networks, ...) to run xPL without duplicating messages.
+
+ListenTo: Configure the xPL applications to accept only traffic from a  specific
+(list of) address(es).
+
+By default both options are set to "ANY_LOCAL".  This starts the xPL application
+listening on  any local  IP address  and makes  it accept  only traffic from the
+local pc.  This is a bit  more stringent than previous xPLLib versions  as these
+accept any incoming traffic.
+
+The hub automatically uses the same security settings.
+
+ListenOn and ListenTo are configurable via registry settings in
+[HKLM]/Software/xPL/ListenOnAddress
+[HKLM]/Software/xPL/ListenToAddresses
+
+
+Possible values are:
+ListenOnAddress: "ANY_LOCAL" or a specific IP address.
+ListenToAddresses: "ANY", "ANY_LOCAL"  or a list of specific comma-separated IP
+addresses.
+
+These registry settings are configurable by the xPL Network Settings Utility, available from:
+http://www.xpl.myby.co.uk/downloads/utils/xplsettings.zip
+
+Fixes
+-----
+
+* Does not keep more UDP ports open than necessary.
+* Better event logging in case of failure.
+* Fixed: HBEAT.END was not always sent.
+* Fixed: cleanup of expired hubclients.
+_______________________________________________________________________________
+

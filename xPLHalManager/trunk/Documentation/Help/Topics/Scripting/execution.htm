@@ -1,0 +1,103 @@
+<html>
+
+<head>
+  <title>Sub-routine Execution</title>
+</head>
+
+<body>
+<h2>Sub-Routine Execution</h2>
+This topic explains what xPLHal does when it receives an xPL message, and the order in which it executes associated sub-routines.
+<br><br>
+When a message is received, xPLHal does the following:<br>
+1) Checks if it has a script for <source>_<instance><br>
+<br>
+2) If a script doesn't exist, it creates a blank script in the root of the scripting hierarchy.
+You can add code such as the following to the newly created script - in this case the xPL device in question is tonyt-tts.voice1:<br>
+<pre>
+Sub TONYT_TTS_VOICE1_Trigger(xPLMessage)
+  ' these are messages of type xpl-trig
+End Sub
+
+Sub TONYT_TTS_VOICE1_Command(xPLMessage)
+  ' these are messages of type xpl-cmnd
+End sub
+
+Sub TONYT_TTS_VOICE1_Status(xPLMessage)
+  ' these are messages of type xpl-stat, except those covered below
+End Sub
+
+Sub TONYT_TTS_VOICE1_Hearbeat(xPLMessage)
+  ' these are messages of type xpl-stat with Schema hbeat.*
+End Sub
+
+Sub TONYT_TTS_VOICE1_Config()
+  ' these are messages of type xpl-stat with Schema config.*
+End Sub
+
+Sub TONYT_TTS_VOICE1_Expired()
+  ' this sub-routine is executed on loss of a heartbeat
+End Sub
+</pre>
+
+The parameter xPLMessage contains parameters and values seperated by CHR(10).<br>
+You can use the helper functions provided by the <a href="../reference/xplclass.htm">xPL Language Extensions</a> to easily interrogate the incoming XplMsg information.<br>
+<br>
+3) It will then run the first found sub in this order, depending on schema options:<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;mode&gt;_&lt;Message_Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;period&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;Message TYpe&gt;(xPLMessage)<br>
+&lt;source>_<instance>_<mode>_<period>_<Message Type>(xPLMessage)<br>
+&lt;source>_<instance>_<mode>_<Message Type>(xPLMessage)<br>
+&lt;source>_<instance>_<period>_<Message Type>(xPLMessage)<br>
+&lt;source&gt;_&lt;instance&gt;_&lt;Message Type&gt;(xPLMessage)<br>
+e.g. source_myinstance_Trigger(xPLMessage)<br>
+<br>
+Note: <Message Type> is Trigger or Command<br>
+<br>
+Note: Only the subs matching the selected schema are considered in the search
+<br>
+The object of this schema is to make the scripting of Message events, dependant on system modes 
+and/or periods as quick, effective and flexible as possible.
+It is recommended that these scripts are placed in the same script files as SOURCE_INSTANCE_Trigger().
+<br><br>
+
+<h3>GLOBALS Scripting</h3>
+When a Global value is set (and the value actually changes) then a script is automatically run,
+if it exists. The sub name is &lt;global name&gt;_Change().<br>
+So, for global 'Boiler Temp' the sub to create is Boiler_Temp_Change().<br>
+
+<h3>HEARTBEAT / CONFIG Scripting</h3>
+When xPLHal receives a xPL-STAT message it will run a script based on the Schema, either<br>
+<br>
+&lt;source&gt;_&lt;Instance&gt;_Config() for CONFIG.APP or CONFIG.BASIC<br>
+or<br>
+&lt;source&gt;_&lt;Instance&gt;_Heartbeat(xPLMessage) for HBEAT.APP or HBEAT.BASIC<br>
+<br>
+All other schemas used in the xPL-STAT messages are processed as normal messages (see previous) of type _Status.<br>
+<br>
+This script is in the same script file as SOURCE_INSTANCE_Trigger().<br>
+An example of it's use is that a DAWN/DUSK xPL application could include the current day/night status in the heartbeat.
+The DAWN_DUSK_Heartbeat() script updates the 'Period' global when executed.<br>
+
+
+<h3>EXPIRED Scripting</h3>
+When an application's or device's heartbeat goes missing for approximately 
+2 * it's heartbeat + (0 to 30) seconds the script 
+&lt;source&gt;_&lt;instance&gt;_Expired() is executed, if it exists.<br>
+This can be used to relaunch the application if local, or some other action.<br>
+Once the script is started the applications expiry is set to 
+current date/time + (2 * expected heartbeat interval) to allow time for the script
+to execute and the application, if relaunched, to respond with a heartbeat.
+If the script does not exist, then the heartbeat watch is automatically suspended.
+
+
+</body>
+</html>

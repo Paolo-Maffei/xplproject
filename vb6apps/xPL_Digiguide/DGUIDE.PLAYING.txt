@@ -1,0 +1,39 @@
+Schema Definition
+-----------------
+
+Class = DGUIDE
+Type  = PLAYING
+
+This Schema provides digiguide programme currently playing information to an xpl implementation
+
+
+XPL-STAT Structure
+------------------
+DGUIDE.PLAYING
+{
+TIME=<hh:mm when program started>
+DURATION=<minutes>
+TITLE=<programme title>
+CATEGORY=<programme category description>
+DESCRIPTION=<programme description>
+CHANNELNAME=<name of channel>
+CHANNELNO=<assigned channel no>
+REMINDER=<digiguide reminder code>
+SMARTSEARCH=<digiguide smart search code>
+FAVOURITE=<digiguide favourite code>
+}
+This message is sent every minute for every programme/channel
+
+
+Schema Specific Notes
+---------------------
+All text limited to first 128 charcters
+This sends a message every 1 minute for each programme - use with caution!
+
+
+Standard Notes
+--------------
+HBEAT.* = hbeat.basic or hbeat.app etc
+(hbeat items) = standard .basic or .app heartbeat items
+[] = optional
+<> = parameter value description

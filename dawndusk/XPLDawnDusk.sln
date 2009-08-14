@@ -1,0 +1,23 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "XPLDawnDusk", "XPLDawnDusk.vbproj", "{816EFCEB-7541-4106-B590-E9535DA09896}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "XPLDawnDuskSetup", "XPLDawnDuskSetup\XPLDawnDuskSetup.vdproj", "{9064B9D7-93FC-4BF3-AE03-EA9821309ED2}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{816EFCEB-7541-4106-B590-E9535DA09896}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{816EFCEB-7541-4106-B590-E9535DA09896}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{816EFCEB-7541-4106-B590-E9535DA09896}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{816EFCEB-7541-4106-B590-E9535DA09896}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9064B9D7-93FC-4BF3-AE03-EA9821309ED2}.Debug|Any CPU.ActiveCfg = Debug
+		{9064B9D7-93FC-4BF3-AE03-EA9821309ED2}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

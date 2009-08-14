@@ -1,0 +1,38 @@
+<html>
+  <head>
+    <title>Introduction to Determinators</title>
+  </head>
+
+  <body>
+    <h2>Introduction to Determinators</h2>
+A typical xPL environment will consist of a number of devices. 
+Some of these devices will report information, some will act on xPL messages, and some will do both.
+For example, a CM12 X10 computer interface reports to the xPL network when it receives an X10 signal, and can also transmit X10 signals 
+in response to a command from the xPL network.<br>
+<br>
+A Determinator is simply a set of conditions, and a corresponding set of actions. For example, if the temperature drops below 20°C and the 
+house is occupied, turn on the heating.<br>
+<br>
+<h3>Initiating a Determinator</h3>
+A Determinator can be initiated either by reception of a particular xPL message, or by the value of a global variable changing.<br>
+In addition to specifying the condition that initiates the determinator, you can specify supplemental conditions which must also be true,
+for example, you may want a different set of actions to occur based on whether the house is occupied or empty.<br>
+<br>
+<h3>Determinator Actions</h3>
+If a particular Determinator's conditions evaluate to true, any actions that have been specified will be executed.<br>
+Actions are executed in a user-specified order, and it is possible to insert pauses in the execution if required.<br>
+<br>
+The following actions are currently supported:
+<ul>
+ <li>Send an xPL Message</li>
+ <li>Set the value of a global variable (including changing the Mode/Period)</li>
+ <li>Run a sub-routine</li>
+ <li>Run a program</li>
+ <li>Execute another rule</li>
+ <li>Pause execution for a specified number of seconds</li>
+</ul>
+
+
+
+  </body>
+</html>

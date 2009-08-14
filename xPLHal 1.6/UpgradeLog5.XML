@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="xPLHal">
+</Property><Property Name="Solution File" Value="H:\Visual Studio 2008\Projects\xPLHal\xPLHal.sln">
+</Property><Property Name="User Options File" Value="H:\Visual Studio 2008\Projects\xPLHal\xPLHal.suo">
+</Property><Property Name="Date" Value="Sunday, 16 November 2008">
+</Property><Property Name="Time" Value="20:30 PM">
+</Property><Property Name="Log Number" Value="5">
+</Property></Properties><Event ErrorLevel="0" Project="" Source="xPLHal.sln" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.sln">
+</Event><Event ErrorLevel="0" Project="" Source="xPLHal.suo" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.suo">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vbproj" Description="Project file successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.vbproj">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vbproj.user" Description="Project user file successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.vbproj.user">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="AssemblyInfo.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\AssemblyInfo.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="Config.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\Config.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="hubxap.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\hubxap.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="ProjectInstaller.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\ProjectInstaller.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="Scripting.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\Scripting.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="SendSMTPMsg.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\SendSMTPMsg.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="SYS.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\SYS.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="X10.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\X10.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="XAP.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\XAP.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xhcp.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xhcp.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPL.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPL.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xplDeterminator.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xplDeterminator.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHalEvents.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHalEvents.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHalGlobals.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHalGlobals.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHalScripting.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHalScripting.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHalStd.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHalStd.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLX10.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLX10.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLXAP.vb" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLXAP.vb">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="bugs.txt" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\bugs.txt">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="version.txt" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\version.txt">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xplsquare2.ico" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xplsquare2.ico">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="ProjectInstaller.resx" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\ProjectInstaller.resx">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.resx" Description="File successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHal.resx">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="xPLHal" Source="xPLHal.vbproj" Description="Converted">
+</Event><Event ErrorLevel="0" Project="xPLHalSetup.vdproj" Source="xPLHalSetup\xPLHalSetup.vdproj" Description="Project file successfully backed up as H:\Visual Studio 2008\Projects\xPLHal\Backup\xPLHalSetup\xPLHalSetup.vdproj">
+</Event><Event ErrorLevel="0" Project="" Source="xPLHal.sln" Description="Solution converted successfully">
+</Event><Event ErrorLevel="3" Project="" Source="xPLHal.sln" Description="Converted">
+</Event><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vbproj" Description="Scan complete: Upgrade not required for project files.">
+</Event></UpgradeLog>

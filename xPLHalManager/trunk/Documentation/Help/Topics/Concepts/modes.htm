@@ -1,0 +1,43 @@
+<html>
+
+<head>
+  <title>Modes</title>
+</head>
+
+<body>
+<h2>Modes</h2>
+Modes are used to define the different states that a house can be in. For example, occupied, unoccupied and sleeping.<br>
+You can configure the list of available modes through the Constructs tab of the xPLHal Properties dialog.<br>
+To view the properties dialog, in the xPLHal Manager, right-click on the name of your xPLHal server and select Properties.<br>
+<br>
+You can use the Mode to customise the behaviour of your home automation system, depending on the state of your house. For example, if a PIR is triggered when
+the house is unoccupied, you may want to go into an alarm mode, and send an SMS to your mobile etc.<br>
+You would not however want this behaviour to occur if the house was occupied.
+<br><br>
+When xPLHal starts, it enumerates all configured modes, and assigns a numeric value to each.<br>
+These values are written to the script XPLHAL_SETTINGS.XPL in the Headers folder.
+This script file should not be edited manually, as it will be overwritten by xPLHal each time scripts are reloaded.
+<br><br>
+The definition of numeric values for the various modes will look something like the following:<br>
+<pre>' constants for mode
+const sys_mode_empty=0
+const sys_mode_occupied=1
+const sys_mode_sleep=2
+</pre>
+
+<br>
+<h4>Determining the current mode</h4>
+You can determine the current mode through use of the sys.setting("Mode") command, as shown below:<br>
+<pre>Dim CurrentMode
+CurrentMode = sys.setting("Mode")
+If CurrentMode = SYS_MODE_EMPTY Then
+  ' The house is empty.
+Else
+  ' The house is occupied.
+End If
+</pre>
+<br>
+You can use the Mode property in combination with the <a href="period.htm">Period</a> setting to achieve a high degree of conditional logic in your scripts.
+
+</body>
+</html>

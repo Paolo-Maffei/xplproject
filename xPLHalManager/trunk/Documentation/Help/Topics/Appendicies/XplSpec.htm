@@ -1,0 +1,324 @@
+<html>
+
+<head>
+  <title>The xPL Protocol: "Lite on the wire, by design"</title>
+</head>
+
+<body>
+<h2>The xPL Protocol: "Lite on the wire, by design"</h2>
+<br>
+<pre>
+There are three styles of xPL Message, which enable all of the various communication processes which may occur within a network of xPL applications. xPL Messages are line based, with each line ending on a LF (ASCII: 10) Character. The following is an example of a typical xPL Message:
+
+ xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=ACME-LAMP.LIVINGROOM
+}
+lamp.basic
+{
+action=dim
+dim=75
+}
+ 
+
+All messages conform to this structure, which is explained in detail in the following table:
+
+xPL Message Element Size (in bytes) Description 
+xpl-cmnd 8 The message type identifier. Valid values are XPL-CMND, XPL-STAT, XPL-TRIG, for each of the three styles of xPL Message, as defined below. 
+{ 1 "Open Section" delimiter. (ASCII: 123) 
+hop=1 5
+9 - max value Hop count. This is incremented each time the xPL message is transferred from one physical network to another, for instance by a bridge appliction passing traffic between an RS485 Serial bus and Ethernet. The Hop count is used as a fail safe mechanism to prevent messages for looping forever, and allow management nodes to determine the number of connected xPL networks. 
+source=ACME-MANAGER.MYHOUSE Tag - 7
+Vendor ID max 8
+Device ID max 8
+Instance ID max 16 Source ID Tag. The Source Tag allows nodes on the xPL network to determine the origins of a command or message. It is assembled from three components:
+
+Vendor ID, which is allocated by the xPL team. (this may be considered a unique address space as no other vendor may use the same ID)
+
+Device ID which is allocated by the manufacturer/developer at design time.
+
+Instance ID, which is assigned an initial value by the manufacturer, but may be re-configured by the end user. Re-configuration of Instance IDs is not mandatory, but is highly recommended.
+
+Note: each component of the source tag has a maximum size, which may not be exceeded, or divided up in any other way. It is not legal, for instance, to use a 4 character long vendor ID, and a 12 character Device ID.
+ 
+target=ACME-LAMP.LIVINGROOM Tag - 7
+Vendor ID max 8
+Device ID max 8
+Instance ID max 16 For Directed command messages (explained in detail within the text), the Target Tag is assembled in the same manner as the Source Tag. For broadcast command messages, the target may be set to a single wildcard symbol "*" (ASCII: 42) 
+} 1 "Close Section" delimiter. (ASCII: 125) 
+lamp.basic class.type
+Class max 8
+Type max 8 Message Schema Identifier. Message contents are defined by means of schemas which allow devices and applications from different vendors to communicate in an open fashion. Each message belongs to a specific class, and each class will define a number of types of message. Examples are given within the text. 
+{ 1 "Open Section" delimiter. (ASCII: 123) 
+action=dim
+dim=75 name=value
+Name max 16
+Value max 128 Commands, Status and Information are expressed within an xPL Message body as a series of Name/Value Pairs. An xPL Message may contain many pairs. The specific contents of the message, as well as the order of those contents will be defined within the message schema used. Developers are free to add additional information into messages, however, the elements mandated by the message schema must always be present in the appropriate order. 
+} 1 "Close Section" delimiter. (ASCII: 125) 
+Command Messages 
+These messages instruct a device to perform an action. The controlling node may determine the completion of this action by the sending of another xPL message
+
+Directed Command Messages 
+Where a device wishes to exert control over a specific device within the home, such as the curtain controller in the lounge, or the central heating boiler, messages may be directed to that device by means of the target field. All devices and applications within an xPL network must respond to a message which is specifically targetted at them in this way.
+
+ xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=ACME-LAMP.LIVINGROOM
+}
+lamp.basic
+{
+action=dim
+dim=75
+}
+ 
+
+In this example, the lamp device manufactured by acme which has been installed in the location livingroom is sent the command action=dim, dim=75. This message is a .basic type message of class lamp, which allows the device to interpret the command in a meaningful way. A device such as a curtain controller which did not support messages of class lamp would ignore the message.
+
+Broadcast Command Messages 
+Where a home controller is issuing commands to more intelligent devices capable of complex parsing (PC Applications, for instance), broadcast messaging may be used. In this case, the target contains the wildcard character "*" (ASCII: 42), indicating that any capable device should parse the message to determine whether the contents are intended for them. Simple devices may not support broadcast messaging, and instead require targetted commands.
+
+ xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=*
+}
+lamp.basic
+{
+action=off
+}
+ 
+
+In this example, the simple Mk1 lamp device installed in the location livingroom does not support broadcast addressing, and ignores the message, as it is not specifically targetted at it.
+
+ACME's updated product, the lamp controller MkII however, is a more advanced model capable of greater intelligence. On the basis of the source, which identifies the sending node, and the fact that this message is a .basic type message of class lamp, the device is able to decide that the message is appropriate, and act on the command "action=off". This method of addressing is particularly appropriate for "all lights off" commands using a single message, or the setting of "scene" lighting across several controllers.
+
+Status Messages 
+Status messages are sent to notify the network about the condition of a device. All devices and applications should send a regular status "heartbeat", and may also optionally respond to requests for current status.
+
+Heartbeat Messages 
+Heartbeat Messages should be sent by all devices on an xPL network (with the exception of hubs). The heartbeats allow for configuration, health monitoring, diagnosis of problems, and logging of events. The heartbeat interval is defined by the developer, and may be anything from five minutes to thirty minutes. There are two template heartbeat schemas currently defined.
+
+Small Devices, such as PIC Systems PC Based Applications, using Ethernet 
+xpl-stat
+{
+hop=1
+source=ACME-LAMP.LIVINGROOM
+target=*
+}
+hbeat.basic
+{
+interval=[interval in minutes]
+(...additional info defined by the developer)
+}
+ xpl-stat
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=*
+}
+hbeat.app
+{
+interval=[interval in minutes]
+port=[listening port]
+remote-ip=[local IP address]
+pid=[process ID]
+(...additional info defined by the developer)
+}
+ 
+
+It should be apparent to the reader that the .app heartbeat type is an extension of the .basic type. Heartbeat message must use one of these schemas as a template. They may include additional elements within the message body, however, the base elements must be present.
+
+Status Requests 
+As well as using the regular heartbeat, a device on an xPL network which wishes to know the current status of a device can employ the status request mechanism.
+
+The Requesting Node
+ACME-MANAGER.MYHOUSE  The Targetted Node
+ACME-TEMPSENS.GARAGE 
+The House Manager wishes to know the temperature of the garage. It therefore constructs a command message, specifically targetted at this device, using the .request type of the temp class of messages. xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=ACME-TEMPSENS.GARAGE
+}
+temp.request
+{
+command=status
+}
+ (listens...) 
+ 
+  
+(listens...) xpl-stat
+{
+hop=1
+source=ACME-TEMPSENS.GARAGE
+target=*
+}
+temp.basic
+{
+TEMP=12
+MAX1HR=13
+MIN1HR=11
+MAX24HR=18
+MIN24HR=3
+}
+ The Garage Temperature Sensor recognises that this message is directed at it. The message uses class temp, and is of type .request which it supports. Therefore, it forms a status message. The Temperature sensor uses the temp.basic message schema for this message.
+
+NOTE: Status Messages are not directed, instead the device simply broadcasts the status information using target=* 
+ 
+  
+The House Manager hears a temp.basic message whose source matches thetemp.request which it sent. It can then take further actions, such as updating a webpage, sending an SMS to the owner, or switching on the heating.   
+Trigger messages 
+Trigger messages should be sent whenever the status changes, whether this happens as a result of an external event, such as the pressing of a button, an IR detection, a temperature being reached, or a device powered on, for example:
+
+ xpl-trig
+{
+hop=1
+source=ACME-PIR.FRONTDOOR
+target=*
+}
+alarm.basic
+{
+SENSOR=PIR
+STATUS=ON
+TRIPCNT=3
+}
+ 
+
+Trigger messages are sent whenever the state of a device changes, whether in response to an xPL Command, a direct human action (as in the pressing of a switch) or by another condition (such as a PIR activating, or the light level changing) Device Groups: 
+
+When a device or application is configured, the management station may wish to configure the device to be logically grouped with other units. xPL provides a powerful mechanism for this to happen in the form of the special "group=" configuration tag. Simple devices may not support group membership, whereas PC applications with large processing power may potentially have many group memberships. Group support is not mandatory, however, it is advisable for developers to support at least one group.
+
+The presence of a "group=" tag within a configuration message clears the existing group memberships, therefore when the group memberships of a device are to be changed, all desired groups must be specified within the config message.
+
+Example One Using a Group to Control Multiple Devices  
+config
+message: xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=ACME-CURTAIN.DEFAULT
+}
+config.response
+{
+newconf=LOUNGE_FRONT
+interval=2
+group=XPL-GROUP.loungedrapes
+group=XPL-GROUP.alldrapes
+}
+ The automator has installed two curtain controllers in his lounge, and wishes to configure them as a group, to be opened and closed together. This configuration message assigns the friendly name, LOUNGE_FRONT to the newly installed device, and tells it that it is now part of both the loungedrapes and alldrapes groups. 
+ 
+  
+command
+message: xpl-cmnd
+{
+hop=1
+source=ACME-MANAGER.MYHOUSE
+target=XPL-GROUP.LOUNGEDRAPES
+}
+drapes.extended
+{
+curtain=open
+dawndusk=disabled
+}
+ Each of the curtain controllers in the lounge recognises that this message is targetted at the reserved XPL-GROUP Vendor + Device ID. This device supports groups, therefore it reads the group name loungedrapes, determines that it belongs to this group, and therefore executes the command. 
+Installer and User Defined Filters: 
+Message Filters may also be specified via a configuration message. Filters provide an incredibly powerful method of addressing devices and applications. As with groups, support for user defined filters is not mandatory, especially on smaller devices, however, incorporating this support is advisable. Even with very simple applications, intelligent filtering provides the most flexible way to provide for complex environments.
+
+Filters are defined using the filter= tag, within a configuration message, according to the following syntax:
+
+ filter = [msgtype] . [vendor + device ID] . [instance] . [class] . [type] 
+
+Elements must be present, but may be wildcarded by the use of a "*" character.
+
+As with groups, the presence of a filter= tag within a configuration message clears the existing filters which the application may be using, therefore when the filters are to be changed, all desired filters must be specified within the config message.
+
+XPL-CMND.WMUTE-K400.BEDROOM.DRAPES.BASIC This filter is a complete match. This is the filter used by a device which will react to a specific command message only. In practice, a developer using the .basic type of a given message class would use the following filter string instead: 
+ 
+ 
+XPL-CMND.WMUTE-K400.BEDROOM.DRAPES.* By wildcarding the type of the message, the developer allows the application to respond to messages with any message using the drapes class. This can be done, because any message of class drapes will inherit all of the elements of the drapes.basic type. 
+ 
+ 
+XPL-CMND.WMUTE-K400.BEDROOM.*.* Wildcarding both class and type allows the installer to process any messages application to respond to messages with any message using the drapes class. This can be done, because any message of class drapes will inherit all of the elements of the drapes.basic type. 
+ 
+ 
+XPL-CMND.WMUTE-K400.*.DRAPES.BASIC In this case, all instances of a given application or device will act as a single entity. 
+ 
+ 
+XPL-CMND.*.*.*.* Devices with more complex logic, capable of determining whether a message may be acted upon based on an internal rulebase may be instructed to listen to all command messages by applying this filter. 
+Using xPL Message Schemas: 
+Several schemas have been defined for use with common devices within the xPL network. The following examples indicate how these message schemas may be used and extended.
+
+Any extension to the .basic type of a given class which will be released to the general public should firat be sent to the xpl team, who can provide guidance on interoperability with existing extensions. Similarly, any new class of message should be registered, preventing the duplication of effort.
+
+Example One A Curtain Controller  
+drapes.basic xpl-stat
+{
+hop=1
+source=ACME-CURTAIN.LIVINGROOM
+target=*
+}
+drapes.basic
+{
+curtain=[open/closed]
+DAWNDUSK=DISABLED
+}
+ In this case, the developer (ACME) has opted to continue using the .basic type of drapes message, which simply specified that the curtain status "open" or "closed" should be returned. Additional status info is added as required to the bottom of the xPL Message. This additional information may or may not be present in an xPL message, using the drapes.basic schema. A similar controller from XYZCORP whilst producing similar information, may use a different format, different names for the same info, or a different order. 
+ 
+  
+drapes.extended xpl-stat
+{
+hop=1
+source=ACME-CURTAIN.LIVINGROOM
+target=*
+}
+drapes.extended
+{
+curtain=[open/closed]
+dawndusk=[enabled/disabled]
+LIGHTLVL=75
+}
+ Acme gets together with the other curtain controller manufacturer, XYZCORP and agrees that all of their controllers should report the same information, so they decide to define a new drapes type: .extended Any device wishing to use the new .extended status message type must provide curtain= and dawndusk= information. ACME are, of course, still free to provide yet more additional status info, added to the bottom of the Message 
+
+In programming terms, drapes.extended inherits the properties of drapes.basic on which it is based.
+
+Example Two A PC Media Application  
+mediapl.basic xpl-stat
+{
+hop=1
+source=ACME-WINAMP.MYHOMEPC
+target=*
+}
+mediapl.basic
+{
+current=[trackname as an ASCII string, max 32 characters]
+TIMELEFT=1:40
+NEXT=Linkin Park - Points of Authority
+}
+ ACME have developed a Winamp interface which they hope will allow any xPL device on the network which can send messages to the PC to control the playback of music throughout the house. Unfortunately, they begin by using the template .basic message type for status updates. A display device can be configured to show what track is playing, however, all extra information is using ACME's own format and layout. If a new streaming music application by XYZCorp was introduced onto the network, the display would not be able to show the playback information as it would be using a different format. 
+ 
+  
+mediapl.extended xpl-stat
+{
+hop=1
+source=ACME-WINAMP.MYHOMEPC
+target=*
+}
+mediapl.extended
+{
+current=[current track name up to 32 chars]
+next=[next track name, up to 32 chars]
+ttotal=[hh:mm:ss]
+tremain=[hh:mm:ss]
+}
+ Acme again gets together with XYZCorp and together they agree to define a new mediapl.custom type. All devices or applications supporting the mediapl.custom message schema can use xPL messages with confidence that the expected information will be present, in the correct order. In the meantime, any device which support the mediapl.basic type will be able to display the current information, as this is present in the new, extended type. 
+
+Note: In defining a new type, the developer is mandating that all devices using this type must supply as a minimum the specified information. Developers may submit new types for a specific class to the xPL team for validation, to prevent conflicts.
+ 
+</pre>
+</body>
+</html>   

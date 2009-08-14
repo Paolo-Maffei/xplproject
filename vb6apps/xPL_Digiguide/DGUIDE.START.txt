@@ -1,0 +1,38 @@
+Schema Definition
+-----------------
+
+Class = DGUIDE
+Type  = START
+
+This Schema provides digiguide programme start information to an xpl implementation
+
+
+XPL-TRIG Structure
+------------------
+DGUIDE.START
+{
+TIME=<hh:mm when program started>
+DURATION=<minutes>
+TITLE=<programme title>
+CATEGORY=<programme category description>
+DESCRIPTION=<programme description>
+CHANNELNAME=<name of channel>
+CHANNELNO=<assigned channel no>
+REMINDER=<digiguide reminder code>
+SMARTSEARCH=<digiguide smart search code>
+FAVOURITE=<digiguide favourite code>
+}
+This message is sent when the digiguide programme start trigger occurs
+
+
+Schema Specific Notes
+---------------------
+All text limited to first 128 charcters
+
+
+Standard Notes
+--------------
+HBEAT.* = hbeat.basic or hbeat.app etc
+(hbeat items) = standard .basic or .app heartbeat items
+[] = optional
+<> = parameter value description

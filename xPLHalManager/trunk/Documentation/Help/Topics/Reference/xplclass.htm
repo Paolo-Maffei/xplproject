@@ -1,0 +1,57 @@
+<html>
+
+<head>
+  <title>xPL Language Extensions</title>
+</head>
+
+<body>
+<h2>xPL Language Extensions</h2>
+The xPL class provides xPL-specific extensions to VBScript, and can be used from any of your scripts when running under xPLHal.
+<br>
+The following xPL-specific functions are currently available:
+<br>
+<h4>To retrieve a specific parameter from an xPL message</h4>
+<pre>xpl.getparam(&lt;message&gt;,&lt;parameter&gt;,&lt;strip white space&gt;)
+The body of the xPL message will be searched for a matching parameter value.
+e.g. myparam = xpl.getparam(xplMessage,"housecode",True)
+
+You can specify the following special parameters to retrieve other portions of the message:
+{SCHEMA} will return the message schema, e.g. x10.basic
+{MSGTYPE} will return the type of message, e.g. xpl-trig
+
+Remember to include the curly braces around the above special values, otherwise GetParam will simply search the body of the message for SCHEMA and MSGTYPE entries.
+</pre>
+
+<h4>To enumerate all parameters in an xPL Message</h4>
+<pre>xpl.GetParamCount()
+Returns the number of parameters contained within the body of the message.
+
+xpl.GetParamName(&lt;XplMsg&gt,&lt;index&gt;)
+Returns the name of the parameter at the specified index.
+
+xpl.GetParamValue(&lt;XplMsg&gt;,&lt;index&gt;)
+Returns the value of the parameter at the specified index.
+</pre>
+
+<h4>To send an xPL message</h4>
+<pre>xpl.sendmsg(&lt;message type&gt;,&lt;target&gt;,&lt;Schema&gt;,&lt;message body&gt;)
+e.g. mymsg=mymsg+"speech=hello world"+chr(10)
+     mymsg=mymsg+"voice=buffy"+chr(10)
+     call xpl.sendmsg("","","TTS.ANNOUNCE",mymsg)
+The body message should only contain the name/value pairs, the final chr(10) is optional
+A &lt;message type&gt; of "" defaults to "XPL-CMND"
+A &lt;target&gt; of "" defaults to "*"
+</pre>
+
+<h4>To safely get the &lt;source_instance&gt;</h4>
+<pre>xpl.srcinst("&lt;source&gt;_&lt;instance&gt;")
+e.g. who = xpl.srcinst("&lt;Source&gt;_&lt;Instance&gt;")
+Safely sets who to &lt;source&gt;.&lt;instance&gt
+Should only be required where source is xpl. or sys. or x10.
+</pre>
+
+
+
+
+</body>
+</html>

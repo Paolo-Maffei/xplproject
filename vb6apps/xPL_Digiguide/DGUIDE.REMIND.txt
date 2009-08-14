@@ -1,0 +1,46 @@
+Schema Definition
+-----------------
+
+Class = DGUIDE
+Type  = REMIND
+
+This Schema provides digiguide programme user reminder information to an xpl implementation
+
+
+XPL-TRIG Structure
+------------------
+DGUIDE.REMIND
+{
+TIME=<hh:mm when program started>
+DURATION=<minutes>
+TITLE=<programme title>
+CATEGORY=<programme category description>
+DESCRIPTION=<programme description>
+CHANNELNAME=<name of channel>
+CHANNELNO=<assigned channel no>
+REMINDER=<digiguide reminder code>
+SMARTSEARCH=<digiguide smart search code>
+FAVOURITE=<digiguide favourite code>
+[MARKERTYPE=<marker type>]
+[MARKERID=<marker ID>]
+}
+This message is sent when the digiguide programme remind trigger occurs
+It will send a message for EACH Marker
+1 Favourite 
+2 Reminder 
+4 Video 
+5 Watch 
+6 Category 
+
+
+Schema Specific Notes
+---------------------
+All text limited to first 128 charcters
+
+
+Standard Notes
+--------------
+HBEAT.* = hbeat.basic or hbeat.app etc
+(hbeat items) = standard .basic or .app heartbeat items
+[] = optional
+<> = parameter value description

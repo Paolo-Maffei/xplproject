@@ -1,0 +1,131 @@
+xPLHal Manager
+=============================
+
+Version 1.60
+Release Date: 15th July 2007
+
+Fixes:
+- Updated to build against .Net 2.0 and modified to install and run under Windows Vista.
+
+=============================
+
+Version 1.55
+Release Date: 12th May 2007
+
+Fixes:
+- Fix to Execute menu command not working correctly when manually executing timed events.
+
+=============================
+
+Version 1.54
+Release date: 8th February 2007
+
+IMPORTANT:
+It is strongly recommended that you upgrade both xPLHal Server and xPLHal Manager to v1.54 or above to ensure that all 
+features function correctly.
+
+New Features:
+- Support for Microsoft Windows Vista
+- New Help menu in Script Editor providing links to reference guides for each supported scripting language.
+
+Fixes:
+- Prevent user from creating (or renaming) determinator with the same name as an existing determinator.
+- When attempting to configure a device where xPLHal returns more config values than we were expecting, 
+warn the user and handle the situation gracefully.
+- Remove Tools menu from Script Editor - this menu has not been used since v1.3!
+- Do not add .xpl file extension to new scripts if the user has already supplied an extension.
+
+=============================
+
+Version 1.53
+Release Date: 20 January 2006
+
+Fixes:
+- A number of issues relating to grouping determinators have been fixed.
+Users are advised to upgrade to the latest xPLHal Server.
+
+=============================
+
+Version 1.52
+Release Date: 1 January 2006
+
+New Features:
+- Support for importing and exporting determinators.
+- Support for organising determinators into groups (requires xPLHal Server v1.52)
+- Enhancements to the determinator condition for date/time comparisons.
+
+=============================
+
+Version 1.51
+Release Date: 21 November 2005
+
+New Features:
+- Right-click on any xPL Device and select All Tasks -> More Info.
+This will take you to the web site for the vendor of that device, provided that the info_url attribute has been
+specified in the vendor's XML file.
+
+Modifications:
+- Removed checkbox from Properties dialog to enable/disable internal xPL hub.
+
+=============================
+
+Version 1.5
+Release Date: 01 October 2005
+
+New Features:
+- Right-click on xPL Devices node and you can select Poll for Devices. 
+This issues a hbeat.request so all devices can respond. The Manager will wait for 5 seconds to allow all devices to reply, 
+then refresh the device list for you.
+
+Fixes:
+- Send xPL Message dialog no longer prepends a space to the source address.
+- When adding the action to "Execute another Determinator" to an existing determinator,
+  the dropdown list of determinators is now populated.
+- When editing an event, the combo box for selecting the sub routine or determinator
+  has been increased in size.
+- Better support for accessibility software such as screen readers.
+
+=============================
+
+Version 1.45
+Release Date: 3rd January 2005
+
+New Features:
+- You can right-click on any message in the xPL Monitor and automatically enter the New Determinator Wizard, with the Determinator
+  already configured to run when the chosen message is received.
+- You can right-click on any message in the xPL Monitor, and have a global variable automatically populated with a specific
+  element from the chosen message. A determinator will be automatically created to populate the global whenever the message is received.
+  
+
+Modifications:
+- Plug-ins are now stored under the system's common application data folder.
+  By default, this is C:\Documents and Settings\All Users\Application Data\xPL\Plugins.
+  This is to allow other applications other than the xPLHal Manager to reliably locate plug-in files.
+  When you run the Manager for the first time, it will move all your plug-ins to the new location.
+- The Sub Routine Builder is no longer supported, and has been removed.
+- Globals list refresh is now optional via the tools menu.
+
+Fixes:
+- The xPL Monitor now functions correctly when running with no hub.
+
+=============================
+
+Version 1.44
+Release Date: Friday, 17th December 2004
+
+New Features:
+- The new "xPL Network Settings" utility (xplsettings.exe) is now included as part of the main distribution, and is available via an item on the Tools menu.
+This utility lets you specify things like the broadcast address, the IP addresses to which xPL applications should bind,
+and the IP addresses that xPL applications should listen to traffic from.
+These settings will apply to any application built using the upcoming version 3.0 release of the xPL .NET library.
+
+- You can now select which portion of the xPLHal Manager tree will be selected at startup. Just right-click on the node that
+you want to appear at startup and select "Set as default".
+- Globals list now refreshes automatically every 30 seconds.
+
+Fixes:
+- xPL devices now sorted properly (previously only vendor portion of source was sorted)
+- xPL monitor now sends heartbeats at regular intervals (5 mins)
+- Edit button now present when editing xPL message parameters in a Determinator condition
+
+=============================

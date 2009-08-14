@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<cachemanager>
+   <cacheentry cacheprefix="x10.{VDI}">
+    <filter>*.*.*.*.x10.basic</filter>
+     <fields>
+      <fieldmap xpltagname="device" cacheobjectname="Device" />
+      <fieldmap xpltagname="command" cacheobjectname="Command" />
+    </fields>
+  </cacheentry>
+  <cacheentry cacheprefix="cache">
+    <filter>xpl-cmnd.*.*.*.*.*</filter>
+     <fields>
+     <fieldmap xpltagname="*" cacheobjectname="*" />
+    </fields>
+  </cacheentry>
+   <cacheentry cacheprefix="hbeat">
+    <filter>*.*.*.*.hbeat.*</filter>
+    <fields>
+      <fieldmap xpltagname="*" cacheobjectname="*" />
+    </fields>
+  </cacheentry>
+   <cacheentry cacheprefix="config">
+    <filter>*.*.*.*.config.*</filter>
+     <fields>
+     <fieldmap xpltagname="*" cacheobjectname="*" />
+    </fields>
+  </cacheentry>
+</cachemanager>

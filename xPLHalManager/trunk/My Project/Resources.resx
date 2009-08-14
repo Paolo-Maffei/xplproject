@@ -1,0 +1,453 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="RES_ABOUT" xml:space="preserve">
+    <value>&amp;About</value>
+  </data>
+  <data name="RES_ADD" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="RES_AWAITING_CONFIG" xml:space="preserve">
+    <value>Awaiting Configuration</value>
+  </data>
+  <data name="RES_CANCEL" xml:space="preserve">
+    <value>Cancel</value>
+  </data>
+  <data name="RES_CHANGE_SERVER" xml:space="preserve">
+    <value>Change Server</value>
+  </data>
+  <data name="RES_CHECK_UPDATES" xml:space="preserve">
+    <value>Check for Updates</value>
+  </data>
+  <data name="RES_CLEAR_ERROR_LOG" xml:space="preserve">
+    <value>Are you sure you want to clear the xPLHal Error Log?</value>
+  </data>
+  <data name="RES_CONFIG" xml:space="preserve">
+    <value>Configure Device</value>
+  </data>
+  <data name="RES_CONNECT_SERVER" xml:space="preserve">
+    <value>Enter the name of your xPLHal server:</value>
+  </data>
+  <data name="RES_COPY" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="RES_CUT" xml:space="preserve">
+    <value>Cut</value>
+  </data>
+  <data name="RES_DEL_CONFIG" xml:space="preserve">
+    <value>Delete Stored Configuration</value>
+  </data>
+  <data name="RES_EDIT" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="RES_EDIT_CONFIG" xml:space="preserve">
+    <value>Edit XML Configuration</value>
+  </data>
+  <data name="RES_ERROR_CONNECT" xml:space="preserve">
+    <value>Could not connect to xPLHal.
+
+Make sure that xPLHal is running on the target computer.</value>
+  </data>
+  <data name="RES_EVENT" xml:space="preserve">
+    <value>Event</value>
+  </data>
+  <data name="RES_EVENTS" xml:space="preserve">
+    <value>Events</value>
+  </data>
+  <data name="RES_EVENT_ENTER_NAME" xml:space="preserve">
+    <value>You must enter a name for this event.</value>
+  </data>
+  <data name="RES_EVENT_SAVE_CHANGES" xml:space="preserve">
+    <value>Do you want to save the changes you made to this event?</value>
+  </data>
+  <data name="RES_EXIT" xml:space="preserve">
+    <value>E&amp;xit</value>
+  </data>
+  <data name="RES_FILE" xml:space="preserve">
+    <value>&amp;File</value>
+  </data>
+  <data name="RES_GLOBALS" xml:space="preserve">
+    <value>Globals</value>
+  </data>
+  <data name="RES_HELP" xml:space="preserve">
+    <value>&amp;Help</value>
+  </data>
+  <data name="RES_HELP_TOPICS" xml:space="preserve">
+    <value>Help Topics</value>
+  </data>
+  <data name="RES_LANGUAGE" xml:space="preserve">
+    <value>Please select your preferred language</value>
+  </data>
+  <data name="RES_LANGUAGE_CAPTION" xml:space="preserve">
+    <value>Select Language</value>
+  </data>
+  <data name="RES_MUST_SELECT_SUB" xml:space="preserve">
+    <value>You must select a sub-routine to be executed.</value>
+  </data>
+  <data name="RES_NEW" xml:space="preserve">
+    <value>New</value>
+  </data>
+  <data name="RES_NEW_GLOBAL" xml:space="preserve">
+    <value>New Global Variable</value>
+  </data>
+  <data name="RES_NEW_X10" xml:space="preserve">
+    <value>New X10 Device</value>
+  </data>
+  <data name="RES_OK" xml:space="preserve">
+    <value>OK</value>
+  </data>
+  <data name="RES_PASTE" xml:space="preserve">
+    <value>Paste</value>
+  </data>
+  <data name="RES_PROMPT_DEL_SCRIPT" xml:space="preserve">
+    <value>Are you sure you want to delete the script %1?</value>
+  </data>
+  <data name="RES_PROPERTIES" xml:space="preserve">
+    <value>Properties</value>
+  </data>
+  <data name="RES_RECURRING" xml:space="preserve">
+    <value>Recurring</value>
+  </data>
+  <data name="RES_REFRESH" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="RES_RELOAD" xml:space="preserve">
+    <value>Reload Scripts</value>
+  </data>
+  <data name="RES_RELOAD_NOW" xml:space="preserve">
+    <value>You have made changes to one or more scripts.
+
+Do you want to reload all scripts now?</value>
+  </data>
+  <data name="RES_RESTART" xml:space="preserve">
+    <value>Restart xPLHal Service</value>
+  </data>
+  <data name="RES_RUN_SUB" xml:space="preserve">
+    <value>Run Sub-routine</value>
+  </data>
+  <data name="RES_SAVE" xml:space="preserve">
+    <value>&amp;Save</value>
+  </data>
+  <data name="RES_SAVE_CHANGES" xml:space="preserve">
+    <value>Do you want to save the changes you made to %1?</value>
+  </data>
+  <data name="RES_SAVE_RELOAD" xml:space="preserve">
+    <value>Save and &amp;Reload</value>
+  </data>
+  <data name="RES_SCRIPT" xml:space="preserve">
+    <value>Script</value>
+  </data>
+  <data name="RES_SCRIPTS" xml:space="preserve">
+    <value>Scripts</value>
+  </data>
+  <data name="RES_SCRIPTS_RELOADED" xml:space="preserve">
+    <value>Scripts reloaded successfully.</value>
+  </data>
+  <data name="RES_SELECT_LANGUAGE" xml:space="preserve">
+    <value>Select Language</value>
+  </data>
+  <data name="RES_SEND_XPL" xml:space="preserve">
+    <value>Send xPL Message</value>
+  </data>
+  <data name="RES_SINGLE" xml:space="preserve">
+    <value>Single</value>
+  </data>
+  <data name="RES_TITLE" xml:space="preserve">
+    <value>xPLHal Manager</value>
+  </data>
+  <data name="RES_TOOLS" xml:space="preserve">
+    <value>&amp;Tools</value>
+  </data>
+  <data name="RES_UPDATE_PLUGINS" xml:space="preserve">
+    <value>Update Plug-in Library</value>
+  </data>
+  <data name="RES_VIEW" xml:space="preserve">
+    <value>&amp;View</value>
+  </data>
+  <data name="RES_VIEW_ERROR" xml:space="preserve">
+    <value>View Error Log</value>
+  </data>
+  <data name="RES_VIEW_SCRIPT" xml:space="preserve">
+    <value>View Script</value>
+  </data>
+  <data name="RES_X10" xml:space="preserve">
+    <value>X10 Device</value>
+  </data>
+  <data name="RES_XPL_DEVICES" xml:space="preserve">
+    <value>xPL Devices</value>
+  </data>
+  <data name="RES_ADDRESS" xml:space="preserve">
+    <value>Address</value>
+  </data>
+  <data name="RES_ALL" xml:space="preserve">
+    <value>All</value>
+  </data>
+  <data name="RES_CANNOT_DEL_SCRIPT" xml:space="preserve">
+    <value>This script cannot be deleted because it is required for successful operation of xPLHal.</value>
+  </data>
+  <data name="RES_CLEAR" xml:space="preserve">
+    <value>Clear</value>
+  </data>
+  <data name="RES_CURRENTVALUE" xml:space="preserve">
+    <value>Current Value</value>
+  </data>
+  <data name="RES_DATETIME" xml:space="preserve">
+    <value>Date/Time</value>
+  </data>
+  <data name="RES_DETERMINATOR" xml:space="preserve">
+    <value>Determinator</value>
+  </data>
+  <data name="RES_DETERMINATORNAME" xml:space="preserve">
+    <value>Determinator Name</value>
+  </data>
+  <data name="RES_DETERMINATORS" xml:space="preserve">
+    <value>Determinators</value>
+  </data>
+  <data name="RES_DEVICE" xml:space="preserve">
+    <value>Device</value>
+  </data>
+  <data name="RES_DEVICENAME" xml:space="preserve">
+    <value>Device Name</value>
+  </data>
+  <data name="RES_ENABLE_FILTER" xml:space="preserve">
+    <value>Enable filter</value>
+  </data>
+  <data name="RES_EVENTNAME" xml:space="preserve">
+    <value>Event Name</value>
+  </data>
+  <data name="RES_EXPIRES" xml:space="preserve">
+    <value>Expires</value>
+  </data>
+  <data name="RES_FILTER" xml:space="preserve">
+    <value>Filter</value>
+  </data>
+  <data name="RES_FILTER_OPTIONS" xml:space="preserve">
+    <value>Filter Options</value>
+  </data>
+  <data name="RES_GLOBALNAME" xml:space="preserve">
+    <value>Global Name</value>
+  </data>
+  <data name="RES_HOP" xml:space="preserve">
+    <value>Hop</value>
+  </data>
+  <data name="RES_INSTANCE" xml:space="preserve">
+    <value>Instance</value>
+  </data>
+  <data name="RES_MESSAGES" xml:space="preserve">
+    <value>Messages</value>
+  </data>
+  <data name="RES_NEW_RULE" xml:space="preserve">
+    <value>New Determinator</value>
+  </data>
+  <data name="RES_NEXTRUNTIME" xml:space="preserve">
+    <value>Next Run Time</value>
+  </data>
+  <data name="RES_NONE" xml:space="preserve">
+    <value>None</value>
+  </data>
+  <data name="RES_PROMPT_DEL_DETERMINATOR" xml:space="preserve">
+    <value>Are you sure you want to delete the determinator %1?</value>
+  </data>
+  <data name="RES_SCHEMA" xml:space="preserve">
+    <value>Schema</value>
+  </data>
+  <data name="RES_SCRIPTNAME" xml:space="preserve">
+    <value>Script Name</value>
+  </data>
+  <data name="RES_SCRIPTS_RELOADED_ERROR" xml:space="preserve">
+    <value>Scripts could not be reloaded.
+
+Please review any changes you have made recently and correct any errors.
+
+Do you want to view the error log?</value>
+  </data>
+  <data name="RES_SOURCE" xml:space="preserve">
+    <value>Source</value>
+  </data>
+  <data name="RES_START" xml:space="preserve">
+    <value>Start</value>
+  </data>
+  <data name="RES_STATE" xml:space="preserve">
+    <value>State</value>
+  </data>
+  <data name="RES_STATS" xml:space="preserve">
+    <value>Stats</value>
+  </data>
+  <data name="RES_STOP" xml:space="preserve">
+    <value>Stop</value>
+  </data>
+  <data name="RES_SUBROUTINE" xml:space="preserve">
+    <value>Execute</value>
+  </data>
+  <data name="RES_TARGET" xml:space="preserve">
+    <value>Target</value>
+  </data>
+  <data name="RES_TIME" xml:space="preserve">
+    <value>Time</value>
+  </data>
+  <data name="RES_TOOLBAR_CHANGESERVER" xml:space="preserve">
+    <value>Change Server</value>
+  </data>
+  <data name="RES_TOOLBAR_SENDXPL" xml:space="preserve">
+    <value>Send xPL Message</value>
+  </data>
+  <data name="RES_TOOLBAR_ABOUT" xml:space="preserve">
+    <value>About</value>
+  </data>
+  <data name="RES_TOOLBAR_HELP" xml:space="preserve">
+    <value>Help</value>
+  </data>
+  <data name="RES_TOOLBAR_REFRESH" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="RES_TOOLBAR_RELOAD" xml:space="preserve">
+    <value>Reload Scripts</value>
+  </data>
+  <data name="RES_TOOLBAR_NEW" xml:space="preserve">
+    <value>New...</value>
+  </data>
+  <data name="RES_TOOLBAR_MONITOR" xml:space="preserve">
+    <value>Monitor</value>
+  </data>
+  <data name="RES_TOOLBAR_RUNSUB" xml:space="preserve">
+    <value>Run Subroutine</value>
+  </data>
+  <data name="RES_TOOLBAR_RUNDET" xml:space="preserve">
+    <value>Run Determinator</value>
+  </data>
+  <data name="RES_TOOLBAR_X10ON" xml:space="preserve">
+    <value>Turn X10 device on</value>
+  </data>
+  <data name="RES_TOOLBAR_X10OFF" xml:space="preserve">
+    <value>Turn X10 device off</value>
+  </data>
+  <data name="RES_TYPE" xml:space="preserve">
+    <value>Type</value>
+  </data>
+  <data name="RES_VENDOR" xml:space="preserve">
+    <value>Vendor</value>
+  </data>
+  <data name="RES_XPLMESSAGES_RECEIVED" xml:space="preserve">
+    <value>xPL Messages Received</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="homepage" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\homepage.rtf;System.String, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+</root>

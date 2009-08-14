@@ -1,0 +1,102 @@
+[Root]
+Most Recent Package=xPL Hub
+
+[Package|xPL Hub|xPL Hub]
+Icon1=xPLHub.exe
+Title1=xPL Hub
+StartIn1=$(AppPath)
+Key1=Icon3
+
+
+[Package|xPL Hub|xPLHub]
+Icon1=xPLHub.exe
+Title1=xPLHub
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|xPL Hub|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\xplhalnet\Modules VB6\xPL_Hub\Package
+
+[Package|xPL Hub|Configure DAO ISAMs]
+Applicable=No
+
+[Package|xPL Hub|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|xPL Hub|Files Found]
+
+[Package|xPL Hub|Files Released]
+
+[Package|xPL Hub|Missing Dependency Information]
+
+[Package|xPL Hub|Out-of-Date Dependency Information]
+
+[Package|xPL Hub|Files Added]
+
+[Package|xPL Hub|Files Removed]
+
+[Package|xPL Hub|Files In Project]
+C:\xplhalnet\Modules VB6\xPL_Hub\xPLHub.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|xPL Hub|Configure Registry Files]
+Applicable=No
+
+[Package|xPL Hub|Configure Remote Servers]
+Applicable=No
+
+[Package|xPL Hub|Install Locations]
+C:\xplhalnet\Modules VB6\xPL_Hub\xPLHub.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|xPL Hub|Configure Shared Files]
+Applicable=Yes
+C:\xplhalnet\Modules VB6\xPL_Hub\xPLHub.exe=No
+
+[Package|xPL Hub|Distribution]
+Type=single
+Size=
+Title=xPL Hub
+
+[Package|xPL Hub|IconGroups]
+Group0=xPL
+PrivateGroup0=0
+Parent0=$(Programs)
+
+[Package|xPL Hub|xPL]
+Icon1=xPLHub.exe
+Title1=xPL Hub
+StartIn1=$(AppPath)
+Key1=Icon2
+
+[Package|xPL Hub|Package]
+PackageFolder=C:\xplhalnet\Modules VB6\xPL_Hub\Package
+ProjectFolder=C:\xplhalnet\Modules VB6\xPL_Hub
+ServerSideCab=
+File1=C:\xplhalnet\Modules VB6\xPL_Hub\Package\setup.exe
+File2=C:\xplhalnet\Modules VB6\xPL_Hub\Package\Setup.Lst
+File3=C:\xplhalnet\Modules VB6\xPL_Hub\Package\xPLHub.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

@@ -1,0 +1,46 @@
+<html>
+
+<head>
+  <title>Configuring your xPL Devices</title>
+</head>
+
+<body>
+<h2>Configuring your xPL Devices</h2>
+The xPL specification includes a set of powerful yet simple remote-configuration features, which allow for complete automatic configuration of your entire xPL network of devices. 
+You should check with the developer or supplier of your particular xPL-enabled device or software application to see if it supports remote configuration.
+Devices that do not support remote configuration may require some manual steps to be taken - you should refer to the documentation for the device in question
+to determine what steps you need to take.
+<br>
+
+<h3>The xPLHal Configuration Manager</h3>
+xPLHal includes a feature-rich configuration manager, which has been tightly integrated into the xPLHal server to offer both flexible and reliable operation, as well as easy management through unified Windows-based and Web-based tools.
+<br><br>
+The built-in Configuration Manager within xPLHal is enabled by default, however should you wish to disable it for any reason, for example if you already have an xPL Configuration Manager on your network, you can do so by following the steps described in 
+<a href="../appendicies/disable.htm">Disabling xPLHal Integrated Components</a>.
+<br>
+Before you can begin configuring your xPL devices, you should ensure that the xPLHal service is installed and running.<br>
+You can then bring online any xPL devices that you need to configure.<br>
+<br>
+The xPL Devices node in the xPLHal Manager will show you a list of all currently configured xPL devices on your network.<br>
+Expanding this node and clicking on the Awaiting Configuration node will show you those devices which are currently waiting to be configured.<br>
+
+<h4>Configuring a Device</h4>
+To configure a device, first ensure that it is powered up and has a connection to your xPL network.<br>
+<ul>
+ <li>Select the xPL Devices -> Awaiting Configuration node.<br>
+ <li>The device you are configuring should appear in the list. Double-click on the device to open it's configuration window.
+ <li>You will see a list of supported configurable items. This list will vary depending on the device being configured, but at a minimum it will contain "newconf" and "interval".
+ <li>Select newconf, and in the text box to the right of the list, enter the name that you wish to associate with the device.<br>
+  The name must be between 1 and 16 characters long and cannot include whitespace (i.e. spaces or tab characters).
+ <li>Optionally, you can select the Interval item and enter an integer between 5 and 30.<br>
+  This is the number of minutes between heartbeat messages.
+ <li>When you have completed configuration of all the desired items, click OK.
+ <li>The device should then appear in the list of xPL Devices with it's newly configured name. 
+</ul>
+
+Please note that the device may remain in the list of Awaiting Configuration devices for up to 15 minutes after it has been configured.
+<br>
+You can re-configure any device at a later date by double-clicking on it and amending the required configuration parameters.
+
+</body>
+</html>

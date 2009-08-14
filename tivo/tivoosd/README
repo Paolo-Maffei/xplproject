@@ -1,0 +1,81 @@
+xPL Tivo OSD (On Screen Display), by Tony Tofts.
+
+To use this work you will also require the xPL Tivo Hub
+
+This is derivative work based on the original YAC program for TIVO
+by Jensen Harris.
+
+Below are the details of the licence terms for the original YAC package.
+
+
+***      YAC: Yet Another Caller ID Program - TiVo Listener     ***
+*** Copyright (C) 2002 Jensen Harris (jensen@sunflowerhead.com) ***
+***                http://www.sunflowerhead.com                 ***
+
+WELCOME
+
+Thanks for checking out YAC.  YAC is a Caller ID system that uses
+the modem in your Windows-based computer to monitor incoming phone
+calls.  When a phone call is received, YAC displays the Caller ID
+info on the computer screen.  YAC also contacts any "YAC Listeners"
+(such as your TiVo) on the network and sends them Caller ID
+information as well.  The TiVo Listener (this program) receives
+that information and displays Caller ID on your TV screen.
+
+YAC can also be used to send short text messages from your YAC
+server to listeners on your network.
+
+
+ACKNOWLEDGEMENTS
+
+A couple of acknowledgements are in order.  YAC was inspired by
+the "elseed" TiVo Caller ID program.  Unfortunately, my TiVo's
+modem was not consistently picking up Caller ID information, so I
+was out of luck.  However, the YAC TiVo Listener is based on
+"elseed", especially the very robust code to handle the hardware
+display.  No one has done it better, and the YAC TiVo Listener
+display code is taken directly from "elseed" (which based its
+display code, in turn, on "tivobi").
+
+
+GETTING STARTED
+
+The YAC source code is licensed and distributed under the GNU General
+Public License.  Be sure to read the LICENSE file before proceeding.
+
+You'll need the TiVo cross-compiler installed on your linux dev box to
+build YAC.  If you have built gcc and have the needed libs installed,
+you will have to do nothing but type 'make' in your yac directory to
+build yac.  You can then transfer it to your TiVo using FTP.
+
+If you have the compiler or libs in an unsual place, you can edit these
+locations in the Makefile.
+
+
+CONTACT INFO AND BUG REPORTING
+
+You can contact the author with questions, source modifications, etc.
+You can also post a message on the TiVo Community Forum Underground,
+as I read that message board and can reply to your question there.
+
+Web: http://www.sunflowerhead.com/software/yac/
+E-mail: jensen@sunflowerhead.com
+TiVo Community Forum: http://www.tivocommunity.com/ (TiVo Underground)
+
+
+MODIFYING SOURCE CODE
+
+You are welcome to modify source code under the terms of the GNU
+General Public License; however, you must supply me any modifications
+you make.  Send me an e-mail with your code modifications; if they are
+generally worthwhile, I'll include them in the official YAC distribution.
+
+
+VERSION HISTORY
+
+Version 0.10 - 11 August 2002
+Initial version of YAC TiVo Listener.
+
+Version 0.15 - 11 September 2002
+Added ability to receive and display text messages.  Requires YAC 0.15
+or later on the Windows computer.

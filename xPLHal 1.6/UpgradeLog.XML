@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?><?xml-stylesheet type='text/xsl' href='_UpgradeReport_Files/UpgradeReport.xslt'?><UpgradeLog>
+<Properties><Property Name="Solution" Value="xPLHal">
+</Property><Property Name="Solution File" Value="D:\Projects\xPL\xPLHal\xPLHal.sln">
+</Property><Property Name="Date" Value="10 July 2007">
+</Property><Property Name="Time" Value="20:45">
+</Property></Properties><Event ErrorLevel="0" Project="xPLHal" Source="xPLHal.vbproj" Description="Project converted successfully">
+</Event><Event ErrorLevel="3" Project="xPLHal" Source="xPLHal.vbproj" Description="Converted">
+</Event><Event ErrorLevel="2" Project="" Source="xPLHal.sln" Description="Solution file 'D:\Projects\xPL\xPLHal\xPLHal.sln' cannot be converted because it is read-only on disk. To convert the solution, change the permissions on the solution file to allow modification and re-open it.">
+</Event><Event ErrorLevel="3" Project="" Source="xPLHal.sln" Description="Not Converted">
+</Event></UpgradeLog>

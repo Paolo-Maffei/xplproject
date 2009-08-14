@@ -1,0 +1,83 @@
+[Root]
+Most Recent Package=xPL OCX
+
+
+[Package|xPL OCX|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\xplhalnet\Modules VB6\xPL_xPLocx\Package
+Controls Design-Time Support=Yes
+
+[Package|xPL OCX|Configure DAO ISAMs]
+Applicable=No
+
+[Package|xPL OCX|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|xPL OCX|Files Found]
+
+[Package|xPL OCX|Files Released]
+
+[Package|xPL OCX|Missing Dependency Information]
+
+[Package|xPL OCX|Out-of-Date Dependency Information]
+
+[Package|xPL OCX|Files Added]
+C:\WINDOWS\System32\MsStkPrp.dll=This file is needed for usercontrol design-time support.
+
+[Package|xPL OCX|Files Removed]
+
+[Package|xPL OCX|Files In Project]
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\WINDOWS\system32\msstkprp.dll=Yes
+
+[Package|xPL OCX|Configure Registry Files]
+Applicable=No
+
+[Package|xPL OCX|Configure Remote Servers]
+Applicable=No
+
+[Package|xPL OCX|Install Locations]
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=$(WinSysPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\WINDOWS\system32\msstkprp.dll=$(WinSysPath)
+
+[Package|xPL OCX|Configure Shared Files]
+Applicable=No
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=Yes
+
+[Package|xPL OCX|Distribution]
+Type=single
+Size=
+Title=xPL OCX
+
+[Package|xPL OCX|Package]
+PackageFolder=C:\xplhalnet\Modules VB6\xPL_xPLocx\Package
+ProjectFolder=C:\xplhalnet\Modules VB6\xPL_xPLocx
+ServerSideCab=
+File1=C:\xplhalnet\Modules VB6\xPL_xPLocx\Package\setup.exe
+File2=C:\xplhalnet\Modules VB6\xPL_xPLocx\Package\Setup.Lst
+File3=C:\xplhalnet\Modules VB6\xPL_xPLocx\Package\xPL.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

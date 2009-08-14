@@ -1,0 +1,62 @@
+
+WEATHER.CURRENT (every 60 seconds and on demand)
+datetime=
+humidityin=
+humidityout=
+tempin=
+tempout=
+dewptin=
+dewptout=
+windgustspeed=
+windgustdir=
+windavgspeed=
+windavgdir=
+windchill=
+rainrate=
+barometer=
+baromtrend=
+barompredict=
+
+WEATHER.LO (on demand)
+humidityin=
+humidityinat=
+humidityout=
+humidityoutat=
+tempin=
+tempinat=
+tempout=
+tempoutat=
+deptin=
+dewptinat=
+dewptout=
+dewptoutat=
+windchill=
+windchillat=
+
+WEATHER.HI (on demand)
+humidityin=
+humidityinat=
+humidityout=
+humidityoutat=
+tempin=
+tempinat=
+tempout=
+tempoutat=
+deptin=
+dewptinat=
+dewptout=
+dewptoutat=
+windspeed=
+winddir=
+windat=
+
+WEATHER.RAIN (on demand)
+rainrate=
+rainyesterday=
+raintotal=
+datetime=
+
+WEATHER.ALARM (on alarm)
+alarm=
+
+

@@ -1,0 +1,71 @@
+<html>
+
+<head>
+  <title>X10 Language Extensions</title>
+</head>
+
+<body>
+<h2>X10 Language Extensions</h2>
+The x10 class provides extensions to VBScript to allow direct integration with X10 devices and the xPLHal X10 device cache.
+<br>
+<h4>To send an X10 command</h4>
+<pre>x10.Send(&lt;device&gt;, &lt;function&gt;, &lt;brightness&gt;)
+&lt;device&gt; is a string containing the X10 device to be controlled, e.g. A1, F2, H3 etc.
+&lt;function&gt; is a string containing the function to be executed.
+Supported functions are:
+ON
+OFF
+DIM
+BRIGHT
+ALL LIGHTS OFF
+ALL LIGHTS ON
+ALL UNITS OFF
+&lt;brightness&gt; is an integer that specifies the level of the dim or bright command.
+For commands other than dim and bright, this parameter is ignored and should be set to zero.
+</pre>
+
+<h4>Load X10 Device and Attributes</h4>
+<pre>x10.loaddevice(<device>,<device type>,<is a light>, <resume dim>, <dim type>, <tracks dim level>, <label>, <timeout>, <State>, <Location>,<OnImage>,<OffImage>,<Overwrite>)
+e.g. call x10.loaddevice("A1",X10_LIGHT,True,True,X10_X10,True,"Kitchen Light",10,X10_OFF,location_kitchen,"light_on.gif","light_off.gif",False)
+The &lt;location&gt; parameter is for future use, most likely in the web interface
+The &lt;OnImage&gt; and &lt;OffImage&gt; parameters are for the web interface
+The &lt;Overwrite&gt; parameter is to determine if record for this device should be overwritten, however once the x10 devices are
+loaded into the database the loaddevice commands could be remarked out
+
+NOTE: some items are for future use
+
+You should not need to use this command under normal circumstances, as you can add X10 devices via the X10 node in the xPLHal Manager.
+</pre>
+
+<h4>To set an individual x10 attribute</h4>
+<pre>x10.attrib(<device>,<attribute>)=<new value>
+e.g. x10.attrib("A1",X10_TIMEOUT)=5
+This function is available, but should not be used except in exceptional/unusual circumstances
+</pre>
+
+<h4>To get an individual x10 attribute</h4>
+<pre>x10.attrib(<device>,<attribute>)
+e.g. lightstate=x10.attrib("A1",X10_STATE)
+
+The file ./scripts/headers/xplhal_x10.xpl contains all of the supported constants
+Please refer to this file for available values
+</pre>
+<br>
+The state of the X10 device cache is maintained automatically by xPLHal.
+It tracks device state changes, including commands that effect multiple devices.
+However, the nature of x10 means the maintaining of these states is based purely on
+the interpretation of xpl messages. Testing to improve this functionality will be
+on-going. 
+<br><br>
+The x10 cache is ONLY updated in response to xpl-trig messages
+(All x10 xpl app's should return an xpl-trig message, in response to an xpl-cmnd message,
+to confirm the message was received and actioned)
+<br>
+The DIM/BRIGHT function support is minimal at the moment, but will be improved.
+<br>
+<h4>To delete an X10 device</h4>
+<pre>x10.DeleteDevice(&lt;deviceName&gt;)</pre>
+This command deletes the specified X10 device from the database.
+
+</body>
+</html>

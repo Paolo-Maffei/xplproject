@@ -1,0 +1,33 @@
+<html>
+
+<head>
+  <title>What is xPL?</title>
+</head>
+
+<body>
+<h2>What is xPL?</h2>
+
+
+xPL is an open protocol intended to permit the control and monitoring of home automation devices. The primary design goal of xPL is to provide a rich set of features and functionality, whilst maintaining an elegant, uncomplicated message structure. The protocol includes complete discovery and auto-configuration capabilities which support a fully "plug-n-play" architecture - essential to ensure a good end-user experience.<br>
+xPL benefits from a strongly-specified message structure, required to ensure that xPL-enabled devices from different vendors are able to communicate without the risk of incompatibilities.<br>
+<br>
+The protocol consists of three basic message types:<br>
+<ul>
+<li><b>xpl-cmnd</b> (Command)<br>
+This message type carries instructions to be performed. For example, open lounge curtain.<br>
+<li><b>xpl-trig</b> (Trigger)<br>
+This message is generated when a device/application has a change of state.<br>
+It may also be generated in response to an xPL command (confirming action)<br>
+For example, lounge curtain is open.<br>
+<li><b>xpl-stat</b> (Status)<br>
+This message type is used for four main purposes,<br>
+1. Request remote configuration at startup<br>
+2. Provide an "i'm alive" heartbeat<br>
+3. Provide regular status information, if applicable<br>
+4. Generate a response that cannot be considered a 'change of state' (e.g. the results of a database lookup)<br>
+</ul>
+<br>
+Please see the <a href="../Appendicies/XplSpec.htm">xPL Specification Document</a> for complete technical details on the xPL protocol.
+
+</body>
+</html>

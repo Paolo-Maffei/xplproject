@@ -1,0 +1,12 @@
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\bin\Debug\xPL Serial Bridge Host.exe
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\bin\Debug\xPL Serial Bridge Host.pdb
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\bin\Debug\xPL Serial Bridge Host.xml
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\bin\Debug\xpllib.dll
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\bin\Debug\xpllib.xml
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\ResolveAssemblyReference.cache
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL_Serial_Bridge_Host.Resources.resources
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL_Serial_Bridge_Host.Service1.resources
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL Serial Bridge Host.vbproj.GenerateResource.Cache
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL Serial Bridge Host.exe
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL Serial Bridge Host.xml
+H:\Visual Studio 2008\Projects\xPL Serial Bridge Host\xPL Serial Bridge Host\obj\Debug\xPL Serial Bridge Host.pdb

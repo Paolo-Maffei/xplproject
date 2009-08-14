@@ -1,0 +1,2 @@
+- Determinators firing by themselves?
+(can this really happen?)

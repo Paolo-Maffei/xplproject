@@ -1,0 +1,14 @@
+bin\Debug\sndvol32.exe
+bin\Debug\sndvol32.pdb
+bin\Debug\sndvol32.xml
+bin\Debug\Interop.MSComctlLib.dll
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\Interop.MSComctlLib.dll
+obj\Debug\ResolveComReference.cache
+obj\Debug\sndvol32.frmVolControl.resources
+obj\Debug\sndvol32.frmMiniControl.resources
+obj\Debug\sndvol32.Resources.resources
+obj\Debug\sndvol32.vbproj.GenerateResource.Cache
+obj\Debug\sndvol32.exe
+obj\Debug\sndvol32.xml
+obj\Debug\sndvol32.pdb

@@ -1,0 +1,53 @@
+Schema Definition
+-----------------
+
+Class = VOICE
+Type  = BASIC
+
+This Schema provides a method of broadcasting voice commands
+
+
+XPL-TRIG Structure
+------------------
+VOICE.BASIC
+{
+COMMAND=<word/phrase spoken>
+[CONTEXT=<alternative context used>]
+[ZONE=<zone>]
+}
+
+
+XPL-CMND Structure
+------------------
+VOICE.BASIC
+{
+COMMAND=ACTIVATE/SUSPEND/ON/OFF/CONTEXT
+[FILENAME=<filename of alternative context>
+}
+
+
+XPL-STAT Structure
+------------------
+VOICE.BASIC
+{
+STATUS=ACTIVATED/SUSPENDED
+}
+
+HBEAT.*
+{
+(hbeat items)
+}
+
+
+
+Schema Specific Notes
+---------------------
+Zone is optional, and only included in message if configured
+
+
+
+Standard Notes
+--------------
+HBEAT.* = hbeat.basic or hbeat.app etc
+(hbeat items) = standard .basic or .app heartbeat items
+[<something>] = optional

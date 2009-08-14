@@ -1,0 +1,14 @@
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xPL VFD Display Driver.exe.config
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xPL VFD Display Driver.exe
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xPL VFD Display Driver.pdb
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xPL VFD Display Driver.xml
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xpllib.dll
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\bin\Release\xpllib.xml
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\ResolveAssemblyReference.cache
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPLVFDisplay.Resources.resources
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPLVFDisplay.ProjectInstaller.resources
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPLVFDisplay.VFDDriver.resources
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPLVFDisplay.vbproj.GenerateResource.Cache
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPL VFD Display Driver.exe
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPL VFD Display Driver.xml
+H:\Visual Studio 2008\Projects\xPLVFDisplay\xPLVFDisplay\obj\Release\xPL VFD Display Driver.pdb

@@ -1,0 +1,58 @@
+<html>
+
+<head>
+  <title>Periods</title>
+</head>
+
+<body>
+<h2>Periods</h2>
+Periods are intended to represent different portions of the day. By default, xPLHal comes configured with two periods: Day and night.
+<br>
+Detection of day and night can be via a number of methods, some of which are listed below.
+<ul>
+<li>The xPL DawnDusk service can be installed. This is a service that sends out xPL messages at dawn and dusk, based on the calculated sunset and sunrise times for your current location.
+<li>An X10 motion sensor such as the MS13, or the PR511 external floodlight can be used to detect dusk and dawn. These devices send out an X10 message which can be picked up by xPLHal and used to set the Period accordingly.
+<li>A light sensor can be directly wired to the PC via the joystick port, or via an add-on serial I/O interface. A utility is available for free download from <a href="http://www.xpl.myby.co.uk/">www.xpl.myby.co.uk</a> which will allow up to 8 devices to be connected to a joystick port and interfaced with an xPL system.
+</ul>
+<br>
+<h4>To set the period</h4>
+The following code sample demonstrates setting the period to one of the values defined in the scripts \headers\XPLHAL_SETTINGS.XPL script:<br>
+<pre>sys.setting("Period") = SYS_PERIOD_NIGHT
+</pre>
+<br>
+<h4>To determine the current period</h4>
+The following code sample demonstrates how to determine the current period, and take action accordingly:<br>
+<pre>Dim CurrentPeriod
+CurrentPeriod = sys.setting("Period")
+If CurrentPeriod = SYS_PERIOD_NIGHT Then
+  call X10.Send("A1","ON",0)
+End If
+</pre>
+The above code will cause the X10 device A1 to be switched on only if the Period is currently night.
+<br>
+<h4>Specifying actions to occur when a period changes</h4>
+You can create sub-routines that will be executed whenever a particular period becomes active.
+By default, in the scripts\headers\periods.xpl file, you will find the following code:<br>
+<pre>Sub Period_Day()
+End Sub
+
+Sub Period_Night()
+End Sub
+</pre>
+Any code you place in these sub-routines will be executed whenever the period is set to the appropriate value.<br>
+For example, suppose you have a light outside your house which you wish to come on at dusk, and switch off at dawn.
+You could modify the above scripts as follows:<br>
+<pre>Sub Period_Night()
+  call X10.Send("A1","ON",0)
+End Sub
+
+Sub Period_Day()
+  call X10.Send("A1","OFF",0)
+End Sub
+</pre>
+
+You can use the Period in combination with the <a href="modes.xpl">Mode</a> setting to achieve a high level of conditional logic in your scripts.
+
+
+</body>
+</html>

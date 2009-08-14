@@ -1,0 +1,194 @@
+[Root]
+Most Recent Package=Standard Setup Package 1
+
+
+[Package|xPL DevCom|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\xplhalnet\Modules VB6\xPL_DevCOM\Package
+
+[Package|xPL DevCom|Configure DAO ISAMs]
+Applicable=No
+
+[Package|xPL DevCom|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|xPL DevCom|Files Found]
+
+[Package|xPL DevCom|Files Released]
+
+[Package|xPL DevCom|Missing Dependency Information]
+C:\xplhalnet\Modules VB6\xPL_WM918\xPL.ocx=
+
+[Package|xPL DevCom|Out-of-Date Dependency Information]
+
+[Package|xPL DevCom|Files Added]
+
+[Package|xPL DevCom|Files Removed]
+
+[Package|xPL DevCom|Files In Project]
+C:\xplhalnet\Modules VB6\xPL_DevCOM\xPLDevCOM.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\MSCOMM32.OCX=Yes
+C:\xplhalnet\Modules VB6\xPL_WM918\xPL.ocx=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+
+[Package|xPL DevCom|Configure Registry Files]
+Applicable=No
+
+[Package|xPL DevCom|Configure Remote Servers]
+Applicable=No
+
+[Package|xPL DevCom|Install Locations]
+C:\xplhalnet\Modules VB6\xPL_DevCOM\xPLDevCOM.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\MSCOMM32.OCX=$(WinSysPath)
+C:\xplhalnet\Modules VB6\xPL_WM918\xPL.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+
+[Package|xPL DevCom|Configure Shared Files]
+Applicable=Yes
+C:\xplhalnet\Modules VB6\xPL_DevCOM\xPLDevCOM.exe=No
+
+[Package|xPL DevCom|Distribution]
+Type=single
+Size=
+Title=xPLDevCOM
+
+[Package|xPL DevCom|IconGroups]
+Group0=xPLDevCOM
+PrivateGroup0=-1
+Parent0=$(Programs)
+
+[Package|xPL DevCom|xPLDevCOM]
+Icon1=xPLDevCOM.exe
+Title1=xPLDevCOM
+StartIn1=$(AppPath)
+Key1=Icon1
+
+[Package|xPL DevCom|Package]
+PackageFolder=C:\xplhalnet\Modules VB6\xPL_DevCOM\Package
+ProjectFolder=C:\xplhalnet\Modules VB6\xPL_DevCOM
+ServerSideCab=
+File1=C:\xplhalnet\Modules VB6\xPL_DevCOM\Package\setup.exe
+File2=C:\xplhalnet\Modules VB6\xPL_DevCOM\Package\Setup.Lst
+File3=C:\xplhalnet\Modules VB6\xPL_DevCOM\Package\xPLDevCOM.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz
+
+[Package|Standard Setup Package 1|xPL Barcode]
+Icon1=xPLBarcode.exe
+Title1=xPL Barcode
+StartIn1=$(AppPath)
+Key1=Icon1
+
+
+[Package|Standard Setup Package 1|Root]
+SubWizProgID=PDWizard.SetupPkgSubWiz
+BuildFolder=C:\xplhalnet\Modules VB6\xPL_Barcode\Package
+
+[Package|Standard Setup Package 1|Configure DAO ISAMs]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure DAO ODBC]
+JetWorkspace=
+ODBCDirect=
+
+[Package|Standard Setup Package 1|Files Found]
+
+[Package|Standard Setup Package 1|Files Released]
+
+[Package|Standard Setup Package 1|Missing Dependency Information]
+
+[Package|Standard Setup Package 1|Out-of-Date Dependency Information]
+
+[Package|Standard Setup Package 1|Files Added]
+c:\windows\system32\mswinsck.ocx=
+
+[Package|Standard Setup Package 1|Files Removed]
+
+[Package|Standard Setup Package 1|Files In Project]
+C:\xplhalnet\Modules VB6\xPL_Barcode\xPLBarcode.exe=Yes
+C:\WINDOWS\system32\msvbvm60.dll=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=Yes
+C:\WINDOWS\system32\MSCOMM32.OCX=Yes
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=Yes
+C:\WINDOWS\system32\VB6STKIT.DLL=Yes
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=Yes
+C:\WINDOWS\system32\MSWINSCK.OCX=Yes
+C:\WINDOWS\system32\MSINET.OCX=Yes
+
+[Package|Standard Setup Package 1|Configure Registry Files]
+Applicable=No
+
+[Package|Standard Setup Package 1|Configure Remote Servers]
+Applicable=No
+
+[Package|Standard Setup Package 1|Install Locations]
+C:\xplhalnet\Modules VB6\xPL_Barcode\xPLBarcode.exe=$(AppPath)
+C:\WINDOWS\system32\msvbvm60.dll=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEAUT32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\OLEPRO32.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\ASYCFILT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\STDOLE2.TLB=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\Redist\COMCAT.DLL=$(WinSysPathSysFile)
+C:\WINDOWS\system32\MSCOMM32.OCX=$(WinSysPath)
+C:\xplhalnet\Modules VB6\xPL_xPLocx\xPL.ocx=$(WinSysPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP.EXE=$(AppPath)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\SETUP1.EXE=$(WinPath)
+C:\WINDOWS\system32\VB6STKIT.DLL=$(WinSysPathSysFile)
+C:\Program Files\Microsoft Visual Studio\VB98\Wizards\PDWizard\ST6UNST.EXE=$(WinPath)
+C:\WINDOWS\system32\MSWINSCK.OCX=$(WinSysPath)
+C:\WINDOWS\system32\MSINET.OCX=$(WinSysPath)
+
+[Package|Standard Setup Package 1|Configure Shared Files]
+Applicable=Yes
+C:\xplhalnet\Modules VB6\xPL_Barcode\xPLBarcode.exe=No
+
+[Package|Standard Setup Package 1|Distribution]
+Type=single
+Size=
+Title=xPL Barcode
+
+[Package|Standard Setup Package 1|IconGroups]
+Group0=xPL
+PrivateGroup0=0
+Parent0=$(Programs)
+
+[Package|Standard Setup Package 1|xPL]
+Icon1=xPLBarcode.exe
+Title1=xPL Barcode
+StartIn1=$(AppPath)
+Key1=Icon3
+
+[Package|Standard Setup Package 1|Package]
+PackageFolder=C:\xplhalnet\Modules VB6\xPL_Barcode\Package
+ProjectFolder=C:\xplhalnet\Modules VB6\xPL_Barcode
+ServerSideCab=
+File1=C:\xplhalnet\Modules VB6\xPL_Barcode\Package\setup.exe
+File2=C:\xplhalnet\Modules VB6\xPL_Barcode\Package\Setup.Lst
+File3=C:\xplhalnet\Modules VB6\xPL_Barcode\Package\xPLBarcode.CAB
+Handler1=PDWizard.FolderDplySubWiz
+Handler2=PDWizard.WebPostDplySubWiz

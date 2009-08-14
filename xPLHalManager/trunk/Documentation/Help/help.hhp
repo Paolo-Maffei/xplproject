@@ -1,0 +1,39 @@
+[OPTIONS]
+Compatibility=1.1 or later
+Compiled file=xplhal.chm
+Contents file=Table of Contents.hhc
+Default topic=Topics\Introduction\WhatIsXplHal.htm
+Display compile progress=No
+Index file=Index.hhk
+Language=0x809 English (United Kingdom)
+
+
+[FILES]
+Topics\Introduction\WhatIsXplHal.htm
+Topics\Introduction\WhatIsXpl.htm
+Topics\Appendicies\XplSpec.htm
+Topics\X10\Overview.htm
+Topics\Scripting\introduction.htm
+Topics\Events\introduction.htm
+Topics\Events\single.htm
+Topics\Events\recurring.htm
+Topics\Reference\xplclass.htm
+Topics\Reference\x10class.htm
+Topics\Reference\sysclass.htm
+Topics\Concepts\modes.htm
+Topics\Concepts\periods.htm
+Topics\Concepts\globals.htm
+Topics\Concepts\default.htm
+Topics\Scripting\layout.htm
+Topics\Appendicies\backup.htm
+Topics\Introduction\gateways.htm
+Topics\Introduction\summary.htm
+Topics\X10\x10scripting.htm
+Topics\Appendicies\glossary.htm
+Topics\Scripting\execution.htm
+Topics\Introduction\config.htm
+Topics\Appendicies\disable.htm
+Topics\Reference\xapclass.htm
+
+[INFOTYPES]
+

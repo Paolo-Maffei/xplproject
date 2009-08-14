@@ -1,0 +1,12 @@
+sub incoming(msg)
+
+dim myarray
+displaytext="1111\n2222\n3333\n4444\n5555\n6666\n" & chr(10)
+MyArray=Split(DisplayText,"\n",5,1)
+msgbox myarray(2)
+
+
+end sub
+
+sub outgoing(msg)
+end sub

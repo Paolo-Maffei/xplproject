@@ -1,0 +1,7 @@
+<configuration> 
+  <appsettings>
+    <settings>
+      <datasource connect="Provider=Microsoft.Jet.OLEDB.4.0;Persist Security Info=False;Data Source=C:\Program Files\xPL\xPLVR\VR.mdb;" />
+    </settings>
+  </appsettings>
+</configuration>

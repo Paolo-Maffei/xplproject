@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{0D53B0F0-87C7-485C-8F5D-EB9B4AAA6E63}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>CommonCode</RootNamespace>
+    <AssemblyName>CommonCode</AssemblyName>
+    <FileAlignment>512</FileAlignment>
+    <MyType>Windows</MyType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DocumentationFile>CommonCode.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DocumentationFile>CommonCode.xml</DocumentationFile>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="StartupShutdown.vb" />
+    <Compile Include="XHCP.vb" />
+    <Compile Include="xplCommon.vb" />
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="My Project\Application.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Application.myapp</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="My Project\Settings.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="My Project\Application.myapp">
+      <Generator>MyApplicationCodeGenerator</Generator>
+      <LastGenOutput>Application.Designer.vb</LastGenOutput>
+    </None>
+    <None Include="My Project\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <CustomToolNamespace>My</CustomToolNamespace>
+      <LastGenOutput>Settings.Designer.vb</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CacheManager\GOCManager.vbproj">
+      <Project>{B9CB7D63-C851-4C58-A84B-86D0DAE266EF}</Project>
+      <Name>GOCManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeterminatorEngine\DeterminatorEngine.vbproj">
+      <Project>{54EB3606-5749-4978-8FE4-123B1F31AA3D}</Project>
+      <Name>DeterminatorEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceManager\DeviceManager.vbproj">
+      <Project>{9937ABEA-F015-40CE-8A26-6BBE2CBDEB91}</Project>
+      <Name>DeviceManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSystem\EventSystem.vbproj">
+      <Project>{48317B52-3A1C-440C-9564-ACDB663F2592}</Project>
+      <Name>EventSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ScriptEngine\Scripts.vbproj">
+      <Project>{83994FC5-E4E8-4B30-BB56-6C491ECA026C}</Project>
+      <Name>Scripts</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xPLEngine\xPLEngine.vbproj">
+      <Project>{B83A15C7-E660-48C1-A2E4-A80060D9D39D}</Project>
+      <Name>xPLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xpllib_V4.4\xpllib.vbproj">
+      <Project>{6CA025DE-C515-4E30-BCCC-846378F2AD20}</Project>
+      <Name>xpllib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xPLLogging\xPLLogging.vbproj">
+      <Project>{A2A48DF0-D3B6-44E2-B8C2-47EC27DBD3FC}</Project>
+      <Name>xPLLogging</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xPLWebServices\xPLWebServices.vbproj">
+      <Project>{4EDE2273-C8FC-4BAB-955D-B3FD7723EBA9}</Project>
+      <Name>xPLWebServices</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

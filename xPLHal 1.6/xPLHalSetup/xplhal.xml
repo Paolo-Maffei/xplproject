@@ -1,0 +1,39 @@
+<?xml version="1.0" standalone="no"?>
+<configuration>
+  <appsettings>
+    <settings>
+      <control xapsupport="N" matchall="N" />
+      <config disableconfig="N" />
+      <smtp disablesmtp="N" />
+      <master masterip="" />
+      <authentication password="" />
+      <xhcp logging="N" />
+      <autoscripts create="N" />
+    </settings>
+    <constructs>
+      <construct subid="F" key="%msgtype%" desc="Message Type" />
+      <construct subid="V" key="%vendor%" desc="Source Vendor" />
+      <construct subid="S" key="%device%" desc="Source Device" />
+      <construct subid="I" key="%instance%" desc="Source Instance" />
+      <construct subid="C" key="%class%" desc="Schema Class" />
+      <construct subid="T" key="%type%" desc="Schema Type" />
+      <construct subid="H" key="%house%" desc="X10 House Code" />
+      <construct subid="D" key="%device%" desc="X10 Device Code" />
+      <construct subid="X" key="%command%" desc="X10 Command" />
+      <construct subid="M" key="mode" desc="Mode" />
+      <values key="empty" desc="Security" />
+      <values key="occupied" desc="Occupied" />
+      <values key="sleep" desc="Sleep Security" />
+      <construct subid="P" key="period" desc="Period" />
+      <values key="day" desc="Daytime" />
+      <values key="night" desc="Nightime" />
+    </constructs>
+    <schemas>
+      <schema msgtype="*" source_vendor="*" source_device="*" source_instance="*" schema_class="HBEAT" schema_type="*" subs="VSIF" action="break" />
+      <schema msgtype="*" source_vendor="*" source_device="*" source_instance="*" schema_class="CONFIG" schema_type="*" subs="VSIF" action="break" />
+      <schema msgtype="*" source_vendor="*" source_device="*" source_instance="*" schema_class="X10" schema_type="*" subs="DMPXF" action="break" />
+      <schema msgtype="*" source_vendor="*" source_device="*" source_instance="*" schema_class="*" schema_type="*" subs="VSIF" action="break" />
+      <schema msgtype="*" source_vendor="*" source_device="*" source_instance="*" schema_class="*" schema_type="*" subs="ct" action="break" />
+    </schemas>
+  </appsettings>
+</configuration>

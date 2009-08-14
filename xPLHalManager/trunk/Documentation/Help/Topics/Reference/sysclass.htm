@@ -1,0 +1,101 @@
+<html>
+
+<head>
+  <title>System Language Extensions</title>
+</head>
+
+<body>
+<h2>System Language Extensions</h2>
+The sys class provides extensions to VBScript which allow the core elements of the xPLHal server to be manipulated.
+<br>
+
+<h4>To set or return the current MODE</h4>
+<pre>sys.setting("Mode")
+e.g. sys.setting("Mode") = sys_mode_occupied to set the mode to occupied
+e.g. mymode = sys.setting("Mode") to return current mode
+This is the only way you should change the mode - do not use sys.value to modify the global value directly.
+</pre>
+
+<h4>To set or return the current PERIOD</h4>
+<pre>sys.setting("Period")
+e.g. sys.setting("Period") = sys_period_day to set the period to day
+e.g. myperiod = sys.setting("Period") to return current period
+</pre>
+
+<h4>To add a Single timed event</h4>
+<pre>sys.SingleEvent(&lt;dd/mm/yyyy hh:mm&gt;, &lt;vbscript sub to execute&gt;, &lt;parameter or ""&gt;, &lt;tag name for identification&gt;)
+e.g. call sys.singleevent("21/09/2002 15:30","mysub", "", "pir 1")
+This runs a vbscript called mysub at 3:30pm on the 21/09/02, then deletes the event
+Note: if the tag already exists then the existing event is overwritten
+</pre>
+
+<h4>To add a Recurring timed event</h4>
+<pre>sys.RecurringEvent(&lt;start time&gt;, &lt;end time&gt;, &lt;interval&gt;, &lt;randomisation&gt;, &lt;which days&gt;, &lt;sub to execute&gt;, &lt;parameter or ""&gt;, &lt;tag name&gt;, &lt;overwrite&gt;)
+
+If the Overwrite parameter is set to True and an event with the same tag name already exists, it will be replaced by a recurring event with the new values.
+If the parameter is false and an event with the same tag name exists, the call will return false and no action will be taken.
+
+Examples:
+
+call sys.recurringevent("12:00","12:00",0,0,"0111110","mysub", "", "Lunch Time",True)
+This runs a sub-routine called my sub at noon on weekdays
+
+call sys.recurringevent("10:00","14:00",30,0,"1000001","mysub" ,"" , "something",True)
+This runs a sub-routine called mysub at 30 minute intervals between 10am and 2pm at the weekends
+</pre>
+
+<h4>To delete a timed event</h4>
+<pre>sys.DeleteEvent(&lt;tag name&gt;)
+e.g. call sys.deleteevent("Lunch Time")
+This deletes the first event found with a tag of "Lunch Time"
+</pre>
+
+<h4>To check if a timed event exists</h4>
+<pre>sys.EventExists(&lt;tag name&gt;)
+e.g. if sys.eventexists("PIR1")=True then ...
+</pre>
+
+<h4>To save all events</h4>
+<pre>sys.SaveEvents()</pre>
+All single and recurring events are saved when xPLHal is shut down, however the above function can be called to immediately write the events database to disk.
+By default, this function is called every 15 minutes as part of the xPLHalBackup event, which ensures that if the xPLHal server was to crash, any changes made to the events system would already have been committed to disk.
+
+<h4>To return a web page</h4>
+<pre>sys.gethttp(<full url>,<bytes to get>)
+e.g. mypage = sys.gethttp("http://192.168.1.50:8080/query?artist=",32768)
+</pre>
+
+<h4>To wait for a specified number of seconds</h4>
+<pre>sys.Waiting(n)
+Where n is the number of seconds (between 1 and 60) that the script should wait before continuing it's execution.
+</pre>
+
+<h4>To check for the existance of a global, or to delete a global</h4>
+<pre>sys.exists(<globalname>,<delete>) - returns true of false
+e.g. status=sys.exists("TEST",false) 
+</pre>
+
+<h4>To set a global value, create if it doesnt exist</h4>
+<pre>sys.value(<globalname>)=<value>
+e.g. sys.value("TEST2")=200
+A SCRIPT IS RUN IF THE VALUE CHANGES
+Note: xPLHal has to interpret the data type as string, numeric or date/time whenever a global
+is created for the first time. Ensure that the first value written is of the correct type.
+</pre>
+
+<h4>To get a global value</h4>
+<pre>sys.value(<globalname>)
+e.g. myvalue=sys.globalvalue("TEST3")
+</pre>
+
+<h4>To disable an expired application</h4>
+<pre>sys.suspend(<source.instance>)
+e.g. call sys.suspend("CallerID.Line1")
+This is the default routine for the <source>_<instance>_Expired() script
+If the app's heartbeat reappears later, then it is automatically set back to active.
+</pre>
+
+
+
+</body>
+</html>

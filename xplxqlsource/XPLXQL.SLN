@@ -1,0 +1,28 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLXQL", "xPLXQL.vbproj", "{5E26E2B1-1000-4623-A94D-81F6E5A12D02}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "xPLXQLSetup", "..\setup\xPLXQLSetup\xPLXQLSetup.vdproj", "{B366C50F-2D4A-41B9-BDE3-2891331FF5C8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5E26E2B1-1000-4623-A94D-81F6E5A12D02}.Debug.ActiveCfg = Release|.NET
+		{5E26E2B1-1000-4623-A94D-81F6E5A12D02}.Debug.Build.0 = Release|.NET
+		{5E26E2B1-1000-4623-A94D-81F6E5A12D02}.Release.ActiveCfg = Release|.NET
+		{5E26E2B1-1000-4623-A94D-81F6E5A12D02}.Release.Build.0 = Release|.NET
+		{B366C50F-2D4A-41B9-BDE3-2891331FF5C8}.Debug.ActiveCfg = Release
+		{B366C50F-2D4A-41B9-BDE3-2891331FF5C8}.Debug.Build.0 = Release
+		{B366C50F-2D4A-41B9-BDE3-2891331FF5C8}.Release.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

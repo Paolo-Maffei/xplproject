@@ -1,0 +1,428 @@
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CA565FD9-CEFD-4EBC-B2CF-451841864209}</ProjectGuid>
+    <SccProjectName>
+    </SccProjectName>
+    <SccLocalPath>
+    </SccLocalPath>
+    <SccProvider>
+    </SccProvider>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>xPLHalMgr</AssemblyName>
+    <AssemblyOriginatorKeyFile>xpllib.snk</AssemblyOriginatorKeyFile>
+    <AssemblyOriginatorKeyMode>None</AssemblyOriginatorKeyMode>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <OutputType>WinExe</OutputType>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionStrict>On</OptionStrict>
+    <RootNamespace>xPLHalMgr</RootNamespace>
+    <StartupObject>xPLHalMgr.frmMain</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <MyType>WindowsFormsWithCustomSubMain</MyType>
+    <SccAuxPath>
+    </SccAuxPath>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <PublishUrl>http://localhost/xPLHalMgr/</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Web</InstallFrom>
+    <UpdateEnabled>true</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>xPLHalMgr.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>true</DebugSymbols>
+    <Optimize>false</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>false</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>bin\</OutputPath>
+    <DocumentationFile>xPLHalMgr.xml</DocumentationFile>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>
+    </DefineConstants>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
+    <DebugSymbols>false</DebugSymbols>
+    <Optimize>true</Optimize>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <RemoveIntegerChecks>true</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <NoWarn>42016,42017,42018,42019,42032</NoWarn>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="ScintillaNet, Version=2.0.3138.25704, Culture=neutral, PublicKeyToken=948d6c9751444115, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\Program Files\ScintillaNET\ScintillaNet.dll</HintPath>
+    </Reference>
+    <Reference Include="System">
+      <Name>System</Name>
+    </Reference>
+    <Reference Include="System.Design" />
+    <Reference Include="System.Drawing">
+      <Name>System.Drawing</Name>
+    </Reference>
+    <Reference Include="System.ServiceProcess">
+      <Name>System.ServiceProcess</Name>
+    </Reference>
+    <Reference Include="System.Windows.Forms">
+      <Name>System.Windows.Forms</Name>
+    </Reference>
+    <Reference Include="System.Xml">
+      <Name>System.XML</Name>
+    </Reference>
+    <Reference Include="xpllib, Version=4.4.3196.42501, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\xpllib_Source_V4.4\bin\xpllib.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="microsoft.win32" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Drawing" />
+    <Import Include="system.globalization" />
+    <Import Include="system.io" />
+    <Import Include="system.net" />
+    <Import Include="system.net.sockets" />
+    <Import Include="system.resources" />
+    <Import Include="system.serviceprocess" />
+    <Import Include="system.text" />
+    <Import Include="system.threading" />
+    <Import Include="System.Windows.Forms" />
+    <Import Include="system.xml" />
+    <Import Include="xplhalmgr.findreplace" />
+    <Import Include="xPLHalMgr.globals" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="frmChangeStuff.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConfigureDevice.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmConnect.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDeterminator.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDeterminatorSubWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmDeterminatorWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditDeterminator.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditDeterminatorAction.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditEvent.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditSchema.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditScript.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditX10.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEditXML.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmErrorLog.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmEventWizard.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMain.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmMonitor.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewBodyBits.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmNewFunction.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmProperties.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRestartService.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmRunSub.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSelectLanguage.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSendRawXPL.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmSplash.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="frmUpdatePlugIn.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="globals.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="modRegistrySettings.vb">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="My Project\Resources.Designer.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="xplhalmgrbase.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <EmbeddedResource Include="frmChangeStuff.resx">
+      <DependentUpon>frmChangeStuff.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmConfigureDevice.resx">
+      <DependentUpon>frmConfigureDevice.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmConnect.resx">
+      <DependentUpon>frmConnect.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDeterminator.resx">
+      <DependentUpon>frmDeterminator.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDeterminatorSubWizard.resx">
+      <DependentUpon>frmDeterminatorSubWizard.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmDeterminatorWizard.resx">
+      <DependentUpon>frmDeterminatorWizard.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditDeterminator.resx">
+      <DependentUpon>frmEditDeterminator.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditDeterminatorAction.resx">
+      <DependentUpon>frmEditDeterminatorAction.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditEvent.resx">
+      <DependentUpon>frmEditEvent.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditSchema.resx">
+      <DependentUpon>frmEditSchema.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditScript.resx">
+      <DependentUpon>frmEditScript.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditX10.resx">
+      <DependentUpon>frmEditX10.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEditXML.resx">
+      <DependentUpon>frmEditXML.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmErrorLog.resx">
+      <DependentUpon>frmErrorLog.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmEventWizard.resx">
+      <DependentUpon>frmEventWizard.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMain.resx">
+      <DependentUpon>frmMain.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmMonitor.resx">
+      <DependentUpon>frmMonitor.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewBodyBits.resx">
+      <DependentUpon>frmNewBodyBits.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmNewFunction.resx">
+      <DependentUpon>frmNewFunction.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmProperties.resx">
+      <DependentUpon>frmProperties.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRestartService.resx">
+      <DependentUpon>frmRestartService.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmRunSub.resx">
+      <DependentUpon>frmRunSub.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSelectLanguage.resx">
+      <DependentUpon>frmSelectLanguage.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSendRawXPL.resx">
+      <DependentUpon>frmSendRawXPL.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmSplash.resx">
+      <DependentUpon>frmSplash.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="frmUpdatePlugIn.resx">
+      <DependentUpon>frmUpdatePlugIn.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="My Project\Resources.resx">
+      <CustomToolNamespace>My.Resources</CustomToolNamespace>
+      <Generator>VbMyResourcesResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.vb</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="xplhalmgrbase.resx">
+      <DependentUpon>xplhalmgrbase.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <None Include="bin\xplhal.chm" />
+    <None Include="Documentation\Help\help.hhp" />
+    <None Include="Documentation\Help\Index.hhk" />
+    <None Include="Documentation\Help\Table of Contents.hhc" />
+    <None Include="homepage.rtf" />
+    <Content Include="scintilla license.rtf">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <None Include="xpllib.snk" />
+    <Content Include="bin\xplsettings.exe" />
+    <Content Include="Documentation\bugs.txt" />
+    <Content Include="Documentation\Help\Topics\Appendicies\backup.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\credits.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\disable.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\glossary.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\hvimport.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\plugins.htm" />
+    <Content Include="Documentation\Help\Topics\Appendicies\XplSpec.htm" />
+    <Content Include="Documentation\Help\Topics\Concepts\default.htm" />
+    <Content Include="Documentation\Help\Topics\Concepts\globals.htm" />
+    <Content Include="Documentation\Help\Topics\Concepts\modes.htm" />
+    <Content Include="Documentation\Help\Topics\Concepts\periods.htm" />
+    <Content Include="Documentation\Help\Topics\Determinator\Determinator.htm" />
+    <Content Include="Documentation\Help\Topics\Determinator\DeterminatorIntro.htm" />
+    <Content Include="Documentation\Help\Topics\Determinator\stepbystep.htm" />
+    <Content Include="Documentation\Help\Topics\Determinator\sysvariables.htm" />
+    <Content Include="Documentation\Help\Topics\Events\introduction.htm" />
+    <Content Include="Documentation\Help\Topics\Events\recurring.htm" />
+    <Content Include="Documentation\Help\Topics\Events\single.htm" />
+    <Content Include="Documentation\Help\Topics\Introduction\config.htm" />
+    <Content Include="Documentation\Help\Topics\Introduction\gateways.htm" />
+    <Content Include="Documentation\Help\Topics\Introduction\summary.htm" />
+    <Content Include="Documentation\Help\Topics\Introduction\WhatIsXpl.htm" />
+    <Content Include="Documentation\Help\Topics\Introduction\WhatIsXplHal.htm" />
+    <Content Include="Documentation\Help\Topics\Monitor\Intro.htm" />
+    <Content Include="Documentation\Help\Topics\Reference\sysclass.htm" />
+    <Content Include="Documentation\Help\Topics\Reference\x10class.htm" />
+    <Content Include="Documentation\Help\Topics\Reference\xapclass.htm" />
+    <Content Include="Documentation\Help\Topics\Reference\xplclass.htm" />
+    <Content Include="Documentation\Help\Topics\Scripting\execution.htm" />
+    <Content Include="Documentation\Help\Topics\Scripting\introduction.htm" />
+    <Content Include="Documentation\Help\Topics\Scripting\layout.htm" />
+    <Content Include="Documentation\Help\Topics\X10\Overview.htm" />
+    <Content Include="Documentation\Help\Topics\X10\x10scripting.htm" />
+    <Content Include="Documentation\Manager-version.txt" />
+    <Content Include="Documentation\todo.txt" />
+    <Content Include="SciLexer.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

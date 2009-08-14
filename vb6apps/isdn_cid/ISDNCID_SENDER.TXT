@@ -1,0 +1,30 @@
+This command line allows the ISDN-CID application from www.telecosoft.com to talk xPL! the app is called from both the Call Start launch menu, and the Call end menu, and sends an xPL trig message on each.
+
+Syntax:
+
+CIDSend 
+/START (or /END)
+/C=!c 	Caller's phone number, no spaces
+/N=#!n#	Caller's name (spaces allowed, # delimited)
+/M=!m 	Called number, no spaces
+/T=!t	Time of Call
+/D=!d	Date of Call
+/L=!l	MSN Number called (1-10)
+
+For the Call End message, pass these parameters as well:
+
+/R=!r	Raw Reason Code
+/F=#!f#	Saved File Path (spaces allowed, # delimited)
+/Y=!y	Call Type (numeric code)
+/P=!p	number of Pages, or Message Length, or Ring Time.
+
+This uses ISDN-CID's defined variables, which allow the app to pass CID information to other processes.
+
+Included in the zip bundle is full VB6 source code, and a suitable MSWINSCK.OCX control, which should be registered on your system. NOTE: any working MSWINSCK.OCX should be fine, there's nothing special about this version.
+
+This Application and it's source code are (c) 2003 Ian Lowe, Wintermute Consultancy.
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 2 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+

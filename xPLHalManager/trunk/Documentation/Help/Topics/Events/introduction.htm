@@ -1,0 +1,49 @@
+<html>
+	<head>
+		<title>Overview of Timed Events in xPLHal</title>
+	</head>
+	<body>
+		<h2>Overview of Timed Events in xPLHal</h2>
+		In addition to executing scripts in response to xPL messages being received, 
+		xPLHal includes a Timed Events Engine that allows scripts to be executed based 
+		on specific dates or times.
+		<br>
+		xPLHal supports three different types of timed events - Single, Recurring and 
+		Repeating.<br>
+		<h2><a name="single">Single Events</a></h2>
+		Single events are those which occur only once, on a specified date, and at a 
+		specified time. As soon as the event has been executed, it will be removed from 
+		the events database.<br>
+		Although you specify an absolute date and time when a single event should 
+		occur, you can optionally specify a level of randomisation. This will cause the 
+		event to occur a random number of minutes after the specified time, and can add 
+		a more realistic feel to your home automation system.
+		<br>
+		You can view all currently defined single events by clicking on the "Single 
+		Events" node, which can be found under the "Events" section in the xPLHal 
+		Manager.
+		<br>
+		<h2><a name="recurring">Recurring Events</a></h2>
+		Recurring events are those which are configured to occur on a 
+		regular basis. For example, a recurring event could be executed every weekday, 
+		or every Saturday, or every day. As with single events, the actual time that 
+		the event occurs can be randomised to add a more realistic feel to your home 
+		automation system.
+		<br>
+		You can view all currently defined recurring events by selecting the "Recurring 
+		Events" node from below the "Events" node in the xPLHal Manager.
+		<br>
+		<h2><a name="repeating">Repeating Events</a></h2>
+		Repeating events are those which are configured to occur repeatedly on a 
+		regular basis. For example, a repeating event could be executed every weekday, 
+		or every Saturday, or every day, and repeat at twenty minute intervals between 
+		four and six p.m. As with other events, the actual time that the event occurs 
+		can be randomised to add a more realistic feel to your home automation system.
+		<br>
+		You can view all currently defined repeating events by selecting the "Recurring 
+		Events" node from below the "Events" node in the xPLHal Manager.
+		<br>
+		When viewing events in the xPLHal Manager, an icon indicates whether sunroutine 
+		or a determinator will be run.
+	</body>
+</html>

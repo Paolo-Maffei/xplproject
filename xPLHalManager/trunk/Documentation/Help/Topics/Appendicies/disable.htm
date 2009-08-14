@@ -1,0 +1,67 @@
+<html>
+
+<head>
+  <title>Enabling and Disabling xPLHal Integrated Components</title>
+</head>
+
+<body>
+<h2>Enabling and Disabling xPLHal Integrated Components</h2>
+xPLHal includes a number of integrated components, intended to simplify the operation of your xPL environment.<br>
+These include an xPL Hub, xpl Device Configuration Manager and an SMTP gateway.
+<br>
+
+<h3>xPL Hub</h3>
+Any computer that needs to run multiple xPL applications requires the use of an xPL Hub. The job of the Hub is to distribute incoming xPL messages to all applications running on the local computer.<br>
+To avoid the need for a stand-alone xPL Hub to be installed, xPLHal includes a built-in hub, which is enabled by default.<br><br>
+
+The operation of this hub can be controlled through use of the following statement within the xPLHal XML Configuration Document:<br>
+<pre>
+&lt;configuration&gt;
+  &lt;appsettings&gt;
+    &lt;settings&gt;
+      &lt;control loadhub="Y" /&gt;
+    &lt;/settings&gt;
+  &lt;/appsettings&gt;
+&lt;/configuration&gt;
+</pre>
+
+Setting the value of loadhub to anything other than Y will cause the built-in hub to be disabled.<br>
+Note however, that if the loadhub statement is missing from the XML document, the hub will be enabled.
+<br>
+
+<h3>Configuration Manager</h3>
+Many xPL devices support automatic remote configuration. To assist in this process, xPLHal includes a built-in configuration manager.<br>
+It is recommended that you only have one configuration manager per xPL network, therefore if you are already using a configuration manager and do not wish to use the one that is integrated into xPLHal, you can disable it by adding the following statement to the
+xPLHal XML configuration document:<br>
+<pre>
+&lt;configuration&gt;
+  &lt;appsettings&gt;
+    &lt;settings&gt;
+      &lt;config disableconfig="Y" /&gt;
+    &lt;/settings&gt;
+  &lt;/appsettings&gt;
+&lt;/configuration&gt;
+</pre>
+<br>
+
+<h3>SMTP Gateway</h3>
+By default, xPLHal will act on any message of type sendmsg.smtp, transmitting it to the appropriate SMTP server.
+<br>
+If you wish to disable this behaviour, add the following statement to the xPLHal XML Configuration Document:
+<br>
+&lt;Smtp disablesmtp="Y"/&gt;
+
+<br><br>
+Setting the value to anything other than Y, or omitting the statement completely, will cause the SMTP gateway to be enabled.
+<br><br>
+
+<h2>xAP Support</h2>
+xPLHal includes a xAP hub. When enabled, xPLHal will execute scripts based on received xAP messages.<br>
+<br>
+To enable xAP support, add the following attribute to the &lt;control&gt; element in the xPLHal XML Configuration Document:<br>
+<pre>&lt;control xapsupport="Y"/&gt;</pre>
+xAP support will be disabled if the value of the xapsupport attribute is set to anything other than Y, or is omitted from the document.
+
+
+</body>
+</html>

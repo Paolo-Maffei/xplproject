@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLVFDisplay", "xPLVFDisplay\xPLVFDisplay.vbproj", "{286720E3-58B7-42EE-827D-0C632E3F76CE}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "xPL VFD Driver", "xPL VFD Driver\xPL VFD Driver.vdproj", "{D6D0F9A6-1EFB-4D2F-ADC8-A47CFAACF272}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{286720E3-58B7-42EE-827D-0C632E3F76CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{286720E3-58B7-42EE-827D-0C632E3F76CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{286720E3-58B7-42EE-827D-0C632E3F76CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{286720E3-58B7-42EE-827D-0C632E3F76CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D6D0F9A6-1EFB-4D2F-ADC8-A47CFAACF272}.Debug|Any CPU.ActiveCfg = Debug
+		{D6D0F9A6-1EFB-4D2F-ADC8-A47CFAACF272}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

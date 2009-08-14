@@ -1,0 +1,4 @@
+localport=59000
+remoteip=192.168.1.100
+remoteport=59000
+encryption=secretpassword

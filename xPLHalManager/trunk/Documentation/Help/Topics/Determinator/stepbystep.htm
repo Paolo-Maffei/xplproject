@@ -1,0 +1,92 @@
+<html>
+
+<head>
+  <title>A Step-by-Step Guide to Creating a Determinator</title>
+</head>
+
+<body>
+<h2>A Step-by-Step Guide to Creating a Determinator</h2>
+In this section we will guide you through the steps required to create a Determinator using the New Determinator Wizard.<br>
+<br>
+<h3>Before you begin</h3>
+The Wizard makes extensive use of vendor-plugins. These are small files written by device vendors that the xPLHal Manager uses to gather information
+about the capabilities of a particular device.<br>
+Before beginning the New Determinator Wizard, it is recommended that you update your plug-in library with the latest versions
+of all available plugins.<br>
+You can do this by selecting Help -&gt; Update Plug-in Library from within the xPLHal Manager.<br>
+When the list of plug-ins appears, click Select All, then click OK.<br>
+After a few seconds, you should receive a message telling you how many plug-ins were downloaded successfully.<br>
+Once this has completed, restart the xPLHal Manager for the new plug-ins to be loaded.<br>
+<br>
+<h3>Starting the Wizard</h3>
+To start the New Determinator Wizard, right-click on the Determinators node in the xPLHal Manager tree and select New Determinator.<br>
+<br>
+When the welcome screen of the wizard appears, click Next.<br>
+<br>
+<h3>Naming your Determinator</h3>
+The first step in the process of creating your Determinator is to assign it a name by which you can identify it.<br>
+You can use any combination of alphanumeric characters, including spaces, when naming your Determinator.<br>
+You may also optionally specify a description for your Determinator.<br>
+<br>
+When you have entered a name and optionally a description for your new Determinator, click Next.<br>
+<br>
+<h3>Adding Conditions to your Determinator</h3>
+In order for a Determinator to be executed, there must be at least one initiating event.<br>
+This can either be the arrival of a specific type of xPL message, or the value of a global variable changing.<br>
+<br>
+The Conditions page lets you define as many conditions as you wish, with the option of specifying whether all the conditions must be true for the Determinator to be executed,
+or whether only one of the conditions needs to be true.<br>
+<br>
+Click the Add button to add your first condition.<br>
+<br>
+First, select the xPL device that will send a message to initiate the Determinator. 
+If you wish to have this Determinator initiated based on the value of a global variable, you should
+select your xPLHal server from the list of devices.<br>
+<br>
+Once you have selected a device, a list of the various types of information that the device can report will
+be listed in the right-hand list box. Just click on the one you are interested in - for example,
+in the case of the CM12, you can select "X10 signal received".<br>
+<br>
+Depending on which item you have selected, you may need to supply extra information.
+For example, if you select "X10 signal received", you will need to specify the type of signal you are interested in
+(on, off, dim, bright etc.) and the house or device code.<br>
+<br>
+You may also allocate a friendly name to the condition to help you identify it. This is especially useful for Determinators that
+contain more than one condition.<br>
+<br>
+Click OK to add your new condition to the list.<br>
+If you are new to Determinators, we recommend you specify only a single condition initially, as you
+can build up more complex Determinators once your basic Determinator is functioning.<br>
+<br>
+Click the Next button to continue to the next screen.<br>
+<br>
+
+<h3>Specifying Actions</h3>
+The Actions page lets you specify a list of actions that the Determinator will perform if the conditions you specified on the previous page are met.<br>
+Any number of actions can be specified, and the order in which they are executed can be controlled 
+by changing the position of an action in the list using the Up and Down buttons.<br>
+<br>
+Click the Add button to add an action.<br>
+<br>
+Select the xPL device you wish to target, then select the action you wish to perform.<br>
+You may need to enter additional information, depending on your chosen action.<br>
+<br>
+You can also select whether the action is targetted at the specific device you selected, at
+all devices that can understand the action, or at a particular group of devices.<br>
+<br>
+Click OK to save your action.<br>
+Use the Add button to add any additional actions to your Determinator.<br>
+Click the Next button to continue, and on the finish screen, click Finish to save
+the Determinator.<br>
+<br>
+<h3>Testing your Determinator</h3>
+Determinators become active as soon as they are created, and any changes you make to a Determinator take effect as soon as you click the OK button.<br>
+You can now go ahead and test your Determinator.<br>
+<br>
+You can edit your Determinator by selecting it from the list of Determinators in the xPLHal Manager.<br>
+<br>
+
+
+
+</body>
+</html>

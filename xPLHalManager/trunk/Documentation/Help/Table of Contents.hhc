@@ -1,0 +1,174 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<HTML>
+<HEAD>
+<meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">
+<!-- Sitemap 1.0 -->
+</HEAD><BODY>
+<OBJECT type="text/site properties">
+	<param name="ImageType" value="Folder">
+</OBJECT>
+<UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Introduction">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What is xPL?">
+			<param name="Local" value="Topics\Introduction\WhatIsXpl.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="What is xPLHal?">
+			<param name="Local" value="Topics\Introduction\WhatIsXplHal.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Supported Hardware and Software">
+			<param name="Local" value="Topics\Introduction\gateways.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Summary">
+			<param name="Local" value="Topics\Introduction\summary.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Getting Started">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Configuring your xPL Devices">
+			<param name="Local" value="Topics\Introduction\config.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Concepts">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Modes">
+			<param name="Local" value="Topics\Concepts\modes.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Periods">
+			<param name="Local" value="Topics\Concepts\periods.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Globals">
+			<param name="Local" value="Topics\Concepts\globals.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Determinators">
+		<param name="Local" value="Topics\Determinator\Determinator.htm">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Introduction">
+			<param name="Local" value="Topics\Determinator\DeterminatorIntro.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Creating a Determinator">
+			<param name="Local" value="Topics\Determinator\stepbystep.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Scripts">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Introduction">
+			<param name="Local" value="Topics\Scripting\introduction.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Script Hierarchy">
+			<param name="Local" value="Topics\Scripting\layout.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Sub-Routine Execution">
+			<param name="Local" value="Topics\Scripting\execution.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="X10 Support">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Overview of X10 Technology">
+			<param name="Local" value="Topics\X10\Overview.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="X10 Scripting">
+			<param name="Local" value="Topics\X10\x10scripting.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Timed Events">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Overview of Timed Events in xPLHal">
+			<param name="Local" value="Topics\Events\introduction.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Creating a Single Event">
+			<param name="Local" value="Topics\Events\single.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Creating a Recurring Event">
+			<param name="Local" value="Topics\Events\recurring.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="The xPL Traffic Monitor">
+		<param name="Local" value="Topics\Monitor\Intro.htm">
+		</OBJECT>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Scripting Reference">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="System Language Extensions">
+			<param name="Local" value="Topics\Reference\sysclass.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="xPL Language Extensions">
+			<param name="Local" value="Topics\Reference\xplclass.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="X10 Language Extensions">
+			<param name="Local" value="Topics\Reference\x10class.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="xAP Language Extensions">
+			<param name="Local" value="Topics\Reference\xapclass.htm">
+			</OBJECT>
+	</UL>
+	<LI> <OBJECT type="text/sitemap">
+		<param name="Name" value="Appendicies">
+		</OBJECT>
+	<UL>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Importing X10 Devices from HomeVision">
+			<param name="Local" value="Topics\Appendicies\hvimport.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Disabling xPLHal Integrated Components">
+			<param name="Local" value="Topics\Appendicies\disable.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="The xPL Protocol Specification">
+			<param name="Local" value="Topics\Appendicies\XplSpec.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Backing Up your Data">
+			<param name="Local" value="Topics\Appendicies\backup.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Glossary">
+			<param name="Local" value="Topics\Appendicies\glossary.htm">
+			</OBJECT>
+		<LI> <OBJECT type="text/sitemap">
+			<param name="Name" value="Credits">
+			<param name="Local" value="Topics\Appendicies\credits.htm">
+			</OBJECT>
+	</UL>
+</UL>
+</BODY></HTML>

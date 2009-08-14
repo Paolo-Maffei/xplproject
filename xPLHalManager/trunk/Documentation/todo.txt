@@ -1,0 +1,8 @@
+
+Add icons for other list view modes.
+
+
+
+
+In monitor, when creating determinator, be more flexible.
+(allow custom global values)

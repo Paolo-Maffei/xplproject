@@ -1,0 +1,24 @@
+<GRAMMAR> 
+<RULE ID="1" Name="xplvoice" TOPLEVEL="ACTIVE">
+<L PROPNAME="command">
+<P VALSTR="PLAY">play</P>
+<P VALSTR="RESUME">resume</P>
+<P VALSTR="QUEUE">queue</P>
+<P VALSTR="STOP">stop</P>
+<P VALSTR="SKIP">skip</P>
+<P VALSTR="PAUSE">pause</P>
+<P VALSTR="VOLUP">louder</P>
+<P VALSTR="VOLDOWN">volume down</P>
+<P VALSTR="MUTE">mute</P>
+<P VALSTR="SELECT">select</P>
+<P VALSTR="PAGEUP">page up</P>
+<P VALSTR="PAGEDOWN">page down</P>
+<P VALSTR="DOWN">down</P>
+<P VALSTR="UP">up</P>
+<P VALSTR="ARTIST">artists</P>
+<P VALSTR="ALBUM">albums</P>
+<P VALSTR="TRACK">tracks</P>
+<P VALSTR="BACK">back</P>
+</L>
+</RULE>
+</GRAMMAR> 

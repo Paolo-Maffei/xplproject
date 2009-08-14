@@ -1,0 +1,25 @@
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\Interop.MSScriptControl.dll
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.vbproj.ResolveComReference.cache
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\xPLHal.exe
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\xPLHal.pdb
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\xPLHal.xml
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\xpllib.dll
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\xpllib.xml
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\bin\Interop.MSScriptControl.dll
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\ResolveAssemblyReference.cache
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.ProjectInstaller.resources
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.xPLHal.resources
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.vbproj.GenerateResource.Cache
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.exe
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.xml
+C:\Ian's Stuff\ian\VS2008 Versions\xPLHal\obj\Debug\xPLHal.pdb
+C:\Documents and Settings\ilowe\My Documents\Visual Studio 2008\Projects\xPLHal\obj\Debug\Interop.MSScriptControl.dll
+C:\Documents and Settings\ilowe\My Documents\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.vbproj.ResolveComReference.cache
+C:\Documents and Settings\ilowe\My Documents\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.exe
+C:\Documents and Settings\ilowe\My Documents\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.xml
+C:\Documents and Settings\ilowe\My Documents\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.pdb
+H:\Visual Studio 2008\Projects\xPLHal\obj\Debug\Interop.MSScriptControl.dll
+H:\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.vbproj.ResolveComReference.cache
+H:\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.exe
+H:\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.xml
+H:\Visual Studio 2008\Projects\xPLHal\obj\Debug\xPLHal.pdb

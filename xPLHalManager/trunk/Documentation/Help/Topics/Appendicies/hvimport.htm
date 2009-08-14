@@ -1,0 +1,33 @@
+<html>
+
+<head>
+  <title>Importing X10 Devices from HomeVision</title>
+</head>
+
+<body>
+<h1>Importing X10 Devices from HomeVision</h1>
+
+This feature allows you to import your X10 device names from HomeVision, saving you the job of entering all your X10 device information into xPLHal by hand.
+It will only import devices that have been renamed, e.g. not named "X10 A1" and so on.
+<br><br>
+To import your devices, follow the steps below:<br>
+<br>
+In the HomeVision PC client:
+<ul>
+ <li>Make sure the latest schedule is loaded into the application.
+ <li>Goto File-Export Schedule.<br>
+  This will save a file with yourschedulename.hvx to the HomeVision program
+  directory (normally c:\Program Files\HomeVision\ but sometimes it can save
+  the file to c:\)
+</ul>
+
+In xPLHal Manager:
+<ul>
+ <li>Select Tools -&gt; Import HomeVision X10 Devices.
+ <li>When the Open File dialog box appears, select the HomeVision schedule file that you saved previously.
+ <li>You will receive a message telling you how many devices were imported.
+ <li>Select (or refresh) the X10 device list in xPLHal Manager to see your newly imported devices.
+</ul>
+
+</body>
+</html>

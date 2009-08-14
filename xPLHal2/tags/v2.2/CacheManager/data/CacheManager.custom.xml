@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- xPL CacheManager configuration file -->
+<!-- This file will NOT be updated when your xPLHal Server is udpated.		 -->
+<!-- Any custom filters you place here will be left in place.				 -->
+<!--																		 -->
+<!-- Custom Filters can be added using the following XML block as an example.-->
+<!--																		 -->
+<!--	<cacheentry cacheprefix="x10">										 -->
+<!--		<filter>"xpl-cmnd"."*"."*"."*"."x10"."basic"</filter>			 -->
+<!--		<fields>														 -->
+<!--			<fieldmap xpltagname="device" cacheobjectname="Device"/>	 -->
+<!--			<fieldmap xpltagname="command" cacheobjectname="Command"/>	 -->
+<!--		</fields>														 -->
+<!--	</cacheentry>														 -->
+
+<cachemanager>
+
+</cachemanager>
