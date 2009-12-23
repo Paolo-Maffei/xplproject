@@ -303,10 +303,10 @@ Public Class frmEditScript
         rtfscript.Scrolling.HorizontalWidth = Me.Width - 50
         If InStr(ScriptName, ".py") <> 0 Then
             rtfscript.ConfigurationManager.Language = "python"
-            If rtfscript.TextLength = 0 Then rtfscript.Text = "#xpl python script,NewPythonScript,false,"
+            'If rtfscript.TextLength = 0 Then rtfscript.Text = "#xpl python script,NewPythonScript,false,"
         ElseIf InStr(ScriptName, ".ps1") <> 0 Then
             rtfscript.ConfigurationManager.Language = "batch"
-            If rtfscript.TextLength = 0 Then rtfscript.Text = "#xpl powershell script,NewPowershellScript,false,"
+            'If rtfscript.TextLength = 0 Then rtfscript.Text = "#xpl powershell script,NewPowershellScript,false,"
         End If
         InitResources()
         FirstActivate = True

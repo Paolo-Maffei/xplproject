@@ -654,6 +654,8 @@ Public Class xplhalMgrBase
     End Sub
 
     Protected Sub xplHalSend(ByVal str As String)
+        Dim retry As Integer = 5
+
         Try
             s.Send(Encoding.ASCII.GetBytes(str))
         Catch ex As Exception
@@ -661,7 +663,17 @@ Public Class xplhalMgrBase
             Try
                 s.Send(Encoding.ASCII.GetBytes(str))
             Catch innerex As Exception
-                MsgBox("Error sending data to the xPLHal server." & vbCrLf & vbCrLf & "Please make sure the server is operational and that you have a working network connection to the server.", vbCritical, "xPLHal Manager")
+                'try to reconnect 5 times...
+                retry -= 1
+                If retry > 0 Then
+                    s = Nothing
+                    ConnectToXplHal()
+
+                    'retransmit the same data
+                    xplHalSend(str)
+                Else
+                    MsgBox("Error sending data to the xPLHal server." & vbCrLf & vbCrLf & "Please make sure the server is operational and that you have a working network connection to the server.", vbCritical, "xPLHal Manager")
+                End If
             End Try
         End Try
     End Sub
