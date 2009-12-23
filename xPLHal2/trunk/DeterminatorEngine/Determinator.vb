@@ -523,7 +523,7 @@ Public Class Determinator
                         ' De-reference any xPL body parameters
                         If Not xSource Is Nothing And newValue.IndexOf("{XPL::") >= 0 Then
                             For Each entry In xSource.KeyValues
-                                newValue = newValue.Replace("{XPL::" & entry.Key & "}", entry.Value)
+                                newValue = newValue.Replace("{XPL::" & entry.Key.ToUpper & "}", entry.Value)
                             Next
                         End If
 
