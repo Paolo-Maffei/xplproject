@@ -148,6 +148,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="gpl.txt" />
+    <None Include="ClassDiagram1.cd" />
     <None Include="Resources\xplsquare2.ico" />
     <Content Include="version.txt" />
   </ItemGroup>

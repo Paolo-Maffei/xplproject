@@ -33,59 +33,53 @@ Public Class xplpython
         For Each ScriptFile In Scriptfiles
             fs = File.OpenText(ScriptFile)
 
-            Dim strHeader, strSource As String
-            strHeader = fs.ReadLine()
-            strSource = fs.ReadToEnd
+            Dim strSource As String = fs.ReadToEnd
+            fs.Close()
 
-            If strHeader IsNot Nothing And strSource IsNot Nothing Then
-                If rgxPythonHeader.IsMatch(strHeader) Then
-                    Dim HeaderParts() As String = rgxPythonHeader.Split(strHeader.ToString)
-                    Dim CodeType As String = "python"
-                    If HeaderParts.Length >= 3 Then
-                        Dim subName As String = HeaderParts(1).ToString.ToLower.Trim
-                        Dim paramString As String = HeaderParts(3).ToString.ToLower.Trim
-
+            If strSource IsNot Nothing Then
+                Dim scriptname As String = Path.GetFileNameWithoutExtension(ScriptFile)
+                If Not xplScripts.Contains(scriptname) Then
+                    Try
                         Dim newscript As New ScriptDetail
                         With newscript
-                            .ScriptName = subName
-                            .Language = ScriptingLanguage.Powershell
-                            .SourceFile = ScriptEngineFolder & "\" & ScriptFile
+                            .ScriptName = Path.GetFileName(ScriptFile)
+                            .Language = ScriptingLanguage.Python
+                            .SourceFile = ScriptFile
                             .Source = strSource
-                            If CodeType = "function" Then
-                                .IsSub = False
-                            Else
-                                .IsSub = True
-                            End If
-                            If CountParams(paramString) > 0 Then
-                                .HasParams = True
-                            Else
-                                .HasParams = False
-                            End If
+                            .Functions = ParseScriptForParameters(strSource)
                         End With
-                        Try
-                            xplScripts.Add(newscript, subName)
-                            Logger.AddLogEntry(AppInfo, "script", "Added a python script called: " & subName)
-                        Catch ex As Exception
-                            Logger.AddLogEntry(AppWarn, "script", "Could not add python script: " & subName)
-                            Logger.AddLogEntry(AppWarn, "script", "cause: " & ex.Message)
-                        End Try
-                    Else
-                        Logger.AddLogEntry(AppWarn, "script", "Did not find valid Script header: " & ScriptFile)
-                    End If
+
+                        'add script to collection
+                        xplScripts.Add(newscript, scriptname)
+                    Catch ex As Exception
+                        Logger.AddLogEntry(AppWarn, "script", "Could not add powershell script: " & scriptname)
+                        Logger.AddLogEntry(AppWarn, "script", "cause: " & ex.Message)
+                    End Try
                 Else
-                    Logger.AddLogEntry(AppWarn, "script", "Did not find valid Script header: " & ScriptFile)
+                    Logger.AddLogEntry(AppWarn, "script", "Could not add script " & scriptname & " because another script already exists with this name.")
                 End If
             End If
-            fs.Close()
         Next
 
     End Sub
+
+    Private Shared Function ParseScriptForParameters(ByVal strSource As String) As Dictionary(Of String, String)
+        Return Nothing
+    End Function
 
     ' routine to calculate number of params in a sub or function
     Private Shared Function CountParams(ByVal _paramString As String) As Integer
         Dim Params() As String = Split(_paramString, ",")
         Return Params.Count
     End Function
+
+    Public Sub RunStartupScript()
+        RunScript("xplhal_startup")
+    End Sub
+
+    Public Sub RunShutdownScript()
+        RunScript("xplhal_shutdown")
+    End Sub
 
 
     Public Class ScriptRunner

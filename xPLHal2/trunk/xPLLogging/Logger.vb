@@ -123,7 +123,7 @@ Public Class Logger
                 Dim timeStamp As String = Now.ToString
                 _logfile.WriteLine(timeStamp & ", " & logtxt & LogLevel.AppError.ToString)
                 If Not _runasservice Then
-                    Console.WriteLine(logtxt & LogLevel.AppError.ToString)
+                    Console.WriteLine(timeStamp & " " & logtxt & LogLevel.AppError.ToString)
                 End If
             End If
         End If
@@ -138,7 +138,7 @@ Public Class Logger
                 Dim timeStamp As String = Now.ToString
                 _logfile.WriteLine(timeStamp & ", " & loglvl.ToString & ", " & sysmodule & ", " & logtxt)
                 If Not _runasservice Then
-                    Console.WriteLine(loglvl.ToString & ", " & sysmodule & ", " & logtxt)
+                    Console.WriteLine(timeStamp & " " & loglvl.ToString & ", " & sysmodule & ", " & logtxt)
                 End If
             End If
         End If

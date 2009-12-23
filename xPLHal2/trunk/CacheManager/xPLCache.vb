@@ -299,6 +299,14 @@ Public Class xPLCache
         Return OutputXML
     End Function
 
+    Public Shared Function ListAllObjectsDictionary() As Dictionary(Of String, String)
+        Dim list As New Dictionary(Of String, String)
+        For Each entry As CacheEntry In ObjectCache
+            list.Add(entry.ObjectName, entry.ObjectValue)
+        Next
+        Return list
+    End Function
+
     Public Shared Function Filtered(ByVal sFilter As String) As Collection
         Dim FilteredSet As New Collection
         For Each entry As CacheEntry In ObjectCache

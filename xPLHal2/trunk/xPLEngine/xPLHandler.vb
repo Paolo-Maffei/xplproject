@@ -35,6 +35,7 @@ Public Class xPLHandler
     Public Shared Event AddtoCache(ByVal _cachename As String, ByVal _cachevalue As String, ByVal _expires As Boolean)
     Public Shared Event ParseMessageForRules(ByVal e As xpllib.XplMsg)
     Public Shared Event ParseMessageForCache(ByVal e As xpllib.XplMsg)
+    Public Shared Event ParseMessageForScripts(ByVal e As xpllib.XplMsg)
     Public Shared Event RunDeterminator(ByVal _rulename As String)
     Public Shared Event ProcessConfigHeartBeat(ByVal _msgsource As String, ByVal e As xpllib.XplMsg)
     Public Shared Event ProcessConfigList(ByVal _msgsource As String, ByVal e As xpllib.XplMsg)
@@ -87,7 +88,7 @@ Public Class xPLHandler
     End Sub
 
 
-    Public Sub SendMessage(ByVal strMsgType As String, ByVal strTarget As String, ByVal strSchema As String, ByVal strMsg As String)
+    Public Shared Sub SendMessage(ByVal strMsgType As String, ByVal strTarget As String, ByVal strSchema As String, ByVal strMsg As String)
 
         'THIS NEEDS re-written to support xpllib 4.4
 
@@ -146,12 +147,23 @@ Public Class xPLHandler
     End Sub
 
     Private Shared Sub HandleIncomingMessage(ByVal sender As Object, ByVal e As xpllib.XplListener.XplEventArgs) Handles xPLNetwork.XplMessageReceived
+        If e.XplMsg.Class = "test" And e.XplMsg.Type = "basic" Then
+            'delme
+            SendMessage("xpl-trig", "", "test.reply", "pos=just after message had arrived")
+        End If
+
 
         If HandlerActive Then
             Logger.AddLogEntry(AppInfo, "xplnet", "xPL Message Arrived, Processing...")
 
             RaiseEvent ParseMessageForCache(e.XplMsg)
             RaiseEvent ParseMessageForRules(e.XplMsg)
+            RaiseEvent ParseMessageForScripts(e.XplMsg)
+
+            'If e.XplMsg.Class = "test" And e.XplMsg.Type = "basic" Then
+            '    'delme
+            '    SendMessage("xpl-trig", "", "test.reply", "pos=events raised")
+            'End If
 
             Dim msgSource As String = e.XplMsg.SourceTag
             Dim msgTarget As String = e.XplMsg.TargetTag

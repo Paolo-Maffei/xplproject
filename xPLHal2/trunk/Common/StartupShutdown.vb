@@ -80,6 +80,7 @@ Partial Public Class xplCommon
     Public Shared Sub AddEventhandlers()
         AddHandler xPLHandler.ParseMessageForCache, AddressOf AddxPLMessagetoCache
         AddHandler xPLHandler.ParseMessageForRules, AddressOf RunDetsInXPLMessage
+        AddHandler xPLHandler.ParseMessageForScripts, AddressOf RunScriptsInXPLMessage
         AddHandler xPLHandler.ProcessConfigList, AddressOf DoxPLConfigList
         AddHandler xPLHandler.ProcessConfigHeartBeat, AddressOf DoxPLConfigHeartBeat
         AddHandler xPLHandler.ProcessCurrentConfig, AddressOf DoxPLCurrentConfig
@@ -276,10 +277,20 @@ Partial Public Class xplCommon
             Logger.AddLogEntry(AppError, "core", "Event Handlers did not Register properly")
             Logger.AddLogEntry(AppError, "core", "Cause: " & ex.Message)
         End Try
+
+        'init done. run startup script now
+        If xPLScriptEngine.IsInitialized Then
+            xPLScriptEngine.RunStartupScript()
+        End If
     End Sub
 
     Public Shared Sub StopxPLHalSystems(ByVal FailDuringBoot As Boolean)
         Try
+            'run shutdown script before everything else...
+            If xPLScriptEngine.IsInitialized Then
+                xPLScriptEngine.RunShutdownScript()
+            End If
+
             StopTimers()
             Logger.AddLogEntry(AppInfo, "core", "Housekeeping and Event Timers Stopped")
         Catch ex As Exception

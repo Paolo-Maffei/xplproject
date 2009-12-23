@@ -399,40 +399,59 @@ Public Class XplMsg
     End Function
 
     Private Function ExtractContents(ByVal themsg As String) As Boolean
-        Dim r As Regex
         Dim ok As Boolean = False
+        Dim m As Match
+
+        'If mStrictInterpretation Then  'no uppercase allowed
+
+        '    r = New Regex("^xpl-(?<msgtype>trig|stat|cmnd)\n" & _
+        '                           "\{\n" & _
+        '                           "(?:hop=\d\n" & _
+        '                           "|source=(?<sv>[0-9a-z]{1,8})-(?<sd>[0-9a-z]{1,8})\.(?<si>[0-9a-z/-]{1,16})\n" & _
+        '                           "|target=(?<target>(?<tv>[0-9a-z]{1,8})-(?<td>[0-9a-z]{1,8})\.(?<ti>[0-9a-z/-]{1,16})|\*)\n){3}" & _
+        '                           "\}\n" & _
+        '                           "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
+        '                           "\{\n" & _
+        '                           "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
+        '                           "\}\n$" _
+        '                           , RegexOptions.Compiled Or RegexOptions.Singleline)
+
+        'Else  'mixed case allowed
+
+        '    r = New Regex("^xpl-(?<msgtype>trig|stat|cmnd)\n" & _
+        '                           "\{\n" & _
+        '                           "(?:hop=\d\n" & _
+        '                           "|source=(?<sv>[0-9a-z]{1,8})-(?<sd>[0-9a-z]{1,8})\.(?<si>[0-9a-z/-]{1,16})\n" & _
+        '                           "|target=(?<target>(?<tv>[0-9a-z]{1,8})-(?<td>[0-9a-z]{1,8})\.(?<ti>[0-9a-z/-]{1,16})|\*)\n){3}" & _
+        '                           "\}\n" & _
+        '                           "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
+        '                           "\{\n" & _
+        '                           "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
+        '                           "\}\n$" _
+        '                           , RegexOptions.Compiled Or RegexOptions.Singleline Or RegexOptions.IgnoreCase)
+
+        'End If
+
+        'Dim m As Match = r.Match(themsg)
+
+        'using static method to avoid object creation...
+        Dim pattern As String = "^xpl-(?<msgtype>trig|stat|cmnd)\n" & _
+                                   "\{\n" & _
+                                   "(?:hop=\d\n" & _
+                                   "|source=(?<sv>[0-9a-z]{1,8})-(?<sd>[0-9a-z]{1,8})\.(?<si>[0-9a-z/-]{1,16})\n" & _
+                                   "|target=(?<target>(?<tv>[0-9a-z]{1,8})-(?<td>[0-9a-z]{1,8})\.(?<ti>[0-9a-z/-]{1,16})|\*)\n){3}" & _
+                                   "\}\n" & _
+                                   "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
+                                   "\{\n" & _
+                                   "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
+                                   "\}\n$"
 
         If mStrictInterpretation Then  'no uppercase allowed
-
-            r = New Regex("^xpl-(?<msgtype>trig|stat|cmnd)\n" & _
-                                   "\{\n" & _
-                                   "(?:hop=\d\n" & _
-                                   "|source=(?<sv>[0-9a-z]{1,8})-(?<sd>[0-9a-z]{1,8})\.(?<si>[0-9a-z/-]{1,16})\n" & _
-                                   "|target=(?<target>(?<tv>[0-9a-z]{1,8})-(?<td>[0-9a-z]{1,8})\.(?<ti>[0-9a-z/-]{1,16})|\*)\n){3}" & _
-                                   "\}\n" & _
-                                   "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
-                                   "\{\n" & _
-                                   "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
-                                   "\}\n$" _
-                                   , RegexOptions.Compiled Or RegexOptions.Singleline)
-
+            m = Regex.Match(themsg, pattern, RegexOptions.Compiled Or RegexOptions.Singleline)
         Else  'mixed case allowed
-
-            r = New Regex("^xpl-(?<msgtype>trig|stat|cmnd)\n" & _
-                                   "\{\n" & _
-                                   "(?:hop=\d\n" & _
-                                   "|source=(?<sv>[0-9a-z]{1,8})-(?<sd>[0-9a-z]{1,8})\.(?<si>[0-9a-z/-]{1,16})\n" & _
-                                   "|target=(?<target>(?<tv>[0-9a-z]{1,8})-(?<td>[0-9a-z]{1,8})\.(?<ti>[0-9a-z/-]{1,16})|\*)\n){3}" & _
-                                   "\}\n" & _
-                                   "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
-                                   "\{\n" & _
-                                   "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
-                                   "\}\n$" _
-                                   , RegexOptions.Compiled Or RegexOptions.Singleline Or RegexOptions.IgnoreCase)
-
+            m = Regex.Match(themsg, pattern, RegexOptions.Compiled Or RegexOptions.Singleline Or RegexOptions.IgnoreCase)
         End If
 
-        Dim m As Match = r.Match(themsg)
         If m.Success Then
             Select Case m.Groups("msgtype").Captures(0).Value.ToLower()
                 Case "trig" : mXplMsgType = xPLMsgType.trig

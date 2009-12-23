@@ -291,10 +291,14 @@ Partial Class xplCommon
                                                     xhcpSyntaxError()
                                                 End If
                                             Case "delrule"
-                                                If params.Length <> 2 Then
+                                                If params.Length < 2 Then
                                                     xhcpSyntaxError()
                                                 Else
-                                                    xhcpDelRule(params(1))
+                                                    Dim sline As String = ""
+                                                    For i As Integer = 1 To UBound(params)
+                                                        sline = sline & " " & params(i)
+                                                    Next
+                                                    xhcpDelRule(sline.Trim())
                                                 End If
                                             Case "delscript"
                                                 If params.Length <> 2 Then
@@ -398,6 +402,8 @@ Partial Class xplCommon
                                                 xhcpListSingleEvents()
                                             Case "listsubs"
                                                 xhcpListSubs()
+                                            Case "listsubsex"
+                                                xhcpListSubsEx()
                                             Case "listx10states" ' trt
                                                 If params.Length = 1 Then
                                                     xhcplistx10states("0")
@@ -617,7 +623,23 @@ Partial Class xplCommon
             Try
                 Dim fs As TextWriter
                 Dim myString As String
-                Logger.AddLogEntry(AppInfo, "xhcp", "Create a new Script called: " & scriptname)
+
+                'if backup is enabled, make backup of previous version..
+                If xPLCache.Contains("xplhal.backupscript") Then
+                    If xPLCache.ObjectValue("xplhal.backupscript") = "1" Then
+                        'if target script exists, backup it first..
+                        If RenameOldScriptIfExists(ScriptEngineFolder & "\" & scriptname) Then
+                            Logger.AddLogEntry(AppInfo, "xhcp", "Renamed existing script and created a new script called " & scriptname)
+                        Else
+                            Logger.AddLogEntry(AppInfo, "xhcp", "Create a new Script called: " & scriptname)
+                        End If
+                    Else
+                        Logger.AddLogEntry(AppInfo, "xhcp", "Added or replaced a script called: " & scriptname)
+                    End If
+                Else
+                    Logger.AddLogEntry(AppInfo, "xhcp", "Added or replaced a script called: " & scriptname)
+                End If
+
                 fs = File.CreateText(ScriptEngineFolder & "\" & scriptname)
                 s.Send(Encoding.ASCII.GetBytes(XH311))
                 Do
@@ -733,20 +755,29 @@ Partial Class xplCommon
         Private Sub xhcpListScripts(ByVal s As Socket, ByVal params() As String)
             Try
                 Logger.AddLogEntry(AppInfo, "xhcp", "List all Scripts")
+                Dim SOption As SearchOption
                 Dim pathName As String = ScriptEngineFolder
+
                 If params.Length = 2 Then
-                    If Not params(1).Trim.StartsWith("\") Then
-                        pathName &= "\" & params(1)
+                    If params(1) = "{ALL}" Then
+                        SOption = SearchOption.AllDirectories
                     Else
-                        pathName &= params(1)
+                        SOption = SearchOption.TopDirectoryOnly
+
+                        If Not params(1).Trim.StartsWith("\") Then
+                            pathName &= "\" & params(1)
+                        Else
+                            pathName &= params(1)
+                        End If
                     End If
                 End If
+
                 Dim d As New DirectoryInfo(pathName)
                 Dim dirs() As DirectoryInfo
                 Dim f() As FileInfo, Counter As Integer
                 Dim sb As New StringBuilder
                 sb.Append(XH212)
-                dirs = d.GetDirectories
+                dirs = d.GetDirectories("*", SOption)
                 f = d.GetFiles
                 For Counter = 0 To dirs.Length - 1
                     sb.Append(dirs(Counter).Name & "\" & vbCrLf)
@@ -822,14 +853,9 @@ Partial Class xplCommon
         Private Sub xhcpRunSub(ByVal scriptName As String, ByVal params As String)
             Try
                 Logger.AddLogEntry(AppInfo, "xhcp", "Run Script: " & scriptName)
-                ' If no parameters, execute directly
-                If params Is Nothing Then
-                    RunScript(scriptName, False, "")
-                    s.Send(Encoding.ASCII.GetBytes(XH203))
-                Else
-                    RunScript(scriptName, True, params)
-                    s.Send(Encoding.ASCII.GetBytes(XH203))
-                End If
+
+                RunScript(scriptName, params)
+                s.Send(Encoding.ASCII.GetBytes(XH203))
             Catch ex As Exception
                 s.Send(Encoding.ASCII.GetBytes(XH503))
                 Logger.AddLogEntry(AppError, "xhcp", "Failed to Run Script: " & scriptName)
@@ -1351,17 +1377,43 @@ Partial Class xplCommon
                     s.Send(Encoding.ASCII.GetBytes(XH224))
                     For Each xscript As ScriptLoader.ScriptDetail In ScriptLoader.xplScripts
                         Dim scriptname As String = xscript.ScriptName
-                        s.Send(Encoding.ASCII.GetBytes(scriptname.ToLower.Trim & vbCrLf))
+                        For Each func As KeyValuePair(Of String, String) In xscript.Functions
+                            's.Send(Encoding.ASCII.GetBytes(scriptname.ToLower() & vbTab & func.Key.ToLower() & vbTab & func.Value & vbCrLf))
+                            s.Send(Encoding.ASCII.GetBytes(scriptname.ToLower() & "$" & func.Key.ToLower() & vbCrLf))
+                        Next
                     Next
                     EndMultiLine()
                 Catch ex As Exception
                     s.Send(Encoding.ASCII.GetBytes(XH503))
-                    Logger.AddLogEntry(AppError, "xhcp", "Failed to Access ScriptCache")
+                    Logger.AddLogEntry(AppError, "xhcp", "Failed to Access scriptcache")
                     Logger.AddLogEntry(AppError, "xhcp", "Cause: " & ex.Message())
                 End Try
             Else
                 s.Send(Encoding.ASCII.GetBytes(XH503))
-                Logger.AddLogEntry(AppError, "xhcp", "ScriptCache Has not been Initialised")
+                Logger.AddLogEntry(AppError, "xhcp", "ScriptCache Has not been initialised")
+            End If
+        End Sub
+
+        Private Sub xhcpListSubsEx()
+            If ScriptLoader.xplScripts IsNot Nothing Then
+                Try
+                    Logger.AddLogEntry(AppInfo, "xhcp", "List of all Subs Requested (extended)")
+                    s.Send(Encoding.ASCII.GetBytes(XH224))
+                    For Each xscript As ScriptLoader.ScriptDetail In ScriptLoader.xplScripts
+                        Dim scriptname As String = xscript.ScriptName
+                        For Each func As KeyValuePair(Of String, String) In xscript.Functions
+                            s.Send(Encoding.ASCII.GetBytes(scriptname.ToLower() & vbTab & func.Key.ToLower() & vbTab & func.Value & vbCrLf))
+                        Next
+                    Next
+                    EndMultiLine()
+                Catch ex As Exception
+                    s.Send(Encoding.ASCII.GetBytes(XH503))
+                    Logger.AddLogEntry(AppError, "xhcp", "Failed to Access scriptcache")
+                    Logger.AddLogEntry(AppError, "xhcp", "Cause: " & ex.Message())
+                End Try
+            Else
+                s.Send(Encoding.ASCII.GetBytes(XH503))
+                Logger.AddLogEntry(AppError, "xhcp", "ScriptCache Has not been initialised")
             End If
         End Sub
 
@@ -1655,6 +1707,20 @@ Partial Class xplCommon
             Next
             Return i
         End Function
-    End Class
 
+        Public Function RenameOldScriptIfExists(ByVal filename As String) As Boolean
+            If Not File.Exists(filename) Then Return False
+            Dim i As Integer = 1
+
+            'rename .ps1 to ps1.x.bak
+            Do
+                If Not File.Exists(filename & "." & i.ToString() & ".bak") Then
+                    File.Move(filename, filename & "." & i.ToString() & ".bak")
+                    Return True
+                Else
+                    i = i + 1
+                End If
+            Loop
+        End Function
+    End Class
 End Class

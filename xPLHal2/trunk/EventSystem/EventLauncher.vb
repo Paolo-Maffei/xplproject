@@ -103,7 +103,8 @@ Public Class EventLauncher
     Public Shared EventCount As Integer
 
     Public Shared Event ExecuteRule(ByVal rulename As String, ByVal offset As Integer, ByVal RunIfDisabled As Boolean)
-    Public Shared Event RunScript(ByVal strScript As String, ByVal HasParams As Boolean, ByVal strParams As Object)
+    'Public Shared Event RunScript(ByVal strScript As String, ByVal HasParams As Boolean, ByVal strParams As Object)
+    Public Shared Event RunScript(ByVal strScript As String, ByVal strParams As Object)
 
     Private Shared xPLEvents As New Collection
 
@@ -243,12 +244,7 @@ Public Class EventLauncher
                             ruleName = ruleName.Substring(ruleName.IndexOf(":") + 1, ruleName.Length - ruleName.IndexOf(":") - 1)
                             RaiseEvent ExecuteRule(ruleName, ruleOffset, False)
                         Else
-                            If EventEntry.Param.ToString.Length > 0 Then
-                                RaiseEvent RunScript(GetScriptSub(EventEntry.RunSub), True, EventEntry.Param.ToString)
-                            Else
-                                Logger.AddLogEntry(AppInfo, "event", "Running script " & EventEntry.RunSub)
-                                RaiseEvent RunScript(GetScriptSub(EventEntry.RunSub), False, "")
-                            End If
+                            RaiseEvent RunScript(GetScriptSub(EventEntry.RunSub), EventEntry.Param.ToString)
                         End If
                     Catch ex As Exception
                         Logger.AddLogEntry(AppError, "event", "Error Executing Event for script " & GetScriptSub(EventEntry.RunSub) & " (" & Err.Description & ")")
@@ -330,6 +326,7 @@ Public Class EventLauncher
 
 
     ' build safe name for script routine
+    'check this
     Private Shared Function GetScriptSub(ByVal strSubName As String) As String
         Dim strSub As String
         strSub = ""

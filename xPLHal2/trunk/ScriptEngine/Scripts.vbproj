@@ -24,7 +24,10 @@
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
     <DocumentationFile>Scripts.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>41998,42004,42026,42029,42030,42031,42104,42105,42106,42107,42108,42109</WarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,7 +36,10 @@
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
     <DocumentationFile>Scripts.xml</DocumentationFile>
-    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
+    <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036</NoWarn>
+    <WarningsAsErrors>41998,42004,42026,42029,42030,42031,42104,42105,42106,42107,42108,42109</WarningsAsErrors>
+    <WarningLevel>1</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="IronPython, Version=2.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
@@ -46,10 +52,18 @@
     </Reference>
     <Reference Include="Microsoft.Scripting.Core, Version=0.9.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35" />
     <Reference Include="System" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Management.Automation, Version=1.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>System.Management.Automation.dll</HintPath>
     </Reference>
+    <Reference Include="System.Runtime.Serialization">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.ServiceModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -60,6 +74,7 @@
   </ItemGroup>
   <ItemGroup>
     <Import Include="Microsoft.VisualBasic" />
+    <Import Include="Scripts" />
     <Import Include="System" />
     <Import Include="System.Collections.Generic" />
     <Import Include="System.Diagnostics" />
@@ -67,7 +82,14 @@
     <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HalObjects.vb" />
+    <Compile Include="IHalObjects.vb" />
     <Compile Include="powershell.vb" />
+    <Compile Include="Service References\WCFDebugService\Reference.vb">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </Compile>
     <Compile Include="xplpython.vb" />
     <Compile Include="ScriptLoader.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
@@ -110,10 +132,62 @@
       <Project>{B9CB7D63-C851-4C58-A84B-86D0DAE266EF}</Project>
       <Name>GOCManager</Name>
     </ProjectReference>
+    <ProjectReference Include="..\DeterminatorEngine\DeterminatorEngine.vbproj">
+      <Project>{54EB3606-5749-4978-8FE4-123B1F31AA3D}</Project>
+      <Name>DeterminatorEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\DeviceManager\DeviceManager.vbproj">
+      <Project>{9937ABEA-F015-40CE-8A26-6BBE2CBDEB91}</Project>
+      <Name>DeviceManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSystem\EventSystem.vbproj">
+      <Project>{48317B52-3A1C-440C-9564-ACDB663F2592}</Project>
+      <Name>EventSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xPLEngine\xPLEngine.vbproj">
+      <Project>{B83A15C7-E660-48C1-A2E4-A80060D9D39D}</Project>
+      <Name>xPLEngine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\xpllib_V4.4\xpllib.vbproj">
+      <Project>{6CA025DE-C515-4E30-BCCC-846378F2AD20}</Project>
+      <Name>xpllib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\xPLLogging\xPLLogging.vbproj">
       <Project>{A2A48DF0-D3B6-44E2-B8C2-47EC27DBD3FC}</Project>
       <Name>xPLLogging</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadataStorage Include="Service References\WCFDebugService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFDebugService\configuration91.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFDebugService\configuration.svcinfo" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFDebugService\item.xsd" />
+    <None Include="Service References\WCFDebugService\item1.xsd" />
+    <None Include="Service References\WCFDebugService\item2.xsd" />
+    <None Include="Service References\WCFDebugService\item3.xsd" />
+    <None Include="Service References\WCFDebugService\Reference.svcmap">
+      <Generator>WCF Proxy Generator</Generator>
+      <LastGenOutput>Reference.vb</LastGenOutput>
+    </None>
+    <None Include="Service References\WCFDebugService\Scripts.WCFDebugService.DebugScriptInfo.datasource">
+      <DependentUpon>Reference.svcmap</DependentUpon>
+    </None>
+    <None Include="Service References\WCFDebugService\WCFDebugService.wsdl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="Service References\WCFDebugService\item.disco" />
+    <None Include="Service References\WCFDebugService\item4.xsd" />
+    <None Include="Service References\WCFDebugService\item5.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

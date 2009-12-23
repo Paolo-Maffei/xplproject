@@ -39,6 +39,7 @@ Imports System.Net
 Imports System.Xml
 Imports DeterminatorEngine.Determinator
 Imports EventSystem
+Imports Scripts.ScriptLoader
 
 Partial Public Class xplCommon
 
@@ -141,18 +142,40 @@ Partial Public Class xplCommon
         Determinator.CacheChanged(objectname)
     End Sub
 
+    Public Shared Sub RunScriptsInXPLMessage(ByVal e As xpllib.XplMsg)
+        'Dim ruleHandler As New ScriptsProcessor
+        'ruleHandler.Message = e
+
+        If e.Class = "test" And e.Type = "basic" Then
+            'delme
+            xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=RunScriptsInXPLMessage")
+        End If
+
+        Try
+            'Dim ruleThread As New Thread(AddressOf ruleHandler.Start)
+            'ruleThread.Start()
+            Dim ruleThread As New Thread(AddressOf xPLScriptEngine.Start)
+            ruleThread.Start(e)
+            Logger.AddLogEntry(AppInfo, "core", "Created Script Processing Thread.")
+        Catch ex As Exception
+            Logger.AddLogEntry(AppError, "core", "Cannot Create Script Processing Thread.")
+            Logger.AddLogEntry(AppError, "core", "Cause: " & ex.Message)
+        End Try
+    End Sub
+
+
     Public Shared Sub ExecuteRule(ByVal rulename As String, ByVal offset As Integer, ByVal RunIfDisabled As Boolean)
         Logger.AddLogEntry(AppInfo, "core", "Running Rule: " & rulename.Trim)
         Determinator.ExecuteRule(rulename, offset, RunIfDisabled)
     End Sub
 
-    Public Shared Sub RunScript(ByVal strScript As String, ByVal HasParams As Boolean, ByVal strParams As Object)
+    Public Shared Sub RunScript(ByVal strScript As String, ByVal strParams As Object)
         Logger.AddLogEntry(AppInfo, "core", "Running Script: " & strScript.Trim)
-        xPLScriptEngine.RunScript(strScript, HasParams, strParams)
+        ScriptLoader.RunScript(strScript, strParams)
     End Sub
 
     Public Shared Sub UpdateGlobal(ByVal globalname As String, ByVal globalvalue As String)
-        Logger.AddLogEntry(AppInfo, "core", "Updating Cache Valuet: " & globalname.Trim)
+        Logger.AddLogEntry(AppInfo, "core", "Updating Cache Value: " & globalname.Trim)
         xPLCache.Add(globalname, globalvalue, False)
     End Sub
 End Class
