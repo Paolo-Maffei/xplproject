@@ -102,10 +102,8 @@ Public Class PowerShell
 
     Private Shared Function ParseScriptForParameters(ByVal strSource As String) As Dictionary(Of String, String)
         'parse script. get all functions and their (optional) parameters..
-        '
-        'make note in doc: use only function { param(...) } syntax for now!
-
-        Dim rgxParams As New Regex("function (\w*).*?\{.*?\((.*?)\).*?}", RegexOptions.Singleline)
+        
+        Dim rgxParams As New Regex("function (?<name>\w*).*?{\s*(?<pstr>param\s*\((?<params>[\s\S]*?)\))?.*?}", RegexOptions.Singleline)
         Dim dict As New Dictionary(Of String, String)
 
         If rgxParams.IsMatch(strSource) Then
@@ -114,7 +112,7 @@ Public Class PowerShell
             Dim mIdx As Integer
 
             For mIdx = 0 To mc.Count - 1
-                dict.Add(mc.Item(mIdx).Groups(1).Value.ToString(), mc.Item(mIdx).Groups(2).Value.ToString())
+                dict.Add(mc.Item(mIdx).Groups(1).Value.ToString(), mc.Item(mIdx).Groups(3).Value.ToString())
             Next
             '        'split parameters and try to make sense of them...
             '        '(this works but there's no need for it now)
