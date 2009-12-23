@@ -1,0 +1,184 @@
+Building documentation...
+Initializing...
+Merging XML documentation...
+Loading XSLT files...
+XSLT probing directories 3
+file://C:\Program Files\NDoc3\bin\Documenter\Msdn\xslt
+file://C:\Documenter\Msdn\xslt
+file://C:\src\Documenter\Msdn\xslt
+    Compiling assembly.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.assembly.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.common.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.filenames.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.global_arguments.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.syntax.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.vb-syntax.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.tags.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.blank.xsltCompiling namespace.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.namespace.xsltCompiling namespacehierarchy.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.namespacehierarchy.xsltCompiling type.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.type.xsltCompiling typehierarchy.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.typehierarchy.xsltCompiling allmembers.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.allmembers.xsltNo external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.memberscommon.xsltCompiling individualmembers.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.individualmembers.xsltCompiling event.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.event.xsltCompiling member.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.member.xsltCompiling memberoverload.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.memberoverload.xsltCompiling property.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.property.xsltCompiling field.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.field.xsltCompiling htmlcontents.xslt
+    No external found - using embedded assembly:[NDoc3.Documenter.Msdn]NDoc3.Documenter.Msdn.xslt.htmlcontents.xsltGenerating HTML pages...
+xPLHalScriptHelper.html
+xPLHalScriptHelper~.html
+xPLHalScriptHelper~~Hierarchy.html
+xPLHalScriptHelper~Sys.html
+xPLHalScriptHelper~Sys~Members.html
+xPLHalScriptHelper~Sys~Methods.html
+xPLHalScriptHelper~Sys.AddRecurringEvent.html
+xPLHalScriptHelper~Sys.AddSingleEvent.html
+xPLHalScriptHelper~Sys.ClearErrorLog.html
+xPLHalScriptHelper~Sys.DeleteDeviceConfig.html
+xPLHalScriptHelper~Sys.DeleteEvent.html
+xPLHalScriptHelper~Sys.DeleteGlobal.html
+xPLHalScriptHelper~Sys.DeleteRule.html
+xPLHalScriptHelper~Sys.DeleteScript.html
+xPLHalScriptHelper~Sys.GetDeviceConfig.html
+xPLHalScriptHelper~Sys.GetDeviceConfigValue.html
+xPLHalScriptHelper~Sys.GetErrorLog.html
+xPLHalScriptHelper~Sys.GetEvent.html
+xPLHalScriptHelper~Sys.GetGlobal.html
+xPLHalScriptHelper~Sys.GetRule.html
+xPLHalScriptHelper~Sys.GetScript.html
+xPLHalScriptHelper~Sys.GetSetting.html
+xPLHalScriptHelper~Sys.ListDevices.html
+xPLHalScriptHelper~Sys.ListEvents.html
+xPLHalScriptHelper~Sys.ListGlobals.html
+xPLHalScriptHelper~Sys.ListRuleGroups.html
+xPLHalScriptHelper~Sys.ListRules~Overloads.html
+xPLHalScriptHelper~Sys.ListRules1.html
+xPLHalScriptHelper~Sys.ListRules2.html
+xPLHalScriptHelper~Sys.ListScripts~Overloads.html
+xPLHalScriptHelper~Sys.ListScripts1.html
+xPLHalScriptHelper~Sys.ListScripts2.html
+xPLHalScriptHelper~Sys.ListSingleEvents.html
+xPLHalScriptHelper~Sys.ListSubs.html
+xPLHalScriptHelper~Sys.PutScript.html
+xPLHalScriptHelper~Sys.ReloadScripts.html
+xPLHalScriptHelper~Sys.RunRule.html
+xPLHalScriptHelper~Sys.RunSub.html
+xPLHalScriptHelper~Sys.SendXapMsg.html
+xPLHalScriptHelper~Sys.SendXplMessage~Overloads.html
+xPLHalScriptHelper~Sys.SendXplMessage2.html
+xPLHalScriptHelper~Sys.SendXplMessage1.html
+xPLHalScriptHelper~Sys.SetGlobal.html
+xPLHalScriptHelper~Sys.SetRule.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.html
+xPLHalScriptHelper~Sys.RecurringEventInfo~Members.html
+xPLHalScriptHelper~Sys.RecurringEventInfo~Fields.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.DOW.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.EndTime.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.Interval.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.Parms.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.Random.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.StartTime.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.SubName.html
+xPLHalScriptHelper~Sys.RecurringEventInfo.Tag.html
+xPLHalScriptHelper~Sys.Rule.html
+xPLHalScriptHelper~Sys.Rule~Members.html
+xPLHalScriptHelper~Sys.Rule~Fields.html
+xPLHalScriptHelper~Sys.Rule.Enabled.html
+xPLHalScriptHelper~Sys.Rule.RuleGuid.html
+xPLHalScriptHelper~Sys.Rule.RuleName.html
+xPLHalScriptHelper~Sys.RuleGroup.html
+xPLHalScriptHelper~Sys.RuleGroup~Members.html
+xPLHalScriptHelper~Sys.RuleGroup~Fields.html
+xPLHalScriptHelper~Sys.RuleGroup.GroupGuid.html
+xPLHalScriptHelper~Sys.RuleGroup.GroupName.html
+xPLHalScriptHelper~Sys.SingleEventInfo.html
+xPLHalScriptHelper~Sys.SingleEventInfo~Members.html
+xPLHalScriptHelper~Sys.SingleEventInfo~Fields.html
+xPLHalScriptHelper~Sys.SingleEventInfo.Date.html
+xPLHalScriptHelper~Sys.SingleEventInfo.Parms.html
+xPLHalScriptHelper~Sys.SingleEventInfo.Random.html
+xPLHalScriptHelper~Sys.SingleEventInfo.SubName.html
+xPLHalScriptHelper~Sys.SingleEventInfo.Tag.html
+xPLHalScriptHelper~Sys.SubRoutine.html
+xPLHalScriptHelper~Sys.SubRoutine~Members.html
+xPLHalScriptHelper~Sys.SubRoutine~Fields.html
+xPLHalScriptHelper~Sys.SubRoutine.FunctionName.html
+xPLHalScriptHelper~Sys.SubRoutine.Parameters.html
+xPLHalScriptHelper~Sys.SubRoutine.ScriptName.html
+xPLHalScriptHelper~Sys.XPLDevice.html
+xPLHalScriptHelper~Sys.XPLDevice~Members.html
+xPLHalScriptHelper~Sys.XPLDevice~Fields.html
+xPLHalScriptHelper~Sys.XPLDevice.Configdone.html
+xPLHalScriptHelper~Sys.XPLDevice.Configtype.html
+xPLHalScriptHelper~Sys.XPLDevice.Expires.html
+xPLHalScriptHelper~Sys.XPLDevice.Interval.html
+xPLHalScriptHelper~Sys.XPLDevice.Suspended.html
+xPLHalScriptHelper~Sys.XPLDevice.Vdi.html
+xPLHalScriptHelper~Sys.XPLDevice.Waitingconfig.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig~Members.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig~Fields.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig.Name.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig.Number.html
+xPLHalScriptHelper~Sys.XPLDeviceConfig.Type.html
+xPLHalScriptHelper~Sys.XplEvent.html
+xPLHalScriptHelper~Sys.XplEvent~Members.html
+xPLHalScriptHelper~Sys.XplEvent~Fields.html
+xPLHalScriptHelper~Sys.XplEvent.DOW.html
+xPLHalScriptHelper~Sys.XplEvent.EndTime.html
+xPLHalScriptHelper~Sys.XplEvent.Parms.html
+xPLHalScriptHelper~Sys.XplEvent.RunTime.html
+xPLHalScriptHelper~Sys.XplEvent.StartTime.html
+xPLHalScriptHelper~Sys.XplEvent.SubName.html
+xPLHalScriptHelper~Sys.XplEvent.Tag.html
+xPLHalScriptHelper~Sys.XplSingleEvent.html
+xPLHalScriptHelper~Sys.XplSingleEvent~Members.html
+xPLHalScriptHelper~Sys.XplSingleEvent~Fields.html
+xPLHalScriptHelper~Sys.XplSingleEvent.Date.html
+xPLHalScriptHelper~Sys.XplSingleEvent.Parms.html
+xPLHalScriptHelper~Sys.XplSingleEvent.SubName.html
+xPLHalScriptHelper~Sys.XplSingleEvent.Tag.html
+xPLHalScriptHelper~XplMsg.html
+xPLHalScriptHelper~XplMsg~Members.html
+xPLHalScriptHelper~XplMsg~Constructors.html
+xPLHalScriptHelper~XplMsg.~ctor1.html
+xPLHalScriptHelper~XplMsg.~ctor2.html
+xPLHalScriptHelper~XplMsg.~ctor3.html
+xPLHalScriptHelper~XplMsg~Properties.html
+xPLHalScriptHelper~XplMsg.AllowUppercaseFromNetwork.html
+xPLHalScriptHelper~XplMsg.Class.html
+xPLHalScriptHelper~XplMsg.KeyValues.html
+xPLHalScriptHelper~XplMsg.MsgType.html
+xPLHalScriptHelper~XplMsg.MsgTypeString.html
+xPLHalScriptHelper~XplMsg.RawXPL.html
+xPLHalScriptHelper~XplMsg.SourceDevice.html
+xPLHalScriptHelper~XplMsg.SourceInstance.html
+xPLHalScriptHelper~XplMsg.SourceTag.html
+xPLHalScriptHelper~XplMsg.SourceVendor.html
+xPLHalScriptHelper~XplMsg.TargetDevice.html
+xPLHalScriptHelper~XplMsg.TargetInstance.html
+xPLHalScriptHelper~XplMsg.TargetIsAll.html
+xPLHalScriptHelper~XplMsg.TargetTag.html
+xPLHalScriptHelper~XplMsg.TargetVendor.html
+xPLHalScriptHelper~XplMsg.Type.html
+xPLHalScriptHelper~XplMsg~Methods.html
+xPLHalScriptHelper~XplMsg.AddKeyValuePair~Overloads.html
+xPLHalScriptHelper~XplMsg.AddKeyValuePair2.html
+xPLHalScriptHelper~XplMsg.AddKeyValuePair1.html
+xPLHalScriptHelper~XplMsg.CheckString.html
+xPLHalScriptHelper~XplMsg.GetKeyValue.html
+xPLHalScriptHelper~XplMsg.xPLMsgType.html
+Compiling HTML Help file...
+Compiling Html Help file
+Microsoft HTML Help Compiler 4.74.8702
+
+Compiling g:\vs2008\xPLHalScriptHelper\xPLHalScriptHelper\ndoc\doc\ndoc3_msdn_temp\xPLHal Scripting.chm
+
+
+Compile time: 0 minutes, 0 seconds
+289	Topics
+874	Local links
+93	Internet links
+4	Graphics
+
+
+Created g:\vs2008\xPLHalScriptHelper\xPLHalScriptHelper\ndoc\doc\ndoc3_msdn_temp\xPLHal Scripting.chm, 83,654 bytes
+Compression decreased file by 349,923 bytes.
+
+Html Help compile complete
+Done.

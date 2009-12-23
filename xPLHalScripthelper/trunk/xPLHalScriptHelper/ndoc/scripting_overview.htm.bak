@@ -1,0 +1,266 @@
+﻿<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+	<head>
+	<link rel="stylesheet" type="text/css" href="MSDN.css" />
+		<title></title>
+	</head>
+	<body id="bodyID" class="dtBODY">
+    <div id="nsbanner">
+      <div id="bannerrow1">
+        <table class="bannerparthead" cellspacing="0">
+          <tr id="hdr">
+            <td class="runninghead"></td>
+            <td class="product">xPLHal v2.0
+            </td>
+          </tr>
+        </table>
+      </div>
+      <div id="TitleRow">
+        <h1 class="dtH1">Scripting functionality in xPLHal v2.0</h1>
+      </div>
+    </div>
+    <div id="nstext">
+    <h3 class="dtH3">
+        Introduction</h3>
+    <p>
+        xPLHal offers, besides its determinators, the possibility to create your own scripts.
+        A lot can be done with determinators, but sometimes you want more control or functionality.
+        That&#39;s where scripting comes in. You can control almost every aspect of xPLHal
+        in scripting. Create an event, set a global variable, get or set the configuration
+        of some device, send a custom xPL message, it is all possible. And because Powershell
+        has access to virtually anything, the possibilities are virtually endless.</p>
+    <p>
+        At the moment, xPLHal supports two programming languages: Powershell and Python.
+        At the moment of writing, the Powershell integration is where the most effort has
+        gone into. This documentation is thus primarily oriented towards Powershell.</p>
+    <p>
+        There are basically four ways scripts can be executed:
+    </p>
+    
+    <ul>
+        <li>You execute a script manually;</li>
+        <li>A determinator executes a script;</li>
+        <li>A script is executed because it matched a specific xPL message signature;</li>
+        <li>You run a script (or part of it) from the xPLHal ScriptHelper.</li>
+    </ul>
+        <p>
+            &nbsp;</p>
+    <p>
+        xPLHal offers additional objects in the scripting environment to get or change information
+        in xPLHal. Those objects are exposed as classes you can use. When you create a script,
+        you always have access to two variables: <span class="code">$Sys</span> and <span
+            class="code">$Msg</span>. The <span class="code">$Sys</span> class contains
+        methods to control xPLHal. The <span class="code">$Msg</span> class contains the
+        message the script reacted on. When you run a script manually, this variable will
+        be <span class="code">null</span>. See for more detailed information about those
+        classes the help file. There are examples of most commands there as well.</p>
+    <h3>
+        The Scripthelper</h3>
+    <p>
+        This is a standalone application to help you develop your scripts. This application
+        can intercept scripts before they are run so you can test and edit them. If Scripthelper
+        is loaded and a script would be executed, it is sent to a new tabpage instead. <b>The
+            script is not executed by xPLHal</b>. You have access to the same classes and
+        functions from global and you can run the script or a selection. You can also save
+        to xPLHal and reload.</p>
+    <p>
+        To use this application, you must (or course) launch it and set a global variable
+        (&quot;<span class="code">xplhal_debugger&quot;</span>=&quot;<span class="code">1</span>&quot;)
+        in xPLHal.</p>
+    <p class="code">
+        xplhal_debugger = [IP address of Scripthelper][: 8731]<br />
+        <br />
+        e.g. xplhal_debugger = localhost<br />
+        &nbsp;&nbsp;&nbsp;&nbsp; xplhal_debugger = 192.168.12.76</p>
+    The port is optional. In the unlikely event you want to change the port number,
+    do so in both the .config files of xPLHal and Scripthelper.<br />
+    <br />
+    If the global variable is set and a script to execute is found, xPLHal tries to
+    contact Scripthelper. If it succeeds, it sends the script and forgets about the
+    whole thing instantly. If for any reason Scripthelper is not available, the script
+    is run normally. Mind you, there is a timeout of about one second so your scripts
+    <i>will</i> be executed with a delay. But if all goes well, the script appears in
+    a new tabpage and you can begin to modify. After you are done, delete the global
+    variable again so there are no more delays.<br />
+    <h3>
+        Automatic backup when saving to xPLHal</h3>
+    This version of xPLHal has the option to backup scripts before they are overwritten.
+    You can enable this option by setting the global variable <span class="code">xplhal_backupscript
+    </span>to <span class="code">1</span>. Any other value will have no effect. When
+    saved, a unique filename will be generated in the form of [scriptname].[ext].n.bak,
+    where &#39;n&#39; is a unique number. This method has advantages (it&#39;s very
+    safe) but you have to monitor the amount of scripts yourself. If you want this to
+    be the default behaviour, put <span class="code">$Sys.SetGlobal(&quot;xplhal_backupscript&quot;,
+        &quot;1&quot;)</span> in your <span class="code">global.ps1</span>. &nbsp;<br />
+    <h2>
+        The scripting architecture</h2>
+    <p>
+        There are a few scripts of which the filename is reserved :</p>
+    <ul>
+        <li><span class="code">xplhal_global </span>- This script is loaded every time a script
+            is exectuted. This is a good place for generic functions etc.</li>
+        <li><span class="code">xplhal_startup </span>- This script will be executed when xPLHal
+            starts up. You could set global variables here etc.</li>
+        <li><span class="code">xplhal_shutdown </span>- This script will be executed when xPLHal
+            shuts down. You could do some cleanup or sound the alarm or something.</li>
+    </ul>
+    <p>
+        Because there can be different languages, at startup all scripts in both directories
+        are read. The filename is very important, because it identifies the script, and
+        will be used to determine if an xPL message should initiate an execution. All scripts
+        are read and stored in memory. This means if you change a script, you will have
+        to manually reload xPLHal&#39;s scripts. This can be done from the xPLHal Manager.
+        (or from the Scripthelper application. Or from a script, of course.).
+    </p>
+    <span class="warning">You cannot have two scripts with the same filename (without extention).
+        So if you have a global Powershell script (Powershell\global.ps1), you cannot have
+        a global Python script (Python\global.py) as well. If they exist anyway, only one
+        will be loaded (in practice the smallest file, so it appears).</span><p>
+            If you have been working with a previous beta version of xPLHal and have some scripts
+            already, give them a good name and delete the first line. It is no longer needed.</p>
+    <p>
+        Most of the times, you will want to run a script based on an xPL message, or on
+        part of it. When a message arrives in xPLHal, it is compared to a tree:</p>
+    <p>
+        <h4>
+            Example</h4>
+            <p class="code">
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;message
+                type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;message
+                type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;period&gt;_&lt;message
+                type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;type&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;message
+                type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;mode&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;class&gt;_&lt;period&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;period&gt;_&lt;message
+                type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;mode&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;period&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;type&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;_&lt;instance&gt;_&lt;message type&gt;($Msg)<br />
+                &lt;source&gt;($Msg)</p>
+      <h3 class="dtH3">Referenced Assemblies</h3>
+      <div class="tablediv">
+        <table class="dtTABLE" cellspacing="0">
+                        <tr>
+                            <th>
+                                Field
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Example
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                source
+                            </td>
+                            <td>
+                                vendor and device id
+                            </td>
+                            <td>
+                                medusa_xplcm11
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                instance
+                            </td>
+                            <td>
+                                instance of the device
+                            </td>
+                            <td>
+                                somehost
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                class
+                            </td>
+                            <td>
+                                The xPL message class
+                            </td>
+                            <td>
+                                x10
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                type
+                            </td>
+                            <td>
+                                The xPL message class type
+                            </td>
+                            <td>
+                                basic
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                mode
+                            </td>
+                            <td>
+                                The current mode of xPLHal
+                            </td>
+                            <td>
+                                0 (at home)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                period
+                            </td>
+                            <td>
+                                The current period of xPLHal
+                            </td>
+                            <td>
+                                0 (daytime)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                message type
+                            </td>
+                            <td>
+                                The xPL message type,being one of:<br />
+                                <ul>
+                                    <li>Command</li>
+                                    <li>Status</li>
+                                    <li>Trigger</li>
+                                </ul>
+                            </td>
+                            <td>
+                                Command
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                $Msg
+                            </td>
+                            <td>
+                                The variable of the xPL message
+                            </td>
+                            <td>
+                                &nbsp;
+                            </td>
+                        </tr>
+                    </table>
+      </div>
+    
+            <p>
+                &nbsp;</p>
+        <p>
+                So if you wanted to run a script that reacted on this message, the script name would
+                be: <span class="code">medusa_xplcm11_somehost_command[.ps1]</span>. Or <span class="code">
+                    medusa_xplcm11_somehost_x10_basic_0_0_trigger[.ps1]</span>, if you wanted to
+                react on an X10 trigger message sent by medusa-xplcm11.somehost when you are at
+                home and it is daytime. Anyway, pretty straightforward.</p>
+                </div>
+  </body>
+</html>

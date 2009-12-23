@@ -1,0 +1,29 @@
+<project SchemaVersion="1.3">
+    <assemblies>
+        <assembly location="..\bin\Debug\xPLHalScriptHelper.exe" documentation="..\bin\Debug\xPLHalScriptHelper.xml" />
+    </assemblies>
+    <namespaces>
+        <namespace name="(global)">The exposed objects</namespace>
+    </namespaces>
+    <documenters>
+        <documenter name="MSDN">
+            <property name="OutputDirectory" value=".\doc\" />
+            <property name="HtmlHelpName" value="xPLHal Scripting" />
+            <property name="Title" value="xPLHal v2.0" />
+            <property name="OutputTarget" value="HtmlHelp" />
+            <property name="MergeAssemblies" value="False" />
+            <property name="RootPageTOCName" value="xPLHal scripting functionality" />
+            <property name="RootPageFileName" value="G:\vs2008\xPLHalScriptHelper\xPLHalScriptHelper\ndoc\scripting_overview.htm" />
+            <property name="DocumentProtected" value="False" />
+            <property name="DocumentSealedProtected" value="False" />
+            <property name="DocumentProtectedInternalAsProtected" value="False" />
+            <property name="SkipNamespacesWithoutSummaries" value="True" />
+            <property name="AutoDocumentConstructors" value="False" />
+            <property name="Preliminary" value="True" />
+            <property name="SdkDocVersion" value="SDK_v3_5" />
+            <property name="SdkDocVersionString" value="VS.90" />
+            <property name="IncludeDefaultThreadSafety" value="False" />
+            <property name="CleanIntermediates" value="True" />
+        </documenter>
+    </documenters>
+</project>
