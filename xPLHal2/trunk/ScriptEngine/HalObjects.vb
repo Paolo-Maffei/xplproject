@@ -560,11 +560,11 @@ Public Class HalObjects
         Return RunScript(scriptname, param)
     End Function
 
-    Public Function SendXplMsg(ByVal t As String, ByVal target As String, ByVal body As String) As Object Implements IHalObjects.SendXplMsg
-        Return SendXplMsg(t, target, Nothing, body)
+    Public Function SendXplMessage(ByVal t As String, ByVal target As String, ByVal body As String) As Object Implements IHalObjects.SendXplMessage
+        Return SendXplMessage(t, target, Nothing, body)
     End Function
 
-    Public Function SendXplMsg(ByVal t As String, ByVal target As String, ByVal schema As String, ByVal body As String) As Object Implements IHalObjects.SendXplMsg
+    Public Function SendXplMessage(ByVal t As String, ByVal target As String, ByVal schema As String, ByVal body As String) As Object Implements IHalObjects.SendXplMessage
         'needs work
         Dim str As String = t & vbLf & "{" & vbLf
         str &= "hop=1" & vbLf & "source=" & xPLHandler.MySourceTag & vbLf
@@ -572,7 +572,7 @@ Public Class HalObjects
         Dim msg As New xpllib.XplMsg(str)
 
         msg.Send()
-       
+
         Return Nothing
     End Function
 

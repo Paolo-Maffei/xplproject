@@ -43,8 +43,8 @@ Interface IHalObjects
 
     Function RunSub(ByVal scriptname As String, ByVal parameters As String) As Object
 
-    Function SendXplMsg(ByVal t As String, ByVal target As String, ByVal body As String) As Object
-    Function SendXplMsg(ByVal t As String, ByVal target As String, ByVal schema As String, ByVal body As String) As Object
+    Function SendXplMessage(ByVal t As String, ByVal target As String, ByVal body As String) As Object
+    Function SendXplMessage(ByVal t As String, ByVal target As String, ByVal schema As String, ByVal body As String) As Object
     Function SetGlobal(ByVal key As String, ByVal value As String) As Object
     Function SetRule(ByVal ruleguid As String, ByVal xml As String) As Object
     Function SetSetting(ByVal settingname As String, ByVal settingvalue As String) As Object

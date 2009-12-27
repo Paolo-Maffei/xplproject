@@ -161,7 +161,20 @@
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
+  </ItemGroup>
+  <ItemGroup>
     <WCFMetadataStorage Include="Service References\WCFDebugService\" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Service References\WCFDebugService\item.disco" />
+    <None Include="Service References\WCFDebugService\item.xsd" />
+    <None Include="Service References\WCFDebugService\item1.xsd" />
+    <None Include="Service References\WCFDebugService\item2.xsd" />
+    <None Include="Service References\WCFDebugService\item3.xsd" />
+    <None Include="Service References\WCFDebugService\item4.xsd" />
+    <None Include="Service References\WCFDebugService\item5.xsd" />
+    <None Include="Service References\WCFDebugService\WCFDebugService.wsdl" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Service References\WCFDebugService\configuration91.svcinfo" />
@@ -170,10 +183,6 @@
     <None Include="Service References\WCFDebugService\configuration.svcinfo" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Service References\WCFDebugService\item.xsd" />
-    <None Include="Service References\WCFDebugService\item1.xsd" />
-    <None Include="Service References\WCFDebugService\item2.xsd" />
-    <None Include="Service References\WCFDebugService\item3.xsd" />
     <None Include="Service References\WCFDebugService\Reference.svcmap">
       <Generator>WCF Proxy Generator</Generator>
       <LastGenOutput>Reference.vb</LastGenOutput>
@@ -181,13 +190,6 @@
     <None Include="Service References\WCFDebugService\Scripts.WCFDebugService.DebugScriptInfo.datasource">
       <DependentUpon>Reference.svcmap</DependentUpon>
     </None>
-    <None Include="Service References\WCFDebugService\WCFDebugService.wsdl" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Service References\WCFDebugService\item.disco" />
-    <None Include="Service References\WCFDebugService\item4.xsd" />
-    <None Include="Service References\WCFDebugService\item5.xsd" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

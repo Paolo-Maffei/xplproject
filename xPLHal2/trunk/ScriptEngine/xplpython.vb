@@ -10,10 +10,10 @@ Imports Microsoft.Scripting.Hosting
 Imports Microsoft.Scripting
 
 Public Class xplpython
+    Private Shared Sys As New HalObjects()
 
     Public Shared Sub LoadScripts(ByVal ScriptFolder As String)
         Dim fs As TextReader
-        Dim rgxPythonHeader As New Regex("#xpl python script,(\w*),(true|false),(.*)")
 
         If (Not System.IO.Directory.Exists(ScriptFolder)) Then
             Logger.AddLogEntry(AppWarn, "script", "Python Scripts Folder doesn't exist, trying to create.")
@@ -42,7 +42,7 @@ Public Class xplpython
                     Try
                         Dim newscript As New ScriptDetail
                         With newscript
-                            .ScriptName = Path.GetFileName(ScriptFile)
+                            .ScriptName = scriptname
                             .Language = ScriptingLanguage.Python
                             .SourceFile = ScriptFile
                             .Source = strSource
@@ -64,13 +64,22 @@ Public Class xplpython
     End Sub
 
     Private Shared Function ParseScriptForParameters(ByVal strSource As String) As Dictionary(Of String, String)
-        Return Nothing
-    End Function
+        'parse script. get all functions and their (optional) parameters..
 
-    ' routine to calculate number of params in a sub or function
-    Private Shared Function CountParams(ByVal _paramString As String) As Integer
-        Dim Params() As String = Split(_paramString, ",")
-        Return Params.Count
+        Dim rgxParams As New Regex("def (?<name>\w*).*?\((?<arg>[^\)]+)\):")
+        Dim dict As New Dictionary(Of String, String)
+
+        If rgxParams.IsMatch(strSource) Then
+            'yep, there are functions in there...
+            Dim mc As MatchCollection = rgxParams.Matches(strSource)
+            Dim mIdx As Integer
+
+            For mIdx = 0 To mc.Count - 1
+                dict.Add(mc.Item(mIdx).Groups(1).Value.ToString(), mc.Item(mIdx).Groups(2).Value.ToString())
+            Next
+        End If
+
+        Return dict
     End Function
 
     Public Sub RunStartupScript()
@@ -85,21 +94,13 @@ Public Class xplpython
     Public Class ScriptRunner
         Private PythEngine = Python.CreateEngine
         Private sScript As String = ""
-        Private bHasParams As Boolean = False
         Private sParams As String = ""
+        Private xMessage As xpllib.XplMsg
+        Public sSubName As String
 
         Public Event _sendxplmessage(ByVal _msgtype As String, ByVal _sourcetag As String, ByVal _msgclass As String, ByVal _msgbody As String)
         Public Event _updateglobal(ByVal _name As String, ByVal _value As String)
         Public Event _executerule(ByVal _rulename As String, ByVal _offset As Integer, ByVal _runifdisabled As Boolean)
-
-        Property ScriptHasParams() As Boolean
-            Get
-                ScriptHasParams = bHasParams
-            End Get
-            Set(ByVal value As Boolean)
-                bHasParams = value
-            End Set
-        End Property
 
         Property ScriptParams() As String
             Get
@@ -119,19 +120,27 @@ Public Class xplpython
             End Set
         End Property
 
+        Property XplMessage() As xpllib.XplMsg
+            Get
+                XplMessage = xMessage
+            End Get
+            Set(ByVal value As xpllib.XplMsg)
+                xMessage = value
+            End Set
+        End Property
+
         Public Function Run() As Boolean
             Try
                 If Not ScriptLoader.xplScripts.Contains(sScript.ToUpper) Then Return False
                 Dim pythonsource As ScriptSource = PythEngine.CreateScriptSourceFromString(sScript, SourceCodeKind.Statements)
-                If bHasParams = True Then
-                    Dim scriptscope = PythEngine.CreateScope()
-                    scriptscope.addtopath(ScriptEngineFolder)
-                    scriptscope.SetVariable("params", sParams)
-                    scriptscope.SetVariable("xplhal", Me)
-                    pythonsource.Execute(scriptscope)
-                Else
-                    pythonsource.Execute()
-                End If
+
+                Dim scriptscope = PythEngine.CreateScope()
+                scriptscope.addtopath(ScriptEngineFolder)
+                scriptscope.SetVariable("Msg", XplMessage)
+                scriptscope.SetVariable("Sys", Sys)
+                scriptscope.SetVariable("Params", ScriptParams)
+                pythonsource.Execute(scriptscope)
+
             Catch ex As Exception
                 Logger.AddLogEntry(AppError, "script", "Error Executing Python Script: " & sScript)
                 Logger.AddLogEntry(AppError, "script", "Cause: " & Err.Description)
@@ -139,10 +148,6 @@ Public Class xplpython
             End Try
             Return True
         End Function
-
-
     End Class
-
-
 End Class
 

@@ -11,7 +11,6 @@ Imports System.Text
 
 Imports GOCManager
 Imports GOCManager.xPLCache
-Imports Scripts.WCFDebugServiceDuplex
 Imports EventSystem
 Imports System.Net
 Imports System.ServiceModel
@@ -19,7 +18,7 @@ Imports System.ServiceModel
 Public Class PowerShell
     Private Shared ScriptDetails As New Collection
     Private Shared runspace As Runspace
-    Private Shared halobjects As New HalObjects()
+    Private Shared Sys As New HalObjects()
 
     Private Shared Sub InitRunSpace()
         'close 'n release
@@ -36,7 +35,7 @@ Public Class PowerShell
             runspace.Open()
 
             'expose the system class
-            runspace.SessionStateProxy.SetVariable("Sys", halobjects)
+            runspace.SessionStateProxy.SetVariable("Sys", Sys)
 
             'delme
             xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=initthread2 end")
@@ -77,7 +76,7 @@ Public Class PowerShell
                     Try
                         Dim newscript As New ScriptDetail
                         With newscript
-                            .ScriptName = Path.GetFileNameWithoutExtension(ScriptFile)
+                            .ScriptName = scriptname
                             .Language = ScriptingLanguage.Powershell
                             .SourceFile = ScriptFile
                             .Source = strSource
@@ -114,10 +113,6 @@ Public Class PowerShell
             For mIdx = 0 To mc.Count - 1
                 dict.Add(mc.Item(mIdx).Groups(1).Value.ToString(), mc.Item(mIdx).Groups(3).Value.ToString())
             Next
-            '        'split parameters and try to make sense of them...
-            '        '(this works but there's no need for it now)
-            '        'Dim mcparams As MatchCollection = New Regex("(\[[a-zA-Z]*\])(\$[a-zA-Z0-9]*)").Matches(m.Groups(groupIdx).Value)
-            '        'mcparams.Item().Value contains param
         End If
 
         Return dict
@@ -172,65 +167,23 @@ Public Class PowerShell
         End Property
 
 
-
-
-        'Public Function InitThread() As Boolean
-        '    Try
-        '        If XplMessage.Class = "test" And XplMessage.Type = "basic" Then
-        '            'delme
-        '            xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=initthread start")
-        '        End If
-
-        '        PowerShellRunspace.Open()
-
-        '        'first get all exposed objects
-        '        'DebugScriptInfo info = GetCurrentScriptTabPage().ScriptInfo;
-
-        '        'expose the system class
-        '        PowerShellRunspace.SessionStateProxy.SetVariable("Sys", New HalObjects())
-
-        '        'expose the xPL message this rule reacted on
-        '        PowerShellRunspace.SessionStateProxy.SetVariable("Msg", XplMessage)
-
-        '        If XplMessage.Class = "test" And XplMessage.Type = "basic" Then
-        '            'delme
-        '            xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=initthread end")
-        '        End If
-
-        '        Return True
-        '    Catch ex As Exception
-        '        Logger.AddLogEntry(AppError, "script", "Unable to Initialise a Powershell thread. " & Err.Description)
-        '        Logger.AddLogEntry(AppError, "script", "Cause: " & ex.Message)
-        '        Return False
-        '    End Try
-        '    Return True
-        'End Function
-
         Public Function Debug() As Boolean
-            Dim list As Dictionary(Of String, Object) = New Dictionary(Of String, Object)
             Try
                 If Not ScriptLoader.xplScripts.Contains(sScript) Then Return False
                 Dim ActiveScript As ScriptDetail = ScriptLoader.xplScripts(sScript)
 
                 ' Create the script object
-                'Dim dsi As New WCFDebugServiceDuplex.DebugScriptInfo()
                 Dim dsi As New WCFDebugService.DebugScriptInfo()
                 dsi.SourceFile = ActiveScript.SourceFile.Substring(ScriptEngineFolder.Length)
                 dsi.ScriptName = ActiveScript.ScriptName
                 dsi.Source = ActiveScript.Source
                 dsi.GlobalScriptSource = GetGlobalScript()
                 dsi.HalIPAddress = GetLocalIPAddress()
-
-
                 If Not XplMessage Is Nothing Then
                     dsi.xPLMessageString = XplMessage.RawXPL
                 End If
 
-                ' Construct InstanceContext to handle messages on callback interface
-                'Dim instanceContext As New ServiceModel.InstanceContext(New CallbackHandler())
-
                 ' Create a client
-                'Dim client As WCFDebugServiceDuplex.WCFDebugServiceDuplexClient = New WCFDebugServiceDuplex.WCFDebugServiceDuplexClient(instanceContext)
                 Dim client As WCFDebugService.WCFDebugServiceClient = New WCFDebugService.WCFDebugServiceClient()
 
                 'Change the IP address according to the value of the global "xplhal.debugger"
@@ -294,7 +247,6 @@ Public Class PowerShell
                 Next
 
                 If Not XplMessage Is Nothing Then
-
                     If XplMessage.Class = "test" And XplMessage.Type = "basic" Then
                         'delme
                         xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=end using pipeline object")
@@ -307,136 +259,8 @@ Public Class PowerShell
                 Logger.AddLogEntry(AppError, "script", "cause: " & ex.Message)
                 Return False
             End Try
+
             Return True
         End Function
     End Class
-
-    '    Public Function Run() As Boolean
-    '        Try
-    '            If XplMessage.Class = "test" And XplMessage.Type = "basic" Then
-    '                'delme
-    '                xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=about to create pipeline object")
-    '            End If
-
-    '            If Not ScriptLoader.xplScripts.Contains(sScript) Then Return False
-    '            Dim ActiveScript As ScriptDetail = ScriptLoader.xplScripts(sScript)
-
-    '            PowershellPipeline = PowerShellRunspace.CreatePipeline
-
-    '            PowershellPipeline.Commands.AddScript(GetGlobalScript())
-    '            PowershellPipeline.Commands.AddScript(ActiveScript.Source)
-
-    '            PowershellPipeline.Commands.Add("Out-String")
-
-    '            Dim results = PowershellPipeline.Invoke()
-    '            Dim output As New StringBuilder
-    '            For Each obj As PSObject In results
-    '                output.AppendLine(obj.ToString)
-    '            Next
-
-    '            Logger.AddLogEntry(AppInfo, "script", output.ToString())
-    '        Catch ex As Exception
-    '            Logger.AddLogEntry(AppError, "script", "Error Executing Script '" + sScript + "'")
-    '            Logger.AddLogEntry(AppError, "script", "cause: " & ex.Message)
-    '            Return False
-    '        End Try
-    '        Return True
-    '    End Function
-    'End Class
-
-    Private Shared Function GetGlobalScript() As String
-        If xplScripts.Contains("Global") Then
-
-            Dim sd As New ScriptDetail
-            sd = xplScripts.Item("Global")
-
-            Return sd.Source
-        Else
-            Return ""
-        End If
-    End Function
-
-
-    Private Shared Function GetLocalIPAddress() As IPAddress
-        Dim ipaddr As IPAddress()
-        ipaddr = Dns.GetHostEntry(Dns.GetHostName()).AddressList()
-        For i = 0 To UBound(ipaddr)
-            If Not ipaddr(i).IsIPv6LinkLocal Then
-                Return ipaddr(i)
-                Exit For
-            End If
-        Next
-        Return Nothing
-    End Function
-
-
-    'Public Class CallbackHandler
-    '    Implements IWCFDebugServiceDuplexCallback
-
-    '    Public Sub AddGlobal(ByVal key As String, ByVal value As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.AddGlobal
-    '        xPLCache.Add(key, value, False)
-    '    End Sub
-
-    '    Public Sub AddRecurringEvent(ByVal start As Date, ByVal [end] As Date, ByVal interval As Integer, ByVal days As String, ByVal scriptname As String, ByVal parameters() As String, ByVal tag As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.AddRecurringEvent
-
-    '    End Sub
-
-    '    Public Sub AddSingleEvent(ByVal [when] As Date, ByVal scriptname As String, ByVal parameters() As String, ByVal tag As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.AddSingleEvent
-
-    '    End Sub
-
-    '    Public Function DeleteGlobal(ByVal key As String) As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.DeleteGlobal
-    '        xPLCache.Remove(key)
-    '    End Function
-
-    '    Public Function DeleteTimedEvent(ByVal tag As String) As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.DeleteTimedEvent
-    '        Return False
-    '    End Function
-
-    '    Public Function GetGlobal(ByVal key As String) As String Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.GetGlobal
-    '        Return xPLCache.ObjectValue(key)
-    '    End Function
-
-    '    Public Function GetMode() As String Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.GetMode
-    '        Return xPLCache.ObjectValue("xplhal.mode")
-    '    End Function
-
-    '    Public Function GetPeriod() As String Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.GetPeriod
-    '        Return xPLCache.ObjectValue("xplhal.period")
-    '    End Function
-
-    '    Public Sub SetGlobal(ByVal key As String, ByVal value As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.SetGlobal
-    '        If (xPLCache.ObjectValue(key) = Nothing) Then
-    '            xPLCache.Add(key, value, False)
-    '        End If
-
-    '        xPLCache.ObjectValue(key) = value
-    '    End Sub
-
-    '    Public Sub SetMode(ByVal mode As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.SetMode
-    '        xPLCache.ObjectValue("xplhal.mode") = mode
-    '    End Sub
-
-    '    Public Function DeleteEvent(ByVal tag As String) As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.DeleteEvent
-    '        'Dim eventEntry As xPLEvent = EventLauncher.GetEvent(evTag.Trim)
-
-    '    End Function
-
-    '    Public Function EventExists(ByVal tag As String) As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.EventExists
-
-    '    End Function
-
-    '    Public Function GlobalExists(ByVal value As String) As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.GlobalExists
-
-    '    End Function
-
-    '    Public Function SaveEvents() As Boolean Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.SaveEvents
-
-    '    End Function
-
-    '    Public Sub Suspend(ByVal application As String) Implements WCFDebugServiceDuplex.IWCFDebugServiceDuplexCallback.Suspend
-
-    '    End Sub
-    'End Class
-
 End Class

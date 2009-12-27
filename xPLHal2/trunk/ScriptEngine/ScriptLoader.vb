@@ -29,6 +29,7 @@ Imports System.Text.RegularExpressions
 Imports System.Threading
 Imports System.IO
 Imports GOCManager
+Imports System.Net
 
 'Import the Script Engines
 'Imports IronPython.Hosting
@@ -233,12 +234,12 @@ Public Class ScriptLoader
                             t.Start()
                             Logger.AddLogEntry(AppInfo, "script", "Trying to run a powershell script called: " & strScript)
 
-                            'If Not Message Is Nothing Then
-                            '    If Message.Class = "test" And Message.Type = "basic" Then
-                            '        'delme
-                            '        xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=script thread started")
-                            '    End If
-                            'End If
+                            If Not Message Is Nothing Then
+                                If Message.Class = "test" And Message.Type = "basic" Then
+                                    'delme
+                                    xPLEngine.xPLHandler.SendMessage("xpl-trig", "", "test.reply", "pos=script thread started")
+                                End If
+                            End If
 
                             Return True ' ok
                         Else
@@ -378,4 +379,28 @@ Public Class ScriptLoader
         If xplScripts.Contains(scriptname) Then RunScript(scriptname, Message)
     End Sub
 
+
+    Public Shared Function GetLocalIPAddress() As IPAddress
+        Dim ipaddr As IPAddress()
+        ipaddr = Dns.GetHostEntry(Dns.GetHostName()).AddressList()
+        For i = 0 To UBound(ipaddr)
+            If Not ipaddr(i).IsIPv6LinkLocal Then
+                Return ipaddr(i)
+                Exit For
+            End If
+        Next
+        Return Nothing
+    End Function
+
+    Public Shared Function GetGlobalScript() As String
+        If xplScripts.Contains("Global") Then
+
+            Dim sd As New ScriptDetail
+            sd = xplScripts.Item("Global")
+
+            Return sd.Source
+        Else
+            Return ""
+        End If
+    End Function
 End Class
