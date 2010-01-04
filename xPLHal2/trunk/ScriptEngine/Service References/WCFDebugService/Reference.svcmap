@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="7b1cd00c-869e-4ddd-8f33-b6a032c90ddb" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/" Protocol="http" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="item.disco" MetadataType="Disco" ID="7e5fbbb1-5c3a-4a9d-a4dd-8bdf011f3021" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?disco" />
+    <MetadataFile FileName="item.xsd" MetadataType="Schema" ID="f0bbe795-3316-4360-a149-eeefaf7c97c8" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd2" />
+    <MetadataFile FileName="WCFDebugService.wsdl" MetadataType="Wsdl" ID="2e8d0f29-ee6c-415d-b8e9-9256740ed66b" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?wsdl" />
+    <MetadataFile FileName="item1.xsd" MetadataType="Schema" ID="6f4e44d5-6039-4721-aafe-9591d75745d4" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd0" />
+    <MetadataFile FileName="item2.xsd" MetadataType="Schema" ID="2ab56f4b-2e30-45d2-9cb1-8da8995f8153" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd5" />
+    <MetadataFile FileName="item3.xsd" MetadataType="Schema" ID="20eb3120-fd98-495e-a752-7ade730eeeb8" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd1" />
+    <MetadataFile FileName="item4.xsd" MetadataType="Schema" ID="d8070be4-19de-48a4-a7ea-b2886ee244b8" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd3" />
+    <MetadataFile FileName="item5.xsd" MetadataType="Schema" ID="ab4d886b-5a3f-4979-96fc-9aba5f402e1b" SourceId="1" SourceUrl="http://localhost:8731/xPLHalScriptHelper/WCFDebugService/?xsd=xsd4" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>
