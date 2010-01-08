@@ -1,0 +1,22 @@
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\bin\Release\xpllib_Source_5._0.xml
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpl.Resources.resources
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib_5.0.vbproj.GenerateResource.Cache
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib_Source_5._0.xml
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\bin\Release\xpllib.dll
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\bin\Release\xpllib.pdb
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib.dll
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib.pdb
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\bin\Release\gpl.txt
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0\xpllib_5.0\bin\Release\ReadMe.txt
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\bin\Release\gpl.txt
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\bin\Release\ReadMe.txt
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\bin\Release\xpllib.dll
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\bin\Release\xpllib.pdb
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\bin\Release\xpllib_Source_5._0.xml
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\ResolveAssemblyReference.cache
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\xPL.Resources.resources
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\xpllib_5.0.vbproj.GenerateResource.Cache
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\xpllib.dll
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\xpllib_Source_5._0.xml
+C:\Users\Thijs\Documents\Visual Studio 2008\Projects\xpllib_5.0 Windows .Net\xpllib_5.0\obj\Release\xpllib.pdb
