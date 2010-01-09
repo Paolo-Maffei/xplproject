@@ -1,6 +1,0 @@
-Send: http://www.mollie.nl/xml/sms/?username=tieske&password=christiaan72&originator=source&recipients=[[RECIPIENT]]&message=[[MESSAGE]]
-Succes: <success>true</success>
-Credits: http://www.mollie.nl/xml/credits/?username=tieske8&password=christiaan72 
-start delim: <credits>
-end delim: </credits>
-
