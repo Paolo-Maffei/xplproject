@@ -60,6 +60,19 @@ Namespace My.Resources
             End Set
         End Property
         
+        '''<summary>
+        '''  Looks up a localized string similar to SOFTWARE NOTICE AND LICENSE
+        '''
+        '''This work (including software, documents, or other related items) is being provided by the copyright holders under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have read, understood, and will comply with the following terms and conditions:
+        '''
+        '''Permission to use, copy, and distribute this software and its documentation, without modification, for any purpose and without fee or royalty is hereby granted, provided that you i [rest of string was truncated]&quot;;.
+        '''</summary>
+        Friend ReadOnly Property license() As String
+            Get
+                Return ResourceManager.GetString("license", resourceCulture)
+            End Get
+        End Property
+        
         Friend ReadOnly Property xpldiag() As Byte()
             Get
                 Dim obj As Object = ResourceManager.GetObject("xpldiag", resourceCulture)
