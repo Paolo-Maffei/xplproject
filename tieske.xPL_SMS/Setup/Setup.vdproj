@@ -15,8 +15,8 @@
     {
         "Entry"
         {
-        "MsmKey" = "8:_38EF8F9386904424934B7DD01281823B"
-        "OwnerKey" = "8:_UNDEFINED"
+        "MsmKey" = "8:_2A25C9BD56AFB40A3C9C6D06276081FD"
+        "OwnerKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -33,26 +33,26 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_84CDD04F5AE047FFB146DE8C3BFDC432"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_ECA8CDA9E7E0F997857B40B58301CE04"
-        "OwnerKey" = "8:_446D1709D17E43918BE35D52F7807EF4"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ECA8CDA9E7E0F997857B40B58301CE04"
-        "OwnerKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_ECA8CDA9E7E0F997857B40B58301CE04"
+        "MsmKey" = "8:_F8A5452D1CB710C48E96A5D7D84B1E62"
         "OwnerKey" = "8:_4A0120776E9143A69912816D9C6A8B7C"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_FEB84A5F6FDDA79B0162C24D2D5CBB3A"
+        "OwnerKey" = "8:_446D1709D17E43918BE35D52F7807EF4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -64,7 +64,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_38EF8F9386904424934B7DD01281823B"
+        "OwnerKey" = "8:_84CDD04F5AE047FFB146DE8C3BFDC432"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_2A25C9BD56AFB40A3C9C6D06276081FD"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,13 +82,19 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
+        "OwnerKey" = "8:_F8A5452D1CB710C48E96A5D7D84B1E62"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_446D1709D17E43918BE35D52F7807EF4"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_ECA8CDA9E7E0F997857B40B58301CE04"
+        "OwnerKey" = "8:_FEB84A5F6FDDA79B0162C24D2D5CBB3A"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -110,6 +122,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
         "Release"
@@ -134,6 +159,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -220,20 +258,51 @@
         }
         "File"
         {
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_38EF8F9386904424934B7DD01281823B"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2A25C9BD56AFB40A3C9C6D06276081FD"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:xPLCheckPackage, Version=1.0.35.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:xpllib, Version=5.0.145.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_38EF8F9386904424934B7DD01281823B"
+                    "_2A25C9BD56AFB40A3C9C6D06276081FD"
+                    {
+                    "Name" = "8:xpllib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:xpllib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_84CDD04F5AE047FFB146DE8C3BFDC432"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:xPLCheckPackage, Version=1.0.58.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_84CDD04F5AE047FFB146DE8C3BFDC432"
                     {
                     "Name" = "8:xPLCheckPackage.exe"
                     "Attributes" = "3:512"
                     }
                 }
-            "SourcePath" = "8:..\\..\\xPL installation aid\\Package\\bin\\Release\\xPLCheckPackage.exe"
+            "SourcePath" = "8:..\\..\\tieske.xPL_installation_aid\\xPLCheckPackage\\bin\\Release\\xPLCheckPackage.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_0347F8CAB2B545269F528A21F63BBA34"
@@ -251,14 +320,45 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_ECA8CDA9E7E0F997857B40B58301CE04"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_F8A5452D1CB710C48E96A5D7D84B1E62"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:xpllib, Version=5.0.145.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_ECA8CDA9E7E0F997857B40B58301CE04"
+                    "_F8A5452D1CB710C48E96A5D7D84B1E62"
+                    {
+                    "Name" = "8:xpllib.dll"
+                    "Attributes" = "3:512"
+                    }
+                }
+            "SourcePath" = "8:xpllib.dll"
+            "TargetName" = "8:"
+            "Tag" = "8:"
+            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_FEB84A5F6FDDA79B0162C24D2D5CBB3A"
+            {
+            "AssemblyRegister" = "3:1"
+            "AssemblyIsInGAC" = "11:FALSE"
+            "AssemblyAsmDisplayName" = "8:xpllib, Version=5.0.145.0, Culture=neutral, processorArchitecture=MSIL"
+                "ScatterAssemblies"
+                {
+                    "_FEB84A5F6FDDA79B0162C24D2D5CBB3A"
                     {
                     "Name" = "8:xpllib.dll"
                     "Attributes" = "3:512"
