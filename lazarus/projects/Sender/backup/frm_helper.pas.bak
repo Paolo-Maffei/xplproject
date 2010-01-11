@@ -1,0 +1,85 @@
+unit frm_Helper;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Grids, ComCtrls, StdCtrls, v_xplmsg_opendialog;
+
+type
+
+  { Tfrmhelper }
+
+  Tfrmhelper = class(TForm)
+    { Todo : replace this stringgrid with a MStringGrid }
+    xplCommands : TStringGrid;
+    edtSchemaClasse: TxPLClassCombo;
+    ToolBar1: TToolBar;
+    btnClose: TToolButton;
+    BtnSave: TToolButton;
+    ToolButton4: TToolButton;
+    procedure btnCloseClick(Sender: TObject);
+    procedure BtnSaveClick(Sender: TObject);
+    procedure edtSchemaClasseEditingDone(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
+    procedure xplCommandsEditingDone(Sender: TObject);
+    procedure xplCommandsSelectEditor(Sender: TObject; aCol, aRow: Integer;
+      var Editor: TWinControl);
+  private
+    { private declarations }
+    myFileName : string;
+  public
+    { public declarations }
+  end; 
+
+var
+  frmhelper: Tfrmhelper;
+
+implementation
+uses uxPLSchema;
+
+{ Tfrmhelper }
+
+procedure Tfrmhelper.btnCloseClick(Sender: TObject);
+begin
+  Close;
+end;
+
+procedure Tfrmhelper.BtnSaveClick(Sender: TObject);
+begin
+   xplCommands.SaveToFile(myFileName);
+end;
+
+procedure Tfrmhelper.edtSchemaClasseEditingDone(Sender: TObject);
+begin
+   xplCommands.Cells[xplCommands.Col,xplCommands.Row]:=edtSchemaClasse.Text;
+end;
+
+procedure Tfrmhelper.FormCreate(Sender: TObject);
+begin
+   myFileName := GetCurrentDir + '\xplcmnds.xml';
+   if FileExists(myFileName) then xplCommands.LoadFromFile(myFileName);
+end;
+
+procedure Tfrmhelper.xplCommandsEditingDone(Sender: TObject);
+begin
+   if xplCommands.Cells[0,xplCommands.RowCount-1]<>'' then xplCommands.RowCount := xplCommands.RowCount +1;
+end;
+
+procedure Tfrmhelper.xplCommandsSelectEditor(Sender: TObject; aCol,
+  aRow: Integer; var Editor: TWinControl);
+begin
+  if aCol = 0 then begin
+     Editor := edtSchemaClasse;
+     edtSchemaClasse.BoundsRect:=xplCommands.CellRect(aCol,aRow);
+  end;
+end;
+
+
+initialization
+  {$I frm_helper.lrs}
+
+end.
+

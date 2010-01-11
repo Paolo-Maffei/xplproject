@@ -1,0 +1,39 @@
+unit frm_about;
+
+{$mode objfpc}{$H+}
+
+interface
+
+uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+     StdCtrls, ExtCtrls, Buttons;
+
+type
+
+{ TfrmAbout }
+
+TfrmAbout = class(TForm)
+        BitBtn1: TBitBtn;
+        Image1: TImage;
+        lblAppName: TLabel;
+        lblVersion: TLabel;
+        mmoCredits: TMemo;
+        procedure FormCreate(Sender: TObject);
+     end;
+
+var frmAbout: TfrmAbout;
+
+implementation
+uses frm_main, lclversion;
+
+procedure TfrmAbout.FormCreate(Sender: TObject);
+begin
+   lblAppName.Caption := K_XPL_APP_NAME;
+   lblVersion.Caption := 'Version ' + K_XPL_APP_VERSION_NUMBER + ' compiled on the ' + K_XPL_APP_VERSION_DATE;
+   mmoCredits.Text := mmoCredits.Text + #13#10 + 'Compiled with Lazarus version ' + lcl_version;
+end;
+
+initialization
+  {$I frm_about.lrs}
+
+end.
+
