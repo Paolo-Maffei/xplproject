@@ -1,0 +1,330 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>findControl: Class TSearchBar</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<a name="TSearchBar"></a><h1 class="cio">Class TSearchBar</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td><a class="section"  href="#%40Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section"  href="#%40Methods">Methods</a></td><td><a class="section"  href="#%40Properties">Properties</a></td></tr></table>
+<a name="%40Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a   href="findControl.html">findControl</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TSearchBar = class(TPanel)</code></p>
+<h2 class="description">Description</h2>
+<p>
+This class implements a Mozilla like search bar</p>
+<p>
+ You can use it this way: </p>
+
+<pre class="longcode">
+    SearchBar:=TSearchBar.create(self);  <span class="pascal_comment">//replace self with the control which should contain the search bar</span>
+    SearchBar.Parent:=self;              <span class="pascal_comment">//the search bar is automatically placeted at the bottom (align)</span>
+    SearchBar.OnSearch:=SearchBarSearch; <span class="pascal_comment">//this must be an event handler which is than called whenever something should be searched</span>
+  </pre>
+
+<p></p>
+<a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TPanel</li>
+<li class="thisitem">TSearchBar</li></ul><h2 class="overview">Overview</h2>
+<a name="%40Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="findControl.TSearchBar.html#setFocus">setFocus</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="findControl.TSearchBar.html#create">create</a></b>(TheOwner: TComponent); override;</code></td>
+</tr>
+</table>
+<a name="%40Properties"></a><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SearchText">SearchText</a></b>: string read GetSearchText;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SearchLocation">SearchLocation</a></b>: longint read GetSearchLocation write SetSearchLocation;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SearchLocations">SearchLocations</a></b>: TStrings read GetSearchLocations;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#Highlighting">Highlighting</a></b>: boolean read GetHighlighting;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#FindState">FindState</a></b>: <a   href="findControl.html#TFindState">TFindState</a> read FFindState write SetFindState;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#OnSearch">OnSearch</a></b>: <a   href="findControl.html#TSearchEvent">TSearchEvent</a> read FOnSearch write FOnSearch;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#OnClose">OnClose</a></b>: TNotifyEvent read FOnClose write FOnClose;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#OnHighlightChanged">OnHighlightChanged</a></b>: TNotifyEvent read FHighlightChanged write FHighlightChanged;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#OnKeyDown">OnKeyDown</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SubComponents">SubComponents</a></b>: <a   href="findControl.html#TSearchBarSubControls">TSearchBarSubControls</a> read FSubComponents write SetSubComponents;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#Caption">Caption</a></b>: string read FCaption write SetCaption;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SearchForwardText">SearchForwardText</a></b>: string read FSearchForwardText write SetSearchForwardText;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#SearchBackwardText">SearchBackwardText</a></b>: string read FsearchBackwardText write SetsearchBackwardText;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#HighlightText">HighlightText</a></b>: string read FHighlightText write SetHighlightText;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#FoundColor">FoundColor</a></b>: TColor read FFoundColor write FFoundColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#NotFoundColor">NotFoundColor</a></b>: TColor read FNotFoundColor write FNotFoundColor;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#NotFoundState">NotFoundState</a></b>: string read FNotFoundState write FNotFoundState;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="findControl.TSearchBar.html#LoopAroundState">LoopAroundState</a></b>: string read FLoopAroundState write FLoopAroundState;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="setFocus"></a><code>procedure <b>setFocus</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+focuses the search text edit</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="create"></a><code>constructor <b>create</b>(TheOwner: TComponent); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SearchText"></a><code>property <b>SearchText</b>: string read GetSearchText;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is the text to search, entered by the user</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SearchLocation"></a><code>property <b>SearchLocation</b>: longint read GetSearchLocation write SetSearchLocation;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Currently selected combobox item</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SearchLocations"></a><code>property <b>SearchLocations</b>: TStrings read GetSearchLocations;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ComboBox-items</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Highlighting"></a><code>property <b>Highlighting</b>: boolean read GetHighlighting;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+State of the highlight all button</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindState"></a><code>property <b>FindState</b>: <a   href="findControl.html#TFindState">TFindState</a> read FFindState write SetFindState;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Set this to the result of the search operation</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnSearch"></a><code>property <b>OnSearch</b>: <a   href="findControl.html#TSearchEvent">TSearchEvent</a> read FOnSearch write FOnSearch;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is called when the text should be searched, e.g. when the user clicks the buttons or types in the edit control</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnClose"></a><code>property <b>OnClose</b>: TNotifyEvent read FOnClose write FOnClose;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is called when the search bar is closed (close button, or escape key)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnHighlightChanged"></a><code>property <b>OnHighlightChanged</b>: TNotifyEvent read FHighlightChanged write FHighlightChanged;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when the highlight button is pressed</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnKeyDown"></a><code>property <b>OnKeyDown</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Typical <code>OnKeyDown</code>-event. Setting key:=0, will prevent the default handling</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SubComponents"></a><code>property <b>SubComponents</b>: <a   href="findControl.html#TSearchBarSubControls">TSearchBarSubControls</a> read FSubComponents write SetSubComponents;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is a set specifies which sub components should be created <br> The default is [fscCloseButton, fscCaption, fscSearchForward, fscSearchBackwards, fscStatus] </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="findControl.html#TSearchBarSubControl">TSearchBarSubControl</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Caption"></a><code>property <b>Caption</b>: string read FCaption write SetCaption;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Caption of the search bar (needs fscCaption)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SearchForwardText"></a><code>property <b>SearchForwardText</b>: string read FSearchForwardText write SetSearchForwardText;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Caption of the button for forward search (needs fscSearchForward)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SearchBackwardText"></a><code>property <b>SearchBackwardText</b>: string read FsearchBackwardText write SetsearchBackwardText;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Caption of the backward button (needs fscSearchBackwards)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="HighlightText"></a><code>property <b>HighlightText</b>: string read FHighlightText write SetHighlightText;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Caption of the highlight all button (needs fscHighlight)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="FoundColor"></a><code>property <b>FoundColor</b>: TColor read FFoundColor write FFoundColor;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Background-color of the edit control when the text is found</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="NotFoundColor"></a><code>property <b>NotFoundColor</b>: TColor read FNotFoundColor write FNotFoundColor;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Background-color of the edit control when the text is not found</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="NotFoundState"></a><code>property <b>NotFoundState</b>: string read FNotFoundState write FNotFoundState;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Text to display when the text is not found (needs fscStatus)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="LoopAroundState"></a><code>property <b>LoopAroundState</b>: string read FLoopAroundState write FLoopAroundState;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Text to display when the text has only been found after looping around (needs fscStatus)</p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2008-08-30 22:12:55</em>
+</span>
+</body></html>

@@ -1,0 +1,279 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TreeListView</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<h1 class="unit">Unit TreeListView</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td>uses</td><td><a class="section"  href="#%40Classes">Classes, Interfaces, Objects and Records</a></td><td><a class="section"  href="#%40FuncsProcs">Functions and Procedures</a></td><td><a class="section"  href="#%40Types">Types</a></td><td>Constants</td><td>Variables</td></tr></table>
+<a name="%40Description"></a><h2 class="description">Description</h2>
+<p>
+This unit contains the <a class="normal"  href="TreeListView.TTreeListView.html">TTreeListView</a> which is a combination of a TreeView and a ListView. This means that you can organize the items in a tree and show additional information in columns.
+
+<p>$Revision: 109 $   </p>
+<a name="%40Uses"></a><h2 class="overview">Overview</h2>
+<a name="%40Classes"></a><h3 class="cio">Classes, Interfaces, Objects and Records</h3>
+<table class="classestable wide_list">
+<tr class="listheader">
+<th class="itemname">Name</th>
+<th class="itemdesc">Description</th>
+</tr>
+<tr class="list">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TObjectList.html"><code>TObjectList</code></a></td>
+<td class="itemdesc">This is a list storing TObjects</td>
+</tr>
+<tr class="list2">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TTreeListItems.html"><code>TTreeListItems</code></a></td>
+<td class="itemdesc">This is the list used for storing (sub)-<a class="normal"  href="TreeListView.TTreeListItems.html#Items">items</a></td>
+</tr>
+<tr class="list">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TRecordItemList.html"><code>TRecordItemList</code></a></td>
+<td class="itemdesc">This list stores the <a class="normal"  href="TreeListView.TRecordItemList.html#Items">items</a> in the detail columns</td>
+</tr>
+<tr class="list2">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TTreeListRecordItem.html"><code>TTreeListRecordItem</code></a></td>
+<td class="itemdesc">This is a item shown in the detail columns</td>
+</tr>
+<tr class="list">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TTreeListItem.html"><code>TTreeListItem</code></a></td>
+<td class="itemdesc">This is an item which can contain <a class="normal"  href="TreeListView.TTreeListItem.html#SubItems">subitems</a> and items in the detail columns</td>
+</tr>
+<tr class="list2">
+<td class="itemname">Class&nbsp;<a class="bold"  href="TreeListView.TTreeListView.html"><code>TTreeListView</code></a></td>
+<td class="itemdesc">This is the main <a class="normal"  href="TreeListView.html">TreeListView</a>-class</td>
+</tr>
+</table>
+<a name="%40FuncsProcs"></a><h3 class="summary">Functions and Procedures</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.html#Register">Register</a></b>;</code></td>
+</tr>
+</table>
+<a name="%40Types"></a><h3 class="summary">Types</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TImageTyp">TImageTyp</a></b> = (...);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TRealItemCounting">TRealItemCounting</a></b>=set of (ricCountCollapsedsubItems);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TTreeListItemCompare">TTreeListItemCompare</a></b> = function (i1, i2: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>): longint of object;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TTreeListInternOptions">TTreeListInternOptions</a></b>=set of (tlioDisablePainting, tlioDeleting, tlioUpdating);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TExpandMode">TExpandMode</a></b> = (...);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TLineMode">TLineMode</a></b> = (...);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TExpandItemEvent">TExpandItemEvent</a></b> = procedure (Sender: TObject; Item: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a></b> = (...);</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TCustomBackgroundDrawEvent">TCustomBackgroundDrawEvent</a></b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TCustomItemDrawEvent">TCustomItemDrawEvent</a></b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;item:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;xpos,ypos,xColumn:integer;lastItem:boolean;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TCustomRecordItemDrawEvent">TCustomRecordItemDrawEvent</a></b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;parentItem:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;RecordItem:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;xpos,ypos,xColumn:integer;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TItemEvent">TItemEvent</a></b> = procedure (sender:TObject;item:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>) of object;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TRecordItemEvent">TRecordItemEvent</a></b> = procedure (sender:TObject;parentItem:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;item:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>) of object;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TCompareTreeListItemsEvent">TCompareTreeListItemsEvent</a></b> = procedure (sender: TObject; item1, item2: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>; var result: longint)of object;</code></td>
+</tr>
+<tr class="list">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TUserSortItemsEvent">TUserSortItemsEvent</a></b> = procedure (sender: TObject; var sortColumn: longint; var invertSorting: boolean) of object;</code></td>
+</tr>
+<tr class="list2">
+<td class="itemcode"><code><b><a   href="TreeListView.html#TEventHeaderControl">TEventHeaderControl</a></b>=THeaderControl;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Functions and Procedures</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="Register"></a><code>procedure <b>Register</b>;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Types</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TImageTyp"></a><code><b>TImageTyp</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+itNone: &nbsp;</li>
+<li>
+itListIndex: &nbsp;</li>
+<li>
+itBitmap: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TRealItemCounting"></a><code><b>TRealItemCounting</b>=set of (ricCountCollapsedsubItems);</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+This specifies if invisible/collapsed items are counted</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TTreeListItemCompare"></a><code><b>TTreeListItemCompare</b> = function (i1, i2: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>): longint of object;</code></td>
+</tr>
+<tr><td colspan="1">
+<p>
+This is a typical compare function</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TTreeListInternOptions"></a><code><b>TTreeListInternOptions</b>=set of (tlioDisablePainting, tlioDeleting, tlioUpdating);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TExpandMode"></a><code><b>TExpandMode</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+emExpandByClick: &nbsp;</li>
+<li>
+emExpandByDoubleClick: &nbsp;</li>
+<li>
+emExpandNot: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TLineMode"></a><code><b>TLineMode</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+lmNone: &nbsp;</li>
+<li>
+lmSolid: &nbsp;</li>
+<li>
+lmDot: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TExpandItemEvent"></a><code><b>TExpandItemEvent</b> = procedure (Sender: TObject; Item: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCustomDrawEventTyp"></a><code><b>TCustomDrawEventTyp</b> = (...);</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;<h6 class="description_section">Values</h6>
+<ul>
+<li>
+cdetPrePaint: &nbsp;</li>
+<li>
+cdetPostPaint: &nbsp;</li>
+</ul>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCustomBackgroundDrawEvent"></a><code><b>TCustomBackgroundDrawEvent</b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCustomItemDrawEvent"></a><code><b>TCustomItemDrawEvent</b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;item:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;xpos,ypos,xColumn:integer;lastItem:boolean;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCustomRecordItemDrawEvent"></a><code><b>TCustomRecordItemDrawEvent</b> = procedure (sender:TObject;eventTyp_cdet:<a   href="TreeListView.html#TCustomDrawEventTyp">TCustomDrawEventTyp</a>;parentItem:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;RecordItem:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;xpos,ypos,xColumn:integer;var defaultDraw:Boolean) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TItemEvent"></a><code><b>TItemEvent</b> = procedure (sender:TObject;item:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TRecordItemEvent"></a><code><b>TRecordItemEvent</b> = procedure (sender:TObject;parentItem:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;item:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TCompareTreeListItemsEvent"></a><code><b>TCompareTreeListItemsEvent</b> = procedure (sender: TObject; item1, item2: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>; var result: longint)of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TUserSortItemsEvent"></a><code><b>TUserSortItemsEvent</b> = procedure (sender: TObject; var sortColumn: longint; var invertSorting: boolean) of object;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="itemcode"><a name="TEventHeaderControl"></a><code><b>TEventHeaderControl</b>=THeaderControl;</code></td>
+</tr>
+<tr><td colspan="1">
+&nbsp;</td></tr>
+</table>
+<h2 class="authors">Authors</h2>
+<ul class="authors">
+<li>Benito van der Zander (<a   href="http://www.benibela.de">www.benibela.de</a>)</li>
+<li>Thanks to: Bruce Christensen</li>
+</ul>
+<h2 class="modified">Last Modified</h2>
+<p>
+$Date: 2008-08-30 22:15:22 +0200 (Sa, 30 Aug 2008) $
+</p>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2008-08-30 22:12:55</em>
+</span>
+</body></html>
