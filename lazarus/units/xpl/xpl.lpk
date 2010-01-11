@@ -8,8 +8,8 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="C:\lazarus\components\indy-10.2.0.3\fpc\;C:\Lazarus\components\indy-10.2.0.3\lazarus\lib\i386-win32\;C:\lazarus\components\indy-10.2.0.3\lazarus\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;C:\Lazarus\projects\Touchpad\;C:\Lazarus\components\log4delphi-0.7\src\delphi\;C:\Lazarus\components\log4delphi-0.7\src\delphi\util\;C:\Lazarus\units\indy\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;C:\Lazarus\units\"/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\regexpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
+        <UnitOutputDirectory Value="$(LazarusDir)\projects\output"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
@@ -33,49 +33,41 @@
         <UnitName Value="v_xplmsg_opendialog"/>
       </Item2>
       <Item3>
-        <Filename Value="..\..\units\MStringGrid.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MStringGrid"/>
-      </Item3>
-      <Item4>
-        <Filename Value="..\..\units\mchecklistbox.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MCheckListBox"/>
-      </Item4>
-      <Item5>
-        <Filename Value="..\..\units\medit.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MEdit"/>
-      </Item5>
-      <Item6>
         <Filename Value="v_msgtype_radio.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_msgtype_radio"/>
-      </Item6>
-      <Item7>
+      </Item3>
+      <Item4>
         <Filename Value="v_class_combo.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_class_combo"/>
-      </Item7>
-      <Item8>
-        <Filename Value="..\..\units\mcombobox.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MComboBox"/>
-      </Item8>
-      <Item9>
+      </Item4>
+      <Item5>
         <Filename Value="FuzzyComp.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="FuzzyComp"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\general\MStringGrid.pas"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\general\medit.pas"/>
+        <UnitName Value="MEdit"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\general\mchecklistbox.pas"/>
+        <UnitName Value="MCheckListBox"/>
+      </Item8>
+      <Item9>
+        <Filename Value="..\general\mcombobox.pas"/>
+        <UnitName Value="MComboBox"/>
       </Item9>
       <Item10>
-        <Filename Value="..\Touchpad\ucontrols.pas"/>
-        <HasRegisterProc Value="True"/>
+        <Filename Value="ucontrols.pas"/>
         <UnitName Value="uControls"/>
       </Item10>
       <Item11>
-        <Filename Value="..\..\units\TreeListView.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="TreeListView"/>
+        <Filename Value="..\general\TreeListView.pas"/>
       </Item11>
     </Files>
     <Type Value="RunAndDesignTime"/>

@@ -8,7 +8,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;source\;packages\khexeditor\"/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+        <UnitOutputDirectory Value="C:\Lazarus\projects\output"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
