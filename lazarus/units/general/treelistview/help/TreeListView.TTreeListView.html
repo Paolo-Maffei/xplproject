@@ -1,0 +1,1627 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TreeListView: Class TTreeListView</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<a name="TTreeListView"></a><h1 class="cio">Class TTreeListView</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td><a class="section"  href="#%40Hierarchy">Hierarchy</a></td><td><a class="section"  href="#%40Fields">Fields</a></td><td><a class="section"  href="#%40Methods">Methods</a></td><td><a class="section"  href="#%40Properties">Properties</a></td></tr></table>
+<a name="%40Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a   href="TreeListView.html">TreeListView</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TTreeListView = class(TCustomControl)</code></p>
+<h2 class="description">Description</h2>
+<p>
+This is the main <a class="normal"  href="TreeListView.html">TreeListView</a>-class</p>
+<p>
+ You should never need to create an object of a different class of this file <br> Example (use in FormCreate): </p>
+
+<pre class="longcode">
+         List:=TTreeListView.create(self);
+         List.Parent:=self;
+         List.Align:=alClient;
+         List.Columns.Clear;
+         List.Columns.Add.Text:=<span class="pascal_string">'A'</span>;
+         List.Columns.Add.Text:=<span class="pascal_string">'B'</span>;
+         List.BeginUpdate;
+         List.Items.Add(<span class="pascal_string">'Item'</span>)<span class="pascal_float">.</span>SubItems.Add(<span class="pascal_string">'Child'</span>)<span class="pascal_float">.</span>RecordItemsText[<span class="pascal_numeric">1</span>]:=<span class="pascal_string">'Property'</span>;
+         List.EndUpdate;
+      </pre>
+
+<p></p>
+<a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TCustomControl</li>
+<li class="thisitem">TTreeListView</li></ul><h2 class="overview">Overview</h2>
+<a name="%40Fields"></a><h3 class="summary">Fields</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code><b><a   href="TreeListView.TTreeListView.html#hotTrackedRecordItem">hotTrackedRecordItem</a></b>:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;</code></td>
+</tr>
+</table>
+<a name="%40Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#UpdateScrollSize">UpdateScrollSize</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="TreeListView.TTreeListView.html#Create">Create</a></b>(aowner:TComponent); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#GetItemAtPos">GetItemAtPos</a></b>(const y:integer):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#GetRecordItemAtPos">GetRecordItemAtPos</a></b>(const x,y:integer):<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#BeginUpdate">BeginUpdate</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#EndUpdate">EndUpdate</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#VisibleRowCount">VisibleRowCount</a></b>:longint;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#sort">sort</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#ensureVisibility">ensureVisibility</a></b>(item: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;column: longint=-1);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#search">search</a></b>(searchFor: string; searchFields:cardinal; backward: boolean=false;extendSelection: boolean=false): <a   href="findControl.html#TFindState">TFindState</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#ColumnFromOriginalIndex">ColumnFromOriginalIndex</a></b>(index: longint): THeaderSection;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#CreateUserColumnVisibilityPopupMenu">CreateUserColumnVisibilityPopupMenu</a></b>();</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#serializeColumnWidths">serializeColumnWidths</a></b>: string;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#serializeColumnOrder">serializeColumnOrder</a></b>: string;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListView.html#serializeColumnVisibility">serializeColumnVisibility</a></b>: string;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#deserializeColumnWidths">deserializeColumnWidths</a></b>(s: string);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#deserializeColumnOrder">deserializeColumnOrder</a></b>(s: string);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#deserializeColumnVisibility">deserializeColumnVisibility</a></b>(s: string);</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#CreateSearchBar">CreateSearchBar</a></b>();</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#Notification">Notification</a></b>(AComponent: TComponent; Operation: TOperation); override;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#WndProc">WndProc</a></b>(var message:TMessage); override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#internPaint">internPaint</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>procedure <b><a   href="TreeListView.TTreeListView.html#Paint">Paint</a></b>; override;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>destructor <b><a   href="TreeListView.TTreeListView.html#Destroy">Destroy</a></b>; override;</code></td>
+</tr>
+</table>
+<a name="%40Properties"></a><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#selCount">selCount</a></b>: longint read F_SelCount;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#multiSelect">multiSelect</a></b>: boolean read F_MultiSelect write SetMultiSelect;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#focused">focused</a></b>: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read F_Focused write SetFocused;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Selected">Selected</a></b>: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read F_Focused write SetSelected;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#SortColumn">SortColumn</a></b>: longint read F_SortColumn write SetSortColumn;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#SearchBar">SearchBar</a></b>: <a   href="findControl.TSearchBar.html">TSearchBar</a> read F_SearchBar;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#TopPos">TopPos</a></b>: integer read GetTopPos;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Columns">Columns</a></b>: THeaderSections read GetColumns write SetColumns;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ColumnsDragable">ColumnsDragable</a></b>: boolean read GetColumnsDragable write SetColumnsDragable;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#RowHeight">RowHeight</a></b>: integer read F_RowHeight write SetRowHeight;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Images">Images</a></b>: TImageList read F_ImageList write setImageList;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#HorizontalLineMode">HorizontalLineMode</a></b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_HorizontalLines write F_HorizontalLines;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#HorizontalLineColor">HorizontalLineColor</a></b>: TColor read F_HorizontalLineColor write F_HorizontalLineColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#VerticalLineMode">VerticalLineMode</a></b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_VerticalLines write F_VerticalLines;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#VerticalLineColor">VerticalLineColor</a></b>: TColor read F_VerticalLineColor write F_VerticalLineColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#RootLineMode">RootLineMode</a></b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_RootLines write F_RootLines;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#RootLineColor">RootLineColor</a></b>: TColor read F_RootLineColor write F_RootLineColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ColorSearchMark">ColorSearchMark</a></b>: tcolor read F_ColorSearchMark write F_ColorSearchMark;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ColorSearchMarkField">ColorSearchMarkField</a></b>: tcolor read F_ColorSearchMarkField write F_ColorSearchMarkField;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#RightMouseSelects">RightMouseSelects</a></b>: boolean read F_RightMouseSelects write F_RightMouseSelects;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ToolTips">ToolTips</a></b>: boolean read F_Tooltips write F_Tooltips;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ExpandMode">ExpandMode</a></b>: <a   href="TreeListView.html#TExpandMode">TExpandMode</a> read F_ExpandMode write F_ExpandMode;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#HotTrackSubTextItems">HotTrackSubTextItems</a></b>: Boolean read F_HotTrackSubTextItems write SetHotTrackSubTextItems;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#HotTrackFont">HotTrackFont</a></b>: TFont read F_HotTrackFont write SetHotTrackFont;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Font">Font</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#SelectedFont">SelectedFont</a></b>: TFont read F_SelectedFont write SetSelectedFont;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#SelectedHotTrackFont">SelectedHotTrackFont</a></b>: TFont read F_SelectedHotTrackFont write SetSelectedHotTrackFont;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Striped">Striped</a></b>: boolean read F_Striped write F_Striped;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#StripedOddColor">StripedOddColor</a></b>: TColor read F_StripedOddColor write F_StripedOddColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#StripedEvenColor">StripedEvenColor</a></b>: TColor read F_StripedEvenColor write F_StripedEvenColor;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#StripInvisibleItems">StripInvisibleItems</a></b>: boolean read F_StripInvisibleItems write F_StripInvisibleItems;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#SelectBackColor">SelectBackColor</a></b>: TColor read F_SelectBackColor write F_SelectBackColor;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ButtonColor">ButtonColor</a></b>: TColor read F_ButtonColor write F_ButtonColor;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BackGroundColor">BackGroundColor</a></b>: TColor read F_BgColor write F_BgColor;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Items">Items</a></b>: <a   href="TreeListView.TTreeListItems.html">TTreeListItems</a> read F_Items write SetItems;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Sorted">Sorted</a></b>: boolean read F_Sorted write SetSorted;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnCompareItems">OnCompareItems</a></b>: <a   href="TreeListView.html#TCompareTreeListItemsEvent">TCompareTreeListItemsEvent</a> read F_OnCompareItems write F_OnCompareItems;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnUserSortItemsEvent">OnUserSortItemsEvent</a></b>: <a   href="TreeListView.html#TUserSortItemsEvent">TUserSortItemsEvent</a> read F_OnUserSortItems write F_OnUserSortItems;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnItemsSortedEvent">OnItemsSortedEvent</a></b>: TNotifyEvent read F_OnItemsSorted write F_OnItemsSorted;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnVScrollBarChange">OnVScrollBarChange</a></b>: TNotifyEvent read F_VScrollBarChange write F_VScrollBarChange;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnHScrollBarChange">OnHScrollBarChange</a></b>: TNotifyEvent read F_HScrollBarChange write F_HScrollBarChange;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnCustomBgDraw">OnCustomBgDraw</a></b>: <a   href="TreeListView.html#TCustomBackgroundDrawEvent">TCustomBackgroundDrawEvent</a> read F_CustomBgDraw write F_CustomBgDraw;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnCustomItemDraw">OnCustomItemDraw</a></b>: <a   href="TreeListView.html#TCustomItemDrawEvent">TCustomItemDrawEvent</a> read F_CustomItemDraw write F_CustomItemDraw;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnCustomRecordItemDraw">OnCustomRecordItemDraw</a></b>: <a   href="TreeListView.html#TCustomRecordItemDrawEvent">TCustomRecordItemDrawEvent</a> read F_CustomRecordItemDraw write F_CustomRecordItemDraw;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnClickAtRecordItem">OnClickAtRecordItem</a></b>: <a   href="TreeListView.html#TRecordItemEvent">TRecordItemEvent</a> read F_ClickAtRecordItem write F_ClickAtRecordItem;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnClickAtItem">OnClickAtItem</a></b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_ClickAtItem write F_ClickAtItem;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnSelect">OnSelect</a></b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnSelect write F_OnSelect;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnItemCollapsed">OnItemCollapsed</a></b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnItemCollapsed write F_OnItemCollapsed;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnItemExpanded">OnItemExpanded</a></b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnItemExpanded write F_OnItemExpanded;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnHeaderSectionResize">OnHeaderSectionResize</a></b>: TSectionNotifyEvent read F_HeaderSectionResize write F_HeaderSectionResize;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnHeaderSectionTrack">OnHeaderSectionTrack</a></b>: TSectionTrackEvent read F_HeaderSectionTrack write F_HeaderSectionTrack;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BorderWidth">BorderWidth</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BevelWidth">BevelWidth</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BevelEdges">BevelEdges</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BevelInner">BevelInner</a></b> default bvLowered;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BevelOuter">BevelOuter</a></b> default bvLowered;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#BevelKind">BevelKind</a></b> default bkTile;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#TabStop">TabStop</a></b> default true;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#TabOrder">TabOrder</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Align">Align</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Anchors">Anchors</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Constraints">Constraints</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#DragCursor">DragCursor</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#DragKind">DragKind</a></b>   ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#DragMode">DragMode</a></b>    ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#Hint">Hint</a></b>         ;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#ShowHint">ShowHint</a></b>      ;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnDockDrop">OnDockDrop</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnDockOver">OnDockOver</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnEnter">OnEnter</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnExit">OnExit</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnGetSiteInfo">OnGetSiteInfo</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnKeyDown">OnKeyDown</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnKeyPress">OnKeyPress</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnKeyUp">OnKeyUp</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseWheel">OnMouseWheel</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseWheelDown">OnMouseWheelDown</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseWheelUp">OnMouseWheelUp</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnUnDock">OnUnDock</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnCanResize">OnCanResize</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnClick">OnClick</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnConstrainedResize">OnConstrainedResize</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnDblClick">OnDblClick</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnDragDrop">OnDragDrop</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnDragOver">OnDragOver</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnEndDock">OnEndDock</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnEndDrag">OnEndDrag</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseDown">OnMouseDown</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseMove">OnMouseMove</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnMouseUp">OnMouseUp</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnResize">OnResize</a></b>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnStartDock">OnStartDock</a></b>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListView.html#OnStartDrag">OnStartDrag</a></b>;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Fields</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="hotTrackedRecordItem"></a><code><b>hotTrackedRecordItem</b>:<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Item currently touched by the mouse</p>
+</td></tr>
+</table>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="UpdateScrollSize"></a><code>procedure <b>UpdateScrollSize</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p class="hint_directive">Warning: this symbol is deprecated.</p><p>
+ Recalculates the necessary scrollbar properties <br> Normally you don't need to call this</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Create"></a><code>constructor <b>Create</b>(aowner:TComponent); override;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+<code>Create</code></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetItemAtPos"></a><code>function <b>GetItemAtPos</b>(const y:integer):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns the item at position y</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetRecordItemAtPos"></a><code>function <b>GetRecordItemAtPos</b>(const x,y:integer):<a   href="TreeListView.TTreeListRecordItem.html">TTreeListRecordItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Returns the record item at position x,y <br> Notice that it doesn't check for visibility, e.g you can use negative coordinates or find <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> hidden by the scrollbars</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="BeginUpdate"></a><code>procedure <b>BeginUpdate</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Notifies the control that the items are changed, so it will not redrawn itself. <br> Never forget to use this, otherwise it will be very slow.</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="EndUpdate"></a><code>procedure <b>EndUpdate</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Stops the redraw block and redraws everything</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="VisibleRowCount"></a><code>function <b>VisibleRowCount</b>:longint;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Count of visible lines</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="sort"></a><code>procedure <b>sort</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Sorts the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> according to the current sorting options</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ensureVisibility"></a><code>procedure <b>ensureVisibility</b>(item: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;column: longint=-1);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Makes item visible, this includes scrolling and expanding of <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> <br> If column is not -1 it scroll horizontally to the beginning/ending of this column if it isn't visible</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="search"></a><code>function <b>search</b>(searchFor: string; searchFields:cardinal; backward: boolean=false;extendSelection: boolean=false): <a   href="findControl.html#TFindState">TFindState</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This searches the text searchFor in searchFields.   </p>
+<h6 class="description_section">Parameters</h6>
+<dl class="parameters">
+<dt>searchFields</dt>
+<dd>Bit-wise combination of column numbers. Use <code>1 shl i</code> for column i. (you can only use the first 32 <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a>)</dd>
+<dt>backward</dt>
+<dd>Specifies <code>search</code> direction</dd>
+<dt>extendSelection</dt>
+<dd>set this to true for an incremental <code>search</code></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="ColumnFromOriginalIndex"></a><code>function <b>ColumnFromOriginalIndex</b>(index: longint): THeaderSection;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+If the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> can be dragged this will return them in the old order</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateUserColumnVisibilityPopupMenu"></a><code>procedure <b>CreateUserColumnVisibilityPopupMenu</b>();</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Creates a popupmenu to hide/show <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> <br> You need to call this method after every removing/creating of <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a>, because the <a class="normal"  href="TreeListView.html">TreeListView</a> doesn't known when the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> are changed, since you have direct access to the headercontrol sections.<br> This needs FPC</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="serializeColumnWidths"></a><code>function <b>serializeColumnWidths</b>: string;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+save the widths of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> in a string </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#deserializeColumnWidths">deserializeColumnWidths</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="serializeColumnOrder"></a><code>function <b>serializeColumnOrder</b>: string;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+save the order of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> in a string (needs FPC) </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#deserializeColumnOrder">deserializeColumnOrder</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="serializeColumnVisibility"></a><code>function <b>serializeColumnVisibility</b>: string;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+save the visibility of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> in a string (needs FPC) </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#deserializeColumnVisibility">deserializeColumnVisibility</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="deserializeColumnWidths"></a><code>procedure <b>deserializeColumnWidths</b>(s: string);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+load the widths of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> from a string </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#serializeColumnWidths">serializeColumnWidths</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="deserializeColumnOrder"></a><code>procedure <b>deserializeColumnOrder</b>(s: string);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+load the order of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> from a string (needs FPC) </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#serializeColumnOrder">serializeColumnOrder</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="deserializeColumnVisibility"></a><code>procedure <b>deserializeColumnVisibility</b>(s: string);</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+load the visibility of the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> from a string (needs FPC) </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListView.html#serializeColumnVisibility">serializeColumnVisibility</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="CreateSearchBar"></a><code>procedure <b>CreateSearchBar</b>();</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Creates a FireFox like <a class="normal"  href="TreeListView.TTreeListView.html#SearchBar">SearchBar</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Notification"></a><code>procedure <b>Notification</b>(AComponent: TComponent; Operation: TOperation); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="WndProc"></a><code>procedure <b>WndProc</b>(var message:TMessage); override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="internPaint"></a><code>procedure <b>internPaint</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Paint"></a><code>procedure <b>Paint</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Destroy"></a><code>destructor <b>Destroy</b>; override;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="selCount"></a><code>property <b>selCount</b>: longint read F_SelCount;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Count of <a class="normal"  href="TreeListView.TTreeListView.html#Selected">selected</a> <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="multiSelect"></a><code>property <b>multiSelect</b>: boolean read F_MultiSelect write SetMultiSelect;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Specifies if multiple <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> can be <a class="normal"  href="TreeListView.TTreeListView.html#Selected">selected</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="focused"></a><code>property <b>focused</b>: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read F_Focused write SetFocused;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Currently <code>focused</code> item, it is not necessarily <a class="normal"  href="TreeListView.TTreeListView.html#Selected">selected</a>. <br> Setting this property will not select the new item</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Selected"></a><code>property <b>Selected</b>: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read F_Focused write SetSelected;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is the same as <a class="normal"  href="TreeListView.TTreeListView.html#focused">Focused</a>, but setting this property will select the item and deselect every other one</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SortColumn"></a><code>property <b>SortColumn</b>: longint read F_SortColumn write SetSortColumn;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Column currently used for sorting</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="SearchBar"></a><code>property <b>SearchBar</b>: <a   href="findControl.TSearchBar.html">TSearchBar</a> read F_SearchBar;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This a FireFox like <a class="normal"  href="TreeListView.TTreeListView.html#search">search</a> bar, call <a class="normal"  href="TreeListView.TTreeListView.html#CreateSearchBar">createSearchBar</a> before using (this property)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="TopPos"></a><code>property <b>TopPos</b>: integer read GetTopPos;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+V-Scrollposition calculated in pixels (=position of <a class="normal"  href="TreeListView.TTreeListView.html#Items">Items</a>[0])</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Columns"></a><code>property <b>Columns</b>: THeaderSections read GetColumns write SetColumns;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+All <code>columns</code></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ColumnsDragable"></a><code>property <b>ColumnsDragable</b>: boolean read GetColumnsDragable write SetColumnsDragable;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines if the user can move the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a> around (needs FPC)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="RowHeight"></a><code>property <b>RowHeight</b>: integer read F_RowHeight write SetRowHeight;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Height of a row</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Images"></a><code>property <b>Images</b>: TImageList read F_ImageList write setImageList;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+ImageList used to get the <code>images</code> for <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> using the TTreeListView.ImageIndex property</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="HorizontalLineMode"></a><code>property <b>HorizontalLineMode</b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_HorizontalLines write F_HorizontalLines;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines how/if lines are drawn between the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="HorizontalLineColor"></a><code>property <b>HorizontalLineColor</b>: TColor read F_HorizontalLineColor write F_HorizontalLineColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="VerticalLineMode"></a><code>property <b>VerticalLineMode</b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_VerticalLines write F_VerticalLines;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines how/if lines are drawn between the <a class="normal"  href="TreeListView.TTreeListView.html#Columns">columns</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="VerticalLineColor"></a><code>property <b>VerticalLineColor</b>: TColor read F_VerticalLineColor write F_VerticalLineColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="RootLineMode"></a><code>property <b>RootLineMode</b>: <a   href="TreeListView.html#TLineMode">TLineMode</a> read F_RootLines write F_RootLines;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines how/if lines are drawn to connect the tree <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="RootLineColor"></a><code>property <b>RootLineColor</b>: TColor read F_RootLineColor write F_RootLineColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ColorSearchMark"></a><code>property <b>ColorSearchMark</b>: tcolor read F_ColorSearchMark write F_ColorSearchMark;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ColorSearchMarkField"></a><code>property <b>ColorSearchMarkField</b>: tcolor read F_ColorSearchMarkField write F_ColorSearchMarkField;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="RightMouseSelects"></a><code>property <b>RightMouseSelects</b>: boolean read F_RightMouseSelects write F_RightMouseSelects;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines if you can select <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> using the right mouse button</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ToolTips"></a><code>property <b>ToolTips</b>: boolean read F_Tooltips write F_Tooltips;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Specifies if <code>tooltips</code> are shown when item text is longer than the column</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ExpandMode"></a><code>property <b>ExpandMode</b>: <a   href="TreeListView.html#TExpandMode">TExpandMode</a> read F_ExpandMode write F_ExpandMode;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines how/if the user is allowed to collapse/expand <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="HotTrackSubTextItems"></a><code>property <b>HotTrackSubTextItems</b>: Boolean read F_HotTrackSubTextItems write SetHotTrackSubTextItems;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines if the record <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> are hot tracked</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="HotTrackFont"></a><code>property <b>HotTrackFont</b>: TFont read F_HotTrackFont write SetHotTrackFont;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Font"></a><code>property <b>Font</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SelectedFont"></a><code>property <b>SelectedFont</b>: TFont read F_SelectedFont write SetSelectedFont;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SelectedHotTrackFont"></a><code>property <b>SelectedHotTrackFont</b>: TFont read F_SelectedHotTrackFont write SetSelectedHotTrackFont;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Striped"></a><code>property <b>Striped</b>: boolean read F_Striped write F_Striped;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Determines if the item background is drawn alternating</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="StripedOddColor"></a><code>property <b>StripedOddColor</b>: TColor read F_StripedOddColor write F_StripedOddColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="StripedEvenColor"></a><code>property <b>StripedEvenColor</b>: TColor read F_StripedEvenColor write F_StripedEvenColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="StripInvisibleItems"></a><code>property <b>StripInvisibleItems</b>: boolean read F_StripInvisibleItems write F_StripInvisibleItems;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Controls if invisible <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> are counted when the control determines if a item is odd or even</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="SelectBackColor"></a><code>property <b>SelectBackColor</b>: TColor read F_SelectBackColor write F_SelectBackColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ButtonColor"></a><code>property <b>ButtonColor</b>: TColor read F_ButtonColor write F_ButtonColor;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Color of the expand/collaps button</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BackGroundColor"></a><code>property <b>BackGroundColor</b>: TColor read F_BgColor write F_BgColor;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Items"></a><code>property <b>Items</b>: <a   href="TreeListView.TTreeListItems.html">TTreeListItems</a> read F_Items write SetItems;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+All the <code>items</code>, use items.add to <a class="normal"  href="TreeListView.TTreeListView.html#Create">create</a> new ones</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Sorted"></a><code>property <b>Sorted</b>: boolean read F_Sorted write SetSorted;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Controls of the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> should be sorted <br> Notice that the items are not always automatically sorted (e.g. new inserted items are not)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnCompareItems"></a><code>property <b>OnCompareItems</b>: <a   href="TreeListView.html#TCompareTreeListItemsEvent">TCompareTreeListItemsEvent</a> read F_OnCompareItems write F_OnCompareItems;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Event which is called when two <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> are compared during sorting <br> The default sorting tries first to compare the text as numbers than as text, every level is sorted on its own, parents are not changed</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnUserSortItemsEvent"></a><code>property <b>OnUserSortItemsEvent</b>: <a   href="TreeListView.html#TUserSortItemsEvent">TUserSortItemsEvent</a> read F_OnUserSortItems write F_OnUserSortItems;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when the user clicks on the header to resort the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a></p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnItemsSortedEvent"></a><code>property <b>OnItemsSortedEvent</b>: TNotifyEvent read F_OnItemsSorted write F_OnItemsSorted;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called after the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> have been sorted</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnVScrollBarChange"></a><code>property <b>OnVScrollBarChange</b>: TNotifyEvent read F_VScrollBarChange write F_VScrollBarChange;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnHScrollBarChange"></a><code>property <b>OnHScrollBarChange</b>: TNotifyEvent read F_HScrollBarChange write F_HScrollBarChange;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnCustomBgDraw"></a><code>property <b>OnCustomBgDraw</b>: <a   href="TreeListView.html#TCustomBackgroundDrawEvent">TCustomBackgroundDrawEvent</a> read F_CustomBgDraw write F_CustomBgDraw;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is called before/after the <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> are drawn</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnCustomItemDraw"></a><code>property <b>OnCustomItemDraw</b>: <a   href="TreeListView.html#TCustomItemDrawEvent">TCustomItemDrawEvent</a> read F_CustomItemDraw write F_CustomItemDraw;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is called before/after an item is drawn </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListItem.html#PaintTo">TTreeListItem.PaintTo</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnCustomRecordItemDraw"></a><code>property <b>OnCustomRecordItemDraw</b>: <a   href="TreeListView.html#TCustomRecordItemDrawEvent">TCustomRecordItemDrawEvent</a> read F_CustomRecordItemDraw write F_CustomRecordItemDraw;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This is called before/after any record <a class="normal"  href="TreeListView.TTreeListView.html#Items">items</a> is drawn</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnClickAtRecordItem"></a><code>property <b>OnClickAtRecordItem</b>: <a   href="TreeListView.html#TRecordItemEvent">TRecordItemEvent</a> read F_ClickAtRecordItem write F_ClickAtRecordItem;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when the user clicks on a record item</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnClickAtItem"></a><code>property <b>OnClickAtItem</b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_ClickAtItem write F_ClickAtItem;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when the user clicks on an item (if you need the column use <a class="normal"  href="TreeListView.TTreeListView.html#OnClickAtRecordItem">OnClickAtRecordItem</a>)</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnSelect"></a><code>property <b>OnSelect</b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnSelect write F_OnSelect;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when an item is <a class="normal"  href="TreeListView.TTreeListView.html#Selected">selected</a> or deselected</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnItemCollapsed"></a><code>property <b>OnItemCollapsed</b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnItemCollapsed write F_OnItemCollapsed;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when an item is collapsed</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnItemExpanded"></a><code>property <b>OnItemExpanded</b>: <a   href="TreeListView.html#TItemEvent">TItemEvent</a> read F_OnItemExpanded write F_OnItemExpanded;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+Called when an item is expanded</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnHeaderSectionResize"></a><code>property <b>OnHeaderSectionResize</b>: TSectionNotifyEvent read F_HeaderSectionResize write F_HeaderSectionResize;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnHeaderSectionTrack"></a><code>property <b>OnHeaderSectionTrack</b>: TSectionTrackEvent read F_HeaderSectionTrack write F_HeaderSectionTrack;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BorderWidth"></a><code>property <b>BorderWidth</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BevelWidth"></a><code>property <b>BevelWidth</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BevelEdges"></a><code>property <b>BevelEdges</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BevelInner"></a><code>property <b>BevelInner</b> default bvLowered;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BevelOuter"></a><code>property <b>BevelOuter</b> default bvLowered;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="BevelKind"></a><code>property <b>BevelKind</b> default bkTile;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="TabStop"></a><code>property <b>TabStop</b> default true;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="TabOrder"></a><code>property <b>TabOrder</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Align"></a><code>property <b>Align</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Anchors"></a><code>property <b>Anchors</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Constraints"></a><code>property <b>Constraints</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="DragCursor"></a><code>property <b>DragCursor</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="DragKind"></a><code>property <b>DragKind</b>   ;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="DragMode"></a><code>property <b>DragMode</b>    ;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="Hint"></a><code>property <b>Hint</b>         ;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+You can't use this if <a class="normal"  href="TreeListView.TTreeListView.html#ToolTips">tooltips</a> is true</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="ShowHint"></a><code>property <b>ShowHint</b>      ;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnDockDrop"></a><code>property <b>OnDockDrop</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnDockOver"></a><code>property <b>OnDockOver</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnEnter"></a><code>property <b>OnEnter</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnExit"></a><code>property <b>OnExit</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnGetSiteInfo"></a><code>property <b>OnGetSiteInfo</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnKeyDown"></a><code>property <b>OnKeyDown</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnKeyPress"></a><code>property <b>OnKeyPress</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnKeyUp"></a><code>property <b>OnKeyUp</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseWheel"></a><code>property <b>OnMouseWheel</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseWheelDown"></a><code>property <b>OnMouseWheelDown</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseWheelUp"></a><code>property <b>OnMouseWheelUp</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnUnDock"></a><code>property <b>OnUnDock</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnCanResize"></a><code>property <b>OnCanResize</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnClick"></a><code>property <b>OnClick</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnConstrainedResize"></a><code>property <b>OnConstrainedResize</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnDblClick"></a><code>property <b>OnDblClick</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnDragDrop"></a><code>property <b>OnDragDrop</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnDragOver"></a><code>property <b>OnDragOver</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnEndDock"></a><code>property <b>OnEndDock</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnEndDrag"></a><code>property <b>OnEndDrag</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseDown"></a><code>property <b>OnMouseDown</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseMove"></a><code>property <b>OnMouseMove</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnMouseUp"></a><code>property <b>OnMouseUp</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnResize"></a><code>property <b>OnResize</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnStartDock"></a><code>property <b>OnStartDock</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="published.gif" alt="Published" title="Published"></a></td>
+<td class="itemcode"><a name="OnStartDrag"></a><code>property <b>OnStartDrag</b>;</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2008-08-30 22:12:55</em>
+</span>
+</body></html>

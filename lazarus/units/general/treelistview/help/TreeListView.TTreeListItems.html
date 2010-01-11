@@ -1,0 +1,169 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/1999/REC-html401-19991224/loose.dtd">
+<html>
+<head>
+<meta name="GENERATOR" content="PasDoc 0.11.0">
+<meta http-equiv="content-type" content="text/html; charset=iso-8859-1">
+<title>TreeListView: Class TTreeListItems</title>
+<link rel="StyleSheet" type="text/css" href="pasdoc.css">
+</head>
+<body bgcolor="#ffffff" text="#000000" link="#0000ff" vlink="#800080" alink="#FF0000">
+<a name="TTreeListItems"></a><h1 class="cio">Class TTreeListItems</h1>
+<table class="sections wide_list">
+<tr>
+<td><a class="section"  href="#%40Description">Description</a></td><td><a class="section"  href="#%40Hierarchy">Hierarchy</a></td><td>Fields</td><td><a class="section"  href="#%40Methods">Methods</a></td><td><a class="section"  href="#%40Properties">Properties</a></td></tr></table>
+<a name="%40Description"></a><h2 class="unit">Unit</h2>
+<p class="unitlink">
+<a   href="TreeListView.html">TreeListView</a></p>
+<h2 class="declaration">Declaration</h2>
+<p class="declaration">
+<code>type TTreeListItems = class(<a class="normal"  href="TreeListView.TObjectList.html">TObjectList</a>)</code></p>
+<h2 class="description">Description</h2>
+<p>
+This is the list used for storing (sub)-<a class="normal"  href="TreeListView.TTreeListItems.html#Items">items</a></p>
+<a name="%40Hierarchy"></a><h2 class="hierarchy">Hierarchy</h2>
+<ul class="hierarchy"><li class="ancestor">TList</li>
+<li class="ancestor"><a class="normal"  href="TreeListView.TObjectList.html">TObjectList</a></li>
+<li class="thisitem">TTreeListItems</li></ul><h2 class="overview">Overview</h2>
+<a name="%40Methods"></a><h3 class="summary">Methods</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>constructor <b><a   href="TreeListView.TTreeListItems.html#create">create</a></b>(parent:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;const TreeListView:<a   href="TreeListView.TTreeListView.html">TTreeListView</a>);</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#Add">Add</a></b>(caption:string=''):<a   href="TreeListView.TTreeListItem.html">TTreelistItem</a>; overload;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#Add">Add</a></b>(Parent:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;caption:string=''):<a   href="TreeListView.TTreeListItem.html">TTreelistItem</a>; overload;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#GetRealItemCount">GetRealItemCount</a></b>(const countTyp:<a   href="TreeListView.html#TRealItemCounting">TRealItemCounting</a> ) :integer;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#RealIndexOf">RealIndexOf</a></b>(const item:<a   href="TreeListView.TTreeListItem.html">ttreeListItem</a>;const countTyp:<a   href="TreeListView.html#TRealItemCounting">TRealItemCounting</a>):integer;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#GetItemWithRealIndex">GetItemWithRealIndex</a></b>(index:integer):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#FindItemWithText">FindItemWithText</a></b>(caption: string): <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr class="list2">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>function <b><a   href="TreeListView.TTreeListItems.html#FindItemWithRecordText">FindItemWithRecordText</a></b>(pos: longint; text: string):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+</table>
+<a name="%40Properties"></a><h3 class="summary">Properties</h3>
+<table class="summary wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><code>property <b><a   href="TreeListView.TTreeListItems.html#Items">Items</a></b>[Index: Integer]: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read Get write Put;</code></td>
+</tr>
+</table>
+<h2 class="description">Description</h2>
+<h3 class="detail">Methods</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="create"></a><code>constructor <b>create</b>(parent:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;const TreeListView:<a   href="TreeListView.TTreeListView.html">TTreeListView</a>);</code></td>
+</tr>
+<tr><td colspan="2">
+&nbsp;</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Add"></a><code>function <b>Add</b>(caption:string=''):<a   href="TreeListView.TTreeListItem.html">TTreelistItem</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This adds an item with the given caption to this list</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Add"></a><code>function <b>Add</b>(Parent:<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;caption:string=''):<a   href="TreeListView.TTreeListItem.html">TTreelistItem</a>; overload;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This adds an item with the given parent and caption <br> If parent is <code>Nil</code> the item is added to this list, otherwise to the list parent.subitems</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetRealItemCount"></a><code>function <b>GetRealItemCount</b>(const countTyp:<a   href="TreeListView.html#TRealItemCounting">TRealItemCounting</a> ) :integer;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This counts all (direct and indirect) children of this item</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="RealIndexOf"></a><code>function <b>RealIndexOf</b>(const item:<a   href="TreeListView.TTreeListItem.html">ttreeListItem</a>;const countTyp:<a   href="TreeListView.html#TRealItemCounting">TRealItemCounting</a>):integer;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This retrieve the real index of the given item <br> The real index tells you how many <a class="normal"  href="TreeListView.TTreeListItems.html#Items">items</a> (including all children) are between item and self <br> This also finds indirect children</p>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="GetItemWithRealIndex"></a><code>function <b>GetItemWithRealIndex</b>(index:integer):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This get the item which are certain real index </p>
+<h6 class="description_section">See also</h6>
+<dl class="see_also">
+  <dt><a class="normal"  href="TreeListView.TTreeListItems.html#RealIndexOf">RealIndexOf</a></dt>
+  <dd></dd>
+</dl>
+</td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindItemWithText"></a><code>function <b>FindItemWithText</b>(caption: string): <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This searches recursive for a item with the given caption </p>
+<h6 class="description_section">Returns</h6>
+<p class="return">the first matching item or nil if nothing is found</p></td></tr>
+</table>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="FindItemWithRecordText"></a><code>function <b>FindItemWithRecordText</b>(pos: longint; text: string):<a   href="TreeListView.TTreeListItem.html">TTreeListItem</a>;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+This searches recursive for a item with text in the column pos (if pos = 0 this is the same as <a class="normal"  href="TreeListView.TTreeListItems.html#FindItemWithText">FindItemWithText</a>) </p>
+<h6 class="description_section">Returns</h6>
+<p class="return">the first matching item or nil if nothing is found</p></td></tr>
+</table>
+<h3 class="detail">Properties</h3>
+<table class="detail wide_list">
+<tr class="list">
+<td class="visibility"><a   href="legend.html"><img  src="public.gif" alt="Public" title="Public"></a></td>
+<td class="itemcode"><a name="Items"></a><code>property <b>Items</b>[Index: Integer]: <a   href="TreeListView.TTreeListItem.html">TTreeListItem</a> read Get write Put;</code></td>
+</tr>
+<tr><td colspan="2">
+<p>
+access to the direct sub <code>items</code></p>
+</td></tr>
+</table>
+<hr noshade size="1"><span class="appinfo"><em>Generated by <a  target="_parent" href="http://pasdoc.sourceforge.net/">PasDoc 0.11.0</a> on 2008-08-30 22:12:55</em>
+</span>
+</body></html>
