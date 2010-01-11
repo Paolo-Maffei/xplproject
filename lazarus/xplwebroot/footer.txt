@@ -1,0 +1,3 @@
+<div id=footer>
+	<p>{%xPLHubStatus%} | {%xPLConfigStatus%} | Version {%xPLAppVersion%} by <a href=http://glh33.free.fr/>Clinique</a></p>
+</div>

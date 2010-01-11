@@ -1,0 +1,31 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META HTTP-EQUIV="Refresh" CONTENT="10">
+	<LINK REL="stylesheet" type="text/css" href="../style.css" />
+
+	<TITLE>{%xPLAppName%}</TITLE>
+</HEAD>
+
+<BODY >
+    <!--#include file="header.txt"-->
+	<!--#include file="./psscript/tabbar.txt"-->
+
+	<div id=header>
+	    This list of function can be directly called (they have no parameters, if function then result will be ignored) :<br> 
+	
+		<FORM ACTION="functions.html" METHOD="POST" ENCTYPE="application/x-www-form-urlencoded">
+			<CENTER>
+			<select NAME="Procedure_Name" size=20 >
+					<!-- Result template> <option>{%function_name%}</option> <Result template-->
+			</select>
+			<P><INPUT TYPE="SUBMIT" NAME="Submit" VALUE="Launch_Procedure">
+		</FORM>
+	</div>
+	
+	<!--#include file="footer.txt"-->
+</BODY>
+
+</HTML>

@@ -1,0 +1,12 @@
+<table width=100% cellspacing=0 cellpadding=0>
+	<TR>
+		<td background='../images/xplapps/frame_top.jpg'>
+			<table width=100% cellspacing=0 cellpadding=0 border=0>
+				<TR>
+					<td width=60><img src='../images/xplapps/{%xPLAppName%}.png'></td>
+					<td align=left class="maintitle" valign=middle>{%xPLAppName%}</td>
+				</tr>
+			</table>
+		</td>
+	</tr>
+</table>
