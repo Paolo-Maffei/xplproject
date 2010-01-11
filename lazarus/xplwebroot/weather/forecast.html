@@ -1,0 +1,102 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<link rel="stylesheet" type="text/css" href="../style.css" />
+	<HEAD>	
+	</HEAD>
+
+	<TITLE>{%xPLAppName%} - Forecast</TITLE>
+</HEAD>
+
+<BODY >
+	<!--#include file="../header.txt"-->
+	
+	<TABLE cellspacing=0 cellpadding=0>
+	<TR>
+		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
+		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/weather/index.html' class='tabbar'>&nbsp;Current&nbsp;</a></td>
+		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
+		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
+		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/weather/forecast.html' class='tabbar'>&nbsp;Forecast&nbsp;</a></td>
+		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
+	</tr>
+	</table>
+
+	<table class="stats" cellspacing="0">
+		<tr>
+			<td class="hed" ></td>
+			<td>{%fcday1%} {%fcdate1%}</td>
+			<td>{%fcday2%} {%fcdate2%}</td>
+			<td>{%fcday3%} {%fcdate3%}</td>
+			<td>{%fcday4%} {%fcdate4%}</td>
+		</tr>
+		<tr>
+			<td class="hed" >Temperature</td>
+			<td>{%fcmintemp1%} / {%fcmaxtemp1%}</td>
+			<td>{%fcmintemp2%} / {%fcmaxtemp2%}</td>
+			<td>{%fcmintemp3%} / {%fcmaxtemp3%}</td>
+			<td>{%fcmintemp4%} / {%fcmaxtemp4%}</td>
+		</tr>		
+		<tr>
+			<td class="hed" >Sunrise/sunset</td>
+			<td>{%fcsunrise1%} {%fcsunset1%}</td>
+			<td>{%fcsunrise2%} {%fcsunset2%}</td>
+			<td>{%fcsunrise3%} {%fcsunset3%}</td>
+			<td>{%fcsunrise4%} {%fcsunset4%}</td>
+		</tr>
+		<tr>
+			<td class="hed" >Weather prevision Day</td>
+			<td>{%fcdayweatherdesc1%} <IMG SRC="/images/weather/{%fcdayweathericon1%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcdayweatherdesc2%} <IMG SRC="/images/weather/{%fcdayweathericon2%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcdayweatherdesc3%} <IMG SRC="/images/weather/{%fcdayweathericon3%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcdayweatherdesc4%} <IMG SRC="/images/weather/{%fcdayweathericon4%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+		</tr>
+		<tr>
+			<td class="hed" >Weather prevision Night</td>
+			<td>{%fcnightweatherdesc1%} <IMG SRC="/images/weather/{%fcnightweathericon1%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcnightweatherdesc2%} <IMG SRC="/images/weather/{%fcnightweathericon2%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcnightweatherdesc3%} <IMG SRC="/images/weather/{%fcnightweathericon3%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+			<td>{%fcnightweatherdesc4%} <IMG SRC="/images/weather/{%fcnightweathericon4%}.png" ALIGN="BOTTOM"  height=33 width=33></td>
+		</tr>
+		<tr>
+			<td class="hed" >Wind Day</td>
+			<td>{%fcdaywind-speed1%} {%fcdaywind-dir1%}</td>
+			<td>{%fcdaywind-speed2%} {%fcdaywind-dir2%}</td>
+			<td>{%fcdaywind-speed3%} {%fcdaywind-dir3%}</td>
+			<td>{%fcdaywind-speed4%} {%fcdaywind-dir4%}</td>
+		</tr>
+		<tr>
+			<td class="hed" >Wind Night</td>
+			<td>{%fcnightwind-speed1%} {%fcnightwind-dir1%}</td>
+			<td>{%fcnightwind-speed2%} {%fcnightwind-dir2%}</td>
+			<td>{%fcnightwind-speed3%} {%fcnightwind-dir3%}</td>
+			<td>{%fcnightwind-speed4%} {%fcnightwind-dir4%}</td>
+		</tr>
+		<tr>
+			<td class="hed" >Rain probability (D/N)</td>
+			<td>{%fcdayrainprob1%}%/{%fcnightrainbrob1%}%</td>
+			<td>{%fcdayrainprob2%}%/{%fcnightrainbrob2%}%</td>
+			<td>{%fcdayrainprob3%}%/{%fcnightrainbrob3%}%</td>
+			<td>{%fcdayrainprob4%}%/{%fcnightrainbrob4%}%</td>
+		</tr>
+		<tr>
+			<td class="hed" >Humidity Level (D/N)</td>
+			<td>{%fcdayhumidity1%}%/{%fcnighthumidity1%}%</td>
+			<td>{%fcdayhumidity2%}%/{%fcnighthumidity2%}%</td>
+			<td>{%fcdayhumidity3%}%/{%fcnighthumidity3%}%</td>
+			<td>{%fcdayhumidity4%}%/{%fcnighthumidity4%}%</td>
+		</tr>
+		<tr>
+			<td class="hed" >Updated</td>
+			<td>{%fctimestamp%}</td><td></td><td></td><td></td>
+			
+		</tr>		
+
+	</table>
+	
+	<!--#include file="../footer.txt"-->
+</BODY>
+
+</HTML>
