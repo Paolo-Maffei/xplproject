@@ -1,0 +1,71 @@
+inherited frmxPLSingleEvent: TfrmxPLSingleEvent
+  Left = 93
+  Height = 347
+  Top = 342
+  Width = 448
+  Caption = 'Edit Single Event'
+  ClientHeight = 347
+  ClientWidth = 448
+  OnPaint = nil
+  OnShow = FormShow
+  inherited ToolBar2: TToolBar
+    Width = 448
+    inherited sbOk: TSpeedButton
+      OnClick = sbOkClick
+    end
+    inherited sbCancel: TSpeedButton
+      OnClick = sbCancelClick
+    end
+  end
+  inherited PageControl1: TPageControl
+    Height = 322
+    Width = 448
+    inherited tsStandardProp: TTabSheet
+      ClientHeight = 296
+      ClientWidth = 440
+      inherited Label3: TLabel
+      end
+      object Label4: TLabel[1]
+        Left = 13
+        Height = 16
+        Top = 41
+        Width = 138
+        Caption = 'Triggering time and date :'
+        ParentColor = False
+      end
+      inherited edtName: TEdit[2]
+        Width = 298
+      end
+      inherited TimePanel: TxPLTimePanel[3]
+        Top = 57
+      end
+      object Calendar1: TCalendar[4]
+        Left = 124
+        Height = 160
+        Top = 121
+        Width = 225
+        DateTime = 40151
+        DisplaySettings = [dsShowHeadings, dsShowDayNames, dsShowWeekNumbers, dsStartMonday]
+      end
+    end
+    inherited tsAdvancedProp: TTabSheet
+      ClientHeight = 296
+      ClientWidth = 440
+      inherited Label5: TLabel
+      end
+      inherited mmoDescription: TMemo
+      end
+      inherited CheckBox1: TCheckBox
+      end
+      inherited Edit1: TEdit
+        Visible = False
+      end
+      inherited BtnDisplay: TButton
+        OnClick = BtnDisplayClick
+      end
+      inherited ckPerso: TCheckBox
+        OnChange = ckPersoChange
+      end
+    end
+  end
+end

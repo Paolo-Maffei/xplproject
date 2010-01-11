@@ -1,0 +1,279 @@
+inherited frmxPLRecurEvent: TfrmxPLRecurEvent
+  Left = 28
+  Height = 442
+  Top = 142
+  Width = 440
+  Caption = 'Edit Recurring Event'
+  ClientHeight = 442
+  ClientWidth = 440
+  OnShow = FormShow
+  inherited ToolBar2: TToolBar
+    Width = 440
+    inherited sbOk: TSpeedButton
+      OnClick = sbOkClick
+    end
+    inherited sbCancel: TSpeedButton
+      OnClick = sbCancelClick
+    end
+  end
+  inherited PageControl1: TPageControl
+    Height = 417
+    Width = 440
+    inherited tsStandardProp: TTabSheet
+      ClientHeight = 391
+      ClientWidth = 432
+      inherited Label3: TLabel
+        Left = 72
+      end
+      inherited Label4: TLabel
+        Left = 4
+        Width = 110
+        Caption = 'Event Starting Time :'
+      end
+      object randomlabel: TLabel[2]
+        Left = 188
+        Height = 16
+        Top = 137
+        Width = 44
+        Caption = 'seconds'
+        ParentColor = False
+      end
+      object lblRepeat: TLabel[3]
+        Left = 188
+        Height = 16
+        Top = 105
+        Width = 20
+        Caption = 'day'
+        ParentColor = False
+      end
+      object Label6: TLabel[4]
+        Left = 40
+        Height = 16
+        Top = 105
+        Width = 74
+        Caption = 'Repeat every :'
+        ParentColor = False
+      end
+      object Label7: TLabel[5]
+        Left = 48
+        Height = 16
+        Top = 137
+        Width = 66
+        Caption = 'Randomize :'
+        ParentColor = False
+      end
+      inherited edtName: TEdit[6]
+      end
+      inherited TimePanel: TxPLTimePanel[7]
+        Top = 41
+        Width = 296
+        ClientWidth = 296
+        TabOrder = 4
+      end
+      inherited Calendar1: TCalendar[8]
+        Left = 68
+        Top = 417
+        Visible = False
+      end
+      object leRandomize: TSpinEdit[9]
+        Left = 124
+        Height = 23
+        Top = 137
+        Width = 50
+        MaxValue = 9999999
+        OnChange = leRandomizeChange
+        TabOrder = 1
+      end
+      object leDayRecurrence: TSpinEdit[10]
+        Left = 124
+        Height = 23
+        Top = 105
+        Width = 50
+        MinValue = 1
+        TabOrder = 2
+        Value = 1
+      end
+      object RadioGroup1: TRadioGroup[11]
+        Left = 13
+        Height = 48
+        Top = 169
+        Width = 410
+        AutoFill = True
+        Caption = 'Event recurrence'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 3
+        ClientHeight = 30
+        ClientWidth = 406
+        Columns = 3
+        TabOrder = 3
+        object rbDaily: TRadioButton
+          Left = 6
+          Height = 18
+          Top = 6
+          Width = 143
+          Caption = 'Daily'
+          Checked = True
+          OnChange = rbDailyChange
+          State = cbChecked
+          TabOrder = 0
+        end
+        object rbWeekly: TRadioButton
+          Left = 149
+          Height = 18
+          Top = 6
+          Width = 156
+          Caption = 'Weekly'
+          OnChange = rbDailyChange
+          TabOrder = 1
+        end
+      end
+      object TabBook: TNotebook[12]
+        Left = 13
+        Height = 168
+        Top = 217
+        Width = 411
+        PageIndex = 0
+        ShowTabs = False
+        TabOrder = 6
+        object pgDay: TPage
+          Caption = 'pgDay'
+          ClientWidth = 403
+          ClientHeight = 160
+          object Label2: TLabel
+            Left = 45
+            Height = 16
+            Top = 42
+            Width = 51
+            Caption = 'End Time'
+            ParentColor = False
+          end
+          object Label8: TLabel
+            Left = 53
+            Height = 16
+            Top = 97
+            Width = 46
+            Caption = 'Interval :'
+            ParentColor = False
+          end
+          object intervallabel: TLabel
+            Left = 181
+            Height = 16
+            Top = 97
+            Width = 44
+            Caption = 'seconds'
+            ParentColor = False
+          end
+          object ckAllDay: TCheckBox
+            Left = 5
+            Height = 19
+            Top = 8
+            Width = 51
+            Caption = 'All day'
+            OnClick = ckAllDayClick
+            TabOrder = 0
+          end
+          object EndTimePanel: TxPLTimePanel
+            Left = 116
+            Height = 50
+            Top = 34
+            Width = 282
+            BevelOuter = bvLowered
+            ClientHeight = 50
+            ClientWidth = 282
+            TabOrder = 1
+          end
+          object leInterval: TSpinEdit
+            Left = 117
+            Height = 23
+            Top = 97
+            Width = 50
+            MaxValue = 99999999
+            MinValue = 1
+            OnChange = leIntervalChange
+            TabOrder = 2
+            Value = 1
+          end
+        end
+        object pgWeek: TPage
+          Caption = 'pgWeek'
+          ClientWidth = 403
+          ClientHeight = 176
+          object ckWeekMap: TCheckListBox
+            Left = 4
+            Height = 88
+            Top = 10
+            Width = 216
+            Columns = 2
+            Items.Strings = (
+              'Monday'
+              'Tuesday'
+              'Wednesday'
+              'Thirsday'
+              'Friday'
+              'Saturday'
+              'Sunday'
+            )
+            ItemHeight = 15
+            TabOrder = 0
+            Data = {
+              0700000000000000000000
+            }
+          end
+          object BtnAllWeek: TButton
+            Left = 284
+            Height = 25
+            Top = 74
+            Width = 75
+            Caption = 'All week'
+            OnClick = BtnAllWeekClick
+            TabOrder = 1
+          end
+          object btnWeekEnd: TButton
+            Left = 284
+            Height = 25
+            Top = 42
+            Width = 75
+            Caption = 'Week end'
+            OnClick = btnWeekEndClick
+            TabOrder = 2
+          end
+          object btnWorkDays: TButton
+            Left = 284
+            Height = 25
+            Top = 10
+            Width = 75
+            Caption = 'Work days'
+            OnClick = btnWorkDaysClick
+            TabOrder = 3
+          end
+        end
+      end
+    end
+    inherited tsAdvancedProp: TTabSheet
+      ClientHeight = 391
+      ClientWidth = 424
+      inherited Label5: TLabel
+      end
+      inherited mmoDescription: TMemo
+      end
+      inherited CheckBox1: TCheckBox
+      end
+      inherited Edit1: TEdit
+      end
+      inherited BtnDisplay: TButton
+        Left = 236
+        Top = 49
+        OnClick = BtnDisplayClick
+      end
+      inherited ckPerso: TCheckBox
+        OnChange = ckPersoChange
+      end
+    end
+  end
+end
