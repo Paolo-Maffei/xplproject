@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 126
+  Left = 41
   Height = 400
-  Top = 65
+  Top = 124
   Width = 632
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -2275,9 +2275,9 @@ object FrmMain: TFrmMain
   object PageControl1: TPageControl
     Height = 357
     Width = 632
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Network Settings'
@@ -2428,7 +2428,7 @@ object FrmMain: TFrmMain
         Images = frmAbout.ilStandardActions
         TabOrder = 0
         object SpeedButton2: TSpeedButton
-          Left = 156
+          Left = 204
           Height = 28
           Width = 147
           Action = UpdateSeed
@@ -2472,7 +2472,7 @@ object FrmMain: TFrmMain
           NumGlyphs = 0
         end
         object SpeedButton3: TSpeedButton
-          Left = 303
+          Left = 351
           Height = 28
           Width = 135
           Action = DownloadSelected
@@ -2518,25 +2518,18 @@ object FrmMain: TFrmMain
         object Panel1: TPanel
           Left = 1
           Height = 28
-          Width = 155
+          Width = 203
           Alignment = taLeftJustify
           BevelOuter = bvNone
           Caption = 'Updated on'
           TabOrder = 0
         end
-        object cbLocations: TComboBox
-          Left = 438
-          Height = 21
-          Width = 164
-          ItemHeight = 13
-          TabOrder = 1
-        end
       end
       object lvPlugins: TListView
-        Height = 301
+        Height = 277
         Top = 30
         Width = 624
-        Align = alClient
+        Align = alTop
         Checkboxes = True
         Columns = <        
           item
@@ -2559,6 +2552,26 @@ object FrmMain: TFrmMain
         SortType = stText
         TabOrder = 1
         ViewStyle = vsReport
+      end
+      object Panel2: TPanel
+        Height = 26
+        Top = 305
+        Width = 624
+        Align = alBottom
+        Alignment = taLeftJustify
+        Caption = 'Update using alternate location : '
+        ClientHeight = 26
+        ClientWidth = 624
+        TabOrder = 2
+        object cbLocations: TComboBox
+          Left = 156
+          Height = 21
+          Top = 1
+          Width = 467
+          Align = alRight
+          ItemHeight = 13
+          TabOrder = 0
+        end
       end
     end
     object TabSheet4: TTabSheet
