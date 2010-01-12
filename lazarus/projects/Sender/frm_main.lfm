@@ -3407,7 +3407,6 @@ object frmMain: TfrmMain
   end
   object XMLPropStorage1: TXMLPropStorage
     StoredValues = <>
-    FileName = 'session.xml'
     left = 320
     top = 160
   end
