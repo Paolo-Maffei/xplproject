@@ -16,8 +16,8 @@ function MakeBroadCast(aAddress : string) : string;
 
 
 implementation
-uses      {$IFDEF UNIX} inet, sockets, {$ENDIF}
-          {$IFDEF WINDOWS} winsock,    {$ENDIF}
+uses      //{$IFDEF UNIX} inet, sockets, {$ENDIF}
+          //{$IFDEF WINDOWS} winsock,    {$ENDIF}
           cStrings;
 
 {function LocalIPs : TStringList;
