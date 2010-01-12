@@ -10,8 +10,8 @@ uses
 
 Const K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
 
-function LocalIP: string;
-function LocalIPs : TStringList;
+//function LocalIP: string;
+//function LocalIPs : TStringList;
 function MakeBroadCast(aAddress : string) : string;
 
 
@@ -20,14 +20,14 @@ uses      {$IFDEF UNIX} inet, sockets, {$ENDIF}
           {$IFDEF WINDOWS} winsock,    {$ENDIF}
           cStrings;
 
-function LocalIPs : TStringList;
+{function LocalIPs : TStringList;
 begin
      Result := TStringList.Create;
      Result.Delimiter:= ',';
      Result.DelimitedText:= LocalIP;
-end;
+end;}
 
-function LocalIP: string;
+{function LocalIP: string;
 type
    TaPInAddr = array [0..10] of PInAddr;
    PaPInAddr = ^TaPInAddr;
@@ -53,7 +53,7 @@ begin
     end;
     setlength(result,length(result)-1);         // cut last trailing ','
     WSACleanup;
-end;
+end;}
 
 function MakeBroadCast(aAddress : string) : string;   // transforms a.b.c.d in a.b.c.255
 var pos : integer;
