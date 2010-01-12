@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, Forms, LResources,
-  frm_main, frm_about, frm_xplappslauncher;
+  frm_main, frm_about, frm_xplappslauncher, indylaz;
 
 {$IFDEF WINDOWS}{$R xpl_network.rc}{$ENDIF}
 
