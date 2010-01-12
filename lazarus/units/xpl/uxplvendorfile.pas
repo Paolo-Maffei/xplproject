@@ -11,7 +11,11 @@ interface
 
 uses Classes, SysUtils, DOM, XMLRead, uxPLSettings;
 
-type TxPLVendorSeedFile = class(TXMLDocument)
+type
+
+{ TxPLVendorSeedFile }
+
+TxPLVendorSeedFile = class(TXMLDocument)
      private
         fSettings  : TxPLSettings;
         fPlugins   : TStringList;
@@ -23,7 +27,8 @@ type TxPLVendorSeedFile = class(TXMLDocument)
         destructor  destroy; override;
         function    Name : string;
         function    Updated  : TDateTime;
-        procedure   Update;     // Reloads the seed file from website
+        procedure  Update(const sLocation : string = 'http://xplproject.org.uk/plugins');     // Reloads the seed file from website
+        function   UpdatePlugin(const aPluginName : string) : boolean;
 
         function GetPluginValue(const aPlugIn : string; const aProperty : string) : string;
         property Plugins   : TStringList read fPlugins;
@@ -31,9 +36,7 @@ type TxPLVendorSeedFile = class(TXMLDocument)
      end;
 
 implementation //========================================================================
-uses uGetHTTP;
-
-ResourceString K_XPL_VENDOR_PLUGIN_SEED     = 'http://xplproject.org.uk/plugins.php';
+uses uGetHTTP, cStrings, IdHTTP;
 
 { TxPLVendorSeedFile ====================================================================}
 procedure TxPLVendorSeedFile.GetElements;
@@ -68,11 +71,13 @@ end;
 constructor TxPLVendorSeedFile.create(const aSettings: TxPLSettings);
 begin
    inherited Create;
-    ReadXMLFile(self,Name);     // this creates the object
-     fSettings := aSettings;
-     fPlugins  := TStringList.Create;
-     fLocations := TStringList.Create;
-     GetElements;
+
+   ReadXMLFile(self,Name);     // this creates the object
+
+   fSettings := aSettings;
+   fPlugins  := TStringList.Create;
+   fLocations := TStringList.Create;
+   GetElements;
 end;
 
 destructor TxPLVendorSeedFile.destroy;
@@ -91,9 +96,23 @@ begin
    if fileDate > -1 then Result := FileDateToDateTime(fileDate);
 end;
 
-procedure TxPLVendorSeedFile.Update;
+procedure TxPLVendorSeedFile.Update(const sLocation : string = 'http://xplproject.org.uk/plugins');
 begin
-   WGetHTTPFile(K_XPL_VENDOR_PLUGIN_SEED, Name);
+   WGetHTTPFile(sLocation + '.php', Name);
+end;
+
+function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
+var plugin_url : string;
+    target_file: string;
+begin
+   result := true;
+   plugin_url := GetPluginValue(aPluginName,'url');
+   target_file:= fSettings.PluginDirectory + copyright(plugin_url, length(plugin_url)-LastDelimiter('/',plugin_url))+'.xml';
+   try
+      WGetHTTPFile(plugin_url + '.xml', target_file);
+   except  // I really don't understand why exceptions here are not catched...maybe fpc bug ?
+      on E : EIdHTTPProtocolException do result := false ;
+   end;
 end;
 
 end.
