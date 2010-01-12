@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList, DOM,
+  StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList,
   Buttons, Grids, uxPLClient, uxPLVendorFile,XMLPropStorage, IdDayTime;
 
 type
@@ -25,6 +25,7 @@ type
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
+    Panel2: TPanel;
     PopupMenu1: TPopupMenu;
     SelectAll: TAction;
     sgDirectories: TStringGrid;
@@ -76,7 +77,6 @@ type
     procedure UpdateSeedExecute(Sender: TObject);
   private
     VendorSeed   : TxPLVendorSeedFile;
-    SeedDocument : TXMLDocument;
   public
     xPLClient : TxPLClient;
   end;
@@ -84,12 +84,12 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //===============================================================
-uses StrUtils, SysUtils, cStrings, IdStack, uIPutils, uGetHTTP, IdHTTP,
+uses StrUtils, SysUtils, IdStack, uIPutils, IdHTTP,
      frm_xplAppsLauncher, frm_about;
 //==============================================================================
 resourcestring
      // Shared xPL Library resources =======================
-     K_XPL_APP_VERSION_NUMBER = '1.1.5';
+     K_XPL_APP_VERSION_NUMBER = '1.2';
      K_XPL_APP_NAME           = 'xPL Network Config';
 
      // Specific to this appresources ======================
@@ -116,10 +116,9 @@ begin
   xPLClient    := TxPLClient.Create(self,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER);
 
   VendorSeed := TxPLVendorSeedFile.Create(xPLClient.Setting);
-  // PageControl1.ActivePage := TabSheet1;
+
   // Network Settings Part ===========================================
-  //e_ListenOn.Items.CommaText:= LocalIP;
-  e_ListenOn.Items.CommaText:= gStack.LocalAddress;
+  e_ListenOn.Items.CommaText:= gStack.LocalAddress;                   // If using inet : LocalIP of uIPutils unit
   e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
   e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
@@ -129,7 +128,6 @@ begin
   LoadNetworkSettings;
 
   // Vendor settings Part ============================================
-  SeedDocument := TXMLDocument.Create;
   LoadVendorSettings;
 
 end;
@@ -137,7 +135,6 @@ end;
 procedure TFrmMain.FormDestroy(Sender: TObject);
 begin
    xPLClient.Destroy;
-   SeedDocument.Destroy;
    VendorSeed.Destroy;
 end;
 
@@ -205,36 +202,19 @@ end;
 
 procedure TFrmMain.UpdateSeedExecute(Sender: TObject);
 begin
-   VendorSeed.Update;
+   if cbLocations.Text<>'' then VendorSeed.Update(cbLocations.Text) else VendorSeed.Update;
    xPLClient.LogInfo('Seed file ' + Panel1.Caption);
    LoadVendorSettings;
 end;
 
 procedure TFrmMain.DownloadSelectedExecute(Sender: TObject);
 var i : integer;
-    Child : TDOMNode;
-    //plugin_type,
-    plugin_url, sFileName : string;
 begin
    for i := 0 to lvPlugIns.Items.Count - 1 do
-       if lvPlugIns.Items[i].Checked then begin
-         Child := TDomNode(lvPlugins.Items[i].Data);
-//         plugin_type := Child.Attributes.GetNamedItem('type').NodeValue;   // can be schema or plugin
-         plugin_url := Child.Attributes.GetNamedItem('url').NodeValue;
-         sFileName := xPLClient.Setting.PluginDirectory + copyright(plugin_url, length(plugin_url)-LastDelimiter('/',plugin_url))+'.xml';
-         lvPlugins.Items[i].SubItems[1]  := 'Processing...';
-         Application.ProcessMessages ;
-
-         DeleteFile(sFileName);
-         WGetHTTPFile(plugin_url + '.xml', sFileName);
-
-         if FileExists(sFileName)
-            then lvPlugins.Items[i].SubItems[1] := 'Done'
-            else begin
-                 lvPlugins.Items[i].SubItems[1] := 'Error';
-                 xPLClient.LogError('Can not download plugin : ' + plugin_url);
-            end;
-      end;
+       with lvPlugins.Items[i] do begin
+          application.ProcessMessages;
+          if Checked then SubItems[1]  := IfThen(VendorSeed.UpdatePlugin(Caption),'Done','Error');
+       end;
 end;
 
 
