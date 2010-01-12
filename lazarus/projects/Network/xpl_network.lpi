@@ -8,7 +8,7 @@
       <TargetFileExt Value=".exe"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="0"/>
+      <ActiveEditorIndexAtStart Value="2"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -35,12 +35,12 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="94">
+    <Units Count="96">
       <Unit0>
         <Filename Value="xpl_network.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_network"/>
-        <CursorPos X="22" Y="11"/>
+        <CursorPos X="53" Y="19"/>
         <TopLine Value="1"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="100"/>
@@ -190,8 +190,8 @@
         <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
-        <CursorPos X="85" Y="108"/>
-        <TopLine Value="91"/>
+        <CursorPos X="1" Y="101"/>
+        <TopLine Value="87"/>
         <EditorIndex Value="1"/>
         <UsageCount Value="90"/>
         <Loaded Value="True"/>
@@ -716,18 +716,96 @@
         <UnitName Value="frm_about"/>
         <CursorPos X="86" Y="12"/>
         <TopLine Value="1"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="20"/>
+        <Loaded Value="True"/>
       </Unit92>
       <Unit93>
         <Filename Value="..\..\units\xpl\frm_xplappslauncher.pas"/>
+        <ComponentName Value="frmAppLauncher"/>
         <HasResources Value="True"/>
         <IsPartOfProject Value="True"/>
+        <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplappslauncher"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="20"/>
-        <SyntaxHighlighter Value="Text"/>
+        <Loaded Value="True"/>
       </Unit93>
+      <Unit94>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <UnitName Value="uxPLVendorFile"/>
+        <CursorPos X="39" Y="23"/>
+        <TopLine Value="8"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit94>
+      <Unit95>
+        <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
+        <UnitName Value="httpprothandler"/>
+        <CursorPos X="65" Y="22"/>
+        <TopLine Value="10"/>
+        <EditorIndex Value="3"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit95>
     </Units>
-    <JumpHistory Count="0" HistoryIndex="-1"/>
+    <JumpHistory Count="13" HistoryIndex="12">
+      <Position1>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="108" Column="85" TopLine="1"/>
+      </Position1>
+      <Position2>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="86" Column="36" TopLine="71"/>
+      </Position2>
+      <Position3>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="9" Column="51" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="103" Column="6" TopLine="88"/>
+      </Position4>
+      <Position5>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="102" Column="6" TopLine="87"/>
+      </Position5>
+      <Position6>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="103" Column="8" TopLine="86"/>
+      </Position6>
+      <Position7>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="94" Column="6" TopLine="79"/>
+      </Position7>
+      <Position8>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="93" Column="6" TopLine="78"/>
+      </Position8>
+      <Position9>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="94" Column="6" TopLine="79"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
+        <Caret Line="25" Column="19" TopLine="1"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="60" Column="5" TopLine="45"/>
+      </Position13>
+    </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="8"/>

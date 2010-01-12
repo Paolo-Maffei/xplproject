@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList, uxPLSettings, DOM,
+  StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList, DOM,
   Buttons, Grids, uxPLClient, uxPLVendorFile,XMLPropStorage;
 
 type
@@ -83,7 +83,7 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //===============================================================
-uses StrUtils, SysUtils, cStrings, XMLRead, uIPutils, uGetHTTP, IdHTTP, 
+uses StrUtils, SysUtils, cStrings, uIPutils, uGetHTTP, IdHTTP,
      frm_xplAppsLauncher, frm_about;
 //==============================================================================
 resourcestring
@@ -98,9 +98,6 @@ resourcestring
      COMMENT_LINE_1         = 'Your network settings have been saved.'#10#13;
      COMMENT_LINE_2         = #10#13'Note that your computer should use a fixed IP Address'#10#13;
      COMMENT_LINE_3         = 'Your xPL applications may need to be restarted for changes to take effect.';
-     MENU_SELECT_ALL        = 'Select all items';
-     MENU_UNSELECT_ALL      = 'Unselect all items';
-     MENU_INVERT_SELECTION  = 'Invert selection';
 
 { TFrmMain Object =============================================================}
 procedure TFrmMain.InstalledAppsExecute(Sender: TObject);
