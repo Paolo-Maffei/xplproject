@@ -20,7 +20,7 @@ type TxPLVendorSeedFile = class(TXMLDocument)
         procedure GetElements;
      public
         constructor create(const aSettings : TxPLSettings);
-        destructor  destroy;
+        destructor  destroy; override;
         function    Name : string;
         function    Updated  : TDateTime;
         procedure   Update;     // Reloads the seed file from website
@@ -57,8 +57,7 @@ begin
 end;
 
 function TxPLVendorSeedFile.GetPluginValue(const aPlugIn : string; const aProperty : string) : string;
-var Child : TDomNode;
-    i : integer;
+var i : integer;
 begin
      result := '';
      i := Plugins.IndexOf(aPlugin);
