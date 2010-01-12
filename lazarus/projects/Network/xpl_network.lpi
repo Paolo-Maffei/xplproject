@@ -8,7 +8,7 @@
       <TargetFileExt Value=".exe"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="2"/>
+      <ActiveEditorIndexAtStart Value="1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -26,24 +26,28 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="SynEdit"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="indylaz"/>
+        <MinVersion Major="10" Minor="2" Build="3" Valid="True"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="SynEdit"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
-    <Units Count="96">
+    <Units Count="101">
       <Unit0>
         <Filename Value="xpl_network.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_network"/>
-        <CursorPos X="53" Y="19"/>
+        <CursorPos X="33" Y="10"/>
         <TopLine Value="1"/>
         <EditorIndex Value="0"/>
-        <UsageCount Value="100"/>
+        <UsageCount Value="101"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -190,10 +194,10 @@
         <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
-        <CursorPos X="1" Y="101"/>
-        <TopLine Value="87"/>
+        <CursorPos X="1" Y="94"/>
+        <TopLine Value="82"/>
         <EditorIndex Value="1"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
       </Unit20>
       <Unit21>
@@ -714,11 +718,9 @@
         <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_about"/>
-        <CursorPos X="86" Y="12"/>
+        <CursorPos X="59" Y="8"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="5"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="21"/>
       </Unit92>
       <Unit93>
         <Filename Value="..\..\units\xpl\frm_xplappslauncher.pas"/>
@@ -727,92 +729,115 @@
         <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplappslauncher"/>
-        <CursorPos X="1" Y="1"/>
+        <CursorPos X="61" Y="4"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="4"/>
-        <UsageCount Value="20"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="21"/>
       </Unit93>
       <Unit94>
         <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
         <UnitName Value="uxPLVendorFile"/>
-        <CursorPos X="39" Y="23"/>
+        <CursorPos X="30" Y="14"/>
         <TopLine Value="8"/>
-        <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit94>
       <Unit95>
         <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
         <UnitName Value="httpprothandler"/>
-        <CursorPos X="65" Y="22"/>
+        <CursorPos X="48" Y="13"/>
         <TopLine Value="10"/>
+        <UsageCount Value="10"/>
+      </Unit95>
+      <Unit96>
+        <Filename Value="..\..\units\xpl\uiputils.pas"/>
+        <UnitName Value="uIPutils"/>
+        <CursorPos X="35" Y="20"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="4"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit96>
+      <Unit97>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdStack.pas"/>
+        <UnitName Value="IdStack"/>
+        <CursorPos X="30" Y="435"/>
+        <TopLine Value="432"/>
+        <UsageCount Value="10"/>
+      </Unit97>
+      <Unit98>
+        <Filename Value="..\..\units\xpl\uxplclient.pas"/>
+        <UnitName Value="uxPLClient"/>
+        <CursorPos X="25" Y="17"/>
+        <TopLine Value="12"/>
+        <UsageCount Value="10"/>
+      </Unit98>
+      <Unit99>
+        <Filename Value="..\..\units\xpl\IdAboutVCL.pas"/>
+        <UnitName Value="IdAboutVCL"/>
+        <CursorPos X="63" Y="11"/>
+        <TopLine Value="1"/>
         <EditorIndex Value="3"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
-      </Unit95>
+      </Unit99>
+      <Unit100>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\lazarus\IdStack.pas"/>
+        <UnitName Value="IdStack"/>
+        <CursorPos X="1" Y="465"/>
+        <TopLine Value="450"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit100>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="10" HistoryIndex="9">
       <Position1>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="108" Column="85" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\uiputils.pas"/>
+        <Caret Line="56" Column="6" TopLine="37"/>
       </Position1>
       <Position2>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="86" Column="36" TopLine="71"/>
+        <Caret Line="115" Column="21" TopLine="101"/>
       </Position2>
       <Position3>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="9" Column="51" TopLine="1"/>
+        <Filename Value="xpl_network.lpr"/>
+        <Caret Line="19" Column="53" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="103" Column="6" TopLine="88"/>
+        <Filename Value="xpl_network.lpr"/>
+        <Caret Line="23" Column="1" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="102" Column="6" TopLine="87"/>
+        <Filename Value="xpl_network.lpr"/>
+        <Caret Line="10" Column="42" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="103" Column="8" TopLine="86"/>
+        <Caret Line="123" Column="3" TopLine="113"/>
       </Position6>
       <Position7>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="94" Column="6" TopLine="79"/>
+        <Filename Value="..\..\units\xpl\IdAboutVCL.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="93" Column="6" TopLine="78"/>
+        <Filename Value="..\..\units\xpl\IdAboutVCL.pas"/>
+        <Caret Line="12" Column="50" TopLine="1"/>
       </Position8>
       <Position9>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="94" Column="6" TopLine="79"/>
+        <Caret Line="168" Column="76" TopLine="151"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="28" Column="81" TopLine="1"/>
       </Position10>
-      <Position11>
-        <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
-        <Caret Line="25" Column="19" TopLine="1"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="60" Column="5" TopLine="45"/>
-      </Position13>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="8"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir)\"/>
-      <OtherUnitFiles Value="$(LazarusDir)\svn\units\xpl\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\svn\units\general\RegExpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\fpc\"/>
+      <IncludeFiles Value="$(ProjOutDir)\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
+      <OtherUnitFiles Value="$(LazarusDir)\svn\units\xpl\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\svn\units\general\RegExpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\fpc\"/>
       <UnitOutputDirectory Value="$(LazarusDir)\projects\output"/>
     </SearchPaths>
     <Parsing>

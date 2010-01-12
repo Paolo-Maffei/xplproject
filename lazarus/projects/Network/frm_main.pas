@@ -7,7 +7,7 @@ interface
 uses
   Classes, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList, DOM,
-  Buttons, Grids, uxPLClient, uxPLVendorFile,XMLPropStorage;
+  Buttons, Grids, uxPLClient, uxPLVendorFile,XMLPropStorage, IdDayTime;
 
 type
 
@@ -16,6 +16,7 @@ type
   TFrmMain = class(TForm)
     About: TAction;
     cbLocations: TComboBox;
+    IdDayTime1: TIdDayTime;
     InstalledApps: TAction;
     MenuItem1: TMenuItem;
     MenuItem11: TMenuItem;
@@ -83,15 +84,13 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //===============================================================
-uses StrUtils, SysUtils, cStrings, uIPutils, uGetHTTP, IdHTTP,
+uses StrUtils, SysUtils, cStrings, IdStack, uIPutils, uGetHTTP, IdHTTP,
      frm_xplAppsLauncher, frm_about;
 //==============================================================================
 resourcestring
      // Shared xPL Library resources =======================
      K_XPL_APP_VERSION_NUMBER = '1.1.5';
      K_XPL_APP_NAME           = 'xPL Network Config';
-     K_DEFAULT_VENDOR         = 'clinique';
-     K_DEFAULT_DEVICE         = 'netconf';
 
      // Specific to this appresources ======================
      K_ALL_IPS_JOCKER       = '*** ALL IP Address ***';
@@ -119,7 +118,8 @@ begin
   VendorSeed := TxPLVendorSeedFile.Create(xPLClient.Setting);
   // PageControl1.ActivePage := TabSheet1;
   // Network Settings Part ===========================================
-  e_ListenOn.Items.CommaText:= LocalIP;
+  //e_ListenOn.Items.CommaText:= LocalIP;
+  e_ListenOn.Items.CommaText:= gStack.LocalAddress;
   e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
   e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
