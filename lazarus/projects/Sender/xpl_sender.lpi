@@ -9,13 +9,13 @@
       <Title Value="xpl_sender"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="0"/>
+      <ActiveEditorIndexAtStart Value="1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <CurrentVersionNr Value="1"/>
-      <CurrentBuildNr Value="2066"/>
+      <CurrentBuildNr Value="2068"/>
       <ProjectVersion Value="1.0.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -39,7 +39,7 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="115">
+    <Units Count="116">
       <Unit0>
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -282,7 +282,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
         <CursorPos X="1" Y="226"/>
-        <TopLine Value="198"/>
+        <TopLine Value="1"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="165"/>
         <Loaded Value="True"/>
@@ -782,7 +782,7 @@
         <UnitName Value="xpl_network"/>
         <CursorPos X="1" Y="13"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit103>
@@ -808,8 +808,8 @@
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
         <UnitName Value="uxplmessage"/>
         <CursorPos X="26" Y="96"/>
-        <TopLine Value="182"/>
-        <EditorIndex Value="1"/>
+        <TopLine Value="140"/>
+        <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit106>
@@ -869,8 +869,17 @@
         <TopLine Value="4818"/>
         <UsageCount Value="10"/>
       </Unit114>
+      <Unit115>
+        <Filename Value="..\..\units\xpl\uiputilas.pas"/>
+        <UnitName Value="uIPutilas"/>
+        <CursorPos X="15" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit115>
     </Units>
-    <JumpHistory Count="7" HistoryIndex="6">
+    <JumpHistory Count="6" HistoryIndex="5">
       <Position1>
         <Filename Value="frm_main.pas"/>
         <Caret Line="29" Column="26" TopLine="29"/>
@@ -892,13 +901,9 @@
         <Caret Line="294" Column="56" TopLine="283"/>
       </Position5>
       <Position6>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="222" Column="135" TopLine="285"/>
-      </Position6>
-      <Position7>
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
         <Caret Line="83" Column="49" TopLine="77"/>
-      </Position7>
+      </Position6>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
