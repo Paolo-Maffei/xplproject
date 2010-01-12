@@ -22,7 +22,6 @@ uses
   {$endif}
   prothandler,
   Classes, SysUtils, 
-  IdHTTPHeaderInfo,    //for HTTP request and response info.
   IdHTTP,
   IdURI;
 
