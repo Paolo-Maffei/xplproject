@@ -1,8 +1,24 @@
 //*************************************************
 // xPL Winamp Plugin                           
-// Version 1.0 Beta 3
-// Written by John Bent
+// Version 1.7
+//
+// Copyright (C) 2003-2005 John Bent
 // http://www.xpl.myby.co.uk
+//
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
+// 
+// This program is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with this program; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+//
 //*************************************************
 #include <windows.h>
 #include <winsock.h>
@@ -11,7 +27,7 @@
 #include "winamp1.h"
 
 // Name and version of this plug-in
-#define APP_NAME "xPL Winamp Plug-in V1.0 Beta 3"
+#define APP_NAME "xPL Winamp Plug-in V1.7"
 
 // Maximum allowed xPL message size
 #define MAX_XPL_MSG_SIZE 1400
@@ -24,6 +40,8 @@ HINSTANCE g_hInstance;
 HWND g_hWnd, g_hwndConfig;
 HWND hSave, hLabel1, hLabel2, hLabel3;
 HWND hInstanceName, hBroadcast, hInterval, hUseHub;
+WNDPROC hWinampProc;
+LPTSTR lpTitle;
 
 // The instance name being used
 LPTSTR g_lpSource;
@@ -43,10 +61,11 @@ UINT g_HBeatInterval;
 // Function prototypes
 VOID ConstructStatusBody(char *body);
 VOID SendXplMessage(char *MsgType, char *MsgBody);
-VOID SendHeartbeat();
+VOID SendHeartbeat(BOOL bEnd);
 VOID SendStatusMessage();
 LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
 LRESULT CALLBACK ConfigWndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam);
+LRESULT CALLBACK WinampWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam);
 DWORD WINAPI StartThread(LPVOID);
 BOOL ReadConfigFile();
 VOID SaveConfigFile();
@@ -107,12 +126,23 @@ extern "C"winampGeneralPurposePlugin *  PASCAL _export  winampGetGeneralPurposeP
 // init is called by Winamp to initialise our plug-in
 int init()
 {
-  CreateThread(NULL,
+  lpTitle = NULL;
+  DWORD dwThreadID;
+
+  // Subclass Winamp's main window
+  (LONG)hWinampProc = SetWindowLong(plugin.hwndParent,GWL_WNDPROC,(LONG)&WinampWndProc);
+
+  if (CreateThread(NULL,
 	0,
 	StartThread,
 	NULL,
 	0,
-	NULL);
+	&dwThreadID)==NULL)
+  {
+    MessageBox(0,"Failed to create worker thread.",APP_NAME,MB_ICONSTOP);
+    return -1;
+  }
+
   return 0;
 }
 
@@ -287,7 +317,7 @@ BOOL ReadConfigFile()
 
   // Set values to defaults
   bUseHub = FALSE;
-  g_Port = 3639;
+  g_Port = 3865;
 
   while (fgets(buff, 255, f))
   {
@@ -359,7 +389,7 @@ BOOL BindReceiver()
 
   if (!bUseHub)
   {
-    g_ListenerPort = 3639; // Default XPL port
+    g_ListenerPort = 3865; // Default XPL port
     addr.sin_family = AF_INET;
     addr.sin_port = htons(g_ListenerPort);
     addr.sin_addr.s_addr = INADDR_ANY;
@@ -371,8 +401,8 @@ BOOL BindReceiver()
   } else {
 
     // We're using a hub
-    temp_port = 50001; // First port to try
-    while (temp_port < 50099)
+    temp_port = 50000; // First port to try
+    while (temp_port < 50999)
     {
       addr.sin_family = AF_INET;
       addr.sin_port = htons(temp_port);
@@ -385,7 +415,7 @@ BOOL BindReceiver()
       } else {
         // Bound successfully
         g_ListenerPort = temp_port;
-        temp_port = 3700;
+        temp_port = 51000;
       }
     }
   }
@@ -494,7 +524,7 @@ VOID HandleAudioBasicCommand(char *pszRHS, char *schemaType)
 
 VOID HandleAudioExtendedCommand(char *pszRHS)
 {
-  char param[255];
+  char param[1024];
   int tempnull = 0, slen = lstrlen(pszRHS);
   char *buffptr;
 
@@ -502,6 +532,8 @@ VOID HandleAudioExtendedCommand(char *pszRHS)
   do {
     tempnull++;
   } while (tempnull < slen && pszRHS[tempnull]!=32);
+
+  // See if a space was found
   if (pszRHS[tempnull]==32)
   {
     buffptr = pszRHS + tempnull + 1;
@@ -511,18 +543,40 @@ VOID HandleAudioExtendedCommand(char *pszRHS)
   }
   pszRHS[tempnull] = NULL;
 
+  // BALANCE
+  if (strcmp(pszRHS,"BALANCE")==0)
+  {
+    INT scaledBalance = atoi(param);
+    if (scaledBalance < 0)
+      scaledBalance = 255 + scaledBalance;
+
+    PostMessage(plugin.hwndParent, WM_USER, scaledBalance, 123);
+  }
+
+  // ADDFILE
+  if (strcmp(pszRHS,"ADDFILE")==0)
+  {
+    char tempbuff[1024];
+    wsprintf(tempbuff,"%swinamp.exe /ADD \"%s\"",g_lpWinampPath, param);
+    WinExec(tempbuff,SW_NORMAL);
+  }
+
   // FADEOUT
   if (strcmp(pszRHS,"FADEOUT")==0)
   {
     PostMessage(plugin.hwndParent,WM_COMMAND,40147,0);
   }
 
-  // ADDFILE
-  if (strcmp(pszRHS,"ADDFILE")==0)
+  // FF5S
+  if (strcmp(pszRHS,"FF5S")==0)
   {
-    char tempbuff[255];
-    wsprintf(tempbuff,"%swinamp.exe /ADD %s",g_lpWinampPath, param);
-    WinExec(tempbuff,SW_NORMAL);
+    PostMessage(plugin.hwndParent,WM_COMMAND,WINAMP_FFWD5S,0);
+  }
+
+  // FR5S
+  if (strcmp(pszRHS,"FR5S")==0)
+  {
+    PostMessage(plugin.hwndParent,WM_COMMAND,WINAMP_REW5S,0);
   }
 
   // PAUSE
@@ -534,13 +588,21 @@ VOID HandleAudioExtendedCommand(char *pszRHS)
   // PLAYFILE
   if (strcmp(pszRHS,"PLAYFILE")==0)
   {
-    char tempbuff[255];
-    wsprintf(tempbuff,"%swinamp.exe /ADD %s",g_lpWinampPath,param);
+    char tempbuff[1024];
+    wsprintf(tempbuff,"%swinamp.exe /ADD \"%s\"",g_lpWinampPath,param);
     SendMessage(plugin.hwndParent,WM_USER,0,101);
     WinExec(tempbuff,SW_NORMAL);
     SendMessage(plugin.hwndParent,WM_COMMAND,WINAMP_BUTTON2,0);
   }
 
+  // SEEK
+  if (strcmp(pszRHS,"SEEK")==0)
+  {
+    INT seekTime = atoi(param);
+    seekTime = seekTime * 1000;
+
+    PostMessage(plugin.hwndParent, WM_USER, seekTime, 106);
+  }
 
 }
 
@@ -560,7 +622,6 @@ VOID HandleXPLMessage(LPCTSTR lpBuff)
   buff[8] = NULL;
   if (strcmp(buff,"XPL-CMND")!=0)
     return; // Not interested
-
 
   buff[8] = '{';
 
@@ -707,9 +768,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT Message, WPARAM wParam, LPARAM lParam)
       }
       break;
     case WM_TIMER:
-      SendHeartbeat();
+      SendHeartbeat(FALSE);
       break;
     case WM_QUIT:
+      SendHeartbeat(TRUE);
       CleanupSocket();
       CleanupMemory();
       break;
@@ -766,8 +828,7 @@ DWORD WINAPI StartThread(LPVOID)
   WndClass.lpszClassName="XPLWINAMPCONFIG";
   RegisterClass(&WndClass);
 
-  hWnd=CreateWindowEx(NULL,
-		    "WIN_ONE",
+  hWnd=CreateWindow("WIN_ONE",
 	APP_NAME,
 	WS_OVERLAPPEDWINDOW,
 	0,
@@ -791,7 +852,7 @@ DWORD WINAPI StartThread(LPVOID)
   return 0;
 }
 
-VOID SendHeartbeat()
+VOID SendHeartbeat(BOOL bEnd)
 {
   hostent *pht;
   LPTSTR lpszBuff = new char[MAX_XPL_MSG_SIZE];
@@ -808,10 +869,10 @@ VOID SendHeartbeat()
   lpszLocalIP = inet_ntoa(addr2.sin_addr);
 
   ConstructStatusBody(lpszBody);
-  wsprintf(lpszBuff,"xpl-stat\n{\nhop=1\nsource=%s-winamp.%s\ntarget=*\n}\n"
-	"hbeat.app\n{\ninterval=%d\nport=%d\n"
+  if (bEnd) {
+    wsprintf(lpszBuff,"xpl-stat\n{\nhop=1\nsource=%s-winamp.%s\ntarget=*\n}\n"
+	"hbeat.end\n{\ninterval=%d\nport=%d\n"
 	"remote-ip=%s\n"
-	"pid=%d\n"
 	"schema=audio.basic\n"
 	"%s"
 	"}\n",
@@ -820,9 +881,24 @@ VOID SendHeartbeat()
 	g_HBeatInterval,
 	g_ListenerPort,
 	lpszLocalIP,
-	g_hInstance,
 	lpszBody
 	);
+  }
+  else {
+    wsprintf(lpszBuff,"xpl-stat\n{\nhop=1\nsource=%s-winamp.%s\ntarget=*\n}\n"
+	"hbeat.app\n{\ninterval=%d\nport=%d\n"
+	"remote-ip=%s\n"
+	"schema=audio.basic\n"
+	"%s"
+	"}\n",
+	VENDOR_ID,
+	g_lpSource,
+	g_HBeatInterval,
+	g_ListenerPort,
+	lpszLocalIP,
+	lpszBody
+	);
+  }
   sendto(sockSender, lpszBuff, strlen(lpszBuff), 0, (struct sockaddr *) &addr, sizeof(addr));
   delete []lpszBuff;
   delete []lpszBody;
@@ -896,16 +972,19 @@ VOID ConstructStatusBody(char *body)
   {
     case 1:
       strcpy(status,"playing");
+      wsprintf(body,"status=%s\ntitle=%s\n",status,lpTitle);
       break;
     case 3:
       strcpy(status,"paused");
+      wsprintf(body,"status=%s\ntitle=%s\n",status,lpTitle);
       break;
     default:
       strcpy(status,"stopped");
+      wsprintf(body,"status=%s\n",status);
       break;
   }
 
-  wsprintf(body,"status=%s\n",status);
+
 }
 
 VOID SendStatusMessage()
@@ -935,4 +1014,22 @@ VOID SendXplMessage(char *MsgType, char *MsgBody)
   sendto(sockSender, lpszBuff, strlen(lpszBuff), 0, (struct sockaddr *) &addr, sizeof(addr));
   delete []lpszBuff;
   delete []lpszBody;
+}
+
+LRESULT CALLBACK WinampWndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
+{
+  switch(Msg)
+  {
+    case WM_SETTEXT:
+      if (lpTitle)
+        delete []lpTitle;
+      lpTitle = new char[lstrlen((LPCTSTR)lParam)+1];;
+      strcpy(lpTitle,(LPCTSTR)lParam);
+      if (lstrlen(lpTitle) > 9) {
+        lpTitle[lstrlen(lpTitle)-9] = NULL;
+      }
+      SendStatusMessage();
+      break;
+  }
+  return CallWindowProc(hWinampProc,hWnd,Msg,wParam,lParam);
 }
