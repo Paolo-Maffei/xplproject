@@ -1,7 +1,0 @@
-DEBUG: Logger created - name=ROOT, level=ALL
-DEBUG: TLogger.SetLevel: INFO
-DEBUG: TPatternLayout#Create
-DEBUG: TAppender#Create
-DEBUG: TFileAppender#SetFile: C:\ProgramData\xPL\Logging\xPL Sender.log
-DEBUG: TAppender#Create
-DEBUG: Appender added to ROOT, named TFileAppender
