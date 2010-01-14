@@ -1,9 +1,13 @@
 unit uxPLWebListener;
 {==============================================================================
   UnitName      = uxPLWebListener
+  UnitVersion   = 0.93
   UnitDesc      = xPL Listener with WebServer capabilities
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
+  0.93 : Modifications made for modif 0.92 for uxPLConfig
+         Configuration handling modified to allow restart of web server after config modification
+         without the need to restart the app
 }
 
 {$mode objfpc}{$H+}
@@ -14,7 +18,7 @@ uses uxPLListener,Classes, SysUtils,
      ExtCtrls, IdGlobal,
      IdHTTPServer, IdContext,IdCustomHTTPServer;
 
-type        { TxPLWebListener }
+type
       TxPLWebCommandGet = procedure(var aPageContent : widestring; aParam, aValue : string) of object;
 
       TxPLWebListener = class(TxPLListener)
@@ -56,12 +60,16 @@ resourcestring
 
 procedure TxPLWebListener.InitWebServer;
 begin
+     if Assigned(fWebServer) then fWebServer.Destroy;
+
+     fWebServer := TIdHttpServer.Create(self);
+
      with fWebServer.Bindings.Add do begin
           IP:=Setting.ListenOnAddress;
           Port:=StrToIntDef(Config.ItemName[K_CONFIG_LIB_SERVER_PORT].Value,8080);
      end;
 
-     with fWebServer.Bindings.Add do begin
+     with fWebServer.Bindings.Add do begin 
           IP:='127.0.0.1';
           Port:=StrToIntDef(Config.ItemName[K_CONFIG_LIB_SERVER_PORT].Value,8080);
      end;
@@ -158,14 +166,13 @@ end;
 constructor TxPLWebListener.create(aOwner: TComponent; aVendor, aDevice,aAppName, aAppVersion, aDefaultPort: string);
 begin
    inherited Create(aOwner,aVendor,aDevice,aAppName,aAppVersion);
-   fWebServer := TIdHttpServer.Create(self);
-   Config.AddItem(K_CONFIG_LIB_SERVER_PORT,aDefaultPort,xpl_ctConfig, 1, 'Port used for local web server', '^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$');
-   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,ExtractFilePath(ParamStr(0)) + 'html',xpl_ctConfig, 1, 'Web server root directory', '^[A-Za-z]:\\([^"*/:?|<>\\.\x00-\x20]([^"*/:?|<>\\\x00-\x1F]*[^"*/:?|<>\\.\x00-\x20])?\\)*$');
+   Config.AddItem(K_CONFIG_LIB_SERVER_PORT,xpl_ctConfig,aDefaultPort);
+   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,xpl_ctConfig,ExtractFilePath(ParamStr(0)) + 'html');
 end;
 
 destructor TxPLWebListener.destroy;
 begin
-  fWebServer.Destroy;
+  if Assigned(fWebServer) then fWebServer.Destroy;
   inherited destroy;
 end;
 
