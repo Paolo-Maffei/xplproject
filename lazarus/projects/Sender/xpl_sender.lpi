@@ -9,7 +9,7 @@
       <Title Value="xpl_sender"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="1"/>
+      <ActiveEditorIndexAtStart Value="2"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
@@ -782,7 +782,7 @@
         <UnitName Value="xpl_network"/>
         <CursorPos X="1" Y="13"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit103>
@@ -809,7 +809,7 @@
         <UnitName Value="uxplmessage"/>
         <CursorPos X="26" Y="96"/>
         <TopLine Value="140"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit106>
@@ -874,9 +874,7 @@
         <UnitName Value="uIPutilas"/>
         <CursorPos X="15" Y="1"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit115>
     </Units>
     <JumpHistory Count="6" HistoryIndex="5">
