@@ -52,7 +52,7 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, frm_xplappslauncher,uxPLCfgItem,uxPLMsgHeader, IdSocketHandle, LCLType, cStrings;
+uses frm_about, frm_xplappslauncher,uxPLCfgItem,uxPLMsgHeader, IdSocketHandle, LCLType, cStrings, uxPLConst;
 
 //=====================================================================================================
 resourcestring
@@ -70,7 +70,7 @@ procedure TfrmMain.acInstalledAppsExecute(Sender: TObject);
 begin frmAppLauncher.Show; end;
 
 procedure TfrmMain.OnJoined(const aJoined: boolean);
-begin Memo1.Append('Hub found') end;
+begin Memo1.Append(K_MSG_HUB_FOUND) end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 
