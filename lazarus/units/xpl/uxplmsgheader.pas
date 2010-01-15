@@ -1,7 +1,6 @@
 unit uxplmsgheader;
 {==============================================================================
   UnitName      = uxplmsgheader
-  UnitVersion   = 0.97
   UnitDesc      = xPL Message Header management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
@@ -9,6 +8,7 @@ unit uxplmsgheader;
  0.95 : Modified XML read and Write format to be closer to other vendors
  0.96 : Rawdata passed are no longer transformed to lower case, then Header has to lower it
  0.97 : Added Assign method
+ 0.98 : String constants removed to uxPLConst
  }
 {$mode objfpc}{$H+}
 
@@ -53,13 +53,11 @@ type TxPLMessageType = (xpl_mtTrig, xpl_mtStat, xpl_mtCmnd, xpl_mtAny, xpl_mtNon
        class function String2MsgType(const aCmnd: string): TxPLMessageType;
      end;
 
-const K_REGEXPR_MESSAGETYPE = 'xpl-(trig|stat|cmnd)';
-
 
 implementation {===============================================================}
-uses SysUtils, Classes, RegExpr;
-const K_MESSAGE_TYPE_DESCRIPTORS : Array[0..3] of string = ( 'xpl-trig','xpl-stat','xpl-cmnd','*');
-const fFormatRawHeader = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10;
+uses SysUtils, Classes, RegExpr, uxPLConst;
+
+const K_MESSAGE_TYPE_DESCRIPTORS : Array[0..3] of string = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
 { General Helper function =====================================================}
 class function TxPLMsgHeader.String2MsgType(const aCmnd: string): TxPLMessageType;
@@ -139,7 +137,7 @@ end;
 function TxPLMsgHeader.GetRawxPL: string;
 begin
      If IsValid
-        then result := Format(fFormatRawHeader,[MessageTypeAsString,Hop,Source.Tag,Target.Tag])
+        then result := Format(K_MSG_HEADER_FORMAT,[MessageTypeAsString,Hop,Source.Tag,Target.Tag])
         else result := '';
 end;
 
@@ -148,13 +146,13 @@ var i : integer;
 begin
      ResetValues;
      with TRegExpr.Create do try
-          Expression := '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n]';
+          Expression := K_RE_HEADER_FORMAT;
           if Exec(AnsiLowerCase(aRawXPL)) then begin
              MessageType := String2MsgType(Match[1]);
              for i:= 3 to 7 do begin
-                 if Match[i] = 'hop'    then fHop := StrToInt(Match[i+1]);
-                 if Match[i] = 'source' then Source.Tag := Match[i+1];
-                 if Match[i] = 'target' then Target.Tag := Match[i+1];
+                 if Match[i] = K_MSG_HEADER_HOP    then fHop := StrToInt(Match[i+1]);
+                 if Match[i] = K_MSG_HEADER_SOURCE then Source.Tag := Match[i+1];
+                 if Match[i] = K_MSG_HEADER_TARGET then Target.Tag := Match[i+1];
              end;
           end;   
           finally free;
