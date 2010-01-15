@@ -1,0 +1,86 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
+	<LINK REL="stylesheet" type="text/css" href="../style.css" />
+</HEAD>
+
+<BODY >
+	<table class="stats" cellspacing="0">
+		<tr>
+			<td class="hed" >Description</td>
+			<td>{%weatherdesc%}</td>
+			<td><IMG SRC="../images/weather/{%weathericon%}.png" ALIGN="BOTTOM" BORDER="0" height=36 width=36>
+			</td>
+		</tr>
+		<tr>
+			<td class="hed" >Temperature</td>
+			<td>{%temperature%}</td>
+			<td><IMG SRC="../images/temperature/{%temperature%}.gif" ALIGN="BOTTOM" BORDER="0" height=24 width=24></td>
+		</tr>
+		<tr>
+			<td class="hed" >Température ressentie</td>
+			<td>{%felt-temp%}</td>
+			<td><IMG SRC="../images/temperature/{%felt-temp%}.gif" ALIGN="BOTTOM" BORDER="0" height=24 width=24></td>
+		</tr>
+		<tr>
+			<td class="hed" >Pression</td>
+			<td>{%barometer%}</td>
+			<td><IMG SRC="../images/pressure/{%pressureevol%}.png" ALIGN="BOTTOM" BORDER="0"></td>
+		</tr>
+		<tr>
+			<td class="hed" >Vitesse du vent</td>
+			<td>{%wind-speed%}</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="hed" >Gust</td>
+			<td>{%wind-gust%}</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="hed" >Direction du vent</td>
+			<td>{%wind-dir%}</td>
+			<td><IMG SRC="../images/winddir/{%wind-dir%}.png" ALIGN="BOTTOM" BORDER="0" height=36 width=36></td>
+		</tr>
+		<tr>
+			<td class="hed" >Taux d'humidité</td>
+			<td>{%humidity%}</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="hed" >Visibilité </td>
+			<td>{%visibility%}</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="hed" >Niveau d'UV</td>
+			<td>{%uv%} _ {%uv-desc%}</td>
+			<td><IMG SRC="../images/uvindex/{%uv%}.gif" ALIGN="BOTTOM" BORDER="0" height=36 width=36></td>
+		</tr>
+		<tr>
+			<td class="hed" >Point de rosée</td>
+			<td>{%dewpoint%}</td>
+			<td></td>
+		</tr>
+		<tr>
+			<td class="hed" >Phase de la lune</td>
+			<td>{%moon%}</td>
+			<td><IMG SRC="../images/moon/{%moonicon%}.png" ALIGN="BOTTOM" BORDER="0"  height=36 width=36></td>
+		</tr>
+		<tr>
+			<td class="hed" >Sun</td>
+			<td>Dawn {%today-sunrise%}</td>
+			<td>Dusk {%today-sunset%}</td>
+		</tr>
+		<tr>
+			<td class="hed">Updated</td>
+			<td>{%timestamp%}</td><td></td>
+	</table>
+	
+	<!--#include file="footer.txt"-->
+</BODY>
+
+</HTML>
