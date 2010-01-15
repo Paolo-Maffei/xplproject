@@ -10,7 +10,7 @@ uses
   Forms,
   TConfiguratorUnit,
   { you can add units after this }LResources, frm_about, frm_main,
-  frm_xplappslauncher, indylaz;
+  frm_xplappslauncher, indylaz, uxPLConst;
 
 {$IFDEF WINDOWS}{$R xpl_weather.rc}{$ENDIF}
 
