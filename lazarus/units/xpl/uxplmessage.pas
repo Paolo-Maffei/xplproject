@@ -76,9 +76,8 @@ TxPLMessage = class(TComponent)
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessage,
+Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessage, uxPLConst,
      Controls, v_xplmsg_opendialog;
-Const   K_XPL_UDP_BASE_PORT : Integer = 3865;
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
@@ -186,7 +185,7 @@ begin
       fSocket   := TIdUDPClient.Create;                          // if needed to avoid waste space
       fSocket.BroadcastEnabled := True;                          // speed and time at runtime
       fSocket.Host := Settings.BroadCastAddress;
-      fSocket.Port := K_XPL_UDP_BASE_PORT;
+      fSocket.Port := XPL_UDP_BASE_PORT;
       Settings.Free;
    end;
    fSocket.Send(RawXPL);
