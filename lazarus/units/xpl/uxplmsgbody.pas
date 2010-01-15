@@ -1,13 +1,13 @@
 unit uxplmsgbody;
 {==============================================================================
   UnitName      = uxplmsgbody
-  UnitVersion   = 0.91
   UnitDesc      = xPL Message Body management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
  0.91 : Added XMLWrite and read method
  0.95 : Modified XML read / write format
  0.96 : Rawdata passed are no longer transformed to lower case, then Body lowers schema, type and body item keys but not body item values
+ 0.97 : Use of uxPLConst
  }
 {$mode objfpc}{$H+}
 
@@ -75,7 +75,7 @@ type
      end;}
 
 implementation {===============================================================}
-uses cStrings, sysutils, cUtils, RegExpr;
+uses cStrings, sysutils, cUtils, RegExpr, uxPLConst;
 
 constructor TxPLMsgBody.create;
 begin
@@ -252,7 +252,7 @@ var i : integer;
 begin
      ResetValues;
      with TRegExpr.Create do try
-     Expression := '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
+     Expression := K_RE_BODY_FORMAT;
           if Exec(aValue) then begin
              Schema.Tag := AnsiLowerCase(Match[1]);
              s := Match[2];
@@ -268,18 +268,18 @@ end;
 procedure TxPLMsgBody.Format_HbeatApp(const aInterval : string; const aPort : string; const aIP : string);
 begin
    ResetAll;
-   Schema.Tag := 'hbeat.app';
-   AddKeyValuePair('interval',aInterval);
-   AddKeyValuePair('port',aPort);
-   AddKeyValuePair('remote-ip',aIP);
+   Schema.Tag := K_SCHEMA_HBEAT_APP;
+   AddKeyValuePair(K_HBEAT_ME_INTERVAL,aInterval);
+   AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
+   AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
 end;
 
 procedure TxPLMsgBody.Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
 begin
    ResetAll;
-   Schema.Tag := 'sensor.basic';
-   AddKeyValuePair('device',aDevice);
-   AddKeyValuePair('type',aType);
+   Schema.Tag := K_SCHEMA_SENSOR_BASIC;
+   AddKeyValuePair('device' ,aDevice);
+   AddKeyValuePair('type'   ,aType);
    AddKeyValuePair('current',aCurrent);
 end;
 
