@@ -1,12 +1,12 @@
 unit uxPLClient;
 {==============================================================================
   UnitName      = uxPLClient
-  UnitVersion   = 0.91
   UnitDesc      = xPL Listener object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
  0.91 : Seperation of basic xPL Client (listener and sender) from pure listener
  0.92 : Suppression of self owned message to avoid conflicts between threads
+ 0.93 : String constant moved to uxPLConst
 }
 
 {$mode objfpc}{$H+}
@@ -37,15 +37,15 @@ type  TxPLClient = class(TComponent)
       end;
 
 implementation //===============================================================
-uses IdStack,uxplcfgitem, cRandom, uxPLSchema, uIPutils, TPatternLayoutUnit,
+uses IdStack,uxplcfgitem, cRandom, uxPLSchema, uIPutils, TPatternLayoutUnit, uxPLConst,
      TLevelUnit, TFileAppenderUnit;
 
 
 constructor TxPLClient.Create(const aOwner : TComponent; const aAppName : string; const aAppVersion : string);
 begin
   inherited Create(aOwner);
-//  TConfiguratorUnit.doBasicConfiguration;
-  TConfiguratorUnit.doPropertiesConfiguration(LogFileName);
+
+   TConfiguratorUnit.doPropertiesConfiguration(LogFileName);
    fAppName    := aAppName;
    fAppVersion := aAppVersion;
 
@@ -57,20 +57,16 @@ begin
    fEventLog.AddAppender(TFileAppender.Create( LogFileName,
                                                TPatternLayout.Create('%d{dd/mm/yy hh:nn:ss} [%5p] %m%n'),
                                                true));
-   fEventLog.info('Application ' + fAppName + ' started');
+   fEventLog.info(Format(K_MSG_APP_STARTED,[fAppName]));
 
    fPluginList := TxPLPluginList.Create;
 end;
 
 procedure TxPLClient.LogInfo(aMessage: string);
-begin
-   fEventLog.info(aMessage);
-end;
+begin fEventLog.info(aMessage);  end;
 
 procedure TxPLClient.LogError(aMessage: string);
-begin
-   fEventLog.error(aMessage);
-end;
+begin fEventLog.error(aMessage); end;
 
 function TxPLClient.LogFileName: string;
 begin result := fSetting.LoggingDirectory + fAppName + '.log'; end;
@@ -78,7 +74,7 @@ begin result := fSetting.LoggingDirectory + fAppName + '.log'; end;
 destructor TxPLClient.Destroy;
 begin
      fPluginList.Destroy;
-     fEventLog.info('Application ' + fAppName + ' stopped');
+     fEventLog.info(Format(K_MSG_APP_STOPPED,[fAppName]));
      TLogger.freeInstances;
      fSetting.Destroy;
      inherited Destroy;
