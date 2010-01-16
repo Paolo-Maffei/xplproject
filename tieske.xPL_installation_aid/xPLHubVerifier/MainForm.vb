@@ -16,9 +16,11 @@ Public Class MainForm
                 If pid <> 0 Then
                     ' get parent process
                     Dim proc As Process = Process.GetProcessById(pid)
-                    proc.WaitForExit()  ' wait for parent process to exit.
+
                     ' this is required because it is an installer and this application also includes 
                     ' installers of which only one can run at any given time.
+                    proc.WaitForExit()  ' wait for parent process to exit.
+
                 End If
             Catch ex As Exception
                 ' do nothing
