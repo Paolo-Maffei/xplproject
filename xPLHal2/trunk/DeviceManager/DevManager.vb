@@ -401,7 +401,9 @@ Public Class DevManager
         'Send the Config response - if we have a config.
         If xPLCache.ChildNodes("config." & msgSource & ".current").Count > 0 Then  'we have a config!
             xPLCache.Add("device." & msgSource & ".configdone", True, False)
-            SendConfigResponse(msgSource, False)
+            ' IRL Removed as an experiment
+            ' See forum thread http://xplproject.org.uk/forums/viewtopic.php?f=1&t=951
+            ' SendConfigResponse(msgSource, False)
         End If
     End Sub
 
