@@ -1,12 +1,13 @@
 unit uxPLListener;
 {==============================================================================
   UnitName      = uxPLListener
-  UnitVersion   = 0.91
   UnitDesc      = xPL Listener object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
  0.91 : Seperation of basic xPL Client (listener and sender) from pure listener
  0.92 : Modification made to avoid handling of my own emitted messages
+ 0.93 : Modifications made for modif 0.92 for uxPLConfig
+ 0.94 : Use of uxPLConst
 }
 
 {$mode objfpc}{$H+}
@@ -24,6 +25,8 @@ type
       TxPLHBeatPrepare  = procedure(const aBody   : TxPLMsgBody) of object;
       TxPLSensorRequest = procedure(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string) of object;
       TxPLTTSBasic      = procedure(const axPLMsg : TxPLMessage; const aSpeech : string) of object;
+      TxPLHBeatApp      = procedure(const axPLMsg : TxPLMessage) of object;
+      TxPLMediaBasic    = procedure(const axPLMsg : TxPLMessage; const aCommand : string; const aMP : string) of object;
 
       { TxPLListener }
 
@@ -36,6 +39,8 @@ type
         FOnxPLSensorRequest : TxPLSensorRequest;
         FOnxPLControlBasic  : TxPLSensorRequest;
         FOnxPLTTSBasic      : TxPLTTSBasic;
+        FOnxPLHBeatApp      : TxPLHBeatApp;
+        FOnxPLMediaBasic    : TxPLMediaBasic;
 
 
       private
@@ -61,11 +66,13 @@ type
         procedure TimerElapsed(Sender : TObject);
         procedure HandleHBeatRequest;   dynamic;
         procedure SendHeartBeatMessage; dynamic;
+        procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
 
         property Config              : TxPLConfig read fConfig;
         property AwaitingConfiguration : Boolean read bConfigOnly write bConfigOnly;
         property Address             : TxPLAddress read fAdresse;
+        property Disposing           : Boolean read bDisposing;
 
         property OnxPLReceived      : TxPLReceivedEvent  read FOnxPLReceived      write FOnxPLReceived;
         property OnxPLJoinedNet     : TxPLJoinedEvent    read FOnxPLJoinedNet     write FOnxPLJoinedNet;
@@ -74,11 +81,15 @@ type
         property OnxPLSensorRequest : TxPLSensorRequest  read FOnxPLSensorRequest write FOnxPLSensorRequest;
         property OnxPLControlBasic  : TxPLSensorRequest  read FOnxPLControlBasic  write FOnxPLControlBasic;
         property OnxPLTTSBasic      : TxPLTTSBasic       read FOnxPLTTSBasic      write FOnxPLTTSBasic;
+        property OnxPLHBeatApp      : TxPLHBeatApp       read FOnxPLHBeatApp      write FOnxPLHBeatApp;
+        property OnxPLMediaBasic    : TxPLMediaBasic     read FOnxPLMediaBasic    write FOnxPLMediaBasic;
 
         procedure DoxPLJoinedNet(aJoined    : boolean);
         function DoSensorRequest(aMessage : TxPLMessage) : boolean;
         function DoControlBasic (aMessage : TxPLMessage) : boolean;
         function DoTTSBasic     (aMessage : TxPLMessage) : boolean;
+        function DoHBeatApp     (aMessage : TxPLMessage) : boolean;
+        function DoMediaBasic   (aMessage : TxPLMessage) : boolean;
 
         function  CheckOrigin(aRemoteIP : string) : boolean;
         procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
@@ -93,13 +104,7 @@ type
      end;
 
 implementation { ==============================================================}
-uses IdStack,uxplcfgitem, cRandom, StrUtils, uxPLSchema, uIPutils, Interfaces;
-Const XPL_BASE_DYNAMIC_PORT : Integer = 50000;           // First port used to try to open the listening port
-      XPL_BASE_PORT_RANGE   : Integer = 512;             //       Range of port to scan for trying to bind socket
-      MAX_XPL_MSG_SIZE      : Integer = 1500;            // Maximum size of a xpl message
-      NOHUB_HBEAT           : Integer = 3;               // seconds between HBEATs until hub is detected
-      NOHUB_LOWERFREQ       : Integer = 30;              // lower frequency probing for hub
-      NOHUB_TIMEOUT         : Integer = 120;             // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
+uses IdStack,uxplcfgitem, cRandom, StrUtils, uxPLSchema, uIPutils, Interfaces, uxPLConst;
 
 { TxPLListener ================================================================}
 
@@ -128,7 +133,7 @@ begin
      IncomingSocket.BufferSize := MAX_XPL_MSG_SIZE;
      IncomingSocket.OnUDPRead  := @UDPRead;
    except
-     HandleError('Unable to initialize incoming UDP server');
+     HandleError(K_MSG_UDP_ERROR);
    end;
 
    bHubFound := False;
@@ -164,7 +169,7 @@ begin
             Binding.ClientPortMax := Binding.ClientPortMin + XPL_BASE_PORT_RANGE;
             Binding.Port          := 0;
             Binding.IP            := gstack.LocalAddresses[i];
-            LogInfo('Client binded on port ' + IntToStr(Binding.Port) + ' for address ' + Binding.IP);
+            LogInfo(Format(K_MSG_BIND_OK,[Binding.Port,Binding.IP]));
         end;
         dec(i);
      end;
@@ -175,7 +180,7 @@ begin
         HBTimer.OnTimer  := @TimerElapsed;
         HBTimer.Enabled  := True;
         TimerElapsed(self);
-     end else HandleError('Socket unable to bind to IP Addresses');
+     end else HandleError(K_MSG_IP_ERROR);
 
 end;
 
@@ -248,26 +253,29 @@ begin
   end;
 end;
 
+procedure TxPLListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
+begin
+   aBody.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
+   aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, fAppName);
+   aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
+
+   if bConfigOnly then aBody.Schema.Classe := xpl_scConfig;                // Change Schema class in this case
+   if bDisposing  then aBody.Schema.TypeAsString   := 'end';               // Change Schema type in this case
+end;
+
 procedure TxPLListener.SendHeartBeatMessage;
 var i : integer;
     aBody : TxPLMsgBody;
 begin
      aBody := TxPLMsgBody.Create;
-     with aBody do try
-        for i:=0 to IncomingSocket.Bindings.Count-1 do begin
-            Format_HbeatApp(IntToStr(fConfig.HBInterval),
-                            IntToStr(IncomingSocket.Bindings[i].Port),
-                            IncomingSocket.Bindings[i].IP);
-            aBody.AddKeyValuePair('appname', fAppName);
-            aBody.AddKeyValuePair('version', fAppVersion);
 
-            if bConfigOnly then Schema.Classe := xpl_scConfig;                // Change Schema class in this case
-            if bDisposing  then Schema.TypeAsString   := 'end';               // Change Schema type in this case
-            if Assigned(OnxPLHBeatPrepare) then OnxPLHBeatPrepare(aBody);
-            SendMessage(xpl_mtStat,'*',RawxPL);
-        end;
-        finally Destroy;
+     for i:=0 to IncomingSocket.Bindings.Count-1 do begin
+         FinalizeHBeatMsg(aBody,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
+         if Assigned(OnxPLHBeatPrepare) then OnxPLHBeatPrepare(aBody);
+         SendMessage(xpl_mtStat,'*',aBody.RawxPL);
      end;
+
+     aBody.Destroy;
 end;
 
 procedure TxPLListener.TimerElapsed(Sender: TObject);
@@ -316,18 +324,19 @@ begin
                 fConfig.ResetValues;
                 bConfigOk := true;
                 for i:= 0 to aMessage.Body.ItemCount-1 do
-                    if not fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i])   // Some configuration elements may need to be upper/lower sensitive
+                    fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i]);   // Some configuration elements may need to be upper/lower sensitive
+                    {if not fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i])   // Some configuration elements may need to be upper/lower sensitive
                        then begin
                           self.LogError('Error setting value of config item "'+ aMessage.Body.Keys[i]+'" to "'+aMessage.Body.Values[i]+'"');
                           bConfigOk := false;
-                       end;
-                if bConfigOk then begin
+                       end;}
+                //if bConfigOk then begin
                    fAdresse.Instance := fConfig.Instance;    // Instance name may have changed
                    bConfigOnly := False;
                    SendHeartBeatMessage;
                    fConfig.Save(fAdresse.Vendor + '-' + fAdresse.Device);
                    CallConfigDone;
-                end;
+                //end;
               end;
      end;
      finally destroy;
@@ -373,7 +382,9 @@ begin
             if not DoSensorRequest(aMessage) then                                                                  // process messages only once
             if not DoControlBasic (aMessage) then
             if not DoTTSBasic     (aMessage) then
-            if Assigned(OnxPLReceived) then OnxPLReceived(aMessage);
+            if not DoHBeatApp     (aMessage) then
+            if not DoMediaBasic   (aMessage) then
+            if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
          end;
       end;
 
@@ -404,7 +415,7 @@ begin
      result := false;
      if not Assigned(OnxPLSensorRequest) then exit;
      if aMessage.MessageType <> xpl_mtCmnd then exit;
-     if aMessage.Schema.Tag  <> 'sensor.request' then exit;
+     if aMessage.Schema.Tag  <> K_SCHEMA_SENSOR_REQUEST then exit;
 
      OnxPLSensorRequest( aMessage, aMessage.Body.GetValueByKey('device'),
                                    aMessage.Body.GetValueByKey('request')
@@ -426,7 +437,7 @@ begin
      result := false;
      if not Assigned(OnxPLControlBasic) then exit;
      if aMessage.MessageType <> xpl_mtCmnd then exit;
-     if aMessage.Schema.Tag  <> 'control.basic' then exit;
+     if aMessage.Schema.Tag  <> K_SCHEMA_CONTROL_BASIC then exit;
 
      OnxPLControlBasic( aMessage, aMessage.Body.GetValueByKey('device'),
                                   aMessage.Body.GetValueByKey('current')
@@ -448,9 +459,49 @@ begin
      result := false;
      if not Assigned(OnxPLTTSBasic) then exit;
      if aMessage.MessageType <> xpl_mtCmnd then exit;
-     if aMessage.Schema.Tag  <> 'tts.basic' then exit;
+     if aMessage.Schema.Tag  <> K_SCHEMA_TTS_BASIC then exit;
      if aMessage.Source.Tag = fAdresse.Tag then exit;
      OnxPLTTSBasic( aMessage, aMessage.Body.GetValueByKey('speech') );
+
+     result := true;
+end;
+
+{------------------------------------------------------------------------
+ DoHBeatApp :
+   Transfers the message to the application only if the message completes
+   required tests : has to be of xpl-stat type and the
+   schema has to be hbeat.app
+   IN  : the message to test and transmit
+   OUT : result indicates wether the message has been transmitted or not
+ ------------------------------------------------------------------------}
+function TxPLListener.DoHBeatApp(aMessage: TxPLMessage): boolean;
+begin
+     result := false;
+     if not Assigned(OnxPLHBeatApp) then exit;
+     if aMessage.MessageType <> xpl_mtStat then exit;
+     if aMessage.Schema.Tag  <> K_SCHEMA_HBEAT_APP then exit;
+     if aMessage.Source.Tag = fAdresse.Tag then exit;
+     OnxPLHBeatApp( aMessage);
+
+     result := true;
+end;
+
+{------------------------------------------------------------------------
+ DoMediaBasic :
+   Transfers the message to the application only if the message completes
+   required tests : has to be of xpl-cmnd type and the
+   schema has to be media.basic
+   IN  : the message to test and transmit
+   OUT : result indicates wether the message has been transmitted or not
+ ------------------------------------------------------------------------}
+function TxPLListener.DoMediaBasic(aMessage: TxPLMessage): boolean;
+begin
+     result := false;
+     if not Assigned(OnxPLMediaBasic) then exit;
+     if aMessage.MessageType <> xpl_mtCmnd then exit;
+     if aMessage.Schema.Tag  <> K_SCHEMA_MEDIA_BASIC then exit;
+     if aMessage.Source.Tag = fAdresse.Tag then exit;
+     OnxPLMediaBasic( aMessage, aMessage.Body.GetValueByKey('command'),aMessage.Body.GetValueByKey('mp'));
 
      result := true;
 end;
