@@ -9,31 +9,11 @@
 	<TITLE>{%xPLAppName%}</TITLE>
 </HEAD>
 
-<BODY >
-    <!--#include file="../header.txt"-->
-	<table class="stats" cellspacing="0">
-		<tr>
-			<td ></td>
-			<td class=hed>Ip Address</td>
-			<td class=hed>PingTime</td>
-			<td class=hed>Status</td>
-		</tr>
-		
-		<!-- Tags 'Result template'	 are mandatory to allow xPL Ping to place its results>
-		<!-- Result template>
-		<tr>
-			<td class="hed"><A href="/ping/device.html?device={%hostname%}">{%hostname%}</A></td>
-			
-			<td>{%ipaddress%}</td>
-			<td>{%pingtime%}</td>
-			<td><IMG SRC="/images/status/{%status%}.gif" ALIGN="BOTTOM" BORDER=0></td>
-		</tr>
-		<Result template-->
-		
-	</table>
+<FRAMESET COLS="5%,95%"> 
+	<FRAME SRC='left.html' NAME='left'>
+	<FRAMESET ROWS="15%, 85%">
+		<FRAME SRC='ping/top.html' NAME='top'>
+		<FRAME SRC='ping/content.html' NAME='content'>
+</FRAMESET> 
 	
-	<!--#include file="../footer.txt"-->
-
-</BODY>
-
 </HTML>
