@@ -49,10 +49,9 @@ type
        procedure Assign(const aBody : TxPLMsgBody); overload;
        function  IsValid : boolean; override;
 
-//       procedure AddKeyValuePair(const aKey : string; aValue: string);
-       procedure AddKeyValuePair(const aKey : string; aValue: string); //aLabel : string = ''; aOption : string = ''; aVisCond : string = ''; aOpLabel : string = ''; aRegExp : string = '(.*)'); overload;
+       procedure AddKeyValuePair(const aKey : string; const aValue : string);
 
-       procedure AddKeyValue(const aKeyValuePair: string);
+       procedure AddKeyValue(const aKeyValuePair : string);
        function  GetValueByKey(const aKeyValue: string; aDefVal : string = '') : string;
 
        procedure WriteToXML(const aParent : TDOMNode; const aDoc : TXMLDocument); overload;
@@ -154,9 +153,8 @@ begin
              else result := aDefVal;
 end;
 
-procedure TxPLMsgBody.AddKeyValuePair(const aKey: string; aValue: string);
-//  aLabel: string; aOption: string; aVisCond: string; aOpLabel: string;
-//  aRegExp: string);
+procedure TxPLMsgBody.AddKeyValuePair(const aKey: string; const aValue: string);
+//  aLabel: string; aOption: string; aVisCond: string; aOpLabel: string; aRegExp: string);
 var i : integer;
 begin
      if aKey = '' then exit;
