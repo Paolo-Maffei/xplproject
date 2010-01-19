@@ -41,6 +41,8 @@ const
    K_SCHEMA_SENSOR_REQUEST = 'sensor.request';
    K_SCHEMA_CONTROL_BASIC  = 'control.basic';
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
+   K_SCHEMA_MEDIA_BASIC    = 'media.basic';
+   K_SCHEMA_X10_BASIC      = 'x10.basic';
 
    // Hub and listener constants ============================================================================
    XPL_BASE_DYNAMIC_PORT : Integer = 50000;           // First port used to try to open the listening port
@@ -52,8 +54,8 @@ const
    NOHUB_TIMEOUT         : Integer = 120;             // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
 
    // Messages to display ==================================================================================
-   K_MSG_HUB_FOUND       = 'xPL Network joined';
-   K_MSG_CONFIGURED      = 'Configuration Done';
+   K_MSG_HUB_FOUND       = 'xPL Network %s joined';
+   K_MSG_CONFIGURED      = 'Configuration %s';
    K_MSG_APP_STARTED     = 'Application %s started';
    K_MSG_APP_STOPPED     = 'Application %s stopped';
    K_MSG_UDP_ERROR       = 'Unable to initialize incoming UDP server';
