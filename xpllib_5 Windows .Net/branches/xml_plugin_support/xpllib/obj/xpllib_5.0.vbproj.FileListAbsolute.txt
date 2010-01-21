@@ -1,0 +1,4 @@
+D:\Visual Studio 2005\Projects\xpllib_5.0\xpllib_5.0\obj\Release\ResolveAssemblyReference.cache
+D:\Visual Studio 2005\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpl.Resources.resources
+D:\Visual Studio 2005\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib_5.0.vbproj.GenerateResource.Cache
+D:\Visual Studio 2005\Projects\xpllib_5.0\xpllib_5.0\obj\Release\xpllib_Source_5._0.xml
