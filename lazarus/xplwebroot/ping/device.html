@@ -19,23 +19,27 @@
 		<!-- Result template>
 		<tr>
 			<td>HostName</td>
-			<td>{%hostname%}</td>
+			<td>{%ping_hostname%}</td>
 		</tr>
 		<tr>
 			<td>IP Address</td>
-			<td>{%ipaddress%}</td>
+			<td>{%ping_ipaddress%}</td>
 		<tr>
 			<td>Ping Time</td>
-			<td>{%pingtime%}</td>
+			<td>{%ping_pingtime%}</td>
 		</tr>
 		<tr>
 			<td>Status</td>
-			<td><IMG SRC="/images/status/{%status%}.gif" ALIGN="BOTTOM" BORDER=0></td>
+			<td><IMG SRC="/images/status/{%ping_status%}.gif" ALIGN="BOTTOM" BORDER=0></td>
+		</tr>
+		<tr>
+			<td>Actions</td>
+			<td><a href=content.html?delete={%ping_hostname%}><IMG SRC="/images/actions/delete.png" ALIGN="BOTTOM" BORDER=0></a></td>
 		</tr>
 		<Result template-->
 		
 	</table>
-	<a href=/ping/content.html target=content>Back</a>
+	
 	<!--#include file="../footer.txt"-->
 	
 </BODY>
