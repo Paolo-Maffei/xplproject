@@ -8,6 +8,7 @@ unit uxPLAddress;
         Added XMLWrite and Read methods
  0.95 : XML Read Write method modified to be consistent with other vendors
  0.96 : Some filter related functions added
+ 0.97 : String constants removed to use uxPLConst
 }
 {$mode objfpc}{$H+}
 interface
@@ -59,27 +60,20 @@ type
        procedure ReadFromXML(const aParent : TDOMNode);                         override;
     end;
 
-const K_REGEXPR_VENDOR   = '([0-9a-z]{1,8})';
-      K_REGEXPR_DEVICE   = K_REGEXPR_VENDOR;
-      K_REGEXPR_INSTANCE = '([0-9a-z/-]{1,16})';
-      K_REGEXPR_ADDRESS  = K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE + '\.' + K_REGEXPR_INSTANCE;
-      K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;    //   /!\ alternative must be place after fixed part !!!      
-
-
 implementation { ==============================================================}
-uses cRandom, SysUtils;
+uses cRandom, SysUtils, uxPLConst;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : string; const aDevice : string; const aInstance : string) : string;
 begin
      If ((aVendor='*') or (aDevice='*') or (aInstance='*'))
          then result := '*'                                              // an address is either generic
-         else result := Format('%s-%s.%s',[aVendor,aDevice,aInstance]);  // either formatted with 3 valid strings
+         else result := Format(K_FMT_ADDRESS,[aVendor,aDevice,aInstance]);  // either formatted with 3 valid strings
 end;
 
 class function TxPLAddress.ComposeAddressFilter(const aVendor : string; const aDevice : string; const aInstance : string) : string;
 begin
-     result := Format('%s.%s.%s',[aVendor,aDevice,aInstance]);
+     result := Format(K_FMT_FILTER,[aVendor,aDevice,aInstance]);
 end;
 
 class function TxPLAddress.RandomInstance : string;
