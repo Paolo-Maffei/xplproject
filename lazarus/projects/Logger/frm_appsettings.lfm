@@ -1,0 +1,90 @@
+object frmAppSettings: TfrmAppSettings
+  Left = 32
+  Height = 300
+  Top = 266
+  Width = 400
+  BorderIcons = [biSystemMenu]
+  BorderStyle = bsDialog
+  Caption = 'Application Settings'
+  ClientHeight = 300
+  ClientWidth = 400
+  SessionProperties = 'ckIcons.Checked;ckShowPreview.Checked;Left;Top;ListBox1.Items'
+  LCLVersion = '0.9.26.2'
+  object Label1: TLabel
+    Left = 8
+    Height = 16
+    Top = 96
+    Width = 178
+    Caption = 'Message fields display and order :'
+    ParentColor = False
+  end
+  object ToolBar3: TToolBar
+    Height = 26
+    Width = 400
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar2'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    Images = frmAbout.ilStandardActions
+    List = True
+    ShowCaptions = True
+    TabOrder = 0
+    object tbOk: TToolButton
+      Left = 1
+      Caption = 'Ok'
+      ImageIndex = 15
+      OnClick = tbOkClick
+    end
+  end
+  object ckIcons: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 32
+    Width = 217
+    Caption = 'Use schema icons (either use Type icons)'
+    Checked = True
+    State = cbChecked
+    TabOrder = 1
+  end
+  object ckShowPreview: TCheckBox
+    Left = 8
+    Height = 19
+    Top = 56
+    Width = 171
+    Caption = 'Display Message Preview Panel'
+    Checked = True
+    State = cbChecked
+    TabOrder = 2
+  end
+  object UpDown1: TUpDown
+    Left = 184
+    Height = 31
+    Top = 120
+    Width = 18
+    TabOrder = 3
+    OnClick = UpDown1Click
+  end
+  object ListBox1: TListBox
+    Left = 8
+    Height = 80
+    Top = 120
+    Width = 168
+    Items.Strings = (
+      'Schema'
+      'Source'
+      'Target'
+      'Type'
+      'Time'
+    )
+    ItemHeight = 13
+    TabOrder = 4
+  end
+  object XMLPropStorage: TXMLPropStorage
+    StoredValues = <>
+    FileName = 'session.xml'
+    left = 368
+    top = 32
+  end
+end
