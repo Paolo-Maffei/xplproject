@@ -31,8 +31,8 @@ type TxPLMessageType = (xpl_mtTrig, xpl_mtStat, xpl_mtCmnd, xpl_mtAny, xpl_mtNon
        procedure SetRawxPL(aRawXPL : string);
 
      public
-       property MessageType : TxPLMessageType   read fMsgType write fMsgType;
-       property Source      : TxPLAddress       read fSource write fSource;
+       property MessageType : TxPLMessageType   read fMsgType  write fMsgType;
+       property Source      : TxPLAddress       read fSource   write fSource;
        property Target      : TxPLTargetAddress read fTarget;
        property Hop         : integer           read fHop      write fHop;
        property RawxPL      : string            read GetRawxPL write SetRawxPL;
