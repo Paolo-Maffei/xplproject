@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xpl-plugin version="1.2" vendor="clinique" plugin_url="http://glh33.free.fr/xpl/clinique.xml" info_url="http://glh33.free.fr">
+  <device id="clinique-timer" version="1.1" description="Versatile Timer and Scheduler app">
+    <command name="Start a timer" msg_type="cmnd" msg_schema="control.basic">
+      <element name="current" default="start" />
+      <element name="device" default="nameofthetimer" />
+      <element name="duration" default="60" />
+      <element name="range" default="global" />
+      <element name="frequence" default="10" />
+    </command>
+    <command name="Stop a timer" msg_type="cmnd" msg_schema="control.basic">
+      <element name="current" default="stop" />
+      <element name="device" default="nameofthetimer" />
+    </command>
+    <command name="Suspend a timer" msg_type="cmnd" msg_schema="control.basic">
+      <element name="current" default="halt" />
+      <element name="device" default="nameofthetimer" />
+    </command>
+    <command name="Resume a timer" msg_type="cmnd" msg_schema="control.basic">
+      <element name="current" default="resume" />
+      <element name="device" default="nameofthetimer" />
+    </command>
+    <command name="Request timer status" msg_type="cmnd" msg_schema="sensor.request">
+      <element name="request" default="current" />
+      <element name="device" default="nameofthetimer" />
+    </command>
+  </device>
+  <device id="clinique-weather" version="2.0" description="Gather weather.com rss feed and push it over xPL network">
+    <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <command name="Request weather sensors" msg_type="cmnd" msg_schema="sensor.request">
+      <element name="device" default="weather" />
+      <element name="request" default="current" />
+    </command>
+    <configItem name="licensekey" description="License key delivered by weather.com" format="^[A-Za-z0-9]{1,50}$" />
+    <configItem name="partnerid" description="Partner ID delivered by weather.com" format="^[A-Za-z0-9]{1,50}$" />
+    <configItem name="unitsystem" description="Either `us` or `metric` system" format="us|metric" />
+    <configItem name="zipcode" description="Code of the city" format="^[A-Za-z0-9]{1,50}$" />
+    <trigger description="This message is emitted as soon as the value of a data is changed" msg_schema="sensor.basic" msg_type="trig" name="Weather element changed">
+      <element control_type="dropdownlist" label="Name of the data element (pressure, wind...)" name="device">
+        <option label="description" value="description" />
+        <option label="temperature" value="temperature" />
+        <option label="felt-temp" value="felt-temp" />
+        <option label="barometer" value="barometer" />
+        <option label="press-var" value="press-var" />
+        <option label="wind-speed" value="wind-speed" />
+        <option label="wind-gust" value="wind-gust" />
+        <option label="humidity" value="humidity" />
+        <option label="visibility" value="visibility" />
+        <option label="uv" value="uv" />
+        <option label="dewpoint" value="dewpoint" />
+        <option label="sunrise" value="sunrise" />
+        <option label="sunset" value="sunset" />
+        <option label="moon-phase" value="moon-phase" />
+      </element>
+      <element control_type="dropdownlist" label="Type of the sensor value" name="type">
+        <option label="generic" value="generic" />
+        <option label="temp" value="temp" />
+        <option label="pressure" value="pressure" />
+        <option label="speed" value="speed" />
+        <option label="direction" value="direction" />
+        <option label="humidity" value="humidity" />
+        <option label="distance" value="distance" />
+        <option label="uv" value="uv" />
+      </element>
+      <element label="Current value of the sensor element" name="current" />
+      <element label="Date of the modification of the value" name="timestamp" />
+    </trigger>
+  </device>
+  <device id="clinique-sender" version="1.1" description="xPL Message sender" />
+  <device id="clinique-ping" version="1.0" description="Network devices monitor">
+    <configItem name="nb_retries" description="Number of retries for each host" format="^[3-9]{1}$" />
+    <configItem name="ping_interval" description="Interval between ping sequences (in minutes)" format="^[1-9]{1}$" />
+    <configItem name="receive_tmout" description="Delay before declaring a host timed out" format="^[2-9]{1}$" />
+    <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <command description="This command requests the current status of the specified device" msg_schema="sensor.request" msg_type="cmnd" name="Request device status">
+      <element default="current" name="request" />
+      <element label="Name of the requested device" name="device" />
+    </command>
+    <trigger description="This message is emitted as soon as the status of a device changes" msg_schema="sensor.basic" msg_type="trig" name="Ping status changed">
+      <element label="Name of the device" name="device" />
+      <element default="ping" label="Type of sensor message" name="type" />
+      <element label="Status of the device (on/off/unknown)" name="current" />
+    </trigger>
+    <trigger description="Message emitted in response to sensor request command" msg_schema="sensor.basic" msg_type="stat" name="Status of a device">
+      <element label="Name of the device" name="device" />
+      <element default="ping" name="type" />
+      <element label="Status of the device (on/off/unknown)" name="current" />
+    </trigger>
+  </device>
+  <device id="clinique-psscript" version="0.7" description="Pascal Scripting engine xPL enabled" />
+  <device id="clinique-network" version="1.1" description="Usefull to setup local base xPL parameters" />
+  <device id="clinique-logger" version="1.2.1" description="Monitor all messages on the xPL Network" />
+  <device id="clinique-chatbot" version="1.1" description="xPL Message sender" />
+  <device id="clinique-free" version="0.1" description="xPL Plugin to french Free internet operator">
+    <configItem name="username" description="Your free account name - usually phone number" format="^[A-Za-z0-9]{1,50}$" />
+    <configItem name="password" description="Your free adsl password" format="^[A-Za-z0-9]{1,50}$" />
+    <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <configItem name="storedir" description="Directory used to store recorded messages" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <trigger description="This message is emitted whenever an untaken call has been recorded" msg_schema="free.basic" msg_type="trig" name="New call recorded">
+      <element default="inbound" name="calltype" />
+      <element label="Number of the calling phone" name="phone" />
+      <element label="Duration of the recording" name="length" />
+      <element label="Time stamp of the call" name="calldate" />
+    </trigger>
+    <trigger description="This message is emitted as soon as the plugin is launched and gained connection to management console" msg_schema="free.basic" msg_type="stat" name="Connected to free console">
+      <element label="Phone number defined by France Telecom" name="phoneline" />
+      <element label="Phone number of your Free line" name="freeline" />
+      <element label="Public IP address of your freebox" name="fbox-public" />
+      <element label="Internal IP address of your freebox" name="fbox-internal" />
+      <element label="Mac address of the freebox" name="fbox-mac" />
+      <element label="Model and type of the freebox" name="fbox-model" />
+    </trigger>
+    <trigger description="Indicates wether the Freebox HD is alive or not" msg_schema="media.devstate" msg_type="trig" name="Freebox HD status report">
+      <element label="Power status of the device" name="power">
+        <regexp>^(On)|(Off)$</regexp>
+      </element>
+      <element label="Reports the connect status of the device" name="connected">
+        <regexp>^(On)|(Off)$</regexp>
+      </element>
+    </trigger>
+    <configItem name="fbox-x10" description="X10 device where the freebox is connected" />
+    <configItem name="fboxhd-x10" description="X10 device where the HD box is connected" />
+    <command description="Power on or off the freebox or hd box" msg_schema="media.basic" msg_type="cmnd" name="Power the freebox">
+      <element default="power" name="command" />
+      <element control_type="dropdownlist" default="freebox" name="mp">
+        <option label="freebox" value="fbox" />
+        <option label="freeboxhd" value="fboxhd" />
+      </element>
+      <element control_type="dropdownlist" default="on" name="state">
+        <option label="on" value="on" />
+        <option label="off" value="off" />
+      </element>
+    </command>
+    <command description="Reboots (on / off 5 times)" msg_schema="media.basic" msg_type="cmnd" name="Reboot the freebox">
+      <element default="reboot" name="command" />
+      <element default="freebox" name="mp" />
+    </command>
+    <configItem name="polling" description="Polling frequency to scan new messages (in minutes)" />
+  </device>
+</xpl-plugin>
+
