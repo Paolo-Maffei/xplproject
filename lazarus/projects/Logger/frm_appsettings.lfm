@@ -83,7 +83,6 @@ object frmAppSettings: TfrmAppSettings
   end
   object XMLPropStorage: TXMLPropStorage
     StoredValues = <>
-    FileName = 'session.xml'
     left = 368
     top = 32
   end

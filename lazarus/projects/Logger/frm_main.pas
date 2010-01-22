@@ -113,7 +113,7 @@ var
   FrmMain: TFrmMain;
 
 implementation { TFrmLogger =====================================================}
-uses frm_xplappslauncher, frm_AppSettings,
+uses frm_xplappslauncher, frm_AppSettings, cDateTime,
      uxPLSchema, uxPLAddress, uxplMsgHeader, uxplcfgitem,
      cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings;
 
@@ -375,8 +375,7 @@ begin
 end;
 
 procedure TFrmMain.AddToTreeview(aMessageNum : integer);
-var item : TListItem;
-    s : array[0..4] of string;
+var s : array[0..4] of string;
     i : integer;
 begin
      with lvMessages.Items.Add,TxPLMessage(Messages.Objects[aMessageNum]) do begin
@@ -396,21 +395,10 @@ begin
 end;
 
 function TFrmMain.StatusString : string;
-var i,r : extended;
-          function DateTimeDiff(Start, Stop : TDateTime) : int64; var TimeStamp : TTimeStamp;
-          begin
-             TimeStamp := DateTimeToTimeStamp(Stop - Start);
-             Dec(TimeStamp.Date, TTimeStamp(DateTimeToTimeStamp(0)).Date);
-             Result := (TimeStamp.Date*24*60*60)+(TimeStamp.Time div 1000);
-          end;
+var i : extended;
 begin
-     i := DateTimeDiff(DtLogStart,Now) / 60;
-     if i=0 then exit;
-
-     r := iLoggedMsg / i  ;
-     result := 'Logged : ' + IntToStr(iLoggedMsg) +
-               ' during '  + TimeToStr(Now-DtLogStart) +
-               ' (' + FloatToStr(Int(r)) + ' msg/min)';
+     i := DiffMinutes(DtLogStart, Now);
+     if i<>0 then Result := Format('Logged %d during %s ( %n msg/min )',[iLoggedMsg,TimeToStr(Now-dtLogStart),iLoggedMsg / i]);
 end;
 
 procedure TFrmMain.OnMessageReceived(const axPLMessage: TxPLMessage);
