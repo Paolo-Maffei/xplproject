@@ -1,4 +1,4 @@
-﻿xPL Library for .NET, version 5.0
+﻿xPL Library for .NET, version 5.1
 
 Contents
 =========
@@ -14,10 +14,10 @@ Contents
 1 - License
 ============
 
-Copyright (c) 2009 Thijs Schreijer
+Copyright (c) 2009-2010 Thijs Schreijer
 http://www.thijsschreijer.nl
 
-Copyright (c) 2008 Tom Van den Panhuyzen
+Copyright (c) 2008-2009 Tom Van den Panhuyzen
 http://blog.boxedbits.com/xpl
 
 Copyright (C) 2003-2005 John Bent
@@ -113,9 +113,12 @@ xPLListener
     the network are passed on to the created xPLDevice objects and to the 
     xPLNetwork object.
 
-xPLPluginStore
+xPLPluginStore (new in 5.1)
     Downloading and parsing vendor xml plugin files is supported through
-    this object.
+    this object. A local shared store can be used to store the information
+    updated locally. 2 collections (vendors and devices) are available 
+    after loading/updating the PluginStore.
+    
 
 Supporting objects
 ------------------
@@ -159,6 +162,25 @@ xPLKeyValuePair
     
 xPLKeyValuePairs
     Maintains a list of key-valuepairs for an xPL message
+
+xPLPluginVendor (new in 5.1)
+	Represents the vendor information downloaded from the vendor plugin 
+	and	vendor related information from the central list maintained by
+	the xpl-project.
+	
+xPLPluginDevice (new in 5.1)
+	Represents the device information downloaded from the vendor plugin. 
+	
+xPLPluginUpdateDlgLog (form) (new in 5.1)
+    Progress form that can be used to display download/update information
+    from the plugin-update process. It displays status, % complete and
+    a complete message log of the process.
+    
+xPLPluginUpdateDlgSmall (form) (new in 5.1)
+    Progress form that can be used to display download/update information
+    from the plugin-update process. It displays status and % complete of 
+    the update process. No log is shown and it is automatically dismissed
+    when the update completes
 
 xPLSchema
     Represents a single schema name

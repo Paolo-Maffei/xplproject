@@ -1,11 +1,11 @@
 '* xPL Library for .NET
 '*
-'* Version 5.0
+'* Version 5.1
 '*
-'* Copyright (c) 2009 Thijs Schreijer
-'* http://www........
+'* Copyright (c) 2009-2010 Thijs Schreijer
+'* http://www.thijsschreijer.nl
 '*
-'* Copyright (c) 2008 Tom Van den Panhuyzen
+'* Copyright (c) 2008-2009 Tom Van den Panhuyzen
 '* http://blog.boxedbits.com/xpl
 '*
 '* Copyright (C) 2003-2005 John Bent
@@ -39,6 +39,7 @@
 '* this exception to your version of the library, but you are not
 '* obligated to do so. If you do not wish to do so, delete this
 '* exception statement from your version.
+
 Option Strict On
 Imports xPL.xPL_Base
 
