@@ -1,0 +1,56 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+xPLHubVerifier
+</name>
+</assembly>
+<members>
+<member name="P:xPL_Hub_Verifier.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:xPL_Hub_Verifier.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="P:xPL_Hub_Verifier.My.Resources.Resources.license">
+	<summary>
+  Looks up a localized string similar to SOFTWARE NOTICE AND LICENSE
+
+This work (including software, documents, or other related items) is being provided by the copyright holders under the following license. By obtaining, using and/or copying this work, you (the licensee) agree that you have read, understood, and will comply with the following terms and conditions:
+
+Permission to use, copy, and distribute this software and its documentation, without modification, for any purpose and without fee or royalty is hereby granted, provided that you i [rest of string was truncated]";.
+</summary>
+</member><member name="T:xPL_Hub_Verifier.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="M:xPL_Hub_Verifier.Firewall.OpenxPLPort">
+	<summary>
+ Opens the xPL port in the firewall; port 3865, UDP
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL_Hub_Verifier.Firewall.ClosexPLport">
+	<summary>
+ Closes the xPL port in the firewall; port 3865, UDP
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL_Hub_Verifier.Resources.tempPath">
+	<summary>
+ Returns the path to the temp files folder, including the closing directory separatorcharacter
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL_Hub_Verifier.Resources.SaveResourceToFile(System.Object,System.String)">
+	<summary>
+ Saves a resource to a file
+ </summary>
+	<param name="resource">The resource to be saved</param>
+	<param name="filename">The filename of the file to which to save the resource</param>
+	<returns>True id success, False otherwise</returns>
+	<remarks></remarks>
+</member>
+</members>
+</doc>
