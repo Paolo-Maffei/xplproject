@@ -12,7 +12,7 @@ Imports System.Runtime.InteropServices
 <Assembly: AssemblyDescription("xPL Library for .NET")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("xPLLib")> 
-<Assembly: AssemblyCopyright("(C) 2003-2007 by John Bent, 2008 Tom VdP, 2009 Thijs Schreijer")> 
+<Assembly: AssemblyCopyright("(C) 2003-2007 by John Bent, 2008-2009 Tom VdP, 2009-2010 Thijs Schreijer")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
  
 
-<Assembly: AssemblyVersion("5.0.164.0")> 
-<Assembly: AssemblyFileVersion("5.0.164.0")> 
+<Assembly: AssemblyVersion("5.1.0.0")> 
+<Assembly: AssemblyFileVersion("5.1.0.0")> 
