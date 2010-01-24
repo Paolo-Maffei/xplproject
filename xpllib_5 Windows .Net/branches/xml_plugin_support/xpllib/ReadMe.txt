@@ -112,7 +112,10 @@ xPLListener
     the listener can maintain a list of devices. Messages received from 
     the network are passed on to the created xPLDevice objects and to the 
     xPLNetwork object.
-    
+
+xPLPluginStore
+    Downloading and parsing vendor xml plugin files is supported through
+    this object.
 
 Supporting objects
 ------------------
@@ -178,8 +181,19 @@ A distribution of the xpllib should include the following files;
 
     
     
-5 - Changelog for version 5.0, build 145
+5 - Changelog for version 5.1, build xxx
 ========================================
+
+Changes in version 5.1 from 5.0
+NEW in 5.1
+  - Added the xPLPlugin object with its supporting object to download and parse
+    vendor plugins xml files into a local PluginStore.
+  - xPLDevice object has two new methods; Enable and Disable, that make setting
+    Enabled property more intuitive.
+    
+FIXED in 5.1
+  - Nothing
+
 
 Changes in version 5.0 from 4.4
 NEW in 5.0

@@ -1278,5 +1278,19 @@ Public Class xPLDevice
 
 #End Region
 
+    ''' <summary>
+    ''' Sets the Enabled property to <c>True</c>
+    ''' </summary>
+    ''' <remarks>See also <seealso cref="xPLDevice.Enabled"/>.</remarks>
+    Public Sub Enable()
+        If Me.Enabled = False Then Me.Enabled = True
+    End Sub
+    ''' <summary>
+    ''' Sets the Enabled property to <c>False</c>
+    ''' </summary>
+    ''' <remarks>See also <seealso cref="xPLDevice.Enabled"/>.</remarks>
+    Public Sub Disable()
+        If Me.Enabled = True Then Me.Enabled = False
+    End Sub
 End Class
 
