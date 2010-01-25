@@ -1,0 +1,7 @@
+[Main]
+OutputDir=C:\Lazarus\projects\PascalScript
+SingleUnit=1
+UseUnitAtDT=0
+FilePrefix=uPSImport
+[Files]
+File0=C:\Lazarus\projects\PascalScript\uxplinterface.pas
