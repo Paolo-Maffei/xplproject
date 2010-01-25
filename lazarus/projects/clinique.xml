@@ -89,7 +89,13 @@
       <element label="Status of the device (on/off/unknown)" name="current" />
     </trigger>
   </device>
-  <device id="clinique-psscript" version="0.7" description="Pascal Scripting engine xPL enabled" />
+  <device id="clinique-psscript" version="0.7" description="Pascal Scripting engine xPL enabled">
+    <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <configItem name="autosense" description="Autosense schema to globals" format="([0-9a-z/-]{1,8})\.([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})" />
+    <configItem name="autostart" description="Launch script at startup (1 or 0)" format="^[01]{1}$" />
+    <configItem name="scriptfile" description="Name of the main script file" format="'^([a-zA-Z]\:|\\\\[^\/\\:*?&quot;&lt;&gt;|]+\\[^\/\\:*?&quot;&lt;&gt;|]+)(\\[^\/\\:*?&quot;&lt;&gt;|]+)+(\.[^\/\\:*?&quot;&lt;&gt;|]+)$" />
+  </device>
   <device id="clinique-network" version="1.1" description="Usefull to setup local base xPL parameters" />
   <device id="clinique-logger" version="1.2.1" description="Monitor all messages on the xPL Network" />
   <device id="clinique-chatbot" version="1.1" description="xPL Message sender" />
