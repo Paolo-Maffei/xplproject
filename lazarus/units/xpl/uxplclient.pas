@@ -37,7 +37,7 @@ type  TxPLClient = class(TComponent)
       end;
 
 implementation //===============================================================
-uses IdStack,uxplcfgitem, cRandom, uxPLSchema, uIPutils, TPatternLayoutUnit, uxPLConst,
+uses IdStack,uxplcfgitem, cRandom, uIPutils, TPatternLayoutUnit, uxPLConst,
      TLevelUnit, TFileAppenderUnit;
 
 
@@ -69,7 +69,7 @@ procedure TxPLClient.LogError(aMessage: string);
 begin fEventLog.error(aMessage); end;
 
 function TxPLClient.LogFileName: string;
-begin result := fSetting.LoggingDirectory + fAppName + '.log'; end;
+begin result := fSetting.LoggingDirectory + fAppName + K_FEXT_LOG; end;
 
 destructor TxPLClient.Destroy;
 begin
