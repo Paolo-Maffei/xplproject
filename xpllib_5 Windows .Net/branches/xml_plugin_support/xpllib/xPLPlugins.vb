@@ -625,7 +625,7 @@ Public Class xPLPluginStore
         Catch ex As Exception
             ' Cannot access/create common data directory
             LogError("xPLPluginStore.SavePluginStore", "Could not create/access " & Path.GetDirectoryName(pPluginStoreFile) & vbCrLf & ex.ToString, EventLogEntryType.Warning)
-            Throw ex
+            Throw New Exception("Could not create/access pluginstore directory", ex)
         End Try
 
         Try
@@ -635,7 +635,7 @@ Public Class xPLPluginStore
         Catch ex As Exception
             ' Could not save pluginstore
             LogError("xPLPluginStore.SavePluginStore", "Error saving store: " & ex.ToString, EventLogEntryType.Error)
-            Throw ex
+            Throw New Exception("Could not save pluginstore directory", ex)
         End Try
 
     End Sub
@@ -685,7 +685,12 @@ Public Class xPLPluginStore
                 Catch
                     LogError("xPLPluginStore.GetPluginList", "Failed retrieving pluginlist from " & URL & XPL_PLUGIN_EXTENSION, EventLogEntryType.Error)
                     Me.EventUpdateAddLog("  URL failed: " & URL, True, True)
+                    If n = loclist.Count - 1 Then
+                        ' this was the last one
+                        Me.EventUpdateAddLog("All URL's failed!", True, True)
+                    End If
                     Me.EventUpdateRaiseNow()
+                    PluginList = Nothing
                 End Try
             End Try
         Next
@@ -804,112 +809,114 @@ Public Class xPLPluginStore
             End Try
             Me.EventUpdateStatus(10)
 
-            ' count files to download
-            For Each vendor As XmlElement In PluginList.DocumentElement.ChildNodes
-                If vendor.Name = "plugin" Then
-                    total += 1
-                End If
-            Next
+            If Not PluginList Is Nothing Then
+                ' count files to download
+                For Each vendor As XmlElement In PluginList.DocumentElement.ChildNodes
+                    If vendor.Name = "plugin" Then
+                        total += 1
+                    End If
+                Next
 
-            ' Now update the individual plugins
-            For Each vendor As XmlElement In PluginList.DocumentElement.ChildNodes
-                If vendor.Name = "plugin" Then
-                    vAttrib.Clear()
-                    Me.EventUpdateAddLog("Downloading plugin info '" & vendor.GetAttribute("name") & "'... ")
-                    Me.EventUpdateStatus(, "Downloading plugin info '" & vendor.GetAttribute("name") & "'... ")
-                    Me.EventUpdateRaiseNow()
-                    ' we've got a plugin element, get plugin data
-                    vAttrib.Add("name", vendor.GetAttribute("name"))
-                    vAttrib.Add("type", vendor.GetAttribute("type"))
-                    vAttrib.Add("description", vendor.GetAttribute("description"))
-                    vURL = vendor.GetAttribute("url")
-                    vAttrib.Add("url", vURL)
-                    ' download plugin
-                    plugin = New XmlDocument
-                    Try
-                        ' download file
-                        plugin.Load(vURL & XPL_PLUGIN_EXTENSION)
-                        ' if download succeeded, then set OneSuccess to true
-                        OneSuccess = True
-                        Me.EventUpdateAddLog("Success!", False)
-                        If Debug Then LogError("xPLPluginStore.PerformUpdate", "Succesfully downloaded " & vURL & XPL_PLUGIN_EXTENSION)
-                    Catch
+                ' Now update the individual plugins
+                For Each vendor As XmlElement In PluginList.DocumentElement.ChildNodes
+                    If vendor.Name = "plugin" Then
+                        vAttrib.Clear()
+                        Me.EventUpdateAddLog("Downloading plugin info '" & vendor.GetAttribute("name") & "'... ")
+                        Me.EventUpdateStatus(, "Downloading plugin info '" & vendor.GetAttribute("name") & "'... ")
+                        Me.EventUpdateRaiseNow()
+                        ' we've got a plugin element, get plugin data
+                        vAttrib.Add("name", vendor.GetAttribute("name"))
+                        vAttrib.Add("type", vendor.GetAttribute("type"))
+                        vAttrib.Add("description", vendor.GetAttribute("description"))
+                        vURL = vendor.GetAttribute("url")
+                        vAttrib.Add("url", vURL)
+                        ' download plugin
+                        plugin = New XmlDocument
                         Try
-                            ' download failed, try again, without extension
-                            plugin.Load(vURL)
+                            ' download file
+                            plugin.Load(vURL & XPL_PLUGIN_EXTENSION)
                             ' if download succeeded, then set OneSuccess to true
                             OneSuccess = True
                             Me.EventUpdateAddLog("Success!", False)
-                            If Debug Then LogError("xPLPluginStore.PerformUpdate", "Succesfully downloaded " & vURL)
-                        Catch ex As Exception
-                            Me.EventUpdateAddLog("Failed!", False)
-                            Me.EventUpdateAddLog("    Failed URL: " & vURL, , True)
-                            LogError("xPLPluginStore.PerformUpdate", "Could not download plugin; " & vbCrLf & _
-                                   "   Name: " & vAttrib.Item("name") & vbCrLf & _
-                                   "   Type: " & vAttrib.Item("type") & vbCrLf & _
-                                   "   Description: " & vAttrib.Item("description") & vbCrLf & _
-                                   "   Url: " & vAttrib.Item("url") & vbCrLf & ex.ToString, EventLogEntryType.Error)
-                            plugin = Nothing
+                            If Debug Then LogError("xPLPluginStore.PerformUpdate", "Succesfully downloaded " & vURL & XPL_PLUGIN_EXTENSION)
+                        Catch
+                            Try
+                                ' download failed, try again, without extension
+                                plugin.Load(vURL)
+                                ' if download succeeded, then set OneSuccess to true
+                                OneSuccess = True
+                                Me.EventUpdateAddLog("Success!", False)
+                                If Debug Then LogError("xPLPluginStore.PerformUpdate", "Succesfully downloaded " & vURL)
+                            Catch ex As Exception
+                                Me.EventUpdateAddLog("Failed!", False)
+                                Me.EventUpdateAddLog("    Failed URL: " & vURL, , True)
+                                LogError("xPLPluginStore.PerformUpdate", "Could not download plugin; " & vbCrLf & _
+                                       "   Name: " & vAttrib.Item("name") & vbCrLf & _
+                                       "   Type: " & vAttrib.Item("type") & vbCrLf & _
+                                       "   Description: " & vAttrib.Item("description") & vbCrLf & _
+                                       "   Url: " & vAttrib.Item("url") & vbCrLf & ex.ToString, EventLogEntryType.Error)
+                                plugin = Nothing
+                            End Try
                         End Try
-                    End Try
 
-                    If Not plugin Is Nothing Then
-                        Try
-                            If Debug Then LogError("xPLPluginStore.PerformUpdate", "Parsing vendor plugin...")
-                            ' Plugin succesfully downloaded, do updates
-                            pRoot = plugin.DocumentElement
-                            ' add attributes found on highest level to vendor list attributes
-                            For Each x As XmlAttribute In pRoot.Attributes
-                                vAttrib.Add(x.Name, x.Value)
-                            Next
-                            ' now go through devices
-                            For Each e As XmlElement In pRoot.ChildNodes
-                                If e.Name = "device" Then
-                                    ' we've got a device, create a copy
-                                    Dim d As XmlDocumentFragment = PluginStore.CreateDocumentFragment()
-                                    d.InnerXml = e.OuterXml ' copy xml fragment
-                                    ' get the Device ID ('vendor-device') and Vendor ID
-                                    DeviceID = e.GetAttribute("id")
-                                    VendorID = DeviceID.Split("-"c)(0)
+                        If Not plugin Is Nothing Then
+                            Try
+                                If Debug Then LogError("xPLPluginStore.PerformUpdate", "Parsing vendor plugin...")
+                                ' Plugin succesfully downloaded, do updates
+                                pRoot = plugin.DocumentElement
+                                ' add attributes found on highest level to vendor list attributes
+                                For Each x As XmlAttribute In pRoot.Attributes
+                                    vAttrib.Add(x.Name, x.Value)
+                                Next
+                                ' now go through devices
+                                For Each e As XmlElement In pRoot.ChildNodes
+                                    If e.Name = "device" Then
+                                        ' we've got a device, create a copy
+                                        Dim d As XmlDocumentFragment = PluginStore.CreateDocumentFragment()
+                                        d.InnerXml = e.OuterXml ' copy xml fragment
+                                        ' get the Device ID ('vendor-device') and Vendor ID
+                                        DeviceID = e.GetAttribute("id")
+                                        VendorID = DeviceID.Split("-"c)(0)
 
-                                    ' Lookup vendor info, and replace with/add current vendor info
-                                    For Each vel As XmlElement In elVendors
-                                        If vel.GetAttribute("id") = VendorID Then
-                                            ' found it, remove it
-                                            elVendors.RemoveChild(vel)
-                                            Exit For
-                                        End If
-                                    Next
-                                    ' Create new vendor element, with all its attributes
-                                    Dim newvendor As XmlElement = PluginStore.CreateElement("vendor")
-                                    newvendor.SetAttribute("id", VendorID)
-                                    For Each kv As KeyValuePair(Of String, String) In vAttrib
-                                        newvendor.SetAttribute(kv.Key, kv.Value)
-                                    Next
-                                    ' append it
-                                    elVendors.AppendChild(newvendor)
+                                        ' Lookup vendor info, and replace with/add current vendor info
+                                        For Each vel As XmlElement In elVendors
+                                            If vel.GetAttribute("id") = VendorID Then
+                                                ' found it, remove it
+                                                elVendors.RemoveChild(vel)
+                                                Exit For
+                                            End If
+                                        Next
+                                        ' Create new vendor element, with all its attributes
+                                        Dim newvendor As XmlElement = PluginStore.CreateElement("vendor")
+                                        newvendor.SetAttribute("id", VendorID)
+                                        For Each kv As KeyValuePair(Of String, String) In vAttrib
+                                            newvendor.SetAttribute(kv.Key, kv.Value)
+                                        Next
+                                        ' append it
+                                        elVendors.AppendChild(newvendor)
 
-                                    ' Lookup device info, and replace with/add current device info
-                                    For Each del As XmlElement In elDevices
-                                        If del.GetAttribute("id") = DeviceID Then
-                                            ' found it, remove it
-                                            elDevices.RemoveChild(del)
-                                            Exit For
-                                        End If
-                                    Next
-                                    ' append it, the copied element 'd'
-                                    elDevices.AppendChild(d)
-                                End If
-                            Next
-                            If Debug Then LogError("xPLPluginStore.PerformUpdate", "Parsing completed succesfully")
-                        Catch ex As Exception
-                            LogError("xPLPluginStore.PerformUpdate", "Parsing failed: " & ex.ToString, EventLogEntryType.Error)
-                        End Try
+                                        ' Lookup device info, and replace with/add current device info
+                                        For Each del As XmlElement In elDevices
+                                            If del.GetAttribute("id") = DeviceID Then
+                                                ' found it, remove it
+                                                elDevices.RemoveChild(del)
+                                                Exit For
+                                            End If
+                                        Next
+                                        ' append it, the copied element 'd'
+                                        elDevices.AppendChild(d)
+                                    End If
+                                Next
+                                If Debug Then LogError("xPLPluginStore.PerformUpdate", "Parsing completed succesfully")
+                            Catch ex As Exception
+                                LogError("xPLPluginStore.PerformUpdate", "Parsing failed: " & ex.ToString, EventLogEntryType.Error)
+                            End Try
+                        End If
+                        count += 1
+                        Me.EventUpdateStatus(CInt(10 + (95 - 10) / total * count))  ' to be calculated correctly
                     End If
-                    count += 1
-                    Me.EventUpdateStatus(CInt(10 + (95 - 10) / total * count))  ' to be calculated correctly
-                End If
-            Next
+                Next
+            End If
 
             ' did we at least have 1 success while downloading ( 0 could mean no connection...)
             If OneSuccess Then
@@ -934,7 +941,7 @@ Public Class xPLPluginStore
             Me.EventUpdateDone()
             LogError("xPLPluginStore.PerformUpdate", "Error: " & ex.ToString)
             Me.ParsePluginStoreToCollections()
-            Throw ex
+            Throw New Exception("Error updating pluginstore", ex)
         End Try
 
         ' now read pluginstore into devices and vendors collections
