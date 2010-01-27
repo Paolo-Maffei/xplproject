@@ -16,12 +16,16 @@ Public Class Form1
         xplug.Debug = True
         frm.Plugin = xplug
         frmsml.Plugin = xplug
-        If MsgBox("Show log?", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
-            xplug.UpdatePluginStore(True)
-            frmsml.ShowDialog()
-        Else
-            xplug.UpdatePluginStore(True)
-            frm.Show()
-        End If
+        Try
+            If MsgBox("Show log?", MsgBoxStyle.YesNo) = MsgBoxResult.No Then
+                xplug.UpdatePluginStore(True)
+                frmsml.ShowDialog()
+            Else
+                xplug.UpdatePluginStore(True)
+                frm.Show()
+            End If
+        Catch ex As Exception
+
+        End Try
     End Sub
 End Class
