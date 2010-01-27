@@ -13,7 +13,7 @@ unit uxPLAddress;
 {$mode objfpc}{$H+}
 interface
 
-uses DOM, uxPLBaseClass;
+uses DOM, uxPLBaseClass, uxPLConst;
 
 type
 
@@ -34,9 +34,9 @@ type
        procedure ReadFromXML(const aParent : TDOMNode)                        virtual;
        function  FilterTag : string;
 
-       class function ComposeAddress       (const aVendor : string; const aDevice : string; const aInstance : string) : string;
-       class function ComposeAddressFilter (const aVendor : string; const aDevice : string; const aInstance : string) : string;
-       class function RandomInstance : string;
+       class function ComposeAddress       (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
+       class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
+       class function RandomInstance : tsInstance;
     end;
 
     { TxPLTargetAddress }
@@ -61,22 +61,22 @@ type
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, uxPLConst;
+uses cRandom, SysUtils;
 
 { General Helper function =====================================================}
-class function TxPLAddress.ComposeAddress(const aVendor : string; const aDevice : string; const aInstance : string) : string;
+class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
 begin
-     If ((aVendor='*') or (aDevice='*') or (aInstance='*'))
-         then result := '*'                                              // an address is either generic
+     If ((aVendor=K_ADDR_ANY_TARGET) or (aDevice=K_ADDR_ANY_TARGET) or (aInstance=K_ADDR_ANY_TARGET))
+         then result := K_ADDR_ANY_TARGET                                   // an address is either generic
          else result := Format(K_FMT_ADDRESS,[aVendor,aDevice,aInstance]);  // either formatted with 3 valid strings
 end;
 
-class function TxPLAddress.ComposeAddressFilter(const aVendor : string; const aDevice : string; const aInstance : string) : string;
+class function TxPLAddress.ComposeAddressFilter(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
 begin
      result := Format(K_FMT_FILTER,[aVendor,aDevice,aInstance]);
 end;
 
-class function TxPLAddress.RandomInstance : string;
+class function TxPLAddress.RandomInstance : tsInstance;
 begin result := AnsiLowerCase(RandomAlphaStr(8)); end;
 
 { TxPLAddress Object ==========================================================}
@@ -146,25 +146,25 @@ end;
 
 procedure TxPLTargetAddress.SetString(const aIndex : integer; const aValue : string);
 begin
-     if aValue = '*' then IsGeneric := True
+     if aValue = K_ADDR_ANY_TARGET then IsGeneric := True
                      else inherited SetString(aIndex, aValue);
 end;
 
 function TxPLTargetAddress.GetTag: string;
 begin
-     If fGeneric then result := '*' else result := inherited;
+     If fGeneric then result := K_ADDR_ANY_TARGET else result := inherited;
 end;
 
 procedure TxPLTargetAddress.SetTag(const AValue: string);
 begin
-     IsGeneric := (aValue='*');
+     IsGeneric := (aValue=K_ADDR_ANY_TARGET);
 
      If not IsGeneric then inherited SetTag(aValue);
 end;
 
 function TxPLTargetAddress.GetString(const AIndex: integer): string;
 begin
-  if IsGeneric then Result:='*' else result := inherited;
+  if IsGeneric then Result:=K_ADDR_ANY_TARGET else result := inherited;
 end;
 
 function TxPLTargetAddress.IsValid: boolean;
