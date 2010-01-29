@@ -10,6 +10,8 @@ unit uxplsettings;
         Added vendor seed file manipulation functions
  0.94 : modified to rip off message directory, wrong good idea
  0.95 : added configuration store directory
+ 0.96 : usage of uxPLConst
+        Added self registering of the app if owner is xPLClient
  }
 {$mode objfpc}{$H+}
 
@@ -17,11 +19,7 @@ interface
 
 uses  Registry,Classes;
 
-type
-
-    { TxPLSettings }
-
-    TxPLSettings = class
+type TxPLSettings = class(TComponent)
      private
         fRegistry : TRegistry;
         fBroadCastAddress  : string;
@@ -41,7 +39,7 @@ type
         function  ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
      public
-        constructor create;
+        constructor create(aOwner : TComponent);
         destructor  destroy; override;
 
         property ListenToAny   : boolean read GetListenToAny   write SetListenToAny;
@@ -61,23 +59,16 @@ type
      end;
 
 implementation { ======================================================================}
-uses SysUtils, StrUtils;
-
-ResourceString K_XPL_ROOT_KEY               = '\Software\xPL\';
-               K_XPL_APPS_KEY               = '\Software\xPL\apps\';
-               K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
-               K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
-               K_REGISTRY_BROADCAST         = 'BroadcastAddress';
-               K_REGISTRY_LISTENON          = 'ListenOnAddress';
-               K_REGISTRY_LISTENTO          = 'ListenToAddresses';
+uses SysUtils, StrUtils, uxPLConst, uxPLClient;
 
 function OnGetAppName : string;                   // This is used to fake the system when
 begin                                             // requesting common xPL applications shared
   result := 'xPL';                                // directory - works in conjunction with
 end;                                              // OnGetApplicationName
 { TxPLSettings ========================================================================}
-constructor TxPLSettings.create;
+constructor TxPLSettings.create(aOwner : TComponent);
 begin
+     inherited Create(aOwner);
      OnGetApplicationName := @OnGetAppName;
 
      fRegistry :=TRegistry.Create;
@@ -87,15 +78,19 @@ begin
      fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON);
      fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO);
 
-     if not DirectoryExists(SharedConfigDir) then CreateDir(SharedConfigDir);   // 1.1.1 Correction
-     if not DirectoryExists(PluginDirectory) then CreateDir(PluginDirectory);   // 1.1.1 Correction
-     if not DirectoryExists(LoggingDirectory) then CreateDir(LoggingDirectory); // 1.1.2 complement
+     if not DirectoryExists(SharedConfigDir)  then CreateDir(SharedConfigDir);   // 1.1.1 Correction
+     if not DirectoryExists(PluginDirectory)  then CreateDir(PluginDirectory);   // 1.1.1 Correction
+     if not DirectoryExists(LoggingDirectory) then CreateDir(LoggingDirectory);  // 1.1.2 complement
+     if not DirectoryExists(ConfigDirectory)  then CreateDir(ConfigDirectory);   // 0.95 complement
+
+     if aOwner is TxPLClient then RegisterMe(TxPLClient(aOwner).AppName,TxPLClient(aOwner).AppVersion);
 end;
 
 destructor TxPLSettings.destroy;
 begin
      fRegistry.CloseKey;
      fRegistry.Destroy;
+     inherited destroy;
 end;
 
 function TxPLSettings.GetListenToAny : boolean;
@@ -119,26 +114,26 @@ end;
 
 procedure TxPLSettings.SetBroadCastAddress(const AValue: string);
 begin
-     fBroadCastAddress := aValue;
-     WriteKeyString(K_REGISTRY_BROADCAST,aValue);
+   fBroadCastAddress := aValue;
+   WriteKeyString(K_REGISTRY_BROADCAST,aValue);
 end;
 
 procedure TxPLSettings.SetListenOnAddress(const AValue: string);
 begin
-     fListenOnAddress := aValue;
-     WriteKeyString(K_REGISTRY_LISTENON,aValue);
+   fListenOnAddress := aValue;
+   WriteKeyString(K_REGISTRY_LISTENON,aValue);
 end;
 
 procedure TxPLSettings.SetListenToAddresses(const AValue: string);
 begin
-     fListenToAddresses := aValue;
-     WriteKeyString(K_REGISTRY_LISTENTO,aValue);
+   fListenToAddresses := aValue;
+   WriteKeyString(K_REGISTRY_LISTENTO,aValue);
 end;
 
 function TxPLSettings.GetListenOnAll : boolean;
 begin
-     result := ((ListenOnAddress = K_XPL_SETTINGS_NETWORK_ANY)
-             or (ListenOnAddress = K_XPL_SETTINGS_NETWORK_LOCAL));
+   result := ((ListenOnAddress = K_XPL_SETTINGS_NETWORK_ANY)
+           or (ListenOnAddress = K_XPL_SETTINGS_NETWORK_LOCAL));
 end;
 
 procedure TxPLSettings.SetListenOnAll(const bValue : boolean);
@@ -152,8 +147,8 @@ begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ; end;
 
 function TxPLSettings.SharedConfigDir : string;
 begin
-     result := GetAppConfigDir(true);
-     if result[length(result)]<>'\' then result += '\';                         // 1.1.1 bug correction
+   result := GetAppConfigDir(true);
+   if result[length(result)]<>'\' then result += '\';                         // 1.1.1 bug correction
 end;
 
 function TxPLSettings.PluginDirectory: string;
@@ -168,26 +163,26 @@ begin result := SharedConfigDir + 'Config\'; end;
 procedure TxPLSettings.RegisterMe(const aAppName : string; const aAppVersion : string);
 var aPath, aVersion : string;
 begin
-     GetxPLAppDetail(aAppName,aPath,aVersion);
-     if aVersion < aAppVersion then begin                                       // Empty or older version information
-        fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName,True);
-        fRegistry.WriteString('version',aAppVersion);
-        fRegistry.WriteString('path',ParamStr(0))
-     end;
+   GetxPLAppDetail(aAppName,aPath,aVersion);
+   if aVersion < aAppVersion then begin                                       // Empty or older version information
+      fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName,True);
+      fRegistry.WriteString('version',aAppVersion);
+      fRegistry.WriteString('path',ParamStr(0))
+   end;
 end;
 
 function TxPLSettings.GetxPLAppList : TStringList;
 begin
-     result := TStringList.Create;
-     fRegistry.OpenKey(K_XPL_APPS_KEY ,True);
-     fRegistry.GetKeyNames(result);
+   result := TStringList.Create;
+   fRegistry.OpenKey(K_XPL_APPS_KEY ,True);
+   fRegistry.GetKeyNames(result);
 end;
 
 procedure TxPLSettings.GetxPLAppDetail(const aAppName: string; out   aPath: string; out aVersion: string);
 begin
-     fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName ,True);                        // At the time, you can't read this
-     aVersion := fRegistry.ReadString('version');                               // if you don't have admin rights !
-     aPath := fRegistry.ReadString('path');
+   fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName ,True);                        // At the time, you can't read this
+   aVersion := fRegistry.ReadString('version');                               // if you don't have admin rights !
+   aPath := fRegistry.ReadString('path');
 end;
 
 end.
