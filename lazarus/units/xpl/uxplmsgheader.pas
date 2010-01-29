@@ -14,11 +14,9 @@ unit uxplmsgheader;
 
 interface
 
-uses uxPLAddress, DOM;
+uses uxPLAddress, DOM, uxPLConst;
 
-type TxPLMessageType = (xpl_mtTrig, xpl_mtStat, xpl_mtCmnd, xpl_mtAny, xpl_mtNone);
-
-     { TxPLMsgHeader }
+type { TxPLMsgHeader }
 
      TxPLMsgHeader = class
      private
@@ -55,7 +53,7 @@ type TxPLMessageType = (xpl_mtTrig, xpl_mtStat, xpl_mtCmnd, xpl_mtAny, xpl_mtNon
 
 
 implementation {===============================================================}
-uses SysUtils, Classes, RegExpr, uxPLConst;
+uses SysUtils, Classes, RegExpr;
 
 const K_MESSAGE_TYPE_DESCRIPTORS : Array[0..3] of string = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
