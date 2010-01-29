@@ -8,24 +8,20 @@ unit uxPLSchema;
  0.91 : first published version
  0.95 : Regular expression added
  0.96 : Simplification of the class (cut inheritance of TxPLBaseClass)
+ 0.97 : Usage of uxPLConst
+        Dropped usage of RegExp, to heavy for such a simple thing
 }
 {$mode objfpc}{$H+}
 interface
 
-uses RegExpr;
+uses uxPLConst;
 
 type
-    TxPLSchemaClasse = ( xpl_scHBeat,    xpl_scConfig,  xpl_scAudio,   xpl_scControl,
-                         xpl_scDateTime, xpl_scDb,      xpl_scDGuide,  xpl_scCID,
-                         xpl_scOSD,      xpl_scRemote,  xpl_scSendMsg, xpl_scSensor,
-                         xpl_scTTS,      xpl_scUps,     xpl_scWebCam,  xpl_scX10,
-                         xpl_scOther );
-
     TxPLSchema = class
     private
       fClasse : string;
       fType   : string;
-      fValidator : TRegExpr;
+      //fValidator : TRegExpr;
 
       function  GetClasse: TxPLSchemaClasse;
       function  GetTag: string;
@@ -40,35 +36,27 @@ type
       property Tag            : string read GetTag  write SetTag;
 
       Constructor Create(const aClasse : string = ''; const aType : string = '');
-      Destructor  Destroy; override;
+      //Destructor  Destroy; override;
 
-      function  IsValid : boolean;
+      //function  IsValid : boolean;
       procedure ResetValues;
     end;
 
-const K_REGEXPR_SCHEMA_ELEMENT = '([0-9a-z/-]{1,8})';
-      K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (
-                                      'hbeat','config','audio','control','datetime',
-                                      'db','dguide','cid','osd','remote','sendmsg',
-                                      'sensor','tts','ups','webcam','x10' );
-
 implementation { ==============================================================}
-uses StrUtils, SysUtils;
-
-const K_REGEXPR_SCHEMA = K_REGEXPR_SCHEMA_ELEMENT + '\.' + K_REGEXPR_SCHEMA_ELEMENT;
+uses StrUtils, SysUtils, cStrings;
 
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
 begin
      inherited Create;
-     fValidator  := TRegExpr.Create;
+     //fValidator  := TRegExpr.Create;
      ClasseAsString := aClasse;
      TypeAsString   := aType;
 end;
 
-destructor TxPLSchema.Destroy;
-begin
-  fValidator.Destroy;
-end;
+//destructor TxPLSchema.Destroy;
+//begin
+//  fValidator.Destroy;
+//end;
 
 procedure TxPLSchema.ResetValues;
 begin
@@ -83,7 +71,8 @@ end;
 
 function TxPLSchema.GetTag: string;
 begin
-     Result := IfThen (isValid, ClasseAsString + '.' + TypeAsString);
+//     Result := IfThen (isValid, Format(K_FMT_SCHEMA,[ClasseAsString,TypeAsString]));
+   Result := Format(K_FMT_SCHEMA,[ClasseAsString,TypeAsString]);
 end;
 
 procedure TxPLSchema.SetClasse(const AValue: TxPLSchemaClasse);
@@ -92,7 +81,7 @@ begin
      ClasseAsString := K_XPL_CLASS_DESCRIPTORS[Ord(aValue)];
 end;
 
-function TxPLSchema.IsValid: boolean;
+{function TxPLSchema.IsValid: boolean;
          function Validate(const aValue : string) : boolean;
          begin
               fValidator.Expression := K_REGEXPR_SCHEMA_ELEMENT;
@@ -100,7 +89,7 @@ function TxPLSchema.IsValid: boolean;
          end;
 begin
   result := Validate(fType) and Validate(fClasse);
-end;
+end;}
 
 procedure TxPLSchema.SetType(const AValue: string);
 begin
@@ -116,11 +105,12 @@ end;
 
 procedure TxPLSchema.SetTag(const AValue: string);
 begin
-     fValidator.Expression := K_REGEXPR_SCHEMA;
-     if fValidator.Exec(aValue) then begin
-        fClasse := fValidator.Match[1];
-        fType   := fValidator.Match[2];
-     end;
+   StrSplitAtChar(aValue,'.',fClasse,fType);
+     //fValidator.Expression := K_REGEXPR_SCHEMA;
+     //if fValidator.Exec(aValue) then begin
+     //   fClasse := fValidator.Match[1];
+     //   fType   := fValidator.Match[2];
+     //end;
 end;
 
 
