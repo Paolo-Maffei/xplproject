@@ -5,26 +5,13 @@ unit uxPLPluginFile;
 interface
 
 uses
-  Classes, SysUtils, DOM, uxPLSettings;
+  Classes, SysUtils, DOM, uxPLSettings, uxPLConst;
 
 type
 
 { txPLPluginFile }
 
 { txPLPluginList }
-
-     txPLPluginList = class
-     private
-           fPluginDir : string;
-           fPlugins   : tstringlist;
-     public
-           constructor Create;
-           destructor  destroy; override;
-
-           function    Count : integer;
-           property    Plugin : tstringlist read fPlugins;
-     end;
-
 
      txPLPluginFile = class(TXMLDocument)
      private
@@ -47,18 +34,31 @@ type
            property    VendorTag  : string      read GetVendorTag;
      end;
 
+     txPLPluginList = class(TComponent)
+     private
+           fPluginDir : string;
+           fPlugins   : tstringlist;
+     public
+           constructor Create(aOwner : TComponent);
+           destructor  destroy; override;
+
+           function    Count : integer;
+           property    Plugin : tstringlist read fPlugins;
+           function    VendorFile(aVendor : tsVendor) : txPLPluginFile;
+     end;
+
 implementation
 uses XMLRead, cStrings;
 { txPLPluginList }
 
-constructor txPLPluginList.Create;
+constructor txPLPluginList.Create(aOwner : TComponent);
 var aPluginFile : TxPLPluginFile;
     searchResult : TSearchRec;
     Settings     : TxPLSettings;
 begin
-     inherited Create;
+     inherited Create(aOwner);
      fplugins := tstringlist.create;
-     Settings := TxPLSettings.Create;
+     Settings := TxPLSettings.Create(self);
      fPluginDir := Settings.PluginDirectory;
      Settings.Free;
      if FindFirst(fPluginDir+'*.xml', faAnyFile, SearchResult)=0 then begin
@@ -70,6 +70,19 @@ begin
      end;
 end;
 
+function txPLPluginList.VendorFile(aVendor: tsVendor): txPLPluginFile;
+var i : integer;
+begin
+   i := Plugin.IndexOf(aVendor);
+   if i<>-1 then begin
+      if not assigned(Plugin.Objects[i]) then begin
+         Plugin.Objects[i] := txPLPluginFile.Create;
+         ReadXMLFile(result,fPluginDir+aVendor+'.xml');
+      end;
+      result := txPLPluginFile(Plugin.Objects[i]);
+   end;
+end;
+
 destructor txPLPluginList.destroy;
 begin
      fplugins.destroy;
@@ -77,9 +90,9 @@ begin
 end;
 
 function txPLPluginList.Count: integer;
-begin
-  result := fplugins.count;
-end;
+begin result := fplugins.count; end;
+
+
 
 { txPLPluginFile }
 destructor txPLPluginFile.Destroy;
