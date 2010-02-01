@@ -1,10 +1,44 @@
-﻿Option Explicit On
+﻿Option Strict On
 Imports xPL
 Imports xPL.xPL_Base
 Public Class MainForm
 
     Dim xdev As xPLDevice = Nothing
     Dim hubtmr As Timers.Timer
+    Dim xplug As xPLPluginStore
+    Dim HubEmbedded As Version = xPLPluginVendor.StrToVersion(My.Settings.BundledHubVersion)
+    Dim DiagEmbedded As Version = xPLPluginVendor.StrToVersion(My.Settings.BundledHubVersion)
+    Dim HubLatest As Version = New Version(0, 0, 0, 0)
+    Dim DiagLatest As Version = New Version(0, 0, 0, 0)
+
+    Private Sub GetLatestVersionInfo()
+        Dim frm As xPLPluginUpdateDlgSmall
+        If xplug Is Nothing Then xplug = New xPLPluginStore
+        If Not xplug.IsLoaded Then
+            Try
+
+                ' prepare for update
+                frm = New xPLPluginUpdateDlgSmall
+                frm.Plugin = xplug
+                xplug.LoadPluginStore()
+                ' do update
+                xplug.UpdatePluginStore()
+                frm.ShowDialog()
+                ' update finished, collect results
+                Try
+                    HubLatest = xplug.Devices(My.Settings.IdHub).VersionV
+                Catch ex As Exception
+                    HubLatest = New Version(0, 0, 0, 0)
+                End Try
+                Try
+                    DiagLatest = xplug.Devices(My.Settings.IdDiag).VersionV
+                Catch ex As Exception
+                    DiagLatest = New Version(0, 0, 0, 0)
+                End Try
+            Catch ex As Exception
+            End Try
+        End If
+    End Sub
 
     Private Sub MainForm_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' start up
@@ -39,7 +73,6 @@ Public Class MainForm
     End Sub
 
 #Region "Hub check"
-
 
     Private Sub btnCheckHub_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCheckHub.Click
         StartHubCheck()
@@ -186,8 +219,78 @@ Public Class MainForm
 
     Private Sub btnInstallHub_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInstallHub.Click
         Dim filename As String = tempPath() & "xplhub.msi"
-        Resources.SaveResourceToFile(My.Resources.xplhub, filename)
         Dim proc As New Process
+        Dim filename2 As String = tempPath()
+        Dim result As MsgBoxResult
+        Dim download As Boolean = False
+        Dim url As String
+        Dim frm As Download
+
+        ' see if there are updates available
+        GetLatestVersionInfo()
+        If HubLatest > HubEmbedded Then
+            ' go ask download new version
+            result = MsgBox("The version of the Hub (version " & HubEmbedded.ToString & ") enclosed with this application is " & _
+                   "outdated, a newer version (version " & HubLatest.ToString & ") is available." & vbCrLf & vbCrLf & _
+                   "Would you like to download and install the newer version? (click No to install the enclosed outdated version)", _
+                   MsgBoxStyle.YesNoCancel Or MsgBoxStyle.Question Or MsgBoxStyle.DefaultButton1, _
+                   "New version available")
+            Select Case result
+                Case MsgBoxResult.Cancel : Exit Sub
+                Case MsgBoxResult.Yes : download = True
+                Case MsgBoxResult.No : download = False
+            End Select
+        End If
+        If download Then
+            Try
+                ' try downloading
+                url = ""
+                ' check it to be an MSI or EXE
+                url = xplug.Devices(My.Settings.IdHub).URLdownload
+                If System.IO.Path.GetExtension(url).ToLower <> ".msi" And _
+                   System.IO.Path.GetExtension(url).ToLower <> ".exe" Then
+                    ' can't execute downloads
+                    ' generate error
+                    Dim a As Integer = 0
+                    a = CInt(15 / a)
+                End If
+                ' add filename to temppath
+                filename2 += System.IO.Path.GetFileName(url)
+
+                If download Then
+                    ' Download file
+                    frm = New Download
+                    frm.lblMessage.Text = "Downloading Hub version " & HubLatest.ToString & ", please be patient..."
+                    frm.Show()
+                    frm.Refresh()
+                    Threading.Thread.Sleep(500)    ' provide time for form to draw itself
+                    My.Computer.Network.DownloadFile(url, filename2)
+                    frm.Close()
+
+                    ' update filename to point to downloaded installer
+                    filename = filename2
+                End If
+
+            Catch
+                ' downloading failed....
+                If MsgBox("There was an error downloading the newer version, would you like to continue " & _
+                          "by installing the enclosed (outdated) Hub?", _
+                          MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton2, _
+                          "Download error") = MsgBoxResult.Cancel Then
+                    ' cancel installation
+                    Exit Sub
+                Else
+                    ' use embedded installer anyway
+                    download = False
+                End If
+            End Try
+        End If
+
+        If Not download Then
+            ' save embedded installer to temp directory
+            Resources.SaveResourceToFile(My.Resources.xpldiag, filename)
+        End If
+
         proc.StartInfo.FileName = filename
         proc.Start()
         Me.WindowState = FormWindowState.Minimized
@@ -201,8 +304,78 @@ Public Class MainForm
 
     Private Sub btnInstallDiag_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnInstallDiag.Click
         Dim filename As String = tempPath() & "xpldiag.msi"
-        Resources.SaveResourceToFile(My.Resources.xpldiag, filename)
+        Dim filename2 As String = tempPath()
         Dim proc As New Process
+        Dim result As MsgBoxResult
+        Dim download As Boolean = False
+        Dim url As String
+        Dim frm As Download
+
+        ' see if there are updates available
+        GetLatestVersionInfo()
+        If DiagLatest > DiagEmbedded Then
+            ' go ask download new version
+            result = MsgBox("The version of xPL Diagnostics (version " & DiagEmbedded.ToString & ") enclosed with this application is " & _
+                   "outdated, a newer version (version " & DiagLatest.ToString & ") is available." & vbCrLf & vbCrLf & _
+                   "Would you like to download and install the newer version? (click No to install the enclosed outdated version)", _
+                   MsgBoxStyle.YesNoCancel Or MsgBoxStyle.Question Or MsgBoxStyle.DefaultButton1, _
+                   "New version available")
+            Select Case result
+                Case MsgBoxResult.Cancel : Exit Sub
+                Case MsgBoxResult.Yes : download = True
+                Case MsgBoxResult.No : download = False
+            End Select
+        End If
+        If download Then
+            Try
+                ' try downloading
+                url = ""
+                ' check it to be an MSI or EXE
+                url = xplug.Devices(My.Settings.IdDiag).URLdownload
+                If System.IO.Path.GetExtension(url).ToLower <> ".msi" And _
+                   System.IO.Path.GetExtension(url).ToLower <> ".exe" Then
+                    ' can't execute downloads
+                    ' generate error
+                    Dim a As Integer = 0
+                    a = CInt(15 / a)
+                End If
+                ' add filename to temppath
+                filename2 += System.IO.Path.GetFileName(url)
+
+                If download Then
+                    ' Download file
+                    frm = New Download
+                    frm.lblMessage.Text = "Downloading xPL Diagnostics version " & DiagLatest.ToString & ", please be patient..."
+                    frm.Show()
+                    frm.Refresh()
+                    Threading.Thread.Sleep(500)    ' provide time for form to draw itself
+                    My.Computer.Network.DownloadFile(url, filename2)
+                    frm.Close()
+
+                    ' update filename to point to downloaded installer
+                    filename = filename2
+                End If
+
+            Catch
+                ' downloading failed....
+                If MsgBox("There was an error downloading the newer version, would you like to continue " & _
+                          "by installing the enclosed (outdated) xPL Diagnostics?", _
+                          MsgBoxStyle.OkCancel Or MsgBoxStyle.Exclamation Or MsgBoxStyle.DefaultButton2, _
+                          "Download error") = MsgBoxResult.Cancel Then
+                    ' cancel installation
+                    Exit Sub
+                Else
+                    ' use embedded installer anyway
+                    download = False
+                End If
+            End Try
+        End If
+
+        If Not download Then
+            ' save embedded installer to temp directory
+            Resources.SaveResourceToFile(My.Resources.xpldiag, filename)
+        End If
+
         proc.StartInfo.FileName = filename
         proc.Start()
         Me.WindowState = FormWindowState.Minimized
