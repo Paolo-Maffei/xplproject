@@ -103,6 +103,9 @@
     <None Include="Resources\xpllib.dll" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="license.txt">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <Content Include="Readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

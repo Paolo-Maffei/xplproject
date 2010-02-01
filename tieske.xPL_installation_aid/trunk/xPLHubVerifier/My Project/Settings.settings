@@ -1,7 +1,18 @@
 ﻿<?xml version='1.0' encoding='utf-8'?>
-<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" UseMySettingsClassName="true">
-  <Profiles>
-    <Profile Name="(Default)" />
-  </Profiles>
-  <Settings />
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="My" GeneratedClassName="MySettings" UseMySettingsClassName="true">
+  <Profiles />
+  <Settings>
+    <Setting Name="BundledHubVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">5.12</Value>
+    </Setting>
+    <Setting Name="BundledDiagVersion" Type="System.String" Scope="User">
+      <Value Profile="(Default)">1.2</Value>
+    </Setting>
+    <Setting Name="IdHub" Type="System.String" Scope="User">
+      <Value Profile="(Default)">mal-hub</Value>
+    </Setting>
+    <Setting Name="IdDiag" Type="System.String" Scope="User">
+      <Value Profile="(Default)">mal-diag</Value>
+    </Setting>
+  </Settings>
 </SettingsFile>
