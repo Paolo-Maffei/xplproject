@@ -44,9 +44,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="xpllib, Version=5.0.149.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="xpllib, Version=5.0.164.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\xpllib_5.0 Windows .Net\xpllib\bin\Release\xpllib.dll</HintPath>
+      <HintPath>..\..\..\..\xpllib_5 Windows .Net\branches\xml_plugin_support\xpllib\bin\Debug\xpllib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -64,6 +64,12 @@
       <DependentUpon>About.vb</DependentUpon>
     </Compile>
     <Compile Include="About.vb">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Download.Designer.vb">
+      <DependentUpon>Download.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Download.vb">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Firewall.vb" />
@@ -94,6 +100,9 @@
   <ItemGroup>
     <EmbeddedResource Include="About.resx">
       <DependentUpon>About.vb</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Download.resx">
+      <DependentUpon>Download.vb</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.vb</DependentUpon>
@@ -133,6 +142,7 @@
     </COMReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="Resources\license.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
