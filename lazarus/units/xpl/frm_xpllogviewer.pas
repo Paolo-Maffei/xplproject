@@ -29,14 +29,8 @@ begin Close; end;
 
 procedure TfrmLogViewer.FormShow(Sender: TObject);
 begin
-//  frmMain.xPLClient.EventLog.Flush;
-
-//  pos := frmMain.xPLClient.EventLog.Stream.Position ;
-//  frmMain.xPLClient.EventLog.Stream.Seek (0,soFromBeginning);
-
-//  Memo1.Lines.LoadFromStream(frmMain.xPLClient.EventLog.Stream);
-  Memo1.Lines.LoadFromFile(frmMain.xPLClient.LogFileName);
-//  frmMain.xPLClient.EventLog.Stream.Seek (pos,soFromBeginning);
+   Memo1.Clear;
+   Memo1.Lines.AddStrings(frmMain.xPLClient.LogList);
 end;
 
 initialization
