@@ -4,7 +4,44 @@ unit uxPLConst;
 
 interface
 
+type
+   tsVendor   = string[8];
+   tsDevice   = string[8];
+   tsInstance = string[16];
+
+   TxPLSchemaClasse = ( xpl_scHBeat,    xpl_scConfig,  xpl_scAudio,   xpl_scControl,
+                        xpl_scDateTime, xpl_scDb,      xpl_scDGuide,  xpl_scCID,
+                        xpl_scOSD,      xpl_scRemote,  xpl_scSendMsg, xpl_scSensor,
+                        xpl_scTTS,      xpl_scUps,     xpl_scWebCam,  xpl_scX10,
+                        xpl_scOther );
+
+   TxPLMessageType  = ( xpl_mtTrig,     xpl_mtStat,    xpl_mtCmnd,    xpl_mtAny,
+                        xpl_mtNone  );
+
+   TxPLConfigType   = ( xpl_ctConfig,   xpl_ctReconf,  xpl_ctOption);
+
 const
+   // Configuration modes ===================================================================================
+   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');  // Works with TxPLConfigType
+
+   // File extensions =======================================================================================
+   K_FEXT_LOG         = '.log';
+   K_FEXT_WAV         = '.wav';
+   K_FEXT_XML         = '.xml';
+
+   K_IP_LOCALHOST     = '127.0.0.1';
+   K_IP_DEFAULT_WEB_PORT = 8080;
+
+   // Adress elements =======================================================================================
+   K_REGEXPR_VENDOR   = '([0-9a-z]{1,8})';
+   K_REGEXPR_DEVICE   = K_REGEXPR_VENDOR;
+   K_REGEXPR_INSTANCE = '([0-9a-z/-]{1,16})';
+   K_REGEXPR_ADDRESS  = K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE + '\.' + K_REGEXPR_INSTANCE;
+   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;    //   /!\ alternative must be place after fixed part !!!
+   K_FMT_ADDRESS      = '%s-%s.%s';
+   K_FMT_FILTER       = '%s.%s.%s';
+   K_ADDR_ANY_TARGET  = '*';
+
    // Message type elements =================================================================================
    K_MSG_TYPE_TRIG = 'xpl-trig';
    K_MSG_TYPE_STAT = 'xpl-stat';
@@ -35,6 +72,12 @@ const
    K_HBEAT_ME_WEB_PORT = 'webport';
 
    // Common schemas ========================================================================================
+   K_REGEXPR_SCHEMA_ELEMENT = '([0-9a-z/-]{1,8})';
+   K_REGEXPR_SCHEMA = K_REGEXPR_SCHEMA_ELEMENT + '\.' + K_REGEXPR_SCHEMA_ELEMENT;
+   K_FMT_SCHEMA     = '%s.%s';
+   K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (  'hbeat','config','audio','control','datetime',
+                                                         'db','dguide','cid','osd','remote','sendmsg',
+                                                         'sensor','tts','ups','webcam','x10' );
    K_SCHEMA_HBEAT_APP      = 'hbeat.app';
    K_SCHEMA_HBEAT_REQUEST  = 'hbeat.request';
    K_SCHEMA_SENSOR_BASIC   = 'sensor.basic';
@@ -43,6 +86,8 @@ const
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
    K_SCHEMA_MEDIA_BASIC    = 'media.basic';
    K_SCHEMA_X10_BASIC      = 'x10.basic';
+   K_SCHEMA_CONFIG_CURRENT = 'config.current';
+   K_SCHEMA_CONFIG_LIST    = 'config.list';
 
    // Hub and listener constants ============================================================================
    XPL_BASE_DYNAMIC_PORT : Integer = 50000;           // First port used to try to open the listening port
@@ -54,17 +99,54 @@ const
    NOHUB_TIMEOUT         : Integer = 120;             // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
 
    // Messages to display ==================================================================================
-   K_MSG_HUB_FOUND       = 'xPL Network %s joined';
+   K_MSG_HUB_FOUND       = 'xPL Network %s found';
    K_MSG_CONFIGURED      = 'Configuration %s';
    K_MSG_APP_STARTED     = 'Application %s started';
    K_MSG_APP_STOPPED     = 'Application %s stopped';
    K_MSG_UDP_ERROR       = 'Unable to initialize incoming UDP server';
    K_MSG_IP_ERROR        = 'Socket unable to bind to IP Addresses';
-   K_MSG_BIND_OK         = 'Client binded on port %u for address %s';
+   K_MSG_BIND_OK         = 'Listener binded on port %u for address %s';
+   K_MSG_BIND_RELEASED   = 'Listener released binded ports';
+   K_MSG_CONFIG_LOADED   = 'Configuration loaded';
+   K_MSG_NETWORK_SETTINGS= 'xPL Network settings are not properly configured';
 
    // Web applications templates ===========================================================================
    K_WEB_TEMPLATE_BEGIN = '<!-- Result template>';
    K_WEB_TEMPLATE_END   = '<Result template-->';
+   K_WEB_RE_INCLUDE     = '<!--\s*\#\s*include\s+(file|virtual)\s*=\s*(["])([^"<>\|\~]+/)*([^"<>/\|\~]+)\2\s*-->';
+   K_WEB_RE_VARIABLE    = '{%(.*?)_(.*?)%}';
+
+   // Configuration items ==================================================================================
+   K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';               // Typically xpl_vendor-device.xml
+   K_CONF_NEWCONF        = 'newconf';
+   K_RE_NEWCONF          = '^' + K_REGEXPR_INSTANCE + '$';
+   K_DESC_NEWCONF        = 'Specifies the instance name of the device';
+   K_CONF_INTERVAL       = 'interval';
+   K_RE_INTERVAL         = '^[56789]{1}$';
+   K_DESC_INTERVAL       = 'Delay (in minutes), between heartbeats';
+   K_CONF_FILTER         = 'filter';
+   K_RE_FILTER           = '';
+   K_DESC_FILTER         = 'Filter applied to broadcast message before beeing handled by the instance';
+   K_CONF_GROUP          = 'group';
+   K_RE_GROUP            = '^xpl-group\.[a-z0-9]{1,16}$';
+   K_DESC_GROUP          = 'Identifies the groups the instance belongs to';
+   K_XPL_CFG_MAX_FILTERS = 16;
+   K_XPL_CFG_MAX_GROUPS  = 16;
+   MIN_HBEAT             = 5;
+   MAX_HBEAT             = 9;
+   K_XPL_DEFAULT_HBEAT   = 5;
+
+   // Global setting items =================================================================================
+   K_XPL_ROOT_KEY               = '\Software\xPL\';
+   K_XPL_APPS_KEY               = '\Software\xPL\apps\';
+   K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
+   K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
+   K_REGISTRY_BROADCAST         = 'BroadcastAddress';
+   K_REGISTRY_LISTENON          = 'ListenOnAddress';
+   K_REGISTRY_LISTENTO          = 'ListenToAddresses';
+
+
+
 
 implementation
 
