@@ -8,12 +8,13 @@ unit uxplmessage;
  0.91 : Added XMLWrite and read methods
  0.95 : Modified to XML read/write com²patible with xml files from other vendors
         Name and Description fields added
+ 0.96 : Usage of uxPLConst
  }
 {$mode objfpc}{$H+}
 
 interface
 
-uses classes,uxPLMsgHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM;
+uses classes,uxPLMsgHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM, uxPLConst;
 
 type
 
@@ -76,8 +77,7 @@ TxPLMessage = class(TComponent)
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessage, uxPLConst,
-     Controls, v_xplmsg_opendialog;
+Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessage, Controls, v_xplmsg_opendialog;
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
@@ -181,7 +181,7 @@ procedure TxPLMessage.Send;
 var Settings : TxPLSettings;
 begin
    if not Assigned(fSocket) then begin                           // The socket is created only
-      Settings := TxPLSettings.Create;
+      Settings := TxPLSettings.Create(self);
       fSocket   := TIdUDPClient.Create;                          // if needed to avoid waste space
       fSocket.BroadcastEnabled := True;                          // speed and time at runtime
       fSocket.Host := Settings.BroadCastAddress;
