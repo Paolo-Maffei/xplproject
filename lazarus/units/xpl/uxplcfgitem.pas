@@ -1,20 +1,19 @@
 unit uxplcfgitem;
 {==============================================================================
   UnitName      = uxplcfgitem
-  UnitVersion   = 0.9
+  UnitVersion   = 0.92
   UnitDesc      = xPL Configuration Element Management Object
   UnitCopyright = GPL by Clinique / xPL Project
- ==============================================================================}
+ ==============================================================================
+ 0.92 : Removal of format and descriptions from this unit, they shall be handled from PluginFile
+ 0.93 : Usage of uxPLConst
+}
 {$mode objfpc}{$H+}
 interface
 
-uses Classes;
+uses Classes, uxPLConst;
 
-Type TxPLConfigType = (xpl_ctConfig, xpl_ctReconf, xpl_ctOption);
-
-     { TxPLConfigItem }
-
-     TxPLConfigItem = class
+Type TxPLConfigItem = class
         private
            fKey         : string;
            fDescription : string;
@@ -30,7 +29,8 @@ Type TxPLConfigType = (xpl_ctConfig, xpl_ctReconf, xpl_ctOption);
            function GetValue   : string;
            function CheckValid(aValue : string) : boolean;
         public
-           constructor create(aKey,aValue : string; aCT : TxPLConfigType; aMax : integer; aDescription , aFormat : string);
+           constructor create(const aKey : string; const aValue : string; aCT : TxPLConfigType; const aMax : integer = 1);
+           constructor create(const aKey : string; const aValue : string; aCT : TxPLConfigType; aDescription , aFormat : string; const aMax : integer = 1 ); overload;
            destructor  destroy; override;
 
            procedure Clear;
@@ -50,35 +50,27 @@ Type TxPLConfigType = (xpl_ctConfig, xpl_ctReconf, xpl_ctOption);
            function AsInteger : integer;
         end;
 
-const K_REGEXPR_CFG_KEY   = '^([_a-z\d]{1,16})$';
-
 implementation { TxPLConfigItem ==================================================================}
 uses SysUtils, RegExpr;
 
-const K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');
-
 { ================================================================================================}
-constructor TxPLConfigItem.Create(aKey,aValue : string; aCT : TxPLConfigType; aMax : integer; aDescription , aFormat : string);
-var bConformKey : boolean;
+constructor TxPLConfigItem.Create(const aKey : string; const aValue : string; aCT : TxPLConfigType; const aMax : integer = 1{; aDescription , aFormat : string});
 begin
-     with TRegExpr.Create do begin
-          try
-             Expression := K_REGEXPR_CFG_KEY;
-             bConformKey := Exec(aKey);
-          finally
-             free;
-          end;
-     end;
-     if not bConformKey then Raise Exception.CreateFmt('Invalid configuration key format : ''%s''', [aKey]);
-
      fKey := aKey;
      fConfigType := aCT;
      fValues := TStringList.Create;
      fValues.Duplicates := dupIgnore;
-     fDescription := aDescription;
-     fFormat      := aFormat;
+     fDescription := '';
+     fFormat      := '';
      MaxValue := aMax;
      SetValue(aValue);
+end;
+
+constructor TxPLConfigItem.create(const aKey: string; const aValue: string; aCT: TxPLConfigType; aDescription, aFormat: string; const aMax: integer );
+begin
+     Create(aKey,aValue,aCT,aMax);
+     fDescription := aDescription;
+     fFormat      := aFormat;
 end;
 
 destructor TxPLConfigItem.destroy;
@@ -157,7 +149,7 @@ begin
            result := Exec(aValue);
         finally
            free;
-        end;
+   end;
 end;
 
 
