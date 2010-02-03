@@ -6,8 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, StdCtrls, Calendar, DbCtrls, EditBtn, jdcalendar,frm_xPLCustomEvent,
-  uControls;
+  ComCtrls, Buttons, StdCtrls, Calendar, DbCtrls, EditBtn, jdcalendar,frm_xPLCustomEvent;
 
 type
 

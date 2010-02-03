@@ -6,7 +6,6 @@ inherited frmxPLSingleEvent: TfrmxPLSingleEvent
   Caption = 'Edit Single Event'
   ClientHeight = 347
   ClientWidth = 448
-  OnPaint = nil
   OnShow = FormShow
   inherited ToolBar2: TToolBar
     Width = 448
