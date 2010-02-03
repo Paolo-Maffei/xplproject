@@ -22,7 +22,7 @@ type
      TBodyMessageGrid = class(TMStringGrid)
      private
         fComboEdit : TComboBox;
-//        fPossibleKey : TStringList;
+        fPossibleKey : TStringList;
 //        fPossibleVal : TStringList;
         fReferencedBody : TxPLMsgBody;
 //        fModeMenu       : TMenuItem;
@@ -48,7 +48,7 @@ type
         function  GetValue(aRow : integer) : string;
         function  GetKeyValuePair(aRow : integer) : string;
 
-//        property  PossibleKeys : TStringList read FPossibleKey;
+        property  PossibleKeys : TStringList read FPossibleKey;
 //        property  PossibleVals : TStringList read FPossibleVal;
         property  IsValid      : boolean     read GetIsValid;
      end;
@@ -89,9 +89,9 @@ begin
   fComboEdit := TCombobox.Create(self);
   fComboEdit.OnEditingDone := @fComboEditEditingDone;
   fComboEdit.Visible := false;
-//  fPossibleKey := TStringList.Create;
-//  fPossibleKey.Sorted := true;
-//  fPossibleKey.Duplicates := dupIgnore;
+  fPossibleKey := TStringList.Create;
+  fPossibleKey.Sorted := true;
+  fPossibleKey.Duplicates := dupIgnore;
 //  fPossibleVal := TStringList.Create;
 //  fPossibleVal.Sorted := true;
 //  fPossibleVal.Duplicates := dupIgnore;
@@ -100,7 +100,7 @@ end;
 destructor TBodyMessageGrid.Destroy;
 begin
 //  fModeMenu.Free;
-//  fPossibleKey.Free;
+  fPossibleKey.Free;
 //  fPossibleVal.Free;
   fComboEdit.Free;
   inherited;
@@ -113,7 +113,7 @@ begin
 end;
 
 procedure TBodyMessageGrid.fComboEditEditingDone(Sender: TObject);
-var sCurrentKey, sCurrentVal : string;
+//var //sCurrentKey, sCurrentVal : string;
     //sConditionalField,sVisCondition : string;
     //field, condition : string;
     //bVisible : boolean;
@@ -125,8 +125,8 @@ begin
 
         if not assigned(fReferencedBody) then exit;
 
-  sCurrentKey := Cells[K_sg_KEY_COL,Row];
-  sCurrentVal := Cells[K_sg_VAL_COL,Row];
+  //sCurrentKey := Cells[K_sg_KEY_COL,Row];
+  //sCurrentVal := Cells[K_sg_VAL_COL,Row];
   // Search for other fields having a visibility condition upon current key value
 //  for i:=0 to fReferencedBody.ItemCount-1 do begin
 //      sVisCondition := fReferencedBody.VisCond[i];
@@ -273,14 +273,14 @@ begin
         end;}
      end;
      if (Col = K_sg_KEY_COL) then begin
-{        if Assigned(fPossibleKEY) then begin
+        if Assigned(fPossibleKEY) then begin
            if fPossibleKEY.Count>0 then begin
               fComboEdit.Items := fPossibleKEY;
               fComboEdit.BoundsRect := CellRect(Col,Row);
               Editor := fComboEdit;
               fComboEdit.Text := Cells[Col,Row];
            end;
-        end;}
+        end;
      end;
 end;
 
