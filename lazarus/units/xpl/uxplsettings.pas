@@ -19,7 +19,11 @@ interface
 
 uses  Registry,Classes;
 
-type TxPLSettings = class(TComponent)
+type
+
+{ TxPLSettings }
+
+TxPLSettings = class(TComponent)
      private
         fRegistry : TRegistry;
         fBroadCastAddress  : string;
@@ -53,6 +57,7 @@ type TxPLSettings = class(TComponent)
         function PluginDirectory  : string;   // In the root, directory where plugin are stored
         function LoggingDirectory : string;
         function ConfigDirectory  : string;   // Directory to store device configuration files
+        function IsValid : Boolean;
         procedure RegisterMe(const aAppName : string; const aAppVersion : string);
         function GetxPLAppList : TStringList;
         procedure GetxPLAppDetail(const aAppName : string; out aPath : string; out aVersion : string);
@@ -83,7 +88,10 @@ begin
      if not DirectoryExists(LoggingDirectory) then CreateDir(LoggingDirectory);  // 1.1.2 complement
      if not DirectoryExists(ConfigDirectory)  then CreateDir(ConfigDirectory);   // 0.95 complement
 
-     if aOwner is TxPLClient then RegisterMe(TxPLClient(aOwner).AppName,TxPLClient(aOwner).AppVersion);
+     if aOwner is TxPLClient then begin
+        RegisterMe(TxPLClient(aOwner).AppName,TxPLClient(aOwner).AppVersion);
+        if not IsValid then Raise Exception.Create(K_MSG_NETWORK_SETTINGS);
+     end;
 end;
 
 destructor TxPLSettings.destroy;
@@ -159,6 +167,13 @@ begin result := SharedConfigDir + 'Logging\'; end;
 
 function TxPLSettings.ConfigDirectory: string;
 begin result := SharedConfigDir + 'Config\'; end;
+
+function TxPLSettings.IsValid: Boolean;                                       // Just verifies that all values
+begin                                                                         // have been initialized
+     result := (length(BroadCastAddress) *
+                length(ListenOnAddress ) *
+                length(ListenToAddresses)) <>0;
+end;
 
 procedure TxPLSettings.RegisterMe(const aAppName : string; const aAppVersion : string);
 var aPath, aVersion : string;
