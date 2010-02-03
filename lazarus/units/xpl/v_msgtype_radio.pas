@@ -5,7 +5,7 @@ unit v_msgtype_radio;
 interface
 
 uses
-  Classes, SysUtils, ExtCtrls, uxPLMsgHeader;
+  Classes, SysUtils, ExtCtrls, uxPLMsgHeader, uxPLConst;
 
 type
   { TxPLMsgTypeRadio }
