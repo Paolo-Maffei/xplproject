@@ -1,4 +1,12 @@
 unit uxPLBaseClass;
+{==============================================================================
+  UnitName      = uxplbaseclass
+  UnitDesc      = a foundation class used to enable loading, storing of self parameters
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.98 : String constants removed to uxPLConst
+        Removed requirement of cStrings units
+ }
 
 {$mode objfpc}{$H+}
 
@@ -46,7 +54,7 @@ type TxPLBaseClass = class
     end;
 
 implementation { ==============================================================}
-uses SysUtils, cStrings;
+uses SysUtils, StrUtils;
 
 constructor TxPLBaseClass.Create;
 begin
@@ -83,7 +91,7 @@ var s : string;
     i : integer;
 begin
      s := fFormatString;
-     for i:= 0 to ItemCount-1 do s := StrReplace('%'+IntToStr(i),fItmValues[i], s);
+     for i:=0 to ItemCount-1 do s := AnsiReplaceStr(s,'%'+IntToStr(i),fItmValues[i]);
      result := s;
 end;
 
@@ -120,9 +128,9 @@ end;
 function TxPLBaseClass.IsValid: boolean;
 var i : integer;
 begin
-     result := true;
-     for i:=0 to fItmValues.Count-1 do
-         if (length(fItmValues[i])=0) then result := false;
+     result := true;                                            // Controling validness of an Item solely on its size
+//     for i:=0 to fItmValues.Count-1 do                        // isn't the good solution
+//         if (length(fItmValues[i])=0) then result := false;
 end;
 
 procedure TxPLBaseClass.ResetValues;
