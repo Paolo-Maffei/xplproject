@@ -4,7 +4,7 @@ unit uxPLFilter;
 
 interface
 
-uses SysUtils, uxPLConfig, uxPLSchema, uxPLMsgHeader, uxPLMessage;
+uses SysUtils, uxPLConfig, uxPLMsgHeader, uxPLConst, uxPLMessage;
 
 type
      TxPLFilters = class
