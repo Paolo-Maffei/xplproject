@@ -1,3 +1,3 @@
 <div id=footer>
-	<p>{%xPLHubStatus%} | {%xPLConfigStatus%} | Version {%xPLAppVersion%} by <a href=http://glh33.free.fr/>Clinique</a></p>
+	<p>{%xPLWeb_HubStatus%} | {%xPLWeb_ConfigStatus%} | Version {%xPLWeb_AppVersion%} by <a href=http://glh33.free.fr/>Clinique</a> | <a href=../log.html target=content>Log</a></p>
 </div>
