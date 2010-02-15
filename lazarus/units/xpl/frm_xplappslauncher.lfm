@@ -49,8 +49,9 @@ object frmAppLauncher: TfrmAppLauncher
   }
   OnCreate = FormCreate
   SessionProperties = 'Height;Left;Top;Width;lvApps.Columns'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object lvApps: TListView
+    Left = 0
     Height = 268
     Top = 26
     Width = 500
@@ -72,7 +73,9 @@ object frmAppLauncher: TfrmAppLauncher
     OnDblClick = lvAppsDblClick
   end
   object ToolBar3: TToolBar
+    Left = 0
     Height = 26
+    Top = 0
     Width = 500
     ButtonHeight = 24
     ButtonWidth = 80
@@ -86,6 +89,7 @@ object frmAppLauncher: TfrmAppLauncher
     TabOrder = 1
     object tbLaunch: TToolButton
       Left = 1
+      Top = 0
       Caption = 'Launch...'
       ImageIndex = 5
       OnClick = tbLaunchClick

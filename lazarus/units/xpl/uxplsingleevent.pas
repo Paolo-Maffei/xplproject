@@ -44,7 +44,7 @@ type
   end;
 
 implementation //===============================================================
-uses SysUtils, frm_xPLRecurEvent, frm_xPLSingleEvent, Controls, uxplmsgheader;
+uses SysUtils, frm_xPLRecurEvent, frm_xPLSingleEvent, Controls, uxplmsgheader, uxPLConst;
 
 constructor TxPLSingleEvent.Create(const aMsg : TxPLMessage);
 begin

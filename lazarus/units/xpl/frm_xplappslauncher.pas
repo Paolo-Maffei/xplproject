@@ -41,11 +41,11 @@ var sl : TStringList;
 begin
      sl := frmMain.xPLClient.Setting.GetxPLAppList;
      for i := 0 to sl.Count -1 do begin
-         item := lvApps.Items.Add;
+         {item := lvApps.Items.Add;
          frmMain.xPLClient.Setting.GetxPLAppDetail(sl[i],path,version);
          item.Caption := sl[i];
          item.SubItems.Add(version);
-         item.SubItems.Add(path);
+         item.SubItems.Add(path);}
      end;
 end;
 

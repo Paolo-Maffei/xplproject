@@ -56,7 +56,7 @@ procedure TxPLActionPanel.ActClick(aSender: TObject);
 var s : string;
 begin
      s := AnsiReplaceText(xPLMessage,'%action%',TButton(aSender).Caption);
-     Listener.SendRawxPL(s);
+     Listener.SendMessage(s);
 end;
 
 constructor TxPLActionPanel.create(aOwner: TComponent);

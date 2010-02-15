@@ -21,6 +21,8 @@ type
 
     TxPLMsgBody = class(TxPLBaseClass)
     private
+      //fItmNames: TStringList;
+      //fItmValues: TStringList;
        fSchema : txPLSchema;
        // *** Items declared to the helper class ***
        //fLabels : TStringList;
@@ -47,7 +49,7 @@ type
 
        procedure ResetValues;
        procedure Assign(const aBody : TxPLMsgBody); overload;
-       function  IsValid : boolean; override;
+       //function  IsValid : boolean; override;
 
        procedure AddKeyValuePair(const aKey : string; const aValue : string);
 
@@ -60,6 +62,7 @@ type
        // Standard described bodies ===========================================
        procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
        procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
+
      end;
 
      { TxPLMsgBodyHelper }
@@ -98,8 +101,8 @@ begin
      inherited;
 end;
 
-function TxPLMsgBody.IsValid: boolean;
-begin result := Schema.IsValid; end;
+//function TxPLMsgBody.IsValid: boolean;
+//begin result := Schema.IsValid; end;
 
 procedure TxPLMsgBody.ResetValues;
 begin
@@ -128,7 +131,8 @@ function TxPLMsgBody.GetRawxPL: string;
 var i : integer;
 begin
    result := '';
-   if Schema.IsValid then result := Schema.Tag;
+   //if Schema.IsValid then
+   result := Schema.Tag;
    result += #10'{'#10;
 //    result := Schema.Tag + #10'{'#10;
 

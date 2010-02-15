@@ -56,7 +56,7 @@ TxPLMessage = class(TComponent)
         procedure Send;
         procedure ResetValues;
 
-        constructor create(const aRawxPL : string = '');
+        constructor create(const aRawxPL : string = ''); overload;
         destructor  Destroy; override;
         procedure   Assign(const aMessage : TxPLMessage); overload;
         function    Edit : boolean;     dynamic;
