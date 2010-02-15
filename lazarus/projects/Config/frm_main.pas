@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, PairSplitter, Grids, StdCtrls, Buttons,
-  uxPLMessage, uxPLSettings, uxPLListener, ExtCtrls, uxPLPluginFile,
+  uxPLMessage,  uxPLListener, ExtCtrls, uxPLPluginFile,
   v_msgbody_stringgrid, v_xplmsg_opendialog;
 
 type
@@ -23,6 +23,7 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Load: TAction;
+    Memo1: TMemo;
     MenuItem10: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
@@ -72,9 +73,6 @@ type
     procedure SendExecute(Sender: TObject);
     procedure sgModulesSelection(Sender: TObject; aCol, aRow: Integer);
   private
-
-    fSettings   : TxPLSettings;
-    fPlugins    : TxPLPluginList;
     CfgListList : TList;
     CfgCurrList : TList;
     CfgPlugin   : TList;
@@ -92,14 +90,13 @@ var
   FrmMain: TFrmMain;
 
   Const
-     K_XPL_APP_VERSION : string = '0.9.4';
-     K_XPL_SENDER_VERSION_DATE   : string = '2010/01/08';
+     K_XPL_APP_VERSION : string = '0.9.5';
      K_XPL_APP_NAME = 'xPL Config';
      K_DEFAULT_VENDOR = 'clinique';
-    K_DEFAULT_DEVICE = 'config';
+     K_DEFAULT_DEVICE = 'config';
 
 implementation { TFrmLogger =====================================================}
-uses frm_About, uxplMsgHeader, uxplcfgitem, LCLType,
+uses frm_About, uxplMsgHeader, LCLType, uxPLConst,
      uxPLConfig, uxPLAddress, uxPLMsgBody;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -112,9 +109,6 @@ begin
   xPLClient := TxPLListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_NAME,K_XPL_APP_VERSION);
   xPLClient.OnxPLReceived  := @OnMessageReceived;
   xPLClient.OnxPLJoinedNet := @OnJoined;
-
-  fSettings := TxPLSettings.Create;
-  fPlugins  := TxPLPluginList.Create; //(fSettings);
 
   CfgListList := TList.Create;
   CfgCurrList := TList.Create;
@@ -130,8 +124,6 @@ end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
 begin
-  fSettings.destroy;
-  fPlugins.destroy;
   xPLClient.destroy;
   CfgListList.Destroy;
   CfgCurrList.Destroy;
@@ -180,30 +172,39 @@ end;
 
 procedure TFrmMain.SendConfigResponse;
 var i : integer;
-    moduletag,s,key,value : string;
+    moduletag,newtag,s,key,value : string;
 begin
      s := '';
      moduletag := sgModules.Cells[0,iSelectedModule+1];
+     newtag    := moduletag;
      for i := 1 to HBDetail.Rowcount-1 do begin   // Browse all configuration items
            key := HBDetail.GetKey(i);
             s += HBDetail.GetKeyValuePair(i) + #10;
             if key='newconf' then begin             // Handle special case of module name
                value := HBDetail.GetValue(i);
                sgModules.Cells[3,iSelectedModule+1] := value;
-               sgModules.Cells[0,iSelectedModule+1] := TxPLAddress.ComposeAddress( sgModules.Cells[1,iSelectedModule+1],
+//               sgModules.Cells[0,iSelectedModule+1] := TxPLAddress.ComposeAddress( sgModules.Cells[1,iSelectedModule+1],
+//                                                                       sgModules.Cells[2,iSelectedModule+1],
+//                                                                       sgModules.Cells[3,iSelectedModule+1] );
+               newtag := TxPLAddress.ComposeAddress( sgModules.Cells[1,iSelectedModule+1],
                                                                        sgModules.Cells[2,iSelectedModule+1],
                                                                        sgModules.Cells[3,iSelectedModule+1] );
+                sgModules.Cells[0,iSelectedModule+1] := newtag;
             end;
      end;
      if length(s)>0 then
      xPLClient.SendMessage( xpl_mtCmnd, moduletag, 'config.response'#10'{'#10+ s + '}'#10);
-     xPLClient.SendMessage( xpl_mtCmnd, moduletag, 'config.current'#10'{'#10'command=request'#10'}'#10);
+     xPLClient.SendMessage( xpl_mtCmnd, newtag, 'config.current'#10'{'#10'command=request'#10'}'#10);
 end;
 
 
 
 procedure TFrmMain.RescanExecute(Sender: TObject);
 begin
+     CfgListList.Clear;
+     CfgCurrList.Clear;
+     CfgPlugIn.Clear;
+     sgModules.RowCount := 1;
     xPLClient.SendMessage(xpl_mtCmnd,'*','hbeat.request'#10'{'#10'command=request'#10'}'#10);
 end;
 
@@ -308,6 +309,7 @@ var aBody : TxPLMsgBody;
     aConfig : TxPLConfig;
     i, plugid, devid : integer;
     aPlugIn : txPLPluginFile;
+    aDevice : txPLDevice;
 begin
    i := sgModules.Cols[0].IndexOf(axPLMessage.Header.Source.Tag)-1;
    if i>=0 then begin                                               // This module is already known
@@ -338,22 +340,24 @@ begin
           CfgListList.Add(TxPLMsgBody.Create);
           CfgCurrList.Add(TxPLMsgBody.Create);
           xPLClient.SendMessage(xpl_mtCmnd,Source.Tag,'config.list'#10'{'#10'command=request'#10'}'#10);
-          xPLClient.SendMessage(xpl_mtCmnd,Source.Tag,'config.current'#10'{'#10'command=request'#10'}'#10);
+          xPLClient.SendMessage(xpl_mtCmnd,Source.Tag,'config.current'#10'{'#10'command=request'#10'}'#10); 
 
-          PlugId := fPlugins.Plugin.IndexOf(Source.Vendor);
+          PlugId := xPLClient.PluginList.Plugin.IndexOf(Source.Vendor);
           if PlugId=-1 then begin                                       // Have we got a plug-in file for this vendor
              sgModules.Cells[7,sgModules.RowCount-1] := 'NF';
              CfgPlugIn.Add(nil);
           end else begin                                                // We've got one, then now do we have a schema for this device ?
-              aPlugIn := TxPLPluginFile(fPlugIns.Plugin.Objects[plugid]);
-              DevId   := aPlugIn.DeviceList.IndexOf(Source.Device);
+              aPlugIn := TxPLPluginFile(xPLClient.PluginList.Plugin.Objects[plugid]);
+              DevId   := aPlugIn.Devices.IndexOf(Source.Device);
               if DevId = -1 then begin
                  sgModules.Cells[7,sgModules.RowCount-1] := 'NF';
                  CfgPlugIn.Add(nil);
               end else begin
                  sgModules.Cells[7,sgModules.RowCount-1] := 'Ok';
-                 aConfig := TxPLConfig.Create(self);
-                 aConfig.ReadFromXML( aPlugin.Device(Source.Device ));
+                 aConfig := TxPLConfig.Create(xPLClient);
+                 aDevice := aPlugin.Device(Source.Device);
+//                 aConfig.ReadFromXML( aPlugin.Device(Source.Device ));
+                 aConfig.ReadFromXML( aDevice.Node);
                  CfgPlugin.Add(aConfig);
               end;
           end;

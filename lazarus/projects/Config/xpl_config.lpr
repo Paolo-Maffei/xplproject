@@ -17,7 +17,7 @@ begin
   {$I xpl_config.lrs}
   Application.Initialize;
   Application.CreateForm(TFrmMain, FrmMain);
-  Application.CreateForm(TFrmAbout, FrmAbout);
+  Application.CreateForm(TFrmAbout,FrmAbout);
   Application.Run;
 end.
 
