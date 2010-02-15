@@ -21,23 +21,31 @@ type
    TxPLConfigType   = ( xpl_ctConfig,   xpl_ctReconf,  xpl_ctOption);
 
 const
-   // Configuration modes ===================================================================================
-   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');  // Works with TxPLConfigType
-
    // File extensions =======================================================================================
    K_FEXT_LOG         = '.log';
    K_FEXT_WAV         = '.wav';
    K_FEXT_XML         = '.xml';
+   K_FEXT_PHP         = '.php';
 
+   // Websites ==============================================================================================
+   K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';             // URL where to download the main plugin file
+   K_XPL_VENDOR_SEED_FILE     = 'plugins' + K_FEXT_XML;
+
+   // Configuration modes ===================================================================================
+   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');  // Works with TxPLConfigType
+
+   // IP related strings
    K_IP_LOCALHOST     = '127.0.0.1';
+   K_IP_BROADCAST     = '255.255.255.255';
    K_IP_DEFAULT_WEB_PORT = 8080;
 
    // Adress elements =======================================================================================
    K_REGEXPR_VENDOR   = '([0-9a-z]{1,8})';
    K_REGEXPR_DEVICE   = K_REGEXPR_VENDOR;
    K_REGEXPR_INSTANCE = '([0-9a-z/-]{1,16})';
-   K_REGEXPR_ADDRESS  = K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE + '\.' + K_REGEXPR_INSTANCE;
-   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;    //   /!\ alternative must be place after fixed part !!!
+   K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;         // Also used in vendor xml file
+   K_REGEXPR_ADDRESS  = K_REGEXPR_DEVICE_ID + '\.' + K_REGEXPR_INSTANCE;
+   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                       //   /!\ alternative must be place after fixed part !!!
    K_FMT_ADDRESS      = '%s-%s.%s';
    K_FMT_FILTER       = '%s.%s.%s';
    K_ADDR_ANY_TARGET  = '*';
@@ -138,14 +146,19 @@ const
 
    // Global setting items =================================================================================
    K_XPL_ROOT_KEY               = '\Software\xPL\';
-   K_XPL_APPS_KEY               = '\Software\xPL\apps\';
+   K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                                                // \software\xpl\vendor\device\
+   K_XPL_REG_VERSION_KEY        = 'version';
+   K_XPL_REG_PATH_KEY           = 'path';
+   //K_XPL_APPS_KEY               = K_XPL_ROOT_KEY + 'apps\';
    K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
    K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
    K_REGISTRY_BROADCAST         = 'BroadcastAddress';
    K_REGISTRY_LISTENON          = 'ListenOnAddress';
    K_REGISTRY_LISTENTO          = 'ListenToAddresses';
-
-
+   K_REGISTRY_ROOT_XPL_DIR      = 'RootxPLDirectory';
+   K_XPL_SETTINGS_SUBDIR_CONF   = 'Config';
+   K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
+   K_XPL_SETTINGS_SUBDIR_LOGS   = 'Logging';
 
 
 implementation

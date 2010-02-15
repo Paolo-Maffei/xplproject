@@ -8,6 +8,8 @@ unit uxPLListener;
  0.92 : Modification made to avoid handling of my own emitted messages
  0.93 : Modifications made for modif 0.92 for uxPLConfig
  0.94 : Use of uxPLConst
+        Removed bHubfound, redondant with JoinedxPLNetwork
+        Removed bConfigOnly, redondant with AwaitingConfiguration
 }
 
 {$mode objfpc}{$H+}
@@ -15,8 +17,8 @@ unit uxPLListener;
 interface
 
 uses Classes, SysUtils, uxPLAddress, IdUDPServer,IdSocketHandle,
-     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter,
-     uxPLMsgBody,  uxPLMsgHeader, uxPLClient;
+     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter, DOM,
+     uxPLMsgBody,  uxPLMsgHeader, uxPLClient, uxPLConst, uxPLPluginFile;
 
 type
       TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
@@ -31,36 +33,22 @@ type
       { TxPLListener }
 
       TxPLListener = class(TxPLClient)
-      protected
-        FOnxPLReceived      : TxPLReceivedEvent;
-        FOnxPLJoinedNet     : TxPLJoinedEvent;
-        FOnxPLHBeatPrepare  : TxPLHBeatPrepare;
-        FOnxPLConfigDone    : TxPLConfigDone;
-        FOnxPLSensorRequest : TxPLSensorRequest;
-        FOnxPLControlBasic  : TxPLSensorRequest;
-        FOnxPLTTSBasic      : TxPLTTSBasic;
-        FOnxPLHBeatApp      : TxPLHBeatApp;
-        FOnxPLMediaBasic    : TxPLMediaBasic;
-
-
       private
-        fConfig : TxPLConfig;
+        fConfig  : TxPLConfig;
         fAdresse : TxPLAddress;
         IncomingSocket : TIdUDPServer;
         HBTimer,HBReqTimer   : TTimer;                       // HBReqTimer is dedicated to hbeat requests
         fFilterSet : TxPLFilters;
         iNoHubTimerCount : integer;
-        bHubFound  : Boolean;
         bDisposing : Boolean;
 
-        bConfigOnly : Boolean;
-
         procedure InitSocket();
-        procedure HandleError(aError : string);
      public
-        PassMyOwnMessages : boolean;
+        PassMyOwnMessages     : Boolean;
+        JoinedxPLNetwork      : Boolean;                    // This should be read only by other objects
+        AwaitingConfiguration : Boolean;                    // This should be read only by other objects
 
-        constructor create(aOwner : TComponent; aVendor, aDevice, aAppName, aAppVersion : string);
+        constructor create(aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string);
         destructor destroy; override;
         procedure CallConfigDone; dynamic;
         procedure TimerElapsed(Sender : TObject);
@@ -70,19 +58,19 @@ type
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
 
         property Config              : TxPLConfig read fConfig;
-        property AwaitingConfiguration : Boolean read bConfigOnly write bConfigOnly;
         property Address             : TxPLAddress read fAdresse;
         property Disposing           : Boolean read bDisposing;
+        function Instance : tsInstance;
 
-        property OnxPLReceived      : TxPLReceivedEvent  read FOnxPLReceived      write FOnxPLReceived;
-        property OnxPLJoinedNet     : TxPLJoinedEvent    read FOnxPLJoinedNet     write FOnxPLJoinedNet;
-        property OnxPLCOnfigDone    : TxPLConfigDone     read FOnxPLConfigDone    write FOnxPLConfigDone;
-        property OnxPLHBeatPrepare  : TxPLHBeatPrepare   read FOnxPLHBeatPrepare  write FOnxPLHBeatPrepare;
-        property OnxPLSensorRequest : TxPLSensorRequest  read FOnxPLSensorRequest write FOnxPLSensorRequest;
-        property OnxPLControlBasic  : TxPLSensorRequest  read FOnxPLControlBasic  write FOnxPLControlBasic;
-        property OnxPLTTSBasic      : TxPLTTSBasic       read FOnxPLTTSBasic      write FOnxPLTTSBasic;
-        property OnxPLHBeatApp      : TxPLHBeatApp       read FOnxPLHBeatApp      write FOnxPLHBeatApp;
-        property OnxPLMediaBasic    : TxPLMediaBasic     read FOnxPLMediaBasic    write FOnxPLMediaBasic;
+        OnxPLReceived      : TxPLReceivedEvent;
+        OnxPLJoinedNet     : TxPLJoinedEvent  ;
+        OnxPLCOnfigDone    : TxPLConfigDone   ;
+        OnxPLHBeatPrepare  : TxPLHBeatPrepare ;
+        OnxPLSensorRequest : TxPLSensorRequest;
+        OnxPLControlBasic  : TxPLSensorRequest;
+        OnxPLTTSBasic      : TxPLTTSBasic     ;
+        OnxPLHBeatApp      : TxPLHBeatApp     ;
+        OnxPLMediaBasic    : TxPLMediaBasic   ;
 
         procedure DoxPLJoinedNet(aJoined    : boolean);
         function DoSensorRequest(aMessage : TxPLMessage) : boolean;
@@ -94,150 +82,132 @@ type
         function  CheckOrigin(aRemoteIP : string) : boolean;
         procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aRawBody : string);
-        procedure SendRawxPL(const aRawXPL : string);
+        procedure SendMessage(const aRawXPL : string); overload;
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
 
-        property JoinedxPLNetwork : boolean read bHubFound;
+        //function VendorFile : TXMLDocument;
 
         procedure Listen;
         procedure Dispose;
      end;
 
 implementation { ==============================================================}
-uses IdStack,uxplcfgitem, cRandom, StrUtils, uxPLSchema, uIPutils, Interfaces, uxPLConst;
+uses IdStack, cRandom, StrUtils, uIPutils, Interfaces;
 
 { TxPLListener ================================================================}
-
-
-constructor TxPLListener.create(aOwner : TComponent; aVendor, aDevice, aAppName, aAppVersion : string);
+constructor TxPLListener.create(aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string);
 begin
-   inherited Create(aOwner, aAppName, aAppVersion);
+   inherited Create(aOwner, aVendor, aDevice, aAppVersion);
 
    PassMyOwnMessages := false;
 
-   fAdresse := TxPLAddress.Create(aVendor,aDevice);
-      fAdresse.Instance := TxPLAddress.RandomInstance ;
-
-   fConfig:= TxPLConfig.Create(self);
-
+   fAdresse   := TxPLAddress.Create(aVendor,aDevice, TxPLAddress.RandomInstance);
+   fConfig    := TxPLConfig.Create(self);
    fFilterSet := TxPLFilters.Create(fConfig);
 
-   HBTimer := TTimer.Create(self);
-
+   HBTimer    := TTimer.Create(self);
+      HBTimer.Interval    := NOHUB_HBEAT * 1000;
+      HBTimer.OnTimer     := @TimerElapsed;
    HBReqTimer := TTimer.Create(self);
       HBReqTimer.OnTimer  := @TimerElapsed;
 
+   JoinedxPLNetwork := False;
+   bDisposing := False;
+   iNoHubTimerCount := 0;
+end;
+
+destructor TxPLListener.destroy;
+begin
+     if not bDisposing then Dispose;
+
+     fFilterSet.Destroy;
+     IncomingSocket.Destroy;
+     fConfig.Destroy;
+     HBReqTimer.Destroy;
+     HBTimer.Destroy;
+     fAdresse.Destroy;
+
+     inherited destroy;
+end;
+
+procedure TxPLListener.InitSocket();
+var i : integer;
+begin
+   if not Setting.IsValid then exit;
    try
      IncomingSocket:=TIdudpServer.create;
      IncomingSocket.Bindings.Clear;
      IncomingSocket.BufferSize := MAX_XPL_MSG_SIZE;
      IncomingSocket.OnUDPRead  := @UDPRead;
    except
-     HandleError(K_MSG_UDP_ERROR);
+     LogError(K_MSG_UDP_ERROR);
    end;
 
-   bHubFound := False;
-   bDisposing := False;
-   iNoHubTimerCount := 0;
+   i := gstack.LocalAddresses.Count-1;
+   while i>=0 do begin
+      if fSetting.ListenOnAll or (gStack.LocalAddresses[i] = fSetting.ListenOnAddress) then
+      with IncomingSocket.Bindings.Add do begin
+           ClientPortMin := XPL_BASE_DYNAMIC_PORT;
+           ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
+           Port          := 0;
+           IP            := gstack.LocalAddresses[i];
+      end;
+      dec(i);
+   end;
 
-end;
-
-destructor TxPLListener.destroy;
-begin
-     if not bDisposing then Dispose;
-     fFilterSet.Destroy;
-
-     IncomingSocket.Destroy;
-     fConfig.Destroy;
-     HBReqTimer.Destroy;
-
-     HBTimer.Destroy;
-     inherited destroy;
-end;
-
-procedure TxPLListener.InitSocket();
-var Binding : TIdSocketHandle;
-    i : integer;
-begin
-     i := gstack.LocalAddresses.Count-1;
-     while i>=0 do begin
-        //fSetting.ListenOnAll or (gStack.LocalAddresses[i] = fSetting.ListenOnAddress)
-        // If network settings are not prepared, then ListenOnAddress may be empty
-        if fSetting.ListenOnAll or (gStack.LocalAddresses[i] = fSetting.ListenOnAddress) then begin
-            Binding := IncomingSocket.Bindings.Add;
-            Binding.ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-            Binding.ClientPortMax := Binding.ClientPortMin + XPL_BASE_PORT_RANGE;
-            Binding.Port          := 0;
-            Binding.IP            := gstack.LocalAddresses[i];
-            LogInfo(Format(K_MSG_BIND_OK,[Binding.Port,Binding.IP]));
-        end;
-        dec(i);
-     end;
-
-     If IncomingSocket.Bindings.Count > 0 then begin                             // Lets be sure we found an address to bind to
-        IncomingSocket.Active:=true;
-        HBTimer.Interval := NOHUB_HBEAT * 1000;
-        HBTimer.OnTimer  := @TimerElapsed;
-        HBTimer.Enabled  := True;
-        TimerElapsed(self);
-     end else HandleError(K_MSG_IP_ERROR);
-
-end;
-
-procedure TxPLListener.HandleError(aError: string);
-begin
-   LogError(aError);
-   Raise Exception.Create(aError);
+   If IncomingSocket.Bindings.Count > 0 then begin                             // Lets be sure we found an address to bind to
+      IncomingSocket.Active:=true;
+      LogInfo(Format(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]));
+      HBTimer.Enabled  := True;
+      TimerElapsed(self);
+   end else LogError(K_MSG_IP_ERROR);
 end;
 
 procedure TxPLListener.CallConfigDone;
 begin
-     if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);
+   LogInfo(K_MSG_CONFIG_LOADED);
+   if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);
 end;
 
 procedure TxPLListener.Listen;
 begin                                                       
-  if bDisposing then bDisposing := false;
-  bConfigOnly := not fConfig.Load(fAdresse.Vendor + '-' + fAdresse.Device);
-  if not bConfigOnly then begin
-                          fAdresse.Instance := fConfig.Instance;
-                          CallConfigDone;
-                     end
-                     else fConfig.Instance  := fAdresse.Instance;
-  InitSocket;
+   bDisposing := false;
+   AwaitingConfiguration := not fConfig.Load;
+   if not AwaitingConfiguration then begin
+      fAdresse.Instance := fConfig.Instance;
+      CallConfigDone;
+   end;
+   InitSocket;
 end;
 
 procedure TxPLListener.Dispose;
 begin
    bDisposing := True;
-   if bHubFound then SendHeartBeatMessage;
-   if IncomingSocket.Active then IncomingSocket.Active := False;
+   if JoinedxPLNetwork then SendHeartBeatMessage;
+   if IncomingSocket.Active then begin
+      IncomingSocket.Active := False;
+      LogInfo(K_MSG_BIND_RELEASED);
+   end;
 end;
 
 procedure TxPLListener.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aRawBody : string);
-var MyMessage : TxPLMessage;
 begin
-   MyMessage := TxPLMessage.Create;
-   MyMessage.Source.Assign(fAdresse);
-
-   with MyMessage do begin
-          Body.ResetValues ;
+   with TxPLMessage.Create do begin
           MessageType := aMsgType;
-          Source.Assign(fAdresse);
           Target.Tag  := aDest;
           Body.RawxPL := aRawBody;
-          if IsValid then Send
-                     else LogError('Error sending message :' + RawXPL);
+          SendMessage(RawXPL);
+          Destroy;
    end;
-   MyMessage.Destroy;
 end;
 
-procedure TxPLListener.SendRawxPL(const aRawXPL : string);
+procedure TxPLListener.SendMessage(const aRawXPL : string);
 begin
    with TxPLMessage.Create do begin
         RawXPL := aRawXPL;
         Source.Assign(fAdresse);
-        Send;
+        if IsValid then Send
+                   else LogError('Error sending message :' + RawXPL);
         Destroy;
    end;
 end;
@@ -253,13 +223,18 @@ begin
   end;
 end;
 
+//function TxPLListener.VendorFile : TXMLDocument;
+//begin
+//     result := PluginList.VendorFile(Address.Vendor);                      // Identify my plugin vendor file
+//end;
+
 procedure TxPLListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
 begin
    aBody.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
-   aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, fAppName);
+   aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
    aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
 
-   if bConfigOnly then aBody.Schema.Classe := xpl_scConfig;                // Change Schema class in this case
+   if AwaitingConfiguration then aBody.Schema.Classe := xpl_scConfig;                // Change Schema class in this case
    if bDisposing  then aBody.Schema.TypeAsString   := 'end';               // Change Schema type in this case
 end;
 
@@ -271,7 +246,7 @@ begin
 
      for i:=0 to IncomingSocket.Bindings.Count-1 do begin
          FinalizeHBeatMsg(aBody,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
-         if Assigned(OnxPLHBeatPrepare) then OnxPLHBeatPrepare(aBody);
+         if Assigned(OnxPLHBeatPrepare) and (not AwaitingConfiguration) then OnxPLHBeatPrepare(aBody);
          SendMessage(xpl_mtStat,'*',aBody.RawxPL);
      end;
 
@@ -292,56 +267,54 @@ end;
 
 procedure TxPLListener.HandleConfigMessage(aMessage: TxPLMessage);
 var i,j : integer;
-    bConfigOk : boolean;
+
 begin
   if aMessage.Header.MessageType <> xpl_mtCmnd then exit;
 
   with TxPLMessage.Create do try
-     Header.MessageType := xpl_mtStat;
-     Header.Source.Assign(fAdresse);
-     Header.Target.IsGeneric := True;
+     MessageType := xpl_mtStat;
+     Source.Assign(fAdresse);
+     Target.IsGeneric := True;
      Body.ResetValues;
 
-     case AnsiIndexStr(aMessage.Body.Schema.TypeAsString, ['current', 'list', 'response']) of
-          // config.current message handling =========================================
-          0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin
-                 Body.Schema.Tag := aMessage.Body.Schema.Tag;
+     case AnsiIndexStr(aMessage.Schema.TypeAsString, ['current', 'list', 'response']) of
+          0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
+                 Schema.Tag := aMessage.Body.Schema.Tag;
                  for i := 0 to fConfig.Count-1 do
                      for j:= 0 to fConfig[i].ValueCount -1 do
                          Body.AddKeyValuePair(fConfig[i].Key,fConfig[i].Values[j]);
                  Send;
               end;
-          // config.list message handling ============================================
-          1 : begin
-                Body.Schema.Tag := aMessage.Body.Schema.Tag;
+          1 : begin                                                                                   // config.list message handling
+                Schema.Tag := aMessage.Body.Schema.Tag;
                 for i := 0 to fConfig.Count-1 do
                     Body.AddKeyValuePair( fConfig[i].ConfigTypeAsString,
                                           fConfig[i].Key + fConfig[i].MaxValueAsString);
                 Send ;
               end;
-          // config.response message handling ========================================
-          2 : begin
+          2 : begin                                                                                   // config.response message handling
                 fConfig.ResetValues;
-                bConfigOk := true;
                 for i:= 0 to aMessage.Body.ItemCount-1 do
-                    fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i]);   // Some configuration elements may need to be upper/lower sensitive
-                    {if not fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i])   // Some configuration elements may need to be upper/lower sensitive
-                       then begin
-                          self.LogError('Error setting value of config item "'+ aMessage.Body.Keys[i]+'" to "'+aMessage.Body.Values[i]+'"');
-                          bConfigOk := false;
-                       end;}
-                //if bConfigOk then begin
-                   fAdresse.Instance := fConfig.Instance;    // Instance name may have changed
-                   bConfigOnly := False;
-                   SendHeartBeatMessage;
-                   fConfig.Save(fAdresse.Vendor + '-' + fAdresse.Device);
-                   CallConfigDone;
-                //end;
+                    fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i]);  // Some configuration elements may need to be upper/lower sensitive
+                fAdresse.Instance := fConfig.Instance;                                                // Instance name may have changed
+                SendHeartBeatMessage;
+                fConfig.Save;
+                LogInfo('Client configuration renewed and saved');
+                CallConfigDone;
               end;
      end;
      finally destroy;
    end;
 end;
+
+//function TxPLListener.Vendor: tsVendor;
+//begin result := fAdresse.Vendor; end;
+
+//function TxPLListener.Device: tsDevice;
+//begin result := fAdresse.Device; end;
+
+function TxPLListener.Instance: tsInstance;
+begin result := fAdresse.Instance; end;
 
 procedure TxPLListener.HandleHBeatRequest;
 begin
@@ -352,7 +325,7 @@ end;
 function TxPLListener.CheckOrigin(aRemoteIP : string): boolean;
 begin
      result := True;
-     // These values may be empty if network setting are not initialized to be checked earlier
+
      if fSetting.ListenToAny then exit;
      if fSetting.ListenToLocal then
         result := (gStack.LocalAddresses.IndexOf(aRemoteIP) > 0)
@@ -374,9 +347,9 @@ begin
                  xpl_scConfig : HandleConfigMessage(aMessage);
             end;
 
-         if (fAdresse.Equals(Source) and (not bHubFound)) then DoxPLJoinedNet(true);
+         if (fAdresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
 
-         if (fFilterSet.MatchesFilters(aMessage) and not bConfigOnly ) and
+         if (fFilterSet.MatchesFilters(aMessage) and not AwaitingConfiguration ) and
             (PassMyOwnMessages or not fAdresse.Equals(Source))                                                     // 0.92 : to avoid handling of my self emitted messages
          then begin
             if not DoSensorRequest(aMessage) then                                                                  // process messages only once
@@ -394,12 +367,13 @@ end;
 
 procedure TxPLListener.DoxPLJoinedNet(aJoined: boolean);
 begin
+   LogInfo(Format(K_MSG_HUB_FOUND,[IfThen(aJoined,'','not')]));
    if aJoined <> true then exit; { TODO -oGLH : Le cas contraire (perte de hub) devrait etre géré ultérieurement}
 
-   bHubFound := aJoined;
+   JoinedxPLNetwork := true;
    iNoHubTimerCount := 0;
    HBTimer.Interval := fConfig.HBInterval * 60000;
-   if Assigned(FOnxPLJoinedNet) then OnxPLJoinedNet(true);
+   if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet(true);
 end;
 
 {------------------------------------------------------------------------

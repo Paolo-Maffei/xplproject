@@ -82,7 +82,7 @@ type
 
 
 implementation //===============================================================
-uses frm_xplTimer, Controls, uxPLMsgHeader, DateUtils, StrUtils;
+uses frm_xplTimer, Controls, uxPLMsgHeader, DateUtils, StrUtils, uxPLConst;
 
 {==============================================================================}
 function DateTimeDiff(Start, Stop : TDateTime) : int64;

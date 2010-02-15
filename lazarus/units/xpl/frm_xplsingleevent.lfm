@@ -20,10 +20,8 @@ inherited frmxPLSingleEvent: TfrmxPLSingleEvent
     Height = 322
     Width = 448
     inherited tsStandardProp: TTabSheet
-      ClientHeight = 296
+      ClientHeight = 294
       ClientWidth = 440
-      inherited Label3: TLabel
-      end
       object Label4: TLabel[1]
         Left = 13
         Height = 16
@@ -42,20 +40,14 @@ inherited frmxPLSingleEvent: TfrmxPLSingleEvent
         Left = 124
         Height = 160
         Top = 121
-        Width = 225
+        Width = 247
         DateTime = 40151
         DisplaySettings = [dsShowHeadings, dsShowDayNames, dsShowWeekNumbers, dsStartMonday]
       end
     end
     inherited tsAdvancedProp: TTabSheet
-      ClientHeight = 296
+      ClientHeight = 294
       ClientWidth = 440
-      inherited Label5: TLabel
-      end
-      inherited mmoDescription: TMemo
-      end
-      inherited CheckBox1: TCheckBox
-      end
       inherited Edit1: TEdit
         Visible = False
       end

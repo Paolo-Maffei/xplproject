@@ -7,9 +7,9 @@
       <Version Value="8"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <IncludeFiles Value="C:\lazarus\components\indy-10.2.0.3\fpc\;C:\Lazarus\components\indy-10.2.0.3\lazarus\lib\i386-win32\;C:\lazarus\components\indy-10.2.0.3\lazarus\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\regexpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
-        <UnitOutputDirectory Value="$(LazarusDir)\projects\output"/>
+        <IncludeFiles Value="$(LazarusDir)\components\indy-10.2.0.3\fpc\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\lib\i386-win32\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\regexpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\;$(LazarusDir)\components\indy-10.2.0.3\fpc\"/>
+        <UnitOutputDirectory Value="C:\LazOut"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
@@ -49,25 +49,32 @@
       </Item5>
       <Item6>
         <Filename Value="..\general\MStringGrid.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="MStringGrid"/>
       </Item6>
       <Item7>
         <Filename Value="..\general\medit.pas"/>
+        <HasRegisterProc Value="True"/>
         <UnitName Value="MEdit"/>
       </Item7>
       <Item8>
         <Filename Value="..\general\mchecklistbox.pas"/>
+        <HasRegisterProc Value="True"/>
         <UnitName Value="MCheckListBox"/>
       </Item8>
       <Item9>
         <Filename Value="..\general\mcombobox.pas"/>
+        <HasRegisterProc Value="True"/>
         <UnitName Value="MComboBox"/>
       </Item9>
       <Item10>
         <Filename Value="ucontrols.pas"/>
+        <HasRegisterProc Value="True"/>
         <UnitName Value="uControls"/>
       </Item10>
       <Item11>
         <Filename Value="..\general\TreeListView.pas"/>
+        <UnitName Value="TreeListView"/>
       </Item11>
     </Files>
     <Type Value="RunAndDesignTime"/>

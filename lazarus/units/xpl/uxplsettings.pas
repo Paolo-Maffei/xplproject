@@ -12,6 +12,9 @@ unit uxplsettings;
  0.95 : added configuration store directory
  0.96 : usage of uxPLConst
         Added self registering of the app if owner is xPLClient
+ 0.97 : Application creates a registry key "HKLM\Software\xPL\[vendorid]\[deviceid]" and a
+        string value "Version" within that key. Because the software is non-device, you'll have
+        to come up with a 'virtual' unique device ID.
  }
 {$mode objfpc}{$H+}
 
@@ -26,13 +29,15 @@ type
 TxPLSettings = class(TComponent)
      private
         fRegistry : TRegistry;
-        fBroadCastAddress  : string;
-        fListenOnAddress   : string;
+        fRootxPLDir,
+        fBroadCastAddress,
+        fListenOnAddress ,
         fListenToAddresses : string;
 
-        function GetListenOnAll     : boolean;
-        function GetListenToAny     : boolean;
-        function GetListenToLocal   : boolean;
+        function  GetListenOnAll     : boolean;
+        function  GetListenToAny     : boolean;
+        function  GetListenToLocal   : boolean;
+
         procedure SetBroadCastAddress (const AValue: string);
         procedure SetListenOnAddress  (const AValue: string);
         procedure SetListenToAddresses(const AValue: string);
@@ -41,9 +46,12 @@ TxPLSettings = class(TComponent)
         procedure SetListenToAny      (const bValue : boolean);
 
         function  ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
+        procedure SetRootxPLDir(const AValue: string);
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
+
+        function  ComposeCorrectPath(const aPath : string; const uSub : string) : string;
      public
-        constructor create(aOwner : TComponent);
+        constructor create(aOwner : TComponent); override;
         destructor  destroy; override;
 
         property ListenToAny   : boolean read GetListenToAny   write SetListenToAny;
@@ -53,23 +61,24 @@ TxPLSettings = class(TComponent)
         property ListenOnAddress   : string read fListenOnAddress   write SetListenOnAddress;
         property ListenToAddresses : string read fListenToAddresses write SetListenToAddresses;
 
-        function SharedConfigDir  : string;   // Root of common to all xPL application setting directory
-        function PluginDirectory  : string;   // In the root, directory where plugin are stored
-        function LoggingDirectory : string;
-        function ConfigDirectory  : string;   // Directory to store device configuration files
-        function IsValid : Boolean;
-        procedure RegisterMe(const aAppName : string; const aAppVersion : string);
+        property SharedConfigDir   : string read fRootxPLDir write SetRootxPLDir;
+        //function SharedConfigDir  : string;                                             // Root of common to all xPL application setting directory
+        function PluginDirectory  : string;                                             // In the root, directory where plugin are stored
+        function LoggingDirectory : string;                                             // In the root, where logs are stored
+        function ConfigDirectory  : string;                                             // Directory to store device configuration files
+        function IsValid          : Boolean;
+        procedure RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
         function GetxPLAppList : TStringList;
-        procedure GetxPLAppDetail(const aAppName : string; out aPath : string; out aVersion : string);
+        procedure GetxPLAppDetail(const aVendor : string; const aDevice : string; out aPath : string; out aVersion : string);
      end;
 
 implementation { ======================================================================}
-uses SysUtils, StrUtils, uxPLConst, uxPLClient;
+uses SysUtils, StrUtils, uxPLConst, uxPLClient, cFileUtils;
 
-function OnGetAppName : string;                   // This is used to fake the system when
-begin                                             // requesting common xPL applications shared
-  result := 'xPL';                                // directory - works in conjunction with
-end;                                              // OnGetApplicationName
+function OnGetAppName : string;                                                         // This is used to fake the system when
+begin                                                                                   // requesting common xPL applications shared
+  result := 'xPL';                                                                      // directory - works in conjunction with
+end;                                                                                    // OnGetApplicationName
 { TxPLSettings ========================================================================}
 constructor TxPLSettings.create(aOwner : TComponent);
 begin
@@ -82,14 +91,15 @@ begin
      fBroadCastAddress := ReadKeyString(K_REGISTRY_BROADCAST);
      fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON);
      fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO);
+     fRootxPLDir       := ReadKeyString(K_REGISTRY_ROOT_XPL_DIR,GetAppConfigDir(true));
 
-     if not DirectoryExists(SharedConfigDir)  then CreateDir(SharedConfigDir);   // 1.1.1 Correction
-     if not DirectoryExists(PluginDirectory)  then CreateDir(PluginDirectory);   // 1.1.1 Correction
-     if not DirectoryExists(LoggingDirectory) then CreateDir(LoggingDirectory);  // 1.1.2 complement
-     if not DirectoryExists(ConfigDirectory)  then CreateDir(ConfigDirectory);   // 0.95 complement
+     if not DirectoryExists(SharedConfigDir ) then CreateDir(SharedConfigDir );         // 1.1.1 Correction
+     if not DirectoryExists(PluginDirectory ) then CreateDir(PluginDirectory );         // 1.1.1 Correction
+     if not DirectoryExists(LoggingDirectory) then CreateDir(LoggingDirectory);         // 1.1.2 complement
+     if not DirectoryExists(ConfigDirectory ) then CreateDir(ConfigDirectory );         // 0.95 complement
 
      if aOwner is TxPLClient then begin
-        RegisterMe(TxPLClient(aOwner).AppName,TxPLClient(aOwner).AppVersion);
+        RegisterMe(TxPLClient(aOwner).Vendor,TxPLClient(aOwner).Device,TxPLClient(aOwner).AppVersion);
         if not IsValid then Raise Exception.Create(K_MSG_NETWORK_SETTINGS);
      end;
 end;
@@ -102,7 +112,7 @@ begin
 end;
 
 function TxPLSettings.GetListenToAny : boolean;
-begin result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_ANY) end;
+begin result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_ANY)   end;
 
 function TxPLSettings.GetListenToLocal : boolean;
 begin result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_LOCAL) end;
@@ -112,6 +122,12 @@ begin
    fRegistry.OpenKey(K_XPL_ROOT_KEY,True);
    result := fRegistry.ReadString(aKeyName);
    if result = '' then result := aDefault;
+end;
+
+procedure TxPLSettings.SetRootxPLDir(const AValue: string);
+begin
+   fRootxPLDir := ComposeCorrectPath(aValue,'');
+   WriteKeyString(K_REGISTRY_ROOT_XPL_DIR,aValue);
 end;
 
 procedure TxPLSettings.WriteKeyString(const aKeyName : string; const aValue : string);
@@ -153,20 +169,22 @@ begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL); end;
 procedure TxPLSettings.SetListenToAny(const bValue : boolean);
 begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ; end;
 
-function TxPLSettings.SharedConfigDir : string;
+function TxPLSettings.ComposeCorrectPath(const aPath: string; const uSub: string ): string;
 begin
-   result := GetAppConfigDir(true);
-   if result[length(result)]<>'\' then result += '\';                         // 1.1.1 bug correction
+     result := aPath;
+     PathEnsureSuffix(result);
+     result += uSub;
+     PathEnsureSuffix(result);
 end;
 
 function TxPLSettings.PluginDirectory: string;
-begin result := SharedConfigDir + 'Plugins\'; end;
+begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_PLUG); end;
 
 function TxPLSettings.LoggingDirectory: string;
-begin result := SharedConfigDir + 'Logging\'; end;
+begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_LOGS); end;
 
 function TxPLSettings.ConfigDirectory: string;
-begin result := SharedConfigDir + 'Config\'; end;
+begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_CONF); end;
 
 function TxPLSettings.IsValid: Boolean;                                       // Just verifies that all values
 begin                                                                         // have been initialized
@@ -175,29 +193,29 @@ begin                                                                         //
                 length(ListenToAddresses)) <>0;
 end;
 
-procedure TxPLSettings.RegisterMe(const aAppName : string; const aAppVersion : string);
+procedure TxPLSettings.RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
 var aPath, aVersion : string;
 begin
-   GetxPLAppDetail(aAppName,aPath,aVersion);
+   GetxPLAppDetail(aVendor, aDevice,aPath,aVersion);
    if aVersion < aAppVersion then begin                                       // Empty or older version information
-      fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName,True);
-      fRegistry.WriteString('version',aAppVersion);
-      fRegistry.WriteString('path',ParamStr(0))
+      fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);
+      fRegistry.WriteString(K_XPL_REG_VERSION_KEY,aAppVersion);
+      fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0))
    end;
 end;
 
 function TxPLSettings.GetxPLAppList : TStringList;
 begin
    result := TStringList.Create;
-   fRegistry.OpenKey(K_XPL_APPS_KEY ,True);
+   fRegistry.OpenKey(K_XPL_ROOT_KEY ,True);
    fRegistry.GetKeyNames(result);
 end;
 
-procedure TxPLSettings.GetxPLAppDetail(const aAppName: string; out   aPath: string; out aVersion: string);
+procedure TxPLSettings.GetxPLAppDetail(const aVendor : string; const aDevice : string; out   aPath: string; out aVersion: string);
 begin
-   fRegistry.OpenKey(K_XPL_APPS_KEY + aAppName ,True);                        // At the time, you can't read this
-   aVersion := fRegistry.ReadString('version');                               // if you don't have admin rights !
-   aPath := fRegistry.ReadString('path');
+   fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);       // At the time, you can't read this
+   aVersion := fRegistry.ReadString(K_XPL_REG_VERSION_KEY);                               // if you don't have admin rights !
+   aPath := fRegistry.ReadString(K_XPL_REG_PATH_KEY);
 end;
 
 end.

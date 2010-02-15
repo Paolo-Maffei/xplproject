@@ -1,11 +1,23 @@
 unit uxPLConfig;
+{==============================================================================
+  UnitName      = uxPLConfig
+  UnitVersion   = 0.92
+  UnitDesc      = xPL Configuration elements manipulation unit
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.91 : Initial full version of this file
+ 0.92 : Removal of format and descriptions from this unit, they shall be handled from PluginFile
+        ==> we make the assumption that provided values have by checked through Regexpr by the configurator tool
+ 0.93 : Declaration of configuration items is now based on the content of the vendor.xml file
+        The AddItem is now moved as private, shouldn't be called by
+        Configuration files are now stored in the config directory hold by xplsettings.
+ }
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Classes, SysUtils, uxPLCfgItem,  XmlCfg, DOM;
-Const K_XPL_DEFAULT_HBEAT = 5;
+uses Classes, SysUtils, uxPLConst,  uxPLCfgItem, XmlCfg, DOM;
 
 type
 
@@ -27,15 +39,17 @@ TxPLConfig = class(TComponent)
         constructor create(aOwner : TComponent); override;
         destructor  destroy; override;
 
-        procedure AddItem(aItmName, aDefaultVal : string; aConfigType : TxPLConfigType; aMax : integer; aDesc, aFormat : string);
         procedure AddValue(aItmName, aValue : string);
-        function SetItem(const aItmName : string; const aValue : string) : boolean;
+        procedure SetItem(const aItmName : string; const aValue : string); // : boolean;
+        procedure AddItem(const aItmName : string; aConfigType : TxPLConfigType; const aDefaultVal : string = ''; const aMax : integer = 1{; aDesc, aFormat : string});
+        procedure AddItem(const aItmName : string; aConfigType : TxPLConfigType; aDesc, aFormat : string; const aMax : integer = 1; const aDefaultVal : string = ''); overload;
+        procedure ResetValues;
+        procedure Save;
 
-        procedure Save(anIdentifier : string);
-        function Load(anIdentifier : string) : boolean;
+        function Load : boolean;
         function Count : integer;
         function ItemByName(const aName : string) : integer;
-       procedure ResetValues;
+
         property HBInterval : integer read GetInterval write SetInterval;
         property Instance : string  read GetInstance write SetInstance;
         property Item[Index : integer] : TxPLConfigItem read GetItem; default;
@@ -50,38 +64,42 @@ TxPLConfig = class(TComponent)
      end;
 
 implementation { =======================================================================}
-
-resourcestring
-      K_CONF_NEWCONF = 'newconf';
-      K_DESC_NEWCONF = 'Enter the name that will be used to identify this device on the xPL network';
-      K_FMT_NEWCONF  = '^[A-Za-z0-9]{1,16}$';
-      K_CONF_INTERVAL= 'interval';
-      K_DESC_INTERVAL= 'Specify the number of minutes between heartbeat messages. The value should be between 5 and 9.';
-      K_FMT_INTERVAL = '^[56789]{1}$';
-      K_CONF_FILTER  = 'filter';
-      K_DESC_FILTER  = '';
-      K_FMT_FILTER   = '';
-      K_CONF_GROUP   = 'group';
-      K_DESC_GROUP   = '';
-      K_FMT_GROUP    = '^xpl-group\.[a-z0-9]{1,16}$';
-
-const K_XPL_CFG_MAX_FILTERS = 16;
-      K_XPL_CFG_MAX_GROUPS  = 16;
-      MIN_HBEAT     : Integer = 5;
-      MAX_HBEAT     : Integer = 9;
-
+uses uxPLListener, uxPLClient, uxPLPluginFile;
 
 { TxPLConfig ===========================================================================}
 constructor TxPLConfig.create(aOwner : TComponent);
+var device    : TxPLDevice;
+    sVendor   : tsVendor;
+    sDevice   : tsDevice;
+    sInstance : tsInstance;
 begin
      inherited Create(aOwner);
+
+     sVendor   := TxPLListener(aOwner).Vendor;
+     sDevice   := TxPLListener(aOwner).Device;
+     sInstance := TxPLListener(aOwner).Instance;
+
      fxmlconfig := TXmlConfig.Create(self);
+     fXmlConfig.Filename:= TxPLListener(aOwner).Setting.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[sVendor,sDevice]);
+
      fConfigItems := TList.Create;
 
-     AddItem(K_CONF_NEWCONF ,''                      , xpl_ctReconf,1,K_DESC_NEWCONF,K_FMT_NEWCONF);
-     AddItem(K_CONF_INTERVAL,IntToStr(K_XPL_DEFAULT_HBEAT), xpl_ctReconf,1,K_DESC_INTERVAL,K_FMT_INTERVAL);
-     AddItem(K_CONF_FILTER  ,''                      , xpl_ctOption,K_XPL_CFG_MAX_FILTERS,K_DESC_FILTER,K_FMT_FILTER);
-     AddItem(K_CONF_GROUP   ,''                      , xpl_ctOption,K_XPL_CFG_MAX_GROUPS,K_DESC_GROUP,K_FMT_GROUP);
+     AddItem(K_CONF_NEWCONF , xpl_ctReconf,K_DESC_NEWCONF,K_RE_NEWCONF,1,sInstance);                       // Standard to all xPL apps configuration elements
+     AddItem(K_CONF_INTERVAL, xpl_ctReconf,K_DESC_INTERVAL,K_RE_INTERVAL,1,IntToStr(K_XPL_DEFAULT_HBEAT));
+     AddItem(K_CONF_FILTER  , xpl_ctOption,K_DESC_FILTER, K_RE_FILTER,K_XPL_CFG_MAX_FILTERS,'');
+     AddItem(K_CONF_GROUP   , xpl_ctOption,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
+
+     device := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
+     if not Assigned(device) then TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating')
+                             else device.Destroy;
+
+//     if assigned(TxPLListener(aOwner).VendorFile) then begin
+//        device := TxPLListener(aOwner).plugin.DeviceNode(sDevice);
+
+//        if assigned(device) then ReadFromXML(device)
+//                            else TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating')
+//     end else
+//         TxPLClient(aOwner).LogInfo('No plug-in file found for vendor - please update plugins');
 end;
 
 destructor TxPLConfig.destroy;                                    
@@ -99,26 +117,32 @@ end;
 
 procedure TxPLConfig.ReadFromXML(const aDeviceNode: TDOMNode);
 var Child : TDOMNode;
-    cfg_name, cfg_desc, cfg_format : string;
+    cfg_name, cfg_desc, cfg_frmt : string;
 begin
    Child := aDeviceNode.FirstChild;
    while Assigned(Child) do begin
          if Child.NodeName = 'configItem' then begin
             cfg_name   := TDOMElement(Child).GetAttribute('name');
             cfg_desc   := TDOMElement(Child).GetAttribute('description');
-            cfg_format := TDOMElement(Child).GetAttribute('format');
-            AddItem(cfg_name,'',xpl_ctOption,1,cfg_desc,cfg_format);
+            cfg_frmt   := TDOMElement(Child).GetAttribute('format');
+            AddItem(cfg_name,xpl_ctConfig,cfg_desc,cfg_frmt);
          end;
          Child := Child.NextSibling;
    end;
+   TxPLClient(Owner).LogInfo('Configuration elements loaded from vendor plugin file');
 end;
 
 function TxPLConfig.GetItem(Index : integer): TxPLConfigItem;
-begin Result := TxPLConfigItem(fConfigItems[Index]); end;
+begin
+   if Index<>-1 then Result := TxPLConfigItem(fConfigItems[Index]);
+end;
 
 function TxPLConfig.GetItemByStr(s : string): TxPLConfigItem;
+var i : integer;
 begin
-     result := Item[ItemByName(s)];
+     i :=  ItemByName(s);
+     if i<>-1 then result := Item[ItemByName(s)]
+              else result := nil;
 end;
 
 procedure TxPLConfig.SetInstance(const AValue: string);
@@ -146,62 +170,56 @@ begin
          if Item[i].Key = K_CONF_NEWCONF then result := Item[i].Value;
 end;
 
-function TxPLConfig.SetItem(const aItmName : string; const aValue : string) : boolean;
+procedure TxPLConfig.SetItem(const aItmName : string; const aValue : string); // : boolean;
 var i : integer;
     s : string;
 begin
-     result := false;
+     //result := false;
      // Basic control on some special configuration items
      s := aValue;
      if aItmName = K_CONF_NEWCONF  then s := AnsiLowerCase(aValue);    // instance name can not be in upper case
      if aItmName = K_CONF_INTERVAL then s := IntToStr(StrToIntDef(aValue,MIN_HBEAT));
 
      for i := 0 to fConfigItems.Count -1 do
-         if Item[i].Key = aItmName then result := Item[i].SetValue(s);
+         if Item[i].Key = aItmName then Item[i].SetValue(s); //result := Item[i].SetValue(s);
 end;
 
-procedure TxPLConfig.Save(anIdentifier : string);
-var filename  : string;
-    i,j : integer;
+procedure TxPLConfig.Save;
+var i,j : integer;
 begin
-     filename := 'xpl_' + anIdentifier + '.xml';
-     filename := GetCurrentDir + '\' + filename;
-     fXmlConfig.Filename:= filename;
+   for i := 0 to Count-1 do
+      for j:= 0 to Item[i].MaxValue -1 do
+         fXmlConfig.SetValue(Item[i].Key+'/'+IntToStr(j),Item[i].Values[j]);
 
-     for i := 0 to Count-1 do begin
-        for j:= 0 to Item[i].MaxValue -1 do begin;
-            fXmlConfig.SetValue(Item[i].Key+'/'+IntToStr(j),Item[i].Values[j]);
-
-        end;
-     end;
-     fXmlConfig.Flush;
+   fXmlConfig.Flush;
 end;
 
-function TxPLConfig.Load(anIdentifier : string) : boolean;
-var filename  : string;
-    i,j : integer;
+function TxPLConfig.Load : boolean;
+var i,j : integer;
 begin
    result := false;
 
-   filename := 'xpl_' + anIdentifier + '.xml';
-   filename := GetCurrentDir + '\' + filename;
+   if not FileExists(fXmlConfig.Filename) then exit;
 
-   if FileExists(filename) then begin
-        fXmlConfig.Filename:= filename;
+   for i := 0 to Count-1 do
+       for j:= 0 to Item[i].MaxValue -1 do
+           Item[i].Values[j] := fXmlConfig.GetValue(Item[i].Key+'/'+IntToStr(j),'');
 
-        for i := 0 to Count-1 do begin
-           for j:= 0 to Item[i].MaxValue -1 do begin;
-            Item[i].Values[j] := fXmlConfig.GetValue(Item[i].Key+'/'+IntToStr(j),'');
-           end;
-        end;
-        result := true;
-    end;
+   result := true;
 end;
 
-procedure TxPLConfig.AddItem(aItmName, aDefaultVal: string;
-  aConfigType: TxPLConfigType; aMax: integer; aDesc, aFormat: string);
+procedure TxPLConfig.AddItem(const aItmName : string; aConfigType : TxPLConfigType; const aDefaultVal : string; const aMax : integer);
 begin
-     fConfigItems.Add(TxPLConfigItem.Create(aItmName,aDefaultVal,aConfigType,aMax,aDesc,aFormat));
+   if ItemName[aItmName] <> nil then                  // a configuration item may be added programmatically
+      fConfigItems.Delete(ItemByName(aItmName));      // it must then override any item initiated by the xml file
+   fConfigItems.Add(TxPLConfigItem.Create(aItmName,aDefaultVal,aConfigType,aMax));
+end;
+
+procedure TxPLConfig.AddItem(const aItmName: string; aConfigType: TxPLConfigType; aDesc, aFormat: string; const aMax : integer = 1; const aDefaultVal : string = '');
+begin
+   if ItemName[aItmName] <> nil then                  // a configuration item may be added programmatically
+      fConfigItems.Delete(ItemByName(aItmName));      // it must then override any item initiated by the xml file
+   fConfigItems.Add(TxPLConfigItem.Create(aItmName,aDefaultVal,aConfigType,aDesc,aFormat,aMax));
 end;
 
 procedure TxPLConfig.AddValue(aItmName, aValue : string);
@@ -213,7 +231,8 @@ end;
 
 function TxPLConfig.Count: integer;
 begin
-     result := fConfigItems.Count;
+   result := -1;
+   if Assigned(fConfigItems) then result := fConfigItems.Count;
 end;
 
 function TxPLConfig.ItemByName(const aName : string) : integer;
@@ -223,7 +242,6 @@ begin
      for i:=0 to fConfigItems.Count-1 do
          if Item[i].Key = aName then result := i;
 end;
-
 
 // Filter specific members =========================================================
 function TxPLConfig.FilterCount  : integer;
