@@ -93,19 +93,19 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, uxPLMsgHeader, cUtils, LCLType, clipbrd, DOM,
+uses frm_about, uxPLAddress, uxPLMsgHeader, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile,
      StrUtils, frm_xplAppsLauncher, uxPLConst;
 
 resourcestring //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '1.1';
-     K_XPL_APP_NAME = 'xPL Sender';
+     K_XPL_APP_VERSION_NUMBER = '1.2';
+     //K_XPL_APP_NAME = 'xPL Sender';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'sender';
 
 // FrmMain ===========================================================================================
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-   xPLClient := TxPLClient.Create(self,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER);
+   xPLClient := TxPLClient.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
 
    SetFileName('');
    OpenDialog.InitialDir := GetCurrentDir;
@@ -129,7 +129,7 @@ end;
 procedure TfrmMain.SetFileName(aName : string);
 begin
   filename := aName;
-  self.Caption := iif(length(filename)=0,K_XPL_APP_NAME,filename);
+  self.Caption := iif(length(filename)=0,xPLClient.AppName ,filename);
 end;
 
 procedure TfrmMain.ClearExecute(Sender: TObject);
@@ -241,7 +241,7 @@ end;
 procedure TFrmMain.PluginCommandExecute ( Sender: TObject );
 var aMenu : TMenuItem;
     command, device, vendor : string;
-    aPlugin : TxPLPluginFile;
+    aPlugin : TxPLVendorSeedFile;
     aDevice : TxPLDevice;
     plugid : integer;
     CommandNode : TDomNode;
@@ -251,10 +251,10 @@ begin
      command := aMenu.Caption;
      device  := aMenu.Parent.Caption;
      vendor  := aMenu.Parent.Parent.Caption;
-     plugid := xPLClient.PluginList.Plugin.IndexOf(vendor);
+     plugid := xPLClient.PluginList.Plugins.IndexOf(vendor);
      if plugid<>-1 then begin
-        aPlugIn := TxPLPluginFile(xPLClient.PluginList.Plugin.Objects[plugid]);
-        aDevice := aPlugIn.Device(device);
+        aPlugIn := TxPLVendorSeedFile(xPLClient.PluginList.Plugins.Objects[plugid]);
+        aDevice := aPlugIn.GetDevice(vendor,device);
 //        CommandNode := aPlugIn.Command(device,command);
         CommandNode := aDevice.Command(command);
         if CommandNode<>nil then begin
@@ -276,13 +276,13 @@ begin
 end;
 
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
-    aPlugin : TxPLPluginFile;
+    aPlugin : TxPLVendorSeedFile;
     aDevice : TxPLDevice;
     aListe, Commands : TStringList;
     cptPlugs,i,j : integer;
 begin
-     for cptPlugs:=0 to xPLClient.PluginList.Count-1 do begin
-         aPlugin := TxPLPluginFile(xPLClient.PluginList.Plugin.Objects[cptPlugs]);
+     for cptPlugs:=0 to xPLClient.PluginList.Plugins.Count-1 do begin
+         aPlugin := TxPLVendorSeedFile(xPLClient.PluginList.Plugins.Objects[cptPlugs]);
          aMenu := TMenuItem.Create(self);
          aMenu.Caption := aPlugin.VendorTag;
          MenuItem8.Insert(0,aMenu);
