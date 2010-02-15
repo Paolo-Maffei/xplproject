@@ -13,6 +13,7 @@ type
   { TfrmAppSettings }
 
   TfrmAppSettings = class(TForm)
+    ckAutoGetSetup: TCheckBox;
     ckIcons: TCheckBox;
     ckShowPreview: TCheckBox;
     Label1: TLabel;
@@ -35,14 +36,10 @@ var
 implementation
 uses frm_about;
 
-{ TfrmAppSettings }
-
 procedure TfrmAppSettings.tbOkClick(Sender: TObject);
 begin
   close;
 end;
-
-
 
 procedure TfrmAppSettings.UpDown1Click(Sender: TObject; Button: TUDBtnType);
 var CurrIndex, LastIndex: Integer;
