@@ -176,7 +176,7 @@ begin
    for i:=0 to VendorSeed.Plugins.Count-1 do begin
        item := lvPlugins.Items.Add;
        item.Caption := VendorSeed.Plugins[i];
-       item.SubItems.Add(VendorSeed.GetPluginValue(item.Caption,'description'));
+       item.SubItems.Add(VendorSeed.PlugInDescription(item.Caption));
        item.SubItems.Add('');
        item.Data := VendorSeed.Plugins.Objects[i];
    end;

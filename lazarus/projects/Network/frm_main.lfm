@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 41
+  Left = 43
   Height = 400
-  Top = 124
+  Top = 126
   Width = 632
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -2271,17 +2271,19 @@ object FrmMain: TFrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   SessionProperties = 'Left;Top;PageControl1.ActivePage'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object PageControl1: TPageControl
+    Left = 0
     Height = 357
+    Top = 0
     Width = 632
-    ActivePage = TabSheet2
+    ActivePage = TabSheet1
     Align = alClient
-    TabIndex = 1
+    TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Network Settings'
-      ClientHeight = 331
+      ClientHeight = 329
       ClientWidth = 624
       object Label4: TLabel
         Left = 8
@@ -2306,7 +2308,7 @@ object FrmMain: TFrmMain
       object rgListenTo: TRadioGroup
         Left = 28
         Height = 104
-        Top = 186
+        Top = 162
         Width = 415
         AutoFill = True
         Caption = 'Listen to messages originating from :'
@@ -2337,29 +2339,31 @@ object FrmMain: TFrmMain
       end
       object e_BroadCast: TComboBox
         Left = 268
-        Height = 21
+        Height = 23
         Top = 130
         Width = 168
-        ItemHeight = 13
+        ItemHeight = 15
         TabOrder = 1
       end
       object e_ListenOn: TComboBox
         Left = 268
-        Height = 21
+        Height = 23
         Top = 90
         Width = 168
-        ItemHeight = 13
+        ItemHeight = 15
         TabOrder = 2
       end
       object edtListenTo: TEdit
         Left = 268
         Height = 23
-        Top = 210
+        Top = 234
         Width = 168
         TabOrder = 3
       end
       object ToolBar1: TToolBar
+        Left = 0
         Height = 30
+        Top = 0
         Width = 624
         ButtonHeight = 28
         ButtonWidth = 30
@@ -2370,6 +2374,7 @@ object FrmMain: TFrmMain
         object SpeedButton1: TSpeedButton
           Left = 1
           Height = 28
+          Top = 0
           Width = 147
           Action = SaveSettings
           Color = clBtnFace
@@ -2415,10 +2420,12 @@ object FrmMain: TFrmMain
     end
     object TabSheet2: TTabSheet
       Caption = 'Vendors plug-ins'
-      ClientHeight = 331
+      ClientHeight = 329
       ClientWidth = 624
       object ToolBar2: TToolBar
+        Left = 0
         Height = 30
+        Top = 0
         Width = 624
         ButtonHeight = 28
         ButtonWidth = 30
@@ -2430,6 +2437,7 @@ object FrmMain: TFrmMain
         object SpeedButton2: TSpeedButton
           Left = 204
           Height = 28
+          Top = 0
           Width = 147
           Action = UpdateSeed
           Color = clBtnFace
@@ -2474,6 +2482,7 @@ object FrmMain: TFrmMain
         object SpeedButton3: TSpeedButton
           Left = 351
           Height = 28
+          Top = 0
           Width = 135
           Action = DownloadSelected
           Color = clBtnFace
@@ -2518,6 +2527,7 @@ object FrmMain: TFrmMain
         object Panel1: TPanel
           Left = 1
           Height = 28
+          Top = 0
           Width = 203
           Alignment = taLeftJustify
           BevelOuter = bvNone
@@ -2526,6 +2536,7 @@ object FrmMain: TFrmMain
         end
       end
       object lvPlugins: TListView
+        Left = 0
         Height = 277
         Top = 30
         Width = 624
@@ -2554,8 +2565,9 @@ object FrmMain: TFrmMain
         ViewStyle = vsReport
       end
       object Panel2: TPanel
+        Left = 0
         Height = 26
-        Top = 305
+        Top = 303
         Width = 624
         Align = alBottom
         Alignment = taLeftJustify
@@ -2565,21 +2577,23 @@ object FrmMain: TFrmMain
         TabOrder = 2
         object cbLocations: TComboBox
           Left = 156
-          Height = 21
+          Height = 23
           Top = 1
           Width = 467
           Align = alRight
-          ItemHeight = 13
+          ItemHeight = 15
           TabOrder = 0
         end
       end
     end
     object TabSheet4: TTabSheet
       Caption = 'Directories'
-      ClientHeight = 331
+      ClientHeight = 329
       ClientWidth = 624
       object sgDirectories: TStringGrid
-        Height = 331
+        Left = 0
+        Height = 329
+        Top = 0
         Width = 624
         Align = alClient
         ColCount = 2
@@ -2611,6 +2625,7 @@ object FrmMain: TFrmMain
     end
   end
   object StatusBar1: TStatusBar
+    Left = 0
     Height = 23
     Top = 357
     Width = 632
@@ -2753,53 +2768,44 @@ object FrmMain: TFrmMain
     left = 392
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       Hint = 'Quit the application'
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object SaveSettings: TAction
       Caption = '&Save Settings'
-      DisableIfNoHandler = True
       ImageIndex = 3
       OnExecute = SaveSettingsExecute
     end
     object UpdateSeed: TAction
       Caption = 'Update plugin list'
-      DisableIfNoHandler = True
       ImageIndex = 12
       OnExecute = UpdateSeedExecute
     end
     object DownloadSelected: TAction
       Caption = 'Download selected'
-      DisableIfNoHandler = True
       ImageIndex = 5
       OnExecute = DownloadSelectedExecute
     end
     object About: TAction
       Caption = 'About...'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
     object SelectAll: TAction
       Caption = 'Select All'
-      DisableIfNoHandler = True
       OnExecute = Select_Do
     end
     object UnselectAll: TAction
       Caption = 'Unselect All'
-      DisableIfNoHandler = True
       OnExecute = Select_Undo
     end
     object InvertSelection: TAction
       Caption = 'Invert selection'
-      DisableIfNoHandler = True
       OnExecute = Select_Invert
     end
     object InstalledApps: TAction
       Caption = 'Installed xPL apps'
-      DisableIfNoHandler = True
       ImageIndex = 17
       OnExecute = InstalledAppsExecute
     end

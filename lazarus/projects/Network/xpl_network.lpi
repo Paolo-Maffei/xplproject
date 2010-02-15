@@ -187,13 +187,13 @@
       </Unit19>
       <Unit20>
         <Filename Value="frm_main.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="FrmMain"/>
         <HasResources Value="True"/>
-        <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
-        <CursorPos X="12" Y="217"/>
-        <TopLine Value="207"/>
+        <CursorPos X="11" Y="177"/>
+        <TopLine Value="154"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="94"/>
         <Loaded Value="True"/>
@@ -711,9 +711,9 @@
       </Unit91>
       <Unit92>
         <Filename Value="..\..\units\xpl\frm_about.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
-        <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_about"/>
         <CursorPos X="59" Y="8"/>
@@ -722,9 +722,9 @@
       </Unit92>
       <Unit93>
         <Filename Value="..\..\units\xpl\frm_xplappslauncher.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAppLauncher"/>
         <HasResources Value="True"/>
-        <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplappslauncher"/>
         <CursorPos X="61" Y="4"/>
@@ -734,8 +734,8 @@
       <Unit94>
         <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
         <UnitName Value="uxPLVendorFile"/>
-        <CursorPos X="1" Y="40"/>
-        <TopLine Value="47"/>
+        <CursorPos X="6" Y="15"/>
+        <TopLine Value="17"/>
         <EditorIndex Value="1"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
@@ -765,7 +765,7 @@
         <Filename Value="..\..\units\xpl\uxplclient.pas"/>
         <UnitName Value="uxPLClient"/>
         <CursorPos X="1" Y="80"/>
-        <TopLine Value="43"/>
+        <TopLine Value="57"/>
         <EditorIndex Value="2"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
@@ -801,123 +801,127 @@
         <UsageCount Value="10"/>
       </Unit102>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="131" Column="14" TopLine="116"/>
+        <Caret Line="131" Column="15" TopLine="116"/>
       </Position1>
       <Position2>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="69" Column="27" TopLine="54"/>
+        <Caret Line="164" Column="32" TopLine="158"/>
       </Position2>
       <Position3>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="131" Column="15" TopLine="116"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position3>
       <Position4>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="164" Column="32" TopLine="158"/>
+        <Caret Line="69" Column="27" TopLine="54"/>
       </Position4>
       <Position5>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="9" Column="53" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="69" Column="27" TopLine="54"/>
+        <Caret Line="86" Column="77" TopLine="79"/>
       </Position6>
       <Position7>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="9" Column="53" TopLine="1"/>
+        <Caret Line="204" Column="18" TopLine="193"/>
       </Position7>
       <Position8>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="86" Column="77" TopLine="79"/>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="96" Column="26" TopLine="70"/>
       </Position8>
       <Position9>
         <Filename Value="frm_main.pas"/>
         <Caret Line="204" Column="18" TopLine="193"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="96" Column="26" TopLine="70"/>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="28" Column="20" TopLine="27"/>
       </Position10>
       <Position11>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="204" Column="18" TopLine="193"/>
+        <Caret Line="21" Column="20" TopLine="20"/>
       </Position11>
       <Position12>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="28" Column="20" TopLine="27"/>
+        <Caret Line="208" Column="46" TopLine="194"/>
       </Position12>
       <Position13>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="21" Column="20" TopLine="20"/>
-      </Position13>
-      <Position14>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="208" Column="46" TopLine="194"/>
-      </Position14>
-      <Position15>
         <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
         <Caret Line="96" Column="35" TopLine="70"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="18" Column="1" TopLine="14"/>
+      </Position14>
+      <Position15>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="221" Column="63" TopLine="212"/>
       </Position15>
       <Position16>
         <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="18" Column="1" TopLine="14"/>
+        <Caret Line="110" Column="1" TopLine="91"/>
       </Position16>
       <Position17>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="221" Column="63" TopLine="212"/>
+        <Caret Line="235" Column="35" TopLine="208"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="110" Column="1" TopLine="91"/>
-      </Position18>
-      <Position19>
-        <Filename Value="frm_main.pas"/>
-        <Caret Line="235" Column="35" TopLine="208"/>
-      </Position19>
-      <Position20>
         <Filename Value="frm_main.pas"/>
         <Caret Line="224" Column="2" TopLine="214"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="110" Column="1" TopLine="91"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
+        <Caret Line="111" Column="1" TopLine="91"/>
       </Position20>
       <Position21>
         <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="110" Column="1" TopLine="91"/>
+        <Caret Line="112" Column="1" TopLine="91"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="111" Column="1" TopLine="91"/>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="224" Column="36" TopLine="206"/>
       </Position22>
       <Position23>
-        <Filename Value="..\..\units\xpl\uxplvendorfile.pas"/>
-        <Caret Line="112" Column="1" TopLine="91"/>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="219" Column="65" TopLine="209"/>
       </Position23>
       <Position24>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="224" Column="36" TopLine="206"/>
+        <Caret Line="218" Column="1" TopLine="209"/>
       </Position24>
       <Position25>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="219" Column="65" TopLine="209"/>
+        <Caret Line="214" Column="7" TopLine="197"/>
       </Position25>
       <Position26>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="218" Column="1" TopLine="209"/>
+        <Caret Line="87" Column="26" TopLine="72"/>
       </Position26>
       <Position27>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="214" Column="7" TopLine="197"/>
+        <Caret Line="213" Column="59" TopLine="201"/>
       </Position27>
       <Position28>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="87" Column="26" TopLine="72"/>
+        <Caret Line="217" Column="12" TopLine="207"/>
       </Position28>
       <Position29>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="213" Column="59" TopLine="201"/>
+        <Caret Line="179" Column="34" TopLine="167"/>
       </Position29>
+      <Position30>
+        <Filename Value="frm_main.pas"/>
+        <Caret Line="79" Column="32" TopLine="67"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
