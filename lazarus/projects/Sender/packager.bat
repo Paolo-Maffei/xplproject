@@ -1,17 +1,17 @@
-..\strip xpl_sender.exe
-..\upx xpl_sender.exe
+..\strip c:\lazout\xpl_sender.exe
+..\upx c:\lazout\xpl_sender.exe
 md xpl_sender_win
-copy  xpl_sender.exe .\xpl_sender_win
+copy  c:\lazout\xpl_sender.exe .\xpl_sender_win
 copy *.xpl .\xpl_sender_win
 copy *.xml .\xpl_sender_win
 copy readme*.* .\xpl_sender_win
 
-md xpl_sender_src
-copy frm_*.pas .\xpl_sender_src
-copy frm_*.lfm .\xpl_sender_src
-copy *.lrs .\xpl_sender_src
-copy *.lpi .\xpl_sender_src
-copy *.lpr .\xpl_sender_src
-copy *.xml .\xpl_sender_src
-copy *.rc  .\xpl_sender_src
-copy readme*.* .\xpl_sender_src
+REM md xpl_sender_src
+REM copy frm_*.pas .\xpl_sender_src
+REM copy frm_*.lfm .\xpl_sender_src
+REM copy *.lrs .\xpl_sender_src
+REM copy *.lpi .\xpl_sender_src
+REM copy *.lpr .\xpl_sender_src
+REM copy *.xml .\xpl_sender_src
+REM copy *.rc  .\xpl_sender_src
+REM copy readme*.* .\xpl_sender_src
