@@ -93,8 +93,8 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, uxPLMsgHeader, uxPLSchema, cUtils, LCLType, clipbrd, DOM,
-     StrUtils, frm_xplAppsLauncher;
+uses frm_about, uxPLAddress, uxPLMsgHeader, cUtils, LCLType, clipbrd, DOM,
+     StrUtils, frm_xplAppsLauncher, uxPLConst;
 
 resourcestring //======================================================================================
      K_XPL_APP_VERSION_NUMBER = '1.1';
@@ -184,7 +184,7 @@ begin
 
    if not aMess.Source.IsValid then sError := sError + ' Source field'#10#13;
    if not aMess.Target.IsValid then sError := sError + ' Target field'#10#13;
-   if not aMess.Schema.IsValid then sError := sError + ' Schema field'#10#13;
+   //if not aMess.Schema.IsValid then sError := sError + ' Schema field'#10#13;
 
    result := (sError='');
    if not result then begin
@@ -242,6 +242,7 @@ procedure TFrmMain.PluginCommandExecute ( Sender: TObject );
 var aMenu : TMenuItem;
     command, device, vendor : string;
     aPlugin : TxPLPluginFile;
+    aDevice : TxPLDevice;
     plugid : integer;
     CommandNode : TDomNode;
     aMessage : TxPLMessage;
@@ -253,13 +254,16 @@ begin
      plugid := xPLClient.PluginList.Plugin.IndexOf(vendor);
      if plugid<>-1 then begin
         aPlugIn := TxPLPluginFile(xPLClient.PluginList.Plugin.Objects[plugid]);
-        CommandNode := aPlugIn.Command(device,command);
+        aDevice := aPlugIn.Device(device);
+//        CommandNode := aPlugIn.Command(device,command);
+        CommandNode := aDevice.Command(command);
         if CommandNode<>nil then begin
            aMessage := TxPLMessage.create;
            aMessage.ReadFromXML(CommandNode);
            Object2Screen(aMessage);
            aMessage.Destroy;
         end;
+        aDevice.Destroy;
      end;
 end;
 
@@ -273,6 +277,7 @@ end;
 
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
     aPlugin : TxPLPluginFile;
+    aDevice : TxPLDevice;
     aListe, Commands : TStringList;
     cptPlugs,i,j : integer;
 begin
@@ -281,19 +286,20 @@ begin
          aMenu := TMenuItem.Create(self);
          aMenu.Caption := aPlugin.VendorTag;
          MenuItem8.Insert(0,aMenu);
-         aListe := TStringList.Create;
-         aListe.AddStrings(aPlugin.DeviceList);
-              for i:=0 to aListe.Count-1 do begin                                 // Loop on devices
-                  aSubMenu := AppendMenu(aMenu, aListe[i]);
-                  Commands := aPlugin.Commands(aListe[i]);
-                  for j:= 0 to Commands.Count-1 do begin
-                      aSubSubMenu := AppendMenu(aSubMenu, Commands[j]);
-                      aSubSubMenu.OnClick := @PluginCommandExecute;
-                  end;
-                  Commands.Destroy;
-                  if aSubMenu.Count=0 then aSubMenu.Free;                         // Eliminates empty sub menus
-              end;
-         aListe.Destroy;
+         for i:=0 to aPlugin.DeviceCount-1 do begin                                 // Loop on devices
+             aDevice := aPlugIn.Device(aPlugin.Devices[i]);
+             aSubMenu := AppendMenu(aMenu, aDevice.Name);
+
+//             Commands := aPlugin.Commands(aPlugin.Device[i]);
+//             Commands := aDevice.Commands;
+             for j:= 0 to aDevice.Commands.Count-1 do begin
+                 aSubSubMenu := AppendMenu(aSubMenu, aDevice.Commands[j]);
+                 aSubSubMenu.OnClick := @PluginCommandExecute;
+             end;
+             aDevice.Destroy;
+//             Commands.Destroy;
+             if aSubMenu.Count=0 then aSubMenu.Free;                         // Eliminates empty sub menus
+         end;
          if aMenu.Count = 0 then aMenu.Free;
      end;
 end;
