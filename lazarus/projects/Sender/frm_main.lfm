@@ -2302,7 +2302,7 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   SessionProperties = 'Left;Top'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object Label1: TLabel
     Left = 16
     Height = 16
@@ -2342,7 +2342,9 @@ object frmMain: TfrmMain
     Width = 26
   end
   object ToolBar1: TToolBar
+    Left = 0
     Height = 26
+    Top = 0
     Width = 354
     Caption = 'ToolBar1'
     TabOrder = 6
@@ -2360,38 +2362,46 @@ object frmMain: TfrmMain
       TabOrder = 0
       object ToolButton3: TToolButton
         Left = 1
+        Top = 0
         Action = Load
       end
       object ToolButton5: TToolButton
         Left = 31
+        Top = 0
         Action = Save
       end
       object ToolButton6: TToolButton
         Left = 159
+        Top = 0
         Action = Send
       end
       object ToolButton10: TToolButton
         Left = 219
+        Top = 0
         Action = Clear
       end
       object ToolButton11: TToolButton
         Left = 61
+        Top = 0
         Width = 34
         Caption = 'ToolButton11'
         Style = tbsDivider
       end
       object ToolButton8: TToolButton
         Left = 95
+        Top = 0
         Action = Paste
       end
       object ToolButton1: TToolButton
         Left = 125
+        Top = 0
         Width = 34
         Caption = 'ToolButton1'
         Style = tbsDivider
       end
       object ToolButton2: TToolButton
         Left = 189
+        Top = 0
         Width = 30
         Caption = 'ToolButton2'
         Style = tbsDivider
@@ -2456,13 +2466,14 @@ object frmMain: TfrmMain
       'Command'
     )
     TabOrder = 0
+    bShowAny = False
   end
   object cbClasse: TxPLClassCombo
     Left = 72
-    Height = 21
+    Height = 23
     Top = 120
     Width = 96
-    ItemHeight = 13
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       ''
@@ -2505,7 +2516,7 @@ object frmMain: TfrmMain
   end
   object edt_Type: TMedit
     Left = 176
-    Height = 21
+    Height = 23
     Top = 120
     Width = 96
     TabOrder = 4
@@ -2825,50 +2836,42 @@ object frmMain: TfrmMain
     left = 320
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       Hint = 'Quit the application'
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object About: TAction
       Caption = 'About'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
     object Load: TAction
       Caption = '&Load a message'
-      DisableIfNoHandler = True
       ImageIndex = 2
       OnExecute = LoadExecute
     end
     object Save: TAction
       Caption = '&Save this message'
-      DisableIfNoHandler = True
       ImageIndex = 3
       OnExecute = SaveExecute
     end
     object Send: TAction
       Caption = 'Send the message'
-      DisableIfNoHandler = True
       ImageIndex = 5
       OnExecute = SendExecute
     end
     object Clear: TAction
       Caption = 'Clear fields'
-      DisableIfNoHandler = True
       ImageIndex = 4
       OnExecute = ClearExecute
     end
     object Paste: TAction
       Caption = 'Paste from clipboard'
-      DisableIfNoHandler = True
       ImageIndex = 13
       OnExecute = PasteExecute
     end
     object acInstalledApps: TAction
       Caption = 'Installed xPL apps'
-      DisableIfNoHandler = True
       ImageIndex = 17
       OnExecute = acInstalledAppsExecute
     end
