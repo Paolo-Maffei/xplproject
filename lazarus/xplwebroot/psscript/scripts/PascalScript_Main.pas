@@ -45,11 +45,11 @@ function xPLMessageArrived(aMessage : string) : longint;
 begin
 writeln('hello');
 
-writeln(xpl.MessageKey(0) + '=' + xpl.MessageValue(0));
-writeln(xpl.MessageSchema);
-writeln(xpl.MessageValueFromKey('request'));
-writeln(xpl.Msg_Class);
-writeln(xpl.Msg_Sender_Device);
+//writeln(xpl.MessageKey(0) + '=' + xpl.MessageValue(0));
+//writeln(xpl.MessageSchema);
+//writeln(xpl.MessageValueFromKey('request'));
+//writeln(xpl.Msg_Class);
+//writeln(xpl.Msg_Sender_Device);
 end;
 
 // Main program ================================================================

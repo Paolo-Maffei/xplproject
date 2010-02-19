@@ -3,7 +3,6 @@
 
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
 	<LINK REL="stylesheet" type="text/css" href="../style.css" />
 </HEAD>
 
@@ -11,7 +10,6 @@
 <table class="stats" cellspacing="0">
 		<tr>
 			<td class=hed colspan=2>Free connexion details</td>
-			
 		</tr>
 		<tr>
 			<td>Numéro de téléphone FT</td>
@@ -36,10 +34,18 @@
 			<td>Modèle de Freebox</td>
 			<td>{%free_boxmodel%}</td>
 		</tr>
+		<tr>
+			<td>Clef WEP</td>
+			<td>{%free_key%}</td>
+		</tr>
+		<tr>
+			<td>Nom du Réseau</td>
+			<td>{%free_ssid%}</td>
+		</tr>
 		
 	</table>
-
-	<!--#include file="footer.txt"-->
+	<br>
+	<a href='http://adsl.free.fr'>Accès à la console de gestion Free</a>
 </BODY>
 
 </HTML>
