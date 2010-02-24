@@ -1,5 +1,42 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xpl-plugin version="1.2" vendor="clinique" plugin_url="http://glh33.free.fr/xpl/clinique.xml" info_url="http://glh33.free.fr">
+<xpl-plugin version="1.3" vendor="clinique" plugin_url="http://glh33.free.fr/xpl/clinique.xml" info_url="http://glh33.free.fr">
+  <device 	id="clinique-logger" 
+			description="Monitor all messages on the xPL Network"
+			version="2.0"
+			info_url="http://glh33.free.fr"
+			platform="windows"
+			beta_version="none"
+			download_url="http://glh33.free.fr/?dl_name=xpl_logger_win.zip"
+			type="tools"
+  />
+  <device 	id="clinique-network" 
+			description="Useful to setup local base xPL parameters"
+			version="1.1.5"
+			info_url="http://glh33.free.fr"
+			platform="windows"
+			beta_version="none"
+			download_url="http://glh33.free.fr/?dl_name=xpl_network_win.zip"
+			type="tools"
+  />
+  <device 	id="clinique-sender" 
+  			description="xPL Message sender"
+			version="1.1"
+			info_url="http://glh33.free.fr"
+			platform="windows"
+			beta_version="none"
+			download_url="http://glh33.free.fr/?dl_name=xpl_sender_win.zip"
+			type="tools"
+  />
+  <device 	id="clinique-config" 
+  			description="Configure applications present on the xPL Network"
+			version="0.9.5"
+			info_url="http://glh33.free.fr"
+			platform="windows"
+			beta_version="none"
+			download_url="http://glh33.free.fr/?dl_name=xpl_config_win.zip"
+			type="tools"
+  />
+
   <device id="clinique-timer" version="1.1" description="Versatile Timer and Scheduler app">
     <command name="Start a timer" msg_type="cmnd" msg_schema="control.basic">
       <element name="current" default="start" />
@@ -67,7 +104,6 @@
       <element label="Date of the modification of the value" name="timestamp" />
     </trigger>
   </device>
-  <device id="clinique-sender" version="1.1" description="xPL Message sender" />
   <device id="clinique-ping" version="1.0" description="Network devices monitor">
     <configItem name="nb_retries" description="Number of retries for each host" format="^[3-9]{1}$" />
     <configItem name="ping_interval" description="Interval between ping sequences (in minutes)" format="^[1-9]{1}$" />
@@ -89,22 +125,22 @@
       <element label="Status of the device (on/off/unknown)" name="current" />
     </trigger>
   </device>
-  <device id="clinique-psscript" version="0.7" description="Pascal Scripting engine xPL enabled">
-    <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
-    <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
-    <configItem name="autosense" description="Autosense schema to globals" format="([0-9a-z/-]{1,8})\.([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})" />
-    <configItem name="autostart" description="Launch script at startup (1 or 0)" format="^[01]{1}$" />
-    <configItem name="scriptfile" description="Name of the main script file" format="'^([a-zA-Z]\:|\\\\[^\/\\:*?&quot;&lt;&gt;|]+\\[^\/\\:*?&quot;&lt;&gt;|]+)(\\[^\/\\:*?&quot;&lt;&gt;|]+)+(\.[^\/\\:*?&quot;&lt;&gt;|]+)$" />
+  <device id="clinique-psscript" version="0.7" description="xPL Pascal Scripting engine">
+    <configItem name="webroot"    description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+    <configItem name="webport"    description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <configItem name="scriptfile" description="Script file to load and run at startup (relative to webroot\psscript\scripts)" />
+    <configItem name="autosense"  description="Autosense schema to globals" format="([0-9a-z/-]{1,8})\.([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})" />
   </device>
-  <device id="clinique-network" version="1.1" description="Usefull to setup local base xPL parameters" />
-  <device id="clinique-logger" version="1.2.1" description="Monitor all messages on the xPL Network" />
-  <device id="clinique-chatbot" version="1.1" description="xPL Message sender" />
+  <device id="clinique-alxpl" version="1.1" description="xPL Message sender" />
   <device id="clinique-free" version="0.1" description="xPL Plugin to french Free internet operator">
     <configItem name="username" description="Your free account name - usually phone number" format="^[A-Za-z0-9]{1,50}$" />
     <configItem name="password" description="Your free adsl password" format="^[A-Za-z0-9]{1,50}$" />
     <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
     <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
     <configItem name="storedir" description="Directory used to store recorded messages" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+	<configItem name="fbox-x10" description="X10 device where the freebox is connected" />
+    <configItem name="fboxhd-x10" description="X10 device where the HD box is connected" />
+	<configItem name="polling" description="Polling frequency to scan new messages (in minutes)" />
     <trigger description="This message is emitted whenever an untaken call has been recorded" msg_schema="free.basic" msg_type="trig" name="New call recorded">
       <element default="inbound" name="calltype" />
       <element label="Number of the calling phone" name="phone" />
@@ -127,9 +163,7 @@
         <regexp>^(On)|(Off)$</regexp>
       </element>
     </trigger>
-    <configItem name="fbox-x10" description="X10 device where the freebox is connected" />
-    <configItem name="fboxhd-x10" description="X10 device where the HD box is connected" />
-    <command description="Power on or off the freebox or hd box" msg_schema="media.basic" msg_type="cmnd" name="Power the freebox">
+    <command description="Power off the freebox or hd box" msg_schema="media.basic" msg_type="cmnd" name="Power on/off the freebox or hd">
       <element default="power" name="command" />
       <element control_type="dropdownlist" default="freebox" name="mp">
         <option label="freebox" value="fbox" />
@@ -144,7 +178,24 @@
       <element default="reboot" name="command" />
       <element default="freebox" name="mp" />
     </command>
-    <configItem name="polling" description="Polling frequency to scan new messages (in minutes)" />
+	<menuItem name="Reboot Freebox">
+        <xplMsg>media.basic
+{
+command=reboot
+mp=freebox
+}
+		</xplMsg>
+    </menuItem>
+	<menuItem name="Power">
+        <xplMsg>media.basic
+{
+command=power
+mp=%freebox|freeboxhd%
+state=%on|off%
+}
+		</xplMsg>
+    </menuItem>
+    
   </device>
 </xpl-plugin>
 
