@@ -15,6 +15,12 @@
     {
         "Entry"
         {
+        "MsmKey" = "8:_2A2472E71C534860846DE7D0BE232FD2"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_2A25C9BD56AFB40A3C9C6D06276081FD"
         "OwnerKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
         "MsmSig" = "8:_UNDEFINED"
@@ -33,13 +39,19 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_84CDD04F5AE047FFB146DE8C3BFDC432"
+        "MsmKey" = "8:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_A21C959FBB1D42E3961FDFC039F02B96"
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -64,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_84CDD04F5AE047FFB146DE8C3BFDC432"
+        "OwnerKey" = "8:_A21C959FBB1D42E3961FDFC039F02B96"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -258,6 +270,26 @@
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_2A2472E71C534860846DE7D0BE232FD2"
+            {
+            "SourcePath" = "8:..\\xPL SMS service\\gpl.txt"
+            "TargetName" = "8:gpl.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
             "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_2A25C9BD56AFB40A3C9C6D06276081FD"
             {
             "AssemblyRegister" = "3:1"
@@ -289,23 +321,12 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_84CDD04F5AE047FFB146DE8C3BFDC432"
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
             {
-            "AssemblyRegister" = "3:1"
-            "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:xPLCheckPackage, Version=1.0.58.0, Culture=neutral, processorArchitecture=MSIL"
-                "ScatterAssemblies"
-                {
-                    "_84CDD04F5AE047FFB146DE8C3BFDC432"
-                    {
-                    "Name" = "8:xPLCheckPackage.exe"
-                    "Attributes" = "3:512"
-                    }
-                }
-            "SourcePath" = "8:..\\..\\tieske.xPL_installation_aid\\xPLCheckPackage\\bin\\Release\\xPLCheckPackage.exe"
-            "TargetName" = "8:"
+            "SourcePath" = "8:..\\xPL SMS service\\ReadMe.txt"
+            "TargetName" = "8:ReadMe.txt"
             "Tag" = "8:"
-            "Folder" = "8:_0347F8CAB2B545269F528A21F63BBA34"
+            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
             "Condition" = "8:"
             "Transitive" = "11:FALSE"
             "Vital" = "11:TRUE"
@@ -347,7 +368,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -378,7 +399,7 @@
             "SharedLegacy" = "11:FALSE"
             "PackageAs" = "3:1"
             "Register" = "3:1"
-            "Exclude" = "11:FALSE"
+            "Exclude" = "11:TRUE"
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
@@ -461,7 +482,7 @@
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:xPL SMS application"
         "ProductCode" = "8:{64CBD963-837D-4D9C-9490-5212DCE8BA73}"
-        "PackageCode" = "8:{ED3374C2-1C27-40B2-949A-AF55C343610F}"
+        "PackageCode" = "8:{C512EA13-6755-4A8A-89EA-6BDDDCE3E2F7}"
         "UpgradeCode" = "8:{B8B98301-8996-4688-94A0-694CF7262209}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
@@ -580,29 +601,29 @@
         }
         "Shortcut"
         {
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_4DB15D028D4244EDB54BC9D4E26E9B0D"
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8D8DEFAA917841A3846EE38DCBED2C8D"
             {
-            "Name" = "8:xPL SMS configurator"
-            "Arguments" = "8:"
-            "Description" = "8:Utility to configure xPL SMS service settings"
-            "ShowCmd" = "3:1"
-            "IconIndex" = "3:0"
-            "Transitive" = "11:FALSE"
-            "Target" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
-            "Folder" = "8:_77DD02D974554CFDBCB4D99F37DD54FE"
-            "WorkingFolder" = "8:_B07576BD025642C7B828930DD25D881E"
-            "Icon" = "8:"
-            "Feature" = "8:"
-            }
-            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_9C73A26B26A44E23AFDAF6AA24E15367"
-            {
-            "Name" = "8:xPL SMS application"
+            "Name" = "8:SMS frontend"
             "Arguments" = "8:"
             "Description" = "8:"
             "ShowCmd" = "3:1"
             "IconIndex" = "3:0"
             "Transitive" = "11:FALSE"
             "Target" = "8:_446D1709D17E43918BE35D52F7807EF4"
+            "Folder" = "8:_77DD02D974554CFDBCB4D99F37DD54FE"
+            "WorkingFolder" = "8:_B07576BD025642C7B828930DD25D881E"
+            "Icon" = "8:"
+            "Feature" = "8:"
+            }
+            "{970C0BB2-C7D0-45D7-ABFA-7EC378858BC0}:_8E15CE53DAF44D7183B9A6009FACD103"
+            {
+            "Name" = "8:SMS configurator"
+            "Arguments" = "8:"
+            "Description" = "8:"
+            "ShowCmd" = "3:1"
+            "IconIndex" = "3:0"
+            "Transitive" = "11:FALSE"
+            "Target" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
             "Folder" = "8:_77DD02D974554CFDBCB4D99F37DD54FE"
             "WorkingFolder" = "8:_B07576BD025642C7B828930DD25D881E"
             "Icon" = "8:"
@@ -1004,6 +1025,31 @@
         }
         "MergeModule"
         {
+            "{CEE29DC0-9FBA-4B99-8D47-5BC643D9B626}:_A21C959FBB1D42E3961FDFC039F02B96"
+            {
+            "UseDynamicProperties" = "11:TRUE"
+            "IsDependency" = "11:FALSE"
+            "SourcePath" = "8:xPLCheckPackageMM.msm"
+                "Properties"
+                {
+                    "_4E52C1947B644964B5ED9F53DAFAD680.F85D2BFE50EE428185094FC4B47A5B5E"
+                    {
+                    "Name" = "8:_4E52C1947B644964B5ED9F53DAFAD680.F85D2BFE50EE428185094FC4B47A5B5E"
+                    "DisplayName" = "8:Module Retargetable Folder"
+                    "Description" = "8:"
+                    "Type" = "3:32769"
+                    "ContextData" = "8:_RetargetableFolder"
+                    "Attributes" = "3:6"
+                    "Setting" = "3:1"
+                    "UsePlugInResources" = "11:FALSE"
+                    }
+                }
+            "LanguageId" = "3:1033"
+            "Exclude" = "11:FALSE"
+            "Folder" = "8:"
+            "Feature" = "8:"
+            "IsolateTo" = "8:"
+            }
         }
         "ProjectOutput"
         {

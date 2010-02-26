@@ -34,7 +34,7 @@ Public Class ProjectInstaller
 
 
     <Security.Permissions.SecurityPermission(Security.Permissions.SecurityAction.Demand)> _
- Public Overrides Sub Commit(ByVal savedState As System.Collections.IDictionary)
+Public Overrides Sub Commit(ByVal savedState As System.Collections.IDictionary)
 
         MyBase.Commit(savedState)
 
@@ -46,15 +46,25 @@ Public Class ProjectInstaller
             If MsgBox("Installation is nearly complete, would you like to verify the xPL infrastructure?", _
                       MsgBoxStyle.OkCancel Or MsgBoxStyle.DefaultButton1 Or MsgBoxStyle.Question, _
                       "Check xPL infrastructure?") = MsgBoxResult.Ok Then
-                proc.StartInfo.FileName = fromfile
-                proc.StartInfo.Arguments = Process.GetCurrentProcess.Id.ToString
-                proc.Start()
-                proc.WaitForExit()
+                Try
+                    proc.StartInfo.FileName = fromfile
+                    proc.StartInfo.Arguments = Process.GetCurrentProcess.Id.ToString
+                    proc.Start()
+                    Try
+                        proc.WaitForExit()
+                    Catch
+                    End Try
+                Catch ex As Exception
+                    MsgBox("Something went wrong, the verification utility couldn't be started. You may try to start " & _
+                           "it manually, the file 'xPLCheckPackage.exe' should be located in your 'Program Files' directory." & _
+                           vbCrLf & vbCrLf & "Error: " & ex.Message, _
+                           MsgBoxStyle.Exclamation Or MsgBoxStyle.OkOnly, "Error")
+                End Try
             End If
             Try
                 ' Process is done, delete file
                 Kill(fromfile)
-            Catch ex As Exception
+            Catch
             End Try
         End If
 
