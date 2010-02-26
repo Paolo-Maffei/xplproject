@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
 
@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("xPL SMS service")> 
-<Assembly: AssemblyDescription("")> 
+<Assembly: AssemblyTitle("SMS Config")> 
+<Assembly: AssemblyDescription("xPL SMS configurator application")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("SMS service")> 
-<Assembly: AssemblyCopyright("Copyright ©  2009")> 
+<Assembly: AssemblyProduct("")> 
+<Assembly: AssemblyCopyright("2009-2010 Thijs Schreijer")> 
 <Assembly: AssemblyTrademark("")> 
 
-<Assembly: ComVisible(False)>
+<Assembly: ComVisible(False)> 
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("c72afcf0-49d9-4ef2-a4bd-623202e5d55e")> 
+<Assembly: Guid("72259f09-134f-4604-9ed9-e97af07e5cd5")> 
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -29,7 +29,6 @@ Imports System.Runtime.InteropServices
 '
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
- 
 
-<Assembly: AssemblyVersion("1.0.135.0")> 
-<Assembly: AssemblyFileVersion("1.0.135.0")> 
+<Assembly: AssemblyVersion("1.1.0.0")> 
+<Assembly: AssemblyFileVersion("1.1.0.0")> 
