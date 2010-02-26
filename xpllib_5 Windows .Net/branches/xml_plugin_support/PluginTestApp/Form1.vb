@@ -27,5 +27,9 @@ Public Class Form1
         Catch ex As Exception
 
         End Try
+        While Not xplug.IsLoaded
+            Threading.Thread.Sleep(100)
+        End While
+        MsgBox(xplug.LocationsXmlElement.InnerXml)
     End Sub
 End Class

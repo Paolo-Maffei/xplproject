@@ -84,12 +84,14 @@ Public Class xPLPluginVendor
     ''' Parse a string to a version object, any missing or uncovertable element will be set to 0
     ''' </summary>
     Public Shared Function StrToVersion(ByVal strVersion As String) As Version
-        Dim s() As String = strVersion.Split("."c)
+        Dim s() As String
         Dim major As Integer
         Dim minor As Integer
         Dim build As Integer
         Dim revision As Integer
         Dim r As Integer
+        If strVersion = "" Then strVersion = "0"
+        s = strVersion.Split("."c)
         For n As Integer = 0 To 3
             If n > s.Length - 1 Then
                 r = 0
@@ -193,10 +195,19 @@ Public Class xPLPluginDevice
     ''' <summary>
     ''' Most recent device version. Source is the vendor specific xml file.
     ''' </summary>
-    ''' <remarks>Version is provided as a string</remarks>
+    ''' <remarks>Version is provided as a string, zeros for build or revision are left out, if you need
+    ''' those included use Version.ToString instead.</remarks>
     Public Property VersionStr() As String
         Get
-            Return pVersion.ToString()
+            Dim result As String = pVersion.ToString()
+            ' remove trailing zero's
+            If VersionV.Revision = 0 Then
+                result = Left(result, Len(result) - 2)
+                If VersionV.Build = 0 Then
+                    result = Left(result, Len(result) - 2)
+                End If
+            End If
+            Return result
         End Get
         Set(ByVal value As String)
             pVersion = xPLPluginVendor.StrToVersion(value)
@@ -218,10 +229,19 @@ Public Class xPLPluginDevice
     ''' <summary>
     ''' Most recent device beta version. Source is the vendor specific xml file.
     ''' </summary>
-    ''' <remarks>Beta Version is provided as a string</remarks>
+    ''' <remarks>Beta Version is provided as a string, zeros for build or revision are left out, if you need
+    ''' those included use BetaVersion.ToString instead.</remarks>
     Public Property BetaVersionStr() As String
         Get
-            Return pBetaVersion.ToString()
+            Dim result As String = pBetaVersion.ToString()
+            ' remove trailing zero's
+            If BetaVersionV.Revision = 0 Then
+                result = Left(result, Len(result) - 2)
+                If BetaVersionV.Build = 0 Then
+                    result = Left(result, Len(result) - 2)
+                End If
+            End If
+            Return result
         End Get
         Set(ByVal value As String)
             pBetaVersion = xPLPluginVendor.StrToVersion(value)
@@ -254,12 +274,12 @@ Public Class xPLPluginDevice
     ''' Source is the vendor specific xml file.
     ''' </summary>
     ''' <remarks>Examples of non-device items are; xPL code libraries, hubs, diagnostic tools, etc.</remarks>
-    Public Type As String = "unknown"
+    Public Type As String = "device"
     ''' <summary>
     ''' Target platform for the device. Source is the vendor specific xml file.
     ''' </summary>
     ''' <remarks>Examples; windows, os x, linux, java, perl.</remarks>
-    Public Platform As String = "unknown"
+    Public Platform As String = ""
     ''' <summary>
     ''' Contains the xml of the device.
     ''' </summary>
@@ -304,6 +324,8 @@ End Class
 ''' <summary>
 ''' Class to manage and update the local shared PluginStore. Provides methods to download an update plugins
 ''' and update the local store.
+''' The xPL Project maintains a list of vendor plugins, in which each vendor maintains the details of their
+''' available applications/services. This class collects and parses all plugins.
 ''' </summary>
 ''' <remarks></remarks>
 Public Class xPLPluginStore
@@ -365,6 +387,71 @@ Public Class xPLPluginStore
 #End Region
 
 #Region "Properties"
+
+    ''' <summary>
+    ''' Returns the main xml element from the plugin store
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="IsLoaded"/>.</remarks>
+    Public ReadOnly Property MainXmlElement() As XmlElement
+        Get
+            If pIsLoaded Then
+                Return PluginMain
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the xml element containing the vendors from the plugin store
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="IsLoaded"/>.</remarks>
+    Public ReadOnly Property VendorsXmlElement() As XmlElement
+        Get
+            If pIsLoaded Then
+                Return PluginMain.Item("vendors")
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the xml element containing the devices from the plugin store
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="IsLoaded"/>.</remarks>
+    Public ReadOnly Property DevicesXmlElement() As XmlElement
+        Get
+            If pIsLoaded Then
+                Return PluginMain.Item("devices")
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Returns the xml element containing the locations from the plugin store
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="IsLoaded"/>.</remarks>
+    Public ReadOnly Property LocationsXmlElement() As XmlElement
+        Get
+            If pIsLoaded Then
+                Return PluginMain.Item("locations")
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
+
     Private pPluginStoreFile As String = _
         GetFolderPath(SpecialFolder.CommonApplicationData) & XPL_PLUGINSTORE_PATH & XPL_PLUGIN_EXTENSION
     ''' <summary>
@@ -586,6 +673,10 @@ Public Class xPLPluginStore
             PluginMain.SetAttribute("lastupdate", pLastUpdate.ToString("u"))
             If Debug Then LogError("xPLPluginStore.LoadPluginStore", "Attribute 'lastupdate' not found; created @ " & pLastUpdate.ToString)
         End If
+
+        ' Parse to collections
+        Me.ParsePluginStoreToCollections()
+
         If Debug Then LogError("xPLPluginStore.LoadPluginStore", "Completed")
     End Sub
 
@@ -869,42 +960,46 @@ Public Class xPLPluginStore
                                     vAttrib.Add(x.Name, x.Value)
                                 Next
                                 ' now go through devices
-                                For Each e As XmlElement In pRoot.ChildNodes
-                                    If e.Name = "device" Then
-                                        ' we've got a device, create a copy
-                                        Dim d As XmlDocumentFragment = PluginStore.CreateDocumentFragment()
-                                        d.InnerXml = e.OuterXml ' copy xml fragment
-                                        ' get the Device ID ('vendor-device') and Vendor ID
-                                        DeviceID = e.GetAttribute("id")
-                                        VendorID = DeviceID.Split("-"c)(0)
+                                For Each cn As XmlNode In pRoot.ChildNodes
+                                    ' only handle elements
+                                    If cn.NodeType = XmlNodeType.Element Then
+                                        Dim e As XmlElement = CType(cn, XmlElement)
+                                        If e.Name = "device" Then
+                                            ' we've got a device, create a copy
+                                            Dim d As XmlDocumentFragment = PluginStore.CreateDocumentFragment()
+                                            d.InnerXml = e.OuterXml ' copy xml fragment
+                                            ' get the Device ID ('vendor-device') and Vendor ID
+                                            DeviceID = e.GetAttribute("id")
+                                            VendorID = DeviceID.Split("-"c)(0)
 
-                                        ' Lookup vendor info, and replace with/add current vendor info
-                                        For Each vel As XmlElement In elVendors
-                                            If vel.GetAttribute("id") = VendorID Then
-                                                ' found it, remove it
-                                                elVendors.RemoveChild(vel)
-                                                Exit For
-                                            End If
-                                        Next
-                                        ' Create new vendor element, with all its attributes
-                                        Dim newvendor As XmlElement = PluginStore.CreateElement("vendor")
-                                        newvendor.SetAttribute("id", VendorID)
-                                        For Each kv As KeyValuePair(Of String, String) In vAttrib
-                                            newvendor.SetAttribute(kv.Key, kv.Value)
-                                        Next
-                                        ' append it
-                                        elVendors.AppendChild(newvendor)
+                                            ' Lookup vendor info, and replace with/add current vendor info
+                                            For Each vel As XmlElement In elVendors
+                                                If vel.GetAttribute("id") = VendorID Then
+                                                    ' found it, remove it
+                                                    elVendors.RemoveChild(vel)
+                                                    Exit For
+                                                End If
+                                            Next
+                                            ' Create new vendor element, with all its attributes
+                                            Dim newvendor As XmlElement = PluginStore.CreateElement("vendor")
+                                            newvendor.SetAttribute("id", VendorID)
+                                            For Each kv As KeyValuePair(Of String, String) In vAttrib
+                                                newvendor.SetAttribute(kv.Key, kv.Value)
+                                            Next
+                                            ' append it
+                                            elVendors.AppendChild(newvendor)
 
-                                        ' Lookup device info, and replace with/add current device info
-                                        For Each del As XmlElement In elDevices
-                                            If del.GetAttribute("id") = DeviceID Then
-                                                ' found it, remove it
-                                                elDevices.RemoveChild(del)
-                                                Exit For
-                                            End If
-                                        Next
-                                        ' append it, the copied element 'd'
-                                        elDevices.AppendChild(d)
+                                            ' Lookup device info, and replace with/add current device info
+                                            For Each del As XmlElement In elDevices
+                                                If del.GetAttribute("id") = DeviceID Then
+                                                    ' found it, remove it
+                                                    elDevices.RemoveChild(del)
+                                                    Exit For
+                                                End If
+                                            Next
+                                            ' append it, the copied element 'd'
+                                            elDevices.AppendChild(d)
+                                        End If
                                     End If
                                 Next
                                 If Debug Then LogError("xPLPluginStore.PerformUpdate", "Parsing completed succesfully")
@@ -945,9 +1040,11 @@ Public Class xPLPluginStore
         End Try
 
         ' now read pluginstore into devices and vendors collections
-        Me.EventUpdateAddLog("Parsing final results")
-        Me.EventUpdateStatus(98, "Parsing final results")
-        Me.ParsePluginStoreToCollections()
+        If OneSuccess Then
+            Me.EventUpdateAddLog("Parsing final results")
+            Me.EventUpdateStatus(98, "Parsing final results")
+            Me.ParsePluginStoreToCollections()
+        End If
         pUpdateRunning = False
         Me.EventUpdateAddLog("Update finished " & Now.ToShortDateString & " " & Now.ToShortTimeString)
         Me.EventUpdateDone("Done")
@@ -959,6 +1056,8 @@ Public Class xPLPluginStore
         Dim vendor As xPLPluginVendor
         Dim device As xPLPluginDevice
         Dim id As String
+
+        If Debug Then LogError("xPLplugin.ParsePluginStoreToCollection", "Starting...", EventLogEntryType.Information)
         ' start with vendors
         Me.Vendors.Clear()
         elem = Me.PluginMain("vendors")
@@ -966,6 +1065,7 @@ Public Class xPLPluginStore
         For Each v As XmlElement In elem
             If v.Name = "vendor" Then
                 id = v.GetAttribute("id")
+                If Debug Then LogError("xPLplugin.ParsePluginStoreToCollection", "    Parsing: " & id, EventLogEntryType.Information)
                 vendor = New xPLPluginVendor(id)
                 For Each a As XmlAttribute In v.Attributes
                     Select Case a.Name
@@ -989,7 +1089,7 @@ Public Class xPLPluginStore
                             vendor.VersionStr = a.Value
                         Case Else
                             ' unknown attribute, add to collection
-                            vendor.Attributes.Add(v.Name, v.Value)
+                            vendor.Attributes.Add(a.Name, a.Value)
                     End Select
 
                 Next
@@ -1005,6 +1105,7 @@ Public Class xPLPluginStore
         For Each d As XmlElement In elem
             If d.Name = "device" Then
                 id = d.GetAttribute("id")
+                If Debug Then LogError("xPLplugin.ParsePluginStoreToCollection", "    Parsing: " & id, EventLogEntryType.Information)
                 device = New xPLPluginDevice(id)
                 device.XML = d.InnerXml
                 For Each a As XmlAttribute In d.Attributes
@@ -1019,15 +1120,15 @@ Public Class xPLPluginStore
                             device.URLinfo = a.Value
                         Case "version"
                             device.VersionStr = a.Value
-                        Case "beta-version"
+                        Case "beta_version"
                             device.BetaVersionStr = a.Value
                         Case "platform"
                             device.Platform = a.Value
                         Case "description"
-                            device.Platform = a.Value
+                            device.Description = a.Value
                         Case Else
                             ' unknown attribute, add to collection
-                            device.Attributes.Add(d.Name, d.Value)
+                            device.Attributes.Add(a.Name, a.Value)
                     End Select
 
                 Next
@@ -1035,6 +1136,7 @@ Public Class xPLPluginStore
                 Me.Devices.Add(device.ID, device)
             End If
         Next
+        If Debug Then LogError("xPLplugin.ParsePluginStoreToCollection", "Completed", EventLogEntryType.Information)
 
     End Sub
 
