@@ -46,7 +46,7 @@
     <Reference Include="System.Xml" />
     <Reference Include="xpllib, Version=5.1.11.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\xpllib_5 Windows .Net\branches\xml_plugin_support\xpllib\bin\Debug\xpllib.dll</HintPath>
+      <HintPath>.\xpllib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
