@@ -59,9 +59,9 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="xpllib, Version=5.0.145.0, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="xpllib, Version=5.1.17.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\xpllib_5.0\xpllib_5.0\bin\Release\xpllib.dll</HintPath>
+      <HintPath>..\xpllib.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
