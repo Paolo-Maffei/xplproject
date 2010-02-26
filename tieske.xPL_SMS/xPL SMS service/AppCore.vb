@@ -54,7 +54,6 @@ Public Class AppCore
         xPLdev.InstanceIDType = InstanceCreation.Randomized
         xPLdev.Configurable = True
         xPLdev.MessagePassing = MessagePassingEnum.ToBeHandledOnly
-        xPLdev.VersionNumber = "0.1"
         ci = xPLdev.ConfigItems
         ci.Add("urlsend", "http://www.mollie.nl/xml/sms/?username=[[USERNAME]]&password=[[PASSWORD]]&", xPLConfigTypes.xReconf, 3)
         ci("urlsend").Add("originator=xPL%20Project&recipients=[[RECIPIENT]]&message=[[MESSAGE]]")
