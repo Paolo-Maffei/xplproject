@@ -62,7 +62,8 @@
     <Compile Include="xPLNetwork.vb" />
     <Compile Include="xPLFilters.vb" />
     <Compile Include="xPLConfigItems.vb" />
-    <Compile Include="xPLPlugins.vb" />
+    <Compile Include="xPLPlugins.vb">
+    </Compile>
     <Compile Include="xPLPluginUpdateDlgLog.Designer.vb">
       <DependentUpon>xPLPluginUpdateDlgLog.vb</DependentUpon>
     </Compile>
