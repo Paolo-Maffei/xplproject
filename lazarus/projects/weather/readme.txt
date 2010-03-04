@@ -32,5 +32,8 @@ v 2.0
 		default port (8333 by default)
 	   - can be changed via xpl configuration options
 	This program now runs in parallel with the web arborescence that must be downloaded altogether.
+	
+v 2.0.1
+	Technical update to stick to repository evolutions of the xPL project
 
 

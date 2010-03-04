@@ -6,9 +6,9 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  ComCtrls, Menus, FPrevisions, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn,
-  Buttons,uxPLMessage, uxPLWebListener, uxPLConfig,uxplmsgbody,
-  Weathers, XMLPropStorage, IdHTTPServer, IdCustomHTTPServer, IdContext;
+  ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn,
+  Buttons,uxPLMessage, uxPLWebListener, uxPLConfig,
+  Weathers, XMLPropStorage, IdCustomHTTPServer;
 
 
 type
@@ -37,27 +37,22 @@ type
   private
     Weather,Backup : TWeather;
 
-    FHTMLDir: string;
-    FTemplate: string;
-    fwebport : integer;
   public
     xPLClient  : TxPLWebListener;
-
-    procedure OnJoined(const aJoined : boolean);
+    procedure LogUpdate(const aList : TStringList);
     procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
     procedure OnConfigDone(const fConfig : TxPLConfig);
-    procedure CommandGet(var aPageContent : widestring; aParam, aValue : string);
+    procedure CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
   end;
 
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, frm_xplappslauncher,uxPLCfgItem,uxPLMsgHeader, IdSocketHandle, LCLType, cStrings, uxPLConst;
+uses frm_about, frm_xplappslauncher,StrUtils,uxPLCfgItem,uxPLMsgHeader,  LCLType, cStrings, uxPLConst;
 
 //=====================================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0';
-     K_XPL_APP_NAME = 'xPL weather';
+     K_XPL_APP_VERSION_NUMBER = '2.0.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
@@ -69,18 +64,18 @@ begin FrmAbout.ShowModal; end;
 procedure TfrmMain.acInstalledAppsExecute(Sender: TObject);
 begin frmAppLauncher.Show; end;
 
-procedure TfrmMain.OnJoined(const aJoined: boolean);
-begin Memo1.Append(K_MSG_HUB_FOUND) end;
+procedure TfrmMain.LogUpdate(const aList: TStringList);
+begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 
 procedure initListener;
 begin
-   xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
+   xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
    with xPLClient do begin
-       OnxPLJoinedNet := @OnJoined;
        OnxPLSensorRequest := @OnSensorRequest;
-       OnxPLConfigDone  := @OnConfigDone;
+       OnxPLConfigDone    := @OnConfigDone;
+       OnLogUpdate        := @LogUpdate;
        OnCommandGet       := @CommandGet;
        Config.AddItem('partnerid', xpl_ctConfig);
        Config.AddItem('licensekey',xpl_ctConfig);
@@ -88,13 +83,12 @@ begin
        Config.AddItem('unitsystem',xpl_ctConfig);
    end;
 
-   OnJoined(False);
    xPLClient.Listen;
 end;
 
 begin
-   Self.Caption := K_XPL_APP_NAME;
    InitListener;
+   Self.Caption := xPLClient.AppName;
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -104,7 +98,7 @@ begin
    if Assigned(Backup) then Backup.Destroy;
 end;
 
-procedure TfrmMain.CommandGet(var aPageContent: widestring; aParam, aValue: string);
+procedure TfrmMain.CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
 var
   s : widestring;
   i : integer;
@@ -229,9 +223,7 @@ begin
       if not bCheckDifference or (Weather.Localite.Sunset         <> Backup.Localite.Sunset         ) then IssueSensor(Weather.Localite.Sunset         ,'sunset'      ,'generic');
       if not bCheckDifference or (Weather.Courant.Lune.Texte      <> Backup.Courant.Lune.Texte      ) then IssueSensor(Weather.Courant.Lune.Texte      ,'moon-phase'  ,'generic');
 
-      with Weather, Courant do    // OK ça marche
-           Memo1.Append('Data loaded for ' + Lieu);
-
+      with Weather, Courant do  xPLClient.LogInfo('Data loaded for ' + Lieu);
    end;
 end;
 

@@ -1464,9 +1464,11 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   SessionProperties = 'Left;Top'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object Memo1: TMemo
+    Left = 0
     Height = 131
+    Top = 0
     Width = 375
     Align = alClient
     TabOrder = 0
@@ -1531,13 +1533,11 @@ object frmMain: TfrmMain
     left = 200
     object About: TAction
       Caption = 'About'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
     object acInstalledApps: TAction
       Caption = 'Installed xPL apps'
-      DisableIfNoHandler = True
       ImageIndex = 17
       OnExecute = acInstalledAppsExecute
     end
