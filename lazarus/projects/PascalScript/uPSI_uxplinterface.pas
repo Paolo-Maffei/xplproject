@@ -40,9 +40,7 @@ implementation
 
 
 uses
-   uxPLListener
-  ,uxPLMessage
-  ,uxPLMsgHeader
+  uxPLMsgHeader
   ,uxplinterface
   ;
  
@@ -60,6 +58,7 @@ begin
   with CL.AddClassN(CL.FindClass('TxPLListener'),'TxPLInterface') do
   begin
     RegisterMethod('Procedure SendMsg( aMsgType : TxPLMessageType; aTarget, aSchema, aBody : string)');
+    RegisterMethod('function  Exists(aString : string; bDelete : boolean) : boolean;');
   end;
 end;
 
@@ -76,6 +75,7 @@ begin
   with CL.Add(TxPLInterface) do
   begin
     RegisterMethod(@TxPLInterface.SendMsg, 'SendMsg');
+	RegisterMethod(@TxPLInterface.Exists, 'Exists');
   end;
 end;
 

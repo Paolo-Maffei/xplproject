@@ -9,10 +9,11 @@ type
     { TxPLInterface }
 
     TxPLInterface = class(TxPLWebListener)
-       fGlobalList : TStringList;   // ==> this should be modified to use TxPLGlobalList
+       //fGlobalList : TStringList;   // ==> this should be modified to use TxPLGlobalList
+       fGlobalList : TxPLGlobalList;
        xPLMessage  : TxPLMessage;
     public
-       constructor create(aOwner : TComponent; aVendor, aDevice, aAppName, aAppVersion, aDefaultPort : string);
+       constructor create(aOwner : TComponent; aVendor, aDevice, aAppVersion, aDefaultPort : string);
        destructor destroy; override;
 
        procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
@@ -41,20 +42,21 @@ type
        // Logs management functions
        procedure Log(aString : string);
     property
-       Globals : tstringlist read fGlobalList;
+       Globals : TxPLGlobalList read fGlobalList;
       // property OnxPLGlobalChanged : TxPLGlobalChangedEvent  read FOnxPLGlobalChanged      write FOnxPLGlobalChanged;
     end;
 
 implementation { TxPLInterface ================================================}
 uses
-  SysUtils,StrUtils;
+  SysUtils,StrUtils, uxPLConst;
 
-constructor TxPLInterface.create(aOwner: TComponent; aVendor, aDevice, aAppName, aAppVersion, aDefaultPort : string);
+constructor TxPLInterface.create(aOwner: TComponent; aVendor, aDevice, aAppVersion, aDefaultPort : string);
 begin
-  inherited create(aOwner, aVendor, aDevice, aAppName, aAppVersion,aDefaultPort );
-  fGlobalList := TStringList.Create;
-  fGlobalList.Duplicates:=dupIgnore;
-  fGlobalList.Sorted := true;
+  inherited create(aOwner, aVendor, aDevice, aAppVersion,aDefaultPort );
+  //fGlobalList := TStringList.Create;
+  fGlobalList := TxPLGlobalList.Create;
+  //fGlobalList.Duplicates:=dupIgnore;
+  //fGlobalList.Sorted := true;
   xPLMessage := TxPLMessage.Create;
 end;
 
@@ -66,25 +68,27 @@ begin
 end;
 
 procedure TxPLInterface.WriteToXML(const aCfgfile: TXmlConfig;  const aRootPath: string);
-var i : integer;
+//var i : integer;
 begin
-    for i:=0 to fGlobalList.Count-1 do
-        TxPLGlobalValue(fGlobalList.Objects[i]).WriteToXML(aCfgfile, aRootPath + '/Global_' + intToStr(i));
-    aCfgfile.SetValue(aRootPath + '/GlobalCount', fGlobalList.Count);
+   fGlobalList.WriteToXML ;
+//    for i:=0 to fGlobalList.Count-1 do
+//        TxPLGlobalValue(fGlobalList.Objects[i]).WriteToXML(aCfgfile, aRootPath + '/Global_' + intToStr(i));
+//    aCfgfile.SetValue(aRootPath + '/GlobalCount', fGlobalList.Count);
 end;
 
 procedure TxPLInterface.ReadFromXML(const aCfgfile: TXmlConfig;   const aRootPath: string);
-var i,newGlobal : integer;
-    aGlobal  : TxPLGlobalValue;
+//var i,newGlobal : integer;
+//    aGlobal  : TxPLGlobalValue;
 begin
-   i := StrToInt(aCfgfile.GetValue(aRootPath +'/GlobalCount', '0')) - 1;
-   while i>=0 do begin
-       aGlobal := TxPLGlobalValue.Create;
-       aGlobal.ReadFromXML(aCfgfile, aRootPath + '/Global_' + intToStr(i));
-       newGlobal := fGlobalList.Add(aGlobal.fName);
-       fGlobalList.Objects[newGlobal] := aGlobal;
-      dec(i);
-   end;
+   fGlobalList.ReadFromXML(aCfgFile,aRootPath);
+//   i := StrToInt(aCfgfile.GetValue(aRootPath +'/GlobalCount', '0')) - 1;
+//   while i>=0 do begin
+//       aGlobal := TxPLGlobalValue.Create;
+//       aGlobal.ReadFromXML(aCfgfile, aRootPath + '/Global_' + intToStr(i));
+//       newGlobal := fGlobalList.Add(aGlobal.fName);
+//       fGlobalList.Objects[newGlobal] := aGlobal;
+//      dec(i);
+//   end;
 end;
 
 procedure TxPLInterface.SendMsg(aMsgType : integer; aTarget,aSchema,aBody : string);
@@ -136,7 +140,8 @@ var i : integer;
 begin
    i := fGlobalList.IndexOf(aString);
    result := (i<>-1);
-   if result and bDelete then fGlobalList.Delete(i);
+   //if result and bDelete then fGlobalList.Delete(i);
+   if result and bDelete then fGlobalList.Delete(aString);
 end;
 
 function TxPLInterface.GlobalValue(aString: string): string;
