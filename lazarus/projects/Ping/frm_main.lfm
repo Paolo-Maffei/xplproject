@@ -2413,9 +2413,11 @@ object FrmMain: TFrmMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object Memo1: TMemo
+    Left = 0
     Height = 162
+    Top = 0
     Width = 494
     Align = alClient
     TabOrder = 0
@@ -2425,13 +2427,11 @@ object FrmMain: TFrmMain
     top = 56
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object About: TAction
       Caption = 'About'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
