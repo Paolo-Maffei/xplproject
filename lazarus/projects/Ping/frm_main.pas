@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls, Grids, StdCtrls,MkPinger,
   DateUtils, IdICMPClient,IdCustomHTTPServer,
-  Variants,  Buttons, uxPLConfig,uxPLWebListener, uxPLMessage, uxPLMsgHeader;
+  Variants,  Buttons, uxPLConfig,uxPLWebListener, uxPLMessage, uxPLMsgHeader, uxPLConst;
 
 type
 
@@ -46,27 +46,24 @@ type
     bConfirmExit : boolean;
     xPLClient   : TxPLWebListener;
 
-    { xPL Part }
-    procedure OnJoined(const aJoined : boolean);
     procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
     procedure OnConfigDone(const fConfig : TxPLConfig);
     procedure SendSensorMsg(aMsgType : TxPLMessageType; aDevice: string; aValue: string);
-    procedure UpdateStatusBar;
     function  AppendAHost(aHostName : string) : TMkPinger;
-
-    procedure CommandGet(var aPageContent : widestring; aParam, aValue : string);
+    procedure CommandGet(var aPageContent : widestring;  ARequestInfo: TIdHTTPRequestInfo);
+    procedure LogUpdate(const aList : TStringList);
+    function  ReplaceTag(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean;
+    function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
   end;
 
-var
-  frmMain: TfrmMain;
+var frmMain: TfrmMain;
 
 implementation {==========================================================================================}
-uses Frm_About,LCLType, uxplcfgitem, StrUtils, cStrings, XMLCfg, uxPLConst;
+uses Frm_About,LCLType,  XMLCfg, StrUtils;
 
 //=====================================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER ='1.5';
-     K_XPL_APP_NAME = 'xPL Ping';
+     K_XPL_APP_VERSION_NUMBER ='1.7';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'ping';
      K_DEFAULT_PORT   = '8334';
@@ -82,38 +79,34 @@ begin FrmAbout.ShowModal; end;
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
 
-procedure TFrmMain.OnJoined(const aJoined: boolean);
-begin UpdateStatusBar; end;
-
-procedure TfrmMain.UpdateStatusBar;
-begin
-   Memo1.Lines.Add(Format(K_MSG_HUB_FOUND,[IfThen( xPLClient.JoinedxPLNetwork, '','not')]));
-   Memo1.Lines.Add(Format(K_MSG_CONFIGURED,[IfThen(xPLClient.AwaitingConfiguration, 'pending','done')]));
-end;
+procedure TfrmMain.LogUpdate(const aList: TStringList);
+begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
+
 procedure initListener;
 begin
-  xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, K_XPL_APP_NAME, K_XPL_APP_VERSION_NUMBER,K_DEFAULT_PORT);
-  with xPLClient do begin
-       OnxPLJoinedNet     := @OnJoined;
-       OnxPLSensorRequest := @OnSensorRequest;
-       OnxPLConfigDone    := @OnConfigDone;
-       OnCommandGet       := @CommandGet;
+   xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER,K_DEFAULT_PORT);
+   with xPLClient do begin
+       OnxPLSensorRequest  := @OnSensorRequest;
+       OnxPLConfigDone     := @OnConfigDone;
+       OnCommandGet        := @CommandGet;
+       OnLogUpdate         := @LogUpdate;
+       OnReplaceTag        := @ReplaceTag;
+       OnReplaceArrayedTag := @ReplaceArrayedTag;
        Config.AddItem(K_CONFIG_INTERVAL, xpl_ctConfig ,'2');
        Config.AddItem(K_CONFIG_TIMEOUT, xpl_ctConfig ,'5');
        Config.AddItem(K_CONFIG_RETRIES   , xpl_ctConfig ,'3');
-  end;
-  OnJoined(False);
-  xPLClient.Listen;
+   end;
+   xPLClient.Listen;
 end;
 
 begin
-  Self.Caption := K_XPL_APP_NAME;
   bConfirmExit := True;
 
   InitListener;
   aMessage := xPLClient.PrepareMessage(xpl_mtStat,'');
+  Self.Caption := xPLClient.AppName;
 end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
@@ -155,36 +148,98 @@ begin
      result.OnFinish    := @ICMPFinish;
 end;
 
-procedure TfrmMain.CommandGet(var aPageContent : widestring; aParam, aValue : string);
-var
-  Pattern : string;
-  sOut    : widestring;
-  Where   : integer;
-  i       : integer;
-  item    : TMkPinger;
+function TfrmMain.ReplaceTag(const aDevice: string; const aParam : string; aValue : string; const aVariable: string; out ReplaceString: string): boolean;
+var item : TMKPinger;
 begin
-   if aParam='delete' then begin fPingerList.DeletePing(aValue); aValue:=''; end;
-   if aParam='add'    then begin AppendAHost(aValue); aValue:=''; end;
-
-   Pattern := StrBetween(aPageContent,K_WEB_TEMPLATE_BEGIN,K_WEB_TEMPLATE_END);
-   if (AnsiPos('{%ping_', Pattern)<>0) then begin                                           // here is a pattern we must handle
-      Where  := AnsiPos(K_WEB_TEMPLATE_BEGIN, aPageContent);                                   // Locate where it begins
-      Delete(aPageContent,Where,length(K_WEB_TEMPLATE_END + K_WEB_TEMPLATE_BEGIN +Pattern));   // Delete it to avoid being processed by another
-      i := fPingerList.Count -1;
-      while(i>=0) do begin
-         item := TMkPinger(fPingerList.Items[i]);
-         if (aValue=item.Host) or (aValue='') then begin
-           sOut := Pattern;
-           HtmlReplaceVar( ['ping_hostname', 'ping_ipaddress', 'ping_pingtime', 'ping_status'],
-                           [item.Host      , item.Statistics.Host  , FloatToStr(item.Statistics.RttAvg), item.StatusAsString],sOut);
-           Insert(sOut,aPageContent,Where);
-           Where += length(sOut);
-         end;
-         dec(i);
+   ReplaceString := '';
+   if aParam='hostname' then begin
+      item := fPingerList.ItemByName(aValue);
+      if Assigned(item) then begin
+         if aVariable = 'hostname'  then ReplaceString := Item.Host
+         else if aVariable = 'ipaddress' then ReplaceString := IfThen(Item.Statistics.Host<>'',Item.Statistics.Host,'unknown')
+         else if aVariable = 'pingtime'  then ReplaceString := FloatToStr(Item.Statistics.RttAvg)
+         else if aVariable = 'status'    then ReplaceString := Item.StatusAsString;
       end;
    end;
+   result := ReplaceString<>'';
 end;
 
+function TfrmMain.ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
+var i : integer;
+begin
+   if aDevice<>K_DEFAULT_DEVICE then exit;
+   ReturnList.Clear;
+
+   if aVariable = 'hostname'  then for i:=0 to fPingerList.Count-1 do ReturnList.Add(TMkPinger(fPingerList.Items[i]).Host)
+   else if aVariable = 'ipaddress' then for i:=0 to fPingerList.Count-1 do ReturnList.Add(TMkPinger(fPingerList.Items[i]).Statistics.Host)
+   else if aVariable = 'pingtime'  then for i:=0 to fPingerList.Count-1 do ReturnList.Add(FloatToStr(TMkPinger(fPingerList.Items[i]).Statistics.RttAvg))
+   else if aVariable = 'status'    then for i:=0 to fPingerList.Count-1 do ReturnList.Add(TMkPinger(fPingerList.Items[i]).StatusAsString);
+
+   result := (ReturnList.Count >0);
+end;
+
+
+procedure TfrmMain.CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
+var aParam : string;
+begin
+   if ARequestInfo.Params.Count=0 then exit;
+
+      aParam := ARequestInfo.Params.Names[0];
+      if aParam ='delete'   then fPingerList.DeletePing(ARequestInfo.Params.Values[aParam])
+      else if aParam ='add' then AppendAHost(ARequestInfo.Params.Values[aParam]);
+
+end;
+
+procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
+var  config : TXmlConfig;
+    i : integer;
+begin
+  if not assigned(FPingerList) then FPingerList := TMkPingerList.Create;
+  config := xPLClient.Config.XmlFile;
+  FPingerList.OnFinish := @PingsFinished;
+  FPingerList.TimeOut  := fConfig.ItemName['receive_tmout'].AsInteger*1000;
+  Ping_Interval := fConfig.ItemName['ping_interval'].AsInteger;
+  i := 0;
+  while (Config.GetValue('PingList/Ping_' + intToStr(i) + '/HostName', 'myDummyImprobableHostname')<> 'myDummyImprobableHostname' ) do begin
+        AppendAHost(Config.GetValue('PingList/Ping_' + intToStr(i) + '/HostName',''));
+        Config.DeletePath ('PingList/Ping_' + intToStr(i)); // Ensure we won't reload it once again later
+        inc(i);
+  end;
+  Timer.Enabled := true;
+end;
+
+procedure TfrmMain.TimerTimer(Sender: TObject);
+var NowDT : TDateTime;
+begin
+  NowDT := Now;
+
+  if ( SecondOfTheYear( NowDT) MOD ( Ping_Interval * 60) = 0) AND ( NOT FPingerList.Pinging) then begin
+           Application.ProcessMessages;
+           Timer.Enabled := false;
+           FPingerList.Process;
+           Application.ProcessMessages;
+     end
+end;
+
+
+// xPL Messages management ====================================================================================
+procedure TfrmMain.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevice : string; const aAction : string);
+var item    : TMkPinger;
+begin
+    if aAction = 'current' then begin
+       item := fPingerList.ItemByName(aDevice);
+       if item<>nil then SendSensorMsg(xpl_mtStat,aDevice, item.StatusAsString);
+    end;
+end;
+
+procedure TfrmMain.SendSensorMsg(aMsgType : TxPLMessageType; aDevice: string; aValue: string);
+begin
+   aMessage.Header.MessageType := aMsgType;
+   aMessage.Body.Format_SensorBasic(aDevice,'ping',aValue);
+   aMessage.Send ;
+end;
+
+// Ping management ============================================================================================
 procedure TfrmMain.ICMPReply(ASender: TComponent;  const ReplyStatus: TReplyStatus);
 var s : string;
 begin
@@ -205,46 +260,7 @@ begin
      item.OldStatus := item.StatusAsString;
   end;
 
-  Memo1.Lines.Add('Pinging...');
-end;
-
-procedure TfrmMain.SendSensorMsg(aMsgType : TxPLMessageType; aDevice: string; aValue: string);
-begin
-   aMessage.Header.MessageType := aMsgType;
-   aMessage.Body.Format_SensorBasic(aDevice,'ping',aValue);
-   aMessage.Send ;
-end;
-
-procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
-var  config : TXmlConfig;
-    i : integer;
-begin
-  if not assigned(FPingerList) then FPingerList := TMkPingerList.Create;
-  config := xPLClient.Config.XmlFile;
-  FPingerList.OnFinish := @PingsFinished;
-  FPingerList.TimeOut  := fConfig.ItemName['receive_tmout'].AsInteger*1000;
-  Ping_Interval := fConfig.ItemName['ping_interval'].AsInteger;
-  i := 0;
-  while (Config.GetValue('PingList/Ping_' + intToStr(i) + '/HostName', 'myDummyImprobableHostname')<> 'myDummyImprobableHostname' ) do begin
-        AppendAHost(Config.GetValue('PingList/Ping_' + intToStr(i) + '/HostName',''));
-        Config.DeletePath ('PingList/Ping_' + intToStr(i)); // Ensure we won't reload it once again later
-        inc(i);
-  end;
-  Timer.Enabled := true;
-  UpdateStatusBar;
-end;
-
-procedure TfrmMain.TimerTimer(Sender: TObject);
-var NowDT : TDateTime;
-begin
-  NowDT := Now;
-
-  if ( SecondOfTheYear( NowDT) MOD ( Ping_Interval * 60) = 0) AND ( NOT FPingerList.Pinging) then begin
-           Application.ProcessMessages;
-           Timer.Enabled := false;
-           FPingerList.Process;
-           Application.ProcessMessages;
-     end
+  xPLClient.LogInfo('Pinging...');
 end;
 
 procedure TfrmMain.PingsFinished(Sender: TObject);
@@ -252,16 +268,6 @@ begin
     Application.ProcessMessages;
     Timer.Enabled := true;
 end;
-
-procedure TfrmMain.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevice : string; const aAction : string);
-var item    : TMkPinger;
-begin
-    if aAction = 'current' then begin
-       item := fPingerList.ItemByName(aDevice);
-       if item<>nil then SendSensorMsg(xpl_mtStat,aDevice, item.StatusAsString);
-    end;
-end;
-
 
 initialization
   {$I frm_main.lrs}
