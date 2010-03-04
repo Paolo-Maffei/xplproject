@@ -12,25 +12,11 @@ object frmMain: TfrmMain
   OnDestroy = FormDestroy
   OnPaint = FormPaint
   SessionProperties = 'Height;Left;lvGlobals.Columns;PageControl1.ActivePage;Top;Width;TreeListView1.Columns'
-  LCLVersion = '0.9.26.2'
-  object StatusBar1: TStatusBar
-    Height = 23
-    Top = 433
-    Width = 735
-    Panels = <    
-      item
-        Width = 200
-      end    
-      item
-        Width = 200
-      end    
-      item
-        Width = 50
-      end>
-    SimplePanel = False
-  end
+  LCLVersion = '0.9.28.2'
   object ToolBar3: TToolBar
+    Left = 0
     Height = 26
+    Top = 0
     Width = 735
     ButtonHeight = 24
     ButtonWidth = 80
@@ -40,73 +26,74 @@ object frmMain: TfrmMain
     Flat = False
     List = True
     ShowCaptions = True
-    TabOrder = 1
+    TabOrder = 0
     object ToolButton2: TToolButton
       Left = 81
+      Top = 0
       Action = acStop
     end
     object ToolButton1: TToolButton
       Left = 1
+      Top = 0
       Action = acRun
     end
   end
   object mmoMessages: TMemo
+    Left = 0
     Height = 407
-    Top = 26
-    Width = 735
-    Align = alClient
+    Top = 24
+    Width = 376
     ReadOnly = True
     ScrollBars = ssVertical
-    TabOrder = 2
+    TabOrder = 1
     WordWrap = False
+  end
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 433
+    Width = 735
+    Panels = <>
   end
   object ActionList1: TActionList
     left = 8
     top = 120
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       Hint = 'Quit the application'
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object About: TAction
       Caption = 'About...'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
     object InstalledApps: TAction
       Caption = 'Installed xPL apps'
-      DisableIfNoHandler = True
       ImageIndex = 17
       OnExecute = InstalledAppsExecute
     end
     object acStop: TAction
       Caption = 'Stop'
-      DisableIfNoHandler = True
       ImageIndex = 9
       OnExecute = acStopExecute
     end
     object acCheck: TAction
       Caption = 'Syntax Check'
-      DisableIfNoHandler = True
       ImageIndex = 15
       OnExecute = acCheckExecute
     end
     object acRun: TAction
       Caption = 'Run'
-      DisableIfNoHandler = True
       ImageIndex = 5
       OnExecute = acRunExecute
     end
     object acGLModify: TAction
       Caption = 'Change value '
-      DisableIfNoHandler = True
     end
     object acGLDelete: TAction
       Caption = 'Delete value'
-      DisableIfNoHandler = True
     end
   end
   object MainMenu1: TMainMenu
@@ -372,6 +359,7 @@ object frmMain: TfrmMain
     end
   end
   object PSScript: TPSScript
+    CompilerOptions = []
     OnLine = PSScriptLine
     OnCompile = PSScriptCompile
     OnExecute = PSScriptExecute

@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls,  uxPLMessage,  StdCtrls, uPSUtils,
-  Buttons, uxPLConfig, uPSComponent, uPSCompiler, uPSRuntime, SynHighlighterPas,
-  SynEdit,  uxPLInterface, XMLPropStorage;
+  Buttons, uPSComponent, uPSCompiler, uPSRuntime, SynHighlighterPas, IdCustomHTTPServer,
+  SynEdit,  uxPLInterface, XMLPropStorage, uxPLConfig, uxPLCacheManagerFile;
 
 type
   TxPLMessageArrived = function (aMessage: String) : Longint of object;         // Function called when an xPLMessage arrives
@@ -80,9 +80,9 @@ type
 //    procedure RefreshGlobalDisplay(const aName : string);
     procedure SetButtons;
     function  Compile : boolean;
-    procedure CommandGet(var aPageContent : widestring; aParam, aValue : string);
+    procedure CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
   public
-     bJoined, bConfigured,bAutoStartWanted : boolean;
+     bAutoStartWanted : boolean;
      xPLClient : TxPLInterface;
      MessageArrived   : TxPLMessageArrived;
      GlobalChanged : TGlobalChanged;
@@ -90,25 +90,27 @@ type
      CurrentSource : TStringList;
      FunctionList  : TStringList;
      FunctionsToLaunch : TStringList;
-
-
+     fxPLCacheManager : TxPLCacheManagerFile;
+    procedure LogUpdate(const aList: TStringList);
     procedure Output_AppendLine(aString : string);
-    procedure Output_Clear;
+        function  ReplaceTag (const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean;
+    function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
+
+//    procedure Output_Clear;
   end;
 
 
 var frmMain: TfrmMain;
 
 implementation {===============================================================}
-uses Frm_About, frm_xPLAppslauncher, cstrings, regexpr,
-     LCLType, StrUtils, DateUtils, uxPLMsgHeader, XMLCfg,uxPLCfgItem,
+uses Frm_About, frm_xPLAppslauncher, cstrings, regexpr, uxPLConst, LCLType,
+     DateUtils, uxPLMsgHeader, XMLCfg, uxPLFilter,
      uPSR_std, uPSC_std, uPSR_forms, uPSC_forms, upsr_dateutils, upsc_dateutils,
      uPSC_classes, uPSR_classes, uPSI_uxplinterface;
 
 {==============================================================================}
 resourcestring
      K_XPL_APP_VERSION_NUMBER = '0.7';
-     K_XPL_APP_NAME = 'xPL Pascal Script';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'psscript';
      K_DEFAULT_PORT = '8335';
@@ -122,6 +124,15 @@ begin frmAppLauncher.ShowModal; end;
 
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
+
+procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin
+   CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES);
+   if CanClose and (PSScript.Running) then AcStopExecute(self);
+end;
+
+procedure TfrmMain.LogUpdate(const aList: TStringList);
+begin mmoMessages.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
 var functionname : string;
@@ -141,13 +152,6 @@ begin
                                                                                                        // from the OnGet http either we have
    PSScript.ExecuteFunction([],functionname);                                                          // an EThread exception on call of CheckSynchronize by a non main thread
    functionsToLaunch.Delete(0);
-end;
-
-
-procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-begin
-   CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES);
-   if CanClose and (PSScript.Running) then AcStopExecute(self);
 end;
 
 { Script operations management ================================================}
@@ -195,8 +199,9 @@ function TfrmMain.Compile : boolean;
 var i: Longint;
 begin
   result := false;
-  Output_Clear;
+//  Output_Clear;
   if FileExists(PSScript.MainFileName) then begin
+     FunctionList.Clear;
      Output_AppendLine('Loading ' + PSScript.MainFileName);
      PSScript.Script.LoadFromFile(PSScript.MainFileName);
      CurrentSource.AddStrings(PSScript.Script);
@@ -211,69 +216,35 @@ begin
   if result then Output_AppendLine('Syntax check ok');
 end;
 
-procedure TfrmMain.CommandGet(var aPageContent: widestring; aParam,aValue: string);
-const sBeginTemplate = '<!-- Result template>';
-      sEndTemplate   = '<Result template-->';
-var //s : widestring;
-  Pattern : string;
-  sOut,globale    : string;
-  Where,long: integer;
-  i       : integer;
+function TfrmMain.ReplaceTag(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean;
 begin
-   if aParam = 'Procedure_Name' then FunctionsToLaunch.Add(aValue);
+   if aDevice <> K_DEFAULT_DEVICE then exit;        // This isn't for me
+   ReplaceString := '';
 
-   Pattern := StrBetween(aPageContent,sBeginTemplate,sEndTemplate);
-   if length(Pattern)=0 then exit;
+   Result := (ReplaceString<>'');
+end;
+
+function TfrmMain.ReplaceArrayedTag(const aDevice: string; const aValue : string; const aVariable: string; ReturnList: TStringList): boolean;
+var i : integer;
+begin
+   if aDevice<>K_DEFAULT_DEVICE then exit;
+   ReturnList.Clear;
 
    with xPLClient do begin
+   if aVariable = 'function_name'        then for i:=0 to FunctionList.Count-1 do ReturnList.Add(FunctionList[i])
+   else if aVariable = 'global_name'     then for i:=0 to Globals.Count-1      do begin if ((aValue='') or (aValue=Globals[i])) then ReturnList.Add(Globals[i]) end
+   else if aVariable = 'global_value'    then for i:=0 to Globals.Count-1      do begin if ((aValue='') or (aValue=Globals[i])) then ReturnList.Add(GlobalValue(Globals[i])) end
+   else if aVariable = 'global_previous' then for i:=0 to Globals.Count-1      do begin if ((aValue='') or (aValue=Globals[i])) then ReturnList.Add(GlobalFormer(Globals[i])) end
+   else if aVariable = 'global_modified' then for i:=0 to Globals.Count-1      do begin if ((aValue='') or (aValue=Globals[i])) then ReturnList.Add(DateTimeToStr(GlobalModified(Globals[i]))) end
+   else if aVariable = 'global_created'  then for i:=0 to Globals.Count-1      do begin if ((aValue='') or (aValue=Globals[i])) then ReturnList.Add(DateTimeToStr(GlobalCreated(Globals[i]))) end
+   end;
+   result := (ReturnList.Count >0);
+end;
 
-     if Pos('{%global_',Pattern)>0 then begin
-        i := Globals.Count -1;
-        long := length(aPageContent);
-        Where  := AnsiPos(sEndTemplate, aPageContent) + length(sEndTemplate);
-        while(i>=0) do begin
-           globale := Globals[i];
-           if (aValue=globale) or (aValue='') then begin
-              sOut := StrReplace('{%global_name%}', globale, Pattern,false);
-              sOut := StrReplace('{%global_value%}', GlobalValue(globale), sOut,false);
-              sOut := StrReplace('{%global_previous%}', GlobalFormer(globale), sOut,false);
-              sOut := StrReplace('{%global_modified%}', DateTimeToStr(GlobalModified(globale)), sOut,false);
-              sOut := StrReplace('{%global_created%}', DateTimeToStr(GlobalCreated(globale)), sOut,false);
-              Insert(sOut,aPageContent,Where);
-              Where += length(sOut);
-           end;
-           dec(i);
-        end;
-     end;
-     if Pos('{%function_',Pattern)>0 then begin
-        i := FunctionList.Count -1;
-        long := length(aPageContent);
-        Where  := AnsiPos(sEndTemplate, aPageContent) + length(sEndTemplate);
-        while(i>=0) do begin
-           globale := FunctionList[i];
-           if (aValue=globale) or (aValue='') then begin
-              sOut := StrReplace('{%function_name%}', globale, Pattern,false);
-              Insert(sOut,aPageContent,Where);
-              Where += length(sOut);
-           end;
-           dec(i);
-        end;
-     end;
-     if Pos('{%script_',Pattern)>0 then begin
-        i := mmoMessages.Lines.Count -1;
-        long := length(aPageContent);
-        Where  := AnsiPos(sEndTemplate, aPageContent) + length(sEndTemplate);
-        while(i>=0) do begin
-           globale := mmoMessages.Lines[i];
-           if (aValue=globale) or (aValue='') then begin
-              sOut := StrReplace('{%script_result%}', globale, Pattern,false);
-              Insert(sOut,aPageContent,Where);
-              Where += length(sOut);
-           end;
-           dec(i);
-        end;
-     end;
-  end;
+procedure TfrmMain.CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
+begin
+   if ARequestInfo.Params.Count=0 then exit;
+   if ARequestInfo.Params.Names[0] = 'Procedure_Name' then FunctionsToLaunch.Add(ARequestInfo.Params.Values[ARequestInfo.Params.Names[0]]);
 end;
 
 procedure TfrmMain.acRunExecute(Sender: TObject);
@@ -306,75 +277,75 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  Self.Caption := K_XPL_APP_NAME;
-  bJoined := false;
-  bConfigured := false;
+//  bJoined := false;
   bAutoStartWanted := false;
   CurrentSource    := TStringList.Create;
   FunctionList     := TStringList.Create;
   FunctionsToLaunch:= TStringList.Create;
 
-  xPLClient := TxPLInterface.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER,K_DEFAULT_PORT);
-  xPLClient.Config.AddItem('autostart',xpl_ctConfig,'0'); //,  1, 'Launch script at startup (1 or 0)', '^[01]{1}$');
+  xPLClient := TxPLInterface.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER,K_DEFAULT_PORT);
   xPLClient.Config.AddItem('scriptfile',xpl_ctConfig,'0');//,  1, 'Name of the main script file', '^([a-zA-Z]\:|\\\\[^\/\\:*?"<>|]+\\[^\/\\:*?"<>|]+)(\\[^\/\\:*?"<>|]+)+(\.[^\/\\:*?"<>|]+)$');
-  xPLClient.Config.AddItem('autosense',xpl_ctConfig,'0',16); //,'Autosense schema to globals','([0-9a-z/-]{1,8})\.([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})');
 
-  xPLClient.Config.AddValue('autosense','sensor.basic,device,current');
-  OnJoined(False);
-
+  Self.Caption := xPLClient.AppName;
   with xPLClient do begin
-       OnxPLJoinedNet := @OnJoined;
-       OnxPLConfigDone:= @OnConfigDone;
-       OnxPLReceived  := @OnMessageReceived;
-       OnxPLGlobalChanged:= @OnGlobalChanged;
+       OnxPLJoinedNet     := @OnJoined;
+       OnLogUpdate        := @LogUpdate;
+       OnxPLReceived      := @OnMessageReceived;
+       OnxPLGlobalChanged := @OnGlobalChanged;
        OnCommandGet       := @CommandGet;
+       OnxPLConfigDone    := @OnConfigDone;
+       OnReplaceTag       := @ReplaceTag;
+       OnReplaceArrayedTag := @ReplaceArrayedTag;
   end;
   xPLClient.Listen;
 end;
 
-procedure TFrmMain.OnJoined(const aJoined: boolean);
+procedure TfrmMain.OnJoined(const aJoined: boolean);
 begin
-   bJoined := aJoined;
-   StatusBar1.Panels[0].Text := 'Hub ' + IfThen( xPLClient.JoinedxPLNetwork, '','not') + ' found';
-   StatusBar1.Panels[1].Text := 'Configuration ' + IfThen (bConfigured, 'done','pending');
+   if xPLClient.AwaitingConfiguration then exit;
 end;
 
-procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
+procedure TfrmMain.OnConfigDone(const fConfig : TxPLConfig);
 var config : TXmlConfig;
 begin
-   bConfigured := true;
-   config := fConfig.XmlFile;
+   if xPLClient.AwaitingConfiguration then exit;
+   if length(xPLClient.HtmlDir) = 0 then exit;
+   config := xPLClient.Config.XmlFile;
 
    xPLClient.ReadFromXML(Config,'GlobalList');
-   if fConfig.ItemName['autostart'].Value='1' then bAutoStartWanted := true;
-   PSScript.MainFileName := fConfig.ItemName['scriptfile'].Value;
+   PSScript.MainFileName := xPLClient.HtmlDir + '\' + K_DEFAULT_DEVICE + '\scripts\' + xPLClient.Config.ItemName['scriptfile'].Value;
+   bAutoStartWanted := FileExists(PSScript.MainFilename);
+   if bAutoStartWanted then
+      xPLClient.LogInfo('Loading ' + PSScript.MainFileName)
+   else
+      xPLClient.LogInfo(Format(K_WEB_ERR_404,[PSScript.MainFileName]));
+
+  fxPLCacheManager := TxPLCacheManagerFile.Create(xPLClient.Setting);
+  xPLClient.Log('Cache manager loaded for ' + intToStr(fxPLCacheManager.Count) + ' entries');
+
    SetButtons;
 end;
 
+
 procedure TfrmMain.OnMessageReceived(const axPLMessage: TxPLMessage);
-var i,j, iDevice,iValue : integer;
-    s, schema, ident, value : string;
+var i,j,k, iDevice,iValue : integer;
+    avalue : string;
+    s,v, schema, ident, value : string;
 begin
    if not PSScript.Running then exit;
-   //*** Device Status Extraction part
-   i := xPLClient.Config.ItemByName('autosense');
-   for j:= 0 to xPLClient.Config.Item[i].ValueCount -1 do begin
-       s := xPLClient.Config.Item[i].Values[j];
-       if StrSplitAtChar(s,',',schema,s) then begin
-          if StrSplitAtChar(s,',',ident,value) then begin
-
-             if axPLMessage.Schema.Tag=schema then begin
-                iDevice := axPLMessage.Body.Keys.IndexOf(ident);
-                iValue  := axPLMessage.Body.Keys.IndexOf(value);
-                if (iDevice<>-1) and (iValue<>-1) then
-                   xPLClient.Value(  axPLMessage.Source.Tag + '.' +
-                        axPLMessage.Body.Values[iDevice],
-                        axPLMessage.Body.Values[iValue]);
-                end;
+   for i := 0 to fxPLCacheManager.Count-1 do
+       if TxPLFilters.Matches(fxPLCacheManager.Filter(i),axPLMessage.FilterTag) then
+          for j := 0 to fxPLCacheManager.CachedCount(i) - 1 do begin
+              aValue := fxPLCacheManager.CachedItem(i,j);
+              if aValue = '*' then begin                                                  // Handle all items contained in the message
+                  for k := 0 to axPLMessage.Body.Keys.Count-1 do
+                     xPLClient.Value( fxPLCacheManager.ComposeCachedName(i,axPLMessage.Body.Keys[k], axPLMessage.Source), axPLMessage.Body.Values[k]);
+              end else begin                                                              // Handle only this item
+                  k := axPLMessage.Body.Keys.IndexOf(aValue);
+                  xPLClient.Value( fxPLCacheManager.ComposeCachedName(i,fxPLCacheManager.CachedName(i,j), axPLMessage.Source), axPLMessage.Body.Values[k]);
+              end;
           end;
-       end;
-   end;
-   //***
+
    xPLClient.xPLMessage.RawXPL := axPLMessage.RawXPL ;
    MessageArrived(axPLMessage.RawXPL);
 end;
@@ -444,7 +415,7 @@ begin
   try
     F := TFileStream.Create(Path, fmOpenRead or fmShareDenyWrite);
   except
-    Output_AppendLine('File not found : ' + Path);
+    Output_AppendLine(Format(K_ERR_MSG_FNF,[Path]));
     Result := false;
     exit;
   end;
@@ -495,6 +466,7 @@ end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
+     if Assigned(fxPLCacheManager) then fxPLCacheManager.destroy;
      xPLClient.WriteToXML(xPLClient.Config.XmlFile,'GlobalList');
      if Assigned(xPLClient) then xPLClient.destroy;
      CurrentSource.Destroy;
@@ -517,10 +489,7 @@ begin
 end;
 
 procedure TfrmMain.Output_AppendLine(aString: string);
-begin mmoMessages.Lines.Add(aString); end;
-
-procedure TfrmMain.Output_Clear;
-begin mmoMessages.Lines.Clear; end;
+begin xPLClient.LogInfo(aString); end;
 
 initialization
   {$I frm_main.lrs}
