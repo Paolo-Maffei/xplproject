@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 10
+  Left = 150
   Height = 494
-  Top = 96
+  Top = 162
   Width = 784
   Caption = 'FrmMain'
   ClientHeight = 474
