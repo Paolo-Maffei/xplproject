@@ -1463,8 +1463,9 @@ object frmMain: TfrmMain
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   SessionProperties = 'Left;Top;Width;Height;lvEvents.Columns;lvTimers.Columns'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object StatusBar1: TStatusBar
+    Left = 0
     Height = 23
     Top = 416
     Width = 699
@@ -1478,6 +1479,7 @@ object frmMain: TfrmMain
     SimplePanel = False
   end
   object lvEvents: TListView
+    Left = 0
     Height = 228
     Top = 188
     Width = 699
@@ -1506,7 +1508,9 @@ object frmMain: TfrmMain
     OnDblClick = lvEventsDblClick
   end
   object lvTimers: TListView
+    Left = 0
     Height = 183
+    Top = 0
     Width = 699
     Align = alTop
     Columns = <    
@@ -1540,6 +1544,7 @@ object frmMain: TfrmMain
   end
   object Splitter1: TSplitter
     Cursor = crVSplit
+    Left = 0
     Height = 5
     Top = 183
     Width = 699
@@ -1781,53 +1786,44 @@ object frmMain: TfrmMain
     left = 336
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       Hint = 'Quit the application'
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object SaveSettings: TAction
       Caption = '&Save Settings'
-      DisableIfNoHandler = True
       ImageIndex = 3
     end
     object UpdateSeed: TAction
       Caption = 'Update plugin list'
-      DisableIfNoHandler = True
       ImageIndex = 12
     end
     object DownloadSelected: TAction
       Caption = 'Download selected'
-      DisableIfNoHandler = True
       ImageIndex = 5
     end
     object About: TAction
       Caption = 'About...'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
     object InstalledApps: TAction
       Caption = 'Installed xPL apps'
-      DisableIfNoHandler = True
       ImageIndex = 17
       OnExecute = InstalledAppsExecute
     end
     object acNewSingleEvent: TAction
       Caption = 'New single Event'
-      DisableIfNoHandler = True
       Enabled = False
       OnExecute = acNewSingleEventExecute
     end
     object acNewRecurringEvent: TAction
       Caption = 'New recurring Event'
-      DisableIfNoHandler = True
       Enabled = False
       OnExecute = acNewRecurringEventExecute
     end
     object acNewTimer: TAction
       Caption = 'New Timer'
-      DisableIfNoHandler = True
       Enabled = False
       OnExecute = acNewTimerExecute
     end
