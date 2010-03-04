@@ -19,6 +19,7 @@ begin
   Application.Initialize;
   TConfiguratorUnit.doBasicConfiguration;
   Application.CreateForm(TfrmMain, frmMain);
+  Application.CreateForm(TfrmAbout, frmAbout);
   Application.Icon := frmMain.Icon;
   Application.Run;
 end.
