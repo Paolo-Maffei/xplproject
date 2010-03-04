@@ -65,7 +65,7 @@ TxPLMessage = class(TComponent)
 
         function    SelectFile : boolean;
 
-        function FilterTag : string; // Return a message like a filter string
+        function FilterTag : tsFilter; // Return a message like a filter string
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
 
@@ -140,7 +140,7 @@ begin
      OpenDialog.Destroy;
 end;
 
-function TxPLMessage.FilterTag: string;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
      result := Header.MessageTypeAsString + '.' +
                Source.FilterTag + '.' +

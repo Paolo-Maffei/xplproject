@@ -36,7 +36,7 @@ type
 
        function    GetElementList(const aEltName : string): TStringList;
        function    GetElement(const aElement : string;  const aEltName : string): TDomNode;
-       function    Command(const aCommand : string) : TDomNode;
+
      public
        constructor Create(aNode : TDOMNode); overload;
        destructor  Destroy; override;
@@ -49,9 +49,12 @@ type
        property    DownloadURL : string read fDownloadUrl;
        property    AppType     : string read fType;
        function    CommandAsMessage(const aCommand : string) : TxPLMessage;
+       function    Command(const aCommand : string) : TDomNode;
        function    Commands : TStringList;
        function    ConfigItems : TStringList;
        function    ConfigItem(const aConfigItem : string) : TDomNode;
+       function    MenuItems : TStringList;
+       function    MenuItem(const aMenuItem : string) : string;
        property    Id        : string read fID;                                 // Vendor-Device
        property    VendorTag : tsVendor read fVendor;
        property    Name      : tsDevice read fName;
@@ -63,6 +66,7 @@ uses XMLRead, RegExpr, Dialogs, uxPLMsgHeader;
 resourcestring // XML Vendor file entry and field variable names ========================
    K_VF_Command     = 'command';
    K_VF_ConfigItem  = 'configItem';
+   K_VF_menuItem    = 'menuItem';
    K_VF_Description = 'description';
    K_VF_Info_url    = 'info_url';
    K_VF_NAME        = 'name';
@@ -77,29 +81,42 @@ resourcestring // XML Vendor file entry and field variable names ===============
 
 { TxPLDevice }
 constructor TxPLDevice.Create(aNode : TDomNode);
+
+function SafeReadNode(aValue : string) : string;
 var DevNode : TDOMNode;
 begin
+   result := '';
+   DevNode := fNode.Attributes.GetNamedItem(aValue);
+   if DevNode<>nil then result := DevNode.NodeValue;
+end;
+
+begin
    fNode := aNode;
-   DevNode := fNode.Attributes.GetNamedItem(K_VF_Version);
-   if DevNode<>nil then fVersion := DevNode.NodeValue;
-   DevNode := fNode.Attributes.GetNamedItem(K_VF_Description);
-   if DevNode<>nil then fDescription := DevNode.NodeValue;
-   DevNode := fNode.Attributes.GetNamedItem(K_VF_Info_url);
-   if DevNode<>nil then fInfoURL := DevNode.NodeValue;
 
-   DevNode := fNode.Attributes.GetNamedItem(K_VF_Platform);
-   if DevNode<>nil then fPlatforme := DevNode.NodeValue;
+   fVersion     := SafeReadNode(K_VF_Version);
+   fDescription := SafeReadNode(K_VF_Description);
+   fInfoURL     := SafeReadNode(K_VF_Info_url);
+   fPlatforme   := SafeReadNode(K_VF_Platform);
+   fBetaVersion := SafeReadNode(K_VF_Beta);
+   fDownloadURL := SafeReadNode(K_VF_Download);
+   fType        := SafeReadNode(K_VF_TYPE);
+   fID        := SafeReadNode(K_VF_ID);
 
-      DevNode := fNode.Attributes.GetNamedItem(K_VF_Beta);
-   if DevNode<>nil then fBetaVersion := DevNode.NodeValue;
-
-      DevNode := fNode.Attributes.GetNamedItem(K_VF_Download);
-   if DevNode<>nil then fDownloadURL := DevNode.NodeValue;
-
-      DevNode := fNode.Attributes.GetNamedItem(K_VF_TYPE);
-   if DevNode<>nil then fType := DevNode.NodeValue;
-
-   fID := fNode.Attributes.GetNamedItem(K_VF_ID).NodeValue;   // This one is mandatory
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Version);
+//   if DevNode<>nil then fVersion := DevNode.NodeValue;
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Description);
+//   if DevNode<>nil then fDescription := DevNode.NodeValue;
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Info_url);
+//   if DevNode<>nil then fInfoURL := DevNode.NodeValue;
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Platform);
+//   if DevNode<>nil then fPlatforme := DevNode.NodeValue;
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Beta);
+//   if DevNode<>nil then fBetaVersion := DevNode.NodeValue;
+//      DevNode := fNode.Attributes.GetNamedItem(K_VF_Download);
+//   if DevNode<>nil then fDownloadURL := DevNode.NodeValue;
+//   DevNode := fNode.Attributes.GetNamedItem(K_VF_TYPE);
+//   if DevNode<>nil then fType := DevNode.NodeValue;
+//   fID := fNode.Attributes.GetNamedItem(K_VF_ID).NodeValue;   // This one is mandatory
 
    with TRegExpr.Create do begin
         Expression := K_REGEXPR_DEVICE_ID;
@@ -160,6 +177,22 @@ begin Result := GetElement(aCommand,K_VF_Command); end;
 
 function TxPLDevice.Commands : TStringList;
 begin Result := GetElementList(K_VF_Command); end;
+
+function TxPLDevice.menuItems : TStringList;
+begin Result := GetElementList(K_VF_menuItem); end;
+
+function TxPLDevice.menuItem(const aMenuItem: string): string;
+var aNode : TDomNode;
+begin
+   Result:= '';
+   aNode := GetElement(aMenuItem,K_VF_menuItem);
+   if not Assigned(aNode) then exit;
+
+   aNode := aNode.FindNode('xplMsg');
+   if not Assigned(aNode) then exit;
+
+   result := aNode.FirstChild.NodeValue;
+end;
 
 function TxPLDevice.ConfigItem(const aConfigItem: string): TDomNode;
 begin Result := GetElement(aConfigItem,K_VF_Command); end;

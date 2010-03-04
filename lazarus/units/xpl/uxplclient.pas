@@ -17,7 +17,7 @@ unit uxPLClient;
 interface
 
 uses  Classes, SysUtils,  TLoggerUnit, ExtCtrls, IdGlobal,  TConfiguratorUnit,
-      uXPLSettings, uxPLPluginFile, uxPLMsgHeader, uxPLVendorFile, uxPLConst;
+      uXPLSettings, uxPLMsgHeader, uxPLVendorFile, uxPLConst;
 
 type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
 
@@ -25,7 +25,6 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
 
       TxPLClient = class(TComponent)
       protected
-        //fAppName    : string;
         fAppVersion : string;
         fVendor     : string;
         fDevice     : string;
@@ -44,7 +43,6 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
 
         property    PluginList : TxPLVendorSeedFile  read fPluginList;
         property    Setting    : TxPLSettings        read fSetting;
-        //property    AppName    : string              read fAppName;
         property    AppVersion : string              read fAppVersion;
         property    LogList    : TStringList         read fLogList;
         property    Vendor     : string              read fVendor;

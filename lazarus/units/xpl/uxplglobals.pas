@@ -1,10 +1,18 @@
 unit uxplglobals;
+{==============================================================================
+  UnitName      = uxplglobals
+  UnitDesc      = xPL Global variable handling
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+  0.90 : Initial version
+  0.91 : Added Expirency capability
+}
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Classes, XMLCfg;
+uses Classes, XMLCfg, ExtCtrls;
 
 type
     TxPLGlobalChangedEvent = procedure(aValue : string; aOld : string; aNew : string) of object;
@@ -17,19 +25,21 @@ type
        fComment : string;
        fModifyTS : TDateTime;
        fCreateTS : TDateTime;
+       fExpireTS : TDateTime;
     public
        constructor Create(const aName : string = '');
 
        procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
        procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
 
-       function  SetValue(const AValue: string) : boolean;
+       function  SetValue(const AValue: string; const ExpireOn : TDateTime = 0) : boolean;
        procedure SetComment(const aComment : string);
     published
        property Value   : string read fValue;
        property Comment : string read fComment;
        property ModifyTS: TDateTime read fModifyTS;
        property CreateTS: TDateTime read fCreateTS;
+       property ExpireTS: TDateTime read fExpireTS;
     end;
 
     { TxPLGlobalList }
@@ -38,9 +48,17 @@ type
     private
        fCfgFile : TXmlConfig;
        fRootPath: string;
+       fTimer   : TTimer;
+
+       procedure OnTimer(aSender : TObject);
     public
        constructor Create;
+       destructor  Destroy;
        procedure SetValue(const aString : string; const aValue: string; const aComment : string = '');
+       function  GetValue(const i : integer) : string;
+       function  GetValue(const aString : string) : string;
+       function  Item(const i : integer) : TxPLGlobalValue;
+       procedure Delete(const aString : string); overload;
        procedure WriteToXML;
        procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string);
     end;
@@ -55,15 +73,17 @@ resourcestring
       K_XML_FORMER_PATH  = '/Former';
       K_XML_MODIF_PATH   = '/ModifyTS';
       K_XML_CREATE_PATH  = '/CreateTS';
+      K_XML_EXPIRE_PATH  = '/ExpireTS';
       K_XML_COMMENT_PATH = '/Comment';
 
 
-function TxPLGlobalValue.SetValue(const AValue: string) : boolean;
+function TxPLGlobalValue.SetValue(const AValue: string; const ExpireOn : TDateTime = 0) : boolean;
 begin
   result := (aValue <> fValue);
   if not result then exit;
 
   fModifyTS := now;
+  if ExpireOn=0 then fExpireTS := fCreateTS-1 else fExpireTS := ExpireOn;
   fFormer:= fValue;
   fValue := aValue;
 end;
@@ -78,6 +98,7 @@ begin
   fValue    := '';
   fFormer   := '';
   fComment  := '';
+  fExpireTS := fCreateTS - 1;
 end;
 
 procedure TxPLGlobalValue.WriteToXML(const aCfgfile : TXmlConfig; const aRootPath : string);
@@ -89,6 +110,7 @@ begin
       SetValue(aRootPath + K_XML_MODIF_PATH , DateTimeToStr(fModifyTS));
       SetValue(aRootPath + K_XML_CREATE_PATH , DateTimeToStr(fCreateTS));
       SetValue(aRootPath + K_XML_COMMENT_PATH  , fComment);
+      SetValue(aRootPath + K_XML_EXPIRE_PATH  , DateTimeToStr(fExpireTS));
    end;
 end;
 
@@ -100,15 +122,41 @@ begin
    fModifyTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_MODIF_PATH, ''));
    fCreateTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_CREATE_PATH, ''));
    fComment  := aCfgFile.GetValue(aRootPath + K_XML_COMMENT_PATH, '');
+   fExpireTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_EXPIRE_PATH, DateTimeToStr(fCreateTS-1)));
 end;
 
 { TxPLGlobalList }
+
+procedure TxPLGlobalList.OnTimer(aSender: TObject);
+var i : integer;
+    global : TxPLGlobalValue;
+begin
+   if Count=0 then exit;
+   i := 0;
+   repeat
+      global := Item(i);
+      if global.ExpireTS<now then begin
+         if global.ExpireTS > global.CreateTS then delete(i) else inc(i);
+      end else inc(i);
+   until i>=Count;
+end;
 
 constructor TxPLGlobalList.Create;
 begin
   inherited Create;
   Duplicates:=dupIgnore;
   Sorted := true;
+  fTimer := TTimer.Create(nil);
+  fTimer.OnTimer:= @OnTimer;
+  fTimer.Enabled:= True;
+  fTimer.Interval:=1000;                                                                  // Time every second
+end;
+
+destructor TxPLGlobalList.Destroy;
+begin
+  WriteToXML;                                                                             // Save values before destroying
+  fTimer.Destroy;
+  inherited;
 end;
 
 procedure TxPLGlobalList.WriteToXML;
@@ -149,6 +197,32 @@ begin
    gv := TxPLGlobalValue(Objects[i]);
    gv.SetValue(aValue);
    if aComment<>'' then gv.SetComment(aComment);
+end;
+
+function TxPLGlobalList.GetValue(const i: integer): string;
+begin
+  result := TxPLGlobalValue(Objects[i]).Value;
+end;
+
+function TxPLGlobalList.GetValue(const aString: string): string;
+var i : integer;
+begin
+  i := IndexOf(aString);
+  if i<>-1 then result := GetValue(i);
+end;
+
+function TxPLGlobalList.Item(const i : integer): TxPLGlobalValue;
+begin
+   result := nil;
+   if i<count then result := TxPLGlobalValue(Objects[i]);
+end;
+
+procedure TxPLGlobalList.Delete(const aString: string);
+var i : integer;
+begin
+     i := IndexOf(aString);
+     if i=-1 then exit;
+     inherited Delete(i);
 end;
 
 end.

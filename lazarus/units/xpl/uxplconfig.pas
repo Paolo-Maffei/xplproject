@@ -17,7 +17,7 @@ unit uxPLConfig;
 
 interface
 
-uses Classes, SysUtils, uxPLConst,  uxPLCfgItem, XmlCfg, DOM;
+uses Classes, SysUtils, uxPLConst,  uxPLCfgItem, XmlCfg, DOM, uxPLPluginFile;
 
 type
 
@@ -27,6 +27,7 @@ TxPLConfig = class(TComponent)
      private
         fConfigItems : TList;
         fxmlconfig : TXmlConfig;
+        fDeviceInVendorFile : TxPLDevice;
 
         function GetInstance: string;
         function GetInterval: integer;
@@ -56,6 +57,7 @@ TxPLConfig = class(TComponent)
         property ItemName[s : string] : TxPLConfigItem read GetItemByStr;
         property Items : TList read fConfigItems;
         property XmlFile : TXmlConfig read fxmlconfig;
+        property DeviceInVendorFile : TxPLDevice read fDeviceInVendorFile;
 
         procedure ReadFromXML(const aDeviceNode : TDOMNode);
         // Filter specific
@@ -64,11 +66,11 @@ TxPLConfig = class(TComponent)
      end;
 
 implementation { =======================================================================}
-uses uxPLListener, uxPLClient, uxPLPluginFile;
+uses uxPLListener, uxPLClient;
 
 { TxPLConfig ===========================================================================}
 constructor TxPLConfig.create(aOwner : TComponent);
-var device    : TxPLDevice;
+var //device    : TxPLDevice;
     sVendor   : tsVendor;
     sDevice   : tsDevice;
     sInstance : tsInstance;
@@ -89,24 +91,16 @@ begin
      AddItem(K_CONF_FILTER  , xpl_ctOption,K_DESC_FILTER, K_RE_FILTER,K_XPL_CFG_MAX_FILTERS,'');
      AddItem(K_CONF_GROUP   , xpl_ctOption,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
 
-     device := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
-     if not Assigned(device) then TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating')
-                             else device.Destroy;
-
-//     if assigned(TxPLListener(aOwner).VendorFile) then begin
-//        device := TxPLListener(aOwner).plugin.DeviceNode(sDevice);
-
-//        if assigned(device) then ReadFromXML(device)
-//                            else TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating')
-//     end else
-//         TxPLClient(aOwner).LogInfo('No plug-in file found for vendor - please update plugins');
+     fDeviceInVendorFile := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
+     if not Assigned(fDeviceInVendorFile) then TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating');
 end;
 
 destructor TxPLConfig.destroy;                                    
-begin                                                                                      
-     fConfigItems.Destroy ;
-     fxmlconfig.destroy;
-     inherited destroy;
+begin
+   if Assigned(fDeviceInVendorFile) then fDeviceInVendorFile.Destroy;
+   fConfigItems.Destroy ;
+   fxmlconfig.destroy;
+   inherited destroy;
 end;
 
 procedure TxPLConfig.ResetValues;
