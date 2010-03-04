@@ -9,19 +9,16 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms,
   TConfiguratorUnit,
-  { you can add units after this }LResources, frm_about, frm_main,
-  frm_xplappslauncher, indylaz, uRegExTools;
+  { you can add units after this }LResources, frm_about, frm_main, indylaz, uRegExTools;
 
 {$IFDEF WINDOWS}{$R xpl_free.rc}{$ENDIF}
 
 begin
   {$I xpl_free.lrs}
   Application.Initialize;
-  TConfiguratorUnit.doBasicConfiguration;
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TfrmAbout, frmAbout);
-  Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
-  Application.Icon := frmMain.Icon;
+  //Application.Icon := frmMain.Icon;
   Application.Run;
 end.
 

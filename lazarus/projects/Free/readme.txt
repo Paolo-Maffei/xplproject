@@ -19,7 +19,15 @@ v0.1
 		fboxhd-x10 : code x10 du module (type AM12) sur lequel est connecté le boitier TV Freebox
 		polling  : délai d'interrogation de la page de messagerie vocale
 
+v0.2	Version qui tente de corriger le pb de socket/port non libéré.
+
+v0.5	Ajoute la recherche des numéros de téléphone dans l'annuaire inversé
+	Le serveur web donne accès aux actions associées au module xPL (reboot freebox, allumage/extinction d'un boitier) sans passer par un sender xPL
+	L'onglet info contient quelques éléments supplémentaires (clef wep, nom du réseau)
+	Icone créée
+
 	
 Todo : 
 	Quand le délai de polling est trop important, la connexion ouverte initialement ne persiste pas, on obtient "Error=2"
 		=> catcher l'erreur et réouvrir la connexion
+	Récupérer les statistiques de la ligne (vitesse DL)
