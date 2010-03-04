@@ -9,9 +9,11 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
   ClientHeight = 380
   ClientWidth = 471
   OnShow = FormShow
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object ToolBar2: TToolBar
+    Left = 0
     Height = 25
+    Top = 0
     Width = 471
     ButtonHeight = 23
     ButtonWidth = 75
@@ -24,6 +26,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     object sbOk: TSpeedButton
       Left = 1
       Height = 23
+      Top = 0
       Width = 75
       Caption = 'Ok'
       Color = clBtnFace
@@ -69,6 +72,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     object sbCancel: TSpeedButton
       Left = 76
       Height = 23
+      Top = 0
       Width = 75
       Caption = 'Cancel'
       Color = clBtnFace
@@ -113,6 +117,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     end
   end
   object PageControl1: TPageControl
+    Left = 0
     Height = 355
     Top = 25
     Width = 471
@@ -122,7 +127,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     TabOrder = 1
     object tsStandardProp: TTabSheet
       Caption = 'Event Properties'
-      ClientHeight = 329
+      ClientHeight = 327
       ClientWidth = 463
       object Label3: TLabel
         Left = 13
@@ -154,7 +159,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     end
     object tsAdvancedProp: TTabSheet
       Caption = 'Advanced Properties'
-      ClientHeight = 329
+      ClientHeight = 327
       ClientWidth = 463
       object Label5: TLabel
         Left = 12

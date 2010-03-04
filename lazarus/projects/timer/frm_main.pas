@@ -6,7 +6,7 @@ interface
                                          
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ActnList, ExtCtrls, uxPLListener, uxPLMessage,  StdCtrls,
+  ComCtrls, Menus, ActnList, ExtCtrls, uxPLListener, uxPLMessage,
   Grids, Buttons, uxPLConfig,  frm_xPLTimer, frm_xplrecurevent,
   uxPLRecurEvent, uxPLTimer, XMLPropStorage;
 
@@ -91,7 +91,7 @@ type
 var frmMain: TfrmMain;
 
 implementation {===============================================================}
-uses Frm_About, frm_xPLAppslauncher, uxPLSingleEvent,
+uses Frm_About, frm_xPLAppslauncher, uxPLSingleEvent, uxPLConst,
      LCLType, StrUtils, DateUtils, uxPLMsgHeader, XMLCfg;
 
 {==============================================================================}
@@ -107,9 +107,6 @@ begin FrmAbout.ShowModal; end;
 
 procedure TfrmMain.InstalledAppsExecute(Sender: TObject);
 begin frmAppLauncher.ShowModal; end;
-
-//procedure TfrmMain.LogViewerExecute(Sender: TObject);
-//begin frmLogViewer.ShowModal; end;
 
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
@@ -171,7 +168,7 @@ begin
   bConfigured := false;
   bInitMessageLaunched := false;
 
-  xPLClient := TxPLListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER);
+  xPLClient := TxPLListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
   OnJoined(False);
 
   with xPLClient do begin
@@ -188,7 +185,6 @@ begin
    bJoined := aJoined;
    StatusBar1.Panels[0].Text := 'Hub ' + IfThen( xPLClient.JoinedxPLNetwork, '','not') + ' found';
    StatusBar1.Panels[1].Text := 'Configuration ' + IfThen (bConfigured, 'done','pending');
-   //SendInitMessage;
 end;
 
 procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
@@ -212,7 +208,6 @@ begin
      acNewTimer.Enabled := true;
 
      Config.Flush;
-//     SendInitMessage;
 end;
 
 {procedure TFrmMain.SendInitMessage;
