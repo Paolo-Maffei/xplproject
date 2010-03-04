@@ -134,8 +134,9 @@ var f,s : string;
     confitem : TxPLConfigItem;
     fValidator : TRegExpr;
 begin
-   if not Assigned(Configuration.Plug_Config) then exit;
+   if not Assigned(Configuration.Plug_Config) then exit;                                  // The plugin may be absent
    confitem := Configuration.Plug_Config.ItemName[HBDetail.GetKey(HBDetail.Row)];
+   if confitem = nil then exit;                                                           // The plugin may be outdated
    f := confItem.Format;
    if length(f)>0 then begin
       fValidator  := TRegExpr.Create;

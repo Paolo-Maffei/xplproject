@@ -160,7 +160,7 @@ uses frm_xplappslauncher, frm_AppSettings, cDateTime,  StrUtils, frm_xpllogviewe
 
 // ===============================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0';
+     K_XPL_APP_VERSION_NUMBER = '2.0.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'logger';
 
