@@ -41,11 +41,9 @@ type
     mnuAddRecurringEvent: TMenuItem;
     mnuAddSingleEvent: TMenuItem;
     MnuStopTimer: TMenuItem;
-    MenuItem11: TMenuItem;
     MnuEditTimer: TMenuItem;
     MnuNewTimer: TMenuItem;
     MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     popmnuTimer: TPopupMenu;
     popmnuEvents: TPopupMenu;
