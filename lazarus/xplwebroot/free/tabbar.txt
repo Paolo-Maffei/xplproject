@@ -1,20 +1,18 @@
 	<TABLE cellspacing=0 cellpadding=0>
 	<TR>
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
-		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/free/content.html' class='tabbar' target=content>&nbsp;Messages&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
 		
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
-		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/free/annuaire.html' class='tabbar' target=content>&nbsp;Annuaire&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
+		<td background='../images/xplapps/tab_green_centre.gif' ><a href='/free/content.html' class='tabbar' target=content>&nbsp;Messages&nbsp;</a></td>
+		<TD>&nbsp </TD>
+		
+		
+		<td background='../images/xplapps/tab_green_centre.gif' ><a href='/free/annuaire.html' class='tabbar' target=content>&nbsp;Annuaire&nbsp;</a></td>
+		<TD>&nbsp </TD>
 	
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
-		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/actions.html' class='tabbar' target=content>&nbsp;Actions&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
-		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/free/info.html' class='tabbar' target=content>&nbsp;Infos&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>			
 		
+		<td background='../images/xplapps/tab_green_centre.gif' ><a href='/actions.html' class='tabbar' target=content>&nbsp;Actions&nbsp;</a></td>
+		<TD>&nbsp </TD>
+
+		
+		<td background='../images/xplapps/tab_green_centre.gif' ><a href='/free/info.html' class='tabbar' target=content>&nbsp;Infos&nbsp;</a></td>
 	</tr>
 	</table>

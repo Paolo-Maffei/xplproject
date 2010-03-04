@@ -1,10 +1,9 @@
 	<TABLE cellspacing=0 cellpadding=0>
 	<TR>
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
 		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/ping/content.html' class='tabbar' target=content>&nbsp;Results&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
+		<TD>&nbsp </TD>
+		
 		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/ping/add.html' class='tabbar' target=content>&nbsp;Add New&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
+
 	</tr>
 	</table>
