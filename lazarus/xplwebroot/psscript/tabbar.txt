@@ -1,14 +1,7 @@
 	<TABLE cellspacing=0 cellpadding=0>
 		<TR>
-			<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
-			<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/psscript/index.html' class='tabbar' target=content>&nbsp;Script Execution&nbsp;</a></td>
-			<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-			<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
 			<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/psscript/globals.html' class='tabbar' target=content>&nbsp;Globals&nbsp;</a></td>
-			<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-			<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
+			<TD>&nbsp </TD>
 			<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/psscript/functions.html' class='tabbar' target=content>&nbsp;Functions&nbsp;</a></td>
-			<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-
 		</tr>
 	</table>

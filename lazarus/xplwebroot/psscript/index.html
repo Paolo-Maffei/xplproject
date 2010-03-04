@@ -3,17 +3,17 @@
 
 <HEAD>
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
-	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
 	<LINK REL="stylesheet" type="text/css" href="../style.css" />
 
 	<TITLE>{%xPLWeb_AppName%}</TITLE>
 </HEAD>
 
-<FRAMESET COLS="5%,95%"> 
-	<FRAME SRC='left.html' NAME='left'>
-	<FRAMESET ROWS="15%, 85%">
-		<FRAME SRC='psscript/top.html' 		NAME='top'>
-		<FRAME SRC='psscript/content.html' 	NAME='content'>
-</FRAMESET> 
+<FRAMESET COLS='64,*' border=0 frameborder=0 framespacing=0> 
+	<FRAME SRC='left.html' NAME='left' noresize>
+	<FRAMESET ROWS='68,*,30' border=0 frameborder=0 framespacing=0>
+		<FRAME SRC='{%xPLWeb_DeviceName%}/top.html' 	   NAME='top' noresize scrolling=no marginwidth=0>
+		<FRAME SRC='{%xPLWeb_DeviceName%}/content.html' NAME='content' scrolling=no>
+		<FRAME SRC='footer.html'	   NAME='footer' noresize scrolling=no>
+</FRAMESET>  
 	
 </HTML>

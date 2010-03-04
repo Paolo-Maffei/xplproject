@@ -6,14 +6,15 @@
 	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
 	<LINK REL="stylesheet" type="text/css" href="../style.css" />
 
-	<TITLE>{%xPLAppName%} - Current</TITLE>
+	<TITLE>{%xPLWeb_AppName%} - Current</TITLE>
 </HEAD>
 
-<FRAMESET COLS="5%,95%"> 
-	<FRAME SRC='left.html' NAME='left'>
-	<FRAMESET ROWS="15%, 85%">
-		<FRAME SRC='weather/top.html' NAME='top'>
-		<FRAME SRC='weather/content.html' NAME='content'>
-</FRAMESET> 
+<FRAMESET COLS='64,*' border=0 frameborder=0 framespacing=0> 
+	<FRAME SRC='left.html' NAME='left' noresize>
+	<FRAMESET ROWS='68,*,30' border=0 frameborder=0 framespacing=0>
+		<FRAME SRC='{%xPLWeb_DeviceName%}/top.html' 	   NAME='top' noresize scrolling=no marginwidth=0>
+		<FRAME SRC='{%xPLWeb_DeviceName%}/content.html' NAME='content' scrolling=no>
+		<FRAME SRC='footer.html'	   NAME='footer' noresize scrolling=no>
+</FRAMESET>
 	
 </HTML>

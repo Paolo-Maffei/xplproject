@@ -1,10 +1,8 @@
 	<TABLE cellspacing=0 cellpadding=0>
 	<TR>
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
 		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/weather/content.html' class='tabbar' target=content>&nbsp;Current&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
-		<TD><IMG Src='../images/xplapps/tab_green_left.gif'></td>
+		<TD>&nbsp </TD>
+		
 		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/weather/forecast.html' class='tabbar' target=content>&nbsp;Forecast&nbsp;</a></td>
-		<TD><IMG Src='../images/xplapps/tab_green_right.gif'></td>
 	</tr>
 	</table>
