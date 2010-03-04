@@ -18,9 +18,10 @@ uses uxPLListener,Classes, SysUtils, ExtCtrls, IdGlobal, uxPLMsgBody, uxPLMessag
      IdHTTPServer, IdContext,IdCustomHTTPServer;
 
 type
-      TWebCommandGet = procedure(var aPageContent : widestring; aParam, aValue : string) of object;
-      TWebCallReplaceTag= function(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean of object;
-      TWebCallReplaceArrayedTag= function(const aDevice : string; const aVariable : string; ReturnList : TStringList) : boolean of object;
+      //TWebCommandGet = procedure(var aPageContent : widestring; aParam, aValue : string) of object;
+      TWebCommandGet = procedure(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo) of object;
+      TWebCallReplaceTag       = function(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean of object;
+      TWebCallReplaceArrayedTag= function(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean of object;
 
       { TxPLWebListener }
 
@@ -35,14 +36,15 @@ type
          procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
          procedure HBeatApp(const axPLMsg : TxPLMessage);
       public
-         constructor create(aOwner : TComponent; aVendor, aDevice, aAppName, aAppVersion, aDefaultPort : string);
+         constructor create(aOwner : TComponent; aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
          procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
-         property HtmlDir : string read fHtmlDir;
          OnCommandGet : TWebCommandGet; // read fOnCommandGet write fOnCommandGet;
          OnReplaceTag : TWebCallReplaceTag;
          OnReplaceArrayedTag : TWebCallReplaceArrayedTag;
+
+         property HtmlDir : string read fHtmlDir;
       end;
 
          // HTML flow handling utilities
@@ -51,7 +53,7 @@ type
 
 implementation  { ==============================================================}
 uses IdStack, cRandom,  uIPutils,cStrings, StrUtils, RegExpr, uxPLConst,
-     uxPLMsgHeader;
+     uxPLMsgHeader,  cUtils;
 
 { Utility functions ============================================================}
 
@@ -59,12 +61,6 @@ function StringListToHtml(aSList : TStrings) : widestring;
 begin
      result := StrReplace(#13#10,'<br>',aSList.Text,false);
 end;
-{procedure HtmlReplaceVar(aVarNames : array of string;aValues : array of string; var aPage : widestring);
-var i : integer;
-begin
-     for i:=low(aVarNames) to high(aVarNames) do
-     aPage := AnsiReplaceStr(aPage,'{%' + aVarNames[i] + '%}', aValues[i]);
-end;}
 { TxPLWebListener ==============================================================}
 resourcestring
    K_CONFIG_LIB_SERVER_ROOT = 'webroot';
@@ -72,7 +68,7 @@ resourcestring
 destructor TxPLWebListener.destroy;
 begin
   if Assigned(fWebServer) then begin
-     LogInfo('Stopping web server');
+     LogInfo(K_WEB_MSG_SRV_STOP);
      fWebServer.Active := false;
      FreeAndNil(fWebServer);
   end;
@@ -96,7 +92,7 @@ begin
           Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
-     LogInfo('Starting web server on port ' + IntToStr(fWebServer.Bindings[0].Port));
+     LogInfo(Format(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]));
 
      with fWebServer do try
         AutoStartSession := True;
@@ -111,14 +107,14 @@ begin
      fWebServer.OnCommandGet:=@DoCommandGet;
      fHtmlDir := Config.ItemName[K_CONFIG_LIB_SERVER_ROOT].Value;
 
-     LogInfo('Webroot located in ' + fHtmlDir);
+     LogInfo(Format(K_WEB_MSG_ROOT_DIR,[fHtmlDir]));
 end;
 
 procedure TxPLWebListener.DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
 var LFilename: string;
     LPathname: string;
     s  : widestring;
-    aParam,aValue : string;
+    aParam,aValue, aAction : string;
     RegExpr : TRegExpr;
 
 function LoadAFile(aFileName : string) : widestring;
@@ -154,6 +150,7 @@ begin
    if aDevice<>'xplweb' then exit;
    ReplaceString := '';
    if aVariable = 'appname'      then ReplaceString := AppName
+   else if aVariable = 'devicename' then ReplaceString := Device
    else if aVariable = 'appversion'   then ReplaceString := AppVersion
    else if aVariable = 'hubstatus'    then ReplaceString := Format(K_MSG_HUB_FOUND,[IfThen(JoinedxPLNetWork,'','not')])
    else if aVariable = 'configstatus' then ReplaceString := Format(K_MSG_CONFIGURED,[IfThen(AwaitingConfiguration,'pending','done')]);
@@ -185,15 +182,47 @@ end;
 procedure LoopOnTemplate(var aPageContent : widestring);
 
 function ReplaceArrayedTag(const aDevice : string; const aVariable : string; ReturnList : TStringList) : boolean;
-var i : integer;
+var i,j : integer;
+    menuName, menuAction, variable, optionlist, entryzone : string;
+    valuelist : stringArray;
+    bLoop : boolean;
 begin
    if aDevice<>'xplweb' then exit;
+
    ReturnList.Clear;
-   if aVariable = 'webappurl'  then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.ValueFromIndex[i]);
-   if aVariable = 'webappname' then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.Names[i]);
-   if aVariable = 'log'        then ReturnList.AddStrings(fLogList); //for i:=0 to fLogList.Count-1 do ReturnList.Add(fLogList[i]);
+   if aVariable = 'webappurl'  then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.ValueFromIndex[i])
+   else if aVariable = 'webappname' then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.Names[i])
+   else if aVariable = 'log'        then ReturnList.AddStrings(fLogList) //for i:=0 to fLogList.Count-1 do ReturnList.Add(fLogList[i]);
+   else if aVariable = 'menuitem'   then begin
+           if Assigned(Config.DeviceInVendorFile) then
+              for i:=0 to Config.DeviceInVendorFile.MenuItems.Count-1 do begin
+                  menuName   := Config.DeviceInVendorFile.MenuItems[i];
+                  menuAction := Config.DeviceInVendorFile.MenuItem(menuName);
+                  with TRegExpr.Create do begin
+                       EntryZone  := '';
+                       Expression :=K_MNU_ITEM_RE_PARAMETER;                              // Search for parameters
+                       bLoop      := Exec(menuAction);
+                       while bLoop do begin                                               // Loop on every parameter found
+                             Variable := Match[1];
+                             if AnsiPos(K_MNU_ITEM_OPTION_SEP,Variable) = 0 then
+                                EntryZone += Format(K_MNU_ITEM_INPUT_TEXT,[Match[1],Match[0]])
+                             else begin
+                                valuelist  := StrSplit(Variable+K_MNU_ITEM_OPTION_SEP,K_MNU_ITEM_OPTION_SEP);
+                                optionlist := '';
+                                for j:=0 to high(valuelist)-1 do optionlist += Format(K_MNU_ITEM_OPTION_LIST,[valuelist[j],valuelist[j]]);
+                                EntryZone += Format(K_MNU_ITEM_SELECT_LIST,[Match[0],optionlist]);
+                             end;
+                             bLoop := ExecNext;
+                       end;
+                       Destroy;
+                  end;
+                  EntryZone += Format(K_MNU_ITEM_MSG_AND_SUBMIT,[menuAction,menuName]);
+                  returnlist.Add(Format(K_MNU_ITEM_ACTION_ZONE,[EntryZone]));
+              end;
+        end;
    result := (ReturnList.Count >0);
 end;
+
 var
   Pattern : string;
   Where   : integer;
@@ -224,7 +253,7 @@ begin
               end;
         end else
         if Assigned(OnReplaceArrayedTag) then
-           if OnReplaceArrayedTag(device,variable,ReturnList) then
+           if OnReplaceArrayedTag(device,aValue,variable,ReturnList) then
            for i:=0 to ReturnList.Count-1 do begin
                if bFirstVariable then PatternList.Add(Pattern);
                PatternList[i] := StringReplace(PatternList[i],tag,ReturnList[i],[rfIgnoreCase, rfReplaceAll]);
@@ -241,6 +270,20 @@ begin
    ReturnList.Destroy;
 end;
 
+procedure HandleMenuItem;
+var commande : string;
+    aPar  : string;
+    i : integer;
+begin
+   commande := ARequestInfo.Params.Values['xplMsg'];
+   for i := 0 to ARequestInfo.Params.Count-1 do begin
+      aPar := ARequestInfo.Params.Names[i];
+      if AnsiPos('%',aPar) <> 0 then commande := AnsiReplaceStr(commande,aPar,ARequestInfo.Params.Values[aPar]);
+   end;
+
+   self.SendMessage(xpl_mtCmnd,self.Address.Tag,commande);
+end;
+
 begin
    LFilename := ARequestInfo.Document;
    if LFilename = '/' then LFilename := '/' + self.Address.Device + '/index.html';           // If no filename specified, we search one based on our own app name
@@ -253,11 +296,12 @@ begin
             aParam := ARequestInfo.Params.Names[0];
             aValue := ARequestInfo.Params.Values[aParam];
          end;
+         if ARequestInfo.Params.Values['xPLWeb_menuItem']<>'' then HandleMenuItem;
          s := LoadAFile(LPathName);
          if length(s)>0 then begin
             RegExpr := TRegExpr.Create;
             SearchIncludes(s);
-            if Assigned(OnCommandGet) then OnCommandGet(s,aParam,aValue);
+            if Assigned(OnCommandGet) then OnCommandGet(s,ARequestInfo);
             ReplaceVariables(s, aParam, aValue);
             LoopOnTemplate(s);
             AResponseInfo.ContentText := s;
@@ -268,46 +312,46 @@ begin
           AResponseInfo.ContentStream := TFileStream.Create(LPathname, fmOpenRead + fmShareDenyWrite);
    end else begin
       AResponseInfo.ResponseNo := 404;
-      AResponseInfo.ContentText := 'The requested URL ' + LPathName  + ' was not found on this server.';
+      AResponseInfo.ContentText := Format(K_WEB_ERR_404,[LPathName]);
    end;
 end;
 
 procedure TxPLWebListener.HBeatApp(const axPLMsg: TxPLMessage);
+const DiscString = '%s=http://%s:%s';
 var aPort : string;
     anApp : string;
-    anIP  : string;
+//    anIP  : string;
 begin
    aPort := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_WEB_PORT);
    if aPort = '' then exit;
 
    anApp := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_APPNAME);
-   anIP  := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP);
-   if fDiscovered.IndexOfName(anApp)=-1 then
-      fDiscovered.Add(anApp+'=http://'+anIP+':'+aPort);           // Compose a phrase like xPL Application=http://192.168.0.10:8336
+//   anIP  := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP);
+   if fDiscovered.IndexOfName(anApp)=-1 then fDiscovered.Add(Format(DiscString,[anApp, axPLMsg.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP), aPort]));
+//      fDiscovered.Add(anApp+'=http://'+anIP+':'+aPort);           // Compose a phrase like xPL Application=http://192.168.0.10:8336
 end;
 
 procedure TxPLWebListener.CallConfigDone;
 begin
-  inherited CallConfigDone;
-  InitWebServer;
-  SendMessage(xpl_mtCmnd,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+   InitWebServer;
+   SendMessage(xpl_mtCmnd,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+   inherited CallConfigDone;
 end;
 
 procedure TxPLWebListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
 begin
-  inherited FinalizeHBeatMsg(aBody,aPort,aIP);
-  if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
+   inherited FinalizeHBeatMsg(aBody,aPort,aIP);
+   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
 end;
 
-constructor TxPLWebListener.create(aOwner: TComponent; aVendor, aDevice,aAppName, aAppVersion, aDefaultPort: string);
+constructor TxPLWebListener.create(aOwner: TComponent; aVendor, aDevice, aAppVersion, aDefaultPort: string);
 begin
-   inherited Create(aOwner,aVendor,aDevice,aAppName,aAppVersion);
+   inherited Create(aOwner,aVendor,aDevice,aAppVersion);
    fDiscovered := TStringList.Create;
    fDiscovered.Duplicates := dupIgnore;
    Config.AddItem(K_HBEAT_ME_WEB_PORT,xpl_ctConfig,aDefaultPort);
    Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,xpl_ctConfig,ExtractFilePath(ParamStr(0)) + 'html');
    OnxPLHBeatApp := @HBeatApp;
-
 end;
 
 end.

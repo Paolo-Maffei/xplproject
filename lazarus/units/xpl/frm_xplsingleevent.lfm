@@ -48,13 +48,18 @@ inherited frmxPLSingleEvent: TfrmxPLSingleEvent
     inherited tsAdvancedProp: TTabSheet
       ClientHeight = 294
       ClientWidth = 440
+      inherited CheckBox1: TCheckBox
+        Width = 62
+      end
       inherited Edit1: TEdit
+        Height = 23
         Visible = False
       end
       inherited BtnDisplay: TButton
         OnClick = BtnDisplayClick
       end
       inherited ckPerso: TCheckBox
+        Width = 157
         OnChange = ckPersoChange
       end
     end

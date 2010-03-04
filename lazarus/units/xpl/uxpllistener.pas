@@ -17,8 +17,8 @@ unit uxPLListener;
 interface
 
 uses Classes, SysUtils, uxPLAddress, IdUDPServer,IdSocketHandle,
-     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter, DOM,
-     uxPLMsgBody,  uxPLMsgHeader, uxPLClient, uxPLConst, uxPLPluginFile;
+     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter,
+     uxPLMsgBody,  uxPLMsgHeader, uxPLClient, uxPLConst;
 
 type
       TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
@@ -84,8 +84,6 @@ type
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aRawBody : string);
         procedure SendMessage(const aRawXPL : string); overload;
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
-
-        //function VendorFile : TXMLDocument;
 
         procedure Listen;
         procedure Dispose;
@@ -223,11 +221,6 @@ begin
   end;
 end;
 
-//function TxPLListener.VendorFile : TXMLDocument;
-//begin
-//     result := PluginList.VendorFile(Address.Vendor);                      // Identify my plugin vendor file
-//end;
-
 procedure TxPLListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
 begin
    aBody.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
@@ -299,19 +292,13 @@ begin
                 fAdresse.Instance := fConfig.Instance;                                                // Instance name may have changed
                 SendHeartBeatMessage;
                 fConfig.Save;
-                LogInfo('Client configuration renewed and saved');
+                LogInfo(Format(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]));
                 CallConfigDone;
               end;
      end;
      finally destroy;
    end;
 end;
-
-//function TxPLListener.Vendor: tsVendor;
-//begin result := fAdresse.Vendor; end;
-
-//function TxPLListener.Device: tsDevice;
-//begin result := fAdresse.Device; end;
 
 function TxPLListener.Instance: tsInstance;
 begin result := fAdresse.Instance; end;

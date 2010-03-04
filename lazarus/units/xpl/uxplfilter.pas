@@ -1,4 +1,11 @@
 unit uxPLFilter;
+{==============================================================================
+  UnitName      = uxPLFilter
+  UnitDesc      = xPL Filter management object and function
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.91 : first published version
+}
 
 {$mode objfpc}{$H+}
 
@@ -19,21 +26,21 @@ type
         function CheckGroup(aTargetName : string) : boolean;
         function MatchesFilters(aMessage : TxPLMessage) : boolean;
 
-        class function  Matches ( const aFilter : string; const aMessage : string) : boolean;
-        class procedure Split   ( const aFilter : string;           out aMsgType : TxPLMessageType;
-                                  out aVendor  : string;            out aDevice  : string;
-                                  out aInstance: string;            out aClasse  : string;
-                                  out aType    : string);
+        class function  Matches ( const aFilter : tsFilter; const aMessageFilterTag : tsFilter) : boolean;
+        class procedure Split   ( const aFilter : tsFilter;           out aMsgType : TxPLMessageType;
+                                  out aVendor  : tsVendor;          out aDevice  : tsDevice;
+                                  out aInstance: tsInstance;        out aClasse  : tsClass;
+                                  out aType    : tsType);
      end;
 
 implementation // ==============================================================
 uses StrUtils, cStrings, cUtils;
 //==============================================================================
 
-class procedure TxPLFilters.Split( const aFilter : string; out aMsgType : TxPLMessageType;
-                                   out aVendor  : string;  out aDevice  : string;
-                                   out aInstance: string;  out aClasse  : string;
-                                   out aType    : string);
+class procedure TxPLFilters.Split( const aFilter : tsFilter;         out aMsgType : TxPLMessageType;
+                                   out aVendor   : tsVendor;         out aDevice  : tsDevice;
+                                   out aInstance : tsInstance;       out aClasse  : tsClass;
+                                   out aType     : tsType);
 var  sFlt : stringArray;
 begin
      sFlt := StrSplit(aFilter,'.');  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
@@ -46,19 +53,17 @@ begin
      aType    := sFlt[5];
 end;
 
-class function TxPLFilters.Matches(const aFilter: string; const aMessage: string): boolean;
+class function TxPLFilters.Matches(const aFilter: tsFilter; const aMessageFilterTag: tsFilter): boolean;
 var iFltElement : integer;
     sFlt, sMsg : stringArray;
 begin
      result := true;
 
-     sFlt := StrSplit(aFilter ,'.');  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-     sMsg := StrSplit(aMessage,'.');
+     sFlt := StrSplit(aFilter ,'.');                                                      // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+     sMsg := StrSplit(aMessageFilterTag,'.');
 
-     For iFltElement := 0 to High(sFlt) do begin
-         if (sFlt[iFltElement]<>'*') then
-            result := result and (sFlt[iFltElement]=sMsg[iFltElement])
-     end;
+     For iFltElement := 0 to High(sFlt) do
+         if (sFlt[iFltElement]<>'*') then result := result and (sFlt[iFltElement]=sMsg[iFltElement])
 end;
 
 { TxPLFilters }

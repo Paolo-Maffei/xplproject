@@ -103,7 +103,7 @@ end;
 procedure TxPLVendorSeedFile.GetElements;
 var Child,Location : TDomNode;
     aRecord : TVendorPluginFile;
-    plugdesc,vendor,fname : string;
+    plugdesc,vendor : string;
 begin
    fPlugins.Clear;
    fLocations.Clear;
@@ -112,12 +112,12 @@ begin
       if Child.NodeName = K_PF_PLUGIN then begin
             plugdesc := Child.Attributes.GetNamedItem(K_PF_NAME).NodeValue;               // like 'cdp1802 Plug-in'
             vendor    := AnsiLeftStr(plugdesc,AnsiPos(' ',plugdesc)-1);                   // like  cdp1802
-            fname     := fPlugDirectory + vendor + K_FEXT_XML;                            // like c:\cxmxclkxc\cdp1802.xml
+            //fname     := fPlugDirectory + vendor + K_FEXT_XML;
             aRecord := TVendorPluginFile.Create;
             aRecord.Node := Child;
             aRecord.PluginFile := nil;
             aRecord.Description := plugDesc;
-            aRecord.FileName := fPlugDirectory + vendor + K_FEXT_XML;
+            aRecord.FileName := fPlugDirectory + vendor + K_FEXT_XML;                     // like c:\cxmxclkxc\cdp1802.xml
             fPlugins.AddObject(vendor,aRecord);
       end;
       if Child.NodeName = K_PF_LOCATION then begin

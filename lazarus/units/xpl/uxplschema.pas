@@ -1,7 +1,6 @@
 unit uxPLSchema;
 {==============================================================================
   UnitName      = uxPLSchema
-  UnitVersion   = 0.91
   UnitDesc      = xPL Schema management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
@@ -9,54 +8,54 @@ unit uxPLSchema;
  0.95 : Regular expression added
  0.96 : Simplification of the class (cut inheritance of TxPLBaseClass)
  0.97 : Usage of uxPLConst
-        Dropped usage of RegExp, to heavy for such a simple thing
+ 0.98 : Typing of fClasse and fType variables
 }
 {$mode objfpc}{$H+}
 interface
 
-uses uxPLConst;
+uses uxPLConst, RegExpr;
 
 type
     TxPLSchema = class
     private
-      fClasse : string;
-      fType   : string;
-      //fValidator : TRegExpr;
+      fClasse : tsClass;
+      fType   : tsType;
+      fValidator : TRegExpr;
 
       function  GetClasse: TxPLSchemaClasse;
       function  GetTag: string;
       procedure SetClasse(const AValue: TxPLSchemaClasse);
-      procedure SetClasse(const AValue: string);
+      procedure SetClasse(const AValue: tsClass);
       procedure SetTag   (const AValue: string);
-      procedure SetType  (const AValue: string);
+      procedure SetType  (const AValue: tsType);
     public
       property Classe         : TxPLSchemaClasse read GetClasse write SetClasse;
-      property ClasseAsString : string read fClasse write SetClasse;
-      property TypeAsString   : string read fType   write SetType;
+      property ClasseAsString : tsClass read fClasse write SetClasse;
+      property TypeAsString   : tsType read fType   write SetType;
       property Tag            : string read GetTag  write SetTag;
 
-      Constructor Create(const aClasse : string = ''; const aType : string = '');
-      //Destructor  Destroy; override;
+      Constructor Create(const aClasse : tsClass = ''; const aType : tsType = '');
+      Destructor  Destroy; override;
 
       //function  IsValid : boolean;
       procedure ResetValues;
     end;
 
 implementation { ==============================================================}
-uses StrUtils, SysUtils, cStrings;
+uses StrUtils, SysUtils;
 
-constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
+constructor TxPLSchema.Create(const aClasse : tsClass = ''; const aType : tsType = '');
 begin
      inherited Create;
-     //fValidator  := TRegExpr.Create;
+     fValidator  := TRegExpr.Create;
      ClasseAsString := aClasse;
      TypeAsString   := aType;
 end;
 
-//destructor TxPLSchema.Destroy;
-//begin
-//  fValidator.Destroy;
-//end;
+destructor TxPLSchema.Destroy;
+begin
+  fValidator.Destroy;
+end;
 
 procedure TxPLSchema.ResetValues;
 begin
@@ -91,13 +90,13 @@ begin
   result := Validate(fType) and Validate(fClasse);
 end;}
 
-procedure TxPLSchema.SetType(const AValue: string);
+procedure TxPLSchema.SetType(const AValue: tsType);
 begin
      if fType = aValue then exit;
      fType := aValue;
 end;
 
-procedure TxPLSchema.SetClasse(const AValue: string);
+procedure TxPLSchema.SetClasse(const AValue: tsClass);
 begin
      if fClasse = aValue then exit;
      fClasse := aValue;
@@ -105,12 +104,11 @@ end;
 
 procedure TxPLSchema.SetTag(const AValue: string);
 begin
-   StrSplitAtChar(aValue,'.',fClasse,fType);
-     //fValidator.Expression := K_REGEXPR_SCHEMA;
-     //if fValidator.Exec(aValue) then begin
-     //   fClasse := fValidator.Match[1];
-     //   fType   := fValidator.Match[2];
-     //end;
+   fValidator.Expression := K_REGEXPR_SCHEMA;
+   if fValidator.Exec(aValue) then begin
+      fClasse := fValidator.Match[1];
+      fType   := fValidator.Match[2];
+   end;
 end;
 
 

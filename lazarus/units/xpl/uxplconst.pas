@@ -8,6 +8,13 @@ type
    tsVendor   = string[8];
    tsDevice   = string[8];
    tsInstance = string[16];
+   tsClass    = string[8];
+   tsType     = string[8];
+   tsMsgType  = string[8];
+   tsBodyElmtName  = string[16];
+   tsBodyElmtValue = string[128];
+
+   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];                       //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
    TxPLSchemaClasse = ( xpl_scHBeat,    xpl_scConfig,  xpl_scAudio,   xpl_scControl,
                         xpl_scDateTime, xpl_scDb,      xpl_scDGuide,  xpl_scCID,
@@ -116,6 +123,7 @@ const
    K_MSG_BIND_OK         = 'Listener binded on port %u for address %s';
    K_MSG_BIND_RELEASED   = 'Listener released binded ports';
    K_MSG_CONFIG_LOADED   = 'Configuration loaded';
+   K_MSG_CONFIG_RECEIVED = 'Configuration received from %s and saved';
    K_MSG_NETWORK_SETTINGS= 'xPL Network settings are not properly configured';
 
    // Web applications templates ===========================================================================
@@ -123,6 +131,11 @@ const
    K_WEB_TEMPLATE_END   = '<Result template-->';
    K_WEB_RE_INCLUDE     = '<!--\s*\#\s*include\s+(file|virtual)\s*=\s*(["])([^"<>\|\~]+/)*([^"<>/\|\~]+)\2\s*-->';
    K_WEB_RE_VARIABLE    = '{%(.*?)_(.*?)%}';
+   K_WEB_MSG_SRV_STOP   = 'Stopping web server';
+   K_WEB_MSG_ROOT_DIR   = 'Webroot located in %s';
+   K_WEB_MSG_PORT       = 'Starting web server on port %u';
+   K_WEB_ERR_404        = 'The requested URL %s was not found on this server.';
+   K_ERR_MSG_FNF        = 'File not found : %s';
 
    // Configuration items ==================================================================================
    K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';               // Typically xpl_vendor-device.xml
@@ -149,7 +162,6 @@ const
    K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                                                // \software\xpl\vendor\device\
    K_XPL_REG_VERSION_KEY        = 'version';
    K_XPL_REG_PATH_KEY           = 'path';
-   //K_XPL_APPS_KEY               = K_XPL_ROOT_KEY + 'apps\';
    K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
    K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
    K_REGISTRY_BROADCAST         = 'BroadcastAddress';
@@ -159,6 +171,15 @@ const
    K_XPL_SETTINGS_SUBDIR_CONF   = 'Config';
    K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
    K_XPL_SETTINGS_SUBDIR_LOGS   = 'Logging';
+
+   // HTML Formatting for standard action contained in menuItems ===========================================
+   K_MNU_ITEM_MSG_AND_SUBMIT    = '<INPUT TYPE=HIDDEN NAME=xplMsg VALUE="%s"><INPUT TYPE=SUBMIT NAME="xPLWeb_menuitem" VALUE="%s">';
+   K_MNU_ITEM_OPTION_LIST       = '<OPTION VALUE="%s">%s</OPTION>';
+   K_MNU_ITEM_INPUT_TEXT        = '%s : <INPUT TYPE=TEXT NAME="%s">&nbsp;';
+   K_MNU_ITEM_SELECT_LIST       = '<SELECT NAME="%s">%s</SELECT>&nbsp;';
+   K_MNU_ITEM_ACTION_ZONE       = '<table class=action><tr><td><FORM ACTION=actions.html METHOD=POST>%s</FORM></td></tr></table>';
+   K_MNU_ITEM_OPTION_SEP        = '|';                                                                      // Separator used in the xml file between valid choices
+   K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                                                // Regular expression used to identify parameters in xplMsg in MenuItems
 
 
 implementation
