@@ -63,7 +63,7 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //======================================================================================
-uses frm_about, SysUtils, uxplmsgheader,
+uses frm_about, SysUtils, uxplmsgheader, uxPLConst,
   UAIMLLoader, UElementFactory ,   UElements,  UPatternMatcher,UTemplateProcessor,UVariables,LibXMLParser;
 { TFrmMain Object ====================================================================================}
 

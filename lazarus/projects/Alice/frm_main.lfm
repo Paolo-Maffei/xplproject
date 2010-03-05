@@ -2133,8 +2133,9 @@ object FrmMain: TFrmMain
   }
   Menu = MainMenu1
   OnCreate = FormCreate
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object StatusBar1: TStatusBar
+    Left = 0
     Height = 23
     Top = 300
     Width = 606
@@ -2148,6 +2149,7 @@ object FrmMain: TFrmMain
     SimplePanel = False
   end
   object Panel1: TPanel
+    Left = 0
     Height = 36
     Top = 264
     Width = 606
@@ -2182,7 +2184,9 @@ object FrmMain: TFrmMain
     end
   end
   object RichEdit1: TMemo
+    Left = 0
     Height = 264
+    Top = 0
     Width = 606
     Align = alClient
     ParentFont = False
@@ -2282,14 +2286,12 @@ object FrmMain: TFrmMain
     left = 392
     object Quit: TAction
       Caption = 'Quit'
-      DisableIfNoHandler = True
       Hint = 'Quit the application'
       ImageIndex = 0
       OnExecute = QuitExecute
     end
     object About: TAction
       Caption = 'About...'
-      DisableIfNoHandler = True
       ImageIndex = 1
       OnExecute = AboutExecute
     end
