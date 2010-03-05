@@ -37,7 +37,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="ALxPL"/>
         <CursorPos X="45" Y="25"/>
-        <TopLine Value="8"/>
+        <TopLine Value="3"/>
         <EditorIndex Value="8"/>
         <UsageCount Value="76"/>
         <Loaded Value="True"/>
@@ -247,7 +247,7 @@
         <Filename Value="UElementFactory.pas"/>
         <UnitName Value="UElementFactory"/>
         <CursorPos X="1" Y="74"/>
-        <TopLine Value="53"/>
+        <TopLine Value="48"/>
         <EditorIndex Value="5"/>
         <UsageCount Value="14"/>
         <Loaded Value="True"/>
@@ -271,13 +271,13 @@
       </Unit31>
       <Unit32>
         <Filename Value="frm_main.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="FrmMain"/>
         <HasResources Value="True"/>
-        <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
-        <CursorPos X="45" Y="67"/>
-        <TopLine Value="55"/>
+        <CursorPos X="1" Y="69"/>
+        <TopLine Value="57"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="66"/>
         <Loaded Value="True"/>
@@ -313,7 +313,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
         <CursorPos X="110" Y="68"/>
-        <TopLine Value="87"/>
+        <TopLine Value="68"/>
         <EditorIndex Value="10"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
@@ -453,13 +453,13 @@
       </Unit55>
       <Unit56>
         <Filename Value="..\..\units\xpl\frm_about.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="frmAbout"/>
         <HasResources Value="True"/>
-        <IsPartOfProject Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_about"/>
         <CursorPos X="34" Y="36"/>
-        <TopLine Value="22"/>
+        <TopLine Value="16"/>
         <EditorIndex Value="3"/>
         <UsageCount Value="20"/>
         <Loaded Value="True"/>
@@ -611,7 +611,7 @@
       </Position29>
       <Position30>
         <Filename Value="frm_main.pas"/>
-        <Caret Line="67" Column="49" TopLine="54"/>
+        <Caret Line="67" Column="45" TopLine="55"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -621,7 +621,7 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)\;C:\Lazarus\projects\xpl\"/>
       <OtherUnitFiles Value="$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\svn\units\general\RegExpr\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\svn\units\general\fndUtl328\Datastructs\;$(LazarusDir)\svn\units\xpl\;$(LazarusDir)\svn\units\general\"/>
-      <UnitOutputDirectory Value="C:\Lazarus\projects\output"/>
+      <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
