@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xpl-plugin version="1.3" vendor="clinique" plugin_url="http://glh33.free.fr/xpl/clinique.xml" info_url="http://glh33.free.fr">
+<xpl-plugin version="1.4" vendor="clinique" plugin_url="http://glh33.free.fr/xpl/clinique.xml" info_url="http://glh33.free.fr">
   <device 	id="clinique-logger" 
 			description="Monitor all messages on the xPL Network"
-			version="2.0"
+			version="2.0.1"
 			info_url="http://glh33.free.fr"
 			platform="windows"
 			beta_version="none"
@@ -37,7 +37,7 @@
 			type="tools"
   />
 
-  <device id="clinique-timer" version="1.1" description="Versatile Timer and Scheduler app">
+  <device id="clinique-timer" version="1.1.2" description="Versatile Timer and Scheduler app">
     <command name="Start a timer" msg_type="cmnd" msg_schema="control.basic">
       <element name="current" default="start" />
       <element name="device" default="nameofthetimer" />
@@ -62,7 +62,7 @@
       <element name="device" default="nameofthetimer" />
     </command>
   </device>
-  <device id="clinique-weather" version="2.0" description="Gather weather.com rss feed and push it over xPL network">
+  <device id="clinique-weather" version="2.0.1" description="Gather weather.com rss feed and push it over xPL network">
     <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
     <configItem name="webport" description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
     <command name="Request weather sensors" msg_type="cmnd" msg_schema="sensor.request">
@@ -104,7 +104,7 @@
       <element label="Date of the modification of the value" name="timestamp" />
     </trigger>
   </device>
-  <device id="clinique-ping" version="1.0" description="Network devices monitor">
+  <device id="clinique-ping" version="1.7" description="Network devices monitor">
     <configItem name="nb_retries" description="Number of retries for each host" format="^[3-9]{1}$" />
     <configItem name="ping_interval" description="Interval between ping sequences (in minutes)" format="^[1-9]{1}$" />
     <configItem name="receive_tmout" description="Delay before declaring a host timed out" format="^[2-9]{1}$" />
@@ -129,10 +129,9 @@
     <configItem name="webroot"    description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
     <configItem name="webport"    description="Port used for local web server" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
     <configItem name="scriptfile" description="Script file to load and run at startup (relative to webroot\psscript\scripts)" />
-    <configItem name="autosense"  description="Autosense schema to globals" format="([0-9a-z/-]{1,8})\.([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})\,([0-9a-z/-]{1,8})" />
   </device>
   <device id="clinique-alxpl" version="1.1" description="xPL Message sender" />
-  <device id="clinique-free" version="0.1" description="xPL Plugin to french Free internet operator">
+  <device id="clinique-free" version="0.5" description="xPL Plugin to french Free internet operator">
     <configItem name="username" description="Your free account name - usually phone number" format="^[A-Za-z0-9]{1,50}$" />
     <configItem name="password" description="Your free adsl password" format="^[A-Za-z0-9]{1,50}$" />
     <configItem name="webroot" description="Web server root directory" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
