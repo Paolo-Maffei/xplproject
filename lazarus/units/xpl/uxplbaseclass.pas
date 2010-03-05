@@ -126,7 +126,7 @@ begin
 end;
 
 function TxPLBaseClass.IsValid: boolean;
-var i : integer;
+//var i : integer;
 begin
      result := true;                                            // Controling validness of an Item solely on its size
 //     for i:=0 to fItmValues.Count-1 do                        // isn't the good solution
