@@ -34,7 +34,6 @@ var
   frmAppSettings: TfrmAppSettings;
 
 implementation
-uses frm_about;
 
 procedure TfrmAppSettings.tbOkClick(Sender: TObject);
 begin
