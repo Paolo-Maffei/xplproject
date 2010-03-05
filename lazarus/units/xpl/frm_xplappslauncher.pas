@@ -31,13 +31,11 @@ type
 var frmAppLauncher: TfrmAppLauncher;
 
 implementation { TfrmAppLauncher ==============================================}
-uses frm_main, frm_about, Process;
+uses frm_main,  Process;
 
 procedure TfrmAppLauncher.FormCreate(Sender: TObject);
 var sl : TStringList;
-    item : TListItem;
     i : integer;
-    version, path : string;
 begin
      sl := frmMain.xPLClient.Setting.GetxPLAppList;
      for i := 0 to sl.Count -1 do begin
