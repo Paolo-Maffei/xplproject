@@ -2511,8 +2511,8 @@ object FrmMain: TFrmMain
   end
   object ActionList1: TActionList
     Images = frmAbout.ilStandardActions
-    left = 256
-    top = 24
+    left = 352
+    top = 128
     object Quit: TAction
       Caption = 'Quit'
       Hint = 'Quit the application'
@@ -2596,8 +2596,8 @@ object FrmMain: TFrmMain
   end
   object MainMenu1: TMainMenu
     Images = frmAbout.ilStandardActions
-    left = 288
-    top = 24
+    left = 360
+    top = 216
     object MenuItem3: TMenuItem
       Caption = '&Application'
       object MenuItem12: TMenuItem
@@ -2841,12 +2841,12 @@ object FrmMain: TFrmMain
     end
   end
   object SaveDialog: TSaveDialog
-    left = 320
-    top = 24
+    left = 416
+    top = 352
   end
   object ClasseImages: TImageList
-    left = 352
-    top = 24
+    left = 416
+    top = 160
     Bitmap = {
       4C69100000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -3365,12 +3365,12 @@ object FrmMain: TFrmMain
   end
   object XMLPropStorage1: TXMLPropStorage
     StoredValues = <>
-    left = 224
-    top = 24
+    left = 280
+    top = 176
   end
   object TypeImages: TImageList
-    left = 384
-    top = 24
+    left = 488
+    top = 216
     Bitmap = {
       4C69030000001000000010000000890000008800000095181400910E0817A737
       268EC97C60D9DCA887F5E6B996FCE4B48EF9D1996FE9985E34B47A380A452407
@@ -3473,8 +3473,8 @@ object FrmMain: TFrmMain
   end
   object PopupMenu1: TPopupMenu
     Images = frmAbout.ilStandardActions
-    left = 192
-    top = 24
+    left = 208
+    top = 112
     object mnuSendMessage: TMenuItem
       Caption = 'Send a new message to...'
       OnClick = mnuSendMessageClick

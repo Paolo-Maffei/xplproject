@@ -48,7 +48,7 @@ var
   frmPluginDetail: TfrmPluginDetail;
 
 implementation
-uses OpenURLUtil, frm_about ;
+uses OpenURLUtil;
 
 { TfrmPluginDetail }
 

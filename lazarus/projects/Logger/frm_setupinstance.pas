@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,frm_main,
-  XMLPropStorage, ComCtrls, Buttons, StdCtrls, v_msgbody_stringgrid, Grids, uxPLConfig,
+  XMLPropStorage, ComCtrls, Buttons, StdCtrls, v_msgbody_stringgrid, Grids,
   v_xplmsg_opendialog;
 
 type
@@ -46,7 +46,7 @@ var
   frmSetupInstance: TfrmSetupInstance;
 
 implementation
-uses frm_about, uxPLMessage, uxPLAddress,uxplcfgitem, cStrings,  uxPLConst, RegExpr,
+uses uxPLMessage, uxPLAddress,uxplcfgitem, cStrings,  uxPLConst, RegExpr,
      uxPLMsgBody, XMLWrite, XMLRead, DOM;
 
 procedure TfrmSetupInstance.FormShow(Sender: TObject);
