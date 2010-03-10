@@ -25,6 +25,7 @@ Public Class AppCore
                 xPLdev = New xPL.xPLDevice(My.Settings.xPLDevice, False)
                 ' now call config changed event handler to propagate settings to the SMSinterface
                 ConfigChanged(xPLdev)
+                xPLdev.VersionNumber = xPL_Base.GetVersionNumber
             Catch ex As Exception
                 ' something is wrong, fallback to defaults
                 LogError("SMS OnStartUp", "Restoring settings failed; starting with defaults", EventLogEntryType.Error)
