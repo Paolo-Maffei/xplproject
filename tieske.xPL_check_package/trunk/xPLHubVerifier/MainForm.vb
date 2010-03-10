@@ -294,7 +294,7 @@ Public Class MainForm
 
         If Not download Then
             ' save embedded installer to temp directory
-            Resources.SaveResourceToFile(My.Resources.xpldiag, filename)
+            Resources.SaveResourceToFile(My.Resources.xplhub, filename)
         End If
 
         proc.StartInfo.FileName = filename
