@@ -54,52 +54,40 @@ Namespace My
             End Get
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("5.12")>  _
-        Public Property BundledHubVersion() As String
+        Public ReadOnly Property BundledHubVersion() As String
             Get
                 Return CType(Me("BundledHubVersion"),String)
             End Get
-            Set
-                Me("BundledHubVersion") = value
-            End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("1.2")>  _
-        Public Property BundledDiagVersion() As String
+        Public ReadOnly Property BundledDiagVersion() As String
             Get
                 Return CType(Me("BundledDiagVersion"),String)
             End Get
-            Set
-                Me("BundledDiagVersion") = value
-            End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("mal-hub")>  _
-        Public Property IdHub() As String
+        Public ReadOnly Property IdHub() As String
             Get
                 Return CType(Me("IdHub"),String)
             End Get
-            Set
-                Me("IdHub") = value
-            End Set
         End Property
         
-        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+        <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
          Global.System.Configuration.DefaultSettingValueAttribute("mal-diag")>  _
-        Public Property IdDiag() As String
+        Public ReadOnly Property IdDiag() As String
             Get
                 Return CType(Me("IdDiag"),String)
             End Get
-            Set
-                Me("IdDiag") = value
-            End Set
         End Property
     End Class
 End Namespace

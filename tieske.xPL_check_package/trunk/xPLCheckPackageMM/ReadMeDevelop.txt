@@ -5,7 +5,7 @@ The Solution consists of 3 projects;
  - xPLHubVerifier; the actual application doing the checks and containing the installers of 
             the Hub and Diag tools.
  - xPLCheckPackage; a wrapper, a single EXE that is the main application of this solution.
-            It contains the output of xPLHubVerifier.
+            It contains all output of xPLHubVerifier.
  - xPLCheckPackageMM; Deployment project that generates a Merge Module, which can be integrated
             when distributing other applications
 

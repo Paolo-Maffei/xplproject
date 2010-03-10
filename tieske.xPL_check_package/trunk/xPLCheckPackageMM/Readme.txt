@@ -1,6 +1,20 @@
-﻿
-Adding the xPL check package to the installation of your xPL application
-========================================================================
+﻿xPL Check Package
+=================
+
+This application checks the infrastructure/xPL requirements for installing xPL applications. It has 2 uses;
+1) standalone executable, that can be used by end users to check their local installation
+2) embedded in an xPL application installer (what is was designed for)
+
+To use it in the first option, just execute the xplcheckpackage.exe application. If you are a developer and wish to embed the verification into your installer, then check below for instructions on how to achieve this.
+
+
+
+
+
+
+
+For developers: Adding the xPL check package to the installation of your xPL application
+========================================================================================
 
  1) add an 'Installer Class' to your project
        - right click the project; Add - New Item...
