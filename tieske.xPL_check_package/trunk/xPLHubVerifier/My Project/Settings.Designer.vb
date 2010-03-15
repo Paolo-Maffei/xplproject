@@ -56,7 +56,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("5.12")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("5.13")>  _
         Public ReadOnly Property BundledHubVersion() As String
             Get
                 Return CType(Me("BundledHubVersion"),String)
@@ -65,7 +65,7 @@ Namespace My
         
         <Global.System.Configuration.ApplicationScopedSettingAttribute(),  _
          Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
-         Global.System.Configuration.DefaultSettingValueAttribute("1.2")>  _
+         Global.System.Configuration.DefaultSettingValueAttribute("1.3")>  _
         Public ReadOnly Property BundledDiagVersion() As String
             Get
                 Return CType(Me("BundledDiagVersion"),String)
