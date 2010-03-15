@@ -1,0 +1,99 @@
+=======================================================================
+   HOW IT WORKS
+=======================================================================
+Information is gathered from the local systems registry and the xPL 
+network, regarding installed and running devices. This information is 
+then compared to information collected from the vendor-plugin-files 
+(downloading those plugins will automatically start when the 
+application is started)
+The comparison is displayed in two tabs, showing the installed and 
+available devices. The icons in the list identify current status (see 
+below).
+
+REMARKS:
+1) The list created from the download plugins is NOT AN EXHAUSTIVE 
+   LIST, as developers who wish not to maintain a plugin file will 
+   not be listed.
+2) Until the update is finished the old information will be shown, 
+   and no new updates will be listed, so please be patient and 
+   wait for the update to complete.
+
+=======================================================================
+   INSTALLED APPLICATIONS
+=======================================================================
+The 'Installed' tab shows all applications that have been seen (using 
+the xPL protocols automatic-discovery methods) on the xPL network or 
+are locally installed. The network applications are listed by their 
+full xPL address, the local applications are listed as '[vendorid]-
+[deviceid].(local installation)'.
+The local-applications-part is used primarily for software that is xPL 
+related, but does not expose itself as an xPL device (and hence cannot 
+be detected on the xPL network). Examples are; hubs, diagnostic tools, 
+etc.
+Double clicking a device will show the available details.
+
+Icons shown in the list:
+EXCLAMATION     : Running versions are different from the vendor 
+                  published version, indicating that there has been an
+                  update
+CHECK MARK      : Running versions are identical to the vendor 
+                  published version, indicating no update has been 
+                  issued
+QUESTION MARK   : the device hasn't been found in the plugin list, so 
+                  there is no vendor provided data to check against
+
+
+=======================================================================
+   AVAILABLE APPLICATIONS
+=======================================================================
+The applications listed here are collected using the 'plugin' system 
+of the xPL Project (see http://xplproject.org.uk). Each developer 
+('Vendor') maintains a plugin xml file that lists all devices by this 
+vendor and many extra details about them. The xPL project maintains an 
+overall plugin list, with urls to all vendor plugins.
+By downloading the plugins a list is harvested of available xPL 
+applications.
+Double clicking a device will show the available details.
+
+Icons shown in the list:
+EXCLAMATION     : current versions are different from previous 
+                  version, indicating that there has been an update
+CHECK MARK      : versions are identical to previous versions, 
+                  indicating no update has been issued
+PLUS SIGN       : the device hasn't been seen before in the plugin 
+                  list, so this is a newly published device
+
+=======================================================================
+   BUTTONS
+=======================================================================
+DETAILS         : shows the details of the highlighted device, 
+                  including informational and download links (similar 
+                  to double clicking a device in the list)
+SCAN            : sends an xPL heartbeat request over the xPL network, 
+                  to search for xPL devices
+CLEAR STATUS    : until this button is pressed, the status info on the 
+                  "available applications" is maintained (old updates 
+                  remain marked as updates). Clearing the status means
+                  that a new comparison baseline will be set and only
+                  new updates from this point forward will be marked
+                  as such.
+
+
+=======================================================================
+   ADDING YOUR APPLICATIONS (for developers)
+=======================================================================
+To maximize the benefits for the user (and to advertise your 
+applications), follow the following guidelines;
+ * make sure that the heartbeat messages of your device contains a key 
+   named "version" (eg. "version=2.1")
+ * if your software is non-device software, then make sure that 
+   installing your application creates a registry key 
+   "HKLM\Software\xPL\[vendorid]\[deviceid]" and a string value
+   "Version" within that key. Because the software is non-device, 
+   you'll have to come up with a 'virtual' unique device ID.
+ * have your plugin xml file up-to-date with correct version 
+   information, descriptions, etc.
+ * Any other item that is neither a device nor an installable piece of 
+   software, can be added to the 'Available' tab by using a 'virtual' 
+   unique device ID and adding that ID to your plugin file. Examples 
+   are code libraries, graphics, documentation, etc.
