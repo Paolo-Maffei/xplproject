@@ -9,10 +9,10 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("xplCurrentCost")> 
-<Assembly: AssemblyDescription("xPL gateway for Curront Cost electricity monitoring device")> 
+<Assembly: AssemblyDescription("xPL gateway for Current Cost electricity monitoring device")> 
 <Assembly: AssemblyCompany("")> 
 <Assembly: AssemblyProduct("xplCurrentCost")> 
-<Assembly: AssemblyCopyright("Copyright ©  2008 Tim Dawe")> 
+<Assembly: AssemblyCopyright("Copyright ©  2009 Tim Dawe")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
 ' <Assembly: AssemblyVersion("1.0.*")> 
 
-<Assembly: AssemblyVersion("0.1.0.0")> 
-<Assembly: AssemblyFileVersion("0.1.0.0")> 
+<Assembly: AssemblyVersion("0.2.0.0")> 
+<Assembly: AssemblyFileVersion("0.2.0.0")> 
