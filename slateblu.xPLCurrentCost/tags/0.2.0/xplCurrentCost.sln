@@ -1,0 +1,24 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xplCurrentCost", "xplCurrentCost\xplCurrentCost.vbproj", "{27E3A856-E311-474D-845B-19BC6D6F2B32}"
+EndProject
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "xplCurrentCostSetup", "Setup\Setup.vdproj", "{14097BFB-D435-4831-95FB-E1D7C51AE8A0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{27E3A856-E311-474D-845B-19BC6D6F2B32}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{27E3A856-E311-474D-845B-19BC6D6F2B32}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{27E3A856-E311-474D-845B-19BC6D6F2B32}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{27E3A856-E311-474D-845B-19BC6D6F2B32}.Release|Any CPU.Build.0 = Release|Any CPU
+		{14097BFB-D435-4831-95FB-E1D7C51AE8A0}.Debug|Any CPU.ActiveCfg = Debug
+		{14097BFB-D435-4831-95FB-E1D7C51AE8A0}.Release|Any CPU.ActiveCfg = Release
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
