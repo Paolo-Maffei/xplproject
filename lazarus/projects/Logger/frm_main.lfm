@@ -1,11 +1,11 @@
 object FrmMain: TFrmMain
-  Left = 150
-  Height = 494
-  Top = 162
-  Width = 784
+  Left = 204
+  Height = 568
+  Top = 91
+  Width = 1022
   Caption = 'FrmMain'
-  ClientHeight = 474
-  ClientWidth = 784
+  ClientHeight = 548
+  ClientWidth = 1022
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
     200010080000CE0400002020000001002000A8100000DE0C0000303000000100
@@ -2274,7 +2274,7 @@ object FrmMain: TFrmMain
     Left = 0
     Height = 26
     Top = 0
-    Width = 784
+    Width = 1022
     ButtonHeight = 25
     ButtonWidth = 80
     Caption = 'ToolBar2'
@@ -2338,23 +2338,23 @@ object FrmMain: TFrmMain
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 425
+    Height = 499
     Top = 26
-    Width = 784
+    Width = 1022
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Monitoring'
-      ClientHeight = 397
-      ClientWidth = 776
+      ClientHeight = 471
+      ClientWidth = 1014
       object lvMessages: TListView
         Left = 172
-        Height = 397
+        Height = 471
         Top = 0
-        Width = 400
-        Align = alLeft
+        Width = 599
+        Align = alClient
         Columns = <        
           item
             Caption = 'Schema'
@@ -2390,7 +2390,7 @@ object FrmMain: TFrmMain
       end
       object tvMessages: TTreeView
         Left = 0
-        Height = 397
+        Height = 471
         Top = 0
         Width = 167
         Align = alLeft
@@ -2405,30 +2405,32 @@ object FrmMain: TFrmMain
       end
       object Splitter1: TSplitter
         Left = 167
-        Height = 397
+        Height = 471
         Top = 0
         Width = 5
       end
       object Splitter2: TSplitter
-        Left = 572
-        Height = 397
+        Left = 771
+        Height = 471
         Top = 0
         Width = 5
+        Align = alRight
+        ResizeAnchor = akRight
       end
       object Panel1: TPanel
-        Left = 577
-        Height = 397
+        Left = 776
+        Height = 471
         Top = 0
-        Width = 199
-        Align = alClient
-        ClientHeight = 397
-        ClientWidth = 199
+        Width = 238
+        Align = alRight
+        ClientHeight = 471
+        ClientWidth = 238
         TabOrder = 4
         object Memo1: TMemo
           Left = 1
-          Height = 395
+          Height = 469
           Top = 1
-          Width = 197
+          Width = 236
           Align = alClient
           Color = clGradientInactiveCaption
           TabOrder = 0
@@ -2437,8 +2439,8 @@ object FrmMain: TFrmMain
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
-      ClientHeight = 397
-      ClientWidth = 776
+      ClientHeight = 471
+      ClientWidth = 1014
       object Label3: TLabel
         Left = 4
         Height = 16
@@ -2498,8 +2500,8 @@ object FrmMain: TFrmMain
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
-    Top = 451
-    Width = 784
+    Top = 525
+    Width = 1022
     Panels = <    
       item
         Width = 300
@@ -3365,8 +3367,8 @@ object FrmMain: TFrmMain
   end
   object XMLPropStorage1: TXMLPropStorage
     StoredValues = <>
-    left = 280
-    top = 176
+    left = 240
+    top = 216
   end
   object TypeImages: TImageList
     left = 488
@@ -3473,8 +3475,8 @@ object FrmMain: TFrmMain
   end
   object PopupMenu1: TPopupMenu
     Images = frmAbout.ilStandardActions
-    left = 208
-    top = 112
+    left = 280
+    top = 104
     object mnuSendMessage: TMenuItem
       Caption = 'Send a new message to...'
       OnClick = mnuSendMessageClick

@@ -8,13 +8,15 @@ type
    tsVendor   = string[8];
    tsDevice   = string[8];
    tsInstance = string[16];
+   tsAddress  = string[8 + 1 + 8 + 1 + 16];
    tsClass    = string[8];
    tsType     = string[8];
+   tsSchema   = string[8 + 1 + 8];
    tsMsgType  = string[8];
    tsBodyElmtName  = string[16];
    tsBodyElmtValue = string[128];
 
-   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];                       //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
+   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];                                          //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
    TxPLSchemaClasse = ( xpl_scHBeat,    xpl_scConfig,  xpl_scAudio,   xpl_scControl,
                         xpl_scDateTime, xpl_scDb,      xpl_scDGuide,  xpl_scCID,
@@ -22,10 +24,10 @@ type
                         xpl_scTTS,      xpl_scUps,     xpl_scWebCam,  xpl_scX10,
                         xpl_scOther );
 
-   TxPLMessageType  = ( xpl_mtTrig,     xpl_mtStat,    xpl_mtCmnd,    xpl_mtAny,
-                        xpl_mtNone  );
+//   TxPLMessageType  = ( xpl_mtTrig,     xpl_mtStat,    xpl_mtCmnd,    xpl_mtAny,   xpl_mtNone  );
 
    TxPLConfigType   = ( xpl_ctConfig,   xpl_ctReconf,  xpl_ctOption);
+
 
 const
    // File extensions =======================================================================================
@@ -35,11 +37,14 @@ const
    K_FEXT_PHP         = '.php';
 
    // Websites ==============================================================================================
-   K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';             // URL where to download the main plugin file
+   K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';                                          // URL where to download the main plugin file
    K_XPL_VENDOR_SEED_FILE     = 'plugins' + K_FEXT_XML;
 
    // Configuration modes ===================================================================================
-   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');  // Works with TxPLConfigType
+   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');                               // Works with TxPLConfigType
+   K_GROUP_NAME_ID     = 'xpl-group.';
+   K_XPL_CONFIGFILTER  = 'filter';
+   K_XPL_CONFIGGROUP   = 'group';
 
    // IP related strings
    K_IP_LOCALHOST     = '127.0.0.1';
@@ -50,9 +55,9 @@ const
    K_REGEXPR_VENDOR   = '([0-9a-z]{1,8})';
    K_REGEXPR_DEVICE   = K_REGEXPR_VENDOR;
    K_REGEXPR_INSTANCE = '([0-9a-z/-]{1,16})';
-   K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;         // Also used in vendor xml file
+   K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;                                          // Also used in vendor xml file
    K_REGEXPR_ADDRESS  = K_REGEXPR_DEVICE_ID + '\.' + K_REGEXPR_INSTANCE;
-   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                       //   /!\ alternative must be place after fixed part !!!
+   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                                                        //   /!\ alternative must be place after fixed part !!!
    K_FMT_ADDRESS      = '%s-%s.%s';
    K_FMT_FILTER       = '%s.%s.%s';
    K_ADDR_ANY_TARGET  = '*';
@@ -63,6 +68,7 @@ const
    K_MSG_TYPE_CMND = 'xpl-cmnd';
    K_MSG_TYPE_ANY  = '*';
    K_RE_MSG_TYPE   = 'xpl-(trig|stat|cmnd)';
+   K_MSG_TYPE_DESCRIPTORS : Array[0..3] of tsMsgType = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
    // Message header elements ===============================================================================
    K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10;
@@ -74,6 +80,9 @@ const
 
    // Message body elements =================================================================================
    K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
+   K_RE_BODY_LINE      = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
+   K_MSG_BODY_FORMAT   = '%s'#10'{'#10'%s'#10'}'#10;
+
 
    // Message elements ======================================================================================
    K_RE_MESSAGE        = '\A(.+})(.+})';
@@ -103,15 +112,17 @@ const
    K_SCHEMA_X10_BASIC      = 'x10.basic';
    K_SCHEMA_CONFIG_CURRENT = 'config.current';
    K_SCHEMA_CONFIG_LIST    = 'config.list';
+   K_SCHEMA_DAWNDUSK_BASIC = 'dawndusk.basic';
+   K_SCHEMA_DAWNDUSK_REQUEST = 'dawndusk.request';
 
    // Hub and listener constants ============================================================================
-   XPL_BASE_DYNAMIC_PORT : Integer = 50000;           // First port used to try to open the listening port
-   XPL_BASE_PORT_RANGE   : Integer = 512;             //       Range of port to scan for trying to bind socket
+   XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                                                  // First port used to try to open the listening port
+   XPL_BASE_PORT_RANGE   : Integer = 512;                                                                    //       Range of port to scan for trying to bind socket
    XPL_UDP_BASE_PORT     : Integer = 3865;
-   MAX_XPL_MSG_SIZE      : Integer = 1500;            // Maximum size of a xpl message
-   NOHUB_HBEAT           : Integer = 3;               // seconds between HBEATs until hub is detected
-   NOHUB_LOWERFREQ       : Integer = 30;              // lower frequency probing for hub
-   NOHUB_TIMEOUT         : Integer = 120;             // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
+   MAX_XPL_MSG_SIZE      : Integer = 1500;                                                                   // Maximum size of a xpl message
+   NOHUB_HBEAT           : Integer = 3;                                                                      // seconds between HBEATs until hub is detected
+   NOHUB_LOWERFREQ       : Integer = 30;                                                                     // lower frequency probing for hub
+   NOHUB_TIMEOUT         : Integer = 120;                                                                    // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
 
    // Messages to display ==================================================================================
    K_MSG_HUB_FOUND       = 'xPL Network %s found';
@@ -125,6 +136,11 @@ const
    K_MSG_CONFIG_LOADED   = 'Configuration loaded';
    K_MSG_CONFIG_RECEIVED = 'Configuration received from %s and saved';
    K_MSG_NETWORK_SETTINGS= 'xPL Network settings are not properly configured';
+   K_MSG_ERROR_SENDING   = 'Error sending message : %s';
+   K_MSG_ERROR_PLUGIN    = 'No device description found in vendor plugin file - please consider updating';
+   K_MSG_OK_PLUGIN       = 'Configuration elements loaded from vendor plugin file';
+   K_MSG_GENERIC_ERROR   = '%s error raised, with message : %s';
+   K_MSG_LISTENER_STARTED= '%s v%s started';
 
    // Web applications templates ===========================================================================
    K_WEB_TEMPLATE_BEGIN = '<!-- Result template>';
@@ -138,7 +154,7 @@ const
    K_ERR_MSG_FNF        = 'File not found : %s';
 
    // Configuration items ==================================================================================
-   K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';               // Typically xpl_vendor-device.xml
+   K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';                                                                 // Typically xpl_vendor-device.xml
    K_CONF_NEWCONF        = 'newconf';
    K_RE_NEWCONF          = '^' + K_REGEXPR_INSTANCE + '$';
    K_DESC_NEWCONF        = 'Specifies the instance name of the device';

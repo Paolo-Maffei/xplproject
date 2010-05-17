@@ -3,7 +3,7 @@ unit uxplinterface;
 {$mode objfpc}{$H+}
 
 interface
-uses uxPLWebListener,  uxPLMsgHeader, uxPLGlobals, Classes, XMLCfg, uxPLMessage;
+uses uxPLWebListener,  uxPLMsgHeader, uxPLGlobals, Classes, XMLCfg, uxPLMessage, uxPLConst;
 
 type
     { TxPLInterface }
@@ -21,9 +21,9 @@ type
 
        OnxPLGlobalChanged : TxPLGlobalChangedEvent;
 
-       procedure SendMsg(aMsgType : integer; aTarget,aSchema,aBody : string);
+       procedure SendMsg(aMsgType : tsMsgType; aTarget,aSchema,aBody : string);
        // Message management functions
-       function  MessageType : integer;
+       function  MessageType : string;
        function  MessageSender : string;
        function  MessageSchema : string;
        function  Msg_Class : string;
@@ -48,7 +48,7 @@ type
 
 implementation { TxPLInterface ================================================}
 uses
-  SysUtils,StrUtils, uxPLConst;
+  SysUtils,StrUtils;
 
 constructor TxPLInterface.create(aOwner: TComponent; aVendor, aDevice, aAppVersion, aDefaultPort : string);
 begin
@@ -91,16 +91,16 @@ begin
 //   end;
 end;
 
-procedure TxPLInterface.SendMsg(aMsgType : integer; aTarget,aSchema,aBody : string);
+procedure TxPLInterface.SendMsg(aMsgType : tsMsgType; aTarget,aSchema,aBody : string);
 begin
    SendMessage(
-      TxPLMessageType(aMsgType),
+      aMsgType,
       IfThen(aTarget='','*',aTarget),
       aBody+#10+'{'+#10+aSchema+#10+'}'+#10);
 end;
 
-function TxPLInterface.MessageType: integer;
-begin result := ord(xPLMessage.MessageType); end;
+function TxPLInterface.MessageType: string;
+begin result := xPLMessage.MessageType; end;
 
 function TxPLInterface.MessageSender: string;
 begin result := xPLMessage.Source.Tag; end;

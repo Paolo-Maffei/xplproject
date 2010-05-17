@@ -6,6 +6,7 @@ unit uxplglobals;
  ==============================================================================
   0.90 : Initial version
   0.91 : Added Expirency capability
+  0.92 : Added On change Event
 }
 
 {$mode objfpc}{$H+}
@@ -15,13 +16,14 @@ interface
 uses Classes, XMLCfg, ExtCtrls;
 
 type
-    TxPLGlobalChangedEvent = procedure(aValue : string; aOld : string; aNew : string) of object;
+    TxPLGlobalChangedEvent = procedure(const aValue : string; const aNew : string; const aOld : string) of object;
     { TxPLGlobalValue }
 
     TxPLGlobalValue = class
        fName  : string;
        fValue : string;
        fFormer: string;
+       fTag   : string;
        fComment : string;
        fModifyTS : TDateTime;
        fCreateTS : TDateTime;
@@ -37,6 +39,8 @@ type
     published
        property Value   : string read fValue;
        property Comment : string read fComment;
+       property Former  : string read fFormer;
+       property Tag     : string read fTag write fTag;
        property ModifyTS: TDateTime read fModifyTS;
        property CreateTS: TDateTime read fCreateTS;
        property ExpireTS: TDateTime read fExpireTS;
@@ -54,13 +58,14 @@ type
     public
        constructor Create;
        destructor  Destroy;
-       procedure SetValue(const aString : string; const aValue: string; const aComment : string = '');
+       function SetValue(const aString : string; const aValue: string; const aComment : string = '') : integer;
        function  GetValue(const i : integer) : string;
        function  GetValue(const aString : string) : string;
        function  Item(const i : integer) : TxPLGlobalValue;
        procedure Delete(const aString : string); overload;
        procedure WriteToXML;
        procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string);
+       OnGlobalChange : TxPLGlobalChangedEvent;
     end;
 
 
@@ -75,6 +80,7 @@ resourcestring
       K_XML_CREATE_PATH  = '/CreateTS';
       K_XML_EXPIRE_PATH  = '/ExpireTS';
       K_XML_COMMENT_PATH = '/Comment';
+      K_XML_TAG_PATH     = '/Tag';
 
 
 function TxPLGlobalValue.SetValue(const AValue: string; const ExpireOn : TDateTime = 0) : boolean;
@@ -111,6 +117,7 @@ begin
       SetValue(aRootPath + K_XML_CREATE_PATH , DateTimeToStr(fCreateTS));
       SetValue(aRootPath + K_XML_COMMENT_PATH  , fComment);
       SetValue(aRootPath + K_XML_EXPIRE_PATH  , DateTimeToStr(fExpireTS));
+      SetValue(aRootPath + K_XML_TAG_PATH, fTag);
    end;
 end;
 
@@ -123,6 +130,7 @@ begin
    fCreateTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_CREATE_PATH, ''));
    fComment  := aCfgFile.GetValue(aRootPath + K_XML_COMMENT_PATH, '');
    fExpireTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_EXPIRE_PATH, DateTimeToStr(fCreateTS-1)));
+   fTag      := aCfgFile.GetValue(aRootPath + K_XML_TAG_PATH, '');
 end;
 
 { TxPLGlobalList }
@@ -183,19 +191,19 @@ begin
    end;
 end;
 
-procedure TxPLGlobalList.SetValue(const aString : string; const aValue: string; const aComment : string = '');
-var i : integer;
-    gv : TxPLGlobalValue;
+function TxPLGlobalList.SetValue(const aString : string; const aValue: string; const aComment : string = '') : integer;
+var gv : TxPLGlobalValue;
+    old : string;
 begin
-   i := IndexOf(aString);
+   result := IndexOf(aString);
 
-   if i=-1 then begin
-       i := Add(aString);
-       Objects[i] := TxPLGlobalValue.Create(aString);
+   if result=-1 then begin
+       result := Add(aString);
+       Objects[result] := TxPLGlobalValue.Create(aString);
    end;
 
-   gv := TxPLGlobalValue(Objects[i]);
-   gv.SetValue(aValue);
+   gv := TxPLGlobalValue(Objects[result]);
+   if gv.SetValue(aValue) and Assigned(OnGlobalChange) then OnGlobalChange(aString,aValue,gv.Former);
    if aComment<>'' then gv.SetComment(aComment);
 end;
 

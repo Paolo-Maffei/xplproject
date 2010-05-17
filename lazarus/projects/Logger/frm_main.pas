@@ -89,7 +89,6 @@ type
     tvMessages: TTreeView;
     XMLPropStorage1: TXMLPropStorage;
     procedure AboutExecute(Sender: TObject);
-//    procedure acAppLauncherExecute(Sender: TObject);
     procedure acAppSettingsExecute(Sender: TObject);
     procedure acDiscoverExecute(Sender: TObject);
     procedure acLoggingExecute(Sender: TObject);
@@ -134,8 +133,10 @@ type
     procedure GetSourceChain(var c1 : string; var c2 : string; var c3 : string);
     function  GetSourceAddress : string;
     procedure AddToTreeview(aMessageNum : integer);
+    procedure RequestConfig(aTarget : tsAddress);
   public
      xPLClient : TxPLListener;
+     procedure ApplySettings(Sender : TObject);
   end;
 
   TConfigurationRecord = class
@@ -152,22 +153,21 @@ type
 var
   FrmMain: TFrmMain;
 
-implementation { TFrmLogger =====================================================}
+implementation { TFrmLogger =============================================================}
 uses frm_xplappslauncher, frm_AppSettings, cDateTime,  StrUtils, frm_xpllogviewer,
-     uxPLAddress, uxplMsgHeader,  frm_PluginDetail,
+     uxPLAddress, uxplHeader,  frm_PluginDetail,
      cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance,
      frm_networksettings, frm_vendorplugins;
 
-// ===============================================================================
+// ======================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0.1';
+     K_XPL_APP_VERSION_NUMBER = '2.0.2';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'logger';
 
-// ===============================================================================
+// ======================================================================================
 procedure TFrmMain.FormCreate(Sender: TObject);
-var i : TxPLMessageType;
-    k : integer;
+var k : integer;
 begin
   saveDialog.Filter := 'txt file|*.txt';
   saveDialog.DefaultExt := 'txt';
@@ -180,8 +180,9 @@ begin
   xPLClient.PassMyOwnMessages := True;
   Self.Caption := xPLClient.AppName;
 
-  for i:= xpl_mtTrig to xpl_mtCmnd do                                         // There's no descriptor for mtNone
-     clbType.Items.Add(TxPLMsgHeader.MsgType2String(i));
+  clbType.Items.Add(K_MSG_TYPE_TRIG);
+  clbType.Items.Add(K_MSG_TYPE_STAT);
+  clbType.Items.Add(K_MSG_TYPE_CMND);
 
   for k := Low(K_XPL_CLASS_DESCRIPTORS) to High(K_XPL_CLASS_DESCRIPTORS) do
      clbSchema.Items.Add(K_XPL_CLASS_DESCRIPTORS[k]);
@@ -225,31 +226,36 @@ begin frmVendorPlugins.ShowModal; end;
 procedure TFrmMain.FilterExecute(Sender: TObject);
 begin { Nothing to do but the function must be present } end;
 
-//procedure TFrmMain.acAppLauncherExecute(Sender: TObject);
-//begin frmAppLauncher.Show; end;
-
-procedure TFrmMain.acAppSettingsExecute(Sender: TObject);
+procedure TFrmMain.ApplySettings(Sender : TObject);                                       // Correction bug FS#39
 var i : integer;
 begin
-   frmAppSettings.ShowModal;
    if frmAppSettings.ckIcons.Checked then lvMessages.SmallImages := ClasseImages
                                      else lvMessages.SmallImages := TypeImages;
    for i:=0 to lvMessages.Columns.Count-1 do
        lvMessages.Column[i].Caption := frmAppSettings.ListBox1.Items[i];
-   Memo1.Visible := frmAppSettings.ckShowPreview.Checked;
+   Panel1.Visible := frmAppSettings.ckShowPreview.Checked;
    tvMessagesSelectionChanged(Sender);
+end;
+
+procedure TFrmMain.acAppSettingsExecute(Sender: TObject);
+begin
+   frmAppSettings.ShowModal;
+   ApplySettings(sender);
 end;
 
 procedure TFrmMain.acDiscoverExecute(Sender: TObject);
 begin
-   xPLClient.SendMessage(xpl_mtCmnd,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10);
+end;
+
+procedure TFrmMain.RequestConfig(aTarget : tsAddress);
+begin
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
 end;
 
 procedure TFrmMain.acRequestConfigExecute(Sender: TObject);
-begin
-   xPLClient.SendMessage(xpl_mtCmnd,GetSourceAddress,K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
-   xPLClient.SendMessage(xpl_mtCmnd,GetSourceAddress,K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
-end;
+begin RequestConfig(GetSourceAddress); end;
 
 procedure TFrmMain.acPluginDetailExecute(Sender: TObject);
 var ConfElmts : TConfigurationRecord;
@@ -280,8 +286,8 @@ begin
          if elt<>-1 then result := result and clbSchema.Checked[elt];
      end;
      for i:=0 to clbType.Items.Count-1 do begin
-         ch := aMsg.Header.MessageTypeAsString;
-         elt := clbSchema.Items.IndexOf(ch);
+         ch := aMsg.Header.MessageType;
+         elt := clbType.Items.IndexOf(ch);
          if elt<>-1 then result := result and clbType.Checked[elt];
      end;
 end;
@@ -509,7 +515,7 @@ var s : array[0..4] of string;
 begin
      with lvMessages.Items.Add,TxPLMessage(Messages.Objects[aMessageNum]) do begin
         if frmAppSettings.ckIcons.Checked then ImageIndex := Ord(Schema.Classe)
-                                          else ImageIndex := Ord(MessageType);
+                                          else ImageIndex := TxPLHeader.MsgTypeAsOrdinal(MessageType);
 
         for i:=0 to 4 do
            if frmAppSettings.ListBox1.Items[i]='Time'
@@ -550,7 +556,7 @@ end;
 
 procedure HandleConfigMessages;
 begin
-   if ((axPLMessage.Body.Keys.Count=0 ) or (axPLMessage.Schema.Classe<>xpl_scConfig) or (axPLMessage.MessageType<>xpl_mtStat)) then exit;      // Don't handle config request messages
+   if ((axPLMessage.Body.Keys.Count=0 ) or (axPLMessage.Schema.Classe<>xpl_scConfig) or (axPLMessage.MessageType<>K_MSG_TYPE_STAT)) then exit;      // Don't handle config request messages
    case AnsiIndexStr(axPLMessage.Schema.Tag, [K_SCHEMA_CONFIG_CURRENT,K_SCHEMA_CONFIG_LIST]) of
         0 : Config_Elmts.config_current:= axPLMessage.Body.RawxPL;
         1 : Config_Elmts.config_list:= axPLMessage.Body.RawxPL;
@@ -582,10 +588,7 @@ begin
          Config_Elmts.Vendor := Vendor;
          Config_Elmts.Instance := Instance;
          aNode3.Data := Config_Elmts;
-         if frmAppSettings.ckAutoGetSetup.Checked then begin
-               xPLClient.SendMessage(xpl_mtCmnd,TxPLAddress.ComposeAddress(Vendor,Device,Instance),K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
-               xPLClient.SendMessage(xpl_mtCmnd,TxPLAddress.ComposeAddress(Vendor,Device,Instance),K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
-         end;
+         if frmAppSettings.ckAutoGetSetup.Checked then RequestConfig(TxPLAddress.ComposeAddress(Vendor,Device,Instance));
       end;
       Config_Elmts := TConfigurationRecord(aNode3.Data);
    end;

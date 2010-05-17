@@ -18,7 +18,7 @@ interface
 
 uses Classes, SysUtils, uxPLAddress, IdUDPServer,IdSocketHandle,
      ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter,
-     uxPLMsgBody,  uxPLMsgHeader, uxPLClient, uxPLConst;
+     uxPLMsgBody,  uxPLClient, uxPLConst;
 
 type
       TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
@@ -81,9 +81,10 @@ type
 
         function  CheckOrigin(aRemoteIP : string) : boolean;
         procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
-        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aRawBody : string);
+        procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aRawXPL : string); overload;
-        function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
+        procedure SendOSDBasic(const aString : string);
+        function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
 
         procedure Listen;
         procedure Dispose;
@@ -138,7 +139,7 @@ begin
      IncomingSocket.BufferSize := MAX_XPL_MSG_SIZE;
      IncomingSocket.OnUDPRead  := @UDPRead;
    except
-     LogError(K_MSG_UDP_ERROR);
+     LogError(K_MSG_UDP_ERROR,[]);
    end;
 
    i := gstack.LocalAddresses.Count-1;
@@ -155,15 +156,15 @@ begin
 
    If IncomingSocket.Bindings.Count > 0 then begin                             // Lets be sure we found an address to bind to
       IncomingSocket.Active:=true;
-      LogInfo(Format(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]));
+      LogInfo(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
       HBTimer.Enabled  := True;
       TimerElapsed(self);
-   end else LogError(K_MSG_IP_ERROR);
+   end else LogError(K_MSG_IP_ERROR,[]);
 end;
 
 procedure TxPLListener.CallConfigDone;
 begin
-   LogInfo(K_MSG_CONFIG_LOADED);
+   LogInfo(K_MSG_CONFIG_LOADED,[]);
    if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);
 end;
 
@@ -184,17 +185,19 @@ begin
    if JoinedxPLNetwork then SendHeartBeatMessage;
    if IncomingSocket.Active then begin
       IncomingSocket.Active := False;
-      LogInfo(K_MSG_BIND_RELEASED);
+      LogInfo(K_MSG_BIND_RELEASED,[]);
    end;
 end;
 
-procedure TxPLListener.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aRawBody : string);
+procedure TxPLListener.SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
 begin
    with TxPLMessage.Create do begin
+          Source.Assign(Address);
           MessageType := aMsgType;
           Target.Tag  := aDest;
           Body.RawxPL := aRawBody;
-          SendMessage(RawXPL);
+          if bClean then Body.CleanEmptyValues;
+          Send;
           Destroy;
    end;
 end;
@@ -205,12 +208,23 @@ begin
         RawXPL := aRawXPL;
         Source.Assign(fAdresse);
         if IsValid then Send
-                   else LogError('Error sending message :' + RawXPL);
+                   else LogError('Error sending message :',[RawXPL]);
         Destroy;
    end;
 end;
 
-function TxPLListener.PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*' ): TxPLMessage;
+procedure TxPLListener.SendOSDBasic(const aString: string);
+begin
+   with PrepareMessage(K_MSG_TYPE_CMND,'osd.basic') do try
+      Body.AddKeyValuePair('command','write');
+      Body.AddKeyValuePair('text',aString);
+      Send;
+   finally
+      destroy;
+   end;
+end;
+
+function TxPLListener.PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*' ): TxPLMessage;
 begin
   result := TxPLMessage.Create;
   with Result do begin
@@ -240,7 +254,7 @@ begin
      for i:=0 to IncomingSocket.Bindings.Count-1 do begin
          FinalizeHBeatMsg(aBody,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
          if Assigned(OnxPLHBeatPrepare) and (not AwaitingConfiguration) then OnxPLHBeatPrepare(aBody);
-         SendMessage(xpl_mtStat,'*',aBody.RawxPL);
+         SendMessage(K_MSG_TYPE_STAT,'*',aBody.RawxPL);
      end;
 
      aBody.Destroy;
@@ -262,10 +276,10 @@ procedure TxPLListener.HandleConfigMessage(aMessage: TxPLMessage);
 var i,j : integer;
 
 begin
-  if aMessage.Header.MessageType <> xpl_mtCmnd then exit;
+  if aMessage.Header.MessageType <> K_MSG_TYPE_CMND then exit;
 
   with TxPLMessage.Create do try
-     MessageType := xpl_mtStat;
+     MessageType := K_MSG_TYPE_STAT;
      Source.Assign(fAdresse);
      Target.IsGeneric := True;
      Body.ResetValues;
@@ -292,7 +306,7 @@ begin
                 fAdresse.Instance := fConfig.Instance;                                                // Instance name may have changed
                 SendHeartBeatMessage;
                 fConfig.Save;
-                LogInfo(Format(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]));
+                LogInfo(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]);
                 CallConfigDone;
               end;
      end;
@@ -354,7 +368,7 @@ end;
 
 procedure TxPLListener.DoxPLJoinedNet(aJoined: boolean);
 begin
-   LogInfo(Format(K_MSG_HUB_FOUND,[IfThen(aJoined,'','not')]));
+   LogInfo(K_MSG_HUB_FOUND,[IfThen(aJoined,'','not')]);
    if aJoined <> true then exit; { TODO -oGLH : Le cas contraire (perte de hub) devrait etre géré ultérieurement}
 
    JoinedxPLNetwork := true;
@@ -375,7 +389,7 @@ function TxPLListener.DoSensorRequest(aMessage : TxPLMessage) : boolean;
 begin
      result := false;
      if not Assigned(OnxPLSensorRequest) then exit;
-     if aMessage.MessageType <> xpl_mtCmnd then exit;
+     if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_SENSOR_REQUEST then exit;
 
      OnxPLSensorRequest( aMessage, aMessage.Body.GetValueByKey('device'),
@@ -397,7 +411,7 @@ function TxPLListener.DoControlBasic(aMessage : TxPLMessage) : boolean;
 begin
      result := false;
      if not Assigned(OnxPLControlBasic) then exit;
-     if aMessage.MessageType <> xpl_mtCmnd then exit;
+     if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_CONTROL_BASIC then exit;
 
      OnxPLControlBasic( aMessage, aMessage.Body.GetValueByKey('device'),
@@ -419,7 +433,7 @@ function TxPLListener.DoTTSBasic(aMessage : TxPLMessage) : boolean;
 begin
      result := false;
      if not Assigned(OnxPLTTSBasic) then exit;
-     if aMessage.MessageType <> xpl_mtCmnd then exit;
+     if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_TTS_BASIC then exit;
      if aMessage.Source.Tag = fAdresse.Tag then exit;
      OnxPLTTSBasic( aMessage, aMessage.Body.GetValueByKey('speech') );
@@ -439,7 +453,7 @@ function TxPLListener.DoHBeatApp(aMessage: TxPLMessage): boolean;
 begin
      result := false;
      if not Assigned(OnxPLHBeatApp) then exit;
-     if aMessage.MessageType <> xpl_mtStat then exit;
+     if aMessage.MessageType <> K_MSG_TYPE_STAT then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_HBEAT_APP then exit;
      if aMessage.Source.Tag = fAdresse.Tag then exit;
      OnxPLHBeatApp( aMessage);
@@ -459,7 +473,7 @@ function TxPLListener.DoMediaBasic(aMessage: TxPLMessage): boolean;
 begin
      result := false;
      if not Assigned(OnxPLMediaBasic) then exit;
-     if aMessage.MessageType <> xpl_mtCmnd then exit;
+     if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_MEDIA_BASIC then exit;
      if aMessage.Source.Tag = fAdresse.Tag then exit;
      OnxPLMediaBasic( aMessage, aMessage.Body.GetValueByKey('command'),aMessage.Body.GetValueByKey('mp'));

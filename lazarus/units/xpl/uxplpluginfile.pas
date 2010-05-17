@@ -39,7 +39,6 @@ type
 
      public
        constructor Create(aNode : TDOMNode); overload;
-       destructor  Destroy; override;
        property    Description : string read FDescription;
        property    Version     : string read FVersion;
        property    InfoURL     : string read FInfoURL;
@@ -61,7 +60,7 @@ type
      end;
 
 implementation //========================================================================
-uses XMLRead, RegExpr, Dialogs, uxPLMsgHeader;
+uses XMLRead, RegExpr, Dialogs;
 
 resourcestring // XML Vendor file entry and field variable names ========================
    K_VF_Command     = 'command';
@@ -102,22 +101,6 @@ begin
    fType        := SafeReadNode(K_VF_TYPE);
    fID        := SafeReadNode(K_VF_ID);
 
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Version);
-//   if DevNode<>nil then fVersion := DevNode.NodeValue;
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Description);
-//   if DevNode<>nil then fDescription := DevNode.NodeValue;
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Info_url);
-//   if DevNode<>nil then fInfoURL := DevNode.NodeValue;
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Platform);
-//   if DevNode<>nil then fPlatforme := DevNode.NodeValue;
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_Beta);
-//   if DevNode<>nil then fBetaVersion := DevNode.NodeValue;
-//      DevNode := fNode.Attributes.GetNamedItem(K_VF_Download);
-//   if DevNode<>nil then fDownloadURL := DevNode.NodeValue;
-//   DevNode := fNode.Attributes.GetNamedItem(K_VF_TYPE);
-//   if DevNode<>nil then fType := DevNode.NodeValue;
-//   fID := fNode.Attributes.GetNamedItem(K_VF_ID).NodeValue;   // This one is mandatory
-
    with TRegExpr.Create do begin
         Expression := K_REGEXPR_DEVICE_ID;
         Exec(fID);
@@ -125,11 +108,6 @@ begin
         fName   := Match[2];
         Destroy;
    end;
-end;
-
-destructor TxPLDevice.Destroy;
-begin
-  inherited Destroy;
 end;
 
 function TxPLDevice.CommandAsMessage(const aCommand: string): TxPLMessage;

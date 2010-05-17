@@ -66,6 +66,14 @@ v 1.1.1
 v 1.1.2
 	Solved problem with timer self firing after launch of the program if their target date/time was reached while the program was off
 	Templates of the schema are now available in the vendor plugin file.
+	
+v 1.5
+	This version is now web enabled
+	Added special timers of family 'dawndusk' to handle dawn, dusk and noon events. These events are not editable.
+	To enable calculation of dusk, dawn, latitude and longitude has to be setup in the configuration of the app.
+	Upon request (dawndusk.request message), the application sends the absolute light level in the day (1 to 6)
+	Timer actions (create timer, start,stop...) directly available thru web version of xPL Timer (actions are issued from the plugin file then it has to be up to date).
+	
 
 
 ---

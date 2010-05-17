@@ -1,13 +1,14 @@
 object frmAppSettings: TfrmAppSettings
-  Left = 32
+  Left = 361
   Height = 300
-  Top = 266
+  Top = 195
   Width = 400
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'Application Settings'
   ClientHeight = 300
   ClientWidth = 400
+  OnCreate = FormCreate
   SessionProperties = 'ckAutoGetSetup.Checked;ckIcons.Checked;ckShowPreview.Checked;Left;ListBox1.Items;Top'
   LCLVersion = '0.9.28.2'
   object Label1: TLabel
@@ -99,7 +100,8 @@ object frmAppSettings: TfrmAppSettings
   end
   object XMLPropStorage: TXMLPropStorage
     StoredValues = <>
-    left = 368
-    top = 32
+    OnRestoreProperties = XMLPropStorageRestoreProperties
+    left = 352
+    top = 40
   end
 end

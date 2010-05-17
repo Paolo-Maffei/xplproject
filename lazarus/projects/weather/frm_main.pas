@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn,
   Buttons,uxPLMessage, uxPLWebListener, uxPLConfig,
-  Weathers, XMLPropStorage, IdCustomHTTPServer;
+  Weathers, IdCustomHTTPServer;
 
 
 type
@@ -16,27 +16,19 @@ type
   { TfrmMain }
 
   TfrmMain = class(TForm)
-    About: TAction;
-    acInstalledApps: TAction;
-    ActionList2: TActionList;
+    MainMenu1: TMainMenu;
     Memo1: TMemo;
+    MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     Timer1: TTimer;
-    MainMenu1: TMainMenu;
-    MenuItem1: TMenuItem;
-    MenuItem4: TMenuItem;
-    XMLPropStorage1: TXMLPropStorage;
 
     procedure AboutExecute(Sender: TObject);
-    procedure acInstalledAppsExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-
     procedure SendSensors(bCheckDifference : boolean);
     procedure Timer1Timer(Sender: TObject);
   private
     Weather,Backup : TWeather;
-
   public
     xPLClient  : TxPLWebListener;
     procedure LogUpdate(const aList : TStringList);
@@ -48,11 +40,11 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, frm_xplappslauncher,StrUtils,uxPLCfgItem,uxPLMsgHeader,  LCLType, cStrings, uxPLConst;
+uses frm_about, frm_xplappslauncher, LCLType, cStrings, uxPLConst;
 
 //=====================================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0.1';
+     K_XPL_APP_VERSION_NUMBER = '2.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
@@ -61,15 +53,10 @@ resourcestring
 procedure TfrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
-procedure TfrmMain.acInstalledAppsExecute(Sender: TObject);
-begin frmAppLauncher.Show; end;
-
 procedure TfrmMain.LogUpdate(const aList: TStringList);
 begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
-
-procedure initListener;
 begin
    xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
    with xPLClient do begin
@@ -81,13 +68,10 @@ begin
        Config.AddItem('licensekey',xpl_ctConfig);
        Config.AddItem('zipcode'  , xpl_ctConfig);
        Config.AddItem('unitsystem',xpl_ctConfig);
+       Config.AddItem('translation',xpl_ctConfig,'us');
    end;
 
    xPLClient.Listen;
-end;
-
-begin
-   InitListener;
    Self.Caption := xPLClient.AppName;
 end;
 
@@ -103,60 +87,58 @@ var
   s : widestring;
   i : integer;
 begin
-      s := StrReplace('{%weatherdesc%}',Weather.Courant.Texte,aPageContent,false);
+      s := StrReplace('{%weatherdesc%}',xPLClient.Translate('weather',Weather.Courant.Texte),aPageContent,false);
       s := StrReplace('{%weathericon%}',Weather.Courant.Icone,s,false);
       s := StrReplace('{%timestamp%}',Weather.Courant.ChaineDateHeure,s,false);                   // date and time of prevision creation at weather.com
-      s := StrReplace('{%description%}',Weather.Courant.Texte,s,false);
       s := StrReplace('{%temperature%}',Weather.Courant.Temperature,s,false);
       s := StrReplace('{%felt-temp%}',Weather.Courant.TempRessentie,s,false);
       s := StrReplace('{%barometer%}',Weather.Courant.Pression.Valeur,s,false);
       s := StrReplace('{%wind-speed%}',Weather.Courant.Vent.Vitesse,s,false);
       s := StrReplace('{%wind-gust%}',Weather.Courant.Vent.Gust,s,false);
-      s := StrReplace('{%wind-dir%}',Weather.Courant.Vent.Sens,s,false);
+      s := StrReplace('{%wind-dir%}',xPLClient.Translate('weather',Weather.Courant.Vent.Sens),s,false);
       s := StrReplace('{%pressureevol%}',Weather.Courant.Pression.Variation,s,false);
       s := StrReplace('{%humidity%}',Weather.Courant.Humidite,s,false);
       s := StrReplace('{%visibility%}',Weather.Courant.Visibilite,s,false);
       s := StrReplace('{%uv%}',Weather.Courant.UV.Indice,s,false);
       s := StrReplace('{%uv-desc%}',Weather.Courant.UV.Texte,s,false);
       s := StrReplace('{%dewpoint%}',Weather.Courant.Dewp,s,false);
-      s := StrReplace('{%moon%}',Weather.Courant.Lune.Texte,s,false);
+      s := StrReplace('{%moon%}',xPLClient.Translate('moon',Weather.Courant.Lune.Texte),s,false);
       s := StrReplace('{%moonicon%}',Weather.Courant.Lune.Icone,s,false);
       s := StrReplace('{%today-sunrise%}',Weather.Localite.Sunrise,s,false);
       s := StrReplace('{%today-sunset%}',Weather.Localite.Sunset,s,false);
       s := StrReplace('{%fctimestamp%}'       ,Weather.Previsions.DateHeure,s,false);
-              for i:=0 to 10 do begin
 
-      s := StrReplace('{%fcday'+inttostr(i)+'%}'             ,Weather.Previsions.Jours[i].JourSemaine,s,false);
-      s := StrReplace('{%fcdate'+inttostr(i)+'%}'            ,Weather.Previsions.Jours[i].ChaineDateJour,s,false);
-      s := StrReplace('{%fcmintemp'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].Mini,s,false);
-      s := StrReplace('{%fcmaxtemp'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].Maxi,s,false);
-      s := StrReplace('{%fcsunrise'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].LeverSoleil,s,false);
-      s := StrReplace('{%fcsunset'+inttostr(i)+'%}'          ,Weather.Previsions.Jours[i].CoucherSoleil,s,false);
-      s := StrReplace('{%fcdayweathericon'+inttostr(i)+'%}'  ,Weather.Previsions.Jours[i].Jour.Icone,s,false);
-      s := StrReplace('{%fcdayweatherdesc'+inttostr(i)+'%}'  ,Weather.Previsions.Jours[i].Jour.Texte,s,false);
-      s := StrReplace('{%fcdaywind-speed'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Jour.Vent.Vitesse,s,false);
-      s := StrReplace('{%fcdaywind-gust'+inttostr(i)+'%}'    ,Weather.Previsions.Jours[i].Jour.Vent.Gust,s,false);
-      s := StrReplace('{%fcdaywind-dir'+inttostr(i)+'%}'     ,Weather.Previsions.Jours[i].Jour.Vent.Sens,s,false);
-      s := StrReplace('{%fcdayrainprob'+inttostr(i)+'%}'     ,Weather.Previsions.Jours[i].Jour.RisquePrecipitation,s,false);
-      s := StrReplace('{%fcdayhumidity'+inttostr(i)+'%}'     ,Weather.Previsions.Jours[i].Jour.Humidite,s,false);
-      s := StrReplace('{%fcnightweathericon'+inttostr(i)+'%}',Weather.Previsions.Jours[i].Nuit.Icone,s,false);
-      s := StrReplace('{%fcnightweatherdesc'+inttostr(i)+'%}',Weather.Previsions.Jours[i].Nuit.Texte,s,false);
-      s := StrReplace('{%fcnightwind-speed'+inttostr(i)+'%}' ,Weather.Previsions.Jours[i].Nuit.Vent.Vitesse,s,false);
-      s := StrReplace('{%fcnightwind-gust'+inttostr(i)+'%}'  ,Weather.Previsions.Jours[i].Nuit.Vent.Gust,s,false);
-      s := StrReplace('{%fcnightwind-dir'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Nuit.Vent.Sens,s,false);
-      s := StrReplace('{%fcnightrainbrob'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Nuit.RisquePrecipitation,s,false);
-      s := StrReplace('{%fcnighthumidity'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Nuit.Humidite,s,false);
-                         end;
-
-   aPageContent := s;
+      for i:=0 to 10 do begin
+          s := StrReplace('{%fcday'+inttostr(i)+'%}'             ,Weather.Previsions.Jours[i].JourSemaine,s,false);
+          s := StrReplace('{%fcdate'+inttostr(i)+'%}'            ,Weather.Previsions.Jours[i].ChaineDateJour,s,false);
+          s := StrReplace('{%fcmintemp'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].Mini,s,false);
+          s := StrReplace('{%fcmaxtemp'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].Maxi,s,false);
+          s := StrReplace('{%fcsunrise'+inttostr(i)+'%}'         ,Weather.Previsions.Jours[i].LeverSoleil,s,false);
+          s := StrReplace('{%fcsunset'+inttostr(i)+'%}'          ,Weather.Previsions.Jours[i].CoucherSoleil,s,false);
+          s := StrReplace('{%fcdayweathericon'+inttostr(i)+'%}'  ,Weather.Previsions.Jours[i].Jour.Icone,s,false);
+          s := StrReplace('{%fcdayweatherdesc'+inttostr(i)+'%}'  ,xPLClient.Translate('weather',Weather.Previsions.Jours[i].Jour.Texte),s,false);
+          s := StrReplace('{%fcdaywind-speed'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Jour.Vent.Vitesse,s,false);
+          s := StrReplace('{%fcdaywind-gust'+inttostr(i)+'%}'    ,Weather.Previsions.Jours[i].Jour.Vent.Gust,s,false);
+          s := StrReplace('{%fcdaywind-dir'+inttostr(i)+'%}'     ,xPLClient.Translate('winddir',Weather.Previsions.Jours[i].Jour.Vent.Sens),s,false);
+          s := StrReplace('{%fcdayrainprob'+inttostr(i)+'%}'     ,Weather.Previsions.Jours[i].Jour.RisquePrecipitation,s,false);
+          s := StrReplace('{%fcdayhumidity'+inttostr(i)+'%}'     ,Weather.Previsions.Jours[i].Jour.Humidite,s,false);
+          s := StrReplace('{%fcnightweathericon'+inttostr(i)+'%}',Weather.Previsions.Jours[i].Nuit.Icone,s,false);
+          s := StrReplace('{%fcnightweatherdesc'+inttostr(i)+'%}',xPLClient.Translate('weather',Weather.Previsions.Jours[i].Nuit.Texte),s,false);
+          s := StrReplace('{%fcnightwind-speed'+inttostr(i)+'%}' ,Weather.Previsions.Jours[i].Nuit.Vent.Vitesse,s,false);
+          s := StrReplace('{%fcnightwind-gust'+inttostr(i)+'%}'  ,Weather.Previsions.Jours[i].Nuit.Vent.Gust,s,false);
+          s := StrReplace('{%fcnightwind-dir'+inttostr(i)+'%}'   ,xPLClient.Translate('winddir',Weather.Previsions.Jours[i].Nuit.Vent.Sens),s,false);
+          s := StrReplace('{%fcnightrainbrob'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Nuit.RisquePrecipitation,s,false);
+          s := StrReplace('{%fcnighthumidity'+inttostr(i)+'%}'   ,Weather.Previsions.Jours[i].Nuit.Humidite,s,false);
+      end;
+      aPageContent := s;
 end;
 
 procedure TfrmMain.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevice: string; const aAction: string);
 begin
-   if (aDevice = 'weather') and (aAction = 'current') then begin
-      Weather.MettreAJour;
-      SendSensors(false);
-   end;
+   if not ((aDevice = 'weather') and (aAction = 'current')) then exit;
+
+   Weather.MettreAJour;
+   SendSensors(false);
 end;
 
 procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
@@ -183,6 +165,10 @@ begin
 
      SendSensors(true);
      Backup.Assign(Weather);
+
+     xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'weather');
+     xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'winddir');
+     xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'moon');
   end;
 end;
 
@@ -197,7 +183,7 @@ procedure TfrmMain.SendSensors(bCheckDifference : boolean);
 procedure IssueSensor(aValue,aDevice,aType : string);
 var aMessage : TxPLMessage;
 begin
-   aMessage := xPLClient.PrepareMessage(xpl_mtTrig,'sensor.basic');
+   aMessage := xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'sensor.basic');
    aMessage.Body.AddKeyValuePair('device',aDevice);
    aMessage.Body.AddKeyValuePair('type',aType);
    aMessage.Body.AddKeyValuePair('current',aValue);
@@ -223,7 +209,7 @@ begin
       if not bCheckDifference or (Weather.Localite.Sunset         <> Backup.Localite.Sunset         ) then IssueSensor(Weather.Localite.Sunset         ,'sunset'      ,'generic');
       if not bCheckDifference or (Weather.Courant.Lune.Texte      <> Backup.Courant.Lune.Texte      ) then IssueSensor(Weather.Courant.Lune.Texte      ,'moon-phase'  ,'generic');
 
-      with Weather, Courant do  xPLClient.LogInfo('Data loaded for ' + Lieu);
+      with Weather, Courant do  xPLClient.LogInfo('Data loaded for ' + Lieu,[]);
    end;
 end;
 

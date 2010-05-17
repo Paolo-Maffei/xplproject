@@ -22,12 +22,23 @@ v0.1
 v0.2	Version qui tente de corriger le pb de socket/port non libéré.
 
 v0.5	Ajoute la recherche des numéros de téléphone dans l'annuaire inversé
-	Le serveur web donne accès aux actions associées au module xPL (reboot freebox, allumage/extinction d'un boitier) sans passer par un sender xPL
-	L'onglet info contient quelques éléments supplémentaires (clef wep, nom du réseau)
-	Icone créée
+		Le serveur web donne accès aux actions associées au module xPL (reboot freebox, allumage/extinction d'un boitier) sans passer par un sender xPL
+		L'onglet info contient quelques éléments supplémentaires (clef wep, nom du réseau)
+		Icone créée
+	
+v0.6	* L'interface Free est passée en HTTPS, mise à jour du programme qui peut nécessiter la présence des librairies OpenSSL 
+		disponibles ici : http://www.slproweb.com/products/Win32OpenSSL.html
+		Microsoft VC++2008 Redistribuable peut aussi être réclamé.
+		* xPL Free se connecte maintenant au usenet free pour détecter les mises à jour de firmware - un message OSD est envoyé quand une nouvelle news est postée.
+		* Erreur 403 lors de la recherche dans l'annuaire inversé réglé
+		
+v0.7
+		* Modification liée au fait que l'ensemble de l'interface Free est désormais en https
 
 	
 Todo : 
 	Quand le délai de polling est trop important, la connexion ouverte initialement ne persiste pas, on obtient "Error=2"
 		=> catcher l'erreur et réouvrir la connexion
 	Récupérer les statistiques de la ligne (vitesse DL)
+	Intégrer les informations produites par PyGrenouille ?
+	

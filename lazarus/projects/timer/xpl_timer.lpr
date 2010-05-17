@@ -8,16 +8,14 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms , LResources, { you can add units after this }
-  TConfiguratorUnit,
-  frm_main, frm_xPLSingleEvent, frm_about, frm_xplappslauncher,
-  frm_xplrecurevent, uxPLTimer;
+  TConfiguratorUnit, frm_main, uxpltimer, SunTime, frm_about, uxPLEvent;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
 
 begin
   {$I xpl_timer.lrs}
   Application.Initialize;
-  TConfiguratorUnit.doBasicConfiguration;
+//  TConfiguratorUnit.doBasicConfiguration;
   Application.CreateForm(TfrmMain, frmMain);
   Application.CreateForm(TfrmAbout, frmAbout);
   Application.Icon := frmMain.Icon;

@@ -92,7 +92,7 @@ begin
      AddItem(K_CONF_GROUP   , xpl_ctOption,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
 
      fDeviceInVendorFile := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
-     if not Assigned(fDeviceInVendorFile) then TxPLClient(aOwner).LogInfo('No device description found in vendor plugin file - please consider updating');
+     if not Assigned(fDeviceInVendorFile) then TxPLClient(aOwner).LogInfo(K_MSG_ERROR_PLUGIN,[]);
 end;
 
 destructor TxPLConfig.destroy;                                    
@@ -123,7 +123,7 @@ begin
          end;
          Child := Child.NextSibling;
    end;
-   TxPLClient(Owner).LogInfo('Configuration elements loaded from vendor plugin file');
+   TxPLClient(Owner).LogInfo(K_MSG_OK_PLUGIN,[]);
 end;
 
 function TxPLConfig.GetItem(Index : integer): TxPLConfigItem;

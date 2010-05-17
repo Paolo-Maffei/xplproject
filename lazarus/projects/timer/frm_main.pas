@@ -5,10 +5,10 @@ unit frm_main;
 interface
                                          
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ActnList, ExtCtrls, uxPLListener, uxPLMessage,
-  Grids, Buttons, uxPLConfig,  frm_xPLTimer, frm_xplrecurevent,
-  uxPLRecurEvent, uxPLTimer, XMLPropStorage;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  ComCtrls, Menus, ActnList, ExtCtrls, uxPLWebListener, uxPLMessage, SunTime,
+  Grids, Buttons, uxPLConfig,  frm_xPLTimer, frm_xplrecurevent, IdCustomHTTPServer,
+  uxPLTimer, uxPLEvent,XMLPropStorage;
 
 type
 
@@ -23,6 +23,7 @@ type
     InstalledApps: TAction;
     lvEvents: TListView;
     lvTimers: TListView;
+    Memo1: TMemo;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -52,17 +53,17 @@ type
     Splitter1: TSplitter;
     TimerImages: TImageList;
     StatusBar1: TStatusBar;
+    ToolBar1: TToolBar;
     UpdateSeed: TAction;
     XMLPropStorage1: TXMLPropStorage;
     procedure AboutExecute(Sender: TObject);
+    procedure acNewEvent(anEvent : TxPLEvent);
     procedure acNewRecurringEventExecute(Sender: TObject);
     procedure acNewSingleEventExecute(Sender: TObject);
     procedure acNewTimerExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure InstalledAppsExecute(Sender: TObject);
-//    procedure LogViewerExecute(Sender: TObject);
     procedure lvEventsDblClick(Sender: TObject);
     procedure mnuEditEventClick(Sender: TObject);
     procedure mnuFireNowClick(Sender: TObject);
@@ -74,72 +75,58 @@ type
     aMessage  : TxPLMessage;
     eventlist : TxPLEventList;
     timerlist : TxPLTimerList;
-
-    procedure OnJoined(const aJoined : boolean);
+    SunTime   : TSuntime;
+    Dawn      : TxPLSunEvent;
+    Dusk      : TxPLSunEvent;
+    Noon      : TxPLSunEvent;
     procedure OnConfigDone(const fConfig : TxPLConfig);
     procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
     procedure OnControlBasic (const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
-//    procedure SendInitMessage;
-  public
-     bJoined, bConfigured, bInitMessageLaunched : boolean;
+    procedure OnReceive(const axPLMsg : TxPLMessage);
+    function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
 
-     xPLClient : TxPLListener;
+  public
+     procedure LogUpdate(const aList : TStringList);
+     xPLClient : TxPLWebListener;
   end;
 
 var frmMain: TfrmMain;
 
 implementation {===============================================================}
-uses Frm_About, frm_xPLAppslauncher, uxPLSingleEvent, uxPLConst,
-     LCLType, StrUtils, DateUtils, uxPLMsgHeader, XMLCfg;
+uses Frm_About, frm_xPLAppslauncher, uxPLConst, uRegExTools, StrUtils, LCLType,
+     DateUtils, uxPLMsgHeader;
 
 {==============================================================================}
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '1.1.2';
-     K_XPL_APP_NAME = 'xPL Timer';
-     K_DEFAULT_VENDOR = 'clinique';
-     K_DEFAULT_DEVICE = 'timer';
+     K_XPL_APP_VERSION_NUMBER = '1.5';
+     K_DEFAULT_VENDOR         = 'clinique';
+     K_DEFAULT_DEVICE         = 'timer';
+     K_DEFAULT_PORT           = '8339';
+
+     K_CONFIG_LATITUDE        = 'latitude';
+     K_CONFIG_LONGITUDE       = 'longitude';
 
 { General window functions ====================================================}
 procedure TfrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
-procedure TfrmMain.InstalledAppsExecute(Sender: TObject);
-begin frmAppLauncher.ShowModal; end;
-
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
 
-procedure TfrmMain.acNewRecurringEventExecute(Sender: TObject);
-var anEvent : TxPLRecurEvent;
-    itemnum : integer;
-begin
-   anEvent := TxPLRecurEvent.Create(aMessage);
-   if anEvent.Edit then begin
-      if eventlist.indexof(anEvent.Name)=-1 then begin
-         itemnum := eventlist.add(anEvent.Name);
-         eventlist.Objects[itemnum] := anEvent;
-      end else begin
-         Application.MessageBox('Event already exists','Error',0);
-         anEvent.Destroy;
-      end;
-   end;
-end;
+procedure TfrmMain.LogUpdate(const aList: TStringList);
+begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
-procedure TfrmMain.acNewSingleEventExecute(Sender: TObject);
-var anEvent : TxPLSingleEvent;
-    itemnum : integer;
+procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
+begin CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) end;
+
+procedure TfrmMain.acNewEvent(anEvent : TxPLEvent);
 begin
-   anEvent := TxPLSingleEvent.Create(aMessage);
    if anEvent.Edit then begin
-      if eventlist.indexof(anEvent.Name)=-1 then begin
-         itemnum := eventlist.add(anEvent.Name);
-         eventlist.Objects[itemnum] := anEvent;
-      end else begin
+      if EventList.Add(anEvent.Name,anEvent) = -1 then begin
          Application.MessageBox('Event already exists','Error',0);
          anEvent.Destroy;
       end;
-   end else
-      anEvent.Destroy;
+   end else anEvent.Destroy;
 end;
 
 procedure TfrmMain.acNewTimerExecute(Sender: TObject);
@@ -147,85 +134,94 @@ var aTimer : TxPLTimer;
 begin
    aTimer := TxPLTimer.Create(TimerList.xPLMessage);
    if aTimer.Edit then begin
-      if TimerList.IndexOf(aTimer.TimerName)=-1 then TimerList.Add(aTimer)
-                                           else begin
-                                                Application.MessageBox('Timer already exists','Error',0);
-                                                aTimer.Destroy;
-                                           end;
-   end else
-      aTimer.Destroy;
+      if TimerList.IndexOf(aTimer.TimerName)=-1 then
+         TimerList.Add(aTimer)
+      else begin
+         Application.MessageBox('Timer already exists','Error',0);
+         aTimer.Destroy;
+      end;
+   end else aTimer.Destroy;
 end;
 
-procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
-begin CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) end;
+procedure TfrmMain.acNewRecurringEventExecute(Sender: TObject);
+begin acNewEvent(TxPLRecurEvent.Create(aMessage));  end;
+
+procedure TfrmMain.acNewSingleEventExecute(Sender: TObject);
+begin acNewEvent(TxPLSingleEvent.Create(aMessage)); end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
+procedure initListener;
 begin
-  Self.Caption := K_XPL_APP_NAME;            
-  bJoined := false;
-  bConfigured := false;
-  bInitMessageLaunched := false;
-
-  xPLClient := TxPLListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
-  OnJoined(False);
-
-  with xPLClient do begin
-       OnxPLJoinedNet := @OnJoined;
-       OnxPLConfigDone:= @OnConfigDone;
-       OnxPLSensorRequest := @OnSensorRequest;
+   xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
+   with xPLClient do begin
        OnxPLControlBasic  := @OnControlBasic;
-       Listen;
-  end;
+       OnxPLSensorRequest := @OnSensorRequest;
+       OnxPLConfigDone    := @OnConfigDone;
+       OnxPLReceived      := @OnReceive;
+       OnLogUpdate        := @LogUpdate;
+       OnReplaceArrayedTag := @ReplaceArrayedTag;
+       Config.AddItem(K_CONFIG_LATITUDE, xpl_ctConfig);
+       Config.AddItem(K_CONFIG_LONGITUDE,xpl_ctConfig);
+   end;
+   xPLClient.PassMyOwnMessages:=true;
+   xPLClient.Listen;
 end;
 
-procedure TFrmMain.OnJoined(const aJoined: boolean);
 begin
-   bJoined := aJoined;
-   StatusBar1.Panels[0].Text := 'Hub ' + IfThen( xPLClient.JoinedxPLNetwork, '','not') + ' found';
-   StatusBar1.Panels[1].Text := 'Configuration ' + IfThen (bConfigured, 'done','pending');
+   Suntime := TSuntime.Create(self);
+   InitListener;
+
+   Self.Caption := xPLClient.AppName;
 end;
 
 procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
-var config : TXmlConfig;
 begin
-     if bConfigured then exit;
+   if not assigned(aMessage)  then aMessage := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
+   if not assigned(eventlist) then eventlist := TxPLEventList.Create(xPLClient, lvEvents);
+   if not assigned(timerlist) then timerlist := TxPLTimerList.Create(xPLClient, lvTimers);
 
-     bConfigured := true;
-     config := xPLClient.Config.XmlFile;
+   timerList.ReadFromXML(xPLClient.Config.XmlFile,'TimerList');
+   eventList.ReadFromXML(xPLClient.Config.XmlFile,'EventList');
 
-     aMessage := xPLClient.PrepareMessage(xpl_mtCmnd,'control.basic');
+   acNewSingleEvent.Enabled := true;
+   acNewRecurringEvent.Enabled := true;
+   acNewTimer.Enabled := true;
 
-     eventlist := TxPLEventList.Create(xPLClient, lvEvents);
-     timerlist := TxPLTimerList.Create(xPLClient, lvTimers);
-
-     timerList.ReadFromXML(Config,'TimerList');
-     eventList.ReadFromXML(Config,'EventList');
-
-     acNewSingleEvent.Enabled := true;
-     acNewRecurringEvent.Enabled := true;
-     acNewTimer.Enabled := true;
-
-     Config.Flush;
-end;
-
-{procedure TFrmMain.SendInitMessage;
-begin
-   if not (bJoined and bConfigured and not bInitMessageLaunched) then exit;
-
-   aMessage := xPLClient.PrepareMessage(xpl_mtCmnd,'control.basic');
-   with aMessage do begin
-        Body.AddKeyValuePair('current','start');
-        Body.AddKeyValuePair('device','timer_app');
-        Send;
+   with RegExpEngine do begin
+        Expression := K_RE_LATITUDE;
+        if RegExpEngine.Exec(xPLClient.Config.ItemName[K_CONFIG_LATITUDE].Value) then begin
+           Suntime.Latitude.Degrees := StrToInt(Match[1]);
+           Suntime.Latitude.Minutes := StrToInt(Match[2]);
+           Suntime.Latitude.Seconds := StrToInt(Match[3]);
+           Suntime.Latitude.Dir     := Match[4];
+        end;
+        Expression := K_RE_LONGITUDE;
+        if RegExpEngine.Exec(xPLClient.Config.ItemName[K_CONFIG_LONGITUDE].Value) then begin
+           Suntime.Longitude.Degrees := StrToInt(Match[1]);
+           Suntime.Longitude.Minutes := StrToInt(Match[2]);
+           Suntime.Longitude.Seconds := StrToInt(Match[3]);
+           Suntime.Longitude.Dir     := Match[4];
+        end;
    end;
-   xPLClient.LogInfo('Init message launched');
-   bInitMessageLaunched := True;
-end;}
+
+   if not Assigned(Dawn) then Dawn := TxPLSunEvent.Create(xPLClient.Address,Suntime,setDawn);
+   if not Assigned(Dusk) then Dusk := TxPLSunEvent.Create(xPLClient.Address,Suntime,setDusk);
+   if not Assigned(Noon) then Noon := TxPLSunEvent.Create(xPLClient.Address,Suntime,setNoon);
+
+   EventList.Add(Dawn.Name, Dawn);
+   EventList.Add(Dusk.Name, Dusk);
+   EventList.Add(Noon.Name, Noon);
+end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
 begin
+   if Assigned(Dawn) then EventList.Delete(Dawn);
+   if Assigned(Dusk) then EventList.Delete(Dusk);
+   if Assigned(Noon) then EventList.Delete(Noon);
+
+   Suntime.Destroy;
+
    if Assigned(aMessage) then aMessage.Destroy;
-   if not Assigned(xPLClient) then exit;
 
    if Assigned(timerlist) then begin
       timerlist.WriteToXML(xPLClient.Config.XmlFile,'TimerList');
@@ -236,7 +232,7 @@ begin
       eventlist.WriteToXML(xPLClient.Config.XmlFile,'EventList');
       eventlist.destroy;
    end;
-   xPLClient.destroy;
+   if Assigned(xPLClient) then xPLClient.destroy;
 end;
 
 procedure TfrmMain.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevice: string; const aAction : string);
@@ -258,40 +254,83 @@ begin
    end;
 end;
 
-// Event menu manipulations ====================================================
+procedure TfrmMain.OnReceive(const axPLMsg: TxPLMessage);
+var aMsg : TxPLMessage;
+s:string;
+    level, delta, lag : longint;
+    status : string;
+    MinD,MaxD, fixdawn, fixnoon, daylength, midday : TDateTime;
+begin
+   if axPLMsg.Schema.Tag = K_SCHEMA_DAWNDUSK_REQUEST then begin
+      aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_STAT,K_SCHEMA_DAWNDUSK_BASIC);
+      aMsg.Body.AddKeyValue('type=daynight');
+      status := IfThen (Dawn.Next>Dusk.Next,'day','night');
+      aMsg.Body.AddKeyValue( 'status=' + status );
 
+      level := 0;
+      if status = 'day' then begin
+         FixDawn := Dawn.Next;
+         if FixDawn > Dusk.Next then FixDawn := FixDawn -1;
+
+         FixNoon := Noon.Next;
+         if FixNoon > Dusk.Next then FixNoon := FixNoon -1;
+
+         delta := MinutesBetween(Now,FixNoon);
+
+         lag := MinutesBetween(FixDawn,FixNoon);
+         level := Round(6/lag * (lag-delta));
+      end;
+      aMsg.Body.AddKeyValue('level=' + IntToStr(level));
+      aMsg.Send;
+      aMsg.Destroy;
+   end;
+end;
+
+function TfrmMain.ReplaceArrayedTag(const aDevice: string; const aValue: string; const aVariable: string; ReturnList: TStringList ): boolean;
+var i : integer;
+    numero, appelant : string;
+begin
+   if aDevice<>K_DEFAULT_DEVICE then exit;
+   ReturnList.Clear;
+
+   if aVariable = 'evtname'    then for i:=0 to EventList.Count-1 do ReturnList.Add(EventList.Events[i].Name)
+   else if aVariable = 'evttype'    then for i:=0 to EventList.Count-1 do ReturnList.Add(EventList.Events[i].TypeAsString)
+   else if aVariable = 'evtnext'    then for i:=0 to EventList.Count-1 do ReturnList.Add(DateTimeToStr(EventList.Events[i].Next))
+   else if aVariable = 'evtenabled' then for i:=0 to EventList.Count-1 do ReturnList.Add(EventList.Events[i].EnabledAsString)
+
+   else if aVariable = 'tmrname'    then for i:=0 to TimerList.Count-1 do ReturnList.Add(TimerList.Timers[i].TimerName)
+   else if aVariable = 'tmrtarget'  then for i:=0 to TimerList.Count-1 do ReturnList.Add(TimerList.Timers[i].Target)
+   else if aVariable = 'tmrstart'   then for i:=0 to TimerList.Count-1 do ReturnList.Add(DateTimeToStr(TimerList.Timers[i].StartTime))
+   else if aVariable = 'tmrcount'   then for i:=0 to TimerList.Count-1 do ReturnList.Add(IntToStr(TimerList.Timers[i].Remaining))
+   else if aVariable = 'tmrstatus'  then for i:=0 to TimerList.Count-1 do ReturnList.Add(TimerList.Timers[i].Status)
+   else if aVariable = 'tmrstop'    then for i:=0 to TimerList.Count-1 do ReturnList.Add(DateTimeToStr(TimerList.Timers[i].EstimatedEnd));
+
+   result := (ReturnList.Count >0);
+end;
+
+// Event menu manipulations ====================================================
 procedure TfrmMain.mnuEditEventClick(Sender: TObject);
 begin lvEventsDblClick(sender); end;
 
 procedure TFrmMain.lvEventsDblClick(Sender: TObject);
-var anEvent : TxPLSingleEvent;
 begin
-     if not Assigned(lvEvents.Selected) then exit;
-
-     anEvent := TxPLSingleEvent(lvEvents.Selected.Data);
-     anEvent.Edit;
+   if not Assigned(lvEvents.Selected) then exit;
+   TxPLEvent(lvEvents.Selected.Data).Edit;
 end;
 
 procedure TfrmMain.mnuFireNowClick(Sender: TObject);                            // FS#27 Ajout fonctionnalité Fire Now
-var anEvent : TxPLSingleEvent;
 begin
    if not Assigned(lvEvents.Selected) then exit;
-
-   anEvent := TxPLSingleEvent(lvEvents.Selected.Data);
-   anEvent.Fire;
+   TxPLEvent(lvEvents.Selected.Data).Fire;
 end;
 
 procedure TfrmMain.mnuDeleteEventClick(Sender: TObject);
-var i : integer;
-    s : string;
+var s : string;
 begin
-     if not assigned(lvEvents.Selected) then exit;
-     s := lvEvents.Selected.Caption;
-     i := EventList.IndexOf(s);
-     if i<>-1 then begin
-        EventList.Delete(i);
-        xPLClient.LogInfo('Event ' + s + ' deleted');
-     end;
+   if not assigned(lvEvents.Selected) then exit;
+   s := lvEvents.Selected.Caption;
+   EventList.Delete(TxPLEvent(lvEvents.Selected.Data));
+   xPLClient.LogInfo('Event ' + s + ' deleted');
 end;
 
 // Timers manipulations functions ==============================================

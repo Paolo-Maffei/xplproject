@@ -10,7 +10,7 @@ unit frm_about;
 interface
 
 uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-     StdCtrls, ExtCtrls, Buttons, XMLPropStorage;
+     StdCtrls, ExtCtrls, Buttons;
 
 type { TfrmAbout ==============================================================}
 
@@ -22,7 +22,6 @@ TfrmAbout = class(TForm)
         lblAppName: TLabel;
         lblVersion: TLabel;
         mmoCredits: TMemo;
-        XMLPropStorage: TXMLPropStorage;
         procedure FormCreate(Sender: TObject);
      end;
 
@@ -35,7 +34,7 @@ procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
    lblAppName.Caption := frmMain.xPLClient.AppName;
    lblVersion.Caption := 'Version ' + frmMain.xPLClient.AppVersion;
-   mmoCredits.Text := mmoCredits.Text + 'Compiled with Lazarus version ' + lcl_version;
+   mmoCredits.Text    := mmoCredits.Text + 'Compiled with Lazarus version ' + lcl_version;
 end;
 
 initialization // ==============================================================

@@ -1,8 +1,9 @@
 object frmMain: TfrmMain
-  Left = 11
+  Left = 26
   Height = 459
-  Top = 127
+  Top = 163
   Width = 699
+  ActiveControl = Memo1
   Caption = 'frmMain'
   ClientHeight = 439
   ClientWidth = 699
@@ -1480,10 +1481,10 @@ object frmMain: TfrmMain
   end
   object lvEvents: TListView
     Left = 0
-    Height = 228
-    Top = 188
+    Height = 155
+    Top = 189
     Width = 699
-    Align = alClient
+    Align = alTop
     Columns = <    
       item
         Caption = 'Event Name'
@@ -1546,10 +1547,26 @@ object frmMain: TfrmMain
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 183
+    Top = 184
     Width = 699
     Align = alTop
     ResizeAnchor = akTop
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 1
+    Top = 183
+    Width = 699
+    Caption = 'ToolBar1'
+    TabOrder = 4
+  end
+  object Memo1: TMemo
+    Left = 0
+    Height = 72
+    Top = 344
+    Width = 699
+    Align = alClient
+    TabOrder = 5
   end
   object TimerImages: TImageList
     left = 304
@@ -1810,7 +1827,6 @@ object frmMain: TfrmMain
     object InstalledApps: TAction
       Caption = 'Installed xPL apps'
       ImageIndex = 17
-      OnExecute = InstalledAppsExecute
     end
     object acNewSingleEvent: TAction
       Caption = 'New single Event'
@@ -1953,7 +1969,6 @@ object frmMain: TfrmMain
   end
   object XMLPropStorage1: TXMLPropStorage
     StoredValues = <>
-    FileName = 'session.xml'
     left = 48
     top = 88
   end
