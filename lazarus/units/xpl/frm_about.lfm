@@ -1,16 +1,16 @@
 object frmAbout: TfrmAbout
-  Left = 164
+  Left = 84
   Height = 216
-  Top = 308
-  Width = 490
+  Top = 266
+  Width = 497
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'About...'
   ClientHeight = 216
-  ClientWidth = 490
+  ClientWidth = 497
   OnCreate = FormCreate
   SessionProperties = 'Left;Top'
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object imLazarusLogo: TImage
     Left = 8
     Height = 96
@@ -525,7 +525,7 @@ object frmAbout: TfrmAbout
     Left = 120
     Height = 128
     Top = 56
-    Width = 360
+    Width = 368
     Color = clBtnFace
     Lines.Strings = (
       'By Clinique'
@@ -536,16 +536,17 @@ object frmAbout: TfrmAbout
       '   - Florian Klaempfland Carl Eric Codere for RegExpr component'
       '   - RemObjects for the PascalScript components and libs'
       '   - Scott Crevier for his temperature icon set'
+      '   - Kambiz R. Khojasteh for the SunTime component'
       ''
-      'And of course, my children and my wife, for their patience and never '
-      'asking what is it all done for...'
+      'And of course, my children and my wife, for their patience and '
+      'never asking what is it all done for...'
     )
     ReadOnly = True
     ScrollBars = ssVertical
     TabOrder = 0
   end
   object btnOk: TButton
-    Left = 405
+    Left = 413
     Height = 25
     Top = 8
     Width = 75
@@ -553,14 +554,9 @@ object frmAbout: TfrmAbout
     ModalResult = 2
     TabOrder = 1
   end
-  object XMLPropStorage: TXMLPropStorage
-    StoredValues = <>
-    left = 8
-    top = 112
-  end
   object ilStandardActions: TImageList
     ShareImages = True
-    left = 48
+    left = 32
     top = 112
     Bitmap = {
       4C69140000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF

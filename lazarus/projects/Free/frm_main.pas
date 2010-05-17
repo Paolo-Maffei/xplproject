@@ -5,10 +5,11 @@ unit frm_main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn,
-  Buttons,uxPLWebListener,  uxPLMessage,
-  XMLPropStorage, IdCustomHTTPServer, IdHTTP, uxPLGlobals;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, ComCtrls,
+  Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn, Buttons, uxPLWebListener,
+  uxPLMessage, XMLPropStorage, IdCustomHTTPServer, IdHTTP, IdNNTP, IdMessage,
+  IdIOHandlerStack, IdSSLOpenSSL,
+  uxPLGlobals;
 
 
 type
@@ -19,12 +20,15 @@ type
     About: TAction;
     ActionList2: TActionList;
     IdHTTP1: TIdHTTP;
+    IdHTTP2: TIdHTTP;
+    IdMessage1: TIdMessage;
+    IdNNTP1: TIdNNTP;
+    IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL;
     Memo1: TMemo;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem4: TMenuItem;
     Timer1: TTimer;
-    ToolBar1: TToolBar;
     XMLPropStorage1: TXMLPropStorage;
 
     procedure AboutExecute(Sender: TObject);
@@ -55,6 +59,7 @@ type
     procedure SendInitialMessage;
     procedure HandlePhoneNumber(const aPhoneNumber : string);
     procedure TestHDBoxState;
+    procedure TestNNTP;
     function  ReplaceTag (const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean;
     function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
   end;
@@ -62,12 +67,12 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, frm_xplappslauncher,uxPLMsgHeader, cStrings, LCLType,  uRegExTools,
+uses frm_about, frm_xplappslauncher, cStrings, LCLType,  uRegExTools, RegExpr,
      uxPLConst,  DateUtils, StrUtils;
 
 //=====================================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '0.5';
+     K_XPL_APP_VERSION_NUMBER = '0.6';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'free';
      K_DEFAULT_PORT   = '8336';
@@ -78,10 +83,14 @@ resourcestring
      K_CONFIG_X10_FREEBOX = 'fbox-x10';
      K_CONFIG_X10_HDBOX   = 'fboxhd-x10';
      K_CONFIG_POLLING     = 'polling';
+     K_CONFIG_NEWS_HOST   = 'newssrvr';
+     K_CONFIG_NEWS_USER   = 'newsuser';
+     K_CONFIG_NEWS_PASS   = 'newspass';
+     K_CONFIG_NEWS_GROUP  = 'newsgroup';
 
 const
-     K_FREE_BASE_URL   = 'http://subscribe.free.fr/login/login.pl';
-     K_FREE_ADSL       = 'http://adsl.free.fr/';
+     K_FREE_BASE_URL   = 'https://subscribes.free.fr/login/login.pl';
+     K_FREE_ADSL       = 'https://adsls.free.fr/';
      K_FREE_CONSOLE    = K_FREE_ADSL + 'compte/console.pl?';                              // Page d'accueil de la console free
      K_FREE_CARTECH    = K_FREE_ADSL + 'suivi/suivi_techgrrr.pl?';                        // Page qui contient les cars tech de la ligne
      K_FREE_TEL        = K_FREE_ADSL + 'admin/tel/';
@@ -123,7 +132,7 @@ begin
 end;
 
 procedure TfrmMain.AddComment(aString: string);
-begin xPLClient.LogInfo(aString); end;
+begin xPLClient.LogInfo(aString,[]); end;
 
 procedure TfrmMain.DeleteWaveFile(aURL: string);
 begin IdHTTP1.Get(K_FREE_TEL + aURL); end;
@@ -135,7 +144,7 @@ begin
      if x10_address = '' then exit;
 
      if aCommand = 'power' then begin
-        with xPLClient.PrepareMessage(xpl_mtCmnd,K_SCHEMA_X10_BASIC) do try
+        with xPLClient.PrepareMessage(K_MSG_TYPE_CMND,K_SCHEMA_X10_BASIC) do try
             Body.AddKeyValuePair('command', axPLMsg.Body.GetValueByKey('state'));
             Body.AddKeyValuePair('device', x10_address);
             Send;
@@ -181,6 +190,10 @@ begin
        Config.AddItem(K_CONFIG_X10_FREEBOX, xpl_ctConfig);
        Config.AddItem(K_CONFIG_X10_HDBOX, xpl_ctConfig);
        Config.AddItem(K_CONFIG_POLLING, xpl_ctConfig,'5');
+       Config.AddItem(K_CONFIG_NEWS_HOST, xpl_ctConfig,'news.free.fr');
+       Config.AddItem(K_CONFIG_NEWS_USER, xpl_ctConfig);
+       Config.AddItem(K_CONFIG_NEWS_PASS, xpl_ctConfig);
+       Config.AddItem(K_CONFIG_NEWS_GROUP, xpl_ctConfig,'proxad.free.annonces');
    end;
 
    xPLClient.Listen;
@@ -193,6 +206,7 @@ begin
    fCalls:= TxPLGlobalList.Create;
    fPhoneNumbers := TxPLGlobalList.Create;
    fGlobals := TxPLGlobalList.Create;
+   fGlobals.SetValue('lastnews','0');
    sHDBoxStatus := '';
    InitListener;
    Self.Caption := xPLClient.AppName;
@@ -214,7 +228,7 @@ begin
    s:= IdHTTP1.Get(K_FREE_MAGNETO + fConnString + '&liste=1');
    NewStatus := IfThen(AnsiContainsText(s,'Le boitier HD ne répond pas'),'on','off');
    if sHDBoxStatus<>NewStatus then begin
-      with xPLClient.PrepareMessage(xpl_mtTrig,'media.devstate') do try
+      with xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'media.devstate') do try
          Body.AddKeyValuePair('power', NewStatus);
          Body.AddKeyValuePair('connected', IfThen(newstatus='on','true','false'));
          Send;
@@ -224,6 +238,28 @@ begin
       end;
    end;
 end;
+
+// Informations regarding NNTP component : http://www.felix-colibri.com/papers/web/threaded_indy_news_reader/threaded_indy_news_reader.html
+procedure TfrmMain.TestNNTP;
+var high, low   : integer;
+
+begin
+   IdNNTP1.Connect;
+   if IdNNTP1.Connected then begin
+      IdNNTP1.SelectGroup(xPLClient.Config.ItemName[K_CONFIG_NEWS_GROUP].Value);
+      high := IdNNTP1.MsgHigh;
+      low  := IdNNTP1.MsgLow;
+      if low < StrToInt(fGlobals.GetValue('lastnews')) then low := StrToInt(fGlobals.GetValue('lastnews'));
+      while (low < high) do begin
+            IdNNTP1.GetArticle(low+1,idMessage1);
+            xPLClient.SendOSDBasic(idMessage1.Subject);
+            inc(low);
+      end;
+      fGlobals.SetValue('lastnews',IntToStr(high));
+      IdNNTP1.Disconnect;
+   end;
+end;
+
 
 function TfrmMain.ReplaceTag(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean;
 var i : integer;
@@ -285,14 +321,13 @@ begin
    if bHandeld then ARequestInfo.Params.Clear;
 end;
 
-
 procedure TfrmMain.SendInitialMessage;
 var s        : widestring;
     i        : integer;
 begin
    if ((fConnString = '') or (xPLClient.Disposing)) then exit;
 
-   with xPLClient.PrepareMessage(xpl_mtStat,'free.basic') do try
+   with xPLClient.PrepareMessage(K_MSG_TYPE_STAT,'free.basic') do try
 
         s := IdHTTP1.Get(K_FREE_CARTECH + fConnString);
 
@@ -333,16 +368,25 @@ begin
 end;
 
 procedure TfrmMain.HandlePhoneNumber(const aPhoneNumber: string);
+var Parameters : TStringList;
+    Page     : TMemoryStream;
 begin
-     fPhoneNumbers.SetValue(aPhoneNumber,'*** unknown ***');
-     ts.add('qPhone=' + aPhoneNumber);
-     IdHTTP1.Post(K_PJ_ANNUAIRE_INV,Ts,Stream);
-     RegExpEngine.Expression := 'QName=(.*?)&amp;QNum';
-     if RegExpEngine.Exec(StreamToString(Stream)) then begin
-        fPhoneNumbers.SetValue(aPhoneNumber,RegExpEngine.Match[1]);
-     end;
-     Stream.Clear;
-     ts.Clear;
+   Parameters := TStringList.Create;
+   Page       := TMemoryStream.Create;
+
+   fPhoneNumbers.SetValue(aPhoneNumber,'*** unknown ***');
+   Parameters.add('qPhone=' + aPhoneNumber);
+
+   IdHTTP2.Post(K_PJ_ANNUAIRE_INV,Parameters,Page);
+
+   with TRegExpr.Create do begin
+        Expression := 'QName=(.*?)&amp;QNum';
+        if Exec(StreamToString(Stream)) then fPhoneNumbers.SetValue(aPhoneNumber,RegExpEngine.Match[1]);
+        Destroy;
+   end;
+
+   Parameters.Destroy;
+   Page.Destroy;
 end;
 
 procedure TfrmMain.Timer1Timer(Sender: TObject);
@@ -355,6 +399,8 @@ var s : widestring;
 begin
    if ((fConnString = '') or (xPLClient.Disposing)) then exit;
    OpenConnection;
+   TestNNTP;
+   AddComment('Connecting to management console : ' + K_FREE_TEL_NOTIFS + fConnString);
    s := IdHTTP1.Get(K_FREE_TEL_NOTIFS + fConnString);                                     // Va chercher les infos sur les appels manqués
    RegExpEngine.Expression := 'message</td><td>(.*?)</td>.*?wrap>(.*?) (.*?)</td>.*?wrap>(.*?)</td>.*?href=''(.*?)''>.*?href=''(.*?)''>';
    bCallPending := RegExpEngine.Exec(s);
@@ -365,7 +411,7 @@ begin
       fCalls.SetValue(filename,RegExpEngine.Match[1],RegExpEngine.Match[4]);              // Store information about the record (filename, call from, call length)
       HandlePhoneNumber(RegExpEngine.Match[1]);                                           // Store the phone number and tries to identify it
       DeleteWaveFile   (RegExpEngine.Match[6]);
-      with xPLClient.PrepareMessage(xpl_mtTrig,'free.basic') do try
+      with xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'free.basic') do try
          Body.AddKeyValuePair('calltype' , 'inbound');
          Body.AddKeyValuePair('phone'    , RegExpEngine.Match[1]);
          Body.AddKeyValuePair('length'   , RegExpEngine.Match[4]);
@@ -377,6 +423,7 @@ begin
       bCallPending := RegExpEngine.ExecNext;
    end;
    TestHDBoxState;
+
 end;
 
 function TfrmMain.DownloadWaveFile(aURL: string) : string;                                // aURL : efface_message.pl?id=755252&idt=09cedf4158efe39c&tel=950201201&fichier=20100115_120730_r0041775873.au
@@ -393,6 +440,11 @@ end;
 
 procedure TfrmMain.OpenConnection;
 begin
+   IdNNTP1.Host     := xPLClient.Config.ItemName[K_CONFIG_NEWS_HOST].Value ;
+   IdNNTP1.Username := xPLClient.Config.ItemName[K_CONFIG_NEWS_USER].Value ;
+   IdNNTP1.Password := xPLClient.Config.ItemName[K_CONFIG_NEWS_PASS].Value ;
+
+   ts.clear;
    ts.add('login=' + xPLClient.Config.ItemName[K_CONFIG_USERNAME].Value);
    ts.add('pass=' + xPLClient.Config.ItemName[K_CONFIG_PASSWORD].Value);
 

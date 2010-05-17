@@ -5,9 +5,19 @@
 	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
 	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
 	<LINK REL="stylesheet" type="text/css" href="../style.css" />
+	<script type="text/javascript" src="../script/gauge/gauge.js"></script> 
+	<script type="text/javascript">
+		<!--
+		if(typeof $=='undefined') {function $(v) {return(document.getElementById(v));}}
+		window.onload = function () { 
+		gauge.add($("g_9"), {width:50, height:30, limit: true, scale: 10, empty: '#ff0000', opacity: 0.5, values:[{%humidity%},100]});	
+		}
+		//-->	
+	</script>
 </HEAD>
 
 <BODY >
+
 	<table class="stats" cellspacing="0">
 		<tr>
 			<td class="hed" >Description</td>
@@ -47,8 +57,8 @@
 		</tr>
 		<tr>
 			<td class="hed" >Taux d'humidité</td>
-			<td>{%humidity%}</td>
-			<td></td>
+			<td>{%humidity%}%</td>
+			<td><div class="demo" id="g_9"></div></td>
 		</tr>
 		<tr>
 			<td class="hed" >Visibilité </td>

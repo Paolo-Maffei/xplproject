@@ -1,0 +1,15 @@
+	<TABLE cellspacing=0 cellpadding=0>
+	<TR>
+		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/frog/content.html' class='tabbar' target=content>&nbsp;Results&nbsp;</a></td>
+		<TD>&nbsp </TD>
+		
+		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/frog/pinglist.html' class='tabbar' target=content>&nbsp;DL test detail&nbsp;</a></td>
+		<TD>&nbsp </TD>
+		
+		<td background='../images/xplapps/tab_green_centre.gif' nowrap><a href='/frog/mygraphs.html' class='tabbar' target=content>&nbsp;My graphs&nbsp;</a></td>
+		<TD>&nbsp </TD>
+
+		<td background='../images/xplapps/tab_green_centre.gif' ><a href='/actions.html' class='tabbar' target=content>&nbsp;Actions&nbsp;</a></td>
+		<TD>&nbsp </TD>	
+	</tr>
+	</table>

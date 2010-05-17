@@ -39,7 +39,7 @@ TfrmxPLCustomEvent = class(TForm)
      end;
 
 implementation { TfrmxPLCustomEvent ===========================================}
-uses uxPLSingleEvent, uxPLMessage;
+uses uxPLEvent, uxPLMessage;
 
 procedure TfrmxPLCustomEvent.BtnDisplayClick(Sender: TObject);
 var aMessage : TxPLMessage;

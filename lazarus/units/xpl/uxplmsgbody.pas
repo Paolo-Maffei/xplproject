@@ -8,6 +8,7 @@ unit uxplmsgbody;
  0.95 : Modified XML read / write format
  0.96 : Rawdata passed are no longer transformed to lower case, then Body lowers schema, type and body item keys but not body item values
  0.97 : Use of uxPLConst
+ 0.98 : Added method to clean empty body elements ('value=')
  }
 {$mode objfpc}{$H+}
 
@@ -23,6 +24,8 @@ type
     private
       //fItmNames: TStringList;
       //fItmValues: TStringList;
+      //fItmNames: TStringList;
+      //fItmValues: TStringList;
        fSchema : txPLSchema;
        // *** Items declared to the helper class ***
        //fLabels : TStringList;
@@ -31,7 +34,7 @@ type
        //fOpLabels : TStringList;
        // ***
        function GetRawxPL : string;
-       procedure SetTag(const AValue: string); virtual;
+       procedure SetTag(const AValue: string); override;
      public
        property Keys     : TStringList read fItmNames;
        property Values   : TStringList read fItmValues;
@@ -48,6 +51,7 @@ type
        destructor  destroy; override;
 
        procedure ResetValues;
+       procedure CleanEmptyValues;
        procedure Assign(const aBody : TxPLMsgBody); overload;
        //function  IsValid : boolean; override;
 
@@ -77,7 +81,7 @@ type
      end;}
 
 implementation {===============================================================}
-uses cStrings, sysutils, cUtils, RegExpr, uxPLConst;
+uses cStrings, sysutils, RegExpr, uxPLConst, uRegExTools;
 
 constructor TxPLMsgBody.create;
 begin
@@ -114,6 +118,14 @@ begin
 //  VisCond.Clear;
 end;
 
+procedure TxPLMsgBody.CleanEmptyValues;
+var i : integer;
+begin
+   i := 0;
+   while i<ItemCount do
+      if Values[i]='' then DeleteItem(i) else inc(i);
+end;
+
 procedure TxPLMsgBody.Assign(const aBody: TxPLMsgBody);
 begin
   inherited Assign(TxPLBaseClass(aBody));
@@ -131,14 +143,10 @@ function TxPLMsgBody.GetRawxPL: string;
 var i : integer;
 begin
    result := '';
-   //if Schema.IsValid then
-   result := Schema.Tag;
-   result += #10'{'#10;
-//    result := Schema.Tag + #10'{'#10;
-
-    for i:= 0 to ItemCount-1 do result += fItmNames[i] + '=' + fItmValues[i] + #10;
-
-    result += ('}'#10);
+   if TxPLSchema.IsValid(Schema.Tag) then begin
+      for i:= 0 to ItemCount-1 do result += fItmNames[i] + '=' + fItmValues[i] + #10;
+      result := Format(K_MSG_BODY_FORMAT,[Schema.Tag,result]);
+    end;
 end;
 
 {------------------------------------------------------------------------
@@ -174,6 +182,7 @@ end;
 procedure TxPLMsgBody.AddKeyValue(const aKeyValuePair: string);
 var left, right : string;
 begin
+     if  AnsiPos('=',aKeyValuePair) = 0  then exit;
      left := '';
      right := '';
      StrSplitAtChar(aKeyValuePair,'=',left,right);
@@ -248,21 +257,19 @@ begin
 end;
 
 procedure TxPLMsgBody.SetTag(const AValue: string);
-var i : integer;
-    s : string;
-    arrStr : StringArray;
 begin
-     ResetValues;
-     with TRegExpr.Create do try
-     Expression := K_RE_BODY_FORMAT;
-          if Exec(aValue) then begin
-             Schema.Tag := AnsiLowerCase(Match[1]);
-             s := Match[2];
-             arrStr := StrSplit(s,#10);
-             for i:=0 to High(arrStr) do
-                 if arrStr[i]<>'' then AddKeyValue(arrStr[i]);
-          end;
-          finally free;
+   ResetValues;
+   with TRegExpr.Create do try
+        Expression := K_RE_BODY_FORMAT;
+        if Exec(StrRemoveChar(aValue,#13)) then begin
+           Schema.Tag := AnsiLowerCase(Match[1]);
+           Expression := K_RE_BODY_LINE;
+           Exec(Match[2]);
+           repeat
+                 AddKeyValue(Match[1]);
+           until not ExecNext;
+        end;
+        finally free;
      end;
 end;
 

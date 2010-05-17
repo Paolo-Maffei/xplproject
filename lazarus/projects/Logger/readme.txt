@@ -26,7 +26,13 @@ Changes History :
 		* Available commands for specific device from the vendor plugin can be directly sent with xPL logger (right click, 'commands')
 		* Plugin information regarding a specific device can be viewed
 
-	2.0.1	* Corrects an error raised when configuration items are absent from the vendor plugin file
+	2.0.1
+		* Corrects an error raised when configuration items are absent from the vendor plugin file
+	
+	2.0.2 
+		* Correct bug FS#29 : saved app setting wasn't applied after application reload
+		* Corrected bug on message panel visibility toggle
+		* Corrected a bug in the filter on message type 
 
 
 

@@ -8,37 +8,35 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, XMLPropStorage, StdCtrls, Buttons;
 
-type
+type TfrmAppSettings = class(TForm)
+        ckAutoGetSetup: TCheckBox;
+        ckIcons: TCheckBox;
+        ckShowPreview: TCheckBox;
+        Label1: TLabel;
+        ListBox1: TListBox;
+        ToolBar3: TToolBar;
+        tbOk: TToolButton;
+        UpDown1: TUpDown;
+        XMLPropStorage: TXMLPropStorage;
+        procedure FormCreate(Sender: TObject);
+        procedure tbOkClick(Sender: TObject);
+        procedure UpDown1Click(Sender: TObject; Button: TUDBtnType);
+        procedure XMLPropStorageRestoreProperties(Sender: TObject);
+     end;
 
-  { TfrmAppSettings }
+var frmAppSettings: TfrmAppSettings;
 
-  TfrmAppSettings = class(TForm)
-    ckAutoGetSetup: TCheckBox;
-    ckIcons: TCheckBox;
-    ckShowPreview: TCheckBox;
-    Label1: TLabel;
-    ListBox1: TListBox;
-    ToolBar3: TToolBar;
-    tbOk: TToolButton;
-    UpDown1: TUpDown;
-    XMLPropStorage: TXMLPropStorage;
-    procedure tbOkClick(Sender: TObject);
-    procedure UpDown1Click(Sender: TObject; Button: TUDBtnType);
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end; 
-
-var
-  frmAppSettings: TfrmAppSettings;
-
-implementation
+implementation //========================================================================
+uses frm_main;
 
 procedure TfrmAppSettings.tbOkClick(Sender: TObject);
-begin
-  close;
-end;
+begin close; end;
+
+procedure TfrmAppSettings.FormCreate(Sender: TObject);
+begin Self.XMLPropStorage.Restore; end;                                                   // Correction of bug FS#39
+
+procedure TfrmAppSettings.XMLPropStorageRestoreProperties(Sender: TObject);
+begin frmMain.ApplySettings(self); end;                                                   // Correction of bug FS#39
 
 procedure TfrmAppSettings.UpDown1Click(Sender: TObject; Button: TUDBtnType);
 var CurrIndex, LastIndex: Integer;

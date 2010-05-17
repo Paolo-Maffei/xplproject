@@ -1,11 +1,11 @@
 object frmMain: TfrmMain
-  Left = 24
-  Height = 151
-  Top = 162
+  Left = 25
+  Height = 280
+  Top = 120
   Width = 528
   BorderWidth = 2
   Caption = 'frmMain'
-  ClientHeight = 131
+  ClientHeight = 260
   ClientWidth = 528
   Icon.Data = {
     6686000000000100050010100000010020006804000056000000202000000100
@@ -1092,22 +1092,15 @@ object frmMain: TfrmMain
   LCLVersion = '0.9.28.2'
   object Memo1: TMemo
     Left = 2
-    Height = 101
-    Top = 28
+    Height = 256
+    Top = 2
     Width = 524
     Align = alClient
     ScrollBars = ssVertical
     TabOrder = 0
   end
-  object ToolBar1: TToolBar
-    Left = 2
-    Height = 26
-    Top = 2
-    Width = 524
-    Caption = 'ToolBar1'
-    TabOrder = 1
-  end
   object MainMenu1: TMainMenu
+    left = 384
     object MenuItem1: TMenuItem
       Caption = '&?'
       object MenuItem4: TMenuItem
@@ -1154,7 +1147,8 @@ object frmMain: TfrmMain
     end
   end
   object ActionList2: TActionList
-    left = 48
+    left = 296
+    top = 2
     object About: TAction
       Caption = 'About'
       ImageIndex = 1
@@ -1162,6 +1156,7 @@ object frmMain: TfrmMain
     end
   end
   object IdHTTP1: TIdHTTP
+    IOHandler = IdSSLIOHandlerSocketOpenSSL1
     AllowCookies = True
     HandleRedirects = True
     ProxyParams.BasicAuthentication = False
@@ -1178,7 +1173,7 @@ object frmMain: TfrmMain
     left = 144
   end
   object Timer1: TTimer
-    Interval = 60000
+    Interval = 30000
     OnTimer = Timer1Timer
     left = 192
   end
@@ -1186,5 +1181,49 @@ object frmMain: TfrmMain
     StoredValues = <>
     left = 258
     top = 2
+  end
+  object IdNNTP1: TIdNNTP
+    left = 112
+    top = 88
+  end
+  object IdMessage1: TIdMessage
+    AttachmentEncoding = 'UUE'
+    BccList = <>
+    CCList = <>
+    Date = 0
+    Encoding = meDefault
+    FromList = <    
+      item
+      end>
+    Recipients = <>
+    ReplyTo = <>
+    ConvertPreamble = True
+    left = 240
+    top = 81
+  end
+  object IdSSLIOHandlerSocketOpenSSL1: TIdSSLIOHandlerSocketOpenSSL
+    MaxLineAction = maException
+    Port = 0
+    DefaultPort = 0
+    SSLOptions.Mode = sslmUnassigned
+    SSLOptions.VerifyMode = []
+    SSLOptions.VerifyDepth = 0
+    left = 179
+    top = 164
+  end
+  object IdHTTP2: TIdHTTP
+    AllowCookies = True
+    ProxyParams.BasicAuthentication = False
+    ProxyParams.ProxyPort = 0
+    Request.ContentLength = -1
+    Request.Date = 0
+    Request.Expires = 0
+    Request.LastModified = 0
+    Request.Accept = 'text/html, */*'
+    Request.BasicAuthentication = False
+    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
+    HTTPOptions = [hoForceEncodeParams]
+    left = 16
+    top = 55
   end
 end

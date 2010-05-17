@@ -6,7 +6,7 @@ interface
                                          
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ActnList, ExtCtrls,  uxPLMessage,  StdCtrls, uPSUtils,
+  ComCtrls, Menus, ActnList, ExtCtrls,  uxPLMessage,  StdCtrls, uPSUtils,  uxPLFilter,
   Buttons, uPSComponent, uPSCompiler, uPSRuntime, SynHighlighterPas, IdCustomHTTPServer,
   SynEdit,  uxPLInterface, XMLPropStorage, uxPLConfig, uxPLCacheManagerFile;
 
@@ -104,13 +104,13 @@ var frmMain: TfrmMain;
 
 implementation {===============================================================}
 uses Frm_About, frm_xPLAppslauncher, cstrings, regexpr, uxPLConst, LCLType,
-     DateUtils, uxPLMsgHeader, XMLCfg, uxPLFilter,
+     DateUtils, uxPLMsgHeader, XMLCfg,
      uPSR_std, uPSC_std, uPSR_forms, uPSC_forms, upsr_dateutils, upsc_dateutils,
      uPSC_classes, uPSR_classes, uPSI_uxplinterface;
 
 {==============================================================================}
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '0.7';
+     K_XPL_APP_VERSION_NUMBER = '0.8';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'psscript';
      K_DEFAULT_PORT = '8335';

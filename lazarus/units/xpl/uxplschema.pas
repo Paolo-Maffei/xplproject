@@ -9,108 +9,93 @@ unit uxPLSchema;
  0.96 : Simplification of the class (cut inheritance of TxPLBaseClass)
  0.97 : Usage of uxPLConst
  0.98 : Typing of fClasse and fType variables
+ 0.99 : Usage of uRegExTools
 }
 {$mode objfpc}{$H+}
 interface
 
-uses uxPLConst, RegExpr;
+uses uxPLConst;
 
 type
+
+    { TxPLSchema }
+
     TxPLSchema = class
     private
       fClasse : tsClass;
       fType   : tsType;
-      fValidator : TRegExpr;
 
+      procedure SetClasse(const aValue: TxPLSchemaClasse);
       function  GetClasse: TxPLSchemaClasse;
       function  GetTag: string;
-      procedure SetClasse(const AValue: TxPLSchemaClasse);
-      procedure SetClasse(const AValue: tsClass);
-      procedure SetTag   (const AValue: string);
-      procedure SetType  (const AValue: tsType);
+      procedure SetTag   (const aValue: string);
     public
-      property Classe         : TxPLSchemaClasse read GetClasse write SetClasse;
-      property ClasseAsString : tsClass read fClasse write SetClasse;
-      property TypeAsString   : tsType read fType   write SetType;
-      property Tag            : string read GetTag  write SetTag;
-
       Constructor Create(const aClasse : tsClass = ''; const aType : tsType = '');
-      Destructor  Destroy; override;
 
-      //function  IsValid : boolean;
       procedure ResetValues;
+      procedure Assign(aSchema : TxPLSchema);
+
+      property Classe         : TxPLSchemaClasse read GetClasse write SetClasse;
+      property ClasseAsString : tsClass  read fClasse write fClasse;
+      property TypeAsString   : tsType   read fType   write fType;
+      property Tag            : string   read GetTag  write SetTag;
+
+      class function IsValid(aSchema : string) : boolean;
+
     end;
 
-implementation { ==============================================================}
-uses StrUtils, SysUtils;
+implementation { ========================================================================}
+uses StrUtils, SysUtils, uRegExTools;
 
 constructor TxPLSchema.Create(const aClasse : tsClass = ''; const aType : tsType = '');
 begin
-     inherited Create;
-     fValidator  := TRegExpr.Create;
-     ClasseAsString := aClasse;
-     TypeAsString   := aType;
-end;
-
-destructor TxPLSchema.Destroy;
-begin
-  fValidator.Destroy;
+   inherited Create;
+   fClasse := aClasse;
+   fType   := aType;
 end;
 
 procedure TxPLSchema.ResetValues;
 begin
-  ClasseAsString := '';
-  TypeAsString := '';
+   fClasse := '';
+   fType   := '';
+end;
+
+procedure TxPLSchema.Assign(aSchema: TxPLSchema);
+begin
+   fClasse := aSchema.ClasseAsString;
+   fType   := aSchema.TypeAsString;
+end;
+
+class function TxPLSchema.IsValid(aSchema: string): boolean;
+begin
+   RegExpEngine.Expression := K_REGEXPR_SCHEMA;
+   result := RegExpEngine.Exec(aSchema);
 end;
 
 function TxPLSchema.GetClasse: TxPLSchemaClasse;
 begin
-     Result := TxPLSchemaClasse(AnsiIndexStr(ClasseAsString,K_XPL_CLASS_DESCRIPTORS));
+   Result := TxPLSchemaClasse(AnsiIndexStr(ClasseAsString,K_XPL_CLASS_DESCRIPTORS));
 end;
 
 function TxPLSchema.GetTag: string;
 begin
-//     Result := IfThen (isValid, Format(K_FMT_SCHEMA,[ClasseAsString,TypeAsString]));
    Result := Format(K_FMT_SCHEMA,[ClasseAsString,TypeAsString]);
 end;
 
 procedure TxPLSchema.SetClasse(const AValue: TxPLSchemaClasse);
 begin
-     if aValue = Classe then exit;
-     ClasseAsString := K_XPL_CLASS_DESCRIPTORS[Ord(aValue)];
+   if aValue = Classe then exit;
+   fClasse := K_XPL_CLASS_DESCRIPTORS[Ord(aValue)];
 end;
 
-{function TxPLSchema.IsValid: boolean;
-         function Validate(const aValue : string) : boolean;
-         begin
-              fValidator.Expression := K_REGEXPR_SCHEMA_ELEMENT;
-              result := fValidator.Exec(aValue);
-         end;
+procedure TxPLSchema.SetTag(const aValue: string);
 begin
-  result := Validate(fType) and Validate(fClasse);
-end;}
-
-procedure TxPLSchema.SetType(const AValue: tsType);
-begin
-     if fType = aValue then exit;
-     fType := aValue;
-end;
-
-procedure TxPLSchema.SetClasse(const AValue: tsClass);
-begin
-     if fClasse = aValue then exit;
-     fClasse := aValue;
-end;
-
-procedure TxPLSchema.SetTag(const AValue: string);
-begin
-   fValidator.Expression := K_REGEXPR_SCHEMA;
-   if fValidator.Exec(aValue) then begin
-      fClasse := fValidator.Match[1];
-      fType   := fValidator.Match[2];
+   RegExpEngine.Expression := K_REGEXPR_SCHEMA;
+   if RegExpEngine.Exec(aValue) then begin
+      fClasse := RegExpEngine.Match[1];
+      fType   := RegExpEngine.Match[2];
    end;
 end;
-
 
 end.
 

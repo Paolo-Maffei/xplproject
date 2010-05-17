@@ -164,8 +164,8 @@ begin
             end;
      end;
      if length(s)>0 then
-     frmMain.xPLClient.SendMessage( xpl_mtCmnd, moduletag, 'config.response'#10'{'#10+ s + '}'#10);
-     frmMain.xPLClient.SendMessage( xpl_mtCmnd, newtag, 'config.current'#10'{'#10'command=request'#10'}'#10);
+     frmMain.xPLClient.SendMessage( K_MSG_TYPE_CMND, moduletag, 'config.response'#10'{'#10+ s + '}'#10);
+     frmMain.xPLClient.SendMessage( K_MSG_TYPE_CMND, newtag, 'config.current'#10'{'#10'command=request'#10'}'#10);
 end;
 
 initialization

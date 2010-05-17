@@ -1,0 +1,63 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<META HTTP-EQUIV="Refresh" CONTENT="300"> 
+	<LINK REL="stylesheet" type="text/css" href="../style.css" />
+</HEAD>
+
+<BODY >
+<table class="stats" cellspacing="0">
+		<tr>
+			<td class=hed colspan=4>Network connexion details</td>
+		</tr>
+		<tr>
+			<td>Download Rate</td>
+			<td>{%frog_dl_bandwidth%} Kb/s</td>
+			<td>{%frog_dl_next%} min.</td>
+			<td>
+			   <script language="javascript">
+					pourcentage = Math.round(({%frog_dl_bandwidth%} / {%frog_dl_max%}) * 100);
+					niveau   = Math.round(pourcentage / 20);
+					document.write("<IMG SRC='/frog/images/temps-" + niveau + ".gif'>")
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Upload Rate</td>
+			<td>{%frog_ul_bandwidth%} Kb/s</td>
+			<td>{%frog_ul_next%} min.</td>
+			<td>
+				<script language="javascript">
+					pourcentage = Math.round(({%frog_ul_bandwidth%} / {%frog_ul_max%}) * 100);
+					niveau   = Math.round(pourcentage / 20);
+					document.write("<IMG SRC='/frog/images/temps-" + niveau + ".gif'>")
+				</script>
+			</td>
+		<tr>
+			<td>Ping</td>
+			<td>{%frog_ping%} ms</td>
+			<td>{%frog_ping_next%} min.</td>
+			<td>
+				<script language="javascript">
+					pourcentage = Math.round(({%frog_ping%} / {%frog_ping_max%}) * 100);
+					pourcentage = 100 - pourcentage;
+					niveau   = Math.round(pourcentage / 20);
+					document.write("<IMG SRC='/frog/images/temps-" + niveau + ".gif'>")
+				</script>
+			</td>
+		</tr>
+		<tr>
+			<td>Internet Access</td>
+			<td>{%frog_bd_status%}</td>
+			<td><IMG SRC="/images/status/{%frog_bd_status%}.gif"></td>
+			<td></td>
+		</tr>
+		
+		
+	</table>
+	<br>
+</BODY>
+
+</HTML>

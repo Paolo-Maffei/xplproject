@@ -54,11 +54,25 @@ end;
 (*----------------------------------------------------------------------------*)
 procedure SIRegister_TxPLInterface(CL: TPSPascalCompiler);
 begin
-  //with RegClassS(CL,'TxPLListener', 'TxPLInterface') do
   with CL.AddClassN(CL.FindClass('TxPLListener'),'TxPLInterface') do
   begin
     RegisterMethod('Procedure SendMsg( aMsgType : TxPLMessageType; aTarget, aSchema, aBody : string)');
     RegisterMethod('function  Exists(aString : string; bDelete : boolean) : boolean;');
+    RegisterMethod('function  MessageType : string;');
+    RegisterMethod('function  MessageSender : string;');
+    RegisterMethod('function  MessageSchema : string;');
+    RegisterMethod('function  Msg_Class : string;');
+    RegisterMethod('function  Msg_Sender_Device: string;');
+    RegisterMethod('function  MessageValues : integer;');
+    RegisterMethod('function  MessageKey (i : integer) : string;');
+    RegisterMethod('function  MessageValue(i : integer) : string;');
+    RegisterMethod('function  MessageValueFromKey(s : string) : string;');
+    RegisterMethod('function  GlobalValue(aString : string) : string;');
+    RegisterMethod('function  GlobalFormer(aString : string) : string;');
+    RegisterMethod('function  GlobalCreated(aString : string) : TDateTime;');
+    RegisterMethod('function  GlobalModified(aString : string) : TDateTime;');
+    RegisterMethod('procedure Value(aString, aValue : string);');
+    RegisterMethod('procedure Log(aString : string);');
   end;
 end;
 
@@ -75,7 +89,23 @@ begin
   with CL.Add(TxPLInterface) do
   begin
     RegisterMethod(@TxPLInterface.SendMsg, 'SendMsg');
-	RegisterMethod(@TxPLInterface.Exists, 'Exists');
+    RegisterMethod(@TxPLInterface.Exists, 'Exists');
+
+    RegisterMethod(@TxPLInterface.MessageType        , 'MessageType');
+    RegisterMethod(@TxPLInterface.MessageSender      , 'MessageSender');
+    RegisterMethod(@TxPLInterface.MessageSchema      , 'MessageSchema');
+    RegisterMethod(@TxPLInterface.Msg_Class          , 'Msg_Class');
+    RegisterMethod(@TxPLInterface.Msg_Sender_Device  , 'Msg_Sender_Device');
+    RegisterMethod(@TxPLInterface.MessageValues      , 'MessageValues');
+    RegisterMethod(@TxPLInterface.MessageKey         , 'MessageKey');
+    RegisterMethod(@TxPLInterface.MessageValue       , 'MessageValue');
+    RegisterMethod(@TxPLInterface.MessageValueFromKey, 'MessageValueFromKey');
+    RegisterMethod(@TxPLInterface.GlobalValue        , 'GlobalValue');
+    RegisterMethod(@TxPLInterface.GlobalFormer       , 'GlobalFormer');
+    RegisterMethod(@TxPLInterface.GlobalCreated      , 'GlobalCreated');
+    RegisterMethod(@TxPLInterface.GlobalModified     , 'GlobalModified');
+    RegisterMethod(@TxPLInterface.Value              , 'Value');
+    RegisterMethod(@TxPLInterface.Log                , 'Log');
   end;
 end;
 

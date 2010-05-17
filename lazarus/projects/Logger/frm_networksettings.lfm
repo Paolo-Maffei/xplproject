@@ -1,12 +1,12 @@
 object frmNetworkSettings: TfrmNetworkSettings
   Left = 52
-  Height = 419
-  Top = 83
+  Height = 378
+  Top = 86
   Width = 441
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Global xPL Network Settings'
-  ClientHeight = 419
+  ClientHeight = 378
   ClientWidth = 441
   OnShow = FormShow
   SessionProperties = 'Left;Top'
@@ -119,7 +119,7 @@ object frmNetworkSettings: TfrmNetworkSettings
   end
   object StaticText1: TStaticText
     Left = 8
-    Height = 33
+    Height = 56
     Top = 32
     Width = 424
     Caption = 'Settings below affect how xPL applications running on this computer transmit and receive xPL messages via the network. Note that your computer should use a fixed IP address.'
@@ -146,7 +146,7 @@ object frmNetworkSettings: TfrmNetworkSettings
   object StaticText2: TStaticText
     Left = 8
     Height = 33
-    Top = 72
+    Top = 88
     Width = 424
     Caption = 'It is mandatory for these settings to be configured to get an xPL application to work as expected'
     Color = clBtnFace

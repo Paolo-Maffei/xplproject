@@ -36,4 +36,10 @@ v 2.0
 v 2.0.1
 	Technical update to stick to repository evolutions of the xPL project
 
+v 2.1
+	Added translation capability and file localisation for french on the web interface.
+	Localised files must be present in the application directory (loc_moon_fr,loc_weather_fr,loc_winddir_fr) as text files.
+	No us translation file needed, english is considered as default language.
+	Thanks to DJMaboul (forum Touteladomotique.com) for his english => french translations.
 
+	

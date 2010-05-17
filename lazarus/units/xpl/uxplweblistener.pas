@@ -68,7 +68,7 @@ resourcestring
 destructor TxPLWebListener.destroy;
 begin
   if Assigned(fWebServer) then begin
-     LogInfo(K_WEB_MSG_SRV_STOP);
+     LogInfo(K_WEB_MSG_SRV_STOP,[]);
      fWebServer.Active := false;
      FreeAndNil(fWebServer);
   end;
@@ -92,7 +92,7 @@ begin
           Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
-     LogInfo(Format(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]));
+     LogInfo(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]);
 
      with fWebServer do try
         AutoStartSession := True;
@@ -101,13 +101,13 @@ begin
         SessionState := True;
         Active:=true;
      except
-        on E : Exception do LogError(E.ClassName+' error raised, with message : '+E.Message);
+        on E : Exception do LogError(K_MSG_GENERIC_ERROR,[E.ClassName,E.Message]);
      end;
 
      fWebServer.OnCommandGet:=@DoCommandGet;
      fHtmlDir := Config.ItemName[K_CONFIG_LIB_SERVER_ROOT].Value;
 
-     LogInfo(Format(K_WEB_MSG_ROOT_DIR,[fHtmlDir]));
+     LogInfo(K_WEB_MSG_ROOT_DIR,[fHtmlDir]);
 end;
 
 procedure TxPLWebListener.DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -271,8 +271,7 @@ begin
 end;
 
 procedure HandleMenuItem;
-var commande : string;
-    aPar  : string;
+var commande, aPar : string;
     i : integer;
 begin
    commande := ARequestInfo.Params.Values['xplMsg'];
@@ -281,7 +280,7 @@ begin
       if AnsiPos('%',aPar) <> 0 then commande := AnsiReplaceStr(commande,aPar,ARequestInfo.Params.Values[aPar]);
    end;
 
-   self.SendMessage(xpl_mtCmnd,self.Address.Tag,commande);
+   SendMessage(K_MSG_TYPE_CMND,self.Address.Tag,commande, true);
 end;
 
 begin
@@ -334,7 +333,7 @@ end;
 procedure TxPLWebListener.CallConfigDone;
 begin
    InitWebServer;
-   SendMessage(xpl_mtCmnd,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
    inherited CallConfigDone;
 end;
 
@@ -352,6 +351,7 @@ begin
    Config.AddItem(K_HBEAT_ME_WEB_PORT,xpl_ctConfig,aDefaultPort);
    Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,xpl_ctConfig,ExtractFilePath(ParamStr(0)) + 'html');
    OnxPLHBeatApp := @HBeatApp;
+   LogInfo(K_MSG_LISTENER_STARTED,[aDevice,aAppVersion]);
 end;
 
 end.

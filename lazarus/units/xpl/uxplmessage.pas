@@ -14,7 +14,7 @@ unit uxplmessage;
 
 interface
 
-uses classes,uxPLMsgHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM, uxPLConst;
+uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM, uxPLConst;
 
 type
 
@@ -29,23 +29,23 @@ type
 
 TxPLMessage = class(TComponent)
      private
-        fHeader   : TxPLMsgHeader;
+        fHeader   : TxPLHeader;
         fBody     : TxPLMsgBody;
         fSocket   : TIdUDPClient;
         fName     : string;
         fDescription : string;
 
         function GetRawXPL: string;
-        procedure SetMessageType(const AValue: TxPLMessageType);
+
         procedure SetRawXPL(const AValue: string);
      public
-        property Header   : TxPLMsgHeader read fHeader;
+        property Header   : TxPLHeader read fHeader;
         property Body     : TxPLMsgBody   read fBody;
         property RawXPL   : string read GetRawXPL write SetRawXPL;
 
         // Shortcut properties ==================================
 
-        property MessageType : TxPLMessageType   read fHeader.fMsgType write SetMessageType ;
+        property MessageType : tsMsgType         read fHeader.fMsgType write fHeader.fMsgType ;
         property Source      : TxPLAddress       read fHeader.fSource  write fHeader.fSource  ;
         property Target      : TxPLTargetAddress read fHeader.fTarget  write fHeader.fTarget  ;
         property Schema      : TxPLSchema        read fBody.fSchema    write fBody.fSchema;
@@ -81,9 +81,8 @@ Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessag
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
-     fHeader   := TxPLMsgHeader.Create;
+     fHeader   := TxPLHeader.Create;
      fBody     := TxPLMsgBody.Create;
-     ResetValues;
      if aRawxPL<>'' then RawXPL := aRawXPL;
 end;
 
@@ -142,9 +141,9 @@ end;
 
 function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-     result := Header.MessageTypeAsString + '.' +
-               Source.FilterTag + '.' +
-               Schema.Tag;
+   result := Header.MessageType + '.' +
+             Source.FilterTag + '.' +
+             Schema.Tag;
 end;
 
 function TxPLMessage.GetRawXPL: string;
@@ -157,13 +156,6 @@ begin
 //        Raise Exception.Create('Unable to build valid xPL from supplied fields : ' + Header.Rawxpl + Body.Rawxpl );
 end;
 
-procedure TxPLMessage.SetMessageType(const AValue: TxPLMessageType);
-begin
-  if fHeader.MessageType = aValue then exit;
-  if aValue = xpl_mtStat then Target.Tag := '*';                   // Rule of XPL : xpl-stat are always broadcast
-  fHeader.MessageType := aValue;
-end;
-
 function TxPLMessage.IsValid: boolean;
 begin
    result := (Header.IsValid) and (Body.IsValid)
@@ -174,7 +166,7 @@ begin
    if anItem = 'Schema' then result := Schema.Tag;
    if anItem = 'Source' then result := Source.Tag;
    if anItem = 'Target' then result := Target.Tag;
-   if anItem = 'Type'   then result := Header.MessageTypeAsString;
+   if anItem = 'Type'   then result := Header.MessageType;
 end;
 
 procedure TxPLMessage.Send;
@@ -194,7 +186,7 @@ end;
 procedure TxPLMessage.SetRawXPL(const AValue: string);
 begin
   with TRegExpr.Create do try
-     Expression := '\A(.+})(.+})';
+     Expression := K_RE_MESSAGE;
      if Exec (StrRemoveChar(aValue,#13)) then begin
         Header.RawXPL := Match[1];
         Body.RawXPL   := Match[2];

@@ -190,6 +190,7 @@ object frmSetupInstance: TfrmSetupInstance
     OnEditingDone = HBDetailEditingDone
     OnSelection = HBDetailSelection
     RowOptions = [roAllowAppend, roAllowDelete, roAllowInsert, roAllowKeys]
+    OnRowsChanged = nil
     ColWidths = (
       15
       125

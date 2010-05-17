@@ -5,7 +5,7 @@ unit v_msgtype_radio;
 interface
 
 uses
-  Classes, SysUtils, ExtCtrls, uxPLMsgHeader, uxPLConst;
+  Classes, SysUtils, ExtCtrls, uxPLConst;
 
 type
   { TxPLMsgTypeRadio }
@@ -15,12 +15,12 @@ TxPLMsgTypeRadio = class(TRadioGroup)
         FShowAny : boolean;
 
         function GetIsValid: boolean;
-        function GetMessageType : TxPLMessageType;
-        procedure SetMessageType(const AValue: TxPLMessageType);
+        function GetMessageType : tsMsgType;
+        procedure SetMessageType(const AValue: tsMsgType);
         procedure SetShowAny(const AValue: boolean);
      public
         constructor create(aOwner : TComponent); override;
-        property ItemIndex : TxPLMessageType read GetMessageType write SetMessageType;
+        property ItemIndex : tsMsgType read GetMessageType write SetMessageType;
         property IsValid   : boolean         read GetIsValid;
      published
         property bShowAny : boolean read FShowAny write SetShowAny;
@@ -29,6 +29,7 @@ TxPLMsgTypeRadio = class(TRadioGroup)
      procedure Register;
 
 implementation
+uses uxPLHeader;
 
 procedure Register;
 begin
@@ -37,9 +38,9 @@ end;
 
 { TxPLMsgTypeRadio }
 
-function TxPLMsgTypeRadio.GetMessageType: TxPLMessageType;
+function TxPLMsgTypeRadio.GetMessageType: tsMsgType;
 begin
-  Result := TxPLMessageType(inherited ItemIndex);
+  Result := K_MSG_TYPE_DESCRIPTORS[inherited ItemIndex];
 end;
 
 function TxPLMsgTypeRadio.GetIsValid: boolean;
@@ -48,9 +49,9 @@ begin
   result := true;
 end;
 
-procedure TxPLMsgTypeRadio.SetMessageType(const AValue: TxPLMessageType);
+procedure TxPLMsgTypeRadio.SetMessageType(const AValue: tsMsgType);
 begin
-  inherited ItemIndex := Ord(aValue);
+  inherited ItemIndex := TxPLHeader.MsgTypeAsOrdinal(aValue);
 end;
 
 procedure TxPLMsgTypeRadio.SetShowAny(const AValue: boolean);

@@ -14,7 +14,11 @@ interface
 
 uses Classes, DOM, RegExpr;
 
-type TxPLBaseClass = class
+type
+
+{ TxPLBaseClass }
+
+TxPLBaseClass = class(TComponent)
      private
        function GetCount: integer;
      protected
@@ -47,6 +51,7 @@ type TxPLBaseClass = class
         procedure Assign(aBaseClass : TxPLBaseClass); virtual;
 
         function  AppendItem(const aName : string; const aReg : string) : integer;
+        procedure DeleteItem(const aIndex : integer);
         function  Equals(aBaseClass : TxPLBaseClass) : boolean; virtual;
         function  IsValid : boolean; virtual;
         function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument) : TDOMNode; virtual;
@@ -81,6 +86,12 @@ begin
      result := fItmNames.Count-1;
      fItmValues.Add('');
      fRegExpr.Add(aReg);
+end;
+
+procedure TxPLBaseClass.DeleteItem(const aIndex: integer);
+begin
+   fItmNames.Delete(aIndex);
+   fItmValues.Delete(aIndex);
 end;
 
 function TxPLBaseClass.GetCount: integer;
