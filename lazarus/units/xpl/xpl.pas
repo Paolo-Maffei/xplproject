@@ -8,8 +8,8 @@ interface
 
 uses
     v_msgbody_stringgrid, v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, 
-  FuzzyComp, MStringGrid, MEdit, MCheckListBox, MComboBox, uControls, 
-  TreeListView, LazarusPackageIntf;
+  TreeListView, MStringGrid, MEdit, MCheckListBox, MComboBox, uControls, 
+  LazarusPackageIntf;
 
 implementation
 
@@ -19,7 +19,6 @@ begin
   RegisterUnit('v_xplmsg_opendialog', @v_xplmsg_opendialog.Register); 
   RegisterUnit('v_msgtype_radio', @v_msgtype_radio.Register); 
   RegisterUnit('v_class_combo', @v_class_combo.Register); 
-  RegisterUnit('FuzzyComp', @FuzzyComp.Register); 
   RegisterUnit('MStringGrid', @MStringGrid.Register); 
   RegisterUnit('MEdit', @MEdit.Register); 
   RegisterUnit('MCheckListBox', @MCheckListBox.Register); 

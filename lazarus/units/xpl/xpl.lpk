@@ -21,7 +21,7 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="11">
+    <Files Count="10">
       <Item1>
         <Filename Value="v_msgbody_stringgrid.pas"/>
         <HasRegisterProc Value="True"/>
@@ -43,9 +43,8 @@
         <UnitName Value="v_class_combo"/>
       </Item4>
       <Item5>
-        <Filename Value="FuzzyComp.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="FuzzyComp"/>
+        <Filename Value="..\general\TreeListView.pas"/>
+        <UnitName Value="TreeListView"/>
       </Item5>
       <Item6>
         <Filename Value="..\general\MStringGrid.pas"/>
@@ -72,10 +71,6 @@
         <HasRegisterProc Value="True"/>
         <UnitName Value="uControls"/>
       </Item10>
-      <Item11>
-        <Filename Value="..\general\TreeListView.pas"/>
-        <UnitName Value="TreeListView"/>
-      </Item11>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">
