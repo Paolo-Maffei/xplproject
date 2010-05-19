@@ -8,8 +8,16 @@ This application checks the infrastructure/xPL requirements for installing xPL a
 To use it in the first option, just execute the xplcheckpackage.exe application. If you are a developer and wish to embed the verification into your installer, then check below for instructions on how to achieve this.
 
 
-
-
+Version history
+===============
+ Ver | Date        | Description
+ ----+-------------+----------------------------------------------------------------------------------
+ 1.3 | 19-May-2010 | 2 bug fixes;
+     |             |  - properly releasing timer resources
+     |             |  - exception when windows firewall is unavailable is now properly handled
+     |             |
+ 1.2 |             | Updated to automatically download the latest version of the hub and diag tools
+     |             |
 
 
 

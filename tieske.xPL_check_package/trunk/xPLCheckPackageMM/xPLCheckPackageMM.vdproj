@@ -144,7 +144,7 @@
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:xPLCheckPackage, Version=1.2.3.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:xPLCheckPackage, Version=1.2.4.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
                     "_ABD4930BCD3340D2AA855C085C794EAA"
@@ -292,7 +292,7 @@
         "Module"
         {
         "ModuleSignature" = "8:MergeModule.F85D2BFE50EE428185094FC4B47A5B5E"
-        "Version" = "8:1.2.4.0"
+        "Version" = "8:1.3.0.0"
         "Title" = "8:xPLCheckPackageMM"
         "Subject" = "8:"
         "Author" = "8:xPL Project"

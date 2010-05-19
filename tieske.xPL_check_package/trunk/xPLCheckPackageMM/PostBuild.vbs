@@ -18,7 +18,7 @@ message = "When the build is complete the 'KeyPath' must be removed from the Mer
 		"  - Save the file and exit." & vbcrlf & _
 		"After this update the .MSM merge module is ready for distribution. Follow the instructions in the readme " & _
 		"file on how to integrate the merge module into your application." & vbcrlf &  vbcrlf & vbcrlf & _
-		"Click Ok to open the Merge Module in Orca (the Orca application MUST be installed for this to work)"
+		"Click Ok to open the Merge Module in Orca (the Orca application MUST be installed for this to work)" 
 
 ' Get commandline arguments
 Set objArgs = WScript.Arguments
@@ -33,6 +33,7 @@ if objArgs.count=1 then
 	Set WshShell = WScript.CreateObject("WScript.Shell")
     WshShell.Run """" & target & """"
 
+	result = MsgBox ("Opened file: """ & target & """", vbOkOnly + vbInformation, "Manual action required")
 end if
 
 

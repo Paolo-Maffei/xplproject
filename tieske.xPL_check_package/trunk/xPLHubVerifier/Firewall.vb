@@ -43,17 +43,22 @@ Module Firewall
         fwProfile = Nothing
         ports = Nothing
     End Sub
-    Public Function IsxPLportOpen() As Boolean
+    Public Function IsFWaccessible() As Boolean
         Dim result As Boolean = False
-        Dim fwMgr As INetFwMgr = CType(getInstance("INetFwMgr"), INetFwMgr)
-        Dim fwPolicy As INetFwPolicy = fwMgr.LocalPolicy
-        Dim fwProfile As INetFwProfile = fwPolicy.CurrentProfile
-        Dim ports As INetFwOpenPorts = fwProfile.GloballyOpenPorts
+        Dim fwMgr As INetFwMgr
+        Dim fwPolicy As INetFwPolicy
+        Dim fwProfile As INetFwProfile
+        Dim ports As INetFwOpenPorts
         Try
-            Dim port As INetFwOpenPort = ports.Item(xPLPort, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_UDP)
-            result = port.Enabled
-            port = Nothing
+            ' try access the COM object for the windows firewall
+            fwMgr = CType(getInstance("INetFwMgr"), INetFwMgr)
+            fwPolicy = fwMgr.LocalPolicy
+            fwProfile = fwPolicy.CurrentProfile
+            ports = fwProfile.GloballyOpenPorts
+            ' No exceptions, so firewall seem to be available
+            result = True
         Catch ex As Exception
+            ' Exception, so seems the firewall is not running (or another one is installed??)
             result = False
         End Try
 
@@ -61,6 +66,28 @@ Module Firewall
         fwPolicy = Nothing
         fwProfile = Nothing
         ports = Nothing
+        Return result
+    End Function
+    Public Function IsxPLportOpen() As Boolean
+        Dim result As Boolean = False
+        If IsFWaccessible() Then
+            Dim fwMgr As INetFwMgr = CType(getInstance("INetFwMgr"), INetFwMgr)
+            Dim fwPolicy As INetFwPolicy = fwMgr.LocalPolicy
+            Dim fwProfile As INetFwProfile = fwPolicy.CurrentProfile
+            Dim ports As INetFwOpenPorts = fwProfile.GloballyOpenPorts
+            Try
+                Dim port As INetFwOpenPort = ports.Item(xPLPort, NET_FW_IP_PROTOCOL_.NET_FW_IP_PROTOCOL_UDP)
+                result = port.Enabled
+                port = Nothing
+            Catch ex As Exception
+                result = False
+            End Try
+
+            fwMgr = Nothing
+            fwPolicy = Nothing
+            fwProfile = Nothing
+            ports = Nothing
+        End If
         Return result
     End Function
 
