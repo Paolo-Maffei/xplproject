@@ -69,6 +69,7 @@ Public Class MainForm
     End Sub
 
     Private Sub btnClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClose.Click
+        If Not hubtmr Is Nothing Then hubtmr.Stop()
         Me.Close()
     End Sub
 
@@ -187,21 +188,38 @@ Public Class MainForm
 #Region "Network Port"
 
     Private Sub CheckPort()
-        If IsxPLportOpen() Then
-            Me.lblPortOpen.Visible = True
-            Me.lblPortClosed.Visible = False
-            Me.btnClosePort.Enabled = True
-            Me.btnOpenPort.Enabled = False
+        If IsFWaccessible() Then
+            If IsxPLportOpen() Then
+                Me.lblPortOpen.Visible = True
+                Me.lblPortClosed.Visible = False
+                Me.lblPortUnavailable.Visible = False
+                Me.btnClosePort.Enabled = True
+                Me.btnOpenPort.Enabled = False
+            Else
+                Me.lblPortOpen.Visible = False
+                Me.lblPortClosed.Visible = True
+                Me.lblPortUnavailable.Visible = False
+                Me.btnClosePort.Enabled = False
+                Me.btnOpenPort.Enabled = True
+            End If
         Else
+            ' Firewall cannot be accessed
             Me.lblPortOpen.Visible = False
-            Me.lblPortClosed.Visible = True
+            Me.lblPortClosed.Visible = False
+            Me.lblPortUnavailable.Visible = True
             Me.btnClosePort.Enabled = False
-            Me.btnOpenPort.Enabled = True
+            Me.btnOpenPort.Enabled = False
         End If
     End Sub
 
     Private Sub btnCheckPort_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCheckPort.Click
-        Me.CheckPort()
+        If IsFWaccessible() Then
+            Me.CheckPort()
+        Else
+            MsgBox("It seems that the Windows Firewall is not available/accessible. The port settings cannot be verified. " & _
+                   "If you are using another firewall, then you should configure the xPL port through that application.", _
+                   MsgBoxStyle.Information Or MsgBoxStyle.OkOnly, "Firewall inaccessible")
+        End If
     End Sub
 
     Private Sub btnOpenPort_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnOpenPort.Click

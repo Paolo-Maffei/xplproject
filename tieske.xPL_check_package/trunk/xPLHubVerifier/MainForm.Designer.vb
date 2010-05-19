@@ -48,6 +48,7 @@ Partial Class MainForm
         Me.lblHubConnecting = New System.Windows.Forms.Label
         Me.xPLLogo = New System.Windows.Forms.PictureBox
         Me.Button1 = New System.Windows.Forms.Button
+        Me.lblPortUnavailable = New System.Windows.Forms.Label
         CType(Me.xPLLogo, System.ComponentModel.ISupportInitialize).BeginInit()
         Me.SuspendLayout()
         '
@@ -308,6 +309,18 @@ Partial Class MainForm
         Me.Button1.Text = "About..."
         Me.Button1.UseVisualStyleBackColor = True
         '
+        'lblPortUnavailable
+        '
+        Me.lblPortUnavailable.AutoSize = True
+        Me.lblPortUnavailable.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, CType(0, Byte))
+        Me.lblPortUnavailable.ForeColor = System.Drawing.Color.Red
+        Me.lblPortUnavailable.Location = New System.Drawing.Point(289, 17)
+        Me.lblPortUnavailable.Name = "lblPortUnavailable"
+        Me.lblPortUnavailable.Size = New System.Drawing.Size(74, 13)
+        Me.lblPortUnavailable.TabIndex = 29
+        Me.lblPortUnavailable.Text = "Unavailable"
+        Me.lblPortUnavailable.TextAlign = System.Drawing.ContentAlignment.TopRight
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
@@ -315,6 +328,7 @@ Partial Class MainForm
         Me.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None
         Me.ClientSize = New System.Drawing.Size(459, 322)
         Me.ControlBox = False
+        Me.Controls.Add(Me.lblPortUnavailable)
         Me.Controls.Add(Me.Button1)
         Me.Controls.Add(Me.lblHubConnecting)
         Me.Controls.Add(Me.lblHubNotFound)
@@ -374,5 +388,6 @@ Partial Class MainForm
     Friend WithEvents lblHubNotFound As System.Windows.Forms.Label
     Friend WithEvents lblHubConnecting As System.Windows.Forms.Label
     Friend WithEvents Button1 As System.Windows.Forms.Button
+    Friend WithEvents lblPortUnavailable As System.Windows.Forms.Label
 
 End Class
