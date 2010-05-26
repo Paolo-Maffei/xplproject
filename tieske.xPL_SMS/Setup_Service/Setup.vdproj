@@ -27,20 +27,20 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
-        "OwnerKey" = "8:_UNDEFINED"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_76454CF41961814CAFF128C6DC143C54"
+        "MsmKey" = "8:_6AC990F5B26351971523D8651B694D26"
         "OwnerKey" = "8:_4A0120776E9143A69912816D9C6A8B7C"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
-        "MsmKey" = "8:_76454CF41961814CAFF128C6DC143C54"
+        "MsmKey" = "8:_6AC990F5B26351971523D8651B694D26"
         "OwnerKey" = "8:_9D68E3A4554F4C998DC179BDCD3F96D5"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
+        "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -76,7 +76,7 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_76454CF41961814CAFF128C6DC143C54"
+        "OwnerKey" = "8:_6AC990F5B26351971523D8651B694D26"
         "MsmSig" = "8:_UNDEFINED"
         }
     }
@@ -260,34 +260,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
-            {
-            "SourcePath" = "8:..\\xPL SMS service\\ReadMe.txt"
-            "TargetName" = "8:ReadMe.txt"
-            "Tag" = "8:"
-            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
-            "Condition" = "8:"
-            "Transitive" = "11:FALSE"
-            "Vital" = "11:TRUE"
-            "ReadOnly" = "11:FALSE"
-            "Hidden" = "11:FALSE"
-            "System" = "11:FALSE"
-            "Permanent" = "11:FALSE"
-            "SharedLegacy" = "11:FALSE"
-            "PackageAs" = "3:1"
-            "Register" = "3:1"
-            "Exclude" = "11:FALSE"
-            "IsDependency" = "11:FALSE"
-            "IsolateTo" = "8:"
-            }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_76454CF41961814CAFF128C6DC143C54"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_6AC990F5B26351971523D8651B694D26"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:xpllib, Version=5.1.17.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_76454CF41961814CAFF128C6DC143C54"
+                    "_6AC990F5B26351971523D8651B694D26"
                     {
                     "Name" = "8:xpllib.dll"
                     "Attributes" = "3:512"
@@ -309,6 +289,26 @@
             "Register" = "3:1"
             "Exclude" = "11:FALSE"
             "IsDependency" = "11:TRUE"
+            "IsolateTo" = "8:"
+            }
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_6B29DA4F7F2C42D8BCC741CCDD43B2E8"
+            {
+            "SourcePath" = "8:..\\xPL SMS service\\ReadMe.txt"
+            "TargetName" = "8:ReadMe.txt"
+            "Tag" = "8:"
+            "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
         }
@@ -389,14 +389,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:xPL SMS Service application"
-        "ProductCode" = "8:{5BE9F970-EA68-4D65-8355-14DE983FBD52}"
-        "PackageCode" = "8:{1C4DFBDE-80BE-4493-AA60-249E033B1043}"
+        "ProductCode" = "8:{0CFFFDBB-3057-4321-B14C-2DBE5FDF17FC}"
+        "PackageCode" = "8:{59B2F88D-627A-43A8-A512-E1A1A2E5C7D3}"
         "UpgradeCode" = "8:{824E9702-9795-4C61-9BAB-A209A571D7D8}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:FALSE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:1.1.0"
+        "ProductVersion" = "8:1.2.0"
         "Manufacturer" = "8:xPL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -999,7 +999,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_4A0120776E9143A69912816D9C6A8B7C"
             {
-            "SourcePath" = "8:..\\xPL SMS service\\obj\\Release\\xPL SMS service.exe"
+            "SourcePath" = "8:..\\xPL SMS service\\obj\\Debug\\xPL SMS service.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
@@ -1027,7 +1027,7 @@
             }
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_9D68E3A4554F4C998DC179BDCD3F96D5"
             {
-            "SourcePath" = "8:..\\SMSconfig\\obj\\Release\\SMSconfig.exe"
+            "SourcePath" = "8:..\\SMSconfig\\obj\\Debug\\SMSconfig.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_B07576BD025642C7B828930DD25D881E"
