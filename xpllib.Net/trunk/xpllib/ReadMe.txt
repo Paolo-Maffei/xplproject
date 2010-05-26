@@ -1,4 +1,4 @@
-﻿xPL Library for .NET, version 5.0
+﻿xPL Library for .NET, version 5.1
 
 Contents
 =========
@@ -14,10 +14,10 @@ Contents
 1 - License
 ============
 
-Copyright (c) 2009 Thijs Schreijer
+Copyright (c) 2009-2010 Thijs Schreijer
 http://www.thijsschreijer.nl
 
-Copyright (c) 2008 Tom Van den Panhuyzen
+Copyright (c) 2008-2009 Tom Van den Panhuyzen
 http://blog.boxedbits.com/xpl
 
 Copyright (C) 2003-2005 John Bent
@@ -112,6 +112,13 @@ xPLListener
     the listener can maintain a list of devices. Messages received from 
     the network are passed on to the created xPLDevice objects and to the 
     xPLNetwork object.
+
+xPLPluginStore (new in 5.1)
+    Downloading and parsing vendor xml plugin files is supported through
+    this object. A local shared store can be used to store the information
+    updated locally. 2 collections (vendors and devices) are available 
+    after loading/updating the PluginStore. Two dialogs are included to
+    show update progress to the enduser.
     
 
 Supporting objects
@@ -157,6 +164,25 @@ xPLKeyValuePair
 xPLKeyValuePairs
     Maintains a list of key-valuepairs for an xPL message
 
+xPLPluginVendor (new in 5.1)
+	Represents the vendor information downloaded from the vendor plugin 
+	and	vendor related information from the central list maintained by
+	the xpl-project.
+	
+xPLPluginDevice (new in 5.1)
+	Represents the device information downloaded from the vendor plugin. 
+	
+xPLPluginUpdateDlgLog (form) (new in 5.1)
+    Progress form that can be used to display download/update information
+    from the plugin-update process. It displays status, % complete and
+    a complete message log of the process.
+    
+xPLPluginUpdateDlgSmall (form) (new in 5.1)
+    Progress form that can be used to display download/update information
+    from the plugin-update process. It displays status and % complete of 
+    the update process. No log is shown and it is automatically dismissed
+    when the update completes
+
 xPLSchema
     Represents a single schema name
     
@@ -178,8 +204,21 @@ A distribution of the xpllib should include the following files;
 
     
     
-5 - Changelog for version 5.0, build 145
+5 - Changelog for version 5.1, build xxx
 ========================================
+
+Changes in version 5.1 from 5.0
+NEW in 5.1
+  - Added the xPLPlugin object with its supporting object to download and parse
+    vendor plugins xml files into a local PluginStore.
+  - xPLDevice object has two new methods; Enable and Disable, that make setting
+    Enabled property more intuitive.
+    
+FIXED in 5.1
+  - "States" returned by the GetState method of the xPLDevice and xPLListener
+    objects was ASCII encoded, which could cause data loss if strings contained
+    non-ASCII characters. States are now encoded using UTF8.
+
 
 Changes in version 5.0 from 4.4
 NEW in 5.0

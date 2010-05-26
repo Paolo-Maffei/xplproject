@@ -8,17 +8,17 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("xPLLib")> 
-<Assembly: AssemblyDescription("xPL Library for .NET")> 
+<Assembly: AssemblyTitle("PluginTestApp")> 
+<Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("xPLLib")> 
-<Assembly: AssemblyCopyright("(C) 2003-2007 by John Bent, 2008-2009 Tom VdP, 2009-2010 Thijs Schreijer")> 
+<Assembly: AssemblyProduct("PluginTestApp")> 
+<Assembly: AssemblyCopyright("Copyright ©  2010")> 
 <Assembly: AssemblyTrademark("")> 
 
 <Assembly: ComVisible(False)>
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("954d2d0e-46cd-47eb-bd4f-cf6eb9afd61b")> 
+<Assembly: Guid("8d826d81-6fd6-48b2-bd99-cffe8560ff81")> 
 
 ' Version information for an assembly consists of the following four values:
 '
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
  
 
-<Assembly: AssemblyVersion("5.1.22.0")> 
-<Assembly: AssemblyFileVersion("5.1.22.0")> 
+<Assembly: AssemblyVersion("1.0.63.0")> 
+<Assembly: AssemblyFileVersion("1.0.63.0")> 

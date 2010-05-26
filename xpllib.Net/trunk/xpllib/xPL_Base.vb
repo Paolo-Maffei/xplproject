@@ -1,11 +1,11 @@
 '* xPL Library for .NET
 '*
-'* Version 5.0
+'* Version 5.1
 '*
-'* Copyright (c) 2009 Thijs Schreijer
-'* http://www........
+'* Copyright (c) 2009-2010 Thijs Schreijer
+'* http://www.thijsschreijer.nl
 '*
-'* Copyright (c) 2008 Tom Van den Panhuyzen
+'* Copyright (c) 2008-2009 Tom Van den Panhuyzen
 '* http://blog.boxedbits.com/xpl
 '*
 '* Copyright (C) 2003-2005 John Bent
@@ -617,6 +617,44 @@ Public Class xPL_Base
     ''' <remarks></remarks>
     Public Const XPL_STATESEP As Char = ","c
 
+
+    '
+    ' Vendor plugin constants
+    '
+
+    ''' <summary>
+    ''' Vendorplugin list download location 1
+    ''' </summary>
+    ''' <remarks>The extension is set in the <seealso cref="XPL_PLUGIN_EXTENSION"/> constant</remarks>
+    Public Const XPL_PLUGIN_URL1 As String = "http://www.xplproject.org.uk/plugins"          ' Main xPL site, by Ian
+    ''' <summary>
+    ''' Vendorplugin list download location 2
+    ''' </summary>
+    ''' <remarks>The extension is set in the <seealso cref="XPL_PLUGIN_EXTENSION"/> constant</remarks>
+    Public Const XPL_PLUGIN_URL2 As String = "http://www.xPL4Java.org/plugins"               ' Gerry's copy
+    ''' <summary>
+    ''' Vendorplugin list download location 3
+    ''' </summary>
+    ''' <remarks>The extension is set in the <seealso cref="XPL_PLUGIN_EXTENSION"/> constant</remarks>
+    Public Const XPL_PLUGIN_URL3 As String = "http://www.xplmonkey.com/downloads/plugins"    ' Mal's copy
+    ''' <summary>
+    ''' Vendorplugin list extension to be used for the plugin and list downloads, also used for the
+    ''' local pluginstore file, see <seealso cref="XPL_PLUGINSTORE_PATH"/>.
+    ''' </summary>
+    ''' <remarks>The dot ('.') preceeding the extension is included.</remarks>
+    Public Const XPL_PLUGIN_EXTENSION As String = ".xml"
+    ''' <summary>
+    ''' The relative path to the pluginstore. The base path is the system directory 'Common Application Data'.
+    ''' </summary>
+    ''' <remarks>The path includes the filename, but not the extension. The extension is 
+    ''' set in the <seealso cref="XPL_PLUGIN_EXTENSION"/> constant.</remarks>
+    Public Const XPL_PLUGINSTORE_PATH As String = "\xPL\xPLLib\PluginStore"
+    ''' <summary>
+    ''' Version of the PluginStore created by the xPLPlugin object
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_PLUGINSTORE_VERSION As String = "1.0"
+
 #End Region
 
 #Region "Graphics"
@@ -703,7 +741,7 @@ Public Class xPL_Base
         Dim s As String = ""
         If value Is Nothing Then value = ""
 
-        s = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(value))
+        s = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(value))
 
         Return s
     End Function
@@ -718,7 +756,7 @@ Public Class xPL_Base
         Dim s As String = ""
         If StateValue Is Nothing Then StateValue = ""
 
-        s = System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(StateValue))
+        s = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(StateValue))
 
         Return s
     End Function
