@@ -1,0 +1,26 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xpllib", "xpllib\xpllib.vbproj", "{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PluginTestApp", "PluginTestApp\PluginTestApp.vbproj", "{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
