@@ -32,4 +32,16 @@ Public Class Form1
         End While
         MsgBox(xplug.LocationsXmlElement.InnerXml)
     End Sub
+
+    Private Sub Button1_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button1.Click
+        Encoded.Text = xPL_Base.StateEncode(ToDecode.Text)
+        Decoded.Text = xPL_Base.StateDecode(Encoded.Text)
+        Dim s As String
+
+        If Decoded.Text = ToDecode.Text Then
+            MsgBox("They are equal", MsgBoxStyle.Information)
+        Else
+            MsgBox("They are not equal!!", MsgBoxStyle.Critical)
+        End If
+    End Sub
 End Class

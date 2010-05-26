@@ -741,7 +741,7 @@ Public Class xPL_Base
         Dim s As String = ""
         If value Is Nothing Then value = ""
 
-        s = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes(value))
+        s = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(value))
 
         Return s
     End Function
@@ -756,7 +756,7 @@ Public Class xPL_Base
         Dim s As String = ""
         If StateValue Is Nothing Then StateValue = ""
 
-        s = System.Text.Encoding.ASCII.GetString(Convert.FromBase64String(StateValue))
+        s = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(StateValue))
 
         Return s
     End Function
