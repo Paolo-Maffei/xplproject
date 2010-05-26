@@ -117,7 +117,8 @@ xPLPluginStore (new in 5.1)
     Downloading and parsing vendor xml plugin files is supported through
     this object. A local shared store can be used to store the information
     updated locally. 2 collections (vendors and devices) are available 
-    after loading/updating the PluginStore.
+    after loading/updating the PluginStore. Two dialogs are included to
+    show update progress to the enduser.
     
 
 Supporting objects
@@ -214,7 +215,9 @@ NEW in 5.1
     Enabled property more intuitive.
     
 FIXED in 5.1
-  - Nothing
+  - "States" returned by the GetState method of the xPLDevice and xPLListener
+    objects was ASCII encoded, which could cause data loss if strings contained
+    non-ASCII characters. States are now encoded using UTF8.
 
 
 Changes in version 5.0 from 4.4
