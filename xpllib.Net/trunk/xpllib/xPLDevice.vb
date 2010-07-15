@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.1
+'* Version 5.2
 '*
 '* Copyright (c) 2009-2010 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -586,7 +586,7 @@ Public Class xPLDevice
         Try
 
             Select Case xVersion
-                Case "5.0"
+                Case "5.0", "5.1", "5.2"
                     ' Restore device address
                     db = db & vbCrLf & "Address: " & lst(i)
                     addr = New xPLAddress(xPLAddressType.Source, lst(i))

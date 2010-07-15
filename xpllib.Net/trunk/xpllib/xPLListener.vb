@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.1
+'* Version 5.2
 '*
 '* Copyright (c) 2009-2010 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -93,9 +93,24 @@ Public Class xPLListener
     ''' <remarks></remarks>
     Public Shared Sub Shutdown()
         If Not mActive Then Exit Sub
-        mActive = False
 
         LogError("xPLListener.Shutdown", "Shutdown started")
+
+        ' cleanup devices
+        Dim xdev As xPLDevice
+        For i As Integer = mDevices.Count - 1 To 0 Step -1
+            Try
+                xdev = CType(mDevices(i), xPLDevice)
+                mDevices.RemoveAt(i)
+                xdev.Dispose()
+                xdev = Nothing
+            Catch ex As Exception
+                LogError("xPLListener.Shutdown", "Error shuttingdown device " & i & ": " & ex.Message)
+            End Try
+        Next
+
+        ' Set mActive to False AFTER destroying the devices, otherwise the devices won't be able to sent a proper END message
+        mActive = False
 
         ' Stop watching xPL network
         xPLNetwork.StopScan()
@@ -110,19 +125,6 @@ Public Class xPLListener
         Catch ex As Exception
             LogError("xPLListener.Shutdown", "Error shutting down LCTimer: " & ex.Message)
         End Try
-
-        ' cleanup devices
-        Dim xdev As xPLDevice
-        For i As Integer = mDevices.Count - 1 To 0 Step -1
-            Try
-                xdev = CType(mDevices(i), xPLDevice)
-                mDevices.RemoveAt(i)
-                xdev.Dispose()
-                xdev = Nothing
-            Catch ex As Exception
-                LogError("xPLListener.Shutdown", "Error shuttingdown device " & i & ": " & ex.Message)
-            End Try
-        Next
 
         ' cleanup network
         Try
@@ -363,16 +365,16 @@ Public Class xPLListener
         lst = SavedState.Split(XPL_STATESEP)
         i = 0
         ' get version of xpllib that created it
-        xversion = lst(i)
+        xversion = StateDecode(lst(i))
         i += 1
         ' get version of the application that created it
-        aversion = lst(i)
+        aversion = StateDecode(lst(i))
         i += 1
 
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
-            Case "5.0"
+            Case "5.0", "5.1", "5.2"
                 ' get settings for xPLNetwork object
                 xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
                 i += 1
