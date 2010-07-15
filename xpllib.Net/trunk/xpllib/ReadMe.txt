@@ -1,4 +1,4 @@
-﻿xPL Library for .NET, version 5.1
+﻿xPL Library for .NET, version 5.2
 
 Contents
 =========
@@ -204,8 +204,17 @@ A distribution of the xpllib should include the following files;
 
     
     
-5 - Changelog for version 5.1, build xxx
+5 - Changelog for version 5.2, build xxx
 ========================================
+
+Changes in version 5.1 from 5.0
+NEW in 5.2
+  - Nothing
+    
+FIXED in 5.2
+  - "States" used with the xPLListener object could not be restored (exception was raised)
+  - the xPLListener.Shutdown method prevented devices from sending a proper end-message
+
 
 Changes in version 5.1 from 5.0
 NEW in 5.1
