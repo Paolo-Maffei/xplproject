@@ -786,9 +786,9 @@ Public Class xPL_Base
                 ' split string in settings for individual devices
                 lst = SavedState.Split(XPL_STATESEP)
                 ' get version of xpllib that created it
-                xVersion = lst(0)
+                xVersion = StateDecode(lst(0))
                 ' get version of the application that created it
-                aVersion = lst(1)
+                aVersion = StateDecode(lst(1))
             Catch ex As Exception
             End Try
         End If
@@ -811,7 +811,7 @@ Public Class xPL_Base
                 ' split string in settings for individual devices
                 lst = SavedState.Split(XPL_STATESEP)
                 ' get version of xpllib that created it
-                xVersion = lst(0)
+                xVersion = StateDecode(lst(0))
             Catch ex As Exception
             End Try
         End If
