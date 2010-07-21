@@ -31,10 +31,10 @@ Partial Class frmMain
         Me.Label4 = New System.Windows.Forms.Label
         Me.Button3 = New System.Windows.Forms.Button
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
-        Me.GroupBox2 = New System.Windows.Forms.GroupBox
-        Me.GroupBox3 = New System.Windows.Forms.GroupBox
         Me.Label5 = New System.Windows.Forms.Label
         Me.Button4 = New System.Windows.Forms.Button
+        Me.GroupBox2 = New System.Windows.Forms.GroupBox
+        Me.GroupBox3 = New System.Windows.Forms.GroupBox
         Me.GroupBox4 = New System.Windows.Forms.GroupBox
         Me.GroupBox1.SuspendLayout()
         Me.SuspendLayout()
@@ -119,6 +119,24 @@ Partial Class frmMain
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Devices"
         '
+        'Label5
+        '
+        Me.Label5.AutoSize = True
+        Me.Label5.Location = New System.Drawing.Point(87, 111)
+        Me.Label5.Name = "Label5"
+        Me.Label5.Size = New System.Drawing.Size(180, 13)
+        Me.Label5.TabIndex = 8
+        Me.Label5.Text = "Sending messages && heartbeat items"
+        '
+        'Button4
+        '
+        Me.Button4.Location = New System.Drawing.Point(6, 106)
+        Me.Button4.Name = "Button4"
+        Me.Button4.Size = New System.Drawing.Size(75, 23)
+        Me.Button4.TabIndex = 7
+        Me.Button4.Text = "Example 4"
+        Me.Button4.UseVisualStyleBackColor = True
+        '
         'GroupBox2
         '
         Me.GroupBox2.Location = New System.Drawing.Point(12, 242)
@@ -136,24 +154,6 @@ Partial Class frmMain
         Me.GroupBox3.TabIndex = 9
         Me.GroupBox3.TabStop = False
         Me.GroupBox3.Text = "the xPL network"
-        '
-        'Label5
-        '
-        Me.Label5.AutoSize = True
-        Me.Label5.Location = New System.Drawing.Point(87, 111)
-        Me.Label5.Name = "Label5"
-        Me.Label5.Size = New System.Drawing.Size(96, 13)
-        Me.Label5.TabIndex = 8
-        Me.Label5.Text = "Sending messages"
-        '
-        'Button4
-        '
-        Me.Button4.Location = New System.Drawing.Point(6, 106)
-        Me.Button4.Name = "Button4"
-        Me.Button4.Size = New System.Drawing.Size(75, 23)
-        Me.Button4.TabIndex = 7
-        Me.Button4.Text = "Example 4"
-        Me.Button4.UseVisualStyleBackColor = True
         '
         'GroupBox4
         '
