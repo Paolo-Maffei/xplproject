@@ -219,6 +219,8 @@ FIXED in 5.2
   - the xPLListener.Shutdown method prevented devices from sending a proper end-message
   - the xPLConfigItem.ToString method didn't list all values in the configitem, only the
     last one in the list
+  - Functions xPL_Base.StatexPLLibVersion and xPL_Base.StateAppVersion, did not correctly
+    decode the version information
 
 
 Changes in version 5.1 from 5.0

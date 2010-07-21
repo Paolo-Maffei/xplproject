@@ -67,12 +67,13 @@ Module Example2
         m = "Device has been configured as follows;" & vbCrLf & _
             "      Address   : " & dev1.Address & vbCrLf & _
             "      Configured: " & dev1.Configured & vbCrLf & vbCrLf & _
-            "Config Items " & vbCrLf & _
+            "Regular Config Items " & vbCrLf & _
             "   newconf : " & dev1.ConfigItems.conf_Newconf & vbCrLf & _
             "   interval: " & dev1.ConfigItems.conf_IntervalInMin & vbCrLf & _
             "   nr of groups: " & dev1.ConfigItems.conf_Group.Count & vbCrLf & _
             "   nr of filters: " & dev1.ConfigItems.conf_Filter.Count & vbCrLf & vbCrLf & _
-            "Custom items: " & vbCrLf & dev1.ConfigItems.Item("extra1").ToString & vbCrLf & _
+            "Custom Config Items: " & vbCrLf & _
+            dev1.ConfigItems.Item("extra1").ToString & vbCrLf & _
             dev1.ConfigItems.Item("extra2").ToString
         MsgBox(m)
 

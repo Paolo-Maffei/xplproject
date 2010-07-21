@@ -11,4 +11,10 @@
         Call Example2.Example2()
         Me.Show()
     End Sub
+
+    Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
+        Me.Hide()
+        Call Example3.Example3()
+        Me.Show()
+    End Sub
 End Class
