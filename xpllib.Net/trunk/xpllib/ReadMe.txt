@@ -57,6 +57,7 @@ exception statement from your version.
 
 2 - xPL
 ========
+
 xPL is an open protocol intended to permit the control and monitoring of 
 home automation devices. The primary design goal of xPL is to provide a 
 rich set of features and functionality, whilst maintaining an elegant, 
@@ -83,7 +84,7 @@ examine the different objects and their properties, most have fairly
 detailed descriptions.
 
 Main objects
-------------
+-------------
 xPLDevice
     This object represents the core of a device. Basically create a 
     device and set its property Enabled to True and you have created a 
@@ -122,7 +123,7 @@ xPLPluginStore (new in 5.1)
     
 
 Supporting objects
-------------------
+-------------------
 xPL_Base
     Provides a number of supporting functions and contains all xPL 
     related constants
@@ -190,7 +191,8 @@ xPLSchema
     
 
 4 - Distribution
-================
+=================
+
 A distribution of the xpllib should include the following files;
  - xpllib.dll        The library core, providing the xPL functionality
  - ReadMe.txt        The documentation, including copyrights and 
@@ -204,28 +206,31 @@ A distribution of the xpllib should include the following files;
 
     
     
-5 - Changelog for version 5.2, build xxx
-========================================
+5 - Changelog 
+==============
 
-Changes in version 5.1 from 5.0
+Changes in version 5.2 from 5.1
 NEW in 5.2
-  - Nothing
+  - The sourcecode now also contains an example application that demonstrates how to use
+    the xpllib to create xPL applications
     
 FIXED in 5.2
-  - "States" used with the xPLListener object could not be restored (exception was raised)
+  - "States" used with the xPLListener object could not be restored (exception was thrown)
   - the xPLListener.Shutdown method prevented devices from sending a proper end-message
+  - the xPLConfigItem.ToString method didn't list all values in the configitem, only the
+    last one in the list
 
 
 Changes in version 5.1 from 5.0
 NEW in 5.1
   - Added the xPLPlugin object with its supporting object to download and parse
     vendor plugins xml files into a local PluginStore.
-  - xPLDevice object has two new methods; Enable and Disable, that make setting
+  - xPLDevice object has two new methods; Enable and Disable, that make setting the
     Enabled property more intuitive.
     
 FIXED in 5.1
   - "States" returned by the GetState method of the xPLDevice and xPLListener
-    objects was ASCII encoded, which could cause data loss if strings contained
+    objects were ASCII encoded, which could cause data loss if strings contained
     non-ASCII characters. States are now encoded using UTF8.
 
 
@@ -273,7 +278,7 @@ FIXED in 5.0
     X10 command, and send an X10 response, but the broken filter causes this to 
     be seen as another command, which causes another response... and so on, 
     until you disable the service...
-      ** The property MessagePassing, if by default set NOT to pass a devices
+      ** The property MessagePassing, is by default set NOT to pass a devices
          own echo messages back to the device. This basically disables the
          loop
   - You can't force the lib to start listening on startup. In the case of 

@@ -249,7 +249,7 @@ Public Class xPLConfigItem
             result = Me.Name & "="
         Else
             For n = 0 To mItem.Count - 1
-                result = Me.Name & "=" & Me.Item(n) & XPL_LF
+                result = result & Me.Name & "=" & Me.Item(n) & XPL_LF
             Next
             result = Left(result, Len(result) - Len(XPL_LF))
         End If
