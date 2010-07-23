@@ -70,6 +70,13 @@ Public Class xPLListener
     Private Shared mActive As Boolean = False
     Private Shared LCTimer As Timers.Timer = Nothing   ' Timer incase network connection fails
 
+    ''' <summary>
+    ''' Event that is raised if data has been received that cannot be parsed into a valid xPL message object
+    ''' </summary>
+    ''' <param name="RawxPL">Contains the raw xPL data received from the network</param>
+    ''' <remarks></remarks>
+    Public Shared Event InvalidMessageReceived(ByVal RawxPL As String)
+
 #Region "Construction, initialisation and destruction of XplListener"
 
     ' Everything is declared Shared, so there are no real constructors/destructors
@@ -699,10 +706,17 @@ Public Class xPLListener
         If accept Then
 
             Try
+                ' parse raw xpl into a message object
                 rawXPL = Encoding.ASCII.GetString(XPL_Buff, 0, bytes_read)
                 myXPL = New xPLMessage(rawXPL)
             Catch ex As Exception
                 LogError("xPLListener.ReceiveData", "Error: " & ex.ToString() & vbCrLf & rawXPL & vbCrLf & HexDump(rawXPL))
+
+                Try
+                    RaiseEvent InvalidMessageReceived(rawXPL)
+                Catch
+                End Try
+
                 rawXPL = ""
                 myXPL = Nothing
             End Try
