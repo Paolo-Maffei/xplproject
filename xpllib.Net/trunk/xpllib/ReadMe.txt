@@ -211,6 +211,8 @@ A distribution of the xpllib should include the following files;
 
 Changes in version 5.2 from 5.1
 NEW in 5.2
+  - New event; xPLListener.InvalidMessageReceived. This event is raised if a received 
+    message cannot be parsed into a xPLMessage object. The raw xPL string is passed along
   - The sourcecode now also contains an example application that demonstrates how to use
     the xpllib to create xPL applications
     
