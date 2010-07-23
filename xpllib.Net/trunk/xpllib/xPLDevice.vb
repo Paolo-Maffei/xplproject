@@ -569,6 +569,9 @@ Public Class xPLDevice
             Throw New ArgumentException("Illegal value; empty string or Nothing", "SavedState")
         End If
 
+        ' set version number, the one property NOT stored in the state
+        VersionNumber = GetVersionNumber()
+
         ' split string in settings for individual devices and decode all items
         lst = SavedState.Split(XPL_STATESEP)
         For i = 0 To lst.Length - 1
@@ -816,7 +819,6 @@ Public Class xPLDevice
         Try
             Dim db As String = ""
             Dim pass As Boolean
-            Dim rawXpl As String = ""
             Dim x As New xPLEventArgs(myXPL)
             x.IsMyEcho = (mConfigItems.Address.ToString = myXPL.Source)
             x.IsHeartbeat = Left(myXPL.Schema, 6) = "hbeat."

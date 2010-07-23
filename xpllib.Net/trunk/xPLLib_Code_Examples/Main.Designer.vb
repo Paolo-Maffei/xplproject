@@ -36,7 +36,12 @@ Partial Class frmMain
         Me.GroupBox2 = New System.Windows.Forms.GroupBox
         Me.GroupBox3 = New System.Windows.Forms.GroupBox
         Me.GroupBox4 = New System.Windows.Forms.GroupBox
+        Me.Button5 = New System.Windows.Forms.Button
+        Me.Label6 = New System.Windows.Forms.Label
+        Me.Button6 = New System.Windows.Forms.Button
+        Me.Label7 = New System.Windows.Forms.Label
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
         'Label1
@@ -104,6 +109,8 @@ Partial Class frmMain
         '
         'GroupBox1
         '
+        Me.GroupBox1.Controls.Add(Me.Button5)
+        Me.GroupBox1.Controls.Add(Me.Label6)
         Me.GroupBox1.Controls.Add(Me.Label5)
         Me.GroupBox1.Controls.Add(Me.Button4)
         Me.GroupBox1.Controls.Add(Me.Button1)
@@ -139,7 +146,7 @@ Partial Class frmMain
         '
         'GroupBox2
         '
-        Me.GroupBox2.Location = New System.Drawing.Point(12, 242)
+        Me.GroupBox2.Location = New System.Drawing.Point(79, 324)
         Me.GroupBox2.Name = "GroupBox2"
         Me.GroupBox2.Size = New System.Drawing.Size(200, 100)
         Me.GroupBox2.TabIndex = 8
@@ -157,12 +164,51 @@ Partial Class frmMain
         '
         'GroupBox4
         '
-        Me.GroupBox4.Location = New System.Drawing.Point(58, 362)
+        Me.GroupBox4.Controls.Add(Me.Button6)
+        Me.GroupBox4.Controls.Add(Me.Label7)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 242)
         Me.GroupBox4.Name = "GroupBox4"
-        Me.GroupBox4.Size = New System.Drawing.Size(200, 100)
+        Me.GroupBox4.Size = New System.Drawing.Size(200, 65)
         Me.GroupBox4.TabIndex = 10
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "xPL_Base functions/utilities"
+        '
+        'Button5
+        '
+        Me.Button5.Enabled = False
+        Me.Button5.Location = New System.Drawing.Point(271, 19)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 9
+        Me.Button5.Text = "Example 5"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(352, 24)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(189, 13)
+        Me.Label6.TabIndex = 10
+        Me.Label6.Text = "Receiving messages && status changes"
+        '
+        'Button6
+        '
+        Me.Button6.Location = New System.Drawing.Point(6, 19)
+        Me.Button6.Name = "Button6"
+        Me.Button6.Size = New System.Drawing.Size(75, 23)
+        Me.Button6.TabIndex = 3
+        Me.Button6.Text = "Example 6"
+        Me.Button6.UseVisualStyleBackColor = True
+        '
+        'Label7
+        '
+        Me.Label7.AutoSize = True
+        Me.Label7.Location = New System.Drawing.Point(87, 24)
+        Me.Label7.Name = "Label7"
+        Me.Label7.Size = New System.Drawing.Size(77, 13)
+        Me.Label7.TabIndex = 4
+        Me.Label7.Text = "Base functions"
         '
         'frmMain
         '
@@ -179,6 +225,8 @@ Partial Class frmMain
         Me.Text = "xPLLib examples"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox4.ResumeLayout(False)
+        Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
         Me.PerformLayout()
 
@@ -196,5 +244,9 @@ Partial Class frmMain
     Friend WithEvents Label5 As System.Windows.Forms.Label
     Friend WithEvents Button4 As System.Windows.Forms.Button
     Friend WithEvents GroupBox4 As System.Windows.Forms.GroupBox
+    Friend WithEvents Button5 As System.Windows.Forms.Button
+    Friend WithEvents Label6 As System.Windows.Forms.Label
+    Friend WithEvents Button6 As System.Windows.Forms.Button
+    Friend WithEvents Label7 As System.Windows.Forms.Label
 
 End Class

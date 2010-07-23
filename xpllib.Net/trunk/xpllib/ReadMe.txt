@@ -223,7 +223,7 @@ FIXED in 5.2
     last one in the list
   - Functions xPL_Base.StatexPLLibVersion and xPL_Base.StateAppVersion, did not correctly
     decode the version information
-
+  - Additionally some minor/cosmetic fixes
 
 Changes in version 5.1 from 5.0
 NEW in 5.1

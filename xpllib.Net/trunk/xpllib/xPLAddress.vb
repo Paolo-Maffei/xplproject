@@ -314,7 +314,7 @@ Public Class xPLAddress
     ''' <returns>String containing a randomized instance id, 16 characters long</returns>
     ''' <remarks>It will just return a random ID, it will not be set (shared method). Possibility of duplicates is extremely small; 36^16.</remarks>
     Public Shared Function GetRandomInstanceId() As String
-        GetRandomInstanceId = GenerateRandomString(XPL_ALLOWED_VENDOR_DEVICE, 16)
+        Return GenerateRandomString(XPL_ALLOWED_VENDOR_DEVICE, 16)
     End Function
 
     ''' <summary>
