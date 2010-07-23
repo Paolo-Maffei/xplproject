@@ -70,6 +70,12 @@
     <Compile Include="Example3.vb" />
     <Compile Include="Example1.vb" />
     <Compile Include="Example2.vb" />
+    <Compile Include="Example6.Designer.vb">
+      <DependentUpon>Example6.vb</DependentUpon>
+    </Compile>
+    <Compile Include="Example6.vb">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main.vb">
       <SubType>Form</SubType>
     </Compile>
@@ -94,6 +100,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Example6.resx">
+      <DependentUpon>Example6.vb</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.vb</DependentUpon>
       <SubType>Designer</SubType>

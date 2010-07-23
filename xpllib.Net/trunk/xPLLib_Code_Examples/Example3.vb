@@ -19,6 +19,7 @@ Module Example3
         ci.Add("value2")
         ci.Add("value3")
         dev1.ConfigItems.Add(ci)
+        dev1.VersionNumber = "some version number  <=  this will not be restored froma a state!!"
 
         ' just enable it to go online
         dev1.Enable()
@@ -33,7 +34,9 @@ Module Example3
 
         MsgBox("You provided the following values; " & vbCrLf & "CustomID:  " & dev1.CustomID & vbCrLf & "CustomSettings:  " & dev1.CustomSettings & vbCrLf & _
                vbCrLf & "Click OK to 1) retrieve the device 'state', 2) destroy the device, 3) restore it from the state" & vbCrLf & _
-               "(btw: we'll be using '" & APPVERSION & "' as the version of this application.)")
+               "(btw: we'll be using '" & APPVERSION & "' as the version of this application.)" & vbCrLf & vbCrLf & _
+               "The property 'VersionNumber' will NOT be restored, it will default to the assembly version" & vbCrLf & _
+               "       VersionNumber = '" & dev1.VersionNumber & "'")
 
         ' now get the state from the device
         Dim state As String
@@ -63,7 +66,10 @@ Module Example3
 
         MsgBox("So the device was restored, you can check that the configuration of tthe device has been restored exactly like it was before " & _
                "as you can see from the following data:" & vbCrLf & _
-               "CustomID:  " & dev1.CustomID & vbCrLf & "CustomSettings:  " & dev1.CustomSettings)
+               "     CustomID:  " & dev1.CustomID & vbCrLf & _
+               "     CustomSettings:  " & dev1.CustomSettings & vbCrLf & vbCrLf & _
+               "EXCEPT for:" & vbCrLf & _
+               "     VersionNumber:  " & dev1.VersionNumber)
 
 
         ' Check versions
@@ -75,6 +81,9 @@ Module Example3
             MsgBox("The versions differ!! if you changed stuff, extra ConfigItems, other values in the CustomID or CustomSettings, then this is the place to do some 'upgrade' actions")
 
         End If
+        MsgBox("What's the difference between the 'Application Version' stored in the State and the 'VersionNumber' property of a device?" & vbCrLf & _
+                "Because applications can have multiple devices, they do not need to have the same version. The device 'VersionNumber' property " & vbCrLf & _
+                "will default to the assembly version of the main application (even after restoring from a state).")
 
         MsgBox("Done with the example, lets cleanup and exit, click OK")
 

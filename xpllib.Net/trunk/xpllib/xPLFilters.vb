@@ -272,8 +272,8 @@ Public Class xPLFilters
     ''' Note that the filter value (eg. <c>flt.ToString</c>) is used to check for duplicates, not the reference 
     ''' to the filter object. The string provided will be converted to lowercase.</remarks>
     Public Sub Add(ByVal flt As String)
-        flt = flt.ToLower
         If flt = "" Then Exit Sub
+        flt = flt.ToLower
         If Me.IndexOf(flt) = -1 Then
             mList.Add(New xPLFilter(flt))
         End If

@@ -121,9 +121,9 @@ Public Class xPLGroups
     ''' <exception cref="ArgumentOutOfRangeException">Condition: if the <c>Count</c> is equal to the <c>MaxValues</c>, no values can be added.</exception>
     ''' <remarks>Values will always be converted to lowercase. If the value is already present in the list, then it will not be added and no exception will be thrown.</remarks>
     Public Sub Add(ByVal itemValue As String)
+        If itemValue = "" Then Exit Sub ' can't add empty values
         'do not allow the same value twice
         itemValue = itemValue.ToLower
-        If itemValue = "" Then Exit Sub ' can't add empty values
         If mItems.IndexOf(itemValue) = -1 Then  'not found, then add
             If mItems.Count >= XPL_MAX_GROUPS Then
                 ' too many items

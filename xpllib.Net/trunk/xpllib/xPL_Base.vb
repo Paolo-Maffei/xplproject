@@ -869,7 +869,7 @@ Public Class xPL_Base
     Friend Shared Sub WaitForRandomPeriod(Optional ByVal MinWait As Integer = 1000, Optional ByVal MaxWait As Integer = 3000)
         ' Compute a random number between 1000 and 3000
         Dim R As New Random
-        Dim Period As Integer = R.Next(1000, 3000)
+        Dim Period As Integer = R.Next(MinWait, MaxWait)
 
         ' Wait for the specified period
         Thread.Sleep(Period)
