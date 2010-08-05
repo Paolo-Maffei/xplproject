@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, Forms, LResources,
-  frm_main, frm_about, frm_xplappslauncher, indylaz;
+  frm_main, frm_about, frm_xpllogviewer, frm_xplappslauncher;
 
 {$IFDEF WINDOWS}{$R xpl_network.rc}{$ENDIF}
 
@@ -16,8 +16,9 @@ begin
   {$I xpl_network.lrs}
   Application.Initialize;
   Application.CreateForm(TFrmMain, FrmMain);
+  Application.CreateForm(TFrmLogViewer, frmLogViewer);
+  Application.CreateForm(TFrmAppLauncher, frmAppLauncher);
   Application.CreateForm(TfrmAbout, frmAbout);
-  Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
   Application.Icon := FrmMain.Icon;
   Application.Run;
 end.
