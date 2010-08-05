@@ -46,10 +46,11 @@ type TxPLVendorSeedFile = class
         function PluginDescription(const aPlugIn : string) : string;
         function PluginURL        (const aPlugin : string) : string;
         function GetDevice(aVendor : tsVendor; aDevice : tsDevice) : TxPLDevice;
+        function GetPluginFilePath(const aPluginName : string) : string;
 
         property Plugins   : TStringList read fPlugins;
         property Locations : TStringList read fLocations;
-        property Status    : boolean     read fStatus;
+        property IsValid   : boolean     read fStatus;
      end;
 
 implementation //========================================================================
@@ -86,20 +87,22 @@ begin
    fPlugins  := TStringList.Create;
    fLocations := TStringList.Create;
    fSettings := aSettings;
-   Load;
+   fStatus := false;
+   if fSettings.IsValid then Load;
 end;
 
 destructor TxPLVendorSeedFile.destroy;
 begin
    fPlugins.Destroy;
    fLocations.Destroy;
-   fDocument.Destroy;
+   if Assigned(fDocument) then fDocument.Destroy;
    inherited;
 end;
 
 procedure TxPLVendorSeedFile.Load;
 begin
-   if not FileExists(Name) then Update;                                                   // If the file is absent, try to download it
+//   if not FileExists(Name) then Update;                                                   // If the file is absent, try to download it
+   if not FileExists(Name) then exit;
    try
       ReadXMLFile(fDocument,Name);
       GetElements;
@@ -110,9 +113,7 @@ begin
 end;
 
 function TxPLVendorSeedFile.Name: string;
-begin
-   result := fPlugDirectory + K_XPL_VENDOR_SEED_FILE;
-end;
+begin result := fPlugDirectory + K_XPL_VENDOR_SEED_FILE; end;
 
 procedure TxPLVendorSeedFile.GetElements;
 var Child,Location : TDomNode;
@@ -162,11 +163,16 @@ begin
    result := GetDistantFile(sLocation + K_FEXT_XML, Name);
 end;
 
-function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
+function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
 var plugin_url : string;
 begin
    plugin_url := PlugInURL(aPluginName);
-   result := GetDistantFile( plugin_url + K_FEXT_XML, fPlugDirectory + copyright(plugin_url, length(plugin_url)-LastDelimiter('/',plugin_url))+ K_FEXT_XML);
+   result := fPlugDirectory + copyright(plugin_url, length(plugin_url)-LastDelimiter('/',plugin_url))+ K_FEXT_XML
+end;
+
+function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
+begin
+   result := GetDistantFile( PlugInURL(aPluginName) + K_FEXT_XML, GetPluginFilePath(aPluginName));
 end;
 
 function TxPLVendorSeedFile.GetPluginValue(const aPlugIn : string; const aProperty : string) : string;

@@ -62,7 +62,7 @@ type
   end;
 
 implementation // TFrmxPLMessage ===============================================================
-uses clipbrd, LCLType, uxplmsgheader, cStrings, cUtils;
+uses clipbrd, LCLType, cStrings, cUtils;
 { TfrmxPLMessage }
 
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);

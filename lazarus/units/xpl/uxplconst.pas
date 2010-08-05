@@ -35,6 +35,7 @@ const
    K_FEXT_WAV         = '.wav';
    K_FEXT_XML         = '.xml';
    K_FEXT_PHP         = '.php';
+   K_FEXT_TXT         = '.txt';
 
    // General ===============================================================================================
    K_STR_TRUE = 'true';
@@ -142,6 +143,7 @@ const
    K_MSG_NETWORK_SETTINGS= 'xPL Network settings are not properly configured';
    K_MSG_ERROR_SENDING   = 'Error sending message : %s';
    K_MSG_ERROR_PLUGIN    = 'No device description found in vendor plugin file - please consider updating';
+   K_MSG_ERROR_VENDOR    = 'Unable to open vendor file (%s)';
    K_MSG_OK_PLUGIN       = 'Configuration elements loaded from vendor plugin file';
    K_MSG_GENERIC_ERROR   = '%s error raised, with message : %s';
    K_MSG_LISTENER_STARTED= '%s v%s started';

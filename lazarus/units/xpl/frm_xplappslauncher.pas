@@ -5,8 +5,8 @@ unit frm_xplappslauncher;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, Buttons, XMLPropStorage;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+  Dialogs, ComCtrls, ActnList, Buttons;
 
 type
 
@@ -16,35 +16,33 @@ type
     lvApps: TListView;
     tbLaunch: TToolButton;
     ToolBar3: TToolBar;
-    XMLPropStorage: TXMLPropStorage;
     procedure FormCreate(Sender: TObject);
     procedure LaunchExecute(Sender: TObject);
     procedure lvAppsDblClick(Sender: TObject);
     procedure QuitExecute(Sender: TObject);
     procedure tbLaunchClick(Sender: TObject);
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end; 
+  end;
 
 var frmAppLauncher: TfrmAppLauncher;
 
-implementation { TfrmAppLauncher ==============================================}
-uses frm_main,  Process;
+implementation { =====================================================================}
+uses frm_main, Process, cStrings;
 
 procedure TfrmAppLauncher.FormCreate(Sender: TObject);
 var sl : TStringList;
+    vendor, device, path, version : string;
     i : integer;
 begin
      sl := frmMain.xPLClient.Setting.GetxPLAppList;
-     for i := 0 to sl.Count -1 do begin
-         {item := lvApps.Items.Add;
-         frmMain.xPLClient.Setting.GetxPLAppDetail(sl[i],path,version);
-         item.Caption := sl[i];
-         item.SubItems.Add(version);
-         item.SubItems.Add(path);}
-     end;
+     for i := 0 to sl.Count -1 do
+        with lvApps.Items.Add do begin
+           StrSplitAtChar(sl[i],'-',vendor,device,false);
+           frmMain.xPLClient.Setting.GetxPLAppDetail(vendor,device,path,version);
+           Caption := device;
+           SubItems.Add(vendor);
+           SubItems.Add(version);
+           SubItems.Add(path);
+        end;
 end;
 
 procedure TfrmAppLauncher.LaunchExecute(Sender: TObject);
@@ -53,7 +51,7 @@ begin
      if lvApps.Selected = nil then exit;
 
      AProcess := TProcess.Create(nil);
-     AProcess.CommandLine := lvApps.Selected.SubItems[1];
+     AProcess.CommandLine := lvApps.Selected.SubItems[2];
      AProcess.Execute;
      AProcess.Free;
 end;

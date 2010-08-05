@@ -1,7 +1,7 @@
 object frmAppLauncher: TfrmAppLauncher
-  Left = 61
+  Left = 51
   Height = 294
-  Top = 337
+  Top = 233
   Width = 500
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSizeToolWin
@@ -62,11 +62,14 @@ object frmAppLauncher: TfrmAppLauncher
         Width = 150
       end    
       item
+        Caption = 'Vendor'
+      end    
+      item
         Caption = 'Version'
       end    
       item
         Caption = 'Path'
-        Width = 150
+        Width = 275
       end>
     TabOrder = 0
     ViewStyle = vsReport
@@ -94,10 +97,5 @@ object frmAppLauncher: TfrmAppLauncher
       ImageIndex = 5
       OnClick = tbLaunchClick
     end
-  end
-  object XMLPropStorage: TXMLPropStorage
-    StoredValues = <>
-    left = 8
-    top = 56
   end
 end

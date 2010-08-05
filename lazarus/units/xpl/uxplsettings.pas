@@ -16,6 +16,7 @@ unit uxplsettings;
         string value "Version" within that key. Because the software is non-device, you'll have
         to come up with a 'virtual' unique device ID.
  0.98 : Added proxy information recording capability
+ 0.99 : Modification to Registry reading behaviour to allow lazarus reg.xml compatibility
  }
 {$mode objfpc}{$H+}
 
@@ -72,7 +73,6 @@ TxPLSettings = class(TComponent)
         property HTTPProxPort : string read fHTTPProxPort write SetHTTPProxPort;
 
         property SharedConfigDir   : string read fRootxPLDir write SetRootxPLDir;
-        //function SharedConfigDir  : string;                                             // Root of common to all xPL application setting directory
         function PluginDirectory  : string;                                             // In the root, directory where plugin are stored
         function LoggingDirectory : string;                                             // In the root, where logs are stored
         function ConfigDirectory  : string;                                             // Directory to store device configuration files
@@ -83,7 +83,7 @@ TxPLSettings = class(TComponent)
      end;
 
 implementation { ======================================================================}
-uses SysUtils, StrUtils, uxPLConst, uxPLClient, cFileUtils;
+uses SysUtils, StrUtils, uxPLConst, uxPLClient, cFileUtils, Dialogs;
 
 function OnGetAppName : string;                                                         // This is used to fake the system when
 begin                                                                                   // requesting common xPL applications shared
@@ -95,8 +95,7 @@ begin
      inherited Create(aOwner);
      OnGetApplicationName := @OnGetAppName;
 
-     fRegistry :=TRegistry.Create;
-     fRegistry.RootKey:=HKEY_LOCAL_MACHINE;
+     fRegistry := TRegistry.Create;
 
      fBroadCastAddress := ReadKeyString(K_REGISTRY_BROADCAST);
      fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON);
@@ -113,7 +112,7 @@ begin
 
      if aOwner is TxPLClient then begin
         RegisterMe(TxPLClient(aOwner).Vendor,TxPLClient(aOwner).Device,TxPLClient(aOwner).AppVersion);
-        if not IsValid then Raise Exception.Create(K_MSG_NETWORK_SETTINGS);
+        if not IsValid then ShowMessage(K_MSG_NETWORK_SETTINGS);                        // Can not use xPLClient logging system because not initialized at the moment
      end;
 end;
 
@@ -132,6 +131,7 @@ begin result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_LOCAL) end;
 
 function TxPLSettings.ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
 begin
+   fRegistry.RootKey := HKEY_LOCAL_MACHINE;
    fRegistry.OpenKey(K_XPL_ROOT_KEY,True);
    result := fRegistry.ReadString(aKeyName);
    if result = '' then result := aDefault;
@@ -152,6 +152,7 @@ end;
 
 procedure TxPLSettings.WriteKeyString(const aKeyName : string; const aValue : string);
 begin
+   fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                             // Redondant but mandatory for reg.xml compatibility
    fRegistry.OpenKey(K_XPL_ROOT_KEY,True);
    fRegistry.WriteString(aKeyName,aValue);
 end;
@@ -220,8 +221,8 @@ begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_LOGS); 
 function TxPLSettings.ConfigDirectory: string;
 begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_CONF); end;
 
-function TxPLSettings.IsValid: Boolean;                                       // Just verifies that all values
-begin                                                                         // have been initialized
+function TxPLSettings.IsValid: Boolean;                                                 // Just verifies that all basic values
+begin                                                                                   // have been initialized
      result := (length(BroadCastAddress) *
                 length(ListenOnAddress ) *
                 length(ListenToAddresses)) <>0;
@@ -231,7 +232,8 @@ procedure TxPLSettings.RegisterMe(const aVendor : string; const aDevice : string
 var aPath, aVersion : string;
 begin
    GetxPLAppDetail(aVendor, aDevice,aPath,aVersion);
-   if aVersion < aAppVersion then begin                                       // Empty or older version information
+   if aVersion < aAppVersion then begin                                                 // Empty or older version information
+      fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                          // Redondant but mandatory for reg.xml compatibility
       fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);
       fRegistry.WriteString(K_XPL_REG_VERSION_KEY,aAppVersion);
       fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0))
@@ -239,17 +241,34 @@ begin
 end;
 
 function TxPLSettings.GetxPLAppList : TStringList;
+var aVendorListe, aAppListe : TStringList;
+    i,j : integer;
 begin
+   aVendorListe := TStringList.Create;
+   aAppListe    := TStringList.Create;
    result := TStringList.Create;
+   fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                             // Redondant but mandatory for reg.xml compatibility
    fRegistry.OpenKey(K_XPL_ROOT_KEY ,True);
-   fRegistry.GetKeyNames(result);
+   fRegistry.GetKeyNames(aVendorListe);
+   for i:= 0 to aVendorListe.Count-1 do begin
+       fRegistry.OpenKey(K_XPL_ROOT_KEY,False);
+       fRegistry.OpenKey(aVendorListe[i],False);
+       fRegistry.GetKeyNames(aAppListe);
+       for j:=0 to aAppListe.Count -1 do aAppListe[j] := aVendorListe[i] + '-' + aAppListe[j];
+       Result.AddStrings(aAppListe);
+   end;
+   aVendorListe.Destroy;
+   aAppListe.Destroy;
 end;
 
 procedure TxPLSettings.GetxPLAppDetail(const aVendor : string; const aDevice : string; out   aPath: string; out aVersion: string);
 begin
-   fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);       // At the time, you can't read this
-   aVersion := fRegistry.ReadString(K_XPL_REG_VERSION_KEY);                               // if you don't have admin rights !
-   aPath := fRegistry.ReadString(K_XPL_REG_PATH_KEY);
+   fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                             // Redondant but mandatory for reg.xml compatibility
+   fRegistry.OpenKey (K_XPL_ROOT_KEY, False);
+   fRegistry.OpenKey (aVendor, True);                                                   // At the time, you can't read this
+   fRegistry.OpenKey (aDevice, False);
+   aVersion := fRegistry.ReadString(K_XPL_REG_VERSION_KEY);                             // if you don't have admin rights under Windows
+   aPath    := fRegistry.ReadString(K_XPL_REG_PATH_KEY);
 end;
 
 end.
