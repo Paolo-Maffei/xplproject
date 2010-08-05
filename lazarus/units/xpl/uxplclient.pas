@@ -12,6 +12,7 @@ unit uxPLClient;
  0.94 : AppName disappeared, Vendor and Device moved from Listener to here
  0.95 : Little change in LogError/LogInfo to integrate standard formatting
  0.96 : Added localisation capabilities
+ 0.97 : Added Logwarn
 }
 
 {$mode objfpc}{$H+}
@@ -39,8 +40,9 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
         function RecordLog(Const Formatting  : string; Const Data  : array of const ) : string;
       public
         constructor Create(const aOwner : TComponent; const aVendor : string; aDevice : string; const aAppVersion : string); overload;
-        procedure   LogInfo(Const Formatting  : string; Const Data  : array of const );
-        procedure   LogError(Const Formatting  : string; Const Data  : array of const );
+        procedure   LogInfo(Const Formatting  : string; Const Data  : array of const );             // Info are only stored in log file
+        procedure   LogError(Const Formatting  : string; Const Data  : array of const );            // Error are stored as error in log, displayed and stop the app
+        procedure   LogWarn(Const Formatting  : string; Const Data  : array of const );             // Warn are stored in log, displayed but doesn't stop the app
         function    RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function    Translate(Const aDomain : string; Const aString : string) : string;
         function    LogFileName : string;
@@ -59,7 +61,7 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
       end;
 
 implementation //===============================================================
-uses IdStack, uIPutils, TPatternLayoutUnit, TLevelUnit, TFileAppenderUnit;
+uses IdStack, uIPutils, TPatternLayoutUnit, TLevelUnit, TFileAppenderUnit, Dialogs;
 
 constructor TxPLClient.Create(const aOwner : TComponent; const aVendor : string; aDevice : string; const aAppVersion : string);
 begin
@@ -80,6 +82,7 @@ begin
    fEventLog.info(Format(K_MSG_APP_STARTED,[AppName]));
 
    fPluginList := TxPLVendorSeedFile.Create(fSetting);
+   if not fPluginList.Status then LogWarn('Error while reading vendor xml file (%s)',[fPluginList.Name]);
 end;
 
 function TxPLClient.RecordLog(const Formatting: string; const Data: array of const): string;
@@ -93,6 +96,14 @@ end;
 procedure TxPLClient.LogInfo(Const Formatting  : string; Const Data  : array of const);
 begin
    fEventLog.info(RecordLog(Formatting,Data));
+end;
+
+procedure TxPLClient.LogWarn(Const Formatting  : string; Const Data  : array of const);
+var s : string;
+begin
+   s := RecordLog(Formatting,Data);
+   fEventLog.error(s);
+   ShowMessage(s);
 end;
 
 procedure TxPLClient.LogError(Const Formatting  : string; Const Data  : array of const);

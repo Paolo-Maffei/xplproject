@@ -15,6 +15,7 @@ unit uxplsettings;
  0.97 : Application creates a registry key "HKLM\Software\xPL\[vendorid]\[deviceid]" and a
         string value "Version" within that key. Because the software is non-device, you'll have
         to come up with a 'virtual' unique device ID.
+ 0.98 : Added proxy information recording capability
  }
 {$mode objfpc}{$H+}
 
@@ -28,17 +29,22 @@ type
 
 TxPLSettings = class(TComponent)
      private
+       fHTTPProxPort: string;
+       fHTTPProxSrvr: string;
         fRegistry : TRegistry;
         fRootxPLDir,
         fBroadCastAddress,
         fListenOnAddress ,
         fListenToAddresses : string;
+        fUseProxy: boolean;
 
         function  GetListenOnAll     : boolean;
         function  GetListenToAny     : boolean;
         function  GetListenToLocal   : boolean;
 
         procedure SetBroadCastAddress (const AValue: string);
+        procedure SetHTTPProxPort(const AValue: string);
+        procedure SetHTTPProxSrvr(const AValue: string);
         procedure SetListenOnAddress  (const AValue: string);
         procedure SetListenToAddresses(const AValue: string);
         procedure SetListenOnAll      (const bValue : boolean);
@@ -47,6 +53,7 @@ TxPLSettings = class(TComponent)
 
         function  ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
         procedure SetRootxPLDir(const AValue: string);
+        procedure SetUseProxy(const AValue: boolean);
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
 
         function  ComposeCorrectPath(const aPath : string; const uSub : string) : string;
@@ -57,9 +64,12 @@ TxPLSettings = class(TComponent)
         property ListenToAny   : boolean read GetListenToAny   write SetListenToAny;
         property ListenToLocal : boolean read GetListenToLocal write SetListenToLocal;
         property ListenOnAll   : boolean read GetListenOnAll   write SetListenOnAll;
+        property UseProxy      : boolean read fUseProxy        write SetUseProxy;
         property BroadCastAddress  : string read fBroadCastAddress  write SetBroadCastAddress;
         property ListenOnAddress   : string read fListenOnAddress   write SetListenOnAddress;
         property ListenToAddresses : string read fListenToAddresses write SetListenToAddresses;
+        property HTTPProxSrvr : string read fHTTPProxSrvr write SetHTTPProxSrvr;
+        property HTTPProxPort : string read fHTTPProxPort write SetHTTPProxPort;
 
         property SharedConfigDir   : string read fRootxPLDir write SetRootxPLDir;
         //function SharedConfigDir  : string;                                             // Root of common to all xPL application setting directory
@@ -92,6 +102,9 @@ begin
      fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON);
      fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO);
      fRootxPLDir       := ReadKeyString(K_REGISTRY_ROOT_XPL_DIR,GetAppConfigDir(true));
+     fUseProxy         := (ReadKeyString(K_REGISTRY_PROXY, K_STR_FALSE) = K_STR_TRUE);
+     fHttpProxPort     := ReadKeyString(K_REGISTRY_HTTP_PROX_PORT,'');
+     fHttpProxSrvr     := ReadKeyString(K_REGISTRY_HTTP_PROX_SRVR,'');
 
      if not DirectoryExists(SharedConfigDir ) then CreateDir(SharedConfigDir );         // 1.1.1 Correction
      if not DirectoryExists(PluginDirectory ) then CreateDir(PluginDirectory );         // 1.1.1 Correction
@@ -130,6 +143,13 @@ begin
    WriteKeyString(K_REGISTRY_ROOT_XPL_DIR,aValue);
 end;
 
+procedure TxPLSettings.SetUseProxy(const AValue: boolean);
+begin
+  if fUseProxy=AValue then exit;
+  fUseProxy:=AValue;
+  WriteKeyString(K_REGISTRY_PROXY, IfThen(fUseProxy,K_STR_TRUE,K_STR_FALSE));
+end;
+
 procedure TxPLSettings.WriteKeyString(const aKeyName : string; const aValue : string);
 begin
    fRegistry.OpenKey(K_XPL_ROOT_KEY,True);
@@ -140,6 +160,20 @@ procedure TxPLSettings.SetBroadCastAddress(const AValue: string);
 begin
    fBroadCastAddress := aValue;
    WriteKeyString(K_REGISTRY_BROADCAST,aValue);
+end;
+
+procedure TxPLSettings.SetHTTPProxPort(const AValue: string);
+begin
+  if fHTTPProxPort=AValue then exit;
+  fHTTPProxPort:=AValue;
+  WriteKeyString(K_REGISTRY_HTTP_PROX_PORT,fHTTPProxPort);
+end;
+
+procedure TxPLSettings.SetHTTPProxSrvr(const AValue: string);
+begin
+  if fHTTPProxSrvr=AValue then exit;
+  fHTTPProxSrvr:=AValue;
+  WriteKeyString(K_REGISTRY_HTTP_PROX_SRVR,fHTTPProxSrvr);
 end;
 
 procedure TxPLSettings.SetListenOnAddress(const AValue: string);

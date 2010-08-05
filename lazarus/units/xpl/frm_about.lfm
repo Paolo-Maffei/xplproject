@@ -556,7 +556,7 @@ object frmAbout: TfrmAbout
   end
   object ilStandardActions: TImageList
     ShareImages = True
-    left = 32
+    left = 40
     top = 112
     Bitmap = {
       4C69140000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
