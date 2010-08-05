@@ -24,10 +24,12 @@
 1.1.5
 	Removed the template repository / redondant with plugin files
 	Added configuration directory to prepare storage of app conf in a centralized point 
+1.2
+1.3
+	Internal updates to stick to xPL Lazarus library evolution
+	Integration of latest functional updates : proxy settings, simplification path input
+	Ripped the app directory
 
-
-To be done :
-	The app directory should not launch an already launched app
 
 
 

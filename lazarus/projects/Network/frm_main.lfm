@@ -1,13 +1,11 @@
 object FrmMain: TFrmMain
-  Left = 43
-  Height = 400
-  Top = 126
-  Width = 632
-  BorderIcons = [biSystemMenu]
-  BorderStyle = bsDialog
+  Left = 47
+  Height = 475
+  Top = 189
+  Width = 631
   Caption = 'FrmMain'
-  ClientHeight = 380
-  ClientWidth = 632
+  ClientHeight = 455
+  ClientWidth = 631
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
     200010080000CE0400002020000001002000A8100000DE0C0000303000000100
@@ -2274,21 +2272,22 @@ object FrmMain: TFrmMain
   LCLVersion = '0.9.28.2'
   object PageControl1: TPageControl
     Left = 0
-    Height = 357
-    Top = 0
-    Width = 632
-    ActivePage = TabSheet1
+    Height = 426
+    Top = 29
+    Width = 631
+    ActivePage = tsVendor
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
-    object TabSheet1: TTabSheet
-      Caption = 'Network Settings'
-      ClientHeight = 329
-      ClientWidth = 624
+    OnPageChanged = PageControl1PageChanged
+    object tsBasic: TTabSheet
+      Caption = 'Basic xPL Settings'
+      ClientHeight = 375
+      ClientWidth = 623
       object Label4: TLabel
-        Left = 8
+        Left = 4
         Height = 16
-        Top = 90
+        Top = 83
         Width = 148
         Caption = 'Listen for xPL messages on :'
         Font.Color = clNavy
@@ -2296,9 +2295,9 @@ object FrmMain: TFrmMain
         ParentFont = False
       end
       object Label3: TLabel
-        Left = 8
+        Left = 4
         Height = 16
-        Top = 130
+        Top = 115
         Width = 247
         Caption = 'Broadcast address used to send xPL Messages :'
         Font.Color = clNavy
@@ -2306,10 +2305,10 @@ object FrmMain: TFrmMain
         ParentFont = False
       end
       object rgListenTo: TRadioGroup
-        Left = 28
+        Left = 4
         Height = 104
-        Top = 162
-        Width = 415
+        Top = 147
+        Width = 424
         AutoFill = True
         Caption = 'Listen to messages originating from :'
         ChildSizing.LeftRightSpacing = 6
@@ -2321,320 +2320,274 @@ object FrmMain: TFrmMain
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
         ClientHeight = 86
-        ClientWidth = 411
+        ClientWidth = 420
         Items.Strings = (
           'Any IP address'
           'Any local IP address'
           'Only the following IP addresses :'
         )
+        OnClick = e_ListenOnChange
         TabOrder = 4
       end
       object StaticText1: TStaticText
-        Left = 28
+        Left = 4
         Height = 33
-        Top = 42
+        Top = 3
         Width = 424
         Caption = 'Settings below affect how xPL applications running on this computer transmit and receive xPL messages via the network.'
         TabOrder = 0
       end
       object e_BroadCast: TComboBox
-        Left = 268
+        Left = 260
         Height = 23
-        Top = 130
+        Top = 115
         Width = 168
         ItemHeight = 15
+        OnChange = e_ListenOnChange
         TabOrder = 1
       end
       object e_ListenOn: TComboBox
-        Left = 268
+        Left = 260
         Height = 23
-        Top = 90
+        Top = 83
         Width = 168
         ItemHeight = 15
+        OnChange = e_ListenOnChange
         TabOrder = 2
       end
       object edtListenTo: TEdit
-        Left = 268
+        Left = 260
         Height = 23
-        Top = 234
-        Width = 168
+        Top = 219
+        Width = 160
+        OnChange = e_ListenOnChange
         TabOrder = 3
       end
-      object ToolBar1: TToolBar
-        Left = 0
-        Height = 30
-        Top = 0
-        Width = 624
-        ButtonHeight = 28
-        ButtonWidth = 30
-        Caption = 'ToolBar1'
-        EdgeBorders = [ebBottom]
-        Images = frmAbout.ilStandardActions
+      object StaticText2: TStaticText
+        Left = 4
+        Height = 33
+        Top = 43
+        Width = 424
+        Caption = 'It is mandatory for these settings to be configured to get an xPL application to work as expected'
+        Color = clNone
+        Font.Color = clRed
+        ParentFont = False
+        ParentColor = False
         TabOrder = 5
-        object SpeedButton1: TSpeedButton
-          Left = 1
-          Height = 28
-          Top = 0
-          Width = 147
-          Action = SaveSettings
-          Color = clBtnFace
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000BA6A368FB969
-            35B5B86935EEB76835FFB56835FFB46734FFB26634FFB06533FFAE6433FFAC63
-            32FFAA6232FFA96132FFA86031FFA76031FEA66031F1A86131C4BA6A35DEEBC6
-            ADFFEAC5ADFFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFB
-            F8FFFEFBF8FFFEFBF8FFFEFBF8FFC89A7CFFC79879FFA76031EDBA6B37FEEDCA
-            B3FFE0A27AFFFEFAF7FF62C088FF62C088FF62C088FF62C088FF62C088FF62C0
-            88FF62C088FF62C088FFFDF9F6FFCA8D65FFC99B7CFFA76031FEBB6C38FFEECC
-            B6FFE1A27AFFFEFAF7FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDCC2FFBFDC
-            C2FFBFDCC2FFBFDCC2FFFDF9F6FFCD9068FFCC9E81FFA86132FFBB6B38FFEFCE
-            B8FFE1A279FFFEFAF7FF62C088FF62C088FF62C088FF62C088FF62C088FF62C0
-            88FF62C088FF62C088FFFDF9F6FFCF936AFFCEA384FFAA6132FFBA6A36FFEFD0
-            BBFFE2A27AFFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFBF8FFFEFB
-            F8FFFEFBF8FFFEFBF8FFFEFBF8FFD3966DFFD2A78AFFAB6232FFBB6A36FFF0D2
-            BEFFE2A37AFFE2A37AFFE1A37AFFE2A37BFFE1A37BFFE0A178FFDE9F77FFDD9F
-            76FFDC9D74FFD99B72FFD89971FFD69970FFD5AB8EFFAD6333FFBB6A36FFF2D5
-            C2FFE3A37AFFE3A37AFFE2A37BFFE2A37BFFE2A47BFFE1A279FFE0A178FFDEA0
-            77FFDE9E75FFDC9D74FFDA9B73FFD99B73FFDAB095FFAF6433FFBB6A36FFF2D8
-            C5FFE3A47BFFE3A37AFFE3A47AFFE2A47BFFE2A37BFFE1A37BFFE1A279FFDFA0
-            77FFDE9F76FFDD9E74FFDB9C72FFDC9D74FFDDB59AFFB16534FFBB6B36FFF4D9
-            C7FFE6A67DFFC88C64FFC98D65FFC98E67FFCB926CFFCB926DFFCA9069FFC88C
-            65FFC88C64FFC88C64FFC88C64FFDA9C74FFE1BA9FFFB36634FFBB6B36FEF4DC
-            C9FFE7A77DFFF9ECE1FFF9ECE1FFF9EDE3FFFCF4EEFFFDFAF7FFFDF7F3FFFAED
-            E5FFF7E7DBFFF7E5D9FFF6E5D8FFDEA077FFE4BEA4FFB46734FFBC6B36FAF5DD
-            CCFFE7A87EFFFAF0E8FFFAF0E8FFC98D66FFFAF0E9FFFDF8F3FFFEFAF8FFFCF4
-            EFFFF9E9DFFFF7E7DBFFF7E5D9FFE0A278FFE7C2A9FFB66835FFBC6B36F0F6DF
-            D0FFE8A87EFFFCF6F1FFFCF6F1FFC88C64FFFAF1E9FFFBF4EEFFFDFAF7FFFDF9
-            F6FFFAF0E8FFF8E8DDFFF7E6DBFFE1A37AFFEFD5C3FFB76935FEBC6B36D8F6DF
-            D1FFE9AA80FFFEFAF6FFFDFAF6FFC88C64FFFBF3EEFFFBF1EAFFFCF6F2FFFEFB
-            F8FFFCF6F1FFF9ECE2FFF8E7DBFFEED0BAFFECD0BDFFBB703EF8BC6B369BF6E0
-            D1FFF7E0D1FFFEFBF8FFFEFBF7FFFDF9F6FFFCF5F0FFFAF0EAFFFBF2EDFFFDF9
-            F6FFFDFAF7FFFBF1EBFFF8E9DFFEECD0BDFBC9895EECB5693563BC6B3671BC6B
-            3690BC6B36CCBC6B36EEBC6B36FABB6B36FEBB6B36FFBB6A36FFBB6A36FFBC6C
-            39FFBD6E3BFFBB6D3AFFBB6B38EFBB703ECBB6693554FFFFFF00
-          }
-          NumGlyphs = 0
-        end
       end
     end
-    object TabSheet2: TTabSheet
-      Caption = 'Vendors plug-ins'
-      ClientHeight = 329
-      ClientWidth = 624
-      object ToolBar2: TToolBar
-        Left = 0
-        Height = 30
-        Top = 0
-        Width = 624
-        ButtonHeight = 28
-        ButtonWidth = 30
-        Caption = 'ToolBar2'
-        EdgeBorders = [ebBottom]
-        EdgeOuter = esRaised
-        Images = frmAbout.ilStandardActions
+    object tsAdanced: TTabSheet
+      Caption = 'Advanced Settings'
+      ClientHeight = 375
+      ClientWidth = 623
+      object Label9: TLabel
+        Left = 8
+        Height = 16
+        Top = 8
+        Width = 226
+        Caption = 'Root directory for xPL apps config storing :'
+        Font.Color = clNavy
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label10: TLabel
+        Left = 44
+        Height = 16
+        Top = 152
+        Width = 69
+        Caption = 'Proxy HTTP :'
+        ParentColor = False
+      end
+      object Label11: TLabel
+        Left = 324
+        Height = 16
+        Top = 152
+        Width = 29
+        Caption = 'Port :'
+        ParentColor = False
+      end
+      object edtRootDir: TEdit
+        Left = 8
+        Height = 23
+        Top = 32
+        Width = 384
+        OnChange = e_ListenOnChange
         TabOrder = 0
-        object SpeedButton2: TSpeedButton
-          Left = 204
-          Height = 28
-          Top = 0
-          Width = 147
-          Action = UpdateSeed
-          Color = clBtnFace
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000FFFFFF00A465
-            34A2A4653401FFFFFF00FFFFFF00A4653405A4653453A76A3ABEA66938E9A466
-            35FAA76A3AE4A76B3BAAA4653424FFFFFF00FFFFFF00FFFFFF00FFFFFF00A465
-            34FFA5673693FFFFFF00A4653454A66737EEB58055F3CEA684FFD8B697FFDBB9
-            99FFD3AC8AFFC2946DFCA66838F6A466355BFFFFFF00FFFFFF00FFFFFF00A567
-            37FEB7845BF7A56736D4B17A4EF4E3CAB4FFECDAC9FFE7D1BCFFE3C9B0FFDEBE
-            A0FFD2AB88FFCEA582FFD3AE8EFFA66838F5A465342AFFFFFF00FFFFFF00A668
-            38FDF1E4D8FFD4B295FEF4E9E0FFF3E8DDFFEDDCCCFFD2AD8FFEB0784CF5A566
-            35FBA66939FFA66939FEA96D3DFFB0784CFFA76A3AA8FFFFFF00FFFFFF00A567
-            37FDF6EEE6FFF5ECE3FFF5EDE4FFE6D2C1FFB0794DF5A66938CAA4653436FFFF
-            FF00A465346AA96B3CEDB67C4FFFA76A3AFEA56837FAFFFFFF00FFFFFF00A466
-            35FCF6EEE6FFEBD7C4FFEAD9C9FFA46534FEA465346AFFFFFF00FFFFFF00FFFF
-            FF00A465340BA56635E9C9956C8DB77F53C2A46534FFA4653405FFFFFF00A465
-            34FCF5EDE5FFF6EDE5FFF5ECE4FFD7B79CFDA66837E0A4653410FFFFFF00FFFF
-            FF00FFFFFF00FFFFFF00D5A47E1ACD997239A46534FCA465340CFFFFFF00A465
-            34F9A46534FEA46534FEA46534FDA46534FCA46534FBA46534B9A465341DA465
-            3418A4653418A4653418A4653418A4653418A465341CFFFFFF00FFFFFF00A465
-            340DFFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00A46534A0A465
-            34FFAD7447F8AF774CF7AF774CF7AF784CF7A46534FFA4653408FFFFFF00A465
-            34FCB3794C7ECF9D762BBB835713A4653402FFFFFF00FFFFFF00A4653404A668
-            38C4D0AC8FFAF6EEE7FFF2E6DBFFF6EEE6FFA66A3AFBA4653409FFFFFF00A465
-            35FEA76A3AFBC791689DA56737E6A4653423FFFFFF00FFFFFF00FFFFFF00A465
-            3460A46635FFE9D7C7FFEBD8C6FFF5ECE3FFA66A3AFAA465340AFFFFFF00A668
-            38F3AB7041FFA96C3CFEA76A3AF5A4653475A4653419A4653445A66938CDB988
-            61F5EBDBCDFFF5EBE2FFF6EEE6FFF6EEE6FFA76A3AFAA465340BFFFFFF00A769
-            399BC09069FDC59872FFA86B3CFFA46635FFA76A3AFCB7855DF3D9BBA1FEF1E4
-            D8FFF2E6DBFFF3E8DDFFCEA788FDEAD8C8FFA76A3AF9A465340DFFFFFF00A465
-            3429A66939F5D3AD8CFFDCBD9DFFDDBEA1FFE5CBB4FFE9D3BFFFEEDDCCFFF0E2
-            D5FFE7D2BFFFAF774BF5A56736C0AB7143F7A46635FCA465340EFFFFFF00FFFF
-            FF00A4653550A66838F6C09068FAD3B08FFFDFC2A8FFDEC1A8FFD4B193FFB987
-            5FF4A56737F0A4653458FFFFFF00A4663566A46534FFA465340FFFFFFF00FFFF
-            FF00FFFFFF00A465341DA7693A9FA76A3ADEA56736F6A76939E5A76A3ABCA465
-            3453A4653405FFFFFF00FFFFFF00FFFFFF00A4653479A4653410
-          }
-          NumGlyphs = 0
-        end
-        object SpeedButton3: TSpeedButton
-          Left = 351
-          Height = 28
-          Top = 0
-          Width = 135
-          Action = DownloadSelected
-          Color = clBtnFace
-          Glyph.Data = {
-            36040000424D3604000000000000360000002800000010000000100000000100
-            2000000000000004000064000000640000000000000000000000000000000000
-            000004733AFF21824FFF638272FF000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFF7ACFA4FF2C8C5AFF3D7659FFAEAEAEFF00000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFF82D8ACFF76D6A6FF3C9D6AFF27744CFFACAEADFF000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000009773FFF83DBAEFF1FC671FF72DEA7FF4BB27FFF177445FFA8ADAAFF0000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFF83DCAFFF11C369FF1ACC73FF69DFA3FF5AC28DFF137643FF9EA7
-            A3FF000000000000000000000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF10BD65FF11C167FF13C269FF59D395FF67C998FF167C
-            47FF889C92FF0000000000000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF0DB35EFF0EB660FF0EB660FF0DB45FFF47C484FF70CA
-            9CFF1D824DFF678C79FF00000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF0CAA58FF12AE5EFF15AF60FF16AD61FF13AA5DFF3AB6
-            77FF75C79DFF288957FF4E8367FF000000000000000000000000000000000000
-            000004733AFFA9DCC1FF2EAD6BFF2BAD6AFF27AB68FF22A964FF1CA55FFF41B2
-            78FF78C69FFF298858FF678C79FF000000000000000000000000000000000000
-            000004733AFFA9DCC1FF36AD70FF32AC6DFF2DAA6AFF28A866FF58BC89FF78C5
-            9DFF1F804EFF839A8EFF00000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF3EB176FF3AAF73FF36AE70FF6FC598FF71BF97FF187B
-            49FFA6B0ABFF0000000000000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF45B47BFF47B47CFF82CCA6FF67B68CFF177745FFC1C5
-            C3FF000000000000000000000000000000000000000000000000000000000000
-            000004733AFFA5DABFFF57BB87FF90D2B0FF5BAB82FF23774CFFD4D5D4FF0000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFFA9DCC1FF9BD5B7FF4C9F73FF3D7D5CFF00000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFFA4D9BEFF3D9366FF5F8873FF0000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000000000000000
-            000004733AFF2D8859FF859C90FF000000000000000000000000000000000000
-            0000000000000000000000000000000000000000000000000000
-          }
-          NumGlyphs = 0
-        end
-        object Panel1: TPanel
-          Left = 1
-          Height = 28
-          Top = 0
-          Width = 203
-          Alignment = taLeftJustify
-          BevelOuter = bvNone
-          Caption = 'Updated on'
-          TabOrder = 0
-        end
+      end
+      object BtnShowDirSelect: TButton
+        Left = 404
+        Height = 25
+        Top = 32
+        Width = 24
+        Caption = '...'
+        OnClick = BtnShowDirSelectClick
+        TabOrder = 1
+      end
+      object rgProxy: TRadioGroup
+        Left = 8
+        Height = 73
+        Top = 72
+        Width = 420
+        AutoFill = True
+        Caption = 'Proxy Server Configuration'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 55
+        ClientWidth = 416
+        Items.Strings = (
+          'No proxy'
+          'Self defined proxy setup :'
+        )
+        OnClick = e_ListenOnChange
+        TabOrder = 2
+      end
+      object edtHTTPProxy: TEdit
+        Left = 124
+        Height = 23
+        Top = 152
+        Width = 192
+        OnClick = e_ListenOnChange
+        TabOrder = 3
+      end
+      object edtHTTPPort: TEdit
+        Left = 364
+        Height = 23
+        Top = 152
+        Width = 64
+        OnClick = e_ListenOnChange
+        TabOrder = 4
+      end
+    end
+    object tsVendor: TTabSheet
+      Caption = 'Vendors plug-ins'
+      ClientHeight = 398
+      ClientWidth = 623
+      object Label12: TLabel
+        Left = 4
+        Height = 16
+        Top = 11
+        Width = 88
+        Caption = 'Location to use :'
+        ParentColor = False
+      end
+      object Panel1: TPanel
+        Left = 420
+        Height = 24
+        Top = 11
+        Width = 203
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        Caption = 'Updated on'
+        TabOrder = 0
+      end
+      object cbLocations: TComboBox
+        Left = 100
+        Height = 23
+        Top = 11
+        Width = 304
+        ItemHeight = 15
+        TabOrder = 1
       end
       object lvPlugins: TListView
         Left = 0
-        Height = 277
-        Top = 30
-        Width = 624
-        Align = alTop
+        Height = 355
+        Top = 43
+        Width = 623
+        Align = alBottom
+        Anchors = [akTop, akLeft, akBottom]
         Checkboxes = True
         Columns = <        
           item
             Caption = 'Plugin Name'
-            Width = 200
+            Width = 90
           end        
           item
-            AutoSize = True
-            Caption = 'Description'
-            Width = 330
-          end        
-          item
+            Caption = 'Type'
             Width = 80
+          end        
+          item
+            Caption = 'URL'
+            Width = 300
+          end        
+          item
+            Caption = 'Update'
+            Width = 100
           end>
-        MultiSelect = True
         PopupMenu = PopupMenu1
-        RowSelect = True
-        ScrollBars = ssAutoVertical
-        SortColumn = 1
-        SortType = stText
-        TabOrder = 1
+        TabOrder = 2
         ViewStyle = vsReport
       end
-      object Panel2: TPanel
-        Left = 0
-        Height = 26
-        Top = 303
-        Width = 624
-        Align = alBottom
-        Alignment = taLeftJustify
-        Caption = 'Update using alternate location : '
-        ClientHeight = 26
-        ClientWidth = 624
-        TabOrder = 2
-        object cbLocations: TComboBox
-          Left = 156
-          Height = 23
-          Top = 1
-          Width = 467
-          Align = alRight
-          ItemHeight = 15
-          TabOrder = 0
-        end
-      end
-    end
-    object TabSheet4: TTabSheet
-      Caption = 'Directories'
-      ClientHeight = 329
-      ClientWidth = 624
-      object sgDirectories: TStringGrid
-        Left = 0
-        Height = 329
-        Top = 0
-        Width = 624
-        Align = alClient
-        ColCount = 2
-        DefaultColWidth = 220
-        FixedRows = 0
-        Options = [goFixedHorzLine, goHorzLine, goColSizing, goEditing, goSmoothScroll]
-        RowCount = 4
-        TabOrder = 0
-        ColWidths = (
-          99
-          505
-        )
-        Cells = (
-          4
-          0
-          0
-          'Common xPL'
-          0
-          1
-          'Vendor Plugin'
-          0
-          2
-          'Logging'
-          0
-          3
-          'Configurations'
-        )
-      end
     end
   end
-  object StatusBar1: TStatusBar
+  object ToolBar1: TToolBar
     Left = 0
-    Height = 23
-    Top = 357
-    Width = 632
-    Panels = <>
+    Height = 29
+    Top = 0
+    Width = 631
+    AutoSize = True
+    ButtonHeight = 28
+    ButtonWidth = 30
+    Caption = 'ToolBar1'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esNone
+    Flat = False
+    Images = frmAbout.ilStandardActions
+    List = True
+    ShowCaptions = True
+    TabOrder = 1
+    object tbReload: TToolButton
+      Left = 1
+      Top = 0
+      Caption = 'Reload'
+      ImageIndex = 12
+      OnClick = tbReloadClick
+    end
+    object tbSave: TToolButton
+      Left = 63
+      Top = 0
+      AutoSize = True
+      Caption = 'Save Settings'
+      ImageIndex = 3
+      OnClick = SaveSettingsExecute
+    end
+    object tbUpdateSeed: TToolButton
+      Left = 93
+      Top = 0
+      Caption = 'Update Plugin List'
+      ImageIndex = 12
+      OnClick = UpdateSeedExecute
+    end
+    object tbDownload: TToolButton
+      Left = 215
+      Top = 0
+      Caption = 'Download Selected'
+      ImageIndex = 5
+      OnClick = DownloadSelectedExecute
+    end
+    object ProgressBar1: TProgressBar
+      Left = 495
+      Height = 28
+      Top = 0
+      Width = 136
+      Align = alRight
+      TabOrder = 0
+      Visible = False
+    end
   end
   object MainMenu1: TMainMenu
-    left = 424
+    left = 384
     object MenuItem3: TMenuItem
       Caption = '&Application'
+      object MenuItem7: TMenuItem
+        Caption = 'View session log journal'
+        OnClick = MenuItem7Click
+      end
       object MenuItem5: TMenuItem
         Action = Quit
         Bitmap.Data = {
@@ -2676,96 +2629,21 @@ object FrmMain: TFrmMain
         OnClick = QuitExecute
       end
     end
-    object MenuItem7: TMenuItem
-      Caption = '?'
-      object MenuItem8: TMenuItem
-        Action = InstalledApps
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          20000000000000040000640000006400000000000000000000000B0B0B612525
-          25C7252525CC242424CA242424CA242424CA242424CA252525CA242424CA2424
-          24CA242424CA242424CA252525CA262626CE111111C300000055787878EEE2E2
-          E2FFDDDDDDFFDADADAFFDADADAFFD8D8D8FFD7D7D7FFD7D7D7FFD6D6D6FFD5D5
-          D5FFD5D5D5FFD4D4D4FFD3D3D3FFE0E0E0FF999999FF0C0C0CBDAAAAAAF7FFFF
-          FFFFF4F4F4FFF3F3F3FFF2F2F2FFEFF0EFFFF5F3F4FFF9F5FAFFF1F1F2FFEAEB
-          EAFFEBEBEBFFE8E8E8FFE5E5E5FFF5F5F5FFC6C6C6FF191919C3A7A7A7F6FBFB
-          FBFFEAEAEAFFEBEBEBFFE9E9E9FFF5EFF4FFE6E0E2FFC2C7BDFFE3DEE3FFEDEC
-          F0FFE2E2E2FFE0E0E0FFDEDEDEFFECECECFFBDBDBDFF181818C1A9A9A9F6FCFC
-          FCFFECECECFFEEEDEEFFF7EFF6FFCCD5C9FF61B472FF2C982BFF668D4DFFCCC7
-          C7FFF0ECF2FFE3E3E2FFE0E0E0FFEEEEEEFFC0C0C0FF191919C1AAAAAAF6FCFC
-          FCFFF1F1F1FFFFFEF9FFA8D3A5FF2CB351FF20C95DFF2BB22EFF238A00FF367E
-          15FFADB39AFFFAF2EDFFE4E4E3FFEDEDEEFFC1C1C1FF191919C1AAAAABF6FFFF
-          FFFFFFFFF3FFBDB6D9FF389168FF1DCB51FF38D773FF3EC551FF349E07FF258E
-          00FF3E7157FFB2B4E3FFF4EEE2FFF9F9F1FFC2C3C3FF191919C1B0B0AFF6EEEE
-          F2FF7674D4FF0B08DBFF1A6C79FF69F677FF69F99AFF4AE683FF36C857FF38AB
-          0DFF14685FFF0A56F5FF6E88DBFFE5E2E8FFCAC9C6FF1A1A1AC1B0B0ABF66060
-          E2FF0000F0FF0000FDFF1D3AA9FF80C989FF79FF96FF4AED7EFF36D05CFF24AC
-          50FF087DADFF0068FFFF0056F8FF537AE6FFC3BEBEFF21211DC1ABABABF64747
-          F2FF0000FDFF3B3BFFFF4842F7FF1924BAFF2C8479FF3AC95BFF16A177FF00A4
-          D0FF00B9FFFF008AFFFF0063FFFF3873F3FFBBB8BCFF25241EC1ABABAFF65B5B
-          EDFF5555F9FF8E8EFFFF7E7EFFFF5954FFFF2016C8FF305A9CFF0DC2F0FF00E9
-          FFFF00CEFFFF00B3FFFF0089FEFF3C80F6FFC0BBC1FF24231EC1B5B5B4F6CECE
-          F0FF8181DDFF6E6EF4FF6464FCFF5353E0FF8883CFFFD3CDEAFF81CEF8FF12C8
-          F9FF00C2FFFF00A2FDFF2C97F3FFB4CCF4FFD0CCC9FF1E1E1DC1B3B3B3F6FFFF
-          FFFFE5E5F0FF9292DEFF6C6CD6FFB3B3D8FFFAFBF1FFFFFFF7FFFFF1F0FFBDCF
-          F0FF49A9F3FF71AEEDFFE1DCE7FFFFFFF8FFCDCECEFF1C1C1DC1B6B6B6F6FFFF
-          FFFFFFFFFDFFFAFAF8FFF3F3F3FFFEFEF9FFF8F8F7FFF1F1F2FFF4F4F2FFFDF5
-          F1FFF5EBECFFF8F0EBFFF5F1EBFFF7F8F7FFCFCFCFFF1E1E1EC2B8B8B8F8FFFF
-          FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFDFDFEFFFCFD
-          FDFFFFFEFCFFFDFCFBFFF9F9FAFFFFFFFFFFD3D3D3FF1F1F1FC27A7A7ACBC2C2
-          C2FEC2C2C2FDC1C1C1FDC1C1C1FDC1C1C1FDC1C1C1FDC1C1C1FDC2C2C2FDC2C2
-          C2FDC2C2C2FDC2C2C2FDC4C4C4FDCACACAFE8A8A8AF50E0E0E65
-        }
-        OnClick = InstalledAppsExecute
+    object MenuItem9: TMenuItem
+      Caption = '&?'
+      object MenuItem10: TMenuItem
+        Caption = 'Installed xPL apps'
+        OnClick = MenuItem8Click
       end
-      object MenuItem11: TMenuItem
-        Caption = '-'
-      end
-      object MenuItem9: TMenuItem
-        Action = About
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00975435239453347D925234DB8A5034F3884F34F38950
-          35DB8950357D84503623FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF009F563453995534E6B28057FFD5B793FFDBC3A6FFDAC3A6FFD2B4
-          90FFAB7A52FF864F34E688503553FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00A76234539F5533F4CBA77DFFD8BB9FFFC39C77FFB68A62FFB48660FFBE96
-          72FFD1B397FFC5A377FF844F35F489503553FFFFFF00FFFFFF00FFFFFF00AF70
-          3522AB6935E5CFAA81FFDABCA2FFBE9166FFBA8C62FFB7895FFFB3845EFFB183
-          5DFFB0835CFFCDAA8DFFC6A579FF895034E589503522FFFFFF00FFFFFF00B878
-          357EBF915EFFE0C2A8FFC5966CFFC29169FFE1CBB8FFFEFDFCFFFFFFFEFFEADC
-          D0FFB4855EFFB3855EFFD4B599FFAE7B56FF8F51357EFFFFFF00FFFFFF00BC7E
-          35DBDBBC9CFFD5AD89FFC7986CFFC39569FFC19367FFEDDFD3FFFAF7F4FFBB8B
-          63FFB98A63FFB88A62FFC59D78FFD2B893FF905135DBFFFFFF00FFFFFF00BF7E
-          35F6E3C7AFFFD0A276FFC5996BFFC4976AFFC49669FFEEE0D4FFFBF7F4FFBF90
-          66FFBE8F65FFBE8F64FFBE9269FFDFC6AAFF925034F6FFFFFF00FFFFFF00C585
-          3BF6E4C9B0FFD0A37AFFCC9D71FFC79A6CFFC5986BFFFFFFFFFFFFFFFEFFC396
-          69FFC19468FFC29468FFC3986DFFDFC5ABFF955334F6FFFFFF00FFFFFF00CB8E
-          41DBE0BC9FFFDBB393FFCFA075FFCD9E72FFCB9C71FFDDBFA3FFDDBFA2FFC599
-          6BFFC5996BFFC4986BFFD1AB85FFD8BA97FF9E5635DBFFFFFF00FFFFFF00CE91
-          477ECD9C68FFE7CBB4FFD4A57AFFD0A077FFCF9E74FFFBF8F5FFFBF8F5FFCB9E
-          71FFCB9D71FFCDA177FFDFC0A5FFB98A5BFFA45C347EFFFFFF00FFFFFF00D293
-          4C22CE8E47E5D9B28CFFE6CAB3FFD6A97DFFD1A579FFE2C4A8FFE1C3A8FFD0A2
-          76FFD1A477FFDDBDA2FFD0AC85FFAB6635E5A9653522FFFFFF00FFFFFF00FFFF
-          FF00D4964D53CF8D47F4D9B28CFFE6CDB8FFE0BA9DFFD7AB85FFD6A982FFD9B3
-          91FFE1C2ABFFD4AE86FFB16B35F4B16F3553FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00D6974F53D19149E6D0A06AFFE0BFA0FFE3C5AEFFE3C5AEFFDFBC
-          9FFFC89762FFBD7D35E6BC7E3553FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00D8985223D4964D7DD2924CDBCD8C45F3CB8B41F3C98B
-          40DBC78B407DC5873D23FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
+      object MenuItem13: TMenuItem
+        Caption = '&About ...'
         OnClick = AboutExecute
       end
     end
   end
   object ActionList1: TActionList
     Images = frmAbout.ilStandardActions
-    left = 392
+    left = 336
     object Quit: TAction
       Caption = 'Quit'
       Hint = 'Quit the application'
@@ -2807,30 +2685,27 @@ object FrmMain: TFrmMain
     object InstalledApps: TAction
       Caption = 'Installed xPL apps'
       ImageIndex = 17
-      OnExecute = InstalledAppsExecute
     end
   end
+  object IdDayTime1: TIdDayTime
+    left = 432
+  end
   object PopupMenu1: TPopupMenu
-    left = 456
-    object MenuItem1: TMenuItem
-      Action = SelectAll
+    left = 304
+    object MenuItem2: TMenuItem
+      Caption = 'Select All'
       OnClick = Select_Do
     end
     object MenuItem4: TMenuItem
-      Action = UnselectAll
+      Caption = 'Unselect All'
       OnClick = Select_Undo
     end
     object MenuItem6: TMenuItem
-      Action = InvertSelection
+      Caption = 'Invert selection'
       OnClick = Select_Invert
     end
   end
-  object XMLPropStorage1: TXMLPropStorage
-    StoredValues = <>
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
     left = 488
-  end
-  object IdDayTime1: TIdDayTime
-    left = 491
-    top = 36
   end
 end

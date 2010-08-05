@@ -7,7 +7,7 @@ interface
 uses
   Classes, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   StdCtrls, ComCtrls, ExtCtrls,  Menus, ActnList,
-  Buttons, Grids, uxPLClient, uxPLVendorFile,XMLPropStorage, IdDayTime;
+  Buttons, Grids, uxPLClient, IdDayTime;
 
 type
 
@@ -15,27 +15,40 @@ type
 
   TFrmMain = class(TForm)
     About: TAction;
+    BtnShowDirSelect: TButton;
     cbLocations: TComboBox;
+    edtHTTPPort: TEdit;
+    edtHTTPProxy: TEdit;
+    edtRootDir: TEdit;
     IdDayTime1: TIdDayTime;
     InstalledApps: TAction;
-    MenuItem1: TMenuItem;
-    MenuItem11: TMenuItem;
+    Label10: TLabel;
+    Label11: TLabel;
+    Label12: TLabel;
+    Label9: TLabel;
+    lvPlugins: TListView;
+    MenuItem10: TMenuItem;
+    MenuItem13: TMenuItem;
+    MenuItem2: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
-    MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
-    Panel2: TPanel;
+    Panel1: TPanel;
     PopupMenu1: TPopupMenu;
+    ProgressBar1: TProgressBar;
+    rgProxy: TRadioGroup;
     SelectAll: TAction;
-    sgDirectories: TStringGrid;
-    TabSheet4: TTabSheet;
+    SelectDirectoryDialog1: TSelectDirectoryDialog;
+    StaticText2: TStaticText;
+    tsAdanced: TTabSheet;
+    tbReload: TToolButton;
+    ToolBar1: TToolBar;
+    tbSave: TToolButton;
+    tbUpdateSeed: TToolButton;
+    tbDownload: TToolButton;
     UnselectAll: TAction;
     InvertSelection: TAction;
-    Panel1: TPanel;
-    SpeedButton2: TSpeedButton;
-    SpeedButton3: TSpeedButton;
-    StatusBar1: TStatusBar;
     UpdateSeed: TAction;
     DownloadSelected: TAction;
     ActionList1: TActionList;
@@ -44,7 +57,6 @@ type
     edtListenTo: TEdit;
     Label3: TLabel;
     Label4: TLabel;
-    lvPlugins: TListView;
     MainMenu1: TMainMenu;
     MenuItem3: TMenuItem;
     MenuItem5: TMenuItem;
@@ -52,18 +64,19 @@ type
     Quit: TAction;
     rgListenTo: TRadioGroup;
     SaveSettings: TAction;
-    SpeedButton1: TSpeedButton;
     StaticText1: TStaticText;
-    TabSheet1: TTabSheet;
-    TabSheet2: TTabSheet;
-    ToolBar1: TToolBar;
-    ToolBar2: TToolBar;
-    XMLPropStorage1: TXMLPropStorage;
+    tsBasic: TTabSheet;
+    tsVendor: TTabSheet;
     procedure AboutExecute(Sender: TObject);
+    procedure BtnShowDirSelectClick(Sender: TObject);
     procedure DownloadSelectedExecute(Sender: TObject);
+    procedure e_ListenOnChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure InstalledAppsExecute(Sender: TObject);
+    procedure MenuItem10Click(Sender: TObject);
+    procedure MenuItem7Click(Sender: TObject);
+    procedure MenuItem8Click(Sender: TObject);
+    procedure PageControl1PageChanged(Sender: TObject);
     procedure QuitExecute(Sender: TObject);
     procedure SaveSettingsExecute(Sender: TObject);
 
@@ -73,10 +86,9 @@ type
     procedure Select_Do( Sender: TObject );
     procedure Select_Undo( Sender: TObject );
     procedure Select_Invert( Sender: TObject );
+    procedure tbReloadClick(Sender: TObject);
 
     procedure UpdateSeedExecute(Sender: TObject);
-  private
-    VendorSeed   : TxPLVendorSeedFile;
   public
     xPLClient : TxPLClient;
   end;
@@ -84,165 +96,199 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //===============================================================
-uses StrUtils, SysUtils, IdStack, uIPutils, IdHTTP,
-     frm_xplAppsLauncher, frm_about;
+uses SysUtils, StrUtils, IdStack, uIPutils,
+     frm_about, uxPLConst, frm_xpllogviewer, frm_xplappslauncher;
 //==============================================================================
 resourcestring
      // Shared xPL Library resources =======================
-     K_XPL_APP_VERSION_NUMBER = '1.2';
-     K_XPL_APP_NAME           = 'xPL Network Config';
+     K_XPL_APP_VERSION_NUMBER = '1.3';
+     K_DEFAULT_VENDOR         = 'clinique';
+     K_DEFAULT_DEVICE         = 'Network_Config';
 
      // Specific to this appresources ======================
      K_ALL_IPS_JOCKER       = '*** ALL IP Address ***';
      COMMENT_LINE_1         = 'Your network settings have been saved.'#10#13;
      COMMENT_LINE_2         = #10#13'Note that your computer should use a fixed IP Address'#10#13;
-     COMMENT_LINE_3         = 'Your xPL applications may need to be restarted for changes to take effect.';
 
 { TFrmMain Object =============================================================}
-procedure TFrmMain.InstalledAppsExecute(Sender: TObject);
-begin frmAppLauncher.ShowModal; end;
-
 procedure TFrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
 procedure TFrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
 
+procedure TFrmMain.MenuItem7Click(Sender: TObject);
+begin frmLogViewer.Show; end;
+
+procedure TFrmMain.MenuItem8Click(Sender: TObject);
+begin frmAppLauncher.Show; end;
+
+
+procedure TFrmMain.BtnShowDirSelectClick(Sender: TObject);
+begin
+   if SelectDirectoryDialog1.Execute then edtRootDir.Text := SelectDirectoryDialog1.FileName;
+end;
+
 procedure TFrmMain.FormCreate(Sender: TObject);
 var i : integer;
 begin
-  Self.Caption := K_XPL_APP_NAME;
-
-  xPLClient    := TxPLClient.Create(self,K_XPL_APP_NAME,K_XPL_APP_VERSION_NUMBER);
-
-  VendorSeed := TxPLVendorSeedFile.Create(xPLClient.Setting);
+  xPLClient    := TxPLClient.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
+  Self.Caption := xPLClient.AppName;
 
   // Network Settings Part ===========================================
-  e_ListenOn.Items.CommaText:= gStack.LocalAddress;                   // If using inet : LocalIP of uIPutils unit
+  e_ListenOn.Items.CommaText:= gStack.LocalAddress;                                // If using inet : LocalIP of uIPutils unit
   e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
+  e_BroadCast.Items.Clear;
   e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
-  for i:=1 to e_ListenOn.Items.Count-1 do
-      e_BroadCast.Items.Add( MakeBroadCast( e_ListenOn.Items[i]));
+  for i:=1 to e_ListenOn.Items.Count-1 do e_BroadCast.Items.Add( MakeBroadCast( e_ListenOn.Items[i]));
 
-  LoadNetworkSettings;
-
-  // Vendor settings Part ============================================
-  LoadVendorSettings;
-
+  tbReloadClick(self);                                                             // Loads current active values stored in registry
+  PageControl1.ActivePage := tsBasic;
+  PageControl1PageChanged(self);
 end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
 begin
    xPLClient.Destroy;
-   VendorSeed.Destroy;
 end;
 
-procedure TFrmMain.LoadNetworkSettings;
+procedure TFrmMain.MenuItem10Click(Sender: TObject);
 begin
-   sgDirectories.Cells[1,0] := xPLClient.Setting.SharedConfigDir;
-   sgDirectories.Cells[1,1] := xPLClient.Setting.PluginDirectory;
-   sgDirectories.Cells[1,2] := xPLClient.Setting.LoggingDirectory;
-   sgDirectories.Cells[1,3] := xPLClient.Setting.ConfigDirectory;
 
-   e_BroadCast.Text := xPLClient.setting.BroadCastAddress;
-
-   e_ListenOn.Text := IfThen( xPLClient.Setting.ListenOnAll, K_ALL_IPS_JOCKER, xPLClient.Setting.ListenOnAddress);
-
-   edtListenTo.Text := '';
-   if xPLClient.setting.ListenToAny then
-      rgListenTo.ItemIndex := 0
-   else
-       if xPLClient.setting.ListenToLocal then
-          rgListenTo.ItemIndex := 1
-       else begin
-           rgListenTo.ItemIndex := 2;
-           edtListenTo.Text := xPLClient.setting.ListenToAddresses;
-       end;
 end;
 
-procedure TFrmMain.LoadVendorSettings;
-var item     : TListItem;
-    i : integer;
+procedure TFrmMain.PageControl1PageChanged(Sender: TObject);
 begin
-   if not FileExists(VendorSeed.Name) then exit;
-
-   Panel1.Caption := 'Updated on '+ DateTimeToStr(VendorSeed.Updated);
-
-   cbLocations.Items.Clear ;
-   cbLocations.Items.AddStrings(VendorSeed.Locations);
-
-   lvPlugins.Items.Clear ;
-   for i:=0 to VendorSeed.Plugins.Count-1 do begin
-       item := lvPlugins.Items.Add;
-       item.Caption := VendorSeed.Plugins[i];
-       item.SubItems.Add(VendorSeed.PlugInDescription(item.Caption));
-       item.SubItems.Add('');
-       item.Data := VendorSeed.Plugins.Objects[i];
-   end;
+   tbReload.Visible := not (PageControl1.ActivePage = tsVendor);                   // Adapt visibility of toolbar buttons to
+   tbSave.Visible   := tbReload.Visible;                                           // the context of the current active page
+   tbUpdateSeed.Visible := not tbReload.Visible;
+   tbDownload.Visible   := tbUpdateSeed.Visible;
 end;
 
 procedure TFrmMain.Select_Do(Sender: TObject);
 var i : integer;
 begin
-     for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := true;
+   for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := true;
 end;
 
 procedure TFrmMain.Select_Undo(Sender: TObject);
 var i : integer;
 begin
-     for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := false;
+   for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := false;
 end;
 
 procedure TFrmMain.Select_Invert(Sender: TObject);
 var i : integer;
 begin
-     for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := not lvPlugIns.Items[i].Checked;
+   for i := 0 to lvPlugins.Items.Count - 1 do lvPlugIns.Items[i].Checked := not lvPlugIns.Items[i].Checked;
+end;
+
+procedure TFrmMain.tbReloadClick(Sender: TObject);
+begin
+  LoadNetworkSettings;
+  LoadVendorSettings;
+end;
+
+procedure TFrmMain.LoadVendorSettings;
+var i : integer;
+begin
+   if not FileExists(xPLClient.PluginList.Name) then exit;
+   xPLClient.PluginList.Load;
+
+   cbLocations.Items.Clear ;
+   cbLocations.Items.AddStrings(xPLClient.PluginList.Locations);
+   cbLocations.Text := K_XPL_VENDOR_SEED_LOCATION;                                        // Default site to use
+
+   lvPlugins.Items.Clear;
+
+   for i:=0 to xPLClient.PluginList.Plugins.Count-1 do
+      with lvPlugins.Items.Add do begin
+           Caption := xPLClient.PluginList.Plugins[i];
+           // SubItems.Add(xPLClient.PluginList.PluginDescription(Caption));              // This element doesnt include really meaningful informations
+           SubItems.Add(xPLClient.PluginList.PluginType       (Caption));
+           SubItems.Add(xPLClient.PluginList.PluginURL        (Caption));
+           SubItems.Add('');
+      end;
+
+   Panel1.Caption := 'Updated on '+ DateTimeToStr(xPLClient.PluginList.Updated);
+end;
+
+procedure TFrmMain.LoadNetworkSettings;
+begin
+    with frmMain.xPLClient.Setting do begin
+      e_BroadCast.Text := BroadCastAddress;
+      e_ListenOn.Text  := IfThen(ListenOnAll, K_ALL_IPS_JOCKER, ListenOnAddress);
+
+      edtListenTo.Text := '';
+      if ListenToAny then
+         rgListenTo.ItemIndex := 0
+      else
+         if ListenToLocal then
+            rgListenTo.ItemIndex := 1
+         else begin
+            rgListenTo.ItemIndex := 2;
+            edtListenTo.Text := ListenToAddresses;
+         end;
+      edtRootDir.Text:= SharedConfigDir;
+      if UseProxy then rgProxy.ItemIndex := 1 else rgProxy.ItemIndex := 0;
+      edtHttpPort.Text := HttpProxPort;
+      edtHttpProxy.Text := HttpProxSrvr;
+
+      tbSave.Enabled := False;                                                            // Will only be enabled if a field changes of value
+   end;
 end;
 
 procedure TFrmMain.UpdateSeedExecute(Sender: TObject);
 begin
-   if cbLocations.Text<>'' then VendorSeed.Update(cbLocations.Text) else VendorSeed.Update;
-   xPLClient.LogInfo('Seed file ' + Panel1.Caption);
+   Screen.Cursor  := crHourGlass;
+   xPLClient.PluginList.Update(cbLocations.Text);
+   xPLClient.LogInfo('Seed file %s',[Panel1.Caption]);
    LoadVendorSettings;
+   Screen.Cursor := crDefault;
 end;
 
 procedure TFrmMain.DownloadSelectedExecute(Sender: TObject);
 var i : integer;
 begin
-   for i := 0 to lvPlugIns.Items.Count - 1 do
+   ProgressBar1.Visible := True;
+   ProgressBar1.Max := lvPlugIns.Items.Count - 1;
+   for i := 0 to ProgressBar1.Max do begin
+       ProgressBar1.Position := i;
        with lvPlugins.Items[i] do begin
           application.ProcessMessages;
-          if Checked then SubItems[1]  := IfThen(VendorSeed.UpdatePlugin(Caption),'Done','Error');
+          if Checked then SubItems[2]  := IfThen(xPLClient.PluginList.UpdatePlugin(Caption),'Done','Error');
        end;
+   end;
+   ProgressBar1.Visible := False;
 end;
 
+procedure TFrmMain.e_ListenOnChange(Sender: TObject);                                     // Called by all editables fields to toggle
+begin tbSave.Enabled:=True; end;                                                          // save button 'on'
 
 procedure TFrmMain.SaveSettingsExecute(Sender: TObject);
-var sCommentaire : string;
-    s : string;
 begin
-     sCommentaire := COMMENT_LINE_1;
+   with frmMain.xPLClient.Setting do begin
+        BroadCastAddress := e_BroadCast.text;
 
-     xPLClient.setting.BroadCastAddress := e_BroadCast.text;
+        ListenOnAll := (e_ListenOn.Text = K_ALL_IPS_JOCKER);
+        if not ListenOnAll then ListenOnAddress := e_ListenOn.Text;
 
-     s := e_ListenOn.Text;
-     xPLClient.Setting.ListenOnAll := (s = K_ALL_IPS_JOCKER);
-     if not xPLClient.Setting.ListenOnAll then begin
-        xPLClient.Setting.ListenOnAddress := s;
-        sCommentaire += COMMENT_LINE_2;
-     end;
+        case rgListenTo.ItemIndex of
+           0 : ListenToAny := true;
+           1 : ListenToLocal := true;
+           2 : ListenToAddresses := edtListenTo.Text;
+        end;
 
-     case rgListenTo.ItemIndex of
-        0 : xPLClient.setting.ListenToAny := true;
-        1 : xPLClient.setting.ListenToLocal := true;
-        2 : xPLClient.setting.ListenToAddresses := edtListenTo.Text;
-     end;
+        UseProxy := (rgProxy.ItemIndex = 1);
+        HttpProxPort := edtHttpPort.Text;
+        HttpProxSrvr := edtHttpProxy.Text;
 
-   sCommentaire += COMMENT_LINE_3;
+        SharedConfigDir := edtRootDir.Text;
 
-   Application.MessageBox(PChar(sCommentaire),PChar(caption),0);
-   xPLClient.LogInfo(sCommentaire);
+        Application.MessageBox(PChar(COMMENT_LINE_1),PChar(caption),0);
+        frmMain.xPLClient.LogInfo(COMMENT_LINE_2,[]);
+   end;
 end;
 
 initialization
