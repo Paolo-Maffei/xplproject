@@ -25,12 +25,10 @@
 	Removed the template repository / redondant with plugin files
 	Added configuration directory to prepare storage of app conf in a centralized point 
 1.2
-1.3
+	Didn't recorded specific evolutions for this version
+1.5 08/08/2010
 	Internal updates to stick to xPL Lazarus library evolution
-	Integration of latest functional updates : proxy settings, simplification path input
-	Ripped the app directory
-
-
-
-
+	Integration of latest functional updates : proxy settings, simplification of path input for root xpl directory
+	Portability validated with Linux version of Lazarus...soon to come
+	Added vendor xml file viewer
 	
