@@ -8,7 +8,7 @@ uses
   Classes, SysUtils;
 
   procedure WGetHTTPFile(aSourceURI, aTargetFile : string);
-  function GetHTTPFile(aSourceURI, aTargetFile : string) : boolean;
+  function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
 
 implementation
 uses LCLType,IdURI,httpprothandler;
@@ -20,7 +20,7 @@ begin
     GURL.URI := aSourceURI;
 
     if THTTPProtHandler.CanHandleURL(GURL) then
-       with THTTPProtHandler.Create(aTargetFile) do
+       with THTTPProtHandler.Create(aTargetFile,'','') do
           try
             GetFile(GURL);
           finally
@@ -30,7 +30,7 @@ begin
     GURL.Destroy;
 end;
 
-function GetHTTPFile(aSourceURI, aTargetFile : string) : boolean;
+function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
 var GURL : TIdURI;
 begin
     result := true;
@@ -38,7 +38,7 @@ begin
     GURL.URI := aSourceURI;
 
     if THTTPProtHandler.CanHandleURL(GURL) then
-       with THTTPProtHandler.Create(aTargetFile) do begin
+       with THTTPProtHandler.Create(aTargetFile,ProxySrvr,ProxyPort) do begin
           try
             GetFile(GURL);
           except

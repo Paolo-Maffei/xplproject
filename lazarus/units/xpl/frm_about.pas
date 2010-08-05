@@ -14,8 +14,8 @@ uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs
 
 type { TfrmAbout ==============================================================}
 
-TfrmAbout = class(TForm)
-  btnOk: TButton;
+     TfrmAbout = class(TForm)
+        btnOk: TButton;
         imLazarusLogo: TImage;
         ilStandardActions: TImageList;
         Label1: TLabel;
@@ -41,4 +41,3 @@ initialization // ==============================================================
 {$I frm_about.lrs}
 
 end.
-

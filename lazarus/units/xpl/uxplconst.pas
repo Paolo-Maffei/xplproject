@@ -36,6 +36,10 @@ const
    K_FEXT_XML         = '.xml';
    K_FEXT_PHP         = '.php';
 
+   // General ===============================================================================================
+   K_STR_TRUE = 'true';
+   K_STR_FALSE = 'false';
+
    // Websites ==============================================================================================
    K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';                                          // URL where to download the main plugin file
    K_XPL_VENDOR_SEED_FILE     = 'plugins' + K_FEXT_XML;
@@ -184,6 +188,9 @@ const
    K_REGISTRY_LISTENON          = 'ListenOnAddress';
    K_REGISTRY_LISTENTO          = 'ListenToAddresses';
    K_REGISTRY_ROOT_XPL_DIR      = 'RootxPLDirectory';
+   K_REGISTRY_PROXY             = 'UseProxy';
+   K_REGISTRY_HTTP_PROX_SRVR    = 'ProxyHttpSrvr';
+   K_REGISTRY_HTTP_PROX_PORT    = 'ProxyHttpPort';
    K_XPL_SETTINGS_SUBDIR_CONF   = 'Config';
    K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
    K_XPL_SETTINGS_SUBDIR_LOGS   = 'Logging';
