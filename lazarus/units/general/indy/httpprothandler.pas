@@ -32,11 +32,13 @@ type
   THTTPProtHandler = class(TProtHandler)
   protected
     LFName : string;
+    LProxyServer : string;
+    LProxyPort   : integer;
     function GetTargetFileName(AHTTP : TIdHTTP; AURI : TIdURI) : String;
   public
     class function CanHandleURL(AURL : TIdURI) : Boolean; override;
     procedure GetFile(AURL : TIdURI); override;
-    constructor Create(aDestination : string);
+    constructor Create(aDestination, aProxyServer, aProxyPort : string);
   end;
 
 implementation
@@ -75,6 +77,10 @@ begin
   {$endif}
   try
     LHTTP := TIdHTTP.Create;
+    if LProxyServer<>'' then begin
+       LHTTP.ProxyParams.ProxyServer:=LProxyServer;
+       LHTTP.ProxyParams.ProxyPort:=LProxyPort;
+    end;
     try
       {$ifdef useopenssl}
       LHTTP.Compressor := LC;
@@ -152,10 +158,12 @@ Mozilla/4.0 (compatible; MyProgram)
   end;
 end;
 
-constructor THTTPProtHandler.Create(aDestination: string);
+constructor THTTPProtHandler.Create(aDestination, aProxyServer, aProxyPort : string);
 begin
   inherited Create;
   LFName := aDestination;
+  LProxyServer := aProxyServer;
+  LProxyPort   := StrToIntDef(aProxyPort,0);
 end;
 
 function THTTPProtHandler.GetTargetFileName(AHTTP : TIdHTTP; AURI : TIdURI) : String;
