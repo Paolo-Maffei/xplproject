@@ -4,7 +4,7 @@ unit v_xplmsg_opendialog;
 
 interface
 
-uses Classes, SysUtils, Dialogs, ExtCtrls, uxPLMsgHeader;
+uses Classes, SysUtils, Dialogs, ExtCtrls;
 
 type TxPLMsgOpenDialog = class(TOpenDialog)
      public

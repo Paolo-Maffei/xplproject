@@ -39,14 +39,17 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
       private
         function RecordLog(Const Formatting  : string; Const Data  : array of const ) : string;
       public
+        OnLogUpdate: TxPLClientLogUpdate;
+
         constructor Create(const aOwner : TComponent; const aVendor : string; aDevice : string; const aAppVersion : string); overload;
+        destructor  Destroy; override;
         procedure   LogInfo(Const Formatting  : string; Const Data  : array of const );             // Info are only stored in log file
         procedure   LogError(Const Formatting  : string; Const Data  : array of const );            // Error are stored as error in log, displayed and stop the app
         procedure   LogWarn(Const Formatting  : string; Const Data  : array of const );             // Warn are stored in log, displayed but doesn't stop the app
         function    RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function    Translate(Const aDomain : string; Const aString : string) : string;
         function    LogFileName : string;
-        destructor  Destroy; override;
+        function    AppName : string;
 
         property    PluginList : TxPLVendorSeedFile  read fPluginList;
         property    Setting    : TxPLSettings        read fSetting;
@@ -55,9 +58,8 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
         property    Vendor     : string              read fVendor;
         property    Device     : string              read fDevice;
 
-        function AppName : string;
 
-        OnLogUpdate: TxPLClientLogUpdate;
+
       end;
 
 implementation //===============================================================
@@ -82,7 +84,7 @@ begin
    fEventLog.info(Format(K_MSG_APP_STARTED,[AppName]));
 
    fPluginList := TxPLVendorSeedFile.Create(fSetting);
-   if not fPluginList.Status then LogWarn('Error while reading vendor xml file (%s)',[fPluginList.Name]);
+   if not fPluginList.IsValid then LogWarn(K_MSG_ERROR_VENDOR,[fPluginList.Name]);
 end;
 
 function TxPLClient.RecordLog(const Formatting: string; const Data: array of const): string;
@@ -121,7 +123,7 @@ begin
    result := true;
    if aTarget = 'us' then exit;                                                           // Right now, we assume base language is english
 
-   f := GetCurrentDir + '\loc_' + aDomain + '_' + aTarget + '.txt';
+   f := GetCurrentDir + '\loc_' + aDomain + '_' + aTarget + K_FEXT_TXT;
    result := FileExists(f);
    if not result then exit;
 
