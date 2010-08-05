@@ -27,15 +27,17 @@ type
     Label12: TLabel;
     Label9: TLabel;
     lvPlugins: TListView;
+    MenuItem1: TMenuItem;
+    mnuDeselectAll: TMenuItem;
     MenuItem10: TMenuItem;
+    mnuInvertSelect: TMenuItem;
+    mnuSelectAll: TMenuItem;
     MenuItem13: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
+    mnuViewXML: TMenuItem;
     MenuItem9: TMenuItem;
     Panel1: TPanel;
-    PopupMenu1: TPopupMenu;
+    popPluginList: TPopupMenu;
     ProgressBar1: TProgressBar;
     rgProxy: TRadioGroup;
     SelectAll: TAction;
@@ -73,7 +75,7 @@ type
     procedure e_ListenOnChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure MenuItem10Click(Sender: TObject);
+    procedure ViewXML(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
     procedure PageControl1PageChanged(Sender: TObject);
@@ -97,11 +99,12 @@ var  FrmMain: TFrmMain;
 
 implementation //===============================================================
 uses SysUtils, StrUtils, IdStack, uIPutils,
-     frm_about, uxPLConst, frm_xpllogviewer, frm_xplappslauncher;
+     {$IFDEF unix}pwhostname, {$ENDIF}
+     frm_about, uxPLConst, frm_xpllogviewer, frm_xplappslauncher, frm_XMLView;
 //==============================================================================
 resourcestring
      // Shared xPL Library resources =======================
-     K_XPL_APP_VERSION_NUMBER = '1.3';
+     K_XPL_APP_VERSION_NUMBER = '1.5';
      K_DEFAULT_VENDOR         = 'clinique';
      K_DEFAULT_DEVICE         = 'Network_Config';
 
@@ -123,11 +126,8 @@ begin frmLogViewer.Show; end;
 procedure TFrmMain.MenuItem8Click(Sender: TObject);
 begin frmAppLauncher.Show; end;
 
-
 procedure TFrmMain.BtnShowDirSelectClick(Sender: TObject);
-begin
-   if SelectDirectoryDialog1.Execute then edtRootDir.Text := SelectDirectoryDialog1.FileName;
-end;
+begin if SelectDirectoryDialog1.Execute then edtRootDir.Text := SelectDirectoryDialog1.FileName; end;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 var i : integer;
@@ -136,7 +136,11 @@ begin
   Self.Caption := xPLClient.AppName;
 
   // Network Settings Part ===========================================
-  e_ListenOn.Items.CommaText:= gStack.LocalAddress;                                // If using inet : LocalIP of uIPutils unit
+  {$IFDEF WINDOWS}
+  e_ListenOn.Items.CommaText:= gStack.LocalAddress;
+  {$ELSE}
+  e_ListenOn.Items.Add(iNetSelfAddr);
+  {$ENDIF}
   e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
   e_BroadCast.Items.Clear;
@@ -153,9 +157,14 @@ begin
    xPLClient.Destroy;
 end;
 
-procedure TFrmMain.MenuItem10Click(Sender: TObject);
+procedure TFrmMain.ViewXML(Sender: TObject);
+var s : string;
 begin
-
+   if lvPlugins.Selected = nil then exit;
+   s := lvPlugins.Selected.Caption;
+   frmXMLView.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
+//   frmXMLView.filePath:=
+   frmXMLView.Show;
 end;
 
 procedure TFrmMain.PageControl1PageChanged(Sender: TObject);
@@ -193,12 +202,12 @@ end;
 procedure TFrmMain.LoadVendorSettings;
 var i : integer;
 begin
-   if not FileExists(xPLClient.PluginList.Name) then exit;
-   xPLClient.PluginList.Load;
-
    cbLocations.Items.Clear ;
    cbLocations.Items.AddStrings(xPLClient.PluginList.Locations);
-   cbLocations.Text := K_XPL_VENDOR_SEED_LOCATION;                                        // Default site to use
+   cbLocations.Text := K_XPL_VENDOR_SEED_LOCATION;                              // Default site to use
+
+   if not FileExists(xPLClient.PluginList.Name) then exit;
+   xPLClient.PluginList.Load;
 
    lvPlugins.Items.Clear;
 

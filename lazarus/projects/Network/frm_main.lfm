@@ -1,8 +1,9 @@
 object FrmMain: TFrmMain
-  Left = 47
+  Left = 9
   Height = 475
-  Top = 189
+  Top = 105
   Width = 631
+  ActiveControl = PageControl1
   Caption = 'FrmMain'
   ClientHeight = 455
   ClientWidth = 631
@@ -2282,7 +2283,7 @@ object FrmMain: TFrmMain
     OnPageChanged = PageControl1PageChanged
     object tsBasic: TTabSheet
       Caption = 'Basic xPL Settings'
-      ClientHeight = 375
+      ClientHeight = 398
       ClientWidth = 623
       object Label4: TLabel
         Left = 4
@@ -2378,7 +2379,7 @@ object FrmMain: TFrmMain
     end
     object tsAdanced: TTabSheet
       Caption = 'Advanced Settings'
-      ClientHeight = 375
+      ClientHeight = 398
       ClientWidth = 623
       object Label9: TLabel
         Left = 8
@@ -2477,9 +2478,9 @@ object FrmMain: TFrmMain
         ParentColor = False
       end
       object Panel1: TPanel
-        Left = 420
+        Left = 412
         Height = 24
-        Top = 11
+        Top = 10
         Width = 203
         Alignment = taLeftJustify
         BevelOuter = bvNone
@@ -2517,11 +2518,12 @@ object FrmMain: TFrmMain
           end        
           item
             Caption = 'Update'
-            Width = 100
+            Width = 130
           end>
-        PopupMenu = PopupMenu1
+        PopupMenu = popPluginList
         TabOrder = 2
         ViewStyle = vsReport
+        OnDblClick = ViewXML
       end
     end
   end
@@ -2690,22 +2692,30 @@ object FrmMain: TFrmMain
   object IdDayTime1: TIdDayTime
     left = 432
   end
-  object PopupMenu1: TPopupMenu
-    left = 304
-    object MenuItem2: TMenuItem
+  object SelectDirectoryDialog1: TSelectDirectoryDialog
+    left = 488
+  end
+  object popPluginList: TPopupMenu
+    left = 525
+    top = 56
+    object mnuSelectAll: TMenuItem
       Caption = 'Select All'
       OnClick = Select_Do
     end
-    object MenuItem4: TMenuItem
-      Caption = 'Unselect All'
+    object mnuDeselectAll: TMenuItem
+      Caption = 'Deselect All'
       OnClick = Select_Undo
     end
-    object MenuItem6: TMenuItem
-      Caption = 'Invert selection'
+    object mnuInvertSelect: TMenuItem
+      Caption = 'Invert Selection'
       OnClick = Select_Invert
     end
-  end
-  object SelectDirectoryDialog1: TSelectDirectoryDialog
-    left = 488
+    object MenuItem1: TMenuItem
+      Caption = '-'
+    end
+    object mnuViewXML: TMenuItem
+      Caption = 'View XML file'
+      OnClick = ViewXML
+    end
   end
 end
