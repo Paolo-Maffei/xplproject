@@ -31,4 +31,4 @@
 	Integration of latest functional updates : proxy settings, simplification of path input for root xpl directory
 	Portability validated with Linux version of Lazarus...soon to come
 	Added vendor xml file viewer
-	
+
