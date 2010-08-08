@@ -1,4 +1,13 @@
 unit uxPLConst;
+{==============================================================================
+  UnitName      = uxConst
+  UnitDesc      = xPL constant and types library
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.91 : Suppressed string casting (tsMsgType from string[8] to string to avoid
+        shortstring problem casting on linux portability
+ }
+
 
 {$mode objfpc}{$H+}
 
@@ -12,7 +21,7 @@ type
    tsClass    = string[8];
    tsType     = string[8];
    tsSchema   = string[8 + 1 + 8];
-   tsMsgType  = string[8];
+   tsMsgType  = string;                       //string[8];
    tsBodyElmtName  = string[16];
    tsBodyElmtValue = string[128];
 

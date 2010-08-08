@@ -17,7 +17,11 @@ interface
 
 uses Classes, SysUtils, DOM, XMLRead, uxPLSettings, uxPLConst, uxPLPluginFile;
 
-type TxPLVendorSeedFile = class
+type
+
+{ TxPLVendorSeedFile }
+
+TxPLVendorSeedFile = class
      private
         fPlugins   : TStringList;
         fLocations : TStringList;
@@ -26,12 +30,11 @@ type TxPLVendorSeedFile = class
         fDocument : TXMLDocument;
         fStatus   : boolean;
 
-        procedure  GetElements;
-        function   GetPluginValue(const aPlugIn : string; const aProperty : string) : string;
-        function    VendorFile(aVendor : tsVendor) : TXMLDocument;
-        function    GetDevices(aDocument : TXMLDocument) : TStringList;
-        function    VendorTag(aDocument : TXMLDocument) : tsVendor;
-        function    GetDistantFile(const sLocation : string; const sDestination : string) : boolean;
+        procedure GetElements;
+        function  GetPluginValue(const aPlugIn : string; const aProperty : string) : string;
+        function  VendorTag(aDocument : TXMLDocument) : tsVendor;
+        function  GetDistantFile(const sLocation : string; const sDestination : string) : boolean;
+        function  VendorFile(aVendor : tsVendor) : TXMLDocument;
      public
         constructor create(const aSettings : TxPLSettings);
         destructor  destroy; override;
@@ -42,6 +45,8 @@ type TxPLVendorSeedFile = class
         function Update(const sLocation : string = K_XPL_VENDOR_SEED_LOCATION) : boolean; // Reloads the seed file from website
         function UpdatePlugin(const aPluginName : string) : boolean;
 
+        function GetDevices(aVendor : tsVendor) : TStringList;
+
         function PluginType       (const aPlugIn : string) : string;
         function PluginDescription(const aPlugIn : string) : string;
         function PluginURL        (const aPlugin : string) : string;
@@ -49,7 +54,7 @@ type TxPLVendorSeedFile = class
         function GetPluginFilePath(const aPluginName : string) : string;
 
         property Plugins   : TStringList read fPlugins;
-        property Locations : TStringList read fLocations;
+        property Locations : TStringList read fLocations;                       // Places where Seed file can be downloaded
         property IsValid   : boolean     read fStatus;
      end;
 
@@ -118,22 +123,20 @@ begin result := fPlugDirectory + K_XPL_VENDOR_SEED_FILE; end;
 procedure TxPLVendorSeedFile.GetElements;
 var Child,Location : TDomNode;
     aRecord : TVendorPluginFile;
-    plugdesc,vendor : string;
+    vendor : tsVendor;
 begin
    fPlugins.Clear;
    fLocations.Clear;
    Child := fDocument.DocumentElement.FirstChild;
    while Assigned(Child) do begin
       if Child.NodeName = K_PF_PLUGIN then begin
-            plugdesc := Child.Attributes.GetNamedItem(K_PF_NAME).NodeValue;               // like 'cdp1802 Plug-in'
-            vendor    := AnsiLeftStr(plugdesc,AnsiPos(' ',plugdesc)-1);                   // like  cdp1802
-            //fname     := fPlugDirectory + vendor + K_FEXT_XML;
-            aRecord := TVendorPluginFile.Create;
-            aRecord.Node := Child;
-            aRecord.PluginFile := nil;
-            aRecord.Description := plugDesc;
-            aRecord.FileName := fPlugDirectory + vendor + K_FEXT_XML;                     // like c:\cxmxclkxc\cdp1802.xml
-            fPlugins.AddObject(vendor,aRecord);
+            aRecord  := TVendorPluginFile.Create;
+            aRecord.Description := Child.Attributes.GetNamedItem(K_PF_NAME).NodeValue;               // like 'cdp1802 Plug-in'
+            Vendor  := AnsiLowerCase(AnsiLeftStr(aRecord.Description,AnsiPos(' ',aRecord.Description)-1));     // like  cdp1802 - converted to lower for linux compatibility needs
+            aRecord.Node        := Child;
+            aRecord.PluginFile  := nil;                                                              // By default, the file isn't loaded
+            aRecord.FileName    := fPlugDirectory + Vendor + K_FEXT_XML;                             // like c:\cxmxclkxc\cdp1802.xml
+            fPlugins.AddObject(Vendor,aRecord);
       end;
       if Child.NodeName = K_PF_LOCATION then begin
          Location := Child.FirstChild;
@@ -186,26 +189,30 @@ end;
 function TxPLVendorSeedFile.VendorFile(aVendor: tsVendor): TXMLDocument;
 var i : integer;
     vpf : TVendorPluginFile;
-    aPluginFile : TXMLDocument;
 begin
    result := nil;
    i := fPlugins.IndexOf(aVendor);
    if i = -1 then exit;
 
    vpf := TVendorPluginFile(fPlugins.Objects[i]);
+
    if not assigned(vpf.PluginFile) then
       if fileexists(vpf.FileName) then begin
-         ReadXMLFile(aPluginFile, vpf.FileName);
-         vpf.PluginFile := aPluginFile;
+         ReadXMLFile(vpf.PluginFile, vpf.FileName);
       end;
-   result := TXMLDocument(vpf.PluginFile);
+   result := vpf.PluginFile;
 end;
 
-function TxPLVendorSeedFile.GetDevices(aDocument: TXMLDocument): TStringList;
+function TxPLVendorSeedFile.GetDevices(aVendor : tsVendor): TStringList;
 var Child : TDomNode;
+    aDocument : TXMLDocument;
 begin
    result := TStringList.Create;
+   aDocument := VendorFile(aVendor);
+   if aDocument = nil then exit;
+
    Child := aDocument.FirstChild;
+   Child := Child.FirstChild;
    with TRegExpr.Create do begin
       while Assigned(Child) do begin
          Expression := K_REGEXPR_DEVICE_ID;

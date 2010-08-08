@@ -45,7 +45,7 @@ TxPLMessage = class(TComponent)
 
         // Shortcut properties ==================================
 
-        property MessageType : tsMsgType         read fHeader.fMsgType write fHeader.fMsgType ;
+        property MessageType : string            read fHeader.fMsgType write fHeader.fMsgType ;
         property Source      : TxPLAddress       read fHeader.fSource  write fHeader.fSource  ;
         property Target      : TxPLTargetAddress read fHeader.fTarget  write fHeader.fTarget  ;
         property Schema      : TxPLSchema        read fBody.fSchema    write fBody.fSchema;
@@ -77,7 +77,8 @@ TxPLMessage = class(TComponent)
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, XMLWrite, XMLRead, Regexpr, cStrings, uxPLSettings, frm_xPLMessage, Controls, v_xplmsg_opendialog;
+Uses SysUtils, FileUtil,XMLWrite, XMLRead, Regexpr, cStrings, Controls,
+     uxPLSettings, frm_xPLMessage, v_xplmsg_opendialog;
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
