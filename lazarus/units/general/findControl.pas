@@ -17,7 +17,7 @@ interface
 
 uses
   Classes, SysUtils, StdCtrls, ExtCtrls, Controls,Buttons,Graphics
-  {$ifdef lcl},LCLType,LCLIntf{$else},windows{$endif};
+  {$ifdef fpc},LCLType,LCLIntf{$else}{$ifdef windows},windows{$endif}{$endif};
 
 type
 TFindState = set of (fsFound, fsLoopAround);
