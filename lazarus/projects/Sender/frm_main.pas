@@ -93,12 +93,11 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, uxPLMsgHeader, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile,
+uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile,
      StrUtils, frm_xplAppsLauncher, uxPLConst;
 
 resourcestring //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '1.2';
-     //K_XPL_APP_NAME = 'xPL Sender';
+     K_XPL_APP_VERSION_NUMBER = '1.5';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'sender';
 
@@ -134,7 +133,7 @@ end;
 
 procedure TfrmMain.ClearExecute(Sender: TObject);
 begin
-  radMsgType.ItemIndex := xpl_mtCmnd;
+  radMsgType.ItemIndex := K_MSG_TYPE_CMND;
   edtSource.Text := '';
   MsgGrid.Clear;
   edtTarget.Text := '';
@@ -167,7 +166,7 @@ begin
 //   xPLClient.xPLMessage.ResetValues;
    If Screen2Object(aMessage) then begin
       aMessage.Send;
-      xPLClient.LogInfo('Message sent : ' + aMessage.Header.RawxPL);
+      xPLClient.LogInfo('Message sent : ' + aMessage.Header.RawxPL,[]);
    end;
 end;
 
@@ -215,7 +214,7 @@ begin
   if (Screen2Object(aMessage) and saveDialog.Execute) then begin
           aMessage.Name := saveDialog.FileName;
           aMessage.SaveToFile(saveDialog.FileName);
-          xPLClient.LogInfo('Message saved : ' + aMessage.Name);
+          xPLClient.LogInfo('Message saved : ' + aMessage.Name,[]);
      end;
   aMessage.Destroy;
 end;
@@ -231,7 +230,7 @@ begin
    aMessage := TxPLMessage.Create;
    if aMessage.LoadFromFile(FileName) then begin
       Object2Screen(aMessage);
-      xPLClient.LogInfo('Message loaded : ' + FileName);
+      xPLClient.LogInfo('Message loaded : ' + FileName,[]);
    end else
       Application.MessageBox('Error reading xpl message file','Error',MB_OK + MB_ICONERROR);
    aMessage.Destroy;
@@ -241,30 +240,28 @@ end;
 procedure TFrmMain.PluginCommandExecute ( Sender: TObject );
 var aMenu : TMenuItem;
     command, device, vendor : string;
-    aPlugin : TxPLVendorSeedFile;
     aDevice : TxPLDevice;
-    plugid : integer;
     CommandNode : TDomNode;
     aMessage : TxPLMessage;
+    asender : string;
 begin
      aMenu := TMenuItem(Sender);
      command := aMenu.Caption;
      device  := aMenu.Parent.Caption;
      vendor  := aMenu.Parent.Parent.Caption;
-     plugid := xPLClient.PluginList.Plugins.IndexOf(vendor);
-     if plugid<>-1 then begin
-        aPlugIn := TxPLVendorSeedFile(xPLClient.PluginList.Plugins.Objects[plugid]);
-        aDevice := aPlugIn.GetDevice(vendor,device);
-//        CommandNode := aPlugIn.Command(device,command);
-        CommandNode := aDevice.Command(command);
-        if CommandNode<>nil then begin
-           aMessage := TxPLMessage.create;
-           aMessage.ReadFromXML(CommandNode);
-           Object2Screen(aMessage);
-           aMessage.Destroy;
-        end;
-        aDevice.Destroy;
+     aDevice := xPLClient.PluginList.GetDevice(vendor,device);
+     if not Assigned(aDevice) then exit;
+
+     CommandNode := aDevice.Command(command);
+     if CommandNode<>nil then begin
+        aMessage := TxPLMessage.create;
+        aMessage.ReadFromXML(CommandNode);
+        asender := edtSource.Caption;                                            // Preserve current sender value
+        Object2Screen(aMessage);
+        edtSource.Caption := asender;
+        aMessage.Destroy;
      end;
+     aDevice.Destroy;
 end;
 
 procedure TFrmMain.InitPluginsMenu;
@@ -278,28 +275,26 @@ end;
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
     aPlugin : TxPLVendorSeedFile;
     aDevice : TxPLDevice;
-    aListe, Commands : TStringList;
+    aListe, Devices, Commands : TStringList;
     cptPlugs,i,j : integer;
 begin
-     for cptPlugs:=0 to xPLClient.PluginList.Plugins.Count-1 do begin
-         aPlugin := TxPLVendorSeedFile(xPLClient.PluginList.Plugins.Objects[cptPlugs]);
-         aMenu := TMenuItem.Create(self);
-         aMenu.Caption := aPlugin.VendorTag;
-         MenuItem8.Insert(0,aMenu);
-         for i:=0 to aPlugin.DeviceCount-1 do begin                                 // Loop on devices
-             aDevice := aPlugIn.Device(aPlugin.Devices[i]);
-             aSubMenu := AppendMenu(aMenu, aDevice.Name);
-
-//             Commands := aPlugin.Commands(aPlugin.Device[i]);
-//             Commands := aDevice.Commands;
-             for j:= 0 to aDevice.Commands.Count-1 do begin
-                 aSubSubMenu := AppendMenu(aSubMenu, aDevice.Commands[j]);
-                 aSubSubMenu.OnClick := @PluginCommandExecute;
-             end;
-             aDevice.Destroy;
-//             Commands.Destroy;
-             if aSubMenu.Count=0 then aSubMenu.Free;                         // Eliminates empty sub menus
+   for cptPlugs :=0 to xPLClient.PluginList.Plugins.Count-1 do begin
+       aMenu := TMenuItem.Create(self);
+       MenuItem8.Insert(0,aMenu);
+       aPlugin := TxPLVendorSeedFile(xPLClient.PluginList);
+       aMenu.Caption := aPlugin.Plugins[cptPlugs];                            // Get the vendor name as menu entry
+       Devices := aPlugin.GetDevices(aMenu.Caption);
+          for i:=0 to Devices.Count-1 do begin                                 // Loop on devices
+              aSubMenu := AppendMenu(aMenu, Devices[i]);
+              aDevice  := aPlugin.GetDevice(aMenu.Caption,Devices[i]);
+              for j:= 0 to aDevice.Commands.Count-1 do begin
+                  aSubSubMenu := AppendMenu(aSubMenu, aDevice.Commands[j]);
+                  aSubSubMenu.OnClick := @PluginCommandExecute;
+              end;
+              aDevice.Destroy;
+              if aSubMenu.Count=0 then aSubMenu.Free;                         // Eliminates empty sub menus
          end;
+         Devices.Free;
          if aMenu.Count = 0 then aMenu.Free;
      end;
 end;
