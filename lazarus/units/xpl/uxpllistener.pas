@@ -44,6 +44,16 @@ type
 
         procedure InitSocket();
      public
+        OnxPLReceived      : TxPLReceivedEvent;
+        OnxPLJoinedNet     : TxPLJoinedEvent  ;
+        OnxPLCOnfigDone    : TxPLConfigDone   ;
+        OnxPLHBeatPrepare  : TxPLHBeatPrepare ;
+        OnxPLSensorRequest : TxPLSensorRequest;
+        OnxPLControlBasic  : TxPLSensorRequest;
+        OnxPLTTSBasic      : TxPLTTSBasic     ;
+        OnxPLHBeatApp      : TxPLHBeatApp     ;
+        OnxPLMediaBasic    : TxPLMediaBasic   ;
+
         PassMyOwnMessages     : Boolean;
         JoinedxPLNetwork      : Boolean;                    // This should be read only by other objects
         AwaitingConfiguration : Boolean;                    // This should be read only by other objects
@@ -61,16 +71,6 @@ type
         property Address             : TxPLAddress read fAdresse;
         property Disposing           : Boolean read bDisposing;
         function Instance : tsInstance;
-
-        OnxPLReceived      : TxPLReceivedEvent;
-        OnxPLJoinedNet     : TxPLJoinedEvent  ;
-        OnxPLCOnfigDone    : TxPLConfigDone   ;
-        OnxPLHBeatPrepare  : TxPLHBeatPrepare ;
-        OnxPLSensorRequest : TxPLSensorRequest;
-        OnxPLControlBasic  : TxPLSensorRequest;
-        OnxPLTTSBasic      : TxPLTTSBasic     ;
-        OnxPLHBeatApp      : TxPLHBeatApp     ;
-        OnxPLMediaBasic    : TxPLMediaBasic   ;
 
         procedure DoxPLJoinedNet(aJoined    : boolean);
         function DoSensorRequest(aMessage : TxPLMessage) : boolean;
