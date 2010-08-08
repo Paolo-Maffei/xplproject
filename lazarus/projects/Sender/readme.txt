@@ -20,6 +20,8 @@ v 1.0
 	* App repository enabled (window allows launching of referenced apps).
 v 1.1
 	* Command line added : xpl_sender -s filename to send a message without gui
+v 1.5 
+	* Modifications to enable linux portability
 
 
 	
