@@ -97,7 +97,7 @@ implementation
 
 uses
   { Delphi }
-  Windows,
+{$ifdef windows}  Windows,{$endif}
   SysUtils,
   Math;
 
