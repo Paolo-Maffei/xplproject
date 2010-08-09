@@ -190,7 +190,7 @@ type
      function StoreSpeedValue   (aValue : string) : string;
   public
      constructor Create(aOwner : TComponent; aZip, aLicense, aPartnerid, aSystem : string);
-     constructor Create(aOwner : TComponent); override;
+//     constructor Create(aOwner : TComponent); override;
      function MettreAJour : boolean;
      procedure Assign(aWeather : TWeather); overload;
 
@@ -238,16 +238,16 @@ end;
 { TWeather ========================================================================================}
 constructor TWeather.Create(aOwner: TComponent; aZip, aLicense, aPartnerid,  aSystem: string);
 begin
-  Create(aOwner);
+  inherited Create(aOwner);
   fSystem      := aSystem;
   fURI         := Format(K_WEATHER_URI,[aZip,aPartnerId,aLicense]);
   fDestination := 'weather.xml';
 end;
 
-constructor TWeather.Create(aOwner: TComponent);
+{constructor TWeather.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-end;
+end;}
 
 function TWeather.StoreDegreeValue(aValue : string) : string;       // by default, weather.com supplies values in farenheit
 var adb : double;
