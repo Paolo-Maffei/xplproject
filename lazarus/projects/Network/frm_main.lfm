@@ -2276,9 +2276,9 @@ object FrmMain: TFrmMain
     Height = 426
     Top = 29
     Width = 631
-    ActivePage = tsVendor
+    ActivePage = tsBasic
     Align = alClient
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     OnPageChanged = PageControl1PageChanged
     object tsBasic: TTabSheet
