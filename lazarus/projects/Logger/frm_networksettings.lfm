@@ -1,51 +1,20 @@
 object frmNetworkSettings: TfrmNetworkSettings
-  Left = 52
-  Height = 378
-  Top = 86
-  Width = 441
+  Left = 354
+  Height = 361
+  Top = 147
+  Width = 466
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Global xPL Network Settings'
-  ClientHeight = 378
-  ClientWidth = 441
+  ClientHeight = 361
+  ClientWidth = 466
   OnShow = FormShow
-  SessionProperties = 'Left;Top'
   LCLVersion = '0.9.28.2'
-  object Label4: TLabel
-    Left = 8
-    Height = 16
-    Top = 128
-    Width = 148
-    Caption = 'Listen for xPL messages on :'
-    Font.Color = clNavy
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label3: TLabel
-    Left = 8
-    Height = 16
-    Top = 168
-    Width = 247
-    Caption = 'Broadcast address used to send xPL Messages :'
-    Font.Color = clNavy
-    ParentColor = False
-    ParentFont = False
-  end
-  object Label5: TLabel
-    Left = 8
-    Height = 16
-    Top = 328
-    Width = 226
-    Caption = 'Root directory for xPL apps config storing :'
-    Font.Color = clNavy
-    ParentColor = False
-    ParentFont = False
-  end
   object ToolBar3: TToolBar
     Left = 0
     Height = 26
     Top = 0
-    Width = 441
+    Width = 466
     ButtonHeight = 24
     ButtonWidth = 80
     Caption = 'ToolBar2'
@@ -92,100 +61,202 @@ object frmNetworkSettings: TfrmNetworkSettings
       OnClick = BtnSaveSettingsClick
     end
   end
-  object rgListenTo: TRadioGroup
+  object Page1: TPageControl
     Left = 8
-    Height = 104
-    Top = 208
-    Width = 424
-    AutoFill = True
-    Caption = 'Listen to messages originating from :'
-    ChildSizing.LeftRightSpacing = 6
-    ChildSizing.TopBottomSpacing = 6
-    ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
-    ChildSizing.EnlargeVertical = crsHomogenousChildResize
-    ChildSizing.ShrinkHorizontal = crsScaleChilds
-    ChildSizing.ShrinkVertical = crsScaleChilds
-    ChildSizing.Layout = cclLeftToRightThenTopToBottom
-    ChildSizing.ControlsPerLine = 1
-    ClientHeight = 86
-    ClientWidth = 420
-    Items.Strings = (
-      'Any IP address'
-      'Any local IP address'
-      'Only the following IP addresses :'
-    )
-    OnClick = e_ListenOnChange
-    TabOrder = 1
-  end
-  object StaticText1: TStaticText
-    Left = 8
-    Height = 56
+    Height = 320
     Top = 32
-    Width = 424
-    Caption = 'Settings below affect how xPL applications running on this computer transmit and receive xPL messages via the network. Note that your computer should use a fixed IP address.'
-    TabOrder = 2
-  end
-  object e_ListenOn: TComboBox
-    Left = 264
-    Height = 23
-    Top = 128
-    Width = 168
-    ItemHeight = 15
-    OnChange = e_ListenOnChange
-    TabOrder = 3
-  end
-  object e_BroadCast: TComboBox
-    Left = 264
-    Height = 23
-    Top = 168
-    Width = 168
-    ItemHeight = 15
-    OnChange = e_ListenOnChange
-    TabOrder = 4
-  end
-  object StaticText2: TStaticText
-    Left = 8
-    Height = 33
-    Top = 88
-    Width = 424
-    Caption = 'It is mandatory for these settings to be configured to get an xPL application to work as expected'
-    Color = clBtnFace
-    Font.Color = clRed
-    ParentFont = False
-    ParentColor = False
-    TabOrder = 5
-  end
-  object edtListenTo: TEdit
-    Left = 264
-    Height = 23
-    Top = 280
-    Width = 160
-    OnChange = e_ListenOnChange
-    TabOrder = 6
-  end
-  object edtRootDir: TEdit
-    Left = 8
-    Height = 23
-    Top = 344
-    Width = 384
-    OnChange = e_ListenOnChange
-    TabOrder = 7
-  end
-  object BtnShowDirSelect: TButton
-    Left = 400
-    Height = 25
-    Top = 344
-    Width = 24
-    Caption = '...'
-    OnClick = BtnShowDirSelectClick
-    TabOrder = 8
-  end
-  object XMLPropStorage: TXMLPropStorage
-    StoredValues = <>
-    left = 240
+    Width = 448
+    ActivePage = TabSheet1
+    TabIndex = 0
+    TabOrder = 1
+    object TabSheet1: TTabSheet
+      Caption = 'Basic xPL Settings'
+      ClientHeight = 292
+      ClientWidth = 440
+      object Label4: TLabel
+        Left = 4
+        Height = 16
+        Top = 104
+        Width = 148
+        Caption = 'Listen for xPL messages on :'
+        Font.Color = clNavy
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label3: TLabel
+        Left = 4
+        Height = 16
+        Top = 144
+        Width = 247
+        Caption = 'Broadcast address used to send xPL Messages :'
+        Font.Color = clNavy
+        ParentColor = False
+        ParentFont = False
+      end
+      object rgListenTo: TRadioGroup
+        Left = 4
+        Height = 104
+        Top = 184
+        Width = 424
+        AutoFill = True
+        Caption = 'Listen to messages originating from :'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 86
+        ClientWidth = 420
+        Items.Strings = (
+          'Any IP address'
+          'Any local IP address'
+          'Only the following IP addresses :'
+        )
+        OnClick = e_ListenOnChange
+        TabOrder = 0
+      end
+      object StaticText1: TStaticText
+        Left = 4
+        Height = 56
+        Top = 8
+        Width = 424
+        Caption = 'Settings below affect how xPL applications running on this computer transmit and receive xPL messages via the network. Note that your computer should use a fixed IP address.'
+        Color = clNone
+        ParentColor = False
+        TabOrder = 1
+      end
+      object e_ListenOn: TComboBox
+        Left = 260
+        Height = 23
+        Top = 104
+        Width = 168
+        ItemHeight = 15
+        OnChange = e_ListenOnChange
+        TabOrder = 2
+      end
+      object e_BroadCast: TComboBox
+        Left = 260
+        Height = 23
+        Top = 144
+        Width = 168
+        ItemHeight = 15
+        OnChange = e_ListenOnChange
+        TabOrder = 3
+      end
+      object StaticText2: TStaticText
+        Left = 4
+        Height = 33
+        Top = 64
+        Width = 424
+        Caption = 'It is mandatory for these settings to be configured to get an xPL application to work as expected'
+        Color = clNone
+        Font.Color = clRed
+        ParentFont = False
+        ParentColor = False
+        TabOrder = 4
+      end
+      object edtListenTo: TEdit
+        Left = 260
+        Height = 23
+        Top = 256
+        Width = 160
+        OnChange = e_ListenOnChange
+        TabOrder = 5
+      end
+    end
+    object TabSheet2: TTabSheet
+      Caption = 'Advanced Settings'
+      ClientHeight = 292
+      ClientWidth = 440
+      object Label5: TLabel
+        Left = 8
+        Height = 16
+        Top = 8
+        Width = 226
+        Caption = 'Root directory for xPL apps config storing :'
+        Font.Color = clNavy
+        ParentColor = False
+        ParentFont = False
+      end
+      object Label2: TLabel
+        Left = 324
+        Height = 16
+        Top = 152
+        Width = 29
+        Caption = 'Port :'
+        ParentColor = False
+      end
+      object Label1: TLabel
+        Left = 44
+        Height = 16
+        Top = 152
+        Width = 69
+        Caption = 'Proxy HTTP :'
+        ParentColor = False
+      end
+      object rgProxy: TRadioGroup
+        Left = 8
+        Height = 81
+        Top = 72
+        Width = 420
+        AutoFill = True
+        Caption = 'Proxy Server Configuration'
+        ChildSizing.LeftRightSpacing = 6
+        ChildSizing.TopBottomSpacing = 6
+        ChildSizing.EnlargeHorizontal = crsHomogenousChildResize
+        ChildSizing.EnlargeVertical = crsHomogenousChildResize
+        ChildSizing.ShrinkHorizontal = crsScaleChilds
+        ChildSizing.ShrinkVertical = crsScaleChilds
+        ChildSizing.Layout = cclLeftToRightThenTopToBottom
+        ChildSizing.ControlsPerLine = 1
+        ClientHeight = 63
+        ClientWidth = 416
+        Items.Strings = (
+          'No proxy'
+          'Self defined proxy setup :'
+        )
+        OnClick = e_ListenOnChange
+        TabOrder = 2
+      end
+      object edtRootDir: TEdit
+        Left = 8
+        Height = 23
+        Top = 32
+        Width = 384
+        OnChange = e_ListenOnChange
+        TabOrder = 0
+      end
+      object BtnShowDirSelect: TButton
+        Left = 404
+        Height = 25
+        Top = 32
+        Width = 24
+        Caption = '...'
+        OnClick = BtnShowDirSelectClick
+        TabOrder = 1
+      end
+      object edtHTTPProxy: TEdit
+        Left = 124
+        Height = 23
+        Top = 152
+        Width = 192
+        OnChange = e_ListenOnChange
+        TabOrder = 3
+      end
+      object edtHTTPPort: TEdit
+        Left = 364
+        Height = 23
+        Top = 152
+        Width = 64
+        OnChange = e_ListenOnChange
+        TabOrder = 4
+      end
+    end
   end
   object SelectDirectoryDialog1: TSelectDirectoryDialog
-    left = 295
-    top = 52
+    left = 304
   end
 end

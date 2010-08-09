@@ -90,7 +90,7 @@ end;
 procedure TfrmVendorPlugins.UpdateSeedExecute(Sender: TObject);
 begin
    VendorSeed.Update(cbLocations.Text);
-   frmMain.xPLClient.LogInfo('Seed file ' + Panel1.Caption);
+   frmMain.xPLClient.LogInfo('Seed file ' + Panel1.Caption,[]);
    LoadVendorSettings;
 end;
 

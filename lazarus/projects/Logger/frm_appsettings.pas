@@ -8,8 +8,13 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, XMLPropStorage, StdCtrls, Buttons;
 
-type TfrmAppSettings = class(TForm)
+type
+
+{ TfrmAppSettings }
+
+TfrmAppSettings = class(TForm)
         ckAutoGetSetup: TCheckBox;
+        ckAutoStartLogging: TCheckBox;
         ckIcons: TCheckBox;
         ckShowPreview: TCheckBox;
         Label1: TLabel;

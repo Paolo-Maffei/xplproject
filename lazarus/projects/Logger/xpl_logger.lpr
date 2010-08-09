@@ -12,7 +12,7 @@ uses
   TConfiguratorUnit, 
 frm_main, XPL, frm_about, frm_appsettings,
 frm_setupinstance, frm_networksettings, frm_vendorplugins,
-frm_xpllogviewer, indylaz, frm_plugindetail, uxplmsgheader;
+frm_xpllogviewer, indylaz, frm_plugindetail;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 

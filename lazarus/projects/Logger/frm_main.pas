@@ -29,17 +29,15 @@ type
     ckCurrentConf: TCheckBox;
     ClasseImages: TImageList;
     Memo1: TMemo;
-    MenuItem10: TMenuItem;
     MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem17: TMenuItem;
     MenuItem18: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
+    MenuItem7: TMenuItem;
     mnuCommands: TMenuItem;
-    mnuConfigurations: TMenuItem;
     mnuSendMessage: TMenuItem;
     Panel1: TPanel;
     PopupMenu1: TPopupMenu;
@@ -161,9 +159,10 @@ uses frm_xplappslauncher, frm_AppSettings, cDateTime,  StrUtils, frm_xpllogviewe
 
 // ======================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0.2';
+     K_XPL_APP_VERSION_NUMBER = '2.0.3';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'logger';
+     K_ROOT_NODE_NAME = 'xPL Network';
 
 // ======================================================================================
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -198,7 +197,7 @@ begin
   clbType.SetCheckedAll(self);
   clbSchema.SetCheckedAll(self);
 
-  topNode := tvMessages.Items.AddChild(nil,'xPL Network');
+  topNode := tvMessages.Items.AddChild(nil,K_ROOT_NODE_NAME);
   tvMessages.Selected := topNode;
 
   xPLClient.Listen;
@@ -227,14 +226,17 @@ procedure TFrmMain.FilterExecute(Sender: TObject);
 begin { Nothing to do but the function must be present } end;
 
 procedure TFrmMain.ApplySettings(Sender : TObject);                                       // Correction bug FS#39
-var i : integer;
-begin
-   if frmAppSettings.ckIcons.Checked then lvMessages.SmallImages := ClasseImages
-                                     else lvMessages.SmallImages := TypeImages;
-   for i:=0 to lvMessages.Columns.Count-1 do
-       lvMessages.Column[i].Caption := frmAppSettings.ListBox1.Items[i];
-   Panel1.Visible := frmAppSettings.ckShowPreview.Checked;
-   tvMessagesSelectionChanged(Sender);
+var i : integer;                                                                          //    This method is also called by frmAppSettings
+begin                                                                                     //    after having load the application default setup
+   with frmAppSettings do begin
+      if ckIcons.Checked then lvMessages.SmallImages := ClasseImages
+                         else lvMessages.SmallImages := TypeImages;
+      if ckAutoStartLogging.Checked then PlayExecute(self)                                // 2.0.3 feature
+                                    else PauseExecute(self);
+      for i:=0 to lvMessages.Columns.Count-1 do lvMessages.Column[i].Caption := ListBox1.Items[i];
+      Panel1.Visible := ckShowPreview.Checked;
+      tvMessagesSelectionChanged(Sender);
+   end;
 end;
 
 procedure TFrmMain.acAppSettingsExecute(Sender: TObject);
@@ -336,6 +338,9 @@ begin
      aMessage := TxPLMessage.Create ;
      aMessage.Header.Source := xPLClient.Address;
      aMessage.Header.Target.Tag := GetSourceAddress;
+     aMessage.Body.Schema.ClasseAsString:='class';                                        // 2.0.3 feature
+     aMessage.Body.Schema.TypeAsString:='basic';                                          // 2.0.3
+     aMessage.Body.AddKeyValuePair('key','value');                                        // 2.0.3
      aMessage.ShowForEdit([boSave,boSend]) ;                                              // Potential issue here : aMessage not destroyed
 end;
 
@@ -427,6 +432,7 @@ var ConfElmts : TConfigurationRecord;
     i : integer;
     aMenu : tmenuitem;
 begin
+   acDiscover.Visible := (Node = TopNode);
    acRequestConfig.Visible := (Node.Data<>nil);
    if acRequestConfig.Visible then begin
       ConfElmts := TConfigurationRecord(Node.Data);

@@ -1,7 +1,7 @@
 object FrmMain: TFrmMain
-  Left = 204
+  Left = 176
   Height = 568
-  Top = 91
+  Top = 107
   Width = 1022
   Caption = 'FrmMain'
   ClientHeight = 548
@@ -2268,7 +2268,7 @@ object FrmMain: TFrmMain
   Menu = MainMenu1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  SessionProperties = 'Height;Left;lvMessages.Columns;Top;Width;clbType.Items;clbSchema.Items'
+  SessionProperties = 'clbSchema.Items;clbType.Items;Height;Left;lvMessages.Columns;Top;Width'
   LCLVersion = '0.9.28.2'
   object ToolBar2: TToolBar
     Left = 0
@@ -2569,14 +2569,17 @@ object FrmMain: TFrmMain
     end
     object acDiscover: TAction
       Caption = 'Discover xPL Network'
+      ImageIndex = 12
       OnExecute = acDiscoverExecute
     end
     object acRequestConfig: TAction
       Caption = 'Request Configuration'
+      ImageIndex = 19
       OnExecute = acRequestConfigExecute
     end
     object acSetupInstance: TAction
       Caption = 'Configure...'
+      ImageIndex = 7
       OnExecute = acSetupInstanceExecute
     end
     object acNetworkSettings: TAction
@@ -2593,6 +2596,7 @@ object FrmMain: TFrmMain
     end
     object acPluginDetail: TAction
       Caption = 'Plugin Details'
+      ImageIndex = 1
       OnExecute = acPluginDetailExecute
     end
   end
@@ -2774,17 +2778,6 @@ object FrmMain: TFrmMain
           FF00FFFFFF00FFFFFF00FFFFFF006D9CD4896A9AD2FB6697CFEE
         }
         OnClick = QuitExecute
-      end
-    end
-    object mnuConfigurations: TMenuItem
-      Caption = 'Device Configuration'
-      object MenuItem10: TMenuItem
-        Action = acDiscover
-        OnClick = acDiscoverExecute
-      end
-      object MenuItem14: TMenuItem
-        Action = acRequestConfig
-        OnClick = acRequestConfigExecute
       end
     end
     object MenuItem16: TMenuItem
@@ -3477,8 +3470,13 @@ object FrmMain: TFrmMain
     Images = frmAbout.ilStandardActions
     left = 280
     top = 104
+    object MenuItem7: TMenuItem
+      Action = acDiscover
+      OnClick = acDiscoverExecute
+    end
     object mnuSendMessage: TMenuItem
       Caption = 'Send a new message to...'
+      ImageIndex = 5
       OnClick = mnuSendMessageClick
     end
     object MenuItem13: TMenuItem
