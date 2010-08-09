@@ -1092,12 +1092,19 @@ object frmMain: TfrmMain
   LCLVersion = '0.9.28.2'
   object Memo1: TMemo
     Left = 2
-    Height = 256
+    Height = 233
     Top = 2
     Width = 524
     Align = alClient
     ScrollBars = ssVertical
     TabOrder = 0
+  end
+  object StatusBar1: TStatusBar
+    Left = 2
+    Height = 23
+    Top = 235
+    Width = 524
+    Panels = <>
   end
   object MainMenu1: TMainMenu
     left = 384
