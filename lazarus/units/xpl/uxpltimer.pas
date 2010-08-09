@@ -55,6 +55,7 @@ type
      aMessage  : TxPLMessage;
      fGrid : TListView;
      fSysTimer : TTimer;
+     function GetTimer(Index : integer): TxPLTimer;
   public
      constructor Create(const aClient : TxPLListener; const aGrid : TListView);
      destructor  Destroy;
@@ -74,8 +75,9 @@ type
 
      function ResumeOrStartATimer(const sTimer: string) : boolean;
      procedure Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequence : string);
-  published
+  public
      property xPLMessage : TxPLMessage read aMessage;
+     property Timers[Index : integer] : TxPLTimer read GetTimer;
   end;
 
 
@@ -211,7 +213,7 @@ begin
    if not result then exit;
 
    with fxPLMessage do begin
-       MessageType := xpl_mtStat;    // as xpl-mtStat this message will be a broadcast, target assumed by message object
+       MessageType := K_MSG_TYPE_STAT;    // as xpl-mtStat this message will be a broadcast, target assumed by message object
        Body.Format_SensorBasic(fName,'generic',Status);
        Body.Schema.Tag := 'timer.basic';
        Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
@@ -227,7 +229,7 @@ begin
    Status := 'started';
 
    with fxPLMessage do begin
-      MessageType := xpl_mtTrig;
+      MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
       Body.Format_SensorBasic(fName,'generic',Status);
       Body.Schema.Tag := 'timer.basic';
@@ -249,7 +251,7 @@ begin
       Remaining := 0;
 
       with fxPLMessage do begin
-         MessageType := xpl_mtTrig;
+         MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := Self.Target;
          Body.Format_SensorBasic(fName,'generic',StopReason);
          Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
@@ -270,7 +272,7 @@ begin
    Status := 'halted';                                                          // Mark it as halted
 
    with fxPLMessage do begin
-      MessageType := xpl_mtTrig;
+      MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
       Body.Format_SensorBasic(fName,'generic',Status);
       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
@@ -390,6 +392,7 @@ procedure TxPLTimerList.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath:
 var i : integer;
     aTimer  : TxPLTimer;
 begin
+   self.Clear;
    i := StrToInt(aCfgfile.GetValue(aRootPath +'/TimerCount', '0')) - 1;
    while i>=0 do begin
       aTimer := TxPLTimer.Create(aMessage);
@@ -442,6 +445,9 @@ begin
    item.Data := aTimer;
 end;
 
+function TxPLTimerList.GetTimer(Index : integer): TxPLTimer;
+begin result := TxPLTimer(Objects[Index]); end;
+
 constructor TxPLTimerList.Create(const aClient: TxPLListener; const aGrid : TListView);
 begin
   inherited Create;
@@ -449,7 +455,7 @@ begin
   fSysTimer.Interval := 1000;
   fSysTimer.Enabled  := False;
   fSysTimer.OnTimer  := @Check;
-  aMessage := aClient.PrepareMessage(xpl_mtTrig,'timer.basic');
+  aMessage := aClient.PrepareMessage(K_MSG_TYPE_TRIG,'timer.basic');
   fGrid := aGrid;
 end;
 
