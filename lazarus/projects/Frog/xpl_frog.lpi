@@ -9,13 +9,13 @@
       <Title Value="xpl_frog"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="6"/>
+      <ActiveEditorIndexAtStart Value="7"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <CurrentVersionNr Value="1"/>
-      <CurrentBuildNr Value="3555"/>
+      <CurrentBuildNr Value="3557"/>
       <ProjectVersion Value="1.0.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -46,7 +46,7 @@
         <UnitName Value="xpl_frog"/>
         <CursorPos X="60" Y="18"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -563,7 +563,7 @@
         <UnitName Value="uxPLConst"/>
         <CursorPos X="19" Y="66"/>
         <TopLine Value="66"/>
-        <EditorIndex Value="10"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="97"/>
         <Loaded Value="True"/>
       </Unit68>
@@ -615,7 +615,7 @@
         <UnitName Value="uxPLListener"/>
         <CursorPos X="124" Y="28"/>
         <TopLine Value="28"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="86"/>
         <Loaded Value="True"/>
       </Unit75>
@@ -699,7 +699,7 @@
         <UnitName Value="uxplglobals"/>
         <CursorPos X="32" Y="52"/>
         <TopLine Value="43"/>
-        <EditorIndex Value="13"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="48"/>
         <Loaded Value="True"/>
       </Unit87>
@@ -908,7 +908,7 @@
         <UnitName Value="IdIcmpClient"/>
         <CursorPos X="25" Y="91"/>
         <TopLine Value="79"/>
-        <EditorIndex Value="11"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit116>
@@ -978,8 +978,8 @@
       <Unit125>
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\objpas\sysutils\filutilh.inc"/>
         <CursorPos X="17" Y="94"/>
-        <TopLine Value="79"/>
-        <EditorIndex Value="7"/>
+        <TopLine Value="66"/>
+        <EditorIndex Value="1"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit125>
@@ -987,7 +987,7 @@
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\win\wininc\ascdef.inc"/>
         <CursorPos X="10" Y="69"/>
         <TopLine Value="58"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit126>
@@ -996,178 +996,45 @@
         <UnitName Value="mxPluginReg"/>
         <CursorPos X="3" Y="48"/>
         <TopLine Value="39"/>
-        <EditorIndex Value="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit127>
       <Unit128>
         <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxPlugin.pas"/>
         <UnitName Value="mxPlugin"/>
         <CursorPos X="64" Y="229"/>
         <TopLine Value="217"/>
-        <EditorIndex Value="2"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit128>
       <Unit129>
         <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
         <UnitName Value="mxSmallPlugin"/>
         <CursorPos X="59" Y="697"/>
         <TopLine Value="686"/>
-        <EditorIndex Value="3"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit129>
       <Unit130>
         <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxPluginLoader.pas"/>
         <UnitName Value="mxPluginLoader"/>
         <CursorPos X="41" Y="459"/>
         <TopLine Value="448"/>
-        <EditorIndex Value="4"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit130>
       <Unit131>
         <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
         <UnitName Value="uPlugin"/>
         <CursorPos X="124" Y="329"/>
         <TopLine Value="318"/>
-        <EditorIndex Value="5"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit131>
       <Unit132>
         <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPluginMan.pas"/>
         <UnitName Value="uPluginMan"/>
         <CursorPos X="37" Y="212"/>
         <TopLine Value="201"/>
-        <EditorIndex Value="6"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit132>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
-      <Position1>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="395" Column="27" TopLine="381"/>
-      </Position1>
-      <Position2>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position2>
-      <Position3>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="182" Column="30" TopLine="171"/>
-      </Position3>
-      <Position4>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="184" Column="42" TopLine="171"/>
-      </Position4>
-      <Position5>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="186" Column="23" TopLine="171"/>
-      </Position5>
-      <Position6>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="220" Column="24" TopLine="209"/>
-      </Position6>
-      <Position7>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="393" Column="17" TopLine="381"/>
-      </Position7>
-      <Position8>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position8>
-      <Position9>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="42" Column="17" TopLine="31"/>
-      </Position9>
-      <Position10>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="43" Column="56" TopLine="31"/>
-      </Position10>
-      <Position11>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="392" Column="27" TopLine="381"/>
-      </Position11>
-      <Position12>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="220" Column="1" TopLine="209"/>
-      </Position12>
-      <Position13>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="392" Column="3" TopLine="381"/>
-      </Position13>
-      <Position14>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="221" Column="160" TopLine="213"/>
-      </Position14>
-      <Position15>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="400" Column="3" TopLine="389"/>
-      </Position15>
-      <Position16>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="401" Column="134" TopLine="390"/>
-      </Position16>
-      <Position17>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="217" Column="21" TopLine="206"/>
-      </Position17>
-      <Position18>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="424" Column="49" TopLine="413"/>
-      </Position18>
-      <Position19>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxSmallPlugin.pas"/>
-        <Caret Line="682" Column="63" TopLine="671"/>
-      </Position19>
-      <Position20>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxPluginLoader.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position20>
-      <Position21>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxPluginLoader.pas"/>
-        <Caret Line="119" Column="29" TopLine="107"/>
-      </Position21>
-      <Position22>
-        <Filename Value="C:\Program Files\MaxComponents\mxPluginLoader\COMPONENT\mxPluginLoader.pas"/>
-        <Caret Line="459" Column="26" TopLine="448"/>
-      </Position22>
-      <Position23>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position23>
-      <Position24>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="109" Column="26" TopLine="98"/>
-      </Position24>
-      <Position25>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="105" Column="40" TopLine="94"/>
-      </Position25>
-      <Position26>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="245" Column="39" TopLine="234"/>
-      </Position26>
-      <Position27>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="75" Column="17" TopLine="64"/>
-      </Position27>
-      <Position28>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="298" Column="41" TopLine="287"/>
-      </Position28>
-      <Position29>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPlugin.pas"/>
-        <Caret Line="76" Column="128" TopLine="65"/>
-      </Position29>
-      <Position30>
-        <Filename Value="C:\Program Files\UIL\uilPlugin5\Delphi 4\uPluginMan.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position30>
-    </JumpHistory>
+    <JumpHistory Count="0" HistoryIndex="-1"/>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="8"/>
