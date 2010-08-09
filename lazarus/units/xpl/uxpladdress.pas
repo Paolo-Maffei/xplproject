@@ -10,11 +10,12 @@ unit uxPLAddress;
  0.96 : Some filter related functions added
  0.97 : String constants removed to use uxPLConst
  0.98 : Simplification of the class (cut inheritance of TxPLBaseClass)
+ 0.99 : Added HostNmInstance
 }
 {$mode objfpc}{$H+}
 interface
 
-uses DOM, uxPLBaseClass, uxPLConst;
+uses uxPLConst;
 
 type
 
@@ -47,6 +48,7 @@ type
        class function ComposeAddress       (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
        class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
        class function RandomInstance : tsInstance;
+       class function HostNmInstance : tsInstance;
     end;
 
     { TxPLTargetAddress }
@@ -69,7 +71,7 @@ type
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, uRegExTools, StrUtils;
+uses cRandom, SysUtils, uRegExTools, StrUtils, uIpUtils;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -85,7 +87,10 @@ begin
 end;
 
 class function TxPLAddress.RandomInstance : tsInstance;
-begin result := AnsiLowerCase(RandomAlphaStr(8)); end;
+begin result := AnsiLowerCase(RandomAlphaStr(sizeof(tsInstance))); end;
+
+class function TxPLAddress.HostNmInstance : tsInstance;
+begin result := AnsiLowerCase(tiGetComputerName); end;
 
 { TxPLAddress Object ==========================================================}
 constructor TxPLAddress.Create;

@@ -1,0 +1,252 @@
+<!--
+
+ This is a reference xPL vendor plug-in.
+ It contains examples of all possible elements and attributes, along with comments to explain their purpose.
+
+ Updated: 
+    17-Jan-2006: Changes for Schema Capability Enumeration
+    07-Feb-2010: Added device attributes; platform, beta-version, download_url, type
+
+-->
+
+<!-- 
+
+ Every vendor plug-in must contain <xpl-plugin> as it's top-level element, and should
+ only contain information specific to a single vendor.
+
+ The following optional attributes may also be included:
+
+  vendor - the vendor's name to which this file relates
+  version - the version of this plug-in file (vendor-defined)
+  plugin_url - official URL where this plug-in should be fetched from
+  info_url - URL to informational web page about this vendor
+
+    07-Feb-2010: added example data for the 4 mentioned attributes
+    
+-->
+<xpl-plugin
+  vendor="acme"
+  version="1.0"
+  plugin_url="http://www.acme.com/thispluginfile"
+  info_url="http://www.acme.com/vendor_informational_url">
+
+
+ <!-- One or more <device> tags may appear in the plug-in. These are used to contain information relating to a particular device.
+      The id attribute must be specified, and should contain the vendor's name, followed by
+      a dash, and then the device name.  E.g. johnb-cm12
+
+      All other attributes of the <device> tag are optional.
+
+      07-Feb-2010: added the following attributes: platform, beta_version, download_url, type
+	  possible type attribute values are;
+	  	- "device"   : anything that delivers some xPL service (default value if absent)
+		- "tools"    : support tools eg. diagnostics, xplplugin editor, loggers, etc.
+		- "xpl"      : category for xPL infrastructure apps like hubs, the java framework, etc.
+		- "library"  : for code libraries like the perl, c and .net libraries
+        - "none"     : for devices that should not be used, but may appear on a network. Examples are applications that expose 
+                       multiple devices like Mal Lansells MCE application which exposes 'mal-mce' and 'mal-mcestat', the latter
+                       is only a helper application and should be listed as type 'none'.
+
+ -->
+ <device 
+  id="acme-cm12"
+  description="A textual description of the device"
+  version="Latest available stable version of this device"
+  info_url="URL to informational web page about this device"
+  platform="windows|linux|java|perl|etc."
+  beta_version="Latest beta version available"
+  download_url="Url to the downloadlocation of the application (should directly point to the package, not to a page)"
+  type="device|tools|xpl|library|none">
+  
+  
+  <!-- The <configItem> tag allows you to specify information about a remote config item that your device supports.
+
+       The following attributes must be provided as part of the tag:
+       name : The name of the remote config item, as it appears in the config.list, config.current and config.response messages.
+       description : A friendly description of the item that will be displayed to the user.
+       format : A regular expression that is used to evaluate whether the user has input a valid value.
+
+       Note: You do not need to specify newconf, interval, group or filter as config items, as
+       xPLHal has built-in support for these items.
+
+  -->
+  <configItem
+   name="baud"
+   description="Specifies the baud rate used by the device."
+   format="^\d{3,6}$"
+  />
+  <configItem
+   name="databits"
+   description="Specifies the number of data bits."
+   format="^5|6|7|8$"
+  />
+
+  <!-- The <schemas> tag enumerates all the schemas that your device implements or uses.  You should
+       only list devices that the device specifically sends out or is used to control/command
+       the device/app.
+
+       Each schema has 1-4 attributes that describe in what context this device uses each
+       schema. The default if an attribute is missing is that it the schema is not used
+       in that capacity.  Context attributes are:
+
+         command=true|false
+           Does this device accept command messages with this schema
+
+         status=true|false
+           Does this device send status messages with this schema
+
+         trigger=true|false
+           Does this device send trigger messages with this schema
+
+         listen=true|false
+           Does this device listen for messages with this schema, but not in the 
+           role of commanding the device.
+
+        You MUST include at least one of these for each schema, but you can include any number of
+        them (though having listen=true and command=true is confusing and should not be done --
+        pick the one that best describes the primary use of the schema for that device
+
+        NOTE: There is a real difference between command=true and listen=true.  In command=true,
+        the device is expected to be controlled or react to the schema message (i.e. turn on
+        a light or send back the current status).
+
+        listen=true means that the device isn't directly commanded by the messages, but it is
+        "paying attention" to them (for example, listening to other devices status and trigger
+        messages to collect info on them or "snooping" on other command messages not intended
+        for the device, but the device can glean needed info from).
+
+        NOTE: You can include an optional comment=, though it's not required.  If
+        you feel you are doing something out of the ordinary, it might be worth 
+        leaving a note so readers of this have some idea what is up.
+  -->
+  <schemas>
+    <schema name="x10.basic" command=true trigger=true/>
+    <schema name="x10.confirm" trigger=true comment="Sent to confirm commands only"/>
+    <schema name="lighting.basic" command=true/>
+    <schema name="lighting.request" command=true/>
+    <schema name="lighting.device" trigger=true/>
+    <schema name="lighting.scene" trigger=true/>
+    <schema name="lighting.gateway" trigger=true comment="Used for reloads ONLY"/>
+  </schemas>
+
+  <!-- The <command> tag specifies a command or action that the device can perform.
+       In the case of our example CM12 X10 computer interface, it can transmit an X10 command.
+
+       The following attributes must be present:
+       name : A friendly name for the command.
+       description : A more verbose description of the command.
+       msg_type : The type of xPL message: Either trig, cmnd or stat. This will usually be cmnd.
+       msg_schema : The schema of the xPL message. For our example, this is
+                    x10.basic.  NOTE: You must ONLY use schemas previously
+                    declared in the <schemas> section!
+
+  -->
+  <command name="Transmit X10 command"
+   description="Transmits an X10 command on the powerline."
+   msg_type="cmnd"
+   msg_schema="x10.basic">
+
+   <!-- Within the <command> tag, you will probably want to specify
+        one or more <element> tags. These define items that go in the body
+        of the xPL message.
+
+        The following attributes are available:
+        name : Required. Specifies the name of the parameter within the xPL message body.
+
+        label : Specifies the text that will identify the input control to the user. If label is an empty string ("")
+          the element will not appear, and the value of the "default" attribute will be used in the message.
+
+        default : Specifies a default value for the element.
+
+        control_type : Either "textbox", "dropdownlist" or "numeric".
+          If dropdownlist, the items that appear
+          in the list must be specified using <option> tags.
+          If numeric, the maxval and minval attributes must be specified.
+          If textbox, an optional <regexp> tag may be supplied - see below.
+          The default control_type is textbox.
+
+        conditional-visibility : Optional. Specifies a regular expression that determines whether
+          an element will be visible to the user, based on the values in other elements.
+    -->
+    <element name="command" label="X10 Command" control_type="dropdownlist">
+       <!-- The <option> tag specifies the items that will appear in the control if the control_type
+            is dropdownlist.
+
+            The following attributes must be provided:
+            value : The actual value that will appear in the xPL message
+            label : The item's name in the list that the user will see
+       -->
+       <option value="on" label="On"/>
+       <option value="off" label="Off"/>
+       <option value="dim" label="Dim"/>
+       <option value="bright" label="Bright" />
+       <option value="all_lights_on" label="All lights on" />
+       <option value="all_units_off" label="All units off" />
+       <option value="extended" label="Extended command" />
+    </element>
+    <element name="device" label="Device" conditional-visibility="command=^(On)|(Off)|(Dim)|(Bright)|(Extended command)$">
+      <!-- Where control_type is a textbox, the <regexp> tag can be used to specify
+           which values will be permitted.
+      -->
+      <regexp>^(.*)$</regexp>
+    </element>
+    <element name="house" label="House code" conditional-visibility="command=^(All lights on)|(All units off)$">
+      <regexp>^[A-P]|[a-p]$</regexp>
+    </element>
+    <element name="level" label="Level" conditional-visibility="command=^(Dim)|(Bright)$">
+      <regexp>^(.*)$</regexp>
+    </element>
+    <element name="data1" label="Data 1" conditional-visibility="command=^Extended command$"/>
+    <element name="data2" label="Data 2" conditional-visibility="command=^Extended command$"/>
+  </command>
+
+
+  <!-- The <trigger> tag is similar in nature to the <command> tag, however it is used to specify
+       something that the device can tell the rest of the xPL network.  This usually includes all messages
+       of type "trig" and "stat" that the device can send.
+
+  -->  
+  <trigger name="X10 Command Received"
+    description="Occurs when an X10 command is received from the powerline."
+    msg_type="trig"
+    msg_schema="x10.basic">
+    <element name="command" label="X10 Command" control_type="dropdownlist">
+       <option value="on" label="On"/>
+       <option value="off" label="Off"/>
+       <option value="dim" label="Dim"/>
+       <option value="bright" label="Bright" />
+       <option value="all_lights_on" label="All lights on" />
+       <option value="all_units_off" label="All units off" />
+    </element>
+    <element name="device" label="Device" conditional-visibility="command=^(On)|(Off)|(Dim)|(Bright)$">
+      <regexp>^([a-p]|[A-P])([1-9]|(1?[0-6]))$</regexp>
+    </element>
+    <element name="house" label="House code" conditional-visibility="command=^(All lights on)|(All lights off)|(All units off)$">
+      <regexp>^[A-P]|[a-p]$</regexp>
+    </element>
+    <element name="level" label="Level" conditional-visibility="command=^(Dim)|(Bright)$">
+      <regexp>^(.*)$</regexp>
+    </element>
+  </trigger>
+
+  <!-- The <menuItem> element is used to add an item to the context menu 
+       that appears when a user right-clicks on a device in the Manager.
+  -->
+  <menuItem name="Send an X10 Command">
+   <!-- An <xplMsg> element must be contained within the <menuItem> element.
+        It specifies the message that will be sent when the item is selected.
+   -->
+   <xplMsg>
+    <!-- This element should contain the body of the xPL message.
+         A value can be requested from the user by using the following syntax:
+         item=%Please enter a value%
+
+         Alternatively, the user can select from a list, as follows:
+         item=up|down|left|right
+
+    -->
+   </xplMsg>
+  </menuItem>
+ </device>
+</xpl-plugin> 
+

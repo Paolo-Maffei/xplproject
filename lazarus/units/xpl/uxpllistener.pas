@@ -10,6 +10,8 @@ unit uxPLListener;
  0.94 : Use of uxPLConst
         Removed bHubfound, redondant with JoinedxPLNetwork
         Removed bConfigOnly, redondant with AwaitingConfiguration
+ 0.94 : Replacement of TTimer with TfpTimer
+ 0.95 : Added 'no config' capability to allow light focused xPL Client avoid waiting config
 }
 
 {$mode objfpc}{$H+}
@@ -17,7 +19,7 @@ unit uxPLListener;
 interface
 
 uses Classes, SysUtils, uxPLAddress, IdUDPServer,IdSocketHandle,
-     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter,
+     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
      uxPLMsgBody,  uxPLClient, uxPLConst;
 
 type
@@ -37,14 +39,14 @@ type
         fConfig  : TxPLConfig;
         fAdresse : TxPLAddress;
         IncomingSocket : TIdUDPServer;
-        HBTimer,HBReqTimer   : TTimer;                       // HBReqTimer is dedicated to hbeat requests
+        HBTimer, HBReqTimer : TFPTimer;                     // HBReqTimer is dedicated to hbeat requests
         fFilterSet : TxPLFilters;
         iNoHubTimerCount : integer;
         bDisposing : Boolean;
 
         procedure InitSocket();
      public
-        OnxPLReceived      : TxPLReceivedEvent;
+	    OnxPLReceived      : TxPLReceivedEvent;
         OnxPLJoinedNet     : TxPLJoinedEvent  ;
         OnxPLCOnfigDone    : TxPLConfigDone   ;
         OnxPLHBeatPrepare  : TxPLHBeatPrepare ;
@@ -53,12 +55,11 @@ type
         OnxPLTTSBasic      : TxPLTTSBasic     ;
         OnxPLHBeatApp      : TxPLHBeatApp     ;
         OnxPLMediaBasic    : TxPLMediaBasic   ;
-
         PassMyOwnMessages     : Boolean;
         JoinedxPLNetwork      : Boolean;                    // This should be read only by other objects
         AwaitingConfiguration : Boolean;                    // This should be read only by other objects
 
-        constructor create(aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string);
+        constructor create(const aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
         destructor destroy; override;
         procedure CallConfigDone; dynamic;
         procedure TimerElapsed(Sender : TObject);
@@ -94,23 +95,24 @@ implementation { ==============================================================}
 uses IdStack, cRandom, StrUtils, uIPutils, Interfaces;
 
 { TxPLListener ================================================================}
-constructor TxPLListener.create(aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string);
+constructor TxPLListener.create(const aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
 begin
    inherited Create(aOwner, aVendor, aDevice, aAppVersion);
 
    PassMyOwnMessages := false;
 
-   fAdresse   := TxPLAddress.Create(aVendor,aDevice, TxPLAddress.RandomInstance);
-   fConfig    := TxPLConfig.Create(self);
-   fFilterSet := TxPLFilters.Create(fConfig);
+   fAdresse          := TxPLAddress.Create(aVendor,aDevice);
+   fConfig           := TxPLConfig.Create(self, bConfigNeeded);
+   fAdresse.Instance := fConfig.Instance;                                             // Instance name will be determined by configuration need or not
+   fFilterSet        := TxPLFilters.Create(fConfig);
 
-   HBTimer    := TTimer.Create(self);
+   HBTimer    := TfpTimer.Create(self);
       HBTimer.Interval    := NOHUB_HBEAT * 1000;
       HBTimer.OnTimer     := @TimerElapsed;
-   HBReqTimer := TTimer.Create(self);
+   HBReqTimer := TfpTimer.Create(self);
       HBReqTimer.OnTimer  := @TimerElapsed;
 
-   JoinedxPLNetwork := False;
+   JoinedxPLNetwork := false;
    bDisposing := False;
    iNoHubTimerCount := 0;
 end;
@@ -165,18 +167,20 @@ end;
 procedure TxPLListener.CallConfigDone;
 begin
    LogInfo(K_MSG_CONFIG_LOADED,[]);
-   if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);
+   if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);                 // Assume that this can never be done if NoConfig has been specified !
 end;
 
 procedure TxPLListener.Listen;
 begin                                                       
    bDisposing := false;
+
    AwaitingConfiguration := not fConfig.Load;
    if not AwaitingConfiguration then begin
       fAdresse.Instance := fConfig.Instance;
       CallConfigDone;
    end;
    InitSocket;
+
 end;
 
 procedure TxPLListener.Dispose;
@@ -215,7 +219,7 @@ end;
 
 procedure TxPLListener.SendOSDBasic(const aString: string);
 begin
-   with PrepareMessage(K_MSG_TYPE_CMND,'osd.basic') do try
+   with PrepareMessage(K_MSG_TYPE_CMND,K_SCHEMA_OSD_BASIC) do try
       Body.AddKeyValuePair('command','write');
       Body.AddKeyValuePair('text',aString);
       Send;
@@ -242,7 +246,7 @@ begin
    aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
 
    if AwaitingConfiguration then aBody.Schema.Classe := xpl_scConfig;                // Change Schema class in this case
-   if bDisposing  then aBody.Schema.TypeAsString   := 'end';               // Change Schema type in this case
+   if bDisposing  then aBody.Schema.TypeAsString   := 'end';                         // Change Schema type in this case
 end;
 
 procedure TxPLListener.SendHeartBeatMessage;

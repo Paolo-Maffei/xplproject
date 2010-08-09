@@ -121,6 +121,7 @@ const
    K_SCHEMA_SENSOR_BASIC   = 'sensor.basic';
    K_SCHEMA_SENSOR_REQUEST = 'sensor.request';
    K_SCHEMA_CONTROL_BASIC  = 'control.basic';
+   K_SCHEMA_OSD_BASIC      = 'osd.basic';
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
    K_SCHEMA_MEDIA_BASIC    = 'media.basic';
    K_SCHEMA_X10_BASIC      = 'x10.basic';
