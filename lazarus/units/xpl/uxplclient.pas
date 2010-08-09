@@ -13,6 +13,7 @@ unit uxPLClient;
  0.95 : Little change in LogError/LogInfo to integrate standard formatting
  0.96 : Added localisation capabilities
  0.97 : Added Logwarn
+ 0.98 : Modified to use WEBSERVER clause for console application, logging to console instead of list
 }
 
 {$mode objfpc}{$H+}
@@ -91,7 +92,11 @@ function TxPLClient.RecordLog(const Formatting: string; const Data: array of con
 begin
    Result := Format(Formatting,Data);
    fLogList.Add(Result);
+   {$IFDEF WebServer}
+   writeln(result);
+   {$ELSE}
    if Assigned(OnLogUpdate) then OnLogUpdate(fLogList);
+   {$ENDIF}
 end;
 
 

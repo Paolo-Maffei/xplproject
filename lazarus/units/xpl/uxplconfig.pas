@@ -11,6 +11,7 @@ unit uxPLConfig;
  0.93 : Declaration of configuration items is now based on the content of the vendor.xml file
         The AddItem is now moved as private, shouldn't be called by
         Configuration files are now stored in the config directory hold by xplsettings.
+ 0.94 : Added ability to avoid need to load config
  }
 
 {$mode objfpc}{$H+}
@@ -25,6 +26,7 @@ type
 
 TxPLConfig = class(TComponent)
      private
+        fConfigNeeded: Boolean;
         fConfigItems : TList;
         fxmlconfig : TXmlConfig;
         fDeviceInVendorFile : TxPLDevice;
@@ -37,7 +39,7 @@ TxPLConfig = class(TComponent)
         procedure SetInterval(const AValue: integer);
 
      public
-        constructor create(aOwner : TComponent); override;
+        constructor create(const aOwner : TComponent; const bConfigNeeded : boolean = true);
         destructor  destroy; override;
 
         procedure AddValue(aItmName, aValue : string);
@@ -66,20 +68,21 @@ TxPLConfig = class(TComponent)
      end;
 
 implementation { =======================================================================}
-uses uxPLListener, uxPLClient;
+uses uxPLListener, uxPLClient, StrUtils, uxPLAddress;
 
 { TxPLConfig ===========================================================================}
-constructor TxPLConfig.create(aOwner : TComponent);
-var //device    : TxPLDevice;
-    sVendor   : tsVendor;
+constructor TxPLConfig.create(const aOwner : TComponent; const bConfigNeeded : boolean = true);
+var sVendor   : tsVendor;
     sDevice   : tsDevice;
     sInstance : tsInstance;
 begin
      inherited Create(aOwner);
 
-     sVendor   := TxPLListener(aOwner).Vendor;
-     sDevice   := TxPLListener(aOwner).Device;
-     sInstance := TxPLListener(aOwner).Instance;
+     fConfigNeeded := bConfigNeeded;
+
+     sVendor       := TxPLListener(aOwner).Vendor;
+     sDevice       := TxPLListener(aOwner).Device;
+     sInstance     := IfThen(fConfigNeeded,TxPLAddress.RandomInstance,TxPLAddress.HostNmInstance);
 
      fxmlconfig := TXmlConfig.Create(self);
      fXmlConfig.Filename:= TxPLListener(aOwner).Setting.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[sVendor,sDevice]);
@@ -191,6 +194,9 @@ end;
 function TxPLConfig.Load : boolean;
 var i,j : integer;
 begin
+   result := true;
+   if not fConfigNeeded then exit;
+
    result := false;
 
    if not FileExists(fXmlConfig.Filename) then exit;

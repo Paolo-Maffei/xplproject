@@ -1,5 +1,6 @@
 unit uIPutils;
 
+
 {$mode objfpc}{$H+}
 
 interface
@@ -13,12 +14,43 @@ Const K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
 //function LocalIP: string;
 //function LocalIPs : TStringList;
 function MakeBroadCast(aAddress : string) : string;
+function tiGetComputerName : string;                      // Issued from tiOPF
 
 
 implementation
 uses      //{$IFDEF UNIX} inet, sockets, {$ENDIF}
           //{$IFDEF WINDOWS} winsock,    {$ENDIF}
           cStrings;
+		  
+		  {$IFDEF UNIX}
+		  
+function tiUnixGetComputerName: string;
+begin
+  Result := GetHostName;
+end;
+{$ENDIF}
+
+{$IFDEF MSWINDOWS}
+function tiWin32GetComputerName: string;
+var
+  computerNameBuffer: array[0..255] of char;
+  sizeBuffer: DWord;
+begin
+  SizeBuffer := 256;
+  getComputerName(computerNameBuffer, sizeBuffer);
+  result := string(computerNameBuffer);
+end;
+{$ENDIF}
+
+function tiGetComputerName : string;
+begin
+  {$IFDEF MSWINDOWS}
+  Result := tiWin32GetComputerName;
+  {$ENDIF MSWINDOWS}
+  {$IFDEF UNIX}
+  Result := tiUnixGetComputerName;
+  {$ENDIF UNIX}
+end;
 
 {function LocalIPs : TStringList;
 begin
