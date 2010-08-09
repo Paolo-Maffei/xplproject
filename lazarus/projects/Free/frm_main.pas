@@ -28,6 +28,7 @@ type
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem4: TMenuItem;
+    StatusBar1: TStatusBar;
     Timer1: TTimer;
     XMLPropStorage1: TXMLPropStorage;
 
