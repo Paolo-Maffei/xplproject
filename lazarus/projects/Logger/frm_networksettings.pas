@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, XMLPropStorage, ExtCtrls, StdCtrls,  Buttons;
+  ComCtrls, ExtCtrls, StdCtrls,  Buttons;
 
 type
 
@@ -14,24 +14,31 @@ type
 
 TfrmNetworkSettings = class(TForm)
   BtnShowDirSelect: TButton;
+  edtHTTPPort: TEdit;
+  edtHTTPProxy: TEdit;
+  edtListenTo: TEdit;
   edtRootDir: TEdit;
-        edtListenTo: TEdit;
-        e_BroadCast: TComboBox;
-        e_ListenOn: TComboBox;
-        Label3: TLabel;
-        Label4: TLabel;
-        Label5: TLabel;
+  e_BroadCast: TComboBox;
+  e_ListenOn: TComboBox;
+  Label1: TLabel;
+  Label2: TLabel;
+  Label3: TLabel;
+  Label4: TLabel;
+  Label5: TLabel;
+        Page1: TPageControl;
+        rgProxy: TRadioGroup;
         rgListenTo: TRadioGroup;
         SelectDirectoryDialog1: TSelectDirectoryDialog;
         StaticText1: TStaticText;
         StaticText2: TStaticText;
+        TabSheet1: TTabSheet;
+        TabSheet2: TTabSheet;
         tbOk: TToolButton;
         ToolBar3: TToolBar;
         tbReload: TToolButton;
         ToolButton2: TToolButton;
         ToolButton3: TToolButton;
         tbSave: TToolButton;
-        XMLPropStorage: TXMLPropStorage;
         procedure BtnSaveSettingsClick(Sender: TObject);
         procedure BtnShowDirSelectClick(Sender: TObject);
         procedure e_ListenOnChange(Sender: TObject);
@@ -89,6 +96,10 @@ begin
             edtListenTo.Text := ListenToAddresses;
          end;
       edtRootDir.Text:= SharedConfigDir;
+      if UseProxy then rgProxy.ItemIndex := 1 else rgProxy.ItemIndex := 0;
+      edtHttpPort.Text := HttpProxPort;
+      edtHttpProxy.Text := HttpProxSrvr;
+
       tbSave.Enabled := False;                                                   // Will only be enabled if a field changes of value
    end;
 end;
@@ -108,10 +119,14 @@ begin
            2 : ListenToAddresses := edtListenTo.Text;
         end;
 
+        UseProxy := (rgProxy.ItemIndex = 1);
+        HttpProxPort := edtHttpPort.Text;
+        HttpProxSrvr := edtHttpProxy.Text;
+
         SharedConfigDir := edtRootDir.Text;
 
         Application.MessageBox(PChar(COMMENT_LINE_1),PChar(caption),0);
-        frmMain.xPLClient.LogInfo(COMMENT_LINE_2);
+        frmMain.xPLClient.LogInfo(COMMENT_LINE_2,[]);
    end;
 end;
 

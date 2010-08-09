@@ -33,6 +33,13 @@ Changes History :
 		* Correct bug FS#29 : saved app setting wasn't applied after application reload
 		* Corrected bug on message panel visibility toggle
 		* Corrected a bug in the filter on message type 
+	2.0.3
+		* The 'Send a New Message To...' menu now populates the message body with sample value (was previously empty)
+		* The 'Discover Network' menu is now accessible on right-clicking on the 'xPL Network' top node of the tree, 
+			suppressed the nearly empty 'Device Configuration' menu.
+		* Added the option to start logging (or not) at application startup
+		* Icons added in contextual menus
+		* Introducing proxy handling capability for HTTP at xPLSettings level
 
 
 

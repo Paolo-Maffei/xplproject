@@ -9,7 +9,7 @@ object frmAppSettings: TfrmAppSettings
   ClientHeight = 300
   ClientWidth = 400
   OnCreate = FormCreate
-  SessionProperties = 'ckAutoGetSetup.Checked;ckIcons.Checked;ckShowPreview.Checked;Left;ListBox1.Items;Top'
+  SessionProperties = 'ckAutoGetSetup.Checked;ckIcons.Checked;ckShowPreview.Checked;Left;ListBox1.Items;Top;ckAutoStartLogging.Checked'
   LCLVersion = '0.9.28.2'
   object Label1: TLabel
     Left = 8
@@ -97,6 +97,16 @@ object frmAppSettings: TfrmAppSettings
     Checked = True
     State = cbChecked
     TabOrder = 5
+  end
+  object ckAutoStartLogging: TCheckBox
+    Left = 6
+    Height = 19
+    Top = 232
+    Width = 202
+    Caption = 'Start logging at application launch'
+    Checked = True
+    State = cbChecked
+    TabOrder = 6
   end
   object XMLPropStorage: TXMLPropStorage
     StoredValues = <>
