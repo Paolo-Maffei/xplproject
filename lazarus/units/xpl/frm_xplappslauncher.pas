@@ -59,6 +59,7 @@ end;
 procedure TfrmAppLauncher.lvAppsDblClick(Sender: TObject);
 begin
      LaunchExecute(self);
+     QuitExecute(sender);
 end;
 
 procedure TfrmAppLauncher.QuitExecute(Sender: TObject);

@@ -17,9 +17,9 @@ object frmxPLMessage: TfrmxPLMessage
     Height = 328
     Top = 26
     Width = 418
-    ActivePage = TabSheet4
+    ActivePage = TabSheet1
     Align = alClient
-    TabIndex = 3
+    TabIndex = 0
     TabOrder = 0
     OnChange = PageControl1Change
     OnPageChanged = PageControl1Change
@@ -172,8 +172,7 @@ object frmxPLMessage: TfrmxPLMessage
         ParentColor = False
         ParentFont = False
         TabOrder = 3
-        BookMarkOptions.OnChange = nil
-        Gutter.Width = 57
+        Gutter.Width = 12
         Gutter.MouseActions = <        
           item
             Shift = []
@@ -747,24 +746,6 @@ object frmxPLMessage: TfrmxPLMessage
         )
         BracketHighlightStyle = sbhsBoth
         object TSynGutterPartList
-          object TSynGutterMarks
-            Width = 23
-          end
-          object TSynGutterLineNumber
-            Width = 17
-            MouseActions = <>
-            MarkupInfo.Background = clBtnFace
-            MarkupInfo.Foreground = clNone
-            DigitCount = 2
-            ShowOnlyLineNumbersMultiplesOf = 1
-            ZeroStart = False
-            LeadingZeros = False
-          end
-          object TSynGutterChanges
-            Width = 4
-            ModifiedColor = 59900
-            SavedColor = clGreen
-          end
           object TSynGutterSeparator
             Width = 2
           end
@@ -1443,6 +1424,7 @@ object frmxPLMessage: TfrmxPLMessage
   end
   object SynPasSyn1: TSynPasSyn
     Enabled = False
+    CommentAttri.Foreground = clGreen
     CompilerMode = pcmDelphi
     NestedComments = False
     left = 229
