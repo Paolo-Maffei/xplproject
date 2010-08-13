@@ -1,5 +1,3 @@
-{ Ceci est un fichier ressource généré automatiquement par Lazarus }
-
 LazarusResources.Add('TfrmAppLauncher','FORMDATA',[
   'TPF0'#15'TfrmAppLauncher'#14'frmAppLauncher'#4'Left'#2'3'#6'Height'#3'&'#1#3
   +'Top'#3#233#0#5'Width'#3#244#1#11'BorderIcons'#11#12'biSystemMenu'#0#11'Bord'

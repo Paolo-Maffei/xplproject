@@ -71,7 +71,7 @@ type
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, uRegExTools, StrUtils, uIpUtils;
+uses cRandom, SysUtils, uRegExTools, StrUtils, uIpUtils, pwHostName;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -90,7 +90,7 @@ class function TxPLAddress.RandomInstance : tsInstance;
 begin result := AnsiLowerCase(RandomAlphaStr(sizeof(tsInstance))); end;
 
 class function TxPLAddress.HostNmInstance : tsInstance;
-begin result := AnsiLowerCase(tiGetComputerName); end;
+begin result := AnsiLowerCase(InetSelfName); end;
 
 { TxPLAddress Object ==========================================================}
 constructor TxPLAddress.Create;

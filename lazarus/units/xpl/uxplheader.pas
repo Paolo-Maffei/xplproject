@@ -99,8 +99,11 @@ begin
 end;
 
 procedure TxPLHeader.ReadFromXML(aParent : TDOMNode);
+var mt : string;
 begin
-   MessageType := TDOMElement(aParent).GetAttribute('msg_type');
+   mt := TDOMElement(aParent).GetAttribute('msg_type');                                   // In vendor plugin file 'xpl-stat' is written 'stat'
+   if not AnsiContainsStr(mt,K_MSG_TYPE_HEAD) then mt := K_MSG_TYPE_HEAD + mt;            // then keep same code for both origins
+   MessageType := mt;
    fSource.Tag := TDOMElement(aParent).GetAttribute('xPLAddress');
    fTarget.Tag := TDOMElement(aParent).GetAttribute('xPLAddress-target');
 end;

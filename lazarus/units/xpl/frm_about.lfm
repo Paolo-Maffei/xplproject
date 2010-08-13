@@ -500,7 +500,7 @@ object frmAbout: TfrmAbout
     Left = 96
     Height = 16
     Top = 8
-    Width = 123
+    Width = 95
     Caption = 'application name'
     Font.Style = [fsBold]
     ParentColor = False
@@ -510,7 +510,7 @@ object frmAbout: TfrmAbout
     Left = 120
     Height = 16
     Top = 32
-    Width = 99
+    Width = 85
     Caption = 'Version number'
     ParentColor = False
   end
@@ -518,7 +518,7 @@ object frmAbout: TfrmAbout
     Left = 120
     Height = 16
     Top = 192
-    Width = 289
+    Width = 242
     Caption = 'Downloads and updates at http://glh33.free.fr'
     ParentColor = False
   end
@@ -538,9 +538,8 @@ object frmAbout: TfrmAbout
       '   - RemObjects for the PascalScript components and libs'
       '   - Scott Crevier for his temperature icon set'
       '   - Kambiz R. Khojasteh for the SunTime component'
-      ''
-      'And of course, my children and my wife, for their patience and '
-      'never asking what is it all done for...'
+      '   - All those passion guy at www.touteladomotique.com  '
+      '   - YOU for reading this, and supporting us.'
     )
     ReadOnly = True
     ScrollBars = ssVertical

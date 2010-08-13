@@ -14,7 +14,7 @@ Const K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
 //function LocalIP: string;
 //function LocalIPs : TStringList;
 function MakeBroadCast(aAddress : string) : string;
-function tiGetComputerName : string;                      // Issued from tiOPF
+//function tiGetComputerName : string;                      // Issued from tiOPF
 
 
 implementation
@@ -22,9 +22,9 @@ uses      //{$IFDEF UNIX} inet, sockets, {$ENDIF}
           //{$IFDEF WINDOWS} winsock,    {$ENDIF}
           cStrings;
 		  
-		  {$IFDEF UNIX}
+	//	  {$IFDEF UNIX}
 		  
-function tiUnixGetComputerName: string;
+{function tiUnixGetComputerName: string;
 begin
   Result := GetHostName;
 end;
@@ -50,7 +50,7 @@ begin
   {$IFDEF UNIX}
   Result := tiUnixGetComputerName;
   {$ENDIF UNIX}
-end;
+end;}
 
 {function LocalIPs : TStringList;
 begin

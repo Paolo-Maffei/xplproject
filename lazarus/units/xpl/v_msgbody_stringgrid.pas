@@ -229,7 +229,7 @@ var i : integer;
 begin
      for i:=1 to RowCount - 1 do begin
          ch := GetKeyValuePair(i);
-         if ch<>'' then aBody.AddKeyValue(GetKeyValuePair(i));
+         if ch<>'' then aBody.AddKeyValue(ch);
      end;
 end;
 

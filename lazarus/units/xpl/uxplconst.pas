@@ -77,11 +77,12 @@ const
    K_ADDR_ANY_TARGET  = '*';
 
    // Message type elements =================================================================================
-   K_MSG_TYPE_TRIG = 'xpl-trig';
-   K_MSG_TYPE_STAT = 'xpl-stat';
-   K_MSG_TYPE_CMND = 'xpl-cmnd';
+   K_MSG_TYPE_HEAD = 'xpl-';
+   K_MSG_TYPE_TRIG = K_MSG_TYPE_HEAD + 'trig';
+   K_MSG_TYPE_STAT = K_MSG_TYPE_HEAD + 'stat';
+   K_MSG_TYPE_CMND = K_MSG_TYPE_HEAD + 'cmnd';
    K_MSG_TYPE_ANY  = '*';
-   K_RE_MSG_TYPE   = 'xpl-(trig|stat|cmnd)';
+   K_RE_MSG_TYPE   = K_MSG_TYPE_HEAD + '(trig|stat|cmnd)';
    K_MSG_TYPE_DESCRIPTORS : Array[0..3] of tsMsgType = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
    // Message header elements ===============================================================================
