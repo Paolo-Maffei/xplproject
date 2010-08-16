@@ -4,7 +4,7 @@ unit u_xml_events;
 
 interface
 
-uses Classes, SysUtils, DOM;
+uses Classes, SysUtils, DOM, u_xml;
 
 type
 
@@ -39,14 +39,7 @@ private
         property eventruntime : ansistring read Get_EventRunTime;
         property init : ansistring read Get_Init;
      end;
-
-     TXMLeventsType = class(TDOMElementList)
-     private
-        function Get_Event(Index: Integer): TXMLEventType;
-     public
-        constructor Create(ANode: TDOMNode); overload;
-        property Event[Index: Integer]: TXMLEventType read Get_Event ; default;
-     end;
+     TXMLEventsType = specialize TXMLElementList<TXMLEventType>;
 
 var eventsfile : TXMLeventsType;
 
@@ -54,66 +47,47 @@ implementation //===============================================================
 uses XMLRead;
 var document : TXMLDocument;
 //========================================================================================
-
-
-{ TXMLEventType }
-
-
 function TXMLEventType.Get_dow: AnsiString;
-begin Result := Attributes.GetNamedItem('dow').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Dow).NodeValue; end;
 
 function TXMLEventType.Get_End_Time: AnsiString;
-begin Result := Attributes.GetNamedItem('endtime').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Endtime).NodeValue; end;
 
 function TXMLEventType.Get_EventDateTime: ansistring;
-begin Result := Attributes.GetNamedItem('eventdatetime').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Eventdatetim).NodeValue; end;
 
 function TXMLEventType.Get_EventRunTime: ansistring;
-begin Result := Attributes.GetNamedItem('eventruntime').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Eventruntime).NodeValue; end;
 
 function TXMLEventType.Get_Init: ansistring;
-begin Result := Attributes.GetNamedItem('init').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Init).NodeValue; end;
 
 function TXMLEventType.Get_interval: ansistring;
-begin Result := Attributes.GetNamedItem('interval').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Interval).NodeValue; end;
 
 function TXMLEventType.Get_Param: ansistring;
-begin Result := Attributes.GetNamedItem('param').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Param).NodeValue; end;
 
 function TXMLEventType.Get_randomtime: ansistring;
-begin Result := Attributes.GetNamedItem('randomtime').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Randomtime).NodeValue; end;
 
 function TXMLEventType.Get_recurring: ansistring;
-begin Result := Attributes.GetNamedItem('recurring').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Recurring).NodeValue; end;
 
 function TXMLEventType.Get_runsub: ansistring;
-begin Result := Attributes.GetNamedItem('runsub').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Runsub).NodeValue; end;
 
 function TXMLEventType.Get_Start_Time: AnsiString;
-begin Result := Attributes.GetNamedItem('starttime').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Starttime).NodeValue; end;
 
 function TXMLEventType.Get_Tag: AnsiString;
-begin Result := Attributes.GetNamedItem('tag').NodeValue; end;
-
-{ TXMLeventsType }
-
-function TXMLeventsType.Get_Event(Index: Integer): TXMLEventType;
-begin
-  Result := TXMLEventType(Item[Index]);
-end;
-
-
-
-constructor TXMLeventsType.Create(ANode: TDOMNode);
-begin
-   inherited Create(aNode,'event');
-end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Tag).NodeValue; end;
 
 // Unit initialization ===================================================================
 initialization
    document := TXMLDocument.Create;
    ReadXMLFile(document,'C:\Program Files\xPL\xPLHal 2.0 for Windows\data\xplhal_events.xml');
-   eventsfile := TXMLeventsType.Create(Document.FirstChild);
+   eventsfile := TXMLeventsType.Create(Document.FirstChild, K_XML_STR_Event);
 
 finalization
    eventsfile.destroy;
