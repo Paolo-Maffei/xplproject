@@ -4,7 +4,7 @@ unit u_xml_cachemanager;
 
 interface
 
-uses Classes, SysUtils, DOM;
+uses Classes, SysUtils, DOM, u_xml;
 
 type
 
@@ -17,13 +17,7 @@ type
      property Cacheobjectname: AnsiString read Get_Cacheobjectname;
   end;
 
-  TXMLFieldsType = class(TDOMElementList)
-  protected
-    function Get_Fieldmap(Index: Integer): TXMLFieldmapType;
-  public
-    constructor Create(ANode: TDOMNode); overload;
-    property Fieldmap[Index: Integer]: TXMLFieldmapType read Get_Fieldmap; default;
-  end;
+  TXMLFieldsType = specialize TXMLElementList<TXMLFieldmapType>;
 
   TXMLCacheEntryType = class(TDOMElement)
   protected
@@ -36,13 +30,7 @@ type
     property Fields: TXMLFieldsType read Get_Fields;
   end;
 
-  TXMLCachemanagerType = class(TDOMElementList)
-  protected
-    function Get_CacheEntry(Index: Integer): TXMLCacheEntryType;
-  public
-    constructor Create(ANode: TDOMNode); overload;
-    property CacheEntry[Index: Integer]: TXMLCacheEntryType read Get_CacheEntry; default;
-  end;
+  TXMLCacheManagerType = specialize TXMLElementList<TXMLCacheEntryType>;
 
 var CacheManagerFile : TXMLCacheManagerType;
 
@@ -52,42 +40,27 @@ var Document : TXMLDocument;
 //========================================================================================
 
 // TXMLFieldmapType ======================================================================
-
 function TXMLFieldmapType.Get_Xpltagname: AnsiString;
-begin Result := Attributes.GetNamedItem('xpltagname').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Xpltagname).NodeValue; end;
 
 function TXMLFieldmapType.Get_Cacheobjectname: AnsiString;
-begin Result := Attributes.GetNamedItem('cacheobjectname').NodeValue; end;
-
-// TXMLFieldsType =======================================================================
-function TXMLFieldsType.Get_Fieldmap(Index: Integer): TXMLFieldmapType;
-begin Result := TXMLFieldmapType(Item[Index]); end;
-
-constructor TXMLFieldsType.Create(ANode: TDOMNode);
-begin inherited Create(aNode,'fieldmap'); end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Cacheobjectn).NodeValue; end;
 
 // TXMLCacheEntryType ===================================================================
 function TXMLCacheEntryType.Get_Cacheprefix: AnsiString;
-begin Result := Attributes.GetNamedItem('cacheprefix').NodeValue; end;
+begin Result := Attributes.GetNamedItem(K_XML_STR_Cacheprefix).NodeValue; end;
 
 function TXMLCacheEntryType.Get_Filter: AnsiString;
-begin Result := FindNode('filter').FirstChild.NodeValue; end;
+begin Result := FindNode(K_XML_STR_Filter).FirstChild.NodeValue; end;
 
 function TXMLCacheEntryType.Get_Fields: TXMLFieldsType;
-begin Result := TXMLFieldsType.Create(self); end;
-
-// TXMLCachemanagerType =================================================================
-function TXMLCachemanagerType.Get_CacheEntry(Index: Integer ): TXMLCacheEntryType;
-begin Result := TXMLCacheEntryType(Item[Index]); end;
-
-constructor TXMLCachemanagerType.Create(ANode: TDOMNode);
-begin inherited Create(aNode,'cacheentry'); end;
+begin Result := TXMLFieldsType.Create(self, K_XML_STR_Fieldmap); end;
 
 // Unit initialization ===================================================================
 initialization
    Document := TXMLDocument.Create;
    ReadXMLFile(document,'C:\ProgramData\xPL\Config\CacheManager.standard.xml');
-   CacheManagerFile := TXMLCacheManagerType.Create(Document.FirstChild);
+   CacheManagerFile := TXMLCacheManagerType.Create(Document.FirstChild, K_XML_STR_Cacheentry);
 
 finalization
    CacheManagerFile.destroy;
