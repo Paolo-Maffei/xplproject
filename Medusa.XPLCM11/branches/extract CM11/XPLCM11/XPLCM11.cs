@@ -49,7 +49,7 @@ namespace Medusa.XPLCM11
 {
 	public class XPLCM11 : System.ServiceProcess.ServiceBase
 	{
-		const string VENDORID = "tieske";
+		const string VENDORID = "medusa";
 		const string DEVICEID = "xplcm11";
 
 		private xPLDevice xL;
