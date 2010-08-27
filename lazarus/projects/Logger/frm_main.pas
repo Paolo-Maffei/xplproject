@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, frm_About, uxPLConfig,
-  uxPLMessage, uxPLPluginFile,uxPLListener, ExtCtrls,MCheckListBox, XMLPropStorage, uxPLConst;
+  uxPLMessage, uxPLPluginFile,uxPLListener, ExtCtrls,MCheckListBox, uxPLConst;
 
 type
 
@@ -85,7 +85,6 @@ type
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     tvMessages: TTreeView;
-    XMLPropStorage1: TXMLPropStorage;
     procedure AboutExecute(Sender: TObject);
     procedure acAppSettingsExecute(Sender: TObject);
     procedure acDiscoverExecute(Sender: TObject);
