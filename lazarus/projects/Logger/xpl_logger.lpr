@@ -1,7 +1,7 @@
 program xpl_logger;
 
 {$mode objfpc}{$H+}
-
+{$DEFINE UseCThreads}
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
