@@ -11,4 +11,9 @@
         app.OnShutdown()
     End Sub
 
+    Protected Overrides Sub OnShutdown()
+        Me.OnStop()
+        MyBase.OnShutdown()
+    End Sub
+
 End Class
