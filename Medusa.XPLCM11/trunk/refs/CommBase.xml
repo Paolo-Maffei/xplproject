@@ -1,0 +1,689 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CommBase</name>
+    </assembly>
+    <members>
+        <member name="T:JH.CommBase.CommBase">
+            <summary>
+            Lowest level Com driver handling all Win32 API calls and processing send and receive in terms of
+            individual bytes. Used as a base class for higher level drivers.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.AltName(System.String)">
+            <summary>
+            Returns the alternative name of a com port i.e. \\.\COM1 for COM1:
+            Some systems require this form for double or more digit com port numbers.
+            </summary>
+            <param name="s">Name in form COM1 or COM1:</param>
+            <returns>Name in form \\.\COM1</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.IsPortAvailable(System.String)">
+            <summary>
+            Tests the availability of a named comm port.
+            </summary>
+            <param name="s">Name of port</param>
+            <returns>Availability of port</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Open">
+            <summary>
+            Opens the com port and configures it with the required settings
+            </summary>
+            <returns>false if the port could not be opened</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Close">
+            <summary>
+            Closes the com port.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Dispose">
+            <summary>
+            For IDisposable
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Finalize">
+            <summary>
+            Destructor (just in case)
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Flush">
+            <summary>
+            Block until all bytes in the queue have been transmitted.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.ThrowException(System.String)">
+            <summary>
+            Use this to throw exceptions in derived classes. Correctly handles threading issues
+            and closes the port if necessary.
+            </summary>
+            <param name="reason">Description of fault</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Send(System.Byte[])">
+            <summary>
+            Queues bytes for transmission. 
+            </summary>
+            <param name="tosend">Array of bytes to be sent</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Send(System.Byte)">
+            <summary>
+            Queues a single byte for transmission.
+            </summary>
+            <param name="tosend">Byte to be sent</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.SendImmediate(System.Byte)">
+            <summary>
+            Sends a protocol byte immediately ahead of any queued bytes.
+            </summary>
+            <param name="tosend">Byte to send</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.Sleep(System.Int32)">
+            <summary>
+            Delay processing.
+            </summary>
+            <param name="milliseconds">Milliseconds to delay by</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.GetModemStatus">
+            <summary>
+            Gets the status of the modem control input signals.
+            </summary>
+            <returns>Modem status object</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.GetQueueStatus">
+            <summary>
+            Get the status of the queues
+            </summary>
+            <returns>Queue status object</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.IsCongested">
+            <summary>
+            Test if the line is congested (data being queued for send faster than it is being dequeued)
+            This detects if baud rate is too slow or if handshaking is not allowing enough transmission
+            time. It should be called at reasonably long fixed intervals. If data has been sent during
+            the interval, congestion is reported if the queue was never empty during the interval.
+            </summary>
+            <returns>True if congested</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.CommSettings">
+            <summary>
+            Override this to provide settings. (NB this is called during Open method)
+            </summary>
+            <returns>CommBaseSettings, or derived object with required settings initialised</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.AfterOpen">
+            <summary>
+            Override this to provide processing after the port is openned (i.e. to configure remote
+            device or just check presence).
+            </summary>
+            <returns>false to close the port again</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.BeforeClose(System.Boolean)">
+            <summary>
+            Override this to provide processing prior to port closure.
+            </summary>
+            <param name="error">True if closing due to an error</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.OnRxChar(System.Byte)">
+            <summary>
+            Override this to process received bytes.
+            </summary>
+            <param name="ch">The byte that was received</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.OnTxDone">
+            <summary>
+            Override this to take action when transmission is complete (i.e. all bytes have actually
+            been sent, not just queued).
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.OnBreak">
+            <summary>
+            Override this to take action when a break condition is detected on the input line.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.OnStatusChange(JH.CommBase.CommBase.ModemStatus,JH.CommBase.CommBase.ModemStatus)">
+            <summary>
+            Override this to take action when one or more modem status inputs change state
+            </summary>
+            <param name="mask">The status inputs that have changed state</param>
+            <param name="state">The state of the status inputs</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.OnRxException(System.Exception)">
+            <summary>
+            Override this to take action when the reception thread closes due to an exception being thrown.
+            </summary>
+            <param name="e">The exception which was thrown</param>
+        </member>
+        <member name="P:JH.CommBase.CommBase.Online">
+            <summary>
+            True if online.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.RTSavailable">
+            <summary>
+            True if the RTS pin is controllable via the RTS property
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.RTS">
+            <summary>
+            Set the state of the RTS modem control output
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.DTRavailable">
+            <summary>
+            True if the DTR pin is controllable via the DTR property
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.DTR">
+            <summary>
+            The state of the DTR modem control output
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.Break">
+            <summary>
+            Assert or remove a break condition from the transmission line
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.Parity">
+            <summary>
+            Parity settings
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Parity.none">
+            <summary>
+            Characters do not have a parity bit.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Parity.odd">
+            <summary>
+            If there are an odd number of 1s in the data bits, the parity bit is 1.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Parity.even">
+            <summary>
+            If there are an even number of 1s in the data bits, the parity bit is 1.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Parity.mark">
+            <summary>
+            The parity bit is always 1.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Parity.space">
+            <summary>
+            The parity bit is always 0.
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.StopBits">
+            <summary>
+            Stop bit settings
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.StopBits.one">
+            <summary>
+            Line is asserted for 1 bit duration at end of each character
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.StopBits.onePointFive">
+            <summary>
+            Line is asserted for 1.5 bit duration at end of each character
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.StopBits.two">
+            <summary>
+            Line is asserted for 2 bit duration at end of each character
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.HSOutput">
+            <summary>
+            Uses for RTS or DTR pins
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.HSOutput.handshake">
+            <summary>
+            Pin is asserted when this station is able to receive data.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.HSOutput.gate">
+            <summary>
+            Pin is asserted when this station is transmitting data (RTS on NT, 2000 or XP only).
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.HSOutput.online">
+            <summary>
+            Pin is asserted when this station is online (port is open).
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.HSOutput.none">
+            <summary>
+            Pin is never asserted.
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.Handshake">
+            <summary>
+            Standard handshake methods
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Handshake.none">
+            <summary>
+            No handshaking
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Handshake.XonXoff">
+            <summary>
+            Software handshaking using Xon / Xoff
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Handshake.CtsRts">
+            <summary>
+            Hardware handshaking using CTS / RTS
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.Handshake.DsrDtr">
+            <summary>
+            Hardware handshaking using DSR / DTR
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.CommBaseSettings">
+            <summary>
+            Set the public fields to supply settings to CommBase.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.port">
+            <summary>
+            Port Name (default: "COM1:")
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.baudRate">
+            <summary>
+            Baud Rate (default: 2400) unsupported rates will throw "Bad settings"
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.parity">
+            <summary>
+            The parity checking scheme (default: none)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.dataBits">
+            <summary>
+            Number of databits 1..8 (default: 8) unsupported values will throw "Bad settings"
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.stopBits">
+            <summary>
+            Number of stop bits (default: one)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.txFlowCTS">
+            <summary>
+            If true, transmission is halted unless CTS is asserted by the remote station (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.txFlowDSR">
+            <summary>
+            If true, transmission is halted unless DSR is asserted by the remote station (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.txFlowX">
+            <summary>
+            If true, transmission is halted when Xoff is received and restarted when Xon is received (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.txWhenRxXoff">
+            <summary>
+            If false, transmission is suspended when this station has sent Xoff to the remote station (default: true)
+            Set false if the remote station treats any character as an Xon.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.rxGateDSR">
+            <summary>
+            If true, received characters are ignored unless DSR is asserted by the remote station (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.rxFlowX">
+            <summary>
+            If true, Xon and Xoff characters are sent to control the data flow from the remote station (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.useRTS">
+            <summary>
+            Specifies the use to which the RTS output is put (default: none)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.useDTR">
+            <summary>
+            Specidies the use to which the DTR output is put (default: none)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.XonChar">
+            <summary>
+            The character used to signal Xon for X flow control (default: DC1)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.XoffChar">
+            <summary>
+            The character used to signal Xoff for X flow control (default: DC3)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.rxHighWater">
+            <summary>
+            The number of free bytes in the reception queue at which flow is disabled
+            (Default: 0 = Set to 1/10th of actual rxQueue size)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.rxLowWater">
+            <summary>
+            The number of bytes in the reception queue at which flow is re-enabled
+            (Default: 0 = Set to 1/10th of actual rxQueue size)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.sendTimeoutMultiplier">
+            <summary>
+            Multiplier. Max time for Send in ms = (Multiplier * Characters) + Constant
+            (default: 0 = No timeout)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.sendTimeoutConstant">
+            <summary>
+            Constant.  Max time for Send in ms = (Multiplier * Characters) + Constant (default: 0)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.rxQueue">
+            <summary>
+            Requested size for receive queue (default: 0 = use operating system default)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.txQueue">
+            <summary>
+            Requested size for transmit queue (default: 0 = use operating system default)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.autoReopen">
+            <summary>
+            If true, the port will automatically re-open on next send if it was previously closed due
+            to an error (default: false)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.CommBaseSettings.checkAllSends">
+            <summary>
+            If true, subsequent Send commands wait for completion of earlier ones enabling the results
+            to be checked. If false, errors, including timeouts, may not be detected, but performance
+            may be better.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommBase.CommBaseSettings.SetStandard(System.String,System.Int32,JH.CommBase.CommBase.Handshake)">
+            <summary>
+            Pre-configures settings for most modern devices: 8 databits, 1 stop bit, no parity and
+            one of the common handshake protocols. Change individual settings later if necessary.
+            </summary>
+            <param name="Port">The port to use (i.e. "COM1:")</param>
+            <param name="Baud">The baud rate</param>
+            <param name="Hs">The handshake protocol</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.CommBaseSettings.SaveAsXML(System.IO.Stream)">
+            <summary>
+            Save the object in XML format to a stream
+            </summary>
+            <param name="s">Stream to save the object to</param>
+        </member>
+        <member name="M:JH.CommBase.CommBase.CommBaseSettings.LoadFromXML(System.IO.Stream)">
+            <summary>
+            Create a new CommBaseSettings object initialised from XML data
+            </summary>
+            <param name="s">Stream to load the XML from</param>
+            <returns>CommBaseSettings object</returns>
+        </member>
+        <member name="M:JH.CommBase.CommBase.CommBaseSettings.LoadFromXML(System.IO.Stream,System.Type)">
+            <summary>
+            Create a new object loading members from the stream in XML format.
+            Derived class should call this from a static method i.e.:
+            return (ComDerivedSettings)LoadFromXML(s, typeof(ComDerivedSettings));
+            </summary>
+            <param name="s">Stream to load the object from</param>
+            <param name="t">Type of the derived object</param>
+            <returns></returns>
+        </member>
+        <member name="T:JH.CommBase.CommBase.ASCII">
+            <summary>
+            Byte type with enumeration constants for ASCII control codes.
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.PortStatus">
+            <summary>
+            Availability status of a port
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.PortStatus.unavailable">
+            <summary>
+            Port exists but is unavailable (may be open to another program)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.PortStatus.available">
+            <summary>
+            Available for use
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommBase.PortStatus.absent">
+            <summary>
+            Port does not exist
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.ModemStatus">
+            <summary>
+            Represents the status of the modem control input signals.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.ModemStatus.cts">
+            <summary>
+            Condition of the Clear To Send signal.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.ModemStatus.dsr">
+            <summary>
+            Condition of the Data Set Ready signal.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.ModemStatus.rlsd">
+            <summary>
+            Condition of the Receive Line Status Detection signal.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.ModemStatus.ring">
+            <summary>
+            Condition of the Ring Detection signal.
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommBase.QueueStatus">
+            <summary>
+            Represents the current condition of the port queues.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.ctsHold">
+            <summary>
+            Output is blocked by CTS handshaking.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.dsrHold">
+            <summary>
+            Output is blocked by DRS handshaking.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.rlsdHold">
+            <summary>
+            Output is blocked by RLSD handshaking.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.xoffHold">
+            <summary>
+            Output is blocked because software handshaking is enabled and XOFF was received.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.xoffSent">
+            <summary>
+            Output was blocked because XOFF was sent and this station is not yet ready to receive.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.immediateWaiting">
+            <summary>
+            There is a character waiting for transmission in the immediate buffer.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.InQueue">
+            <summary>
+            Number of bytes waiting in the input queue.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.OutQueue">
+            <summary>
+            Number of bytes waiting for transmission.
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.InQueueSize">
+            <summary>
+            Total size of input queue (0 means information unavailable)
+            </summary>
+        </member>
+        <member name="P:JH.CommBase.CommBase.QueueStatus.OutQueueSize">
+            <summary>
+            Total size of output queue (0 means information unavailable)
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommLine">
+            <summary>
+            Overlays CommBase to provide line or packet oriented communications to derived classes. Strings
+            are sent and received and the Transact method is added which transmits a string and then blocks until
+            a reply string has been received (subject to a timeout).
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommLine.Send(System.String)">
+            <summary>
+            Queue the ASCII representation of a string and then the set terminator bytes for sending.
+            </summary>
+            <param name="toSend">String to be sent.</param>
+        </member>
+        <member name="M:JH.CommBase.CommLine.Transact(System.String)">
+            <summary>
+            Transmits the ASCII representation of a string followed by the set terminator bytes and then
+            awaits a response string.
+            </summary>
+            <param name="toSend">The string to be sent.</param>
+            <returns>The response string.</returns>
+        </member>
+        <member name="M:JH.CommBase.CommLine.Setup(JH.CommBase.CommLine.CommLineSettings)">
+            <summary>
+            If a derived class overrides ComSettings(), it must call this prior to returning the settings to
+            the base class.
+            </summary>
+            <param name="s">Class containing the appropriate settings.</param>
+        </member>
+        <member name="M:JH.CommBase.CommLine.OnRxLine(System.String)">
+            <summary>
+            Override this to process unsolicited input lines (not a result of Transact).
+            </summary>
+            <param name="s">String containing the received ASCII text.</param>
+        </member>
+        <member name="T:JH.CommBase.CommLine.CommLineSettings">
+            <summary>
+            Extends CommBaseSettings to add the settings used by CommLine.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommLine.CommLineSettings.rxStringBufferSize">
+            <summary>
+            Maximum size of received string (default: 256)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommLine.CommLineSettings.rxTerminator">
+            <summary>
+            ASCII code that terminates a received string (default: CR)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommLine.CommLineSettings.rxFilter">
+            <summary>
+            ASCII codes that will be ignored in received string (default: null)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommLine.CommLineSettings.transactTimeout">
+            <summary>
+            Maximum time (ms) for the Transact method to complete (default: 500)
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommLine.CommLineSettings.txTerminator">
+            <summary>
+            ASCII codes transmitted after each Send string (default: null)
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommPortException">
+            <summary>
+            Exception used for all errors.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommPortException.#ctor(System.String)">
+            <summary>
+            Constructor for raising direct exceptions
+            </summary>
+            <param name="desc">Description of error</param>
+        </member>
+        <member name="M:JH.CommBase.CommPortException.#ctor(System.Exception)">
+            <summary>
+            Constructor for re-raising exceptions from receive thread
+            </summary>
+            <param name="e">Inner exception raised on receive thread</param>
+        </member>
+        <member name="M:JH.CommBase.Win32Com.CreateFile(System.String,System.UInt32,System.UInt32,System.IntPtr,System.UInt32,System.UInt32,System.IntPtr)">
+            <summary>
+            Opening Testing and Closing the Port Handle.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.Win32Com.GetCommState(System.IntPtr,JH.CommBase.Win32Com.DCB@)">
+            <summary>
+            Manipulating the communications settings.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.Win32Com.WriteFile(System.IntPtr,System.Byte[],System.UInt32,System.UInt32@,System.IntPtr)">
+            <summary>
+            Reading and writing.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.Win32Com.EscapeCommFunction(System.IntPtr,System.UInt32)">
+            <summary>
+            Control port functions.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.Win32Com.GetOverlappedResult(System.IntPtr,System.IntPtr,System.UInt32@,System.Boolean)">
+            <summary>
+            Status Functions.
+            </summary>
+        </member>
+        <member name="T:JH.CommBase.CommPingPong">
+            <summary>
+            Overlays CommBase to provide byte-level ping-pong communications were each transmitted byte
+            illicits a single byte response which must be absorbed before sending the next byte.
+            There is a default response timeout of 500ms after which a Timeout exception will be raised.
+            This timeout can be changed by changing the transactTimeout parameter in the settings object.
+            Use the Transact method for all communications.
+            </summary>
+        </member>
+        <member name="M:JH.CommBase.CommPingPong.Transact(System.Byte)">
+            <summary>
+            Transmits a byte and waits for and returns the response byte.
+            </summary>
+            <param name="toSend">The byte to be sent.</param>
+            <returns>The response byte.</returns>
+        </member>
+        <member name="M:JH.CommBase.CommPingPong.Setup(JH.CommBase.CommPingPong.CommPingPongSettings)">
+            <summary>
+            If a derived class overrides ComSettings(), it must call this prior to returning the settings to
+            the base class.
+            </summary>
+            <param name="s">Class containing the appropriate settings.</param>
+        </member>
+        <member name="T:JH.CommBase.CommPingPong.CommPingPongSettings">
+            <summary>
+            Extends CommBaseSettings to add the settings used by CommLine.
+            </summary>
+        </member>
+        <member name="F:JH.CommBase.CommPingPong.CommPingPongSettings.transactTimeout">
+            <summary>
+            Maximum time (ms) for the Transact method to complete (default: 500)
+            </summary>
+        </member>
+    </members>
+</doc>
