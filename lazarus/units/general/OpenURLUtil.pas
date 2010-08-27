@@ -13,7 +13,7 @@ interface
 uses ShellAPI, Win32Proc;
 {$endif}
 {$ifdef LINUX}
-uses SysUtils;
+uses SysUtils, Unix;
 {$endif}
 {$ifdef Darwin} // LCLCarbon?
 uses MacOSAll, CarbonProc;
