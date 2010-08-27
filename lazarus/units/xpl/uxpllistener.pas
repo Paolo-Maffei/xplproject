@@ -12,6 +12,7 @@ unit uxPLListener;
         Removed bConfigOnly, redondant with AwaitingConfiguration
  0.94 : Replacement of TTimer with TfpTimer
  0.95 : Added 'no config' capability to allow light focused xPL Client avoid waiting config
+ Rev 298 : Modified to enable Linux support
 }
 
 {$mode objfpc}{$H+}
@@ -144,6 +145,7 @@ begin
      LogError(K_MSG_UDP_ERROR,[]);
    end;
 
+{$IFDEF WINDOWS}
    i := gstack.LocalAddresses.Count-1;
    while i>=0 do begin
       if fSetting.ListenOnAll or (gStack.LocalAddresses[i] = fSetting.ListenOnAddress) then
@@ -155,6 +157,14 @@ begin
       end;
       dec(i);
    end;
+{$ELSE}
+      with IncomingSocket.Bindings.Add do begin
+           ClientPortMin := XPL_BASE_DYNAMIC_PORT;
+           ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
+           Port          := 0;
+           IP            := fSetting.ListenOnAddress;
+      end;
+{$ENDIF}
 
    If IncomingSocket.Bindings.Count > 0 then begin                             // Lets be sure we found an address to bind to
       IncomingSocket.Active:=true;

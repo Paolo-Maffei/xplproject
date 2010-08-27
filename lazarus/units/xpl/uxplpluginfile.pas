@@ -60,7 +60,7 @@ type
      end;
 
 implementation //========================================================================
-uses XMLRead, RegExpr, Dialogs;
+uses XMLRead, RegExpr;
 
 resourcestring // XML Vendor file entry and field variable names ========================
    K_VF_Command     = 'command';
