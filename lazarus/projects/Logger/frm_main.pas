@@ -152,14 +152,15 @@ var
   FrmMain: TFrmMain;
 
 implementation { TFrmLogger =============================================================}
-uses frm_xplappslauncher, frm_AppSettings, cDateTime,  StrUtils, frm_xpllogviewer,
+uses frm_xplappslauncher, frm_AppSettings, //cDateTime,
+     StrUtils, frm_xpllogviewer,
      uxPLAddress, uxplHeader,  frm_PluginDetail,
      cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance,
      frm_networksettings, frm_vendorplugins;
 
 // ======================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.0.3';
+     K_XPL_APP_VERSION_NUMBER = '2.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'logger';
      K_ROOT_NODE_NAME = 'xPL Network';
@@ -217,7 +218,13 @@ procedure TFrmMain.acLoggingExecute(Sender: TObject);
 begin frmLogViewer.Showmodal; end;
 
 procedure TFrmMain.acNetworkSettingsExecute(Sender: TObject);
-begin frmNetworkSettings.ShowModal; end;
+begin
+ {$IFDEF WINDOWS}
+ frmNetworkSettings.ShowModal;
+ {$ELSE}
+ Application.MessageBox('Not implemented in this version','Info',mb_OK);
+ {$ENDIF}
+end;
 
 procedure TFrmMain.acVendorPluginsExecute(Sender: TObject);
 begin frmVendorPlugins.ShowModal; end;
@@ -447,6 +454,7 @@ begin
    acSetupInstance.Visible := ckConfigList.Checked or acPluginDetail.Visible;
    mnuCommands.Visible := acSetupInstance.Visible;
    if ConfElmts.plug_detail<>nil then begin
+{$IFDEF WINDOWS}       // At the time, don't understand why this fails under linux
       mnuCommands.Clear;
       for i := 0 to ConfElmts.plug_detail.Commands.Count-1 do begin
           aMenu := TMenuItem.Create(self);
@@ -454,6 +462,7 @@ begin
           aMenu.OnClick := @mnuCommandClick;
           mnuCommands.Add(aMenu);
       end;
+{$ENDIF}
       mnuCommands.Enabled := (mnuCommands.Count > 0);
    end;
 end;
@@ -538,7 +547,7 @@ end;
 function TFrmMain.StatusString : string;
 var i : extended;
 begin
-     i := DiffMinutes(DtLogStart, Now);
+     i := Integer(Trunc((Now - DtLogStart) / (1/24/60)));
      if i<>0 then Result := Format('Logged %d during %s ( %n msg/min )',[iLoggedMsg,TimeToStr(Now-dtLogStart),iLoggedMsg / i]);
 end;
 

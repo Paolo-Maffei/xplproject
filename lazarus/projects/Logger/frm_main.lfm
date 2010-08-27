@@ -3,8 +3,9 @@ object FrmMain: TFrmMain
   Height = 568
   Top = 107
   Width = 1022
+  ActiveControl = PageControl1
   Caption = 'FrmMain'
-  ClientHeight = 548
+  ClientHeight = 545
   ClientWidth = 1022
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
@@ -2338,7 +2339,7 @@ object FrmMain: TFrmMain
   end
   object PageControl1: TPageControl
     Left = 0
-    Height = 499
+    Height = 500
     Top = 26
     Width = 1022
     ActivePage = TabSheet1
@@ -2347,13 +2348,13 @@ object FrmMain: TFrmMain
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Monitoring'
-      ClientHeight = 471
-      ClientWidth = 1014
+      ClientHeight = 475
+      ClientWidth = 1020
       object lvMessages: TListView
         Left = 172
-        Height = 471
+        Height = 475
         Top = 0
-        Width = 599
+        Width = 605
         Align = alClient
         Columns = <        
           item
@@ -2374,7 +2375,7 @@ object FrmMain: TFrmMain
           end        
           item
             Caption = 'Time'
-            Width = 80
+            Width = 172
           end>
         ReadOnly = True
         RowSelect = True
@@ -2390,7 +2391,7 @@ object FrmMain: TFrmMain
       end
       object tvMessages: TTreeView
         Left = 0
-        Height = 471
+        Height = 475
         Top = 0
         Width = 167
         Align = alLeft
@@ -2405,30 +2406,30 @@ object FrmMain: TFrmMain
       end
       object Splitter1: TSplitter
         Left = 167
-        Height = 471
+        Height = 475
         Top = 0
         Width = 5
       end
       object Splitter2: TSplitter
-        Left = 771
-        Height = 471
+        Left = 777
+        Height = 475
         Top = 0
         Width = 5
         Align = alRight
         ResizeAnchor = akRight
       end
       object Panel1: TPanel
-        Left = 776
-        Height = 471
+        Left = 782
+        Height = 475
         Top = 0
         Width = 238
         Align = alRight
-        ClientHeight = 471
+        ClientHeight = 475
         ClientWidth = 238
         TabOrder = 4
         object Memo1: TMemo
           Left = 1
-          Height = 469
+          Height = 473
           Top = 1
           Width = 236
           Align = alClient
@@ -2439,8 +2440,8 @@ object FrmMain: TFrmMain
     end
     object TabSheet2: TTabSheet
       Caption = 'Filters'
-      ClientHeight = 471
-      ClientWidth = 1014
+      ClientHeight = 475
+      ClientWidth = 1020
       object Label3: TLabel
         Left = 4
         Height = 16
@@ -2466,6 +2467,7 @@ object FrmMain: TFrmMain
         ItemHeight = 0
         ParentFont = False
         TabOrder = 0
+        TopIndex = -1
       end
       object clbSchema: TMCheckListBox
         Left = 172
@@ -2476,6 +2478,7 @@ object FrmMain: TFrmMain
         ItemHeight = 0
         ParentFont = False
         TabOrder = 1
+        TopIndex = -1
       end
       object ckConfigList: TCheckBox
         Left = 4
@@ -2499,8 +2502,8 @@ object FrmMain: TFrmMain
   end
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
-    Top = 525
+    Height = 19
+    Top = 526
     Width = 1022
     Panels = <    
       item
