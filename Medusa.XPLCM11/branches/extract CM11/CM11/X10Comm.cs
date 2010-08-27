@@ -44,9 +44,6 @@ namespace Medusa.X10CM11
 {
 	#region event definitions
 
-	/// <summary>
-	/// Summary description for X10Comm.
-	/// </summary>
 	public delegate void SendX10ResultEventHandler(object sender, X10EventArgs e);
 	public delegate void ReceivedX10EventHandler(object sender, X10EventArgs e);
 
@@ -79,9 +76,24 @@ namespace Medusa.X10CM11
 		private readonly byte mData2;
 		private readonly int mResultCode;
 
-		public X10EventArgs(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2):this(Devices,X10Command,Brightness,data1,data2,0) { }
+        /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</param>
+        /// <param name="X10Command">X10 command sent/received</param>
+        /// <param name="Brightness">Brightness, range 0-100%</param>
+        /// <param name="data1">Extended data byte 1, range 0-255</param>
+        /// <param name="data2">Extended data byte 2, range 0-255</param>
+        public X10EventArgs(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2) : this(Devices, X10Command, Brightness, data1, data2, 0) { }
 
-		public X10EventArgs(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2, int ResultCode)
+        /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</param>
+        /// <param name="X10Command">X10 command sent/received</param>
+        /// <param name="Brightness">Brightness, range 0-100%</param>
+        /// <param name="data1">Extended data byte 1, range 0-255</param>
+        /// <param name="data2">Extended data byte 2, range 0-255</param>
+        /// <param name="ResultCode">Resultcode of X10 commands send, 0 if success, 1 if failure.</param>
+        public X10EventArgs(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2, int ResultCode)
 		{
 			mDevices = Devices;
 			mX10Command = X10Command;
@@ -91,21 +103,53 @@ namespace Medusa.X10CM11
 			mResultCode = ResultCode;
 		}
 
-		public string Devices { get { return mDevices; }}
+		/// <summary>A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</summary>
+        public string Devices { get { return mDevices; }}
+        /// <summary>
+        /// X10 command to be sent or received
+        /// </summary>
 		public X10_COMMANDS X10Command { get { return mX10Command; }}
+        /// <summary>
+        /// Brightness, range 0-100%
+        /// </summary>
 		public byte Brightness { get { return mBrightness; }}
+        /// <summary>
+        /// Extended data byte 1, range 0-255
+        /// </summary>
 		public byte Data1 { get { return mData1; }}
+        /// <summary>
+        /// Extended data byte 2, range 0-255
+        /// </summary>
 		public byte Data2 { get { return mData2; }}
+        /// <summary>
+        /// Resultcode of X10 commands send
+        /// </summary>
+        /// <value>0 if success, 1 if failure</value>
+        /// <remarks>Failure indicates that the maximum number of retries has been reached. This property is 
+        /// only used by the <see cref="X10Comm.SendX10ResultEventHandler"/> event.</remarks>
 		public int ResultCode { get { return mResultCode; }}
 	}
 	#endregion
 
-
+    /// <summary>
+    /// X10 communication object for a X10-CM11 gateway device.
+    /// </summary>
+    /// <remarks>To create an instance of this object use the static/shared <see cref="X10Comm.Instance"/> 
+    /// property. This property ensures that there will be only 1 instance active.</remarks>
 	public sealed class X10Comm:IDisposable
 	{
 		
-		public event SendX10ResultEventHandler SendX10Result;
-		public event ReceivedX10EventHandler ReceivedX10;
+		/// <summary>
+		/// Event raised when a previously enqueued X10 message has been sent to the CM11
+		/// </summary>
+        public event SendX10ResultEventHandler SendX10Result;
+		/// <summary>
+		/// Event raised when an X10 command is received from the CM11
+		/// </summary>
+        /// <remarks>Check the <see cref="X10EventArgs.ResultCode"/> for errors</remarks>
+        public event ReceivedX10EventHandler ReceivedX10;
 
 #if DEBUG
 		private static BooleanSwitch timingPerformance;
@@ -117,7 +161,8 @@ namespace Medusa.X10CM11
 
 		#region internal representation of an X10 message
 
-		private class X10Message
+        /// <summary>Represents an X10 message</summary>
+        private class X10Message
 		{
 			private string mDevices0;
 			private char mHouseCode;
@@ -132,13 +177,32 @@ namespace Medusa.X10CM11
 
 			private byte[] codes = {6,14,2,10,1,9,5,13,7,15,3,11,0,8,4,12};
 
-			public X10Message(string Devices, X10_COMMANDS X10Command):this(Devices,X10Command,0,0,0)
+            /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+            /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+            /// housecode per command is supported.</param>
+            /// <param name="X10Command">X10 command to be sent</param>
+            public X10Message(string Devices, X10_COMMANDS X10Command)
+                : this(Devices, X10Command, 0, 0, 0)
 			{ }
 
-			public X10Message(string Devices, X10_COMMANDS X10Command, byte Brightness):this(Devices,X10Command,Brightness,0,0)
+            /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+            /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+            /// housecode per command is supported.</param>
+            /// <param name="X10Command">X10 command to be sent</param>
+            /// <param name="Brightness">Brightness, range 0-100%</param>
+            public X10Message(string Devices, X10_COMMANDS X10Command, byte Brightness)
+                : this(Devices, X10Command, Brightness, 0, 0)
 			{ }
 
-			public X10Message(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2)
+			
+            /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+            /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+            /// housecode per command is supported.</param>
+            /// <param name="X10Command">X10 command to be sent</param>
+            /// <param name="Brightness">Brightness, range 0-100%</param>
+            /// <param name="data1">Extended data byte 1, range 0-255</param>
+            /// <param name="data2">Extended data byte 2, range 0-255</param>
+            public X10Message(string Devices, X10_COMMANDS X10Command, byte Brightness, byte data1, byte data2)
 			{
 				mDevices0 = Devices;
 				mHouseCode = Convert.ToChar(Devices.Substring(0,1).ToUpper());
@@ -275,9 +339,22 @@ namespace Medusa.X10CM11
 		}
 		#endregion
 
-		public int ComPort { get { return mComPort; } set { mComPort = value; }}
+		/// <summary>
+		/// COM port on which the CM11 is connected
+		/// </summary>
+        /// <remarks>To change the COM port on an open connection, first dispose of the object by 
+        /// explicitly calling <see cref="X10Comm.Dispose"/> and then create a new <see cref="X10Comm"/> 
+        /// with the new COM port.</remarks>
+        public int ComPort { get { return mComPort; } set { mComPort = value; } }
+        /// <summary>
+        /// System eventlog to which exceptions and other messages should be logged
+        /// </summary>
 		public EventLog Eventlog { set { mEventLog = value; }}
-
+        /// <summary>
+        /// Opens the serial connection to the CM11
+        /// </summary>
+        /// <returns><c>True</c> if the connection succeeds, <c>False</c> otherwise</returns>
+        /// <remarks>To close the connection, explicitly call <see cref="X10Comm.Dispose"/>.</remarks>
 		public bool Open()
 		{	
 			bool ok = cm11.Open();
@@ -285,17 +362,35 @@ namespace Medusa.X10CM11
 			return (ok || cm11.Online);
 		}
 
-		public void AsyncSendX10(string Devices, X10_COMMANDS X10Command)		
+        /// <summary>Enqueues an X10 command for transmission</summary>
+        /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</param>
+        /// <param name="X10Command">X10 command to be sent</param>
+        public void AsyncSendX10(string Devices, X10_COMMANDS X10Command)		
 		{
 			AsyncSendX10(Devices, X10Command, 0, 0, 0);
 		}
 
-		public void AsyncSendX10(string Devices, X10_COMMANDS X10Command, byte Brightness)		
+        /// <summary>Enqueues an X10 command for transmission</summary>
+        /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</param>
+        /// <param name="X10Command">X10 command to be sent</param>
+        /// <param name="Brightness">Brightness, range 0-100%</param>
+        public void AsyncSendX10(string Devices, X10_COMMANDS X10Command, byte Brightness)		
 		{
 			AsyncSendX10(Devices, X10Command, Brightness, 0, 0);
 		}
 
-		public void AsyncSendX10(string Devices, X10_COMMANDS X10Command, byte data1, byte data2)		
+        /// <summary>Enqueues an X10 command for transmission</summary>
+        /// <param name="Devices">A string starting with a housecode, followed by a comma separated list of
+        /// device numbers. Eg. "A1,2,3" represents a command to be sent to devices A1, A2 and A3. Only 1 
+        /// housecode per command is supported.</param>
+        /// <param name="X10Command">X10 command to be sent</param>
+        /// <param name="data1">Extended data byte 1, range 0-255</param>
+        /// <param name="data2">Extended data byte 2, range 0-255</param>
+        public void AsyncSendX10(string Devices, X10_COMMANDS X10Command, byte data1, byte data2)		
 		{
 			AsyncSendX10(Devices, X10Command, 0, data1, data2);
 		}
