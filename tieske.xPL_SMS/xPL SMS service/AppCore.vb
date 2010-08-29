@@ -22,6 +22,8 @@ Public Class AppCore
             ' Get settings and restore xPL device
             Try
                 LogError("SMS OnStartUp", "Settings read; starting", EventLogEntryType.Information)
+                LogError("SMS OnStartUp", "State read (Length: " & My.Settings.xPLDevice.Length.ToString & "): " & _
+                         My.Settings.xPLDevice, EventLogEntryType.Information)
                 xPLdev = New xPL.xPLDevice(My.Settings.xPLDevice, False)
                 ' now call config changed event handler to propagate settings to the SMSinterface
                 ConfigChanged(xPLdev)
@@ -166,18 +168,27 @@ Public Class AppCore
     Friend Sub OnShutdown()
         ' cleanup handlers and callbacks
         LogError("SMS OnShutDown", "Stopping service", EventLogEntryType.Information)
-        If Not xPLdev Is Nothing Then
-            xPLdev.xPLGetHBeatItems = Nothing
-            RemoveHandler xPLdev.xPLConfigDone, AddressOf ConfigChanged
-            RemoveHandler xPLdev.xPLReConfigDone, AddressOf ConfigChanged
-            RemoveHandler xPLdev.xPLMessageReceived, AddressOf MessageReceived
-            ' Store settings
-            My.Settings.xPLDevice = xPLdev.GetState(GetVersionNumber(2))
-            My.Settings.Save()
-            ' destroy device
-            xPLdev.Dispose()
-            LogError("SMS OnShutDown", "Service stopped", EventLogEntryType.Information)
-        End If
+        Dim s As String
+        Try
+            If Not xPLdev Is Nothing Then
+                xPLdev.xPLGetHBeatItems = Nothing
+                RemoveHandler xPLdev.xPLConfigDone, AddressOf ConfigChanged
+                RemoveHandler xPLdev.xPLReConfigDone, AddressOf ConfigChanged
+                RemoveHandler xPLdev.xPLMessageReceived, AddressOf MessageReceived
+                ' Store settings
+                s = xPLdev.GetState(GetVersionNumber(2))
+                My.Settings.xPLDevice = s
+                LogError("SMS OnShutDown", "State saved (Length: " & s.Length.ToString & "): " & s, _
+                          EventLogEntryType.Information)
+                My.Settings.Save()
+                ' destroy device
+                xPLdev.Dispose()
+                LogError("SMS OnShutDown", "Service stopped", EventLogEntryType.Information)
+            End If
+        Catch ex As Exception
+            LogError("SMS OnShutDown", "Exception while stopping the service:" & vbCrLf & ex.ToString, _
+                     EventLogEntryType.Error)
+        End Try
     End Sub
 
 End Class
