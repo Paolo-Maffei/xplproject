@@ -98,8 +98,9 @@ type
   private
     function Get_description: AnsiString;
     function Get_groupname: AnsiString;
-    function Get_Enabled: ansistring;
-    function Get_IsGroup: ansistring;
+    function Get_EnabledAsBoolean: boolean;
+    function Get_EnabledAsString: string;
+    function Get_IsGroup: boolean;
     function Get_Name: AnsiString;
     function Get_output: TXMLoutput;
   protected
@@ -108,68 +109,64 @@ type
     property name_ : AnsiString read Get_Name;
     property description : AnsiString read Get_description;
     property groupname : AnsiString read Get_groupname;
-    property isgroup : ansistring read Get_IsGroup;
-    property enabled : ansistring read Get_Enabled;
+    property isgroup : boolean read Get_IsGroup;
+    property enabledAsBoolean : boolean read Get_EnabledAsBoolean;
+    property enabledAsString : string read Get_EnabledAsString;
     property input : TXMLinput read Get_input;
     property output : TXMLoutput read Get_output;
   end;
 
-  TXMLxpldeterminatorsType = specialize TXMLElementList<TXMLdeterminatorType>;
-
-var xpldeterminatorFile : TXMLxpldeterminatorsType;
+  TXMLxpldeterminatorsFile = specialize TXMLElementList<TXMLdeterminatorType>;
 
 implementation //=========================================================================
-uses XMLRead;
-var Document : TXMLDocument;
-//========================================================================================
 
 // TXMLparamType ======================================================================
 function TXMLparamType.Get_name: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Name); end;
 
 function TXMLparamType.Get_operator: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Operator).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Operator); end;
 
 function TXMLparamType.Get_Value: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Value).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Value); end;
 
 // TXMLxplconditionType =======================================================================
 function TXMLxplconditionType.Get_DisplayName: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Display_name).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Display_name); end;
 
 function TXMLxplconditionType.Get_MsgType: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Msg_type).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Msg_type); end;
 
 function TXMLxplconditionType.Get_SchemaClass: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Schema_class).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Schema_class); end;
 
 function TXMLxplconditionType.Get_SchemaType: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Schema_type).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Schema_type); end;
 
 function TXMLxplconditionType.Get_SourceDevice: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Source_devic).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Source_devic); end;
 
 function TXMLxplconditionType.Get_SourceInstance: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Source_insta).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Source_insta); end;
 
 function TXMLxplconditionType.Get_SourceVendor: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Source_vendo).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Source_vendo); end;
 
 function TXMLxplconditionType.Get_TargetDevice: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Target_devic).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Target_devic); end;
 
 function TXMLxplconditionType.Get_TargetInstance: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Target_insta).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Target_insta); end;
 
 function TXMLxplconditionType.Get_TargetVendor: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Target_vendo).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Target_vendo); end;
 
 function TXMLxplconditionType.Get_Params: TXMLParamsType;
 begin Result := TXMLParamsType.Create(self, K_XML_STR_Param); end;
 
 { TXMLinput }
 function TXMLinput.Get_Match: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Match).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Match); end;
 
 function TXMLinput.Get_xplconditions: TXMLConditionsType;
 begin Result := TXMLConditionsType.Create(self, K_XML_STR_XplCondition); end;
@@ -180,19 +177,22 @@ begin Result := TXMLActionsType.Create(self, K_XML_STR_XplAction); end;
 
 { TXMLdeterminatorType }
 function TXMLdeterminatorType.Get_Description: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Description).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLdeterminatorType.Get_groupname: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_GroupName).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_GroupName); end;
 
-function TXMLdeterminatorType.Get_Enabled: ansistring;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Enabled).NodeValue; end;
+function TXMLdeterminatorType.Get_EnabledAsString : String;
+begin Result := GetAttribute(K_XML_STR_Enabled); end;
 
-function TXMLdeterminatorType.Get_IsGroup: ansistring;
-begin Result := Attributes.GetNamedItem(K_XML_STR_IsGroup).NodeValue; end;
+function TXMLdeterminatorType.Get_EnabledAsBoolean: boolean;
+begin Result := (EnabledAsString = 'Y'); end;
+
+function TXMLdeterminatorType.Get_IsGroup: boolean;
+begin Result := (GetAttribute(K_XML_STR_IsGroup) = 'Y'); end;
 
 function TXMLdeterminatorType.Get_Name: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Name); end;
 
 function TXMLdeterminatorType.Get_output: TXMLoutput;
 begin Result := TXMLoutput(FindNode(K_XML_STR_Output)); end;
@@ -202,35 +202,26 @@ begin Result := TXMLInput(FindNode(K_XML_STR_Input)); end;
 
 { TXMLxplActionParamType }
 function TXMLxplActionParamType.Get_Expression: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Expression).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Expression); end;
 
 { TXMLxplActionType }
 function TXMLxplActionType.Get_DisplayName: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Display_name).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Display_name); end;
 
 function TXMLxplActionType.Get_ExecuteOrder: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_ExecuteOrder).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_ExecuteOrder); end;
 
 function TXMLxplActionType.Get_Msg_Schema: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Msg_schema).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Msg_schema); end;
 
 function TXMLxplActionType.Get_Msg_Target: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Msg_target).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Msg_target); end;
 
 function TXMLxplActionType.Get_Msg_Type: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Msg_type).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Msg_type); end;
 
 function TXMLxplActionType.Get_xplActionParams: TXMLxplActionParamsType;
 begin Result := TXMLxplActionParamsType.Create(self, K_XML_STR_XplActionPar); end;
-
-initialization
-   Document := TXMLDocument.Create;
-   ReadXMLFile(document,'C:\Program Files\xPL\xPLHal 2.0 for Windows\data\determinator\36aaa3adcf324675b6104c2590866a57.xml');
-   xpldeterminatorFile := TXMLxpldeterminatorsType.Create(Document.FirstChild,K_XML_STR_Determinator);
-
-finalization
-   xpldeterminatorFile.destroy;
-   Document.destroy;
 
 end.
 

@@ -20,7 +20,7 @@ private
   function Get_interval: ansistring;
   function Get_Param: ansistring;
   function Get_randomtime: ansistring;
-  function Get_recurring: ansistring;
+  function Get_recurring: boolean;
   function Get_runsub: ansistring;
   function Get_Start_Time: AnsiString;
   function Get_Tag: AnsiString;
@@ -31,7 +31,7 @@ private
         property end_time : AnsiString read Get_End_Time;
         property dow : AnsiString read Get_dow;
         property randomtime : ansistring read Get_randomtime;
-        property recurring : ansistring read Get_recurring;
+        property recurring : boolean read Get_recurring;
         property interval : ansistring read Get_interval;
         property runsub : ansistring read Get_runsub;
         property param : ansistring read Get_Param;
@@ -41,10 +41,10 @@ private
      end;
      TXMLEventsType = specialize TXMLElementList<TXMLEventType>;
 
-var eventsfile : TXMLeventsType;
+var Eventsfile : TXMLeventsType;
 
 implementation //=========================================================================
-uses XMLRead;
+uses XMLRead, XMLWrite,uxPLConst;
 var document : TXMLDocument;
 //========================================================================================
 function TXMLEventType.Get_dow: AnsiString;
@@ -71,8 +71,8 @@ begin Result := Attributes.GetNamedItem(K_XML_STR_Param).NodeValue; end;
 function TXMLEventType.Get_randomtime: ansistring;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Randomtime).NodeValue; end;
 
-function TXMLEventType.Get_recurring: ansistring;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Recurring).NodeValue; end;
+function TXMLEventType.Get_recurring: boolean;
+begin Result := GetAttribute(K_XML_STR_Recurring)=K_STR_TRUE; end;
 
 function TXMLEventType.Get_runsub: ansistring;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Runsub).NodeValue; end;
@@ -87,9 +87,10 @@ begin Result := Attributes.GetNamedItem(K_XML_STR_Tag).NodeValue; end;
 initialization
    document := TXMLDocument.Create;
    ReadXMLFile(document,'C:\Program Files\xPL\xPLHal 2.0 for Windows\data\xplhal_events.xml');
-   eventsfile := TXMLeventsType.Create(Document.FirstChild, K_XML_STR_Event);
+   eventsfile := TXMLeventsType.Create(document, K_XML_STR_Global);
 
 finalization
+   WriteXMLFile(document,'C:\Program Files\xPL\xPLHal 2.0 for Windows\data\xplhal_events.xml');
    eventsfile.destroy;
    document.destroy;
 
