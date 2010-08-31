@@ -76,7 +76,7 @@ type
     procedure OnJoined(const aJoined : boolean);
     procedure OnConfigDone(const fConfig : TxPLConfig);
     procedure OnMessageReceived(const axPLMessage: TxPLMessage);
-    procedure OnGlobalChanged(aValue : string; aOld : string; aNew : string);
+    procedure OnGlobalChanged(const aValue : string; const aNew : string; const aOld : string);
 //    procedure RefreshGlobalDisplay(const aName : string);
     procedure SetButtons;
     function  Compile : boolean;
@@ -104,7 +104,7 @@ var frmMain: TfrmMain;
 
 implementation {===============================================================}
 uses Frm_About, frm_xPLAppslauncher, cstrings, regexpr, uxPLConst, LCLType,
-     DateUtils, uxPLMsgHeader, XMLCfg,
+     DateUtils, XMLCfg,
      uPSR_std, uPSC_std, uPSR_forms, uPSC_forms, upsr_dateutils, upsc_dateutils,
      uPSC_classes, uPSR_classes, uPSI_uxplinterface;
 
@@ -316,9 +316,9 @@ begin
    PSScript.MainFileName := xPLClient.HtmlDir + '\' + K_DEFAULT_DEVICE + '\scripts\' + xPLClient.Config.ItemName['scriptfile'].Value;
    bAutoStartWanted := FileExists(PSScript.MainFilename);
    if bAutoStartWanted then
-      xPLClient.LogInfo('Loading ' + PSScript.MainFileName)
+      xPLClient.LogInfo('Loading ' + PSScript.MainFileName,[])
    else
-      xPLClient.LogInfo(Format(K_WEB_ERR_404,[PSScript.MainFileName]));
+      xPLClient.LogInfo(K_WEB_ERR_404,[PSScript.MainFileName]);
 
   fxPLCacheManager := TxPLCacheManagerFile.Create(xPLClient.Setting);
   xPLClient.Log('Cache manager loaded for ' + intToStr(fxPLCacheManager.Count) + ' entries');
@@ -328,9 +328,12 @@ end;
 
 
 procedure TfrmMain.OnMessageReceived(const axPLMessage: TxPLMessage);
+const
+   K_PROC_NAME_TEMPLATE = 'procedure %s_%s_%s_%s(const aMessage : string);';
 var i,j,k, iDevice,iValue : integer;
     avalue : string;
     s,v, schema, ident, value : string;
+    AutoProc : string;
 begin
    if not PSScript.Running then exit;
    for i := 0 to fxPLCacheManager.Count-1 do
@@ -348,9 +351,31 @@ begin
 
    xPLClient.xPLMessage.RawXPL := axPLMessage.RawXPL ;
    MessageArrived(axPLMessage.RawXPL);
+   //*** AUTO DISPATCH SYSTEM
+         AutoProc := StrReplace('xpl-','',(Format(K_PROC_NAME_TEMPLATE,[axPLMessage.Header.Source.Vendor,
+                                                  axPLMessage.Header.Source.Device,
+                                                  axPLMessage.Header.Source.Instance,
+                                                  axPLMessage.Header.MessageType ])));
+         Output_AppendLine('Trying to call ' + AutoProc);
+         AutoProc := StrReplace('xpl-','',(Format(K_PROC_NAME_TEMPLATE,[axPLMessage.Header.Source.Vendor,
+                                                  axPLMessage.Header.Source.Device,
+                                                  axPLMessage.Header.Source.Instance,
+                                                  ''])));
+         Output_AppendLine('Trying to call ' + AutoProc);
+         AutoProc := StrReplace('xpl-','',(Format(K_PROC_NAME_TEMPLATE,[axPLMessage.Header.Source.Vendor,
+                                                  axPLMessage.Header.Source.Device,
+                                                  '',
+                                                  ''])));
+         Output_AppendLine('Trying to call ' + AutoProc);
+         AutoProc := StrReplace('xpl-','',(Format(K_PROC_NAME_TEMPLATE,[axPLMessage.Header.Source.Vendor,
+                                                  '',
+                                                  '',
+                                                  ''])));
+         Output_AppendLine('Trying to call ' + AutoProc);
+   //*** AUTO DISPATCH SYSTEM
 end;
 
-procedure TfrmMain.OnGlobalChanged( aValue: string; aOld: string;  aNew: string);
+procedure TfrmMain.OnGlobalChanged(const aValue : string; const aNew : string; const aOld : string);
 begin
    GlobalChanged(aValue,aOld,aNew);
 end;
@@ -489,7 +514,7 @@ begin
 end;
 
 procedure TfrmMain.Output_AppendLine(aString: string);
-begin xPLClient.LogInfo(aString); end;
+begin xPLClient.LogInfo(aString,[]); end;
 
 initialization
   {$I frm_main.lrs}

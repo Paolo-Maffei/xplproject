@@ -3,7 +3,7 @@ unit uxplinterface;
 {$mode objfpc}{$H+}
 
 interface
-uses uxPLWebListener,  uxPLMsgHeader, uxPLGlobals, Classes, XMLCfg, uxPLMessage, uxPLConst;
+uses uxPLWebListener,  uxPLGlobals, Classes, XMLCfg, uxPLMessage, uxPLConst;
 
 type
     { TxPLInterface }
@@ -43,7 +43,7 @@ type
        procedure Log(aString : string);
     property
        Globals : TxPLGlobalList read fGlobalList;
-      // property OnxPLGlobalChanged : TxPLGlobalChangedEvent  read FOnxPLGlobalChanged      write FOnxPLGlobalChanged;
+       //property OnxPLGlobalChanged : TxPLGlobalChangedEvent  read FOnxPLGlobalChanged      write FOnxPLGlobalChanged;
     end;
 
 implementation { TxPLInterface ================================================}
@@ -194,7 +194,7 @@ end;
 
 // Globals manipulation functions ==============================================
 procedure TxPLInterface.Log(aString: string);
-begin LogInfo(aString); end;
+begin LogInfo(aString,[]); end;
 
 end.
 
