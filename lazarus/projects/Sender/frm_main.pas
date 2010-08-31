@@ -97,7 +97,7 @@ uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile,
      StrUtils, frm_xplAppsLauncher, uxPLConst;
 
 resourcestring //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '1.5';
+     K_XPL_APP_VERSION_NUMBER = '1.5.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'sender';
 
@@ -117,7 +117,7 @@ begin
    edtTarget.RegExpr := K_REGEXPR_TARGET;
 
    ClearExecute(self);
-   edtSource.Text := TxPLAddress.ComposeAddress(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, TxPLAddress.RandomInstance);
+   edtSource.Text := TxPLAddress.ComposeAddress(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, TxPLAddress.HostNmInstance);
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -163,11 +163,11 @@ procedure TfrmMain.SendExecute(Sender: TObject);
 var aMessage : TxPLMessage;
 begin
    aMessage := TxPLMessage.Create;
-//   xPLClient.xPLMessage.ResetValues;
    If Screen2Object(aMessage) then begin
       aMessage.Send;
       xPLClient.LogInfo('Message sent : ' + aMessage.Header.RawxPL,[]);
    end;
+   aMessage.Destroy;
 end;
 
 function TfrmMain.Screen2Object(aMess : TxPLMessage) : boolean;
@@ -243,7 +243,7 @@ var aMenu : TMenuItem;
     aDevice : TxPLDevice;
     CommandNode : TDomNode;
     aMessage : TxPLMessage;
-    asender : string;
+    asender,atarget : string;
 begin
      aMenu := TMenuItem(Sender);
      command := aMenu.Caption;
@@ -257,8 +257,10 @@ begin
         aMessage := TxPLMessage.create;
         aMessage.ReadFromXML(CommandNode);
         asender := edtSource.Caption;                                            // Preserve current sender value
+        atarget := edtTarget.Caption;                                            // Preserve current target value
         Object2Screen(aMessage);
         edtSource.Caption := asender;
+        edtTarget.Caption := atarget;
         aMessage.Destroy;
      end;
      aDevice.Destroy;
