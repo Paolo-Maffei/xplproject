@@ -4,6 +4,7 @@ Credits goes to Scott Crevier for his set of temperature icons (http://www.x10.c
 
 All configuration must be done (through xplhal or dcm) before it operates.
 You must get an account with weather.com and then fill PartnerID, LicenseKey and select a ZipCode.
+http://www.weather.com/services/xmloap.html
 Works for USA - test with success for France.
 The weather.com website is scanned every 30 minutes.
 
@@ -42,4 +43,5 @@ v 2.1
 	No us translation file needed, english is considered as default language.
 	Thanks to DJMaboul (forum Touteladomotique.com) for his english => french translations.
 
-	
+v 2.5 	
+	xPL Weather app ported to Linux	

@@ -119,6 +119,7 @@ DESCRIPTION DES CHAMPS RETOURNES.
       Previsions.Nuits[0..10].Nuit.RisquePrecipitation : Risque de pluie dans la nuit en % (ex: 10)
       Previsions.Nuits[0..10].Nuit.Himite : Taux d'humidité en %dans la nuit (ex: 60)
 }
+{$mode objfpc}{$H+}
 unit Weathers;
 
 interface
@@ -190,7 +191,7 @@ type
      function StoreSpeedValue   (aValue : string) : string;
   public
      constructor Create(aOwner : TComponent; aZip, aLicense, aPartnerid, aSystem : string);
-//     constructor Create(aOwner : TComponent); override;
+     constructor Create(aOwner : TComponent); override;
      function MettreAJour : boolean;
      procedure Assign(aWeather : TWeather); overload;
 
@@ -200,62 +201,61 @@ type
   end;
 
 implementation {====================================================================================}
-uses DateUtils, uGetHTTP, DOM,XMLRead, cStrings, StdConvs, ConvUtils;
-resourcestring
+uses DateUtils, StrUtils,uGetHTTP, DOM,XMLRead, cStrings,StdConvs, ConvUtils;
+const
    K_WEATHER_URI = 'http://xoap.weather.com/weather/local/%s?cc=*&dayf=5&link=xoap&prod=xoap&par=%s&key=%s';
+   rsMetric = 'metric';
+   rsNA = 'N/A';
 
 { Utility functions ================================================================================}
-function WeatherDt2XPLDt(aDateTime : string) : string;                        // Takes a string like : 7/29/09 02:30 PM Local Time
-var back_dat_format, back_tim_format : string;                                //         and returns  20090729143000
-    dt                               : TDateTime;
+function WeatherDt2Dt(aDateTime : string) : TDateTime;                        // Takes a string like : 7/29/09 02:30 PM Local Time
+var year,month,day,hour,minute,left,right : string;                                //         and returns  20090729143000
+
 begin
-    back_dat_format := ShortDateFormat;                                        // save these formats
-    back_tim_format := LongTimeFormat;
+   StrSplitAtChar(aDateTime,'/',month,right);                                  // First, get the month
+   StrSplitAtChar(right,'/',day,right);                                      // Then get the day
+   StrSplitAtChar(right,' ',year,right);
+   year := '20' + year;
 
-    ShortDateFormat := 'mm/dd/yy';                                             // format found in weather.com string
-    dt := StrToDateTime(aDateTime);
-
-    ShortDateFormat := 'yyyymmdd';                                             // Transforms output date format
-    LongTimeFormat  := 'hhmmss';
-
-    Result := StrRemoveChar(DateTimeToStr(dt),#32);
-
-    ShortDateFormat := back_dat_format;                                        // Restore original values
-    LongTimeFormat  := back_tim_format;
+   StrSplitAtChar(right,':',hour,right);
+   StrSplitAtChar(right,' ',minute,right);
+   StrSplitAtChar(right,'M',left,right);
+   hour := ifthen(strToint(hour)<12,hour,'00');
+   if left = 'P' then hour := IntToStr(12+StrToInt(hour));
+   result := EncodeDateTime( StrToInt(year),StrToInt(Month),StrToInt(Day),
+                             StrToInt(Hour),StrToInt(Minute),0,0);
 end;
 
-function WeatherDt2Dt(aDateTime : string) : TDateTime;                        // Takes a string like : 7/29/09 02:30 PM Local Time
-var back_dat_format : string;                                //         and returns  20090729143000
+function WeatherDt2XPLDt(const aDateTime : string) : string;                  // Takes a string like : 07/2/09 02:30 PM Local Time
+var back_dat_format, back_tim_format : string;                                //         and returns  20090729143000
+    hour,minute,left,right : string;
+    dt : tdatetime;
 begin
-    back_dat_format := ShortDateFormat;                                        // save these formats
-
-    ShortDateFormat := 'mm/dd/yy';                                             // format found in weather.com string
-    result := StrToDateTime(aDateTime);
-
-    ShortDateFormat := back_dat_format;                                        // Restore original values
+   dt := WeatherDt2Dt(aDateTime);
+   result := FormatDateTime('yyyymmddhhmm',dt) + '00';
 end;
 
 { TWeather ========================================================================================}
 constructor TWeather.Create(aOwner: TComponent; aZip, aLicense, aPartnerid,  aSystem: string);
 begin
-  inherited Create(aOwner);
+  Create(aOwner);
   fSystem      := aSystem;
   fURI         := Format(K_WEATHER_URI,[aZip,aPartnerId,aLicense]);
   fDestination := 'weather.xml';
 end;
 
-{constructor TWeather.Create(aOwner: TComponent);
+constructor TWeather.Create(aOwner: TComponent);
 begin
   inherited Create(aOwner);
-end;}
+end;
 
 function TWeather.StoreDegreeValue(aValue : string) : string;       // by default, weather.com supplies values in farenheit
 var adb : double;
 begin                                                               // let's translate it
     result := aValue;
-    if aValue = 'N/A' then exit;
+    if aValue = rsNA then exit;
 
-    if fSystem = 'metric' then begin
+    if fSystem = rsMetric then begin
        adb := CelsiusToFahrenheit ( StrToFloat( aValue));  // there's an error in fpc library, both functions seems interverted...
        adb := Round(adb);
        result := FloatToStr( adb);
@@ -266,9 +266,9 @@ function TWeather.StorePressureValue(aValue : string) : string;       // by defa
 var adb : double;
 begin                                                               // let's translate it
     result := aValue;
-    if aValue = 'N/A' then exit;
+    if aValue = rsNA then exit;
 
-    if fSystem = 'metric' then begin
+    if fSystem = rsMetric then begin
        adb := StrToFloat(aValue);                        // 29,94 inch
        adb := Convert(adb,duInches,duMillimeters);       // 760   mm HG
        adb := adb * 1.33322;                             // 1013,549548  hPA ou/et millibar
@@ -281,9 +281,9 @@ function TWeather.StoreSpeedValue(aValue : string) : string;       // by default
 var adb : double;
 begin                                                               // let's translate it
     result := aValue;
-    if aValue = 'N/A' then exit;
+    if aValue = rsNA then exit;
 
-    if fSystem = 'metric' then begin
+    if fSystem = rsMetric then begin
        adb := StrToFloat(aValue);
        adb := Convert(adb,duMiles,duKilometers);
        adb := Round(adb);
