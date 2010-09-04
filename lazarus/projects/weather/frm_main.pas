@@ -44,7 +44,7 @@ uses frm_about, frm_xplappslauncher, LCLType, cStrings, uxPLConst;
 
 //=====================================================================================================
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.1';
+     K_XPL_APP_VERSION_NUMBER = '2.5';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
@@ -64,11 +64,11 @@ begin
        OnxPLConfigDone    := @OnConfigDone;
        OnLogUpdate        := @LogUpdate;
        OnCommandGet       := @CommandGet;
-       Config.AddItem('partnerid', xpl_ctConfig);
-       Config.AddItem('licensekey',xpl_ctConfig);
-       Config.AddItem('zipcode'  , xpl_ctConfig);
-       Config.AddItem('unitsystem',xpl_ctConfig);
-       Config.AddItem('translation',xpl_ctConfig,'us');
+       Config.AddItem('partnerid', K_XPL_CT_CONFIG);
+       Config.AddItem('licensekey',K_XPL_CT_CONFIG);
+       Config.AddItem('zipcode'  , K_XPL_CT_CONFIG);
+       Config.AddItem('unitsystem',K_XPL_CT_CONFIG);
+       Config.AddItem('translation',K_XPL_CT_CONFIG,'us');
    end;
 
    xPLClient.Listen;

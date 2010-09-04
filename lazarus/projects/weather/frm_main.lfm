@@ -3,10 +3,11 @@ object frmMain: TfrmMain
   Height = 151
   Top = 168
   Width = 375
+  ActiveControl = Memo1
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'frmMain'
-  ClientHeight = 131
+  ClientHeight = 128
   ClientWidth = 375
   Icon.Data = {
     26B5000000000100040010100000010008006805000046000000202000000100
@@ -1467,7 +1468,7 @@ object frmMain: TfrmMain
   LCLVersion = '0.9.28.2'
   object Memo1: TMemo
     Left = 0
-    Height = 131
+    Height = 128
     Top = 0
     Width = 375
     Align = alClient

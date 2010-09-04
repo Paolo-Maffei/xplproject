@@ -3,9 +3,9 @@ program xpl_weather;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}{ $ IFDEF UseCThreads}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  { $ ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms,
   TConfiguratorUnit,
