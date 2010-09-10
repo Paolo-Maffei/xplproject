@@ -172,6 +172,7 @@ object frmxPLMessage: TfrmxPLMessage
         ParentColor = False
         ParentFont = False
         TabOrder = 3
+        BookMarkOptions.OnChange = nil
         Gutter.Width = 12
         Gutter.MouseActions = <        
           item
