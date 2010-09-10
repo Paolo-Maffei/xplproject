@@ -9,6 +9,7 @@ unit uxplmessage;
  0.95 : Modified to XML read/write com²patible with xml files from other vendors
         Name and Description fields added
  0.96 : Usage of uxPLConst
+ 0.97 : Removed user interface function to u_xpl_message_gui to enable console apps
  }
 {$mode objfpc}{$H+}
 
@@ -18,12 +19,6 @@ uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM, 
 
 type
 
-  TButtonOption = (
-                boLoad,
-                boSave,
-                boCopy,
-                boSend);
-  TButtonOptions = set of TButtonOption;
 
 { TxPLMessage }
 
@@ -59,12 +54,6 @@ TxPLMessage = class(TComponent)
         constructor create(const aRawxPL : string = ''); overload;
         destructor  Destroy; override;
         procedure   Assign(const aMessage : TxPLMessage); overload;
-        function    Edit : boolean;     dynamic;
-        procedure   Show(options : TButtonOptions);
-        procedure   ShowForEdit(options : TButtonOptions);
-
-        function    SelectFile : boolean;
-
         function FilterTag : tsFilter; // Return a message like a filter string
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
@@ -77,8 +66,7 @@ TxPLMessage = class(TComponent)
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, FileUtil,XMLWrite, XMLRead, Regexpr, cStrings, Controls,
-     uxPLSettings, frm_xPLMessage, v_xplmsg_opendialog;
+Uses SysUtils, FileUtil,XMLWrite, XMLRead, cStrings, uxPLSettings, uRegExpr;
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
@@ -104,40 +92,6 @@ procedure TxPLMessage.Assign(const aMessage: TxPLMessage);
 begin
   Header.Assign(aMessage.Header);
   Body.Assign(aMessage.Body);
-end;
-
-procedure TxPLMessage.ShowForEdit(options : TButtonOptions);
-var aForm : TfrmxPLMessage;
-begin
-     aForm := TfrmxPLMessage.Create(self);
-     aForm.buttonOptions := options;
-     aForm.mmoMessage.ReadOnly := false;
-     aForm.Show;
-end;
-
-function TxPLMessage.Edit : boolean;
-var aForm : TfrmxPLMessage;
-begin
-    aForm := TfrmxPLMessage.Create(self);
-    result := (aForm.ShowModal = mrOk);
-    aForm.Destroy;
-end;
-
-procedure TxPLMessage.Show(options : TButtonOptions);
-var aForm : TfrmxPLMessage;
-begin
-    aForm := TfrmxPLMessage.Create(self);
-    aForm.buttonOptions := options;
-    aForm.Show;
-end;
-
-function TxPLMessage.SelectFile: boolean;
-var OpenDialog: TxPLMsgOpenDialog;
-begin
-     OpenDialog:=TxPLMsgOpenDialog.create(self);
-     result := OpenDialog.Execute;
-     if result then LoadFromFile(OpenDialog.FileName);
-     OpenDialog.Destroy;
 end;
 
 function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
