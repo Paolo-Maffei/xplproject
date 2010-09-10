@@ -6,6 +6,10 @@ unit uxPLConst;
  ==============================================================================
  0.91 : Suppressed string casting (tsMsgType from string[8] to string to avoid
         shortstring problem casting on linux portability
+ 0.92 : Having a global initialized regular expression engines is a big error -
+        the code is now longer reentrant then deleted previously created
+        RegExpEngine that was available via uRegExTools unit. This unit is deleted
+        from the project (bug # FS47)
  }
 
 
@@ -216,6 +220,13 @@ const
    K_MNU_ITEM_ACTION_ZONE       = '<table class=action><tr><td><FORM ACTION=actions.html METHOD=POST>%s</FORM></td></tr></table>';
    K_MNU_ITEM_OPTION_SEP        = '|';                                                                      // Separator used in the xml file between valid choices
    K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                                                // Regular expression used to identify parameters in xplMsg in MenuItems
+
+   // Global and general regular expressions
+   K_RE_FRENCH_PHONE = '\d\d \d\d \d\d \d\d \d\d';                              // French phone number, formatted : 01 02 03 04 05
+   K_RE_IP_ADDRESS   = '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';        // Simply formed IP v4 Address : 192.168.1.1
+   K_RE_MAC_ADDRESS  = '([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])';  // Network card mac address
+   K_RE_LATITUDE     = '([0-8][0-9]|[9][0])\.([0-9][0-9])\.([0-9][0-9])([NS]|[ns])';
+   K_RE_LONGITUDE    = '([01][0-7]|[00][0-9][0-9]|[1][8][0])\.([0-9][0-9])\.([0-9][0-9])([EW]|[ew])';
 
 
 implementation

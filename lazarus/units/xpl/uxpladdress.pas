@@ -11,6 +11,7 @@ unit uxPLAddress;
  0.97 : String constants removed to use uxPLConst
  0.98 : Simplification of the class (cut inheritance of TxPLBaseClass)
  0.99 : Added HostNmInstance
+ 1.00 : Suppressed uRegExpTools
 }
 {$mode objfpc}{$H+}
 interface
@@ -28,6 +29,7 @@ type
 
        function  GetTag: string;                        dynamic;
        procedure SetTag   (const aValue: string);       dynamic;
+       procedure SetAddressElement(const aIndex : integer; const aValue : string); dynamic;
     public
        constructor Create;
        constructor Create(const axPLAddress : TxPLAddress);
@@ -36,9 +38,13 @@ type
        procedure ResetValues;                           dynamic;
        procedure Assign(anAddress : TxPLAddress);
 
-       property Vendor   : string read fVendor   write fVendor;
-       property Device   : string read fDevice   write fDevice;
-       property Instance : string read fInstance write fInstance;
+//       property Vendor   : string read fVendor   write fVendor;
+//       property Device   : string read fDevice   write fDevice;
+//       property Instance : string read fInstance write fInstance;
+       property Vendor   : string index 0 read fVendor   write SetAddressElement;
+       property Device   : string index 1 read fDevice   write SetAddressElement;
+       property Instance : string index 2 read fInstance write SetAddressElement;
+
        property Tag      : string read GetTag    write SetTag;
 
        function  FilterTag : string;
@@ -54,24 +60,21 @@ type
     { TxPLTargetAddress }
 
     TxPLTargetAddress = class(TxPLAddress)
-       procedure SetAddressElement(const aIndex : integer; const aValue : string);
+       fIsGeneric : boolean;
 
        procedure SetTag(const AValue: string); override;
        function  GetTag: string;               override;
+       procedure SetAddressElement(const aIndex : integer; const aValue : string); override;
     public
-       Isgeneric : boolean;
+       constructor Create;
 
-       property Vendor   : string index 0 read fVendor   write SetAddressElement;
-       property Device   : string index 1 read fDevice   write SetAddressElement;
-       property Instance : string index 2 read fInstance write SetAddressElement;
-       property Tag      : string         read GetTag    write SetTag;
-
-       procedure ResetValues;                           override;
-       function  IsValid : boolean;                     override;
+       property  IsGeneric : boolean  read fIsGeneric write fIsGeneric;
+       procedure ResetValues;         override;
+       function  IsValid : boolean;   override;
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, uRegExTools, StrUtils, uIpUtils, pwHostName;
+uses cRandom, SysUtils, StrUtils, uIpUtils, pwHostName, uRegExpr;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -134,11 +137,14 @@ end;
 
 procedure TxPLAddress.SetTag(const aValue: string);
 begin
-   RegExpEngine.Expression := K_REGEXPR_ADDRESS;
-   if RegExpEngine.Exec(aValue) then begin
-      fVendor   := RegExpEngine.Match[1];
-      fDevice   := RegExpEngine.Match[2];
-      fInstance := RegExpEngine.Match[3];
+   with TRegExpr.Create do try
+        Expression := K_REGEXPR_ADDRESS;
+        if Exec(aValue) then begin
+           fVendor   := Match[1];
+           fDevice   := Match[2];
+           fInstance := Match[3];
+        end;
+   finally destroy
    end;
 end;
 
@@ -156,42 +162,60 @@ end;
 
 function TxPLAddress.IsValid : boolean;
 begin
-   RegExpEngine.Expression := K_REGEXPR_ADDRESS;
-   result := RegExpEngine.Exec(Tag);
+   with TRegExpr.Create do try
+        Expression := K_REGEXPR_ADDRESS;
+        result := Exec(Tag);
+   finally destroy;
+   end;
 end;
 
-{ TxPLTargetAddress Object =======================================================}
-procedure TxPLTargetAddress.ResetValues;
+procedure TxPLAddress.SetAddressElement(const aIndex : integer; const aValue : string);
 begin
-   inherited ResetValues;
-   IsGeneric := true;
-end;
-
-procedure TxPLTargetAddress.SetAddressElement(const aIndex : integer; const aValue : string);
-begin
-   if aValue = K_ADDR_ANY_TARGET then IsGeneric := True
-   else case aIndex of
+   case aIndex of
         0 : fVendor   := aValue;
         1 : fDevice   := aValue;
         2 : fInstance := aValue;
    end;
 end;
 
+
+{ TxPLTargetAddress Object =======================================================}
+procedure TxPLTargetAddress.ResetValues;
+begin
+   inherited ResetValues;
+   fIsGeneric := true;
+end;
+
+procedure TxPLTargetAddress.SetAddressElement(const aIndex : integer; const aValue : string);
+begin
+   if aValue = K_ADDR_ANY_TARGET then fIsGeneric := True
+                                 else inherited;
+end;
+
 function TxPLTargetAddress.GetTag: string;
 begin
-   Result := IfThen( IsGeneric, K_ADDR_ANY_TARGET, inherited GetTag);
+   Result := IfThen( fIsGeneric, K_ADDR_ANY_TARGET, inherited GetTag);
+end;
+
+constructor TxPLTargetAddress.Create;
+begin
+  inherited;
+  fIsGeneric := True;
 end;
 
 procedure TxPLTargetAddress.SetTag(const AValue: string);
 begin
-   IsGeneric := (aValue=K_ADDR_ANY_TARGET);
-   If not IsGeneric then inherited SetTag(aValue);
+   fIsGeneric := (aValue=K_ADDR_ANY_TARGET);
+   If not fIsGeneric then inherited;
 end;
 
 function TxPLTargetAddress.IsValid : boolean;
 begin
-   RegExpEngine.Expression := K_REGEXPR_TARGET;
-   result := RegExpEngine.Exec(Tag);
+   with TRegExpr.Create do try
+        Expression := K_REGEXPR_TARGET;
+        result := Exec(Tag);
+   finally destroy;
+   end;
 end;
 
 end.

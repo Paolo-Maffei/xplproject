@@ -14,6 +14,7 @@ unit uxPLHeader;
         Simplification of the class fMsgType became of type tsMsgType (string)
         avoiding multiple tanstyping
         Renamed the class from TxPLMsgHeader to TxPLHeader
+ 1.00 : Suppressed usage of uRegExTools to correct bug #FS47
  }
 {$mode objfpc}{$H+}
 
@@ -56,14 +57,13 @@ type { TxPLHeader }
 
 
 implementation {=========================================================================}
-uses SysUtils, Classes, RegExpr, uRegExTools, StrUtils;
+uses SysUtils, Classes, RegExpr, StrUtils;
 
 { TxPLHeader Object =====================================================================}
 constructor TxPLHeader.create;
 begin
-   fSource := TxPLAddress.Create;
-   fTarget := TxPLTargetAddress.Create;
-   ResetValues;
+   fSource := TxPLAddress.Create;                                                         // No need to reset them
+   fTarget := TxPLTargetAddress.Create;                                                   // They're created emty
 end;
 
 destructor TxPLHeader.destroy;
@@ -130,24 +130,29 @@ end;
 procedure TxPLHeader.SetMessageType(const AValue: tsMsgType);
 begin
    if MessageType = aValue then exit;
-   if aValue = K_MSG_TYPE_STAT then Target.Tag := '*';                                    // Rule of XPL : xpl-stat are always broadcast
+   if aValue = K_MSG_TYPE_STAT then Target.Tag := '*';                          // Rule of XPL : xpl-stat are always broadcast
    fMsgType := aValue;
 end;
 
 procedure TxPLHeader.SetRawXpl(aRawXPL : string);
 var i : integer;
 begin
-   ResetValues;
-   with RegExpEngine do begin
+   with TRegExpr.Create do try                                                  // Modified for correction of bug #FS47
         Expression := K_RE_HEADER_FORMAT;
         if Exec(AnsiLowerCase(aRawXPL)) then begin
            MessageType := Match[1];
-           for i:= 3 to 7 do begin
-               if Match[i] = K_MSG_HEADER_HOP    then fHop := StrToInt(Match[i+1]);
-               if Match[i] = K_MSG_HEADER_SOURCE then Source.Tag := Match[i+1];
-               if Match[i] = K_MSG_HEADER_TARGET then Target.Tag := Match[i+1];
+           i := 3;                                                              // Modified for correction of bug #FS47
+           while i<=7 do begin                                                  //          avoid inutile loops
+              Case AnsiIndexStr( Match[i],
+                                 [K_MSG_HEADER_HOP,K_MSG_HEADER_SOURCE,K_MSG_HEADER_TARGET]) of
+                   0 : fHop := StrToInt(Match[i+1]);
+                   1 : Source.Tag := Match[i+1];
+                   2 : Target.Tag := Match[i+1];
+              end;
+              i += 2;
            end;
         end;
+   finally destroy;
    end;
 end;
 
