@@ -59,7 +59,8 @@ TxPLVendorSeedFile = class
      end;
 
 implementation //========================================================================
-uses uGetHTTP, cStrings, IdHTTP, StrUtils, RegExpr, Dialogs;
+uses uGetHTTP, cStrings, IdHTTP, StrUtils, uRegExpr
+ ;
 
 type TVendorPluginFile = class
         Node : TDomNode;

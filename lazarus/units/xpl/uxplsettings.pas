@@ -83,7 +83,11 @@ TxPLSettings = class(TComponent)
      end;
 
 implementation { ======================================================================}
-uses SysUtils, StrUtils, uxPLConst, uxPLClient, cFileUtils, Dialogs;
+uses SysUtils, StrUtils, uxPLConst, uxPLClient, cFileUtils
+{$ifdef console}
+, Dialogs
+{$endif}
+;
 
 function OnGetAppName : string;                                                         // This is used to fake the system when
 begin                                                                                   // requesting common xPL applications shared
@@ -112,7 +116,12 @@ begin
 
      if aOwner is TxPLClient then begin
         RegisterMe(TxPLClient(aOwner).Vendor,TxPLClient(aOwner).Device,TxPLClient(aOwner).AppVersion);
+        {$ifdef console}
         if not IsValid then ShowMessage(K_MSG_NETWORK_SETTINGS);                        // Can not use xPLClient logging system because not initialized at the moment
+        {$ELSE}
+        if not IsValid then writeln(K_MSG_NETWORK_SETTINGS);                        // Can not use xPLClient logging system because not initialized at the moment
+        {$endif}
+
      end;
 end;
 
