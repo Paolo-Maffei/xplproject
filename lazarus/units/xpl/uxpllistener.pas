@@ -19,8 +19,8 @@ unit uxPLListener;
 
 interface
 
-uses Classes, SysUtils, uxPLAddress, IdUDPServer,IdSocketHandle,
-     ExtCtrls, IdGlobal,uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
+uses Classes, SysUtils, uxPLAddress, u_xpl_udp_socket,
+     ExtCtrls, uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
      uxPLMsgBody,  uxPLClient, uxPLConst;
 
 type
@@ -39,7 +39,7 @@ type
       private
         fConfig  : TxPLConfig;
         fAdresse : TxPLAddress;
-        IncomingSocket : TIdUDPServer;
+        IncomingSocket : TxPLUDPServer;
         HBTimer, HBReqTimer : TFPTimer;                     // HBReqTimer is dedicated to hbeat requests
         fFilterSet : TxPLFilters;
         iNoHubTimerCount : integer;
@@ -72,7 +72,8 @@ type
         property Config              : TxPLConfig read fConfig;
         property Address             : TxPLAddress read fAdresse;
         property Disposing           : Boolean read bDisposing;
-        function Instance : tsInstance;
+        property Instance            : string read fAdresse.fInstance;
+        //function Instance : tsInstance;
 
         procedure DoxPLJoinedNet(aJoined    : boolean);
         function DoSensorRequest(aMessage : TxPLMessage) : boolean;
@@ -81,8 +82,9 @@ type
         function DoHBeatApp     (aMessage : TxPLMessage) : boolean;
         function DoMediaBasic   (aMessage : TxPLMessage) : boolean;
 
-        function  CheckOrigin(aRemoteIP : string) : boolean;
-        procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+        //function  CheckOrigin(aRemoteIP : string) : boolean;
+        //procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+        procedure UDPRead(const aString : string);
         procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
@@ -93,7 +95,7 @@ type
      end;
 
 implementation { ==============================================================}
-uses IdStack, cRandom, StrUtils, uIPutils, Interfaces;
+uses StrUtils;
 
 { TxPLListener ================================================================}
 constructor TxPLListener.create(const aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
@@ -133,45 +135,18 @@ begin
 end;
 
 procedure TxPLListener.InitSocket();
-var i : integer;
 begin
    if not Setting.IsValid then exit;
    try
-     IncomingSocket:=TIdudpServer.create;
-     IncomingSocket.Bindings.Clear;
-     IncomingSocket.BufferSize := MAX_XPL_MSG_SIZE;
-     IncomingSocket.OnUDPRead  := @UDPRead;
+     IncomingSocket:=TxPLUDPServer.create(fSetting,@UDPRead);
+     If IncomingSocket.Active then begin                             // Lets be sure we found an address to bind to
+        LogInfo(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
+        HBTimer.Enabled  := True;
+        TimerElapsed(self);
+     end else LogError(K_MSG_IP_ERROR,[]);
    except
      LogError(K_MSG_UDP_ERROR,[]);
    end;
-
-{$IFDEF WINDOWS}
-   i := gstack.LocalAddresses.Count-1;
-   while i>=0 do begin
-      if fSetting.ListenOnAll or (gStack.LocalAddresses[i] = fSetting.ListenOnAddress) then
-      with IncomingSocket.Bindings.Add do begin
-           ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-           ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-           Port          := 0;
-           IP            := gstack.LocalAddresses[i];
-      end;
-      dec(i);
-   end;
-{$ELSE}
-      with IncomingSocket.Bindings.Add do begin
-           ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-           ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-           Port          := 0;
-           IP            := fSetting.ListenOnAddress;
-      end;
-{$ENDIF}
-
-   If IncomingSocket.Bindings.Count > 0 then begin                             // Lets be sure we found an address to bind to
-      IncomingSocket.Active:=true;
-      LogInfo(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
-      HBTimer.Enabled  := True;
-      TimerElapsed(self);
-   end else LogError(K_MSG_IP_ERROR,[]);
 end;
 
 procedure TxPLListener.CallConfigDone;
@@ -328,8 +303,8 @@ begin
    end;
 end;
 
-function TxPLListener.Instance: tsInstance;
-begin result := fAdresse.Instance; end;
+{function TxPLListener.Instance: tsInstance;
+begin result := fAdresse.Instance; end;}
 
 procedure TxPLListener.HandleHBeatRequest;
 begin
@@ -337,7 +312,7 @@ begin
      HBReqTimer.Enabled  := True;
 end;
 
-function TxPLListener.CheckOrigin(aRemoteIP : string): boolean;
+{function TxPLListener.CheckOrigin(aRemoteIP : string): boolean;
 begin
      result := True;
 
@@ -346,16 +321,16 @@ begin
         result := (gStack.LocalAddresses.IndexOf(aRemoteIP) > 0)
      else                   // we're in a list of ip
         result := (AnsiPos(aRemoteIP, fSetting.ListenToAddresses) > 0)
-end;
+end;}
 
-procedure TxPLListener.UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes;   ABinding: TIdSocketHandle);
+procedure TxPLListener.UDPRead(const aString : string); //(AThread: TIdUDPListenerThread; AData: TIdBytes;   ABinding: TIdSocketHandle);
 var aMessage : TxPLMessage;
 begin
    if bDisposing then exit;
-
-   aMessage := TxPLMessage.Create(BytesToString(AData));
+//   aMessage := TxPLMessage.Create(BytesToString(AData));
+   aMessage := TxPLMessage.Create(aString);
    with aMessage do try
-      if CheckOrigin(aBinding.PeerIP) then begin
+//      if CheckOrigin(aBinding.PeerIP) then begin
          if ((fAdresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then   // It is directed to me
             case Schema.Classe of
                  xpl_scHBeat  : if Schema.TypeAsString = 'request' then HandleHBeatRequest;
@@ -374,7 +349,7 @@ begin
             if not DoMediaBasic   (aMessage) then
             if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
          end;
-      end;
+//      end;
 
       finally Destroy;
    end;
