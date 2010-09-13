@@ -10,12 +10,13 @@ unit uxplmessage;
         Name and Description fields added
  0.96 : Usage of uxPLConst
  0.97 : Removed user interface function to u_xpl_message_gui to enable console apps
+        Introduced usage of u_xpl_udp_socket_client
  }
 {$mode objfpc}{$H+}
 
 interface
 
-uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,IdUDPClient, uxPLSchema, DOM, uxPLConst;
+uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,u_xpl_udp_socket, uxPLSchema, DOM, uxPLConst;
 
 type
 
@@ -26,7 +27,7 @@ TxPLMessage = class(TComponent)
      private
         fHeader   : TxPLHeader;
         fBody     : TxPLMsgBody;
-        fSocket   : TIdUDPClient;
+        fSocket   : TxPLUDPClient;
         fName     : string;
         fDescription : string;
 
@@ -128,11 +129,11 @@ procedure TxPLMessage.Send;
 var Settings : TxPLSettings;
 begin
    if not Assigned(fSocket) then begin                           // The socket is created only
-      Settings := TxPLSettings.Create(self);
-      fSocket   := TIdUDPClient.Create;                          // if needed to avoid waste space
-      fSocket.BroadcastEnabled := True;                          // speed and time at runtime
-      fSocket.Host := Settings.BroadCastAddress;
-      fSocket.Port := XPL_UDP_BASE_PORT;
+      Settings := TxPLSettings.Create(self);                     // if needed to avoid waste space
+      fSocket   := TxPLUDPClient.Create(Settings.BroadCastAddress);
+//      fSocket.BroadcastEnabled := True;                          // speed and time at runtime
+//      fSocket.Host := ;
+//      fSocket.Port := XPL_UDP_BASE_PORT;
       Settings.Free;
    end;
    fSocket.Send(RawXPL);
