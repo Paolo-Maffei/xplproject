@@ -4,8 +4,8 @@ unit u_xpl_opc;
 
 interface
 
-uses Classes, SysUtils, uxPLMessage, DeCAL, cStrings,
-     uxPLGlobals,uxPLDeterminators,uxPLDevices,uxPLListener;
+uses Classes, SysUtils, uxPLMessage, DeCAL,
+     uxPLGlobals,uxPLDeterminators,uxPLListener;
 
 type
 
@@ -16,6 +16,7 @@ type
      private
         fGlobalList : TxPLGlobalList;
         fDeterminatorList : TxPLDeterminatorList;
+        fDataDirectory : string;
         //fDeviceList : DMap;
          Iter : DIterator;
         function Get_XHCP_VERSION: string;
@@ -34,7 +35,7 @@ type
      end;
 
 implementation // =======================================================================
-uses uxPLConst, uxPLMsgBody,
+uses uxPLConst, uxPLMsgBody,uxPLSettings,cStrings,
      DateUtils, StrUtils;
 const
      K_XHCP_VERSION = '1.5';
@@ -51,7 +52,10 @@ begin
    inherited Create(aOwner,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,aAppVersion,False);
    PassMyOwnMessages := True;
 
-   fGlobalList := TxPLGlobalList.Create(Settings);
+  fDataDirectory := Settings.SharedConfigDir + K_DEFAULT_DEVICE + '/';
+  TxPLSettings.EnsureDirectoryExists(fDataDirectory);
+
+   fGlobalList := TxPLGlobalList.Create(fDataDirectory);
    fDeterminatorList := TxPLDeterminatorList.Create(Settings);
 //   fDeviceList := DMap.Create;
 //   fDevices := DMap.Create;
@@ -75,25 +79,25 @@ procedure RecordSender;
 begin
 //   if AnsiIndexStr(aMessage.Schema.Tag,[K_SCHEMA_CONFIG_END,K_SCHEMA_HBEAT_END]) >= 0 then exit; // We won't record a quitting application
 //   fDeviceList.PutPair([aMessage.Header.Source.Tag,TDeviceRecord.Create]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.vdi'            ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.vdi',aMessage.Header.Source.Tag)]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.configmissing'  ,TxPLGlobalValue.Create('device.'+aMessage.Header.Source.Tag + '.configmissing')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.configsource'   ,TxPLGlobalValue.Create('device.'+aMessage.Header.Source.Tag + '.configsource')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.current'        ,TxPLGlobalValue.Create('device.'+aMessage.Header.Source.Tag + '.current')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.configlistsent' ,TxPLGlobalValue.Create('device.'+aMessage.Header.Source.Tag + '.configlistsent')]);
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.vdi'            );
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.configmissing'  );
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.configsource'   );
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.current'        );
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.configlistsent' );
 end;
 
 function HandleHeartBeat : boolean;
 var i : integer;
 begin
    result := False;
-   if aMessage.Schema.Tag <> K_SCHEMA_HBEAT_APP then exit;
+   if not AnsiMatchStr(aMessage.Schema.Tag,[K_SCHEMA_HBEAT_APP,K_SCHEMA_CONFIG_APP]) then exit;
    i := StrToInt(aMessage.Body.GetValueByKey(K_HBEAT_ME_INTERVAL));
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.expires'        ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.expires',DateTimeToStr(IncMinute(Now,2*i + 1)))]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.interval'       ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.interval',aMessage.Body.GetValueByKey(K_HBEAT_ME_INTERVAL))]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.suspended'      ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.suspended','N')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.configtype'     ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.configtype','N')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.configdone'     ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.configdone','Y')]);
-   fGlobalList.putPair(['device.'+aMessage.Header.Source.Tag + '.waitingconfig'  ,TxPLGlobalValue.CreateEx('device.'+aMessage.Header.Source.Tag + '.waitingconfig','N')]);
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.expires'        ,DateTimeToStr(IncMinute(Now,2*i + 1)));
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.interval'       ,aMessage.Body.GetValueByKey(K_HBEAT_ME_INTERVAL));
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.suspended'      ,'N');
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.configtype'     ,'N');
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.configdone'     ,'Y');
+   fGlobalList.AddGlobal('device.'+aMessage.Header.Source.Tag + '.waitingconfig'  ,'N');
    Result := True;
 end;
 
@@ -122,27 +126,39 @@ end;
 function HandleConfigMessage : boolean;
 var i : integer;
     s,t : string;
+//    tsl : tstringlist;
 begin
    result := False;
    if not ((aMessage.Schema.Tag = K_SCHEMA_CONFIG_CURRENT) or (aMessage.Schema.Tag = K_SCHEMA_CONFIG_LIST) ) then exit;
+//   tsl := tstringlist.create;
+//   tsl.Add(aMessage.RawxPL);
    case AnsiIndexStr(aMessage.Schema.Tag, [K_SCHEMA_CONFIG_CURRENT,K_SCHEMA_CONFIG_LIST]) of
-        0 : begin
-          for i:=0 to aMessage.Body.Keys.Count-1 do begin
-              s := 'config.'+aMessage.Header.Source.Tag + '.current.' + aMessage.Body.Keys[i];
-              fGlobalList.putPair([s,TxPLGlobalValue.CreateEx(s,aMessage.Body.Values[i])]);
-          end;
-        end;
-        1 : begin
-          for i:=0 to aMessage.Body.Keys.Count-1 do begin
-              s := 'config.'+aMessage.Header.Source.Tag + '.options.' + aMessage.Body.Values[i];
-              fGlobalList.putPair([s,TxPLGlobalValue.Create(s)]);
-              t := s + '.type';
-              fGlobalList.putPair([t,TxPLGlobalValue.CreateEx(t, aMessage.Body.Keys[i])]);
-              t := s + '.count';
-              fGlobalList.putPair([t,TxPLGlobalValue.CreateEx(t, StrBetWeenChar(aMessage.Body.Values[i],'[',']'))]);
-          end;
-        end;
+
+        0 : //fGlobalList.AddGlobal('config.'+aMessage.Header.Source.Tag + '.current',aMessage.Body.RawxPL);
+//          tsl.SaveToFile(fDataDirectory + aMessage.Header.Source.Tag + '.current.xpl');
+          aMessage.SaveToFile(fDataDirectory + aMessage.Header.Source.Tag + '.current.xpl');
+//        begin
+//          for i:=0 to aMessage.Body.Keys.Count-1 do begin
+//              s := 'config.'+aMessage.Header.Source.Tag + '.current.' + aMessage.Body.Keys[i];
+//              fGlobalList.AddGlobal(s,aMessage.Body.Values[i]);
+//          end;
+//        end;
+        1 : aMessage.SaveToFile(fDataDirectory + aMessage.Header.Source.Tag + '.list.xpl');
+        //;//fGlobalList.AddGlobal('config.'+aMessage.Header.Source.Tag + '.options',aMessage.Body.RawxPL);
+//          tsl.SaveToFile(fDataDirectory + aMessage.Header.Source.Tag + '.options.xpl');
+//        begin
+//          for i:=0 to aMessage.Body.Keys.Count-1 do begin
+//              s := StrBeforeChar(aMessage.Body.Values[i],'[');                                             // rip off any [xx] if present
+//              s := 'config.'+aMessage.Header.Source.Tag + '.options.' + s;
+//              fGlobalList.AddGlobal(s);
+//              t := s + '.type';
+//              fGlobalList.AddGlobal(t,aMessage.Body.Keys[i]);
+//              t := s + '.count';
+//              fGlobalList.AddGlobal(t,StrBetWeenChar(aMessage.Body.Values[i],'[',']'));
+//          end;
+//        end;
    end;
+//   tsl.destroy;
    result := true;
 end;
 
@@ -153,7 +169,6 @@ begin
       RecordSender;
       Iter := fGlobalList.locate([aMessage.Header.Source.Tag]);
    end;
-//   devrec = GetObject(iter) as TDeviceRecord;
    if not HandleHeartBeat then
       if not HandleConfigNeeded then
          HandleConfigMessage;
@@ -169,7 +184,24 @@ procedure TxPLOPC.GETDEVCONFIG(const aListe: TStringList; const aRequested: stri
 var    Body1, Body2 : TxPLMsgBody;
        i,j : integer;
        chaine,retour : string;
+       MsgCurrent, MsgList : TxPLMessage;
 begin
+   MsgCurrent := TxPLMessage.Create;
+   MsgList    := TxPLMessage.Create;
+   MsgCurrent.LoadFromFile(fDataDirectory + aRequested + '.current.xpl');
+   MsgList.LoadFromFile(fDataDirectory + aRequested + '.list.xpl');
+   for i := 0 to MsgCurrent.Body.ItemCount-1 do begin
+      for j:= 0 to MsgList.Body.ItemCount-1 do begin
+          if AnsiLeftStr(MsgList.Body.Values[j],Length(MsgCurrent.Body.Keys[i])) = MsgCurrent.Body.Keys[i] then begin
+                         chaine := MsgList.Body.Keys[j];
+                         retour := StrBetweenChar(MsgList.Body.Values[j],'[',']');
+          end;
+      end;
+      aListe.Add(Format('%s'#9'%s'#9'%s',[MsgCurrent.Body.Keys[i],chaine,retour]));
+   end;
+   MsgList.Destroy;
+   MsgCurrent.Destroy;
+//   fGlobalList.GetDevConfig(aListe,aRequested);
 {   Iter := Devices.locate([aRequested]);
    if not atEnd(Iter) then begin
       SetToValue(iter);
