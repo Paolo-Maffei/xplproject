@@ -5,7 +5,7 @@ unit frm_main;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,IdFTP,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, frm_About, uxPLConfig,
   uxPLMessage, uxPLPluginFile,uxPLListener, ExtCtrls,MCheckListBox, uxPLConst;
 
@@ -152,7 +152,7 @@ var
 
 implementation { TFrmLogger =============================================================}
 uses frm_xplappslauncher, frm_AppSettings, //cDateTime,
-     StrUtils, frm_xpllogviewer,
+     StrUtils, frm_xpllogviewer, u_xpl_message_gui,
      uxPLAddress, uxplHeader,  frm_PluginDetail,
      cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance,
      frm_networksettings, frm_vendorplugins;
@@ -339,9 +339,9 @@ end;
 
 
 procedure TFrmMain.mnuSendMessageClick(Sender: TObject);
-var aMessage : txPLMessage;
+var aMessage : txPLMessageGUI;
 begin
-     aMessage := TxPLMessage.Create ;
+     aMessage := TxPLMessageGUI.Create ;
      aMessage.Header.Source := xPLClient.Address;
      aMessage.Header.Target.Tag := GetSourceAddress;
      aMessage.Body.Schema.ClasseAsString:='class';                                        // 2.0.3 feature
@@ -400,7 +400,7 @@ begin
    if not assigned(lvMessages.Selected) then exit;
 
    i := StrToInt( lvMessages.Selected.SubItems[4]);
-   with TxPLMessage(Messages.Objects[i]) do Show([boSave,boCopy,boSend]);
+   with TxPLMessageGUI(Messages.Objects[i]) do Show([boSave,boCopy,boSend]);
 end;
 
 procedure TFrmMain.PauseExecute(Sender: TObject);
