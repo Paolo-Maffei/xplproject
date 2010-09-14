@@ -12,7 +12,8 @@ unit uxPLListener;
         Removed bConfigOnly, redondant with AwaitingConfiguration
  0.94 : Replacement of TTimer with TfpTimer
  0.95 : Added 'no config' capability to allow light focused xPL Client avoid waiting config
- Rev 298 : Modified to enable Linux support
+ 0.96 : Suppressed symbolic constants for Schema
+Rev 298 : Modified to enable Linux support
 }
 
 {$mode objfpc}{$H+}
@@ -47,7 +48,7 @@ type
 
         procedure InitSocket();
      public
-	    OnxPLReceived      : TxPLReceivedEvent;
+        OnxPLReceived      : TxPLReceivedEvent;
         OnxPLJoinedNet     : TxPLJoinedEvent  ;
         OnxPLCOnfigDone    : TxPLConfigDone   ;
         OnxPLHBeatPrepare  : TxPLHBeatPrepare ;
@@ -66,6 +67,7 @@ type
         procedure TimerElapsed(Sender : TObject);
         procedure HandleHBeatRequest;   dynamic;
         procedure SendHeartBeatMessage; dynamic;
+        procedure SendConfigRequestMsg(aTarget : string);
         procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
 
@@ -136,7 +138,7 @@ end;
 
 procedure TxPLListener.InitSocket();
 begin
-   if not Setting.IsValid then exit;
+   if not Settings.IsValid then exit;
    try
      IncomingSocket:=TxPLUDPServer.create(fSetting,@UDPRead);
      If IncomingSocket.Active then begin                             // Lets be sure we found an address to bind to
@@ -230,8 +232,8 @@ begin
    aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
    aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
 
-   if AwaitingConfiguration then aBody.Schema.Classe := xpl_scConfig;                // Change Schema class in this case
-   if bDisposing  then aBody.Schema.TypeAsString   := 'end';                         // Change Schema type in this case
+   if AwaitingConfiguration then aBody.Schema.Classe := K_SCHEMA_CLASS_CONFIG;       // Change Schema class in this case
+   if bDisposing  then aBody.Schema.Type_ := 'end';                         // Change Schema type in this case
 end;
 
 procedure TxPLListener.SendHeartBeatMessage;
@@ -247,6 +249,12 @@ begin
      end;
 
      aBody.Destroy;
+end;
+
+procedure TxPLListener.SendConfigRequestMsg(aTarget : string);
+begin
+   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
+   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
 end;
 
 procedure TxPLListener.TimerElapsed(Sender: TObject);
@@ -273,7 +281,7 @@ begin
      Target.IsGeneric := True;
      Body.ResetValues;
 
-     case AnsiIndexStr(aMessage.Schema.TypeAsString, ['current', 'list', 'response']) of
+     case AnsiIndexStr(aMessage.Schema.Type_, ['current', 'list', 'response']) of
           0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
                  Schema.Tag := aMessage.Body.Schema.Tag;
                  for i := 0 to fConfig.Count-1 do
@@ -316,11 +324,11 @@ end;
 begin
      result := True;
 
-     if fSetting.ListenToAny then exit;
-     if fSetting.ListenToLocal then
+     if fSettings.ListenToAny then exit;
+     if fSettings.ListenToLocal then
         result := (gStack.LocalAddresses.IndexOf(aRemoteIP) > 0)
      else                   // we're in a list of ip
-        result := (AnsiPos(aRemoteIP, fSetting.ListenToAddresses) > 0)
+        result := (AnsiPos(aRemoteIP, fSettings.ListenToAddresses) > 0)
 end;}
 
 procedure TxPLListener.UDPRead(const aString : string); //(AThread: TIdUDPListenerThread; AData: TIdBytes;   ABinding: TIdSocketHandle);
@@ -332,10 +340,8 @@ begin
    with aMessage do try
 //      if CheckOrigin(aBinding.PeerIP) then begin
          if ((fAdresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then   // It is directed to me
-            case Schema.Classe of
-                 xpl_scHBeat  : if Schema.TypeAsString = 'request' then HandleHBeatRequest;
-                 xpl_scConfig : HandleConfigMessage(aMessage);
-            end;
+            if Schema.Classe = K_SCHEMA_CLASS_HBEAT  then if Schema.Type_ = 'request' then HandleHBeatRequest;
+            if Schema.Classe = K_SCHEMA_CLASS_CONFIG then HandleConfigMessage(aMessage);
 
          if (fAdresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
 
