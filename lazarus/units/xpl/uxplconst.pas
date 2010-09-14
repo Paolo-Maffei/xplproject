@@ -6,6 +6,7 @@ unit uxPLConst;
  ==============================================================================
  0.91 : Suppressed string casting (tsMsgType from string[8] to string to avoid
         shortstring problem casting on linux portability
+ Rev 256 : removed usage of symbolic constants for schema
  0.92 : Having a global initialized regular expression engines is a big error -
         the code is now longer reentrant then deleted previously created
         RegExpEngine that was available via uRegExTools unit. This unit is deleted
@@ -31,11 +32,6 @@ type
 
    tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];                                          //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
-   TxPLSchemaClasse = ( xpl_scHBeat,    xpl_scConfig,  xpl_scAudio,   xpl_scControl,
-                        xpl_scDateTime, xpl_scDb,      xpl_scDGuide,  xpl_scCID,
-                        xpl_scOSD,      xpl_scRemote,  xpl_scSendMsg, xpl_scSensor,
-                        xpl_scTTS,      xpl_scUps,     xpl_scWebCam,  xpl_scX10,
-                        xpl_scOther );
 
 //   TxPLMessageType  = ( xpl_mtTrig,     xpl_mtStat,    xpl_mtCmnd,    xpl_mtAny,   xpl_mtNone  );
 
@@ -49,6 +45,7 @@ const
    K_FEXT_XML         = '.xml';
    K_FEXT_PHP         = '.php';
    K_FEXT_TXT         = '.txt';
+   K_FEXT_PAS         = 'pas';
 
    // General ===============================================================================================
    K_STR_TRUE = 'true';
@@ -118,11 +115,20 @@ const
    K_REGEXPR_SCHEMA_ELEMENT = '([0-9a-z/-]{1,8})';
    K_REGEXPR_SCHEMA = K_REGEXPR_SCHEMA_ELEMENT + '\.' + K_REGEXPR_SCHEMA_ELEMENT;
    K_FMT_SCHEMA     = '%s.%s';
-   K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (  'hbeat','config','audio','control','datetime',
-                                                         'db','dguide','cid','osd','remote','sendmsg',
-                                                         'sensor','tts','ups','webcam','x10' );
-   K_SCHEMA_HBEAT_APP      = 'hbeat.app';
-   K_SCHEMA_HBEAT_REQUEST  = 'hbeat.request';
+//   K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (  'hbeat','config','audio','control','datetime',
+//                                                         'db','dguide','cid','osd','remote','sendmsg',
+//                                                         'sensor','tts','ups','webcam','x10' );
+   K_SCHEMA_SEPARATOR      = '.';
+   K_SCHEMA_CLASS_HBEAT    = 'hbeat';
+   K_SCHEMA_HBEAT_APP      = K_SCHEMA_CLASS_HBEAT  + K_SCHEMA_SEPARATOR + 'app';
+   K_SCHEMA_HBEAT_REQUEST  = K_SCHEMA_CLASS_HBEAT  + K_SCHEMA_SEPARATOR + 'request';
+   K_SCHEMA_HBEAT_END      = K_SCHEMA_CLASS_HBEAT  + K_SCHEMA_SEPARATOR + 'end';
+   K_SCHEMA_CLASS_CONFIG   = 'config';
+   K_SCHEMA_CONFIG_APP     = K_SCHEMA_CLASS_CONFIG + K_SCHEMA_SEPARATOR + 'app';
+   K_SCHEMA_CONFIG_CURRENT = K_SCHEMA_CLASS_CONFIG + K_SCHEMA_SEPARATOR + 'current';
+   K_SCHEMA_CONFIG_LIST    = K_SCHEMA_CLASS_CONFIG + K_SCHEMA_SEPARATOR + 'list';
+   K_SCHEMA_CONFIG_END    = K_SCHEMA_CLASS_CONFIG + K_SCHEMA_SEPARATOR + 'end';
+
    K_SCHEMA_SENSOR_BASIC   = 'sensor.basic';
    K_SCHEMA_SENSOR_REQUEST = 'sensor.request';
    K_SCHEMA_CONTROL_BASIC  = 'control.basic';
@@ -194,24 +200,6 @@ const
    MAX_HBEAT             = 9;
    K_XPL_DEFAULT_HBEAT   = 5;
 
-   // Global setting items =================================================================================
-   K_XPL_ROOT_KEY               = '\Software\xPL\';
-   K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                                                // \software\xpl\vendor\device\
-   K_XPL_REG_VERSION_KEY        = 'version';
-   K_XPL_REG_PATH_KEY           = 'path';
-   K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
-   K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
-   K_REGISTRY_BROADCAST         = 'BroadcastAddress';
-   K_REGISTRY_LISTENON          = 'ListenOnAddress';
-   K_REGISTRY_LISTENTO          = 'ListenToAddresses';
-   K_REGISTRY_ROOT_XPL_DIR      = 'RootxPLDirectory';
-   K_REGISTRY_PROXY             = 'UseProxy';
-   K_REGISTRY_HTTP_PROX_SRVR    = 'ProxyHttpSrvr';
-   K_REGISTRY_HTTP_PROX_PORT    = 'ProxyHttpPort';
-   K_XPL_SETTINGS_SUBDIR_CONF   = 'Config';
-   K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
-   K_XPL_SETTINGS_SUBDIR_LOGS   = 'Logging';
-
    // HTML Formatting for standard action contained in menuItems ===========================================
    K_MNU_ITEM_MSG_AND_SUBMIT    = '<INPUT TYPE=HIDDEN NAME=xplMsg VALUE="%s"><INPUT TYPE=SUBMIT NAME="xPLWeb_menuitem" VALUE="%s">';
    K_MNU_ITEM_OPTION_LIST       = '<OPTION VALUE="%s">%s</OPTION>';
@@ -221,12 +209,15 @@ const
    K_MNU_ITEM_OPTION_SEP        = '|';                                                                      // Separator used in the xml file between valid choices
    K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                                                // Regular expression used to identify parameters in xplMsg in MenuItems
 
+   // XHCP elements ========================================================================================
+   K_XHCP_LOGIN                 = '%d %s Version %s XHCP %s';
    // Global and general regular expressions
    K_RE_FRENCH_PHONE = '\d\d \d\d \d\d \d\d \d\d';                              // French phone number, formatted : 01 02 03 04 05
    K_RE_IP_ADDRESS   = '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';        // Simply formed IP v4 Address : 192.168.1.1
    K_RE_MAC_ADDRESS  = '([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])';  // Network card mac address
    K_RE_LATITUDE     = '([0-8][0-9]|[9][0])\.([0-9][0-9])\.([0-9][0-9])([NS]|[ns])';
    K_RE_LONGITUDE    = '([01][0-7]|[00][0-9][0-9]|[1][8][0])\.([0-9][0-9])\.([0-9][0-9])([EW]|[ew])';
+
 
 
 implementation
