@@ -1,22 +1,22 @@
 object frmxPLMessage: TfrmxPLMessage
-  Left = 145
-  Height = 354
-  Top = 154
-  Width = 418
+  Left = 323
+  Height = 333
+  Top = 155
+  Width = 431
   BorderIcons = [biSystemMenu]
   BorderStyle = bsToolWindow
   Caption = 'xPL Message details'
-  ClientHeight = 354
-  ClientWidth = 418
+  ClientHeight = 333
+  ClientWidth = 431
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   LCLVersion = '0.9.28.2'
   object PageControl1: TPageControl
     Left = 0
-    Height = 328
+    Height = 307
     Top = 26
-    Width = 418
+    Width = 431
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
@@ -25,13 +25,13 @@ object frmxPLMessage: TfrmxPLMessage
     OnPageChanged = PageControl1Change
     object TabSheet1: TTabSheet
       Caption = 'Text'
-      ClientHeight = 300
-      ClientWidth = 410
+      ClientHeight = 279
+      ClientWidth = 423
       object mmoMessage: TMemo
         Left = 0
-        Height = 300
+        Height = 279
         Top = 0
-        Width = 410
+        Width = 423
         Align = alClient
         Color = 14811135
         Font.Style = [fsBold]
@@ -172,7 +172,6 @@ object frmxPLMessage: TfrmxPLMessage
         ParentColor = False
         ParentFont = False
         TabOrder = 3
-        BookMarkOptions.OnChange = nil
         Gutter.Width = 12
         Gutter.MouseActions = <        
           item
@@ -852,7 +851,7 @@ object frmxPLMessage: TfrmxPLMessage
     Left = 0
     Height = 26
     Top = 0
-    Width = 418
+    Width = 431
     ButtonHeight = 24
     ButtonWidth = 80
     Caption = 'ToolBar2'
@@ -864,37 +863,49 @@ object frmxPLMessage: TfrmxPLMessage
     ShowCaptions = True
     TabOrder = 1
     object ToolButton1: TToolButton
-      Left = 81
+      Left = 184
       Top = 0
       Action = MsgSave
     end
     object ToolButton2: TToolButton
-      Left = 184
+      Left = 287
       Top = 0
       Action = MsgCopy
     end
     object ToolButton3: TToolButton
-      Left = 287
-      Top = 0
+      Left = 1
+      Top = 24
       Action = DoSend
     end
     object ToolButton4: TToolButton
-      Left = 264
+      Left = 367
       Top = 0
       Width = 23
       Caption = 'ToolButton4'
       Style = tbsSeparator
     end
     object ToolButton5: TToolButton
-      Left = 1
+      Left = 104
       Top = 0
       Action = acLoad
     end
     object ToolButton6: TToolButton
-      Left = 161
+      Left = 264
       Top = 0
       Width = 23
       Caption = 'ToolButton6'
+      Style = tbsSeparator
+    end
+    object ToolButton7: TToolButton
+      Left = 1
+      Top = 0
+      Action = acClose
+    end
+    object ToolButton8: TToolButton
+      Left = 81
+      Top = 0
+      Width = 23
+      Caption = 'ToolButton8'
       Style = tbsSeparator
     end
   end
@@ -925,10 +936,16 @@ object frmxPLMessage: TfrmxPLMessage
       ImageIndex = 2
       OnExecute = acLoadExecute
     end
+    object acClose: TAction
+      Caption = 'Close'
+      ImageIndex = 0
+      OnExecute = acCloseExecute
+    end
   end
   object ImageList1: TImageList
     ShareImages = True
-    left = 48
+    left = 64
+    top = 88
     Bitmap = {
       4C690F0000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF

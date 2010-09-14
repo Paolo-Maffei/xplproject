@@ -14,22 +14,23 @@ unit u_xpl_message_GUI;
 interface
 
 uses
-  Classes, SysUtils, uxPLMessage;
+  Classes,
+  SysUtils,
+  uxPLMessage;
 
-type
-  TButtonOption = (
+type TButtonOption = (
                 boLoad,
                 boSave,
                 boCopy,
                 boSend);
-  TButtonOptions = set of TButtonOption;
+     TButtonOptions = set of TButtonOption;
 
      TxPLMessageGUI = class(TxPLMessage)
-     public
-        function    Edit : boolean;     dynamic;
-        procedure   Show(options : TButtonOptions);
-        procedure   ShowForEdit(options : TButtonOptions);
-        function    SelectFile : boolean;
+        public
+           function  Edit : boolean;     dynamic;
+           procedure Show(options : TButtonOptions);
+           procedure ShowForEdit(options : TButtonOptions);
+           function  SelectFile : boolean;
      end;
 
 implementation { ==============================================================}
@@ -37,40 +38,42 @@ uses frm_xPLMessage,
      v_xplmsg_opendialog,
      Controls;
 
-
-
 procedure TxPLMessageGUI.ShowForEdit(options : TButtonOptions);
-var aForm : TfrmxPLMessage;
 begin
-     aForm := TfrmxPLMessage.Create(self);
-     aForm.buttonOptions := options;
-     aForm.mmoMessage.ReadOnly := false;
-     aForm.Show;
+   with TfrmxPLMessage.Create(self) do try
+        buttonOptions := options;
+        mmoMessage.ReadOnly := false;
+        Show;
+   finally
+   end;
 end;
 
 function TxPLMessageGUI.Edit : boolean;
-var aForm : TfrmxPLMessage;
 begin
-    aForm := TfrmxPLMessage.Create(self);
-    result := (aForm.ShowModal = mrOk);
-    aForm.Destroy;
+   with TfrmxPLMessage.Create(self) do try
+        result := (ShowModal = mrOk);
+   finally
+        Destroy;
+   end;
 end;
 
 procedure TxPLMessageGUI.Show(options : TButtonOptions);
-var aForm : TfrmxPLMessage;
 begin
-    aForm := TfrmxPLMessage.Create(self);
-    aForm.buttonOptions := options;
-    aForm.Show;
+   with TfrmxPLMessage.Create(self) do try
+        buttonOptions := options;
+        Show;
+   finally
+   end;
 end;
 
 function TxPLMessageGUI.SelectFile: boolean;
-var OpenDialog: TxPLMsgOpenDialog;
 begin
-     OpenDialog:=TxPLMsgOpenDialog.create(self);
-     result := OpenDialog.Execute;
-     if result then LoadFromFile(OpenDialog.FileName);
-     OpenDialog.Destroy;
+   with TxPLMsgOpenDialog.create(self) do try
+        result := Execute;
+        if result then LoadFromFile(FileName);
+   finally
+        Destroy;
+   end;
 end;
 
 

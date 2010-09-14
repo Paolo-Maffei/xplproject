@@ -81,7 +81,7 @@ type
      end;}
 
 implementation {===============================================================}
-uses cStrings, sysutils, RegExpr, uxPLConst, uRegExTools;
+uses cStrings, sysutils, uRegExpr, uxPLConst, uRegExTools;
 
 constructor TxPLMsgBody.create;
 begin
