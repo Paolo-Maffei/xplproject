@@ -15,12 +15,16 @@ unit uxPLHeader;
         avoiding multiple tanstyping
         Renamed the class from TxPLMsgHeader to TxPLHeader
  1.00 : Suppressed usage of uRegExTools to correct bug #FS47
+ Rev 256 : Replaced string constants with u_xml string constants
+         Switched local type of xml writing to use u_xml_xpldeterminator
  }
 {$mode objfpc}{$H+}
 
 interface
 
-uses uxPLAddress, DOM, uxPLConst;
+uses uxPLAddress,
+     uxPLConst,
+     u_xml_xpldeterminator;
 
 type { TxPLHeader }
 
@@ -49,21 +53,22 @@ type { TxPLHeader }
 
        function IsValid : boolean;
 
-       procedure WriteToXML(aParent : TDOMNode);
-       procedure ReadFromXML(aParent : TDOMNode);
+       procedure WriteToXML(aAction : TXMLxplActionType);
+       procedure ReadFromXML(aAction : TXMLxplActionType);
 
        class function MsgTypeAsOrdinal(const aMsgType : tsMsgType) : integer;
      end;
 
 
 implementation {=========================================================================}
-uses SysUtils, Classes, RegExpr, StrUtils;
+uses SysUtils, Classes, uRegExpr, StrUtils;
 
 { TxPLHeader Object =====================================================================}
 constructor TxPLHeader.create;
 begin
-   fSource := TxPLAddress.Create;                                                         // No need to reset them
-   fTarget := TxPLTargetAddress.Create;                                                   // They're created emty
+   fSource := TxPLAddress.Create;
+   fTarget := TxPLTargetAddress.Create;
+
 end;
 
 destructor TxPLHeader.destroy;
@@ -98,26 +103,26 @@ begin
             )
 end;
 
-procedure TxPLHeader.ReadFromXML(aParent : TDOMNode);
+procedure TxPLHeader.ReadFromXML(aAction : TXMLxplActionType);
 var mt : string;
 begin
-   mt := TDOMElement(aParent).GetAttribute('msg_type');                                   // In vendor plugin file 'xpl-stat' is written 'stat'
-   if not AnsiContainsStr(mt,K_MSG_TYPE_HEAD) then mt := K_MSG_TYPE_HEAD + mt;            // then keep same code for both origins
-   MessageType := mt;
-   fSource.Tag := TDOMElement(aParent).GetAttribute('xPLAddress');
-   fTarget.Tag := TDOMElement(aParent).GetAttribute('xPLAddress-target');
+   mt := aAction.Msg_Type;
+   if not AnsiContainsStr(mt,K_MSG_TYPE_HEAD) then mt := K_MSG_TYPE_HEAD + mt;            // In vendor plugin file 'xpl-stat' is written 'stat'
+   MessageType := mt;                                                                     // then keep same code for both origins
+   Target.Tag  := aAction.Msg_Target;
+   Source.Tag  := aAction.Msg_Source;
 end;
 
 class function TxPLHeader.MsgTypeAsOrdinal(const aMsgType: tsMsgType): integer;
 begin
-   Result := AnsiIndexStr(aMsgType,[K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND])
+   Result := AnsiIndexStr(aMsgType,[K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND]);
 end;
 
-procedure TxPLHeader.WriteToXML(aParent : TDOMNode);
+procedure TxPLHeader.WriteToXML(aAction : TXMLxplActionType);
 begin
-   TDOMElement(aParent).SetAttribute('msg_type',MessageType);
-   TDOMElement(aParent).SetAttribute('xPLAddress',fSource.Tag);
-   TDOMElement(aParent).SetAttribute('xPLAddress-target',fTarget.Tag);
+   aAction.Msg_Type:=MessageType;
+   aAction.Msg_Target:=Target.Tag;
+   aAction.Msg_Source:=Source.Tag;
 end;
 
 function TxPLHeader.GetRawxPL: string;
@@ -130,29 +135,24 @@ end;
 procedure TxPLHeader.SetMessageType(const AValue: tsMsgType);
 begin
    if MessageType = aValue then exit;
-   if aValue = K_MSG_TYPE_STAT then Target.Tag := '*';                          // Rule of XPL : xpl-stat are always broadcast
+   if aValue = K_MSG_TYPE_STAT then Target.Tag := K_MSG_TARGET_ANY;                                // Rule of XPL : xpl-stat are always broadcast
    fMsgType := aValue;
 end;
 
 procedure TxPLHeader.SetRawXpl(aRawXPL : string);
 var i : integer;
 begin
-   with TRegExpr.Create do try                                                  // Modified for correction of bug #FS47
+   ResetValues;
+   with RegExpEngine do begin
         Expression := K_RE_HEADER_FORMAT;
         if Exec(AnsiLowerCase(aRawXPL)) then begin
            MessageType := Match[1];
-           i := 3;                                                              // Modified for correction of bug #FS47
-           while i<=7 do begin                                                  //          avoid inutile loops
-              Case AnsiIndexStr( Match[i],
-                                 [K_MSG_HEADER_HOP,K_MSG_HEADER_SOURCE,K_MSG_HEADER_TARGET]) of
-                   0 : fHop := StrToInt(Match[i+1]);
-                   1 : Source.Tag := Match[i+1];
-                   2 : Target.Tag := Match[i+1];
-              end;
-              i += 2;
+           for i:= 3 to 7 do begin
+               if Match[i] = K_MSG_HEADER_HOP    then fHop := StrToInt(Match[i+1]);
+               if Match[i] = K_MSG_HEADER_SOURCE then Source.Tag := Match[i+1];
+               if Match[i] = K_MSG_HEADER_TARGET then Target.Tag := Match[i+1];
            end;
         end;
-   finally destroy;
    end;
 end;
 
