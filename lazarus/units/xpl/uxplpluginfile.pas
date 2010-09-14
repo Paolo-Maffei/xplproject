@@ -60,7 +60,7 @@ type
      end;
 
 implementation //========================================================================
-uses XMLRead, RegExpr;
+uses XMLRead, RegExpr, Dialogs, u_xml_xpldeterminator;
 
 resourcestring // XML Vendor file entry and field variable names ========================
    K_VF_Command     = 'command';
@@ -118,7 +118,7 @@ begin
    if not Assigned(aNode) then exit;
 
    Result := TxPLMessage.Create;
-   Result.ReadFromXML(aNode);
+   Result.ReadFromXML(TXMLActionsType(aNode));       // check later this hazardous type casting it may surely crash here
 end;
 
 function TxPLDevice.GetElementList(const aEltName : string ): TStringList;

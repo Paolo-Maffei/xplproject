@@ -9,21 +9,22 @@ unit uxplmessage;
  0.95 : Modified to XML read/write com²patible with xml files from other vendors
         Name and Description fields added
  0.96 : Usage of uxPLConst
- 0.97 : Removed user interface function to u_xpl_message_gui to enable console apps
+ 0.97 : Usage of u_xml_xpldeterminator for read/write to xml format
+ 0.98 : Removed user interface function to u_xpl_message_gui to enable console apps
         Introduced usage of u_xpl_udp_socket_client
  }
 {$mode objfpc}{$H+}
 
 interface
 
-uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,u_xpl_udp_socket, uxPLSchema, DOM, uxPLConst;
+uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,u_xpl_udp_socket, uxPLSchema, DOM, uxPLConst,
+     u_xml_xpldeterminator;
 
 type
 
 
-{ TxPLMessage }
 
-TxPLMessage = class(TComponent)
+  TxPLMessage = class(TComponent)
      private
         fHeader   : TxPLHeader;
         fBody     : TxPLMsgBody;
@@ -55,6 +56,7 @@ TxPLMessage = class(TComponent)
         constructor create(const aRawxPL : string = ''); overload;
         destructor  Destroy; override;
         procedure   Assign(const aMessage : TxPLMessage); overload;
+
         function FilterTag : tsFilter; // Return a message like a filter string
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
@@ -62,8 +64,8 @@ TxPLMessage = class(TComponent)
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
 
-        function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TDOMNode;
-        procedure ReadFromXML(const aCom : TDOMNode);
+        function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
+        procedure ReadFromXML(const aCom : TXMLActionsType);
      end;
 
 implementation { ==============================================================}
@@ -94,6 +96,7 @@ begin
   Header.Assign(aMessage.Header);
   Body.Assign(aMessage.Body);
 end;
+
 
 function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
@@ -153,13 +156,13 @@ end;
 
 function TxPLMessage.LoadFromFile(aFileName: string): boolean;
 var xdoc : TXMLDocument;
-    aCom : TDomNode;
+    aCom : TXMLActionsType;
 begin
      ResetValues;
      xdoc :=  TXMLDocument.Create;
      ReadXMLFile(xDoc,aFileName);
 
-     aCom := xDoc.FindNode('command');
+     aCom := TXMLActionsType.Create(xDoc);
      result := (aCom<>nil);
 
      if result then ReadFromXML(aCom);
@@ -175,23 +178,24 @@ begin
      xdoc.Free;
 end;
 
-function TxPLMessage.WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TDOMNode;
+function TxPLMessage.WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
 begin
-     result := adoc.CreateElement('command');
-     aDoc.AppendChild(result);
-     TDOMElement(result).SetAttribute('name',Name);
-     TDOMElement(result).SetAttribute('description',Description);
-
-     Header.WriteToXML(result);
-     Body.WriteToXML(result, aDoc);
+   result := TXMLxplActionType(aDoc.AppendChild(TXMLOutput.Create(aDoc).xplactions.AddElement(Name)));
+   result.Display_Name:=Description;
+   result.ExecuteOrder:=Name;
+   Header.WriteToXML(result);
+   Body.WriteToXML(result);
 end;
 
-procedure TxPLMessage.ReadFromXML(const aCom : TDOMNode);
+procedure TxPLMessage.ReadFromXML(const aCom : TXMLActionsType);
+var action :TXMLxplActionType;
 begin
-     Description := TDOMElement(aCom).GetAttribute('description');
-     Name := TDOMElement(aCom).GetAttribute('name');
-     Header.ReadFromXML(aCom);
-     Body.ReadFromXML(aCom);
+   if aCom.Count<=0 then exit;
+   action := aCom.Element[0];
+   Description := action.Display_Name;
+   Name := action.ExecuteOrder;
+   Header.ReadFromXML(action);
+   Body.ReadFromXML(action);
 end;
 
 end.
