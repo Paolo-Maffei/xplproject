@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   StdCtrls, ExtCtrls, EditBtn, Grids, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui, uxplmessage,
-  KHexEditor, XMLPropStorage, SynEdit, SynHighlighterPas, v_xplmsg_opendialog;
+  KHexEditor, SynEdit, SynHighlighterPas, v_xplmsg_opendialog;
 
 type
 
