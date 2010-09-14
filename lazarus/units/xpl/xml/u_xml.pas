@@ -110,49 +110,56 @@ const
 
 type
 
+     { TXMLElementList }
+
      generic TXMLElementList<_T> = class(TDOMElementList)
+     private
+       function GetDocument: TXMLDocument;
      protected
-        fDocument : TXMLDocument;
+//        fDocument : TXMLDocument;
         fRootNode : TDOMNode;
         fKeyWord  : string;
         function Get_Element (Index: Integer): _T;
      public
-        constructor Create(const ADocument : TXMLDocument; const aLabel : string);
-        constructor Create(const aNode : TDOMNode; const aLabel : string);
+        constructor Create(const aDocument : TXMLDocument; const aLabel : string); overload;
+        constructor Create(const aNode : TDOMNode; const aLabel : string);         overload;
         function    AddElement(const aName : string) : _T;
         property Element[Index: Integer]: _T read Get_Element; default;
         property RootNode : TDOMNode read fRootNode;
-        property Document : TXMLDocument read fDocument;
+        property Document : TXMLDocument read GetDocument;
      end;
 
 implementation
 
+function TXMLElementList.GetDocument: TXMLDocument;
+begin result := TXMLDocument(RootNode.OwnerDocument); end;
 
 function TXMLElementList.Get_Element(Index: Integer): _T;
 begin
    Result := _T(Item[Index]);
 end;
 
-constructor TXMLElementList.Create(const ADocument : TXMLDocument; const aLabel : string);
+constructor TXMLElementList.Create(const aDocument : TXMLDocument; const aLabel : string);
 begin
-   fDocument := aDocument;
-   fRootNode := fDocument.FirstChild;
-   fKeyWord  := aLabel;
-   inherited Create(fRootNode,fKeyWord);
+//   fDocument := aDocument;
+//   fRootNode := aDocument.FirstChild;
+//   fKeyWord  := aLabel;
+//   inherited Create(fRootNode,fKeyWord);
+   Create(aDocument.FirstChild,aLabel);
 end;
 
 constructor TXMLElementList.Create(const aNode : TDOMNode; const aLabel : string);
 begin
    fRootNode := aNode;
    fKeyWord  := aLabel;
+
    inherited Create(fRootNode,fKeyWord);
 end;
-
 
 function TXMLElementList.AddElement(const aName : string) : _T;
 var child : TDOMNode;
 begin
-   child := fDocument.CreateElement(fKeyword);
+   child := Document.CreateElement(fKeyword);
    fRootNode.AppendChild(child);
    TDOMElement(Child).SetAttribute(K_XML_STR_NAME, aName);
    fList.Add(child);

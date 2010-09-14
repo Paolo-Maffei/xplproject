@@ -19,11 +19,14 @@ type
      property value : AnsiString read Get_Value;
   end;
 
+  { TXMLxplActionParamType }
+
   TXMLxplActionParamType = class(TDOMElement)
   private
     function Get_Expression: AnsiString;
+    procedure Set_Expression(const AValue: AnsiString);
   public
-     property expression: AnsiString read Get_Expression;
+     property expression: AnsiString read Get_Expression write Set_Expression;
   end;
 
   TXMLParamsType = specialize TXMLElementList<TXMLParamType>;
@@ -57,21 +60,31 @@ type
      property Params: TXMLParamsType read Get_Params;
   end;
 
+  { TXMLxplActionType }
+
   TXMLxplActionType = class(TDOMElement)
   private
     function Get_DisplayName: AnsiString;
     function Get_ExecuteOrder: AnsiString;
     function Get_Msg_Schema: AnsiString;
+    function Get_Msg_Source: AnsiString;
     function Get_Msg_Target: AnsiString;
     function Get_Msg_Type: AnsiString;
     function Get_xplActionParams: TXMLxplActionParamsType;
+    procedure Set_Display_Name(const AValue: AnsiString);
+    procedure Set_ExecuteOrder(const AValue: AnsiString);
+    procedure Set_Msg_Schema(const AValue: AnsiString);
+    procedure Set_Msg_Source(const AValue: AnsiString);
+    procedure Set_Msg_Target(const AValue: AnsiString);
+    procedure Set_Msg_Type(const AValue: AnsiString);
 
   public
-     property ExecuteOrder: AnsiString read Get_ExecuteOrder;
-     property Display_Name: AnsiString read Get_DisplayName;
-     property Msg_Type : AnsiString read Get_Msg_Type;
-     property Msg_Target : AnsiString read Get_Msg_Target;
-     property Msg_Schema : AnsiString read Get_Msg_Schema;
+     property ExecuteOrder: AnsiString read Get_ExecuteOrder write Set_ExecuteOrder;
+     property Display_Name: AnsiString read Get_DisplayName write Set_Display_Name;
+     property Msg_Type : AnsiString read Get_Msg_Type write Set_Msg_Type;
+     property Msg_Target : AnsiString read Get_Msg_Target write Set_Msg_Target;
+     property Msg_Source : AnsiString read Get_Msg_Source write Set_Msg_Source;
+     property Msg_Schema : AnsiString read Get_Msg_Schema write Set_Msg_Schema;
      property xplActions: TXMLxplActionParamsType read Get_xplActionParams;
   end;
 
@@ -202,7 +215,10 @@ begin Result := TXMLInput(FindNode(K_XML_STR_Input)); end;
 
 { TXMLxplActionParamType }
 function TXMLxplActionParamType.Get_Expression: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Expression); end;
+begin Result := GetAttribute(K_XML_STR_EXPRESSION); end;
+
+procedure TXMLxplActionParamType.Set_Expression(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_EXPRESSION, aValue); end;
 
 { TXMLxplActionType }
 function TXMLxplActionType.Get_DisplayName: AnsiString;
@@ -214,6 +230,9 @@ begin Result := GetAttribute(K_XML_STR_ExecuteOrder); end;
 function TXMLxplActionType.Get_Msg_Schema: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Msg_schema); end;
 
+function TXMLxplActionType.Get_Msg_Source: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Msg_Source); end;
+
 function TXMLxplActionType.Get_Msg_Target: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Msg_target); end;
 
@@ -222,6 +241,24 @@ begin Result := GetAttribute(K_XML_STR_Msg_type); end;
 
 function TXMLxplActionType.Get_xplActionParams: TXMLxplActionParamsType;
 begin Result := TXMLxplActionParamsType.Create(self, K_XML_STR_XplActionPar); end;
+
+procedure TXMLxplActionType.Set_Display_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Display_name,aValue); end;
+
+procedure TXMLxplActionType.Set_ExecuteOrder(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_ExecuteOrder,aValue); end;
+
+procedure TXMLxplActionType.Set_Msg_Schema(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_MSG_SCHEMA,aValue); end;
+
+procedure TXMLxplActionType.Set_Msg_Source(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Msg_Source,aValue); end;
+
+procedure TXMLxplActionType.Set_Msg_Target(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Msg_target,aValue); end;
+
+procedure TXMLxplActionType.Set_Msg_Type(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Msg_type,aValue); end;
 
 end.
 
