@@ -85,7 +85,7 @@ begin
      sInstance     := IfThen(fConfigNeeded,TxPLAddress.RandomInstance,TxPLAddress.HostNmInstance);
 
      fxmlconfig := TXmlConfig.Create(self);
-     fXmlConfig.Filename:= TxPLListener(aOwner).Setting.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[sVendor,sDevice]);
+     fXmlConfig.Filename:= TxPLListener(aOwner).Settings.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[sVendor,sDevice]);
 
      fConfigItems := TList.Create;
 

@@ -14,6 +14,7 @@ unit uxPLClient;
  0.96 : Added localisation capabilities
  0.97 : Added Logwarn
  0.98 : Modified to use WEBSERVER clause for console application, logging to console instead of list
+ Rev 256 : Rename Setting to Settings
 }
 
 {$mode objfpc}{$H+}
@@ -34,11 +35,12 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
         fDevice     : string;
         fEventLog   : TLogger;
         fLogList    : TStringList;
-        fSetting    : TxPLSettings;
+        fSettings    : TxPLSettings;
         fPluginList : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
       private
         function RecordLog(Const Formatting  : string; Const Data  : array of const ) : string;
+        procedure RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
       public
         OnLogUpdate: TxPLClientLogUpdate;
 
@@ -53,7 +55,7 @@ type  TxPLClientLogUpdate = procedure(const aLogList : TStringList) of object;
         function    AppName : string;
 
         property    PluginList : TxPLVendorSeedFile  read fPluginList;
-        property    Setting    : TxPLSettings        read fSetting;
+        property    Settings   : TxPLSettings        read fSettings;
         property    AppVersion : string              read fAppVersion;
         property    LogList    : TStringList         read fLogList;
         property    Vendor     : string              read fVendor;
@@ -73,9 +75,11 @@ begin
    fDevice     := aDevice;
    fAppVersion := aAppVersion;
    fLogList    := TStringList.Create;
-   fSetting    := TxPLSettings.create(self);
+   fSettings    := TxPLSettings.create; //(self);
    fLocaleDomains := TStringList.Create;
    TConfiguratorUnit.doPropertiesConfiguration(LogFileName);
+
+   RegisterMe(Vendor,Device,AppVersion);
 
    fEventLog := TLogger.getInstance;
    fEventLog.SetLevel(TLevelUnit.INFO);
@@ -84,7 +88,7 @@ begin
                                                true));
    fEventLog.info(Format(K_MSG_APP_STARTED,[AppName]));
 
-   fPluginList := TxPLVendorSeedFile.Create(fSetting);
+   fPluginList := TxPLVendorSeedFile.Create(fSettings);
    if not fPluginList.IsValid then LogWarn(K_MSG_ERROR_VENDOR,[fPluginList.Name]);
 end;
 
@@ -148,18 +152,26 @@ begin
 end;
 
 function TxPLClient.LogFileName: string;
-begin result := fSetting.LoggingDirectory + AppName + K_FEXT_LOG; end;
+begin result := fSettings.LoggingDirectory + AppName + K_FEXT_LOG; end;
 
 destructor TxPLClient.Destroy;
 begin
      fPluginList.Destroy;
      fEventLog.info(Format(K_MSG_APP_STOPPED,[AppName]));
      TLogger.freeInstances;
-     fSetting.Destroy;
+     fSettings.Destroy;
      fLogList.Destroy;
      fLocaleDomains.Destroy;
      inherited Destroy;
 end;
+
+procedure TxPLClient.RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
+var aPath, aVersion : string;
+begin
+   fSettings.GetAppDetail(Vendor, Device,aPath,aVersion);
+   if aVersion < AppVersion then fSettings.SetAppDetail(Vendor,Device,AppVersion)
+end;
+
 
 function TxPLClient.AppName: string;                                                      // Todo : capitalize first char of Device
 begin result := 'xPL ' + Device; end;
