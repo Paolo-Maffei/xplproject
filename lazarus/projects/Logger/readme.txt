@@ -41,5 +41,9 @@ Changes History :
 		* Icons added in contextual menus
 		* Introducing proxy handling capability for HTTP at xPLSettings level
 
+		
+To do :
+	Il semble que quand on 'request configuration' sur un module particulier, le message envoyé soit expédié à target=* au 
+	lieu de target=vendor.device.instance, résultat tout le monde répond
 
 
