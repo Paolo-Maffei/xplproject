@@ -14,6 +14,7 @@ type
   { TfrmxPLMessage }
   TfrmxPLMessage = class(TForm)
     acLoad: TAction;
+    acClose: TAction;
     ckBody: TCheckBox;
     ckMsgType: TCheckBox;
     ckInstance: TCheckBox;
@@ -47,7 +48,10 @@ type
     ToolButton6: TToolButton;
     SaveMessage: TxPLMsgSaveDialog;
     OpenMessage: TxPLMsgOpenDialog;
+    ToolButton7: TToolButton;
+    ToolButton8: TToolButton;
 
+    procedure acCloseExecute(Sender: TObject);
     procedure acLoadExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
     procedure DoSendExecute(Sender: TObject);
@@ -90,6 +94,11 @@ begin
   xPLMessage.LoadFromFile(OpenMessage.FileName);
   DisplayMessage;
 
+end;
+
+procedure TfrmxPLMessage.acCloseExecute(Sender: TObject);
+begin
+   Close;
 end;
 
 procedure TfrmxPLMessage.ckDeviceChange(Sender: TObject);
