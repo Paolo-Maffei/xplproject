@@ -7,231 +7,447 @@ unit uxplglobals;
   0.90 : Initial version
   0.91 : Added Expirency capability
   0.92 : Added On change Event
+  Rev 236 : major changes to use u_xml_globals instead of self defined XML procedures
 }
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Classes, XMLCfg, ExtCtrls;
+uses Classes,  ExtCtrls, u_xml_globals, DOM, uxPLSettings, DeCAL;
 
 type
+
     TxPLGlobalChangedEvent = procedure(const aValue : string; const aNew : string; const aOld : string) of object;
+
     { TxPLGlobalValue }
 
     TxPLGlobalValue = class
+    private
        fName  : string;
        fValue : string;
        fFormer: string;
-       fTag   : string;
        fComment : string;
        fModifyTS : TDateTime;
        fCreateTS : TDateTime;
        fExpireTS : TDateTime;
+       fExpires : boolean;
+       fXMLGlobal : TXMLGlobalType;
     public
-       constructor Create(const aName : string = '');
+//       constructor Create(const aName : string = '');
+//       constructor CreateEx(const aName : string; const aValue : string = '');
+       constructor Create(const aName : string; const aDefaultValue : string; const aXMLGlobal : TXMLGlobalType);
+       constructor Create(const aXMLGlobal : TXMLGlobalType);
 
-       procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
-       procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
+       function  SetValue(const AValue: string; const ExpireOn : TDateTime = 0; bForceUpdate : boolean = false) : boolean;
+       procedure GetFromXML(const aXMLGlobal : TXMLGlobalType);
+       procedure PutToXML;
 
-       function  SetValue(const AValue: string; const ExpireOn : TDateTime = 0) : boolean;
-       procedure SetComment(const aComment : string);
+    private
+       procedure Delete;
+       function GetAsBoolean: boolean;
     published
        property Value   : string read fValue;
-       property Comment : string read fComment;
+       property Comment : string read fComment write fComment;
        property Former  : string read fFormer;
-       property Tag     : string read fTag write fTag;
+       property Name    : string read fName;
        property ModifyTS: TDateTime read fModifyTS;
        property CreateTS: TDateTime read fCreateTS;
        property ExpireTS: TDateTime read fExpireTS;
+       property Expires : boolean read fExpires;
+       property AsBoolean : boolean read GetAsBoolean;
     end;
 
     { TxPLGlobalList }
 
-    TxPLGlobalList = class(TStringList)
+    TxPLGlobalList = class(DMAP)
     private
-       fCfgFile : TXmlConfig;
-       fRootPath: string;
+       Iter : DIterator;
        fTimer   : TTimer;
-
+       fCacheFile : string;
+       fDocument : TXMLDocument;
        procedure OnTimer(aSender : TObject);
+       procedure ReadFromXML;
     public
-       constructor Create;
-       destructor  Destroy;
-       function SetValue(const aString : string; const aValue: string; const aComment : string = '') : integer;
-       function  GetValue(const i : integer) : string;
+       constructor Create(const aBaseDir : string);
+       destructor  Destroy; override;
+       procedure SetValue(const aString : string; const aValue: string; const aComment : string = '');
        function  GetValue(const aString : string) : string;
-       function  Item(const i : integer) : TxPLGlobalValue;
-       procedure Delete(const aString : string); overload;
-       procedure WriteToXML;
-       procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string);
        OnGlobalChange : TxPLGlobalChangedEvent;
+       procedure LISTGLOBALS(const aListe : TStringList);
+       procedure LISTDEVICES(const aListe : TStringList; const aStatus : string);
+       procedure GETDEVCONFIG(const aListe : TStringList; const aName : string);
+       procedure Delete(const aString : string);
+       procedure AddGlobal(const aName : string; const aDefault : string='');
     end;
 
 
+
+
 implementation { TxPLGlobalValue =============================================================}
-uses SysUtils;
-resourcestring
-      // String constants to access stored value in XML file
-      K_XML_NAME_PATH    = '/Name';
-      K_XML_VALUE_PATH   = '/Value';
-      K_XML_FORMER_PATH  = '/Former';
-      K_XML_MODIF_PATH   = '/ModifyTS';
-      K_XML_CREATE_PATH  = '/CreateTS';
-      K_XML_EXPIRE_PATH  = '/ExpireTS';
-      K_XML_COMMENT_PATH = '/Comment';
-      K_XML_TAG_PATH     = '/Tag';
+uses SysUtils, XMLRead, XMLWrite, u_xml, cStrings, StrUtils;
+const K_CACHEFILE_NAME = 'object_cache.xml';
+var fGlobalsFile : TXMLglobalsType;
+    globalliste : TxPLGlobalList;
 
+//constructor TxPLGlobalValue.Create(const aName: string);
+constructor TxPLGlobalValue.Create(const aName : string; const aDefaultValue : string; const aXMLGlobal : TXMLGlobalType);
+begin
+  fName      := aName;
+  fCreateTS  := now;
+  fExpires   := false;
+  fXMLGlobal := aXMLGlobal;
+  SetValue(aDefaultValue,0, true);         // Force update for initialization of values
+//  fXMLGlobal := fGlobalsFile.AddElement(fName);
+//  PutToXML;
+end;
 
-function TxPLGlobalValue.SetValue(const AValue: string; const ExpireOn : TDateTime = 0) : boolean;
+//constructor TxPLGlobalValue.CreateEx(const aName: string; const aValue: string);
+//begin
+//  Create(aName);
+//  SetValue(aValue);
+//end;
+
+constructor TxPLGlobalValue.Create(const aXMLGlobal : TXMLGlobalType);
+begin
+  fXMLGlobal := aXMLGlobal;
+  GetFromXML(aXMLGlobal);
+end;
+
+function TxPLGlobalValue.SetValue(const AValue: string; const ExpireOn : TDateTime = 0; bForceUpdate : boolean = false) : boolean;
 begin
   result := (aValue <> fValue);
-  if not result then exit;
+  if not (result or bForceUpdate) then exit;
 
   fModifyTS := now;
-  if ExpireOn=0 then fExpireTS := fCreateTS-1 else fExpireTS := ExpireOn;
-  fFormer:= fValue;
-  fValue := aValue;
+  fExpires  := (ExpireOn<>0);
+  fExpireTS := ExpireOn;
+  fFormer   := fValue;
+  fValue    := aValue;
+  PutToXML;
 end;
 
-procedure TxPLGlobalValue.SetComment(const aComment: string);
-begin fComment := aComment; end;
-
-constructor TxPLGlobalValue.Create(const aName: string);
+procedure TxPLGlobalValue.GetFromXML(const aXMLGlobal: TXMLGlobalType);
 begin
-  fName     := aName;
-  fCreateTS := now;
-  fValue    := '';
-  fFormer   := '';
-  fComment  := '';
-  fExpireTS := fCreateTS - 1;
+  fName      := fXMLGlobal.Name;
+  fValue     := fXMLGlobal.Value;
+  fModifyTS  := fXMLGlobal.LastUpdate;
+  fExpires   := fXMLGlobal.Expires;
+  fCreateTS  := fXMLGlobal.CreateTS;
+  fFormer    := fXMLGlobal.Former;
+  fComment   := fXMLGlobal.Comment;
+  fExpireTS  := fXMLGlobal.ExpireTS;
 end;
 
-procedure TxPLGlobalValue.WriteToXML(const aCfgfile : TXmlConfig; const aRootPath : string);
+procedure TxPLGlobalValue.PutToXML;
 begin
-   with aCfgFile do begin
-      SetValue(aRootPath + K_XML_NAME_PATH     , fName);
-      SetValue(aRootPath + K_XML_VALUE_PATH    , fValue);
-      SetValue(aRootPath + K_XML_FORMER_PATH   , fFormer);
-      SetValue(aRootPath + K_XML_MODIF_PATH , DateTimeToStr(fModifyTS));
-      SetValue(aRootPath + K_XML_CREATE_PATH , DateTimeToStr(fCreateTS));
-      SetValue(aRootPath + K_XML_COMMENT_PATH  , fComment);
-      SetValue(aRootPath + K_XML_EXPIRE_PATH  , DateTimeToStr(fExpireTS));
-      SetValue(aRootPath + K_XML_TAG_PATH, fTag);
-   end;
+  fXMLGlobal.LastUpdate := fModifyTS;
+  fXMLGlobal.Expires    := fExpires;
+  fXMLGlobal.ExpireTS   := fExpireTS;
+  fXMLGlobal.Former     := fFormer;
+  fXMLGlobal.Value      := fValue;
+  fXMLGlobal.CreateTS   := fCreateTS;
 end;
 
-procedure TxPLGlobalValue.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLGlobalValue.Delete;
 begin
-   fName     := aCfgFile.GetValue(aRootPath + K_XML_NAME_PATH, '');
-   fValue    := aCfgFile.GetValue(aRootPath + K_XML_VALUE_PATH, '');
-   fFormer   := aCfgFile.GetValue(aRootPath + K_XML_FORMER_PATH, '');
-   fModifyTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_MODIF_PATH, ''));
-   fCreateTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_CREATE_PATH, ''));
-   fComment  := aCfgFile.GetValue(aRootPath + K_XML_COMMENT_PATH, '');
-   fExpireTS := StrToDateTime(aCfgFile.GetValue(aRootPath + K_XML_EXPIRE_PATH, DateTimeToStr(fCreateTS-1)));
-   fTag      := aCfgFile.GetValue(aRootPath + K_XML_TAG_PATH, '');
+  if Assigned(fXMLGlobal) then fXMLGlobal.Remove;
 end;
 
-{ TxPLGlobalList }
-
-procedure TxPLGlobalList.OnTimer(aSender: TObject);
-var i : integer;
-    global : TxPLGlobalValue;
+function TxPLGlobalValue.GetAsBoolean: boolean;
+var temp : string;
 begin
-   if Count=0 then exit;
-   i := 0;
-   repeat
-      global := Item(i);
-      if global.ExpireTS<now then begin
-         if global.ExpireTS > global.CreateTS then delete(i) else inc(i);
-      end else inc(i);
-   until i>=Count;
+   temp := AnsilowerCase(Value);
+   result := ((temp='y') or (temp='true') or (temp='yes'));
 end;
 
-constructor TxPLGlobalList.Create;
+{ TxPLGlobalList ======================================================================================}
+constructor TxPLGlobalList.Create(const aBaseDir : string);
 begin
   inherited Create;
-  Duplicates:=dupIgnore;
-  Sorted := true;
+
+  fCacheFile := aBasedir + K_CACHEFILE_NAME;
+  fDocument := TXMLDocument.Create;
+
+  if not FileExists(fCacheFile) then begin                                               // Handles creation of the file if it is
+     fDocument.AppendChild(fDocument.CreateElement(K_XML_STR_Global));                   // not present
+     WriteXMLFile(fDocument,fCacheFile);
+  end;
+
+  ReadXMLFile(fDocument,fCacheFile);
+  fGlobalsFile := TXMLglobalsType.Create(fDocument, K_XML_STR_Global);
+
   fTimer := TTimer.Create(nil);
   fTimer.OnTimer:= @OnTimer;
   fTimer.Enabled:= True;
-  fTimer.Interval:=1000;                                                                  // Time every second
+  fTimer.Interval:=1000;                                                                  // Tick every second
+  ReadFromXML;
+  globalliste := self;
+
 end;
 
 destructor TxPLGlobalList.Destroy;
 begin
-  WriteToXML;                                                                             // Save values before destroying
+  WriteXMLFile(fDocument,fCacheFile);
+  fGlobalsfile.destroy;
+  fDocument.destroy;
+
   fTimer.Destroy;
   inherited;
 end;
 
-procedure TxPLGlobalList.WriteToXML;
-var i : integer;
+procedure TxPLGlobalList.SetValue(const aString : string; const aValue: string; const aComment : string = '');
+var global : TxPLGlobalValue;
 begin
-    for i:=0 to Count-1 do
-        TxPLGlobalValue(Objects[i]).WriteToXML(fCfgfile, fRootPath + '/Global_' + intToStr(i));
-    fCfgfile.SetValue(fRootPath + '/GlobalCount', Count);
+   if AtEnd(locate([aString])) then AddGlobal(aString);
+
+   Iter := locate([aString]);
+   global := GetObject(iter) as TxPLGlobalValue;
+   if global.SetValue(aValue) and Assigned(OnGlobalChange) then OnGlobalChange(aString,aValue,global.Former);
+   if Length(aComment) >0 then global.Comment := aComment;
 end;
 
-procedure TxPLGlobalList.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
-var i,newGlobal : integer;
-    aGlobal  : TxPLGlobalValue;
-begin
-     fCfgFile := aCfgFile;
-     fRootPath := aRootPath;
-   i := StrToInt(aCfgfile.GetValue(aRootPath +'/GlobalCount', '0')) - 1;
-   while i>=0 do begin
-       aGlobal := TxPLGlobalValue.Create;
-       aGlobal.ReadFromXML(aCfgfile, aRootPath + '/Global_' + intToStr(i));
-       newGlobal := Add(aGlobal.fName);
-       Objects[newGlobal] := aGlobal;
-      dec(i);
+procedure TxPLGlobalList.OnTimer(aSender: TObject);                                                                            // In Hal v2 - a value flagged to expire
+var global : TxPLGlobalValue;                                                                                                  // will be automatically deleted
+begin                                                                                                                          { TODO : Gérer le système d'expiration automatique au bout de 15mn }                                                                                                 // 15 minutes after creation
+   Iter := start;
+   While iterateOver(iter) do Begin
+      global := GetObject(iter) as TxPLGlobalValue;
+      if global.Expires and (global.ExpireTS<now) then begin
+         removeAt(iter);
+         global.destroy;
+      end;
    end;
-end;
-
-function TxPLGlobalList.SetValue(const aString : string; const aValue: string; const aComment : string = '') : integer;
-var gv : TxPLGlobalValue;
-    old : string;
-begin
-   result := IndexOf(aString);
-
-   if result=-1 then begin
-       result := Add(aString);
-       Objects[result] := TxPLGlobalValue.Create(aString);
-   end;
-
-   gv := TxPLGlobalValue(Objects[result]);
-   if gv.SetValue(aValue) and Assigned(OnGlobalChange) then OnGlobalChange(aString,aValue,gv.Former);
-   if aComment<>'' then gv.SetComment(aComment);
-end;
-
-function TxPLGlobalList.GetValue(const i: integer): string;
-begin
-  result := TxPLGlobalValue(Objects[i]).Value;
 end;
 
 function TxPLGlobalList.GetValue(const aString: string): string;
 var i : integer;
 begin
-  i := IndexOf(aString);
-  if i<>-1 then result := GetValue(i);
+   Iter := locate([aString]);
+   if not AtEnd(Iter) then result := TxPLGlobalValue(GetObject(iter)).Value;
 end;
 
-function TxPLGlobalList.Item(const i : integer): TxPLGlobalValue;
+function IsDevice(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
 begin
-   result := nil;
-   if i<count then result := TxPLGlobalValue(Objects[i]);
+   global := AsObject(obj) as TxPLGlobalValue;
+   Result := (StrMatchLeft(global.Name,'device.')) and (StrMatchRight(global.Name,'.vdi'))
+end;
+
+function IsWaitingConfig(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
+   iter2 : DIterator;
+   vdi : string;
+begin
+   Result := IsDevice(ptr,obj);
+   if not result then exit;
+
+   global := AsObject(obj) as TxPLGlobalValue;
+   vdi := global.value;
+
+   Iter2 := globalliste.locate(['device.'+ vdi + '.waitingconfig']);
+   if not atEnd(Iter2) then begin
+      Global := GetObject(Iter2) as TxPLGlobalValue;
+      result := Global.AsBoolean;
+   end else result := false;
+end;
+
+function IsConfigured(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
+   iter2 : DIterator;
+   vdi : string;
+begin
+   Result := IsDevice(ptr,obj);
+   if not result then exit;
+
+   global := AsObject(obj) as TxPLGlobalValue;
+   vdi := global.value;
+
+   Iter2 := globalliste.locate(['device.'+ vdi + '.configdone']);
+   if not atEnd(Iter2) then begin
+      Global := GetObject(Iter2) as TxPLGlobalValue;
+      result := Global.AsBoolean;
+   end else result := false;
+end;
+
+function IsMissingConf(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
+   iter2 : DIterator;
+   vdi : string;
+begin
+   Result := IsDevice(ptr,obj);
+   if not result then exit;
+
+   global := AsObject(obj) as TxPLGlobalValue;
+   vdi := global.value;
+
+   Iter2 := globalliste.locate(['device.'+ vdi + '.configmissing']);
+   if not atEnd(Iter2) then begin
+      Global := GetObject(Iter2) as TxPLGlobalValue;
+      result := Global.AsBoolean;
+   end else result := false;
+end;
+
+function IsConfig(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
+begin
+   global := AsObject(obj) as TxPLGlobalValue;
+   Result := (StrMatchLeft(global.Name,'config.'))
+end;
+
+function IsGlobal(ptr: Pointer; const obj: DObject): Boolean;
+begin
+   Result := not (IsConfig(ptr,obj)) and not (IsDevice(ptr,obj))
+end;
+
+
+procedure TxPLGlobalList.LISTGLOBALS(const aListe: TStringList);                                        // will be automatically deleted
+var global : TxPLGlobalValue;
+    globales : DArray;
+begin                                                                                                                          { TODO : Gérer le système d'expiration automatique au bout de 15mn }                                                                                                 // 15 minutes after creation
+   globales := Darray.create;
+   filter(self,globales,MakeTest(@IsGlobal));
+   Iter := globales.start;
+   While iterateOver(iter) do Begin
+      global := GetObject(iter) as TxPLGlobalValue;
+      aListe.Add(global.name + '=' + global.value);
+   end;
+   globales.destroy;
+end;
+
+procedure TxPLGlobalList.LISTDEVICES(const aListe: TStringList; const aStatus: string);
+var global : TxPLGlobalValue;
+    globales : DArray;
+    vdi : string;
+    iter2 : DIterator;
+    chaine : string;
+begin
+   globales := Darray.create;
+   Case AnsiIndexStr(aStatus,['AWAITINGCONFIG','CONFIGURED','MISSINGCONFIG']) of
+        0 : filter(self,globales,MakeTest(@IsWaitingConfig));
+        1 : filter(self,globales,MakeTest(@IsConfigured));
+        2 : filter(self,globales,MakeTest(@IsMissingConf));
+   end;
+
+   Iter := globales.start;
+   While iterateOver(iter) do Begin
+      chaine := '';
+      global := GetObject(iter) as TxPLGlobalValue;
+      vdi := global.value;
+      chaine += vdi + #9;
+
+      Iter2 := locate(['device.'+ vdi + '.expires']);
+      if not atEnd(Iter2) then begin
+         Global := GetObject(Iter2) as TxPLGlobalValue;
+         chaine += global.Value + #9
+      end else chaine += ''#9;
+
+      Iter2 := locate(['device.'+ vdi + '.interval']);
+      if not atEnd(Iter2) then begin
+         Global := GetObject(Iter2) as TxPLGlobalValue;
+         chaine += global.Value + #9
+      end else chaine += ''#9;
+
+      Iter2 := locate(['device.'+ vdi + '.suspended']);
+      if not atEnd(Iter2) then begin
+         Global := GetObject(Iter2) as TxPLGlobalValue;
+         chaine += global.Value + #9
+      end else chaine += ''#9;
+
+      Iter2 := locate(['device.'+ vdi + '.configtype']);
+      if not atEnd(Iter2) then begin
+         Global := GetObject(Iter2) as TxPLGlobalValue;
+         chaine += global.Value + #9
+      end else chaine += ''#9;
+
+      Iter2 := locate(['device.'+ vdi + '.waiting']);
+      if not atEnd(Iter2) then begin
+         Global := GetObject(Iter2) as TxPLGlobalValue;
+         chaine += global.Value + #9
+      end else chaine += ''#9;
+
+      aliste.Add(chaine);
+   end;
+   globales.destroy;
+end;
+
+
+
+
+procedure TxPLGlobalList.GETDEVCONFIG(const aListe: TStringList; const aName: string);
+var global : TxPLGlobalValue;
+    globales : DArray;
+
+function IsConfigElement(ptr: Pointer; const obj: DObject): Boolean;
+var global : TxPLGlobalValue;
+begin
+   global := AsObject(obj) as TxPLGlobalValue;
+
+   Result := (StrMatchLeft(global.Name,'config.'))
+end;
+
+begin                                                                                                                          { TODO : Gérer le système d'expiration automatique au bout de 15mn }                                                                                                 // 15 minutes after creation
+   globales := Darray.create;
+//   filter(self,globales,MakeTest(@IsConfigElement));
+   Iter := globales.start;
+   While iterateOver(iter) do Begin
+      global := GetObject(iter) as TxPLGlobalValue;
+      aListe.Add(global.name + '=' + global.value);
+   end;
+   globales.destroy;
+{   Iter := Devices.locate([aRequested]);
+   if not atEnd(Iter) then begin
+      SetToValue(iter);
+      with getObject(iter) as TDeviceRecord do begin
+         Body1 := TxPLMsgBody.Create;
+         Body2 := TxPLMsgBody.Create;
+         Body1.RawxPL:=config_current;
+         Body2.RawxPL:=config_list;
+               for i := 0 to Body1.ItemCount-1 do begin
+                   for j:=0 to Body2.ItemCount-1 do begin
+                      if AnsiLeftStr(Body2.Values[j],Length(Body1.Keys[i])) = Body1.Keys[i] then begin
+                         chaine := Body2.Keys[j];
+                         retour := StrBetweenChar(Body2.Values[j],'[',']');
+                      end;
+                   end;
+                   aListe.Add(Format('%s'#9'%s'#9'%s',[Body1.Keys[i],chaine,retour]));
+               end;
+         Body1.Destroy;
+         Body2.Destroy;
+      end;
+   end;}
 end;
 
 procedure TxPLGlobalList.Delete(const aString: string);
-var i : integer;
+var global : TxPLGlobalValue;
 begin
-     i := IndexOf(aString);
-     if i=-1 then exit;
-     inherited Delete(i);
+   Iter := locate([aString]);
+   if not AtEnd(Iter) then begin
+      global := GetObject(iter) as TxPLGlobalValue;
+         removeAt(iter);
+         global.destroy;
+   end;
 end;
+
+procedure TxPLGlobalList.AddGlobal(const aName : string; const aDefault : string='');
+begin
+   if atEnd(locate([aName])) then
+     inherited putPair( [ aName,
+                          TxPLGlobalValue.Create(aName, aDefault,fGlobalsFile.AddElement(aName))
+                          ]);
+end;
+
+procedure TxPLGlobalList.ReadFromXML;
+var i : integer;
+    aGlobal : TxPLGlobalValue;
+begin
+   for i:=0 to fGlobalsFile.Count-1 do begin
+       aGlobal := TxPLGlobalValue.Create(fGlobalsFile[i]);
+       PutPair( [ aGlobal.Name, aGlobal ]);
+
+   end;
+end;
+
 
 end.
 
