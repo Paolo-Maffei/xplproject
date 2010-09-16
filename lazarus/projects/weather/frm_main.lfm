@@ -7,7 +7,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu, biMinimize]
   BorderStyle = bsSingle
   Caption = 'frmMain'
-  ClientHeight = 128
+  ClientHeight = 131
   ClientWidth = 375
   Icon.Data = {
     26B5000000000100040010100000010008006805000046000000202000000100
@@ -1463,31 +1463,49 @@ object frmMain: TfrmMain
   }
   Menu = MainMenu1
   OnCreate = FormCreate
-  OnDestroy = FormDestroy
   SessionProperties = 'Left;Top'
   LCLVersion = '0.9.28.2'
   object Memo1: TMemo
     Left = 0
-    Height = 128
+    Height = 108
     Top = 0
     Width = 375
     Align = alClient
     TabOrder = 0
   end
-  object Timer1: TTimer
-    Enabled = False
-    OnTimer = Timer1Timer
-    left = 144
-    top = 8
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 108
+    Width = 375
+    Panels = <>
   end
   object MainMenu1: TMainMenu
     left = 75
     top = 8
     object MenuItem1: TMenuItem
       Caption = '?'
+      object MenuItem4: TMenuItem
+        Caption = 'App repository'
+        OnClick = MenuItem4Click
+      end
+      object MenuItem3: TMenuItem
+        Caption = 'Session log'
+        OnClick = MenuItem3Click
+      end
+      object MenuItem5: TMenuItem
+        Caption = '-'
+      end
       object MenuItem2: TMenuItem
         Caption = '&About'
         OnClick = AboutExecute
+      end
+      object MenuItem7: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem6: TMenuItem
+        Caption = 'Quit'
+        OnClick = MenuItem6Click
       end
     end
   end
