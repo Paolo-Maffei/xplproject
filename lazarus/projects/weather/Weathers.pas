@@ -125,7 +125,7 @@ unit Weathers;
 interface
 
 uses
-  Classes, SysUtils, ExtCtrls;
+  Classes, SysUtils;
 
 type
   TLocalite = record    // Structure décrivant le lieu choisi

@@ -45,3 +45,6 @@ v 2.1
 
 v 2.5 	
 	xPL Weather app ported to Linux	
+	
+v 3.0
+	This version is now GUI free both under windows and linux - program size dramatically decreased (-75%)
