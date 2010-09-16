@@ -44,8 +44,8 @@ TxPLConfig = class(TComponent)
 
         procedure AddValue(aItmName, aValue : string);
         procedure SetItem(const aItmName : string; const aValue : string); // : boolean;
-        procedure AddItem(const aItmName : string; aConfigType : TxPLConfigType; const aDefaultVal : string = ''; const aMax : integer = 1{; aDesc, aFormat : string});
-        procedure AddItem(const aItmName : string; aConfigType : TxPLConfigType; aDesc, aFormat : string; const aMax : integer = 1; const aDefaultVal : string = ''); overload;
+        procedure AddItem(const aItmName : string; const aConfigType : string; const aDefaultVal : string = ''; const aMax : integer = 1{; aDesc, aFormat : string});
+        procedure AddItem(const aItmName : string; const aConfigType : string; aDesc, aFormat : string; const aMax : integer = 1; const aDefaultVal : string = ''); overload;
         procedure ResetValues;
         procedure Save;
 
@@ -89,10 +89,10 @@ begin
 
      fConfigItems := TList.Create;
 
-     AddItem(K_CONF_NEWCONF , xpl_ctReconf,K_DESC_NEWCONF,K_RE_NEWCONF,1,sInstance);                       // Standard to all xPL apps configuration elements
-     AddItem(K_CONF_INTERVAL, xpl_ctReconf,K_DESC_INTERVAL,K_RE_INTERVAL,1,IntToStr(K_XPL_DEFAULT_HBEAT));
-     AddItem(K_CONF_FILTER  , xpl_ctOption,K_DESC_FILTER, K_RE_FILTER,K_XPL_CFG_MAX_FILTERS,'');
-     AddItem(K_CONF_GROUP   , xpl_ctOption,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
+     AddItem(K_CONF_NEWCONF , K_XPL_CT_RECONF,K_DESC_NEWCONF,K_RE_NEWCONF,1,sInstance);                       // Standard to all xPL apps configuration elements
+     AddItem(K_CONF_INTERVAL, K_XPL_CT_RECONF,K_DESC_INTERVAL,K_RE_INTERVAL,1,IntToStr(K_XPL_DEFAULT_HBEAT));
+     AddItem(K_CONF_FILTER  , K_XPL_CT_OPTION,K_DESC_FILTER, K_RE_FILTER,K_XPL_CFG_MAX_FILTERS,'');
+     AddItem(K_CONF_GROUP   , K_XPL_CT_OPTION,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
 
      fDeviceInVendorFile := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
      if not Assigned(fDeviceInVendorFile) then TxPLClient(aOwner).LogInfo(K_MSG_ERROR_PLUGIN,[]);
@@ -122,7 +122,7 @@ begin
             cfg_name   := TDOMElement(Child).GetAttribute('name');
             cfg_desc   := TDOMElement(Child).GetAttribute('description');
             cfg_frmt   := TDOMElement(Child).GetAttribute('format');
-            AddItem(cfg_name,xpl_ctConfig,cfg_desc,cfg_frmt);
+            AddItem(cfg_name,K_XPL_CT_CONFIG,cfg_desc,cfg_frmt);
          end;
          Child := Child.NextSibling;
    end;
@@ -208,14 +208,14 @@ begin
    result := true;
 end;
 
-procedure TxPLConfig.AddItem(const aItmName : string; aConfigType : TxPLConfigType; const aDefaultVal : string; const aMax : integer);
+procedure TxPLConfig.AddItem(const aItmName : string; const aConfigType : string; const aDefaultVal : string; const aMax : integer);
 begin
    if ItemName[aItmName] <> nil then                  // a configuration item may be added programmatically
       fConfigItems.Delete(ItemByName(aItmName));      // it must then override any item initiated by the xml file
    fConfigItems.Add(TxPLConfigItem.Create(aItmName,aDefaultVal,aConfigType,aMax));
 end;
 
-procedure TxPLConfig.AddItem(const aItmName: string; aConfigType: TxPLConfigType; aDesc, aFormat: string; const aMax : integer = 1; const aDefaultVal : string = '');
+procedure TxPLConfig.AddItem(const aItmName: string; const aConfigType: string; aDesc, aFormat: string; const aMax : integer = 1; const aDefaultVal : string = '');
 begin
    if ItemName[aItmName] <> nil then                  // a configuration item may be added programmatically
       fConfigItems.Delete(ItemByName(aItmName));      // it must then override any item initiated by the xml file

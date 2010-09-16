@@ -131,8 +131,8 @@ end;
 procedure TxPLMessage.Send;
 var Settings : TxPLSettings;
 begin
-   if not Assigned(fSocket) then begin                           // The socket is created only
-      Settings := TxPLSettings.Create(self);                     // if needed to avoid waste space
+   if not Assigned(fSocket) then begin                                          // The socket is created only
+      Settings := TxPLSettings.Create;                                          // if needed to avoid waste space
       fSocket   := TxPLUDPClient.Create(Settings.BroadCastAddress);
 //      fSocket.BroadcastEnabled := True;                          // speed and time at runtime
 //      fSocket.Host := ;

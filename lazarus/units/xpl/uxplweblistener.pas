@@ -14,7 +14,7 @@ unit uxPLWebListener;
 
 interface
 
-uses uxPLListener,Classes, SysUtils, ExtCtrls, IdGlobal, uxPLMsgBody, uxPLMessage,
+uses uxPLListener,Classes, SysUtils, IdGlobal, uxPLMsgBody, uxPLMessage,
      IdHTTPServer, IdContext,IdCustomHTTPServer;
 
 type
@@ -87,8 +87,8 @@ begin
           Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
-     if Setting.ListenOnAddress<>K_IP_LOCALHOST then with fWebServer.Bindings.Add do begin
-          IP:=Setting.ListenOnAddress;
+     if Settings.ListenOnAddress<>K_IP_LOCALHOST then with fWebServer.Bindings.Add do begin
+          IP:=Settings.ListenOnAddress;
           Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
@@ -192,7 +192,7 @@ begin
    ReturnList.Clear;
    if aVariable = 'webappurl'  then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.ValueFromIndex[i])
    else if aVariable = 'webappname' then for i:=0 to fDiscovered.Count-1 do ReturnList.Add(fDiscovered.Names[i])
-   else if aVariable = 'log'        then ReturnList.AddStrings(fLogList) //for i:=0 to fLogList.Count-1 do ReturnList.Add(fLogList[i]);
+   else if aVariable = 'log'        then ReturnList.LoadFromFile(self.LogFileName)
    else if aVariable = 'menuitem'   then begin
            if Assigned(Config.DeviceInVendorFile) then
               for i:=0 to Config.DeviceInVendorFile.MenuItems.Count-1 do begin
@@ -348,10 +348,10 @@ begin
    inherited Create(aOwner,aVendor,aDevice,aAppVersion);
    fDiscovered := TStringList.Create;
    fDiscovered.Duplicates := dupIgnore;
-   Config.AddItem(K_HBEAT_ME_WEB_PORT,xpl_ctConfig,aDefaultPort);
-   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,xpl_ctConfig,ExtractFilePath(ParamStr(0)) + 'html');
+   Config.AddItem(K_HBEAT_ME_WEB_PORT,K_XPL_CT_CONFIG,aDefaultPort);
+   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,K_XPL_CT_CONFIG,ExtractFilePath(ParamStr(0)) + 'html');
    OnxPLHBeatApp := @HBeatApp;
-   LogInfo(K_MSG_LISTENER_STARTED,[aDevice,aAppVersion]);
+   LogInfo(K_MSG_LISTENER_STARTED,[AppName,aAppVersion]);
 end;
 
 end.

@@ -85,7 +85,7 @@ type  TxPLSettings = class
      end;
 
 implementation // ======================================================================
-uses SysUtils, StrUtils, cFileUtils, Dialogs, uxPLConst;
+uses SysUtils, StrUtils, cFileUtils, uxPLConst;
 
 const // Registry Key and values constants =============================================
    K_XPL_ROOT_KEY               = '\Software\xPL\';
@@ -134,8 +134,6 @@ begin
    EnsureDirectoryExists(LoggingDirectory);                                           // 1.1.2 complement
    EnsureDirectoryExists(ConfigDirectory );                                           // 0.95 complement
    EnsureDirectoryExists(PluginDirectory );                                           // 1.1.1 Correction
-
-   if not IsValid then ShowMessage(K_MSG_NETWORK_SETTINGS);                           // Can not use xPLClient logging system because may not initialized at the moment
 end;
 
 destructor TxPLSettings.destroy;

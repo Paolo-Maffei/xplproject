@@ -4,7 +4,9 @@ unit frm_about;
   UnitVersion   = 1.0
   UnitDesc      = Standard xPL / Lazarus About box - shared by all projects
   UnitCopyright = GPL by Clinique / xPL Project
- ==============================================================================}
+ ==============================================================================
+ 1.1 : switched from xPLClient belonging to frm_main to app_main
+}
 {$mode objfpc}{$H+}
 
 interface
@@ -28,12 +30,13 @@ type { TfrmAbout ==============================================================}
 var  frmAbout: TfrmAbout;
 
 implementation // ==============================================================
-uses frm_main, lclversion;
+uses app_main,
+     lclversion;
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-   lblAppName.Caption := frmMain.xPLClient.AppName;
-   lblVersion.Caption := 'Version ' + frmMain.xPLClient.AppVersion;
+   lblAppName.Caption := xPLApplication.xPLClient.AppName;
+   lblVersion.Caption := 'Version ' + xPLApplication.xPLClient.AppVersion;
    mmoCredits.Text    := mmoCredits.Text + 'Compiled with Lazarus version ' + lcl_version;
 end;
 

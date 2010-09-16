@@ -143,7 +143,7 @@ procedure TxPLHeader.SetRawXpl(aRawXPL : string);
 var i : integer;
 begin
    ResetValues;
-   with RegExpEngine do begin
+   with TRegExpr.Create do try
         Expression := K_RE_HEADER_FORMAT;
         if Exec(AnsiLowerCase(aRawXPL)) then begin
            MessageType := Match[1];
@@ -153,6 +153,7 @@ begin
                if Match[i] = K_MSG_HEADER_TARGET then Target.Tag := Match[i+1];
            end;
         end;
+   finally Destroy;
    end;
 end;
 

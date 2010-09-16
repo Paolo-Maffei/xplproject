@@ -5,32 +5,50 @@ unit frm_xpllogviewer;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ActnList, ComCtrls, Buttons, StdCtrls;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+  Dialogs, ComCtrls, ActnList, StdCtrls, Buttons;
 
-type TfrmLogViewer = class(TForm)
-        ActionList1: TActionList;
-        ImageList1: TImageList;
-        Memo1: TMemo;
-        Quit: TAction;
-        SpeedButton1: TSpeedButton;
-        ToolBar2: TToolBar;
-        procedure FormShow(Sender: TObject);
-        procedure QuitExecute(Sender: TObject);
-     end;
+type
 
-var  frmLogViewer: TfrmLogViewer;
+  { TfrmLogViewer }
 
-implementation { TfrmLogViewer ================================================}
-uses frm_main;
+  TfrmLogViewer = class(TForm)
+    Empty: TAction;
+    Quit: TAction;
+    ActionList1: TActionList;
+    Memo1: TMemo;
+    SpeedButton1: TSpeedButton;
+    ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
+    procedure EmptyExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
+    procedure QuitExecute(Sender: TObject);
+  private
+  public
+  end;
+
+var frmLogViewer: TfrmLogViewer;
+
+implementation
+uses app_main,
+     frm_about;
 
 procedure TfrmLogViewer.QuitExecute(Sender: TObject);
-begin Close; end;
+begin
+   Close;
+end;
 
 procedure TfrmLogViewer.FormShow(Sender: TObject);
 begin
    Memo1.Clear;
-   Memo1.Lines.AddStrings(frmMain.xPLClient.LogList);
+   Caption := xPLApplication.xPLClient.LogFileName;
+   Memo1.Lines.LoadFromFile(Caption);
+end;
+
+procedure TfrmLogViewer.EmptyExecute(Sender: TObject);
+begin
+   Memo1.Lines.Clear;
+   Memo1.Lines.SaveToFile(Caption);
 end;
 
 initialization

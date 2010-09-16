@@ -12,7 +12,7 @@ unit uxPLBaseClass;
 
 interface
 
-uses Classes, DOM, RegExpr;
+uses Classes, DOM, uRegExpr;
 
 type
 

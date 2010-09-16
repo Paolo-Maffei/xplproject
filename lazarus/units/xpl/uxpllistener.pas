@@ -21,7 +21,7 @@ Rev 298 : Modified to enable Linux support
 interface
 
 uses Classes, SysUtils, uxPLAddress, u_xpl_udp_socket,
-     ExtCtrls, uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
+     uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
      uxPLMsgBody,  uxPLClient, uxPLConst;
 
 type
@@ -140,7 +140,7 @@ procedure TxPLListener.InitSocket();
 begin
    if not Settings.IsValid then exit;
    try
-     IncomingSocket:=TxPLUDPServer.create(fSetting,@UDPRead);
+     IncomingSocket:=TxPLUDPServer.create(Settings,@UDPRead);
      If IncomingSocket.Active then begin                             // Lets be sure we found an address to bind to
         LogInfo(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
         HBTimer.Enabled  := True;
@@ -292,7 +292,7 @@ begin
           1 : begin                                                                                   // config.list message handling
                 Schema.Tag := aMessage.Body.Schema.Tag;
                 for i := 0 to fConfig.Count-1 do
-                    Body.AddKeyValuePair( fConfig[i].ConfigTypeAsString,
+                    Body.AddKeyValuePair( fConfig[i].ConfigType,
                                           fConfig[i].Key + fConfig[i].MaxValueAsString);
                 Send ;
               end;
