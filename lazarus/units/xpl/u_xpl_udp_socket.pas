@@ -6,6 +6,7 @@ unit u_xpl_udp_socket;
  ==============================================================================
  0.91 : Created from specific code parts of uxplmessage and uxpllistener to
         isolate xPL logic (message, listener) from UDP logic.
+ 0.92 : Removed usage of uxPLConst for strictly limited to this scope constants
  }
 
 {$mode objfpc}{$H+}
@@ -37,10 +38,13 @@ type TUDPReceivedEvent = procedure(const aString : string) of object;
      end;
 
 implementation //===============================================================
+uses  IdStack,
+      SysUtils;
 
-uses IdStack,
-     SysUtils,
-     uxPLConst;
+const XPL_UDP_BASE_PORT     : Integer = 3865;
+      XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
+      XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                  // First port used to try to open the listening port
+      XPL_BASE_PORT_RANGE   : Integer = 512;                                    //       Range of port to scan for trying to bind socket
 
 // TxPLUDPClient ===============================================================
 constructor TxPLUDPClient.Create(const aBroadCastAddress : string);
@@ -57,7 +61,7 @@ var i : integer;
 begin
    inherited Create;
    Bindings.Clear;
-   BufferSize   := MAX_XPL_MSG_SIZE;
+   BufferSize   := XPL_MAX_MSG_SIZE;
    OnUDPRead    := @UDPRead;
    fOnReceived  := aReceivedProc;
    fSettings    := axPLSettings;

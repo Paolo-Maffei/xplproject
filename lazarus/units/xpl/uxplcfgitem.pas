@@ -7,6 +7,7 @@ unit uxplcfgitem;
  ==============================================================================
  0.92 : Removal of format and descriptions from this unit, they shall be handled from PluginFile
  0.93 : Usage of uxPLConst
+ 0.94 : Removed symbolic constants for fConfigType
 }
 {$mode objfpc}{$H+}
 interface
@@ -19,18 +20,18 @@ Type TxPLConfigItem = class
            fDescription : string;
            fFormat      : string;
            fMaxValue    : integer;
-           fConfigType  : TxPLConfigType;
+           fConfigType  : string; //TxPLConfigType;
            fValues      : TStringList;
 
-           function GetConfigTypeAsString: string;
+           //function GetConfigTypeAsString: string;
            function GetMaxValueAsString: string;
            function GetValueCount: integer;
            procedure SetMaxValue(aValue : integer);
            function GetValue   : string;
            function CheckValid(aValue : string) : boolean;
         public
-           constructor create(const aKey : string; const aValue : string; aCT : TxPLConfigType; const aMax : integer = 1);
-           constructor create(const aKey : string; const aValue : string; aCT : TxPLConfigType; aDescription , aFormat : string; const aMax : integer = 1 ); overload;
+           constructor create(const aKey : string; const aValue : string; const aCT : string; const aMax : integer = 1);
+           constructor create(const aKey : string; const aValue : string; const aCT : string; aDescription , aFormat : string; const aMax : integer = 1 ); overload;
            destructor  destroy; override;
 
            procedure Clear;
@@ -45,16 +46,17 @@ Type TxPLConfigItem = class
            property Format      : string  read fFormat;
            property MaxValue    : integer read fMaxValue write SetMaxValue;
 
-           property ConfigTypeAsString : string read GetConfigTypeAsString;
+           //property ConfigTypeAsString : string read GetConfigTypeAsString;
+           property ConfigType : string read fConfigType;
            function SetValue(aValue : string) : boolean;
            function AsInteger : integer;
         end;
 
 implementation { TxPLConfigItem ==================================================================}
-uses SysUtils, RegExpr;
+uses SysUtils, uRegExpr;
 
 { ================================================================================================}
-constructor TxPLConfigItem.Create(const aKey : string; const aValue : string; aCT : TxPLConfigType; const aMax : integer = 1{; aDescription , aFormat : string});
+constructor TxPLConfigItem.Create(const aKey : string; const aValue : string; const aCT : string; const aMax : integer = 1{; aDescription , aFormat : string});
 begin
      fKey := aKey;
      fConfigType := aCT;
@@ -66,7 +68,7 @@ begin
      SetValue(aValue);
 end;
 
-constructor TxPLConfigItem.create(const aKey: string; const aValue: string; aCT: TxPLConfigType; aDescription, aFormat: string; const aMax: integer );
+constructor TxPLConfigItem.create(const aKey: string; const aValue: string; const aCT: string; aDescription, aFormat: string; const aMax: integer );
 begin
      Create(aKey,aValue,aCT,aMax);
      fDescription := aDescription;
@@ -110,8 +112,8 @@ begin
      result := i;
 end;
 
-function TxPLConfigItem.GetConfigTypeAsString: string;
-begin result := K_XPL_CONFIGOPTIONS[Ord(fConfigType)]; end;
+//function TxPLConfigItem.GetConfigTypeAsString: string;
+//begin result := K_XPL_CONFIGOPTIONS[Ord(fConfigType)]; end;
 
 function TxPLConfigItem.GetValue: string;
 begin result := fValues[0]; end;

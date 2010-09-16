@@ -11,6 +11,7 @@ unit uxPLConst;
         the code is now longer reentrant then deleted previously created
         RegExpEngine that was available via uRegExTools unit. This unit is deleted
         from the project (bug # FS47)
+ 0.93 : Removed usage of symbolic constants for ConfigType
  }
 
 
@@ -30,16 +31,11 @@ type
    tsBodyElmtName  = string[16];
    tsBodyElmtValue = string[128];
 
-   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];                                          //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
-
-
-//   TxPLMessageType  = ( xpl_mtTrig,     xpl_mtStat,    xpl_mtCmnd,    xpl_mtAny,   xpl_mtNone  );
-
-   TxPLConfigType   = ( xpl_ctConfig,   xpl_ctReconf,  xpl_ctOption);
+   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];             //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
 
 const
-   // File extensions =======================================================================================
+   // File extensions ==========================================================
    K_FEXT_LOG         = '.log';
    K_FEXT_WAV         = '.wav';
    K_FEXT_XML         = '.xml';
@@ -47,37 +43,43 @@ const
    K_FEXT_TXT         = '.txt';
    K_FEXT_PAS         = 'pas';
 
-   // General ===============================================================================================
+   // General ==================================================================
    K_STR_TRUE = 'true';
    K_STR_FALSE = 'false';
 
-   // Websites ==============================================================================================
-   K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';                                          // URL where to download the main plugin file
+   // Websites =================================================================
+   K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';             // URL where to download the main plugin file
    K_XPL_VENDOR_SEED_FILE     = 'plugins' + K_FEXT_XML;
 
-   // Configuration modes ===================================================================================
-   K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');                               // Works with TxPLConfigType
+   // Configuration modes ======================================================
+   //K_XPL_CONFIGOPTIONS : Array[0..2] of string = ('config','reconf','option');  // Works with TxPLConfigType
    K_GROUP_NAME_ID     = 'xpl-group.';
    K_XPL_CONFIGFILTER  = 'filter';
    K_XPL_CONFIGGROUP   = 'group';
+   K_XPL_CT_CONFIG    = 'config';
+   K_XPL_CT_RECONF    = 'reconf';
+   K_XPL_CT_OPTION    = 'option';
 
    // IP related strings
    K_IP_LOCALHOST     = '127.0.0.1';
    K_IP_BROADCAST     = '255.255.255.255';
    K_IP_DEFAULT_WEB_PORT = 8080;
 
-   // Adress elements =======================================================================================
+   // Adress elements ==========================================================
    K_REGEXPR_VENDOR   = '([0-9a-z]{1,8})';
    K_REGEXPR_DEVICE   = K_REGEXPR_VENDOR;
    K_REGEXPR_INSTANCE = '([0-9a-z/-]{1,16})';
-   K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;                                          // Also used in vendor xml file
+   K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;             // Also used in vendor xml file
    K_REGEXPR_ADDRESS  = K_REGEXPR_DEVICE_ID + '\.' + K_REGEXPR_INSTANCE;
-   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                                                        //   /!\ alternative must be place after fixed part !!!
+   K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                           //   /!\ alternative must be place after fixed part !!!
    K_FMT_ADDRESS      = '%s-%s.%s';
    K_FMT_FILTER       = '%s.%s.%s';
    K_ADDR_ANY_TARGET  = '*';
 
-   // Message type elements =================================================================================
+   // Config Types
+
+
+   // Message type elements ====================================================
    K_MSG_TYPE_HEAD = 'xpl-';
    K_MSG_TYPE_TRIG = K_MSG_TYPE_HEAD + 'trig';
    K_MSG_TYPE_STAT = K_MSG_TYPE_HEAD + 'stat';
@@ -86,7 +88,7 @@ const
    K_RE_MSG_TYPE   = K_MSG_TYPE_HEAD + '(trig|stat|cmnd)';
    K_MSG_TYPE_DESCRIPTORS : Array[0..3] of tsMsgType = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
-   // Message header elements ===============================================================================
+   // Message header elements ==================================================
    K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10;
    K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n]';
    K_MSG_HEADER_HOP    = 'hop';
@@ -94,16 +96,16 @@ const
    K_MSG_HEADER_TARGET = 'target';
    K_MSG_TARGET_ANY    = '*';
 
-   // Message body elements =================================================================================
+   // Message body elements ====================================================
    K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
    K_RE_BODY_LINE      = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
    K_MSG_BODY_FORMAT   = '%s'#10'{'#10'%s'#10'}'#10;
 
 
-   // Message elements ======================================================================================
+   // Message elements =========================================================
    K_RE_MESSAGE        = '\A(.+})(.+})';
 
-   // Heart beat message elements ===========================================================================
+   // Heart beat message elements ==============================================
    K_HBEAT_ME_APPNAME  = 'appname';
    K_HBEAT_ME_VERSION  = 'version';
    K_HBEAT_ME_INTERVAL = 'interval';
@@ -111,13 +113,13 @@ const
    K_HBEAT_ME_REMOTEIP = 'remote-ip';
    K_HBEAT_ME_WEB_PORT = 'webport';
 
-   // Common schemas ========================================================================================
+   // Common schemas ===========================================================
    K_REGEXPR_SCHEMA_ELEMENT = '([0-9a-z/-]{1,8})';
    K_REGEXPR_SCHEMA = K_REGEXPR_SCHEMA_ELEMENT + '\.' + K_REGEXPR_SCHEMA_ELEMENT;
    K_FMT_SCHEMA     = '%s.%s';
-//   K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (  'hbeat','config','audio','control','datetime',
-//                                                         'db','dguide','cid','osd','remote','sendmsg',
-//                                                         'sensor','tts','ups','webcam','x10' );
+   K_XPL_CLASS_DESCRIPTORS : Array[0..15] of string = (  'hbeat','config','audio','control','datetime',
+                                                         'db','dguide','cid','osd','remote','sendmsg',
+                                                         'sensor','tts','ups','webcam','x10' );
    K_SCHEMA_SEPARATOR      = '.';
    K_SCHEMA_CLASS_HBEAT    = 'hbeat';
    K_SCHEMA_HBEAT_APP      = K_SCHEMA_CLASS_HBEAT  + K_SCHEMA_SEPARATOR + 'app';
@@ -136,32 +138,26 @@ const
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
    K_SCHEMA_MEDIA_BASIC    = 'media.basic';
    K_SCHEMA_X10_BASIC      = 'x10.basic';
-   K_SCHEMA_CONFIG_CURRENT = 'config.current';
-   K_SCHEMA_CONFIG_LIST    = 'config.list';
    K_SCHEMA_DAWNDUSK_BASIC = 'dawndusk.basic';
    K_SCHEMA_DAWNDUSK_REQUEST = 'dawndusk.request';
 
-   // Hub and listener constants ============================================================================
-   XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                                                  // First port used to try to open the listening port
-   XPL_BASE_PORT_RANGE   : Integer = 512;                                                                    //       Range of port to scan for trying to bind socket
-   XPL_UDP_BASE_PORT     : Integer = 3865;
-   MAX_XPL_MSG_SIZE      : Integer = 1500;                                                                   // Maximum size of a xpl message
-   NOHUB_HBEAT           : Integer = 3;                                                                      // seconds between HBEATs until hub is detected
-   NOHUB_LOWERFREQ       : Integer = 30;                                                                     // lower frequency probing for hub
-   NOHUB_TIMEOUT         : Integer = 120;                                                                    // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
+   // Hub and listener constants ===============================================
+   NOHUB_HBEAT           : Integer = 3;                                         // seconds between HBEATs until hub is detected
+   NOHUB_LOWERFREQ       : Integer = 30;                                        // lower frequency probing for hub
+   NOHUB_TIMEOUT         : Integer = 120;                                       // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
 
-   // Messages to display ==================================================================================
+   // Messages to display ======================================================
    K_MSG_HUB_FOUND       = 'xPL Network %s found';
    K_MSG_CONFIGURED      = 'Configuration %s';
    K_MSG_APP_STARTED     = 'Application %s started';
    K_MSG_APP_STOPPED     = 'Application %s stopped';
    K_MSG_UDP_ERROR       = 'Unable to initialize incoming UDP server';
    K_MSG_IP_ERROR        = 'Socket unable to bind to IP Addresses';
-   K_MSG_BIND_OK         = 'Listener binded on port %u for address %s';
+   K_MSG_BIND_OK         = 'xPL listening on port %u for address %s';
    K_MSG_BIND_RELEASED   = 'Listener released binded ports';
    K_MSG_CONFIG_LOADED   = 'Configuration loaded';
    K_MSG_CONFIG_RECEIVED = 'Configuration received from %s and saved';
-   K_MSG_NETWORK_SETTINGS= 'xPL Network settings are not properly configured';
+   K_MSG_NETWORK_SETTINGS= 'Network settings for xPL may not be properly configured';
    K_MSG_ERROR_SENDING   = 'Error sending message : %s';
    K_MSG_ERROR_PLUGIN    = 'No device description found in vendor plugin file - please consider updating';
    K_MSG_ERROR_VENDOR    = 'Unable to open vendor file (%s)';
@@ -169,7 +165,7 @@ const
    K_MSG_GENERIC_ERROR   = '%s error raised, with message : %s';
    K_MSG_LISTENER_STARTED= '%s v%s started';
 
-   // Web applications templates ===========================================================================
+   // Web applications templates ===============================================
    K_WEB_TEMPLATE_BEGIN = '<!-- Result template>';
    K_WEB_TEMPLATE_END   = '<Result template-->';
    K_WEB_RE_INCLUDE     = '<!--\s*\#\s*include\s+(file|virtual)\s*=\s*(["])([^"<>\|\~]+/)*([^"<>/\|\~]+)\2\s*-->';
@@ -180,8 +176,8 @@ const
    K_WEB_ERR_404        = 'The requested URL %s was not found on this server.';
    K_ERR_MSG_FNF        = 'File not found : %s';
 
-   // Configuration items ==================================================================================
-   K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';                                                                 // Typically xpl_vendor-device.xml
+   // Configuration items ======================================================
+   K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';                                     // Typically xpl_vendor-device.xml
    K_CONF_NEWCONF        = 'newconf';
    K_RE_NEWCONF          = '^' + K_REGEXPR_INSTANCE + '$';
    K_DESC_NEWCONF        = 'Specifies the instance name of the device';
@@ -200,16 +196,16 @@ const
    MAX_HBEAT             = 9;
    K_XPL_DEFAULT_HBEAT   = 5;
 
-   // HTML Formatting for standard action contained in menuItems ===========================================
+   // HTML Formatting for standard action contained in menuItems ===============
    K_MNU_ITEM_MSG_AND_SUBMIT    = '<INPUT TYPE=HIDDEN NAME=xplMsg VALUE="%s"><INPUT TYPE=SUBMIT NAME="xPLWeb_menuitem" VALUE="%s">';
    K_MNU_ITEM_OPTION_LIST       = '<OPTION VALUE="%s">%s</OPTION>';
    K_MNU_ITEM_INPUT_TEXT        = '%s : <INPUT TYPE=TEXT NAME="%s">&nbsp;';
    K_MNU_ITEM_SELECT_LIST       = '<SELECT NAME="%s">%s</SELECT>&nbsp;';
    K_MNU_ITEM_ACTION_ZONE       = '<table class=action><tr><td><FORM ACTION=actions.html METHOD=POST>%s</FORM></td></tr></table>';
-   K_MNU_ITEM_OPTION_SEP        = '|';                                                                      // Separator used in the xml file between valid choices
-   K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                                                // Regular expression used to identify parameters in xplMsg in MenuItems
+   K_MNU_ITEM_OPTION_SEP        = '|';                                          // Separator used in the xml file between valid choices
+   K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                    // Regular expression used to identify parameters in xplMsg in MenuItems
 
-   // XHCP elements ========================================================================================
+   // XHCP elements ============================================================
    K_XHCP_LOGIN                 = '%d %s Version %s XHCP %s';
    // Global and general regular expressions
    K_RE_FRENCH_PHONE = '\d\d \d\d \d\d \d\d \d\d';                              // French phone number, formatted : 01 02 03 04 05
