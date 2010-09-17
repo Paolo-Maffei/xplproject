@@ -48,7 +48,7 @@ end;
 procedure TfrmLogViewer.EmptyExecute(Sender: TObject);
 begin
    Memo1.Lines.Clear;
-   Memo1.Lines.SaveToFile(Caption);
+   xPLClient.ResetLog;
 end;
 
 initialization

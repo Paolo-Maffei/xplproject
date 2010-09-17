@@ -205,8 +205,6 @@ const
    K_MNU_ITEM_OPTION_SEP        = '|';                                          // Separator used in the xml file between valid choices
    K_MNU_ITEM_RE_PARAMETER      = '%(.*?)%';                                    // Regular expression used to identify parameters in xplMsg in MenuItems
 
-   // XHCP elements ============================================================
-   K_XHCP_LOGIN                 = '%d %s Version %s XHCP %s';
    // Global and general regular expressions
    K_RE_FRENCH_PHONE = '\d\d \d\d \d\d \d\d \d\d';                              // French phone number, formatted : 01 02 03 04 05
    K_RE_IP_ADDRESS   = '[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}';        // Simply formed IP v4 Address : 192.168.1.1
