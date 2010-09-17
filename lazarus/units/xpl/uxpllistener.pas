@@ -14,6 +14,8 @@ unit uxPLListener;
  0.95 : Added 'no config' capability to allow light focused xPL Client avoid waiting config
  0.96 : Suppressed symbolic constants for Schema
 Rev 298 : Modified to enable Linux support
+ 0.97 : Removed fAdresse field, moved to TxPLClient object
+        Removed field AwaitingConfiguration that was redundant with Config.ConfigNeeded
 }
 
 {$mode objfpc}{$H+}
@@ -39,7 +41,6 @@ type
       TxPLListener = class(TxPLClient)
       private
         fConfig  : TxPLConfig;
-        fAdresse : TxPLAddress;
         IncomingSocket : TxPLUDPServer;
         HBTimer, HBReqTimer : TFPTimer;                     // HBReqTimer is dedicated to hbeat requests
         fFilterSet : TxPLFilters;
@@ -57,11 +58,10 @@ type
         OnxPLTTSBasic      : TxPLTTSBasic     ;
         OnxPLHBeatApp      : TxPLHBeatApp     ;
         OnxPLMediaBasic    : TxPLMediaBasic   ;
-        PassMyOwnMessages     : Boolean;
-        JoinedxPLNetwork      : Boolean;                    // This should be read only by other objects
-        AwaitingConfiguration : Boolean;                    // This should be read only by other objects
+        PassMyOwnMessages  : Boolean;
+        JoinedxPLNetwork   : Boolean;                    // This should be read only by other objects
 
-        constructor create(const aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
+        constructor create(const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
         destructor destroy; override;
         procedure CallConfigDone; dynamic;
         procedure TimerElapsed(Sender : TObject);
@@ -75,7 +75,6 @@ type
         property Address             : TxPLAddress read fAdresse;
         property Disposing           : Boolean read bDisposing;
         property Instance            : string read fAdresse.fInstance;
-        //function Instance : tsInstance;
 
         procedure DoxPLJoinedNet(aJoined    : boolean);
         function DoSensorRequest(aMessage : TxPLMessage) : boolean;
@@ -84,8 +83,6 @@ type
         function DoHBeatApp     (aMessage : TxPLMessage) : boolean;
         function DoMediaBasic   (aMessage : TxPLMessage) : boolean;
 
-        //function  CheckOrigin(aRemoteIP : string) : boolean;
-        //procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
         procedure UDPRead(const aString : string);
         procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aRawXPL : string); overload;
@@ -100,21 +97,20 @@ implementation { ==============================================================}
 uses StrUtils;
 
 { TxPLListener ================================================================}
-constructor TxPLListener.create(const aOwner : TComponent; const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
+constructor TxPLListener.create(const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
 begin
-   inherited Create(aOwner, aVendor, aDevice, aAppVersion);
+   inherited Create(aVendor, aDevice, aAppVersion);
 
    PassMyOwnMessages := false;
 
-   fAdresse          := TxPLAddress.Create(aVendor,aDevice);
-   fConfig           := TxPLConfig.Create(self, bConfigNeeded);
-   fAdresse.Instance := fConfig.Instance;                                             // Instance name will be determined by configuration need or not
-   fFilterSet        := TxPLFilters.Create(fConfig);
+   fConfig          := TxPLConfig.Create(self, bConfigNeeded);
+   Adresse.Instance := fConfig.Instance;                                             // Instance name will be determined by configuration need or not
+   fFilterSet       := TxPLFilters.Create(fConfig);
 
-   HBTimer    := TfpTimer.Create(self);
+   HBTimer    := TfpTimer.Create(nil);
       HBTimer.Interval    := NOHUB_HBEAT * 1000;
       HBTimer.OnTimer     := @TimerElapsed;
-   HBReqTimer := TfpTimer.Create(self);
+   HBReqTimer := TfpTimer.Create(nil);
       HBReqTimer.OnTimer  := @TimerElapsed;
 
    JoinedxPLNetwork := false;
@@ -131,7 +127,6 @@ begin
      fConfig.Destroy;
      HBReqTimer.Destroy;
      HBTimer.Destroy;
-     fAdresse.Destroy;
 
      inherited destroy;
 end;
@@ -160,24 +155,20 @@ end;
 procedure TxPLListener.Listen;
 begin                                                       
    bDisposing := false;
-
-   AwaitingConfiguration := not fConfig.Load;
-   if not AwaitingConfiguration then begin
-      fAdresse.Instance := fConfig.Instance;
+   Config.Load;
+   if not Config.ConfigNeeded then begin
+      Adresse.Instance := fConfig.Instance;
       CallConfigDone;
    end;
    InitSocket;
-
 end;
 
 procedure TxPLListener.Dispose;
 begin
    bDisposing := True;
    if JoinedxPLNetwork then SendHeartBeatMessage;
-   if IncomingSocket.Active then begin
-      IncomingSocket.Active := False;
-      LogInfo(K_MSG_BIND_RELEASED,[]);
-   end;
+   if IncomingSocket.Active then LogInfo(K_MSG_BIND_RELEASED,[]);
+   IncomingSocket.Active := False;
 end;
 
 procedure TxPLListener.SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
@@ -197,7 +188,7 @@ procedure TxPLListener.SendMessage(const aRawXPL : string);
 begin
    with TxPLMessage.Create do begin
         RawXPL := aRawXPL;
-        Source.Assign(fAdresse);
+        Source.Assign(Adresse);
         if IsValid then Send
                    else LogError('Error sending message :',[RawXPL]);
         Destroy;
@@ -219,7 +210,7 @@ function TxPLListener.PrepareMessage(const aMsgType: tsMsgType; const aSchema : 
 begin
   result := TxPLMessage.Create;
   with Result do begin
-     Source.Assign(fAdresse);
+     Source.Assign(Adresse);
      MessageType := aMsgType;
      Target.Tag  := aTarget;
      Body.Schema.Tag := aSchema;
@@ -232,7 +223,7 @@ begin
    aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
    aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
 
-   if AwaitingConfiguration then aBody.Schema.Classe := K_SCHEMA_CLASS_CONFIG;       // Change Schema class in this case
+   if Config.ConfigNeeded then aBody.Schema.Classe := K_SCHEMA_CLASS_CONFIG;       // Change Schema class in this case
    if bDisposing  then aBody.Schema.Type_ := 'end';                         // Change Schema type in this case
 end;
 
@@ -244,7 +235,7 @@ begin
 
      for i:=0 to IncomingSocket.Bindings.Count-1 do begin
          FinalizeHBeatMsg(aBody,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
-         if Assigned(OnxPLHBeatPrepare) and (not AwaitingConfiguration) then OnxPLHBeatPrepare(aBody);
+         if Assigned(OnxPLHBeatPrepare) and (not Config.ConfigNeeded) then OnxPLHBeatPrepare(aBody);
          SendMessage(K_MSG_TYPE_STAT,'*',aBody.RawxPL);
      end;
 
@@ -277,7 +268,7 @@ begin
 
   with TxPLMessage.Create do try
      MessageType := K_MSG_TYPE_STAT;
-     Source.Assign(fAdresse);
+     Source.Assign(Adresse);
      Target.IsGeneric := True;
      Body.ResetValues;
 
@@ -300,7 +291,7 @@ begin
                 fConfig.ResetValues;
                 for i:= 0 to aMessage.Body.ItemCount-1 do
                     fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i]);  // Some configuration elements may need to be upper/lower sensitive
-                fAdresse.Instance := fConfig.Instance;                                                // Instance name may have changed
+                Adresse.Instance := fConfig.Instance;                                                // Instance name may have changed
                 SendHeartBeatMessage;
                 fConfig.Save;
                 LogInfo(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]);
@@ -311,42 +302,26 @@ begin
    end;
 end;
 
-{function TxPLListener.Instance: tsInstance;
-begin result := fAdresse.Instance; end;}
-
 procedure TxPLListener.HandleHBeatRequest;
 begin
      HBReqTimer.Interval := Random(4000) + 2000;     // Choose a random value between 2 and 6 seconds
      HBReqTimer.Enabled  := True;
 end;
 
-{function TxPLListener.CheckOrigin(aRemoteIP : string): boolean;
-begin
-     result := True;
-
-     if fSettings.ListenToAny then exit;
-     if fSettings.ListenToLocal then
-        result := (gStack.LocalAddresses.IndexOf(aRemoteIP) > 0)
-     else                   // we're in a list of ip
-        result := (AnsiPos(aRemoteIP, fSettings.ListenToAddresses) > 0)
-end;}
-
-procedure TxPLListener.UDPRead(const aString : string); //(AThread: TIdUDPListenerThread; AData: TIdBytes;   ABinding: TIdSocketHandle);
+procedure TxPLListener.UDPRead(const aString : string);
 var aMessage : TxPLMessage;
 begin
    if bDisposing then exit;
-//   aMessage := TxPLMessage.Create(BytesToString(AData));
    aMessage := TxPLMessage.Create(aString);
    with aMessage do try
-//      if CheckOrigin(aBinding.PeerIP) then begin
-         if ((fAdresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then   // It is directed to me
-            if Schema.Classe = K_SCHEMA_CLASS_HBEAT  then if Schema.Type_ = 'request' then HandleHBeatRequest;
-            if Schema.Classe = K_SCHEMA_CLASS_CONFIG then HandleConfigMessage(aMessage);
+         if ((Adresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then   // It is directed to me
+            if (Schema.Classe = K_SCHEMA_CLASS_HBEAT ) and (Schema.Type_ = 'request') then HandleHBeatRequest;
+            if (Schema.Classe = K_SCHEMA_CLASS_CONFIG) then HandleConfigMessage(aMessage);
 
-         if (fAdresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
+         if (Adresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
 
-         if (fFilterSet.MatchesFilters(aMessage) and not AwaitingConfiguration ) and
-            (PassMyOwnMessages or not fAdresse.Equals(Source))                                                     // 0.92 : to avoid handling of my self emitted messages
+         if (fFilterSet.MatchesFilters(aMessage) and not Config.ConfigNeeded ) and
+            (PassMyOwnMessages or not Adresse.Equals(Source))                                                     // 0.92 : to avoid handling of my self emitted messages
          then begin
             if not DoSensorRequest(aMessage) then                                                                  // process messages only once
             if not DoControlBasic (aMessage) then
@@ -355,7 +330,6 @@ begin
             if not DoMediaBasic   (aMessage) then
             if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
          end;
-//      end;
 
       finally Destroy;
    end;
@@ -430,7 +404,7 @@ begin
      if not Assigned(OnxPLTTSBasic) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_TTS_BASIC then exit;
-     if aMessage.Source.Tag = fAdresse.Tag then exit;
+     if aMessage.Source.Tag = Adresse.Tag then exit;
      OnxPLTTSBasic( aMessage, aMessage.Body.GetValueByKey('speech') );
 
      result := true;
@@ -450,7 +424,7 @@ begin
      if not Assigned(OnxPLHBeatApp) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_STAT then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_HBEAT_APP then exit;
-     if aMessage.Source.Tag = fAdresse.Tag then exit;
+     if aMessage.Source.Tag = Adresse.Tag then exit;
      OnxPLHBeatApp( aMessage);
 
      result := true;
@@ -470,7 +444,7 @@ begin
      if not Assigned(OnxPLMediaBasic) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
      if aMessage.Schema.Tag  <> K_SCHEMA_MEDIA_BASIC then exit;
-     if aMessage.Source.Tag = fAdresse.Tag then exit;
+     if aMessage.Source.Tag = Adresse.Tag then exit;
      OnxPLMediaBasic( aMessage, aMessage.Body.GetValueByKey('command'),aMessage.Body.GetValueByKey('mp'));
 
      result := true;

@@ -20,6 +20,9 @@ unit uxPLClient;
         usage constaint (not having multi apps in the same directory). Replaced
         by Multilog
         This also removed the need to have a OnLogUpdate notification message
+ 1.00 : Suppressed fDevice, fVendor fields, replaced by fAdresse that was present
+        in uxPLListener
+        Cutted inheritence from TComponent
 }
 
 {$mode objfpc}{$H+}
@@ -27,20 +30,19 @@ unit uxPLClient;
 interface
 
 uses  Classes, SysUtils,
-      uXPLSettings, uxPLVendorFile, sharedlogger, uxPLConst;
+      uXPLSettings, uxPLVendorFile, sharedlogger, uxPLConst, uxPLAddress;
 
-type  TxPLClient = class(TComponent)
+type  TxPLClient = class
       protected
         fAppVersion    : string;
-        fVendor        : string;
-        fDevice        : string;
         fSettings      : TxPLSettings;
         fPluginList    : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
       private
-        procedure RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
+        fAdresse       : TxPLAddress;
+        procedure RegisterMe;
       public
-        constructor Create(const aOwner : TComponent; const aVendor : string; aDevice : string; const aAppVersion : string); overload;
+        constructor Create(const aVendor : string; aDevice : string; const aAppVersion : string);
         destructor  Destroy; override;
         procedure   LogInfo (Const Formatting : string; Const Data : array of const );            // Info are only stored in log file
         procedure   LogError(Const Formatting : string; Const Data : array of const );            // Error are stored as error in log, displayed and stop the app
@@ -50,11 +52,12 @@ type  TxPLClient = class(TComponent)
         function    LogFileName : string; inline;
         function    AppName     : string; inline;
 
-        property    PluginList : TxPLVendorSeedFile  read fPluginList;
-        property    Settings   : TxPLSettings        read fSettings;
-        property    AppVersion : string              read fAppVersion;
-        property    Vendor     : string              read fVendor;
-        property    Device     : string              read fDevice;
+        property    PluginList : TxPLVendorSeedFile read fPluginList;
+        property    Settings   : TxPLSettings       read fSettings;
+        property    AppVersion : string             read fAppVersion;
+        property    Vendor     : string             read fAdresse.fVendor;
+        property    Device     : string             read fAdresse.fDevice;
+        property    Adresse    : TxPLAddress        read fAdresse;
       end;
 
 implementation //===============================================================
@@ -70,16 +73,14 @@ begin result := fSettings.LoggingDirectory + AppName + K_FEXT_LOG; end;
 function TxPLClient.AppName: string;
 begin result := 'xPL ' + Device; end;
 
-constructor TxPLClient.Create(const aOwner : TComponent; const aVendor : string; aDevice : string; const aAppVersion : string);
+constructor TxPLClient.Create(const aVendor : string; aDevice : string; const aAppVersion : string);
 begin
-   inherited Create(aOwner);
-   fVendor        := aVendor;
-   fDevice        := aDevice;
    fAppVersion    := aAppVersion;
-   fSettings      := TxPLSettings.create;
    fLocaleDomains := TStringList.Create;
+   fAdresse       := TxPLAddress.Create(aVendor,aDevice);
+   fSettings      := TxPLSettings.create;
 
-   RegisterMe(Vendor,Device,AppVersion);
+   RegisterMe;
 
    if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
    Logger.Channels.Add(TFileChannel.Create(LogFileName));
@@ -143,14 +144,14 @@ begin
    fPluginList.Destroy;
    fSettings.Destroy;
    fLocaleDomains.Destroy;
-   inherited Destroy;
+   fAdresse.Destroy;
 end;
 
-procedure TxPLClient.RegisterMe(const aVendor : string; const aDevice : string; const aAppVersion : string);
+procedure TxPLClient.RegisterMe;
 var aPath, aVersion : string;
 begin
-   fSettings.GetAppDetail(Vendor, Device,aPath,aVersion);
-   if aVersion < AppVersion then fSettings.SetAppDetail(Vendor,Device,AppVersion)
+   Settings.GetAppDetail(Vendor, Device,aPath,aVersion);
+   if aVersion < AppVersion then Settings.SetAppDetail(Vendor,Device,AppVersion)
 end;
 
 

@@ -46,9 +46,9 @@ type  TxPLSettings = class
         procedure SetHTTPProxSrvr     (const AValue: string);
         procedure SetListenOnAddress  (const AValue: string);
         procedure SetListenToAddresses(const AValue: string);
-        procedure SetListenOnAll      (const bValue : boolean);
-        procedure SetListenToLocal    (const bValue : boolean);
-        procedure SetListenToAny      (const bValue : boolean);
+        procedure SetListenOnAll      (const bValue : boolean); inline;
+        procedure SetListenToLocal    (const bValue : boolean); inline;
+        procedure SetListenToAny      (const bValue : boolean); inline;
 
         function  ReadKeyString (const aKeyName : string; const aDefault : string = '') : string;
         procedure SetRootxPLDir (const AValue: string);

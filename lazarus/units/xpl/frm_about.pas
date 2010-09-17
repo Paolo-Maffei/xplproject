@@ -35,8 +35,8 @@ uses app_main,
 
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-   lblAppName.Caption := xPLApplication.xPLClient.AppName;
-   lblVersion.Caption := 'Version ' + xPLApplication.xPLClient.AppVersion;
+   lblAppName.Caption := xPLClient.AppName;
+   lblVersion.Caption := 'Version ' + xPLClient.AppVersion;
    mmoCredits.Text    := mmoCredits.Text + 'Compiled with Lazarus version ' + lcl_version;
 end;
 

@@ -36,7 +36,7 @@ type
          procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
          procedure HBeatApp(const axPLMsg : TxPLMessage);
       public
-         constructor create(aOwner : TComponent; aVendor, aDevice, aAppVersion, aDefaultPort : string);
+         constructor create(aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
          procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
@@ -80,7 +80,7 @@ procedure TxPLWebListener.InitWebServer;
 begin
      if Assigned(fWebServer) then fWebServer.Destroy;
 
-     fWebServer := TIdHttpServer.Create(self);
+     fWebServer := TIdHttpServer.Create(nil);
 
      with fWebServer.Bindings.Add do begin
           IP:=K_IP_LOCALHOST;
@@ -114,7 +114,7 @@ procedure TxPLWebListener.DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHT
 var LFilename: string;
     LPathname: string;
     s  : widestring;
-    aParam,aValue, aAction : string;
+    aParam,aValue : string;
     RegExpr : TRegExpr;
 
 function LoadAFile(aFileName : string) : widestring;
@@ -153,7 +153,7 @@ begin
    else if aVariable = 'devicename' then ReplaceString := Device
    else if aVariable = 'appversion'   then ReplaceString := AppVersion
    else if aVariable = 'hubstatus'    then ReplaceString := Format(K_MSG_HUB_FOUND,[IfThen(JoinedxPLNetWork,'','not')])
-   else if aVariable = 'configstatus' then ReplaceString := Format(K_MSG_CONFIGURED,[IfThen(AwaitingConfiguration,'pending','done')]);
+   else if aVariable = 'configstatus' then ReplaceString := Format(K_MSG_CONFIGURED,[IfThen(Config.ConfigNeeded,'pending','done')]);
    result := ReplaceString<>'';
 end;
 
@@ -343,9 +343,9 @@ begin
    if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
 end;
 
-constructor TxPLWebListener.create(aOwner: TComponent; aVendor, aDevice, aAppVersion, aDefaultPort: string);
+constructor TxPLWebListener.create(aVendor, aDevice, aAppVersion, aDefaultPort: string);
 begin
-   inherited Create(aOwner,aVendor,aDevice,aAppVersion);
+   inherited Create(aVendor,aDevice,aAppVersion);
    fDiscovered := TStringList.Create;
    fDiscovered.Duplicates := dupIgnore;
    Config.AddItem(K_HBEAT_ME_WEB_PORT,K_XPL_CT_CONFIG,aDefaultPort);
