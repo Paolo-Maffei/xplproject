@@ -7,20 +7,20 @@ interface
 uses
   Classes, SysUtils;
 
-  procedure WGetHTTPFile(aSourceURI, aTargetFile : string);
+  //procedure WGetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string);
   function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
 
 implementation
 uses LCLType,IdURI,httpprothandler;
 
-procedure WGetHTTPFile(aSourceURI, aTargetFile : string);
+{procedure WGetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string);
 var GURL : TIdURI;
 begin
     GURL := TIdURI.Create;
     GURL.URI := aSourceURI;
 
     if THTTPProtHandler.CanHandleURL(GURL) then
-       with THTTPProtHandler.Create(aTargetFile,'','') do
+       with THTTPProtHandler.Create(aTargetFile,ProxySrvr,ProxyPort) do
           try
             GetFile(GURL);
           finally
@@ -28,7 +28,7 @@ begin
           end;
 
     GURL.Destroy;
-end;
+end;}
 
 function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
 var GURL : TIdURI;

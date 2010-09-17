@@ -38,9 +38,6 @@ type
        procedure ResetValues;                           dynamic;
        procedure Assign(anAddress : TxPLAddress);
 
-//       property Vendor   : string read fVendor   write fVendor;
-//       property Device   : string read fDevice   write fDevice;
-//       property Instance : string read fInstance write fInstance;
        property Vendor   : string index 0 read fVendor   write SetAddressElement;
        property Device   : string index 1 read fDevice   write SetAddressElement;
        property Instance : string index 2 read fInstance write SetAddressElement;

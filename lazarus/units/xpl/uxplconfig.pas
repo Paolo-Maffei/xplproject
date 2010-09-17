@@ -12,6 +12,7 @@ unit uxPLConfig;
         The AddItem is now moved as private, shouldn't be called by
         Configuration files are now stored in the config directory hold by xplsettings.
  0.94 : Added ability to avoid need to load config
+ 0.95 : Cutted inheritance from TComponent
  }
 
 {$mode objfpc}{$H+}
@@ -24,9 +25,9 @@ type
 
 { TxPLConfig }
 
-TxPLConfig = class(TComponent)
+TxPLConfig = class//(TComponent)
      private
-        fConfigNeeded: Boolean;
+        fConfigNeeded: Boolean;                               // Indicates if a configuration is needed by design for this app
         fConfigItems : TList;
         fxmlconfig : TXmlConfig;
         fDeviceInVendorFile : TxPLDevice;
@@ -39,7 +40,7 @@ TxPLConfig = class(TComponent)
         procedure SetInterval(const AValue: integer);
 
      public
-        constructor create(const aOwner : TComponent; const bConfigNeeded : boolean = true);
+        constructor create(const aOwner : TObject; const bConfigNeeded : boolean = true);
         destructor  destroy; override;
 
         procedure AddValue(aItmName, aValue : string);
@@ -49,7 +50,7 @@ TxPLConfig = class(TComponent)
         procedure ResetValues;
         procedure Save;
 
-        function Load : boolean;
+        procedure Load;
         function Count : integer;
         function ItemByName(const aName : string) : integer;
 
@@ -58,7 +59,8 @@ TxPLConfig = class(TComponent)
         property Item[Index : integer] : TxPLConfigItem read GetItem; default;
         property ItemName[s : string] : TxPLConfigItem read GetItemByStr;
         property Items : TList read fConfigItems;
-        property XmlFile : TXmlConfig read fxmlconfig;
+        property ConfigNeeded : boolean read fConfigNeeded;
+        //property XmlFile : TXmlConfig read fxmlconfig;                       I'm not sure this is used anywhere else
         property DeviceInVendorFile : TxPLDevice read fDeviceInVendorFile;
 
         procedure ReadFromXML(const aDeviceNode : TDOMNode);
@@ -68,48 +70,37 @@ TxPLConfig = class(TComponent)
      end;
 
 implementation { =======================================================================}
-uses uxPLListener, uxPLClient, StrUtils, uxPLAddress;
+uses uxPLListener, StrUtils, uxPLAddress;
 
 { TxPLConfig ===========================================================================}
-constructor TxPLConfig.create(const aOwner : TComponent; const bConfigNeeded : boolean = true);
-var sVendor   : tsVendor;
-    sDevice   : tsDevice;
-    sInstance : tsInstance;
+constructor TxPLConfig.create(const aOwner : TObject; const bConfigNeeded : boolean = true);
 begin
-     inherited Create(aOwner);
+   fConfigNeeded := bConfigNeeded;
+   fConfigItems := TList.Create;
+   AddItem(K_CONF_NEWCONF , K_XPL_CT_RECONF,K_DESC_NEWCONF , K_RE_NEWCONF , 1, IfThen(fConfigNeeded,TxPLAddress.RandomInstance,TxPLAddress.HostNmInstance));                       // Standard to all xPL apps configuration elements
+   AddItem(K_CONF_INTERVAL, K_XPL_CT_RECONF,K_DESC_INTERVAL, K_RE_INTERVAL, 1, IntToStr(K_XPL_DEFAULT_HBEAT));
+   AddItem(K_CONF_FILTER  , K_XPL_CT_OPTION,K_DESC_FILTER  , K_RE_FILTER  , K_XPL_CFG_MAX_FILTERS,'');
+   AddItem(K_CONF_GROUP   , K_XPL_CT_OPTION,K_DESC_GROUP   , K_RE_GROUP   , K_XPL_CFG_MAX_GROUPS,'');
 
-     fConfigNeeded := bConfigNeeded;
-
-     sVendor       := TxPLListener(aOwner).Vendor;
-     sDevice       := TxPLListener(aOwner).Device;
-     sInstance     := IfThen(fConfigNeeded,TxPLAddress.RandomInstance,TxPLAddress.HostNmInstance);
-
-     fxmlconfig := TXmlConfig.Create(self);
-     fXmlConfig.Filename:= TxPLListener(aOwner).Settings.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[sVendor,sDevice]);
-
-     fConfigItems := TList.Create;
-
-     AddItem(K_CONF_NEWCONF , K_XPL_CT_RECONF,K_DESC_NEWCONF,K_RE_NEWCONF,1,sInstance);                       // Standard to all xPL apps configuration elements
-     AddItem(K_CONF_INTERVAL, K_XPL_CT_RECONF,K_DESC_INTERVAL,K_RE_INTERVAL,1,IntToStr(K_XPL_DEFAULT_HBEAT));
-     AddItem(K_CONF_FILTER  , K_XPL_CT_OPTION,K_DESC_FILTER, K_RE_FILTER,K_XPL_CFG_MAX_FILTERS,'');
-     AddItem(K_CONF_GROUP   , K_XPL_CT_OPTION,K_DESC_GROUP, K_RE_GROUP,K_XPL_CFG_MAX_GROUPS,'');
-
-     fDeviceInVendorFile := TxPLListener(aOwner).PluginList.GetDevice(sVendor,sDevice);
-     if not Assigned(fDeviceInVendorFile) then TxPLClient(aOwner).LogInfo(K_MSG_ERROR_PLUGIN,[]);
+   fxmlconfig := TXmlConfig.Create(nil);
+   with TxPLListener(aOwner) do begin
+      fXmlConfig.Filename:= Settings.ConfigDirectory + Format(K_FMT_CONFIG_FILE,[Vendor,Device]);
+      fDeviceInVendorFile := PluginList.GetDevice(Vendor,Device);
+      if not Assigned(fDeviceInVendorFile) then LogInfo(K_MSG_ERROR_PLUGIN,[]);
+   end;
 end;
 
 destructor TxPLConfig.destroy;                                    
 begin
    if Assigned(fDeviceInVendorFile) then fDeviceInVendorFile.Destroy;
-   fConfigItems.Destroy ;
+   fConfigItems.Destroy;
    fxmlconfig.destroy;
-   inherited destroy;
 end;
 
 procedure TxPLConfig.ResetValues;
 var i : integer;
 begin
-     for i := 0 to Items.Count-1 do Item[i].Clear;
+   for i := 0 to Items.Count-1 do Item[i].Clear;
 end;
 
 procedure TxPLConfig.ReadFromXML(const aDeviceNode: TDOMNode);
@@ -126,7 +117,6 @@ begin
          end;
          Child := Child.NextSibling;
    end;
-   TxPLClient(Owner).LogInfo(K_MSG_OK_PLUGIN,[]);
 end;
 
 function TxPLConfig.GetItem(Index : integer): TxPLConfigItem;
@@ -191,21 +181,16 @@ begin
    fXmlConfig.Flush;
 end;
 
-function TxPLConfig.Load : boolean;
+procedure TxPLConfig.Load;
 var i,j : integer;
 begin
-   result := true;
-   if not fConfigNeeded then exit;
-
-   result := false;
-
-   if not FileExists(fXmlConfig.Filename) then exit;
+   if (not fConfigNeeded) or (not FileExists(fXmlConfig.Filename)) then exit;
 
    for i := 0 to Count-1 do
        for j:= 0 to Item[i].MaxValue -1 do
            Item[i].Values[j] := fXmlConfig.GetValue(Item[i].Key+'/'+IntToStr(j),'');
 
-   result := true;
+   fConfigNeeded := false;
 end;
 
 procedure TxPLConfig.AddItem(const aItmName : string; const aConfigType : string; const aDefaultVal : string; const aMax : integer);

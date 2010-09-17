@@ -41,7 +41,7 @@ end;
 procedure TfrmLogViewer.FormShow(Sender: TObject);
 begin
    Memo1.Clear;
-   Caption := xPLApplication.xPLClient.LogFileName;
+   Caption := xPLClient.LogFileName;
    Memo1.Lines.LoadFromFile(Caption);
 end;
 

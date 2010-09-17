@@ -32,11 +32,11 @@ var sl : TStringList;
     vendor, device, path, version : string;
     i : integer;
 begin
-     sl := xPLApplication.xPLClient.Settings.GetxPLAppList;
+     sl := xPLClient.Settings.GetxPLAppList;
      for i := 0 to sl.Count -1 do
         with lvApps.Items.Add do begin
            StrSplitAtChar(sl[i],'-',vendor,device,false);
-           xPLApplication.xPLClient.Settings.GetAppDetail(vendor,device,path,version);
+           xPLClient.Settings.GetAppDetail(vendor,device,path,version);
            Caption := device;
            SubItems.Add(vendor);
            SubItems.Add(version);
