@@ -60,7 +60,7 @@ end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-  Self.Caption := xPLApplication.xPLClient.AppName;
+  Self.Caption := xPLClient.AppName;
   Memo1.Lines.Add('Started');
 end;
 

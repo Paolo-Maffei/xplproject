@@ -48,3 +48,5 @@ v 2.5
 	
 v 3.0
 	This version is now GUI free both under windows and linux - program size dramatically decreased (-75%)
+	The app now put its working file (weather.xml) in the users temp directory
+	The app is now aware of proxy settings whenever present
