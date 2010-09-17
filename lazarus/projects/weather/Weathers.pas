@@ -201,7 +201,16 @@ type
   end;
 
 implementation {====================================================================================}
-uses DateUtils, StrUtils,uGetHTTP, DOM,XMLRead, cStrings,StdConvs, ConvUtils;
+uses DateUtils,
+     StrUtils,
+     uGetHTTP,
+     DOM,
+     XMLRead,
+     cStrings,
+     StdConvs,
+     ConvUtils,
+     app_main;
+
 const
    K_WEATHER_URI = 'http://xoap.weather.com/weather/local/%s?cc=*&dayf=5&link=xoap&prod=xoap&par=%s&key=%s';
    rsMetric = 'metric';
@@ -241,7 +250,7 @@ begin
   Create(aOwner);
   fSystem      := aSystem;
   fURI         := Format(K_WEATHER_URI,[aZip,aPartnerId,aLicense]);
-  fDestination := 'weather.xml';
+  fDestination := GetTempDir + 'weather.xml';
 end;
 
 constructor TWeather.Create(aOwner: TComponent);
@@ -298,6 +307,7 @@ var
    N,N2 : TDOMNode;
    NL : TDOMNodeList;
    i : integer;
+   s : string;
 
   // Récupération de la prévision d'une demi journée <part>...</part>
   procedure RecupererPrevisionDemiJour(var P : TDemiPrevision; Node : TDOMNode);
@@ -346,7 +356,7 @@ var
 
 begin
   Result := false;
-  WGetHTTPFile(fURI,fDestination);
+  GetHTTPFile(fURI,fDestination,xPLClient.Settings.HTTPProxSrvr,xPLClient.Settings.HTTPProxPort);
   AssignFile(fichier,fDestination);
   Reset(Fichier);
   if FileSize(Fichier)>0 then begin

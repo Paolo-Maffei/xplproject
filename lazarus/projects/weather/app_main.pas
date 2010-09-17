@@ -28,7 +28,6 @@ type TMyApplication = class({$IFDEF CONSOLE_APP}TCustomApplication{$ELSE}TApplic
         procedure SendSensors(bCheckDifference : boolean);
         procedure Timer1Timer(Sender: TObject);
      public
-        xPLClient  : TxPLWebListener;
         constructor Create(TheOwner: TComponent); override;
         procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
         procedure OnConfigDone(const fConfig : TxPLConfig);
@@ -36,7 +35,8 @@ type TMyApplication = class({$IFDEF CONSOLE_APP}TCustomApplication{$ELSE}TApplic
         destructor Destroy; override;
      end;
 
-var  xPLApplication: TMyApplication;
+var  xPLApplication : TMyApplication;
+     xPLClient      : TxPLWebListener;
 
 implementation //======================================================================================
 uses uxPLConst, cStrings;
@@ -118,7 +118,7 @@ begin
   StopOnException:=True;
   Timer1 := TfpTimer.Create(self);
   Timer1.OnTimer:=@Timer1Timer;
-  xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
+  xPLClient := TxPLWebListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
   with xPLClient do begin
        OnxPLSensorRequest := @OnSensorRequest;
        OnxPLConfigDone    := @OnConfigDone;
