@@ -14,7 +14,7 @@ unit uxplglobals;
 
 interface
 
-uses Classes,  ExtCtrls, u_xml_globals, DOM, uxPLSettings, DeCAL;
+uses Classes,  u_xml_globals, DOM, uxPLSettings, DeCAL, fpTimer;
 
 type
 
@@ -63,7 +63,7 @@ type
     TxPLGlobalList = class(DMAP)
     private
        Iter : DIterator;
-       fTimer   : TTimer;
+       fTimer   : TfpTimer;
        fCacheFile : string;
        fDocument : TXMLDocument;
        procedure OnTimer(aSender : TObject);
@@ -177,7 +177,7 @@ begin
   ReadXMLFile(fDocument,fCacheFile);
   fGlobalsFile := TXMLglobalsType.Create(fDocument, K_XML_STR_Global);
 
-  fTimer := TTimer.Create(nil);
+  fTimer := TfpTimer.Create(nil);
   fTimer.OnTimer:= @OnTimer;
   fTimer.Enabled:= True;
   fTimer.Interval:=1000;                                                                  // Tick every second

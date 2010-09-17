@@ -13,20 +13,22 @@ unit u_xpl_udp_socket;
 
 interface
 
-uses IdGlobal,
+uses Classes,
+     IdGlobal,
      IdUDPClient,
      IdUDPServer,
+     IdTelnetServer,
      IdSocketHandle,
      uxPLSettings;
 
 type TUDPReceivedEvent = procedure(const aString : string) of object;
 
-     TxPLUDPClient = class(TIdUDPClient)
+     TxPLUDPClient = class(TIdUDPClient)                                        // Connexion used to send xPL messages
         public
            constructor Create(const aBroadCastAddress : string);
      end;
 
-     TxPLUDPServer = class(TIdUDPServer)
+     TxPLUDPServer = class(TIdUDPServer)                                        // Connexion used to listen to xPL messages
         private
            fOnReceived : TUDPReceivedEvent;
            fSettings   : TxPLSettings;
@@ -35,6 +37,11 @@ type TUDPReceivedEvent = procedure(const aString : string) of object;
         public
            constructor Create(const axPLSettings : TxPLSettings; const aReceivedProc : TUDPReceivedEvent);
            procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+     end;
+
+     TXHCPServer = class(TIdTelnetServer)                                       // Connexion used to listen XHCP messages
+        public
+           constructor Create(const aOwner : TComponent);
      end;
 
 implementation //===============================================================
@@ -99,6 +106,15 @@ begin
    then fOnReceived(BytesToString(AData));
 end;
 
+// TXHCPServer ===============================================================
+constructor TXHCPServer.Create(const aOwner: TComponent);
+begin
+   inherited Create(aOwner);
+
+   DefaultPort := XPL_UDP_BASE_PORT;
+   LoginMessage:= '';
+   Active := True;
+end;
 
 end.
 

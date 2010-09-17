@@ -32,7 +32,11 @@ interface
 uses  Classes, SysUtils,
       uXPLSettings, uxPLVendorFile, sharedlogger, uxPLConst, uxPLAddress;
 
-type  TxPLClient = class
+type
+
+{ TxPLClient }
+
+TxPLClient = class
       protected
         fAppVersion    : string;
         fSettings      : TxPLSettings;
@@ -49,6 +53,7 @@ type  TxPLClient = class
         procedure   LogWarn (Const Formatting : string; Const Data : array of const );            // Warn are stored in log, displayed but doesn't stop the app
         function    RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function    Translate(Const aDomain : string; Const aString : string) : string;
+        procedure   ResetLog;
         function    LogFileName : string; inline;
         function    AppName     : string; inline;
 
@@ -136,6 +141,14 @@ begin
    i := fLocaleDomains.IndexOf(aDomain);
    if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString];
    if length(result)=0 then result := aString;
+end;
+
+procedure TxPLClient.ResetLog;
+var f : file;
+begin
+     Assign(f,LogFileName);
+     Reset(f);
+     Close(f);
 end;
 
 destructor TxPLClient.Destroy;
