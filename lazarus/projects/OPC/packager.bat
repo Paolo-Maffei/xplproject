@@ -1,5 +1,6 @@
-..\strip c:\lazout\ftp\xpl_ftp.exe
-..\upx c:\lazout\ftp\xpl_ftp.exe
-md xpl_ftp_win
-copy  c:\lazout\ftp\xpl_ftp.exe .\xpl_ftp_win
-copy readme*.* .\xpl_ftp_win
+..\strip c:\lazout\opc\xpl_opc.exe
+..\upx c:\lazout\opc\xpl_opc.exe
+md xpl_opc_win
+copy  c:\lazout\opc\xpl_opc.exe .\xpl_opc_win
+copy readme*.* .\xpl_opc_win
+copy ..\lic*.* .\xpl_opc_win

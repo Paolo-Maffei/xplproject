@@ -9,6 +9,15 @@
 			download_url="http://glh33.free.fr/?dl_name=xpl_logger_win.zip"
 			type="tools"
   />
+   <device 	id="clinique-dirmon" 
+			description="Monitor files and directories"
+			version="0.8"
+			info_url="http://glh33.free.fr"
+			platform="windows"
+			beta_version="none"
+			download_url="http://glh33.free.fr/?dl_name=xpl_dirmon_win.zip"
+			type="tools"
+  />
   <device 	id="clinique-network" 
 			description="Useful to setup local base xPL parameters"
 			version="1.1.5"

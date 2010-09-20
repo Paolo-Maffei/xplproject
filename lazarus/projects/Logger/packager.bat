@@ -3,3 +3,4 @@
 md xpl_logger_win
 copy  c:\lazout\logger\xpl_logger.exe .\xpl_logger_win
 copy readme*.* .\xpl_logger_win
+copy ..\lic*.* .\xpl_logger_win
