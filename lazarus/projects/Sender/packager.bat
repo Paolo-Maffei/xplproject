@@ -5,6 +5,7 @@ copy  c:\lazout\xpl_sender.exe .\xpl_sender_win
 copy *.xpl .\xpl_sender_win
 copy *.xml .\xpl_sender_win
 copy readme*.* .\xpl_sender_win
+copy ..\lic*.* .\xpl_sender_win
 
 REM md xpl_sender_src
 REM copy frm_*.pas .\xpl_sender_src

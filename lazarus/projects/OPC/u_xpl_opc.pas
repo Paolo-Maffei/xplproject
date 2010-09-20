@@ -1,11 +1,18 @@
 unit u_xpl_opc;
 
 {$mode objfpc}{$H+}
+{$M+}
 
 interface
 
-uses Classes, SysUtils, uxPLMessage, DeCAL,
-     uxPLGlobals,uxPLDeterminators,uxPLListener;
+uses Classes,
+     uxPLMessage,
+     DeCAL,
+     u_xpl_udp_socket,
+     uxPLGlobals,
+     uxPLDeterminators,
+     uxPLListener,
+     SysUtils;
 
 type
 
@@ -38,7 +45,7 @@ implementation // ==============================================================
 uses uxPLConst, uxPLMsgBody,uxPLSettings,cStrings,
      DateUtils, StrUtils;
 const
-     K_XHCP_VERSION = '1.5';
+     K_XHCP_VERSION = '0.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'opc';
 
@@ -49,7 +56,7 @@ begin result := K_XHCP_VERSION; end;
 
 constructor TxPLOPC.create(const aOwner: TComponent; const aAppVersion: string);
 begin
-   inherited Create(aOwner,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,aAppVersion,False);
+   inherited Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,aAppVersion,False);
    PassMyOwnMessages := True;
 
   fDataDirectory := Settings.SharedConfigDir + K_DEFAULT_DEVICE + '/';

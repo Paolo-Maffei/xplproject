@@ -109,3 +109,17 @@ When a timer is stopped or the duration equals 0 :
 		name = timername
 		status = stopped
 		elapsed = number of seconds between start and stop
+
+TODO : 
+Messages not targeted to me are captured, this message is interpreted as a timer start message :
+xpl-cmnd
+{
+hop=1
+source=clinique-timer.lapfr0005
+target=clinique-dirmon.lapfr0005
+}
+control.basic
+{
+current=start
+device=c:\lazout
+}

@@ -60,7 +60,7 @@ TxPLConfig = class//(TComponent)
         property ItemName[s : string] : TxPLConfigItem read GetItemByStr;
         property Items : TList read fConfigItems;
         property ConfigNeeded : boolean read fConfigNeeded;
-        //property XmlFile : TXmlConfig read fxmlconfig;                       I'm not sure this is used anywhere else
+        property XmlFile : TXmlConfig read fxmlconfig;
         property DeviceInVendorFile : TxPLDevice read fDeviceInVendorFile;
 
         procedure ReadFromXML(const aDeviceNode : TDOMNode);
