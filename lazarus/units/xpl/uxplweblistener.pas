@@ -28,18 +28,20 @@ type
       TxPLWebListener = class(TxPLListener)
       protected
          //fOnCommandGet : TxPLWebCommandGet;
+
       private
          fWebServer : TIdHTTPServer;
          fHtmlDir   : string;
          fDiscovered : TStringList;
          procedure InitWebServer;
          procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
-         procedure HBeatApp(const axPLMsg : TxPLMessage);
+
       public
          constructor create(aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
          procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
+         procedure HBeatApp(const axPLMsg : TxPLMessage);
          OnCommandGet : TWebCommandGet; // read fOnCommandGet write fOnCommandGet;
          OnReplaceTag : TWebCallReplaceTag;
          OnReplaceArrayedTag : TWebCallReplaceArrayedTag;
@@ -319,15 +321,12 @@ procedure TxPLWebListener.HBeatApp(const axPLMsg: TxPLMessage);
 const DiscString = '%s=http://%s:%s';
 var aPort : string;
     anApp : string;
-//    anIP  : string;
 begin
    aPort := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_WEB_PORT);
    if aPort = '' then exit;
 
    anApp := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_APPNAME);
-//   anIP  := axPLMsg.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP);
    if fDiscovered.IndexOfName(anApp)=-1 then fDiscovered.Add(Format(DiscString,[anApp, axPLMsg.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP), aPort]));
-//      fDiscovered.Add(anApp+'=http://'+anIP+':'+aPort);           // Compose a phrase like xPL Application=http://192.168.0.10:8336
 end;
 
 procedure TxPLWebListener.CallConfigDone;

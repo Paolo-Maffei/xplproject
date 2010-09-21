@@ -69,26 +69,26 @@ type
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, FileUtil,XMLWrite, XMLRead, cStrings, uxPLSettings, uRegExpr;
+Uses SysUtils, uxPLSettings, uRegExpr, cStrings, XMLRead, XMLWrite;
 
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
-     fHeader   := TxPLHeader.Create;
-     fBody     := TxPLMsgBody.Create;
-     if aRawxPL<>'' then RawXPL := aRawXPL;
+   fHeader   := TxPLHeader.Create;
+   fBody     := TxPLMsgBody.Create;
+   if aRawxPL<>'' then RawXPL := aRawXPL;
 end;
 
 procedure TxPLMessage.ResetValues;
 begin
-     Header.ResetValues;
-     Body.ResetValues;
+   Header.ResetValues;
+   Body.ResetValues;
 end;
 
 destructor TxPLMessage.Destroy;
 begin
-     if Assigned(fSocket) then fSocket.Destroy;
-     Header.Destroy;
-     Body.Destroy;
+   if Assigned(fSocket) then fSocket.Destroy;
+   Header.Destroy;
+   Body.Destroy;
 end;
 
 procedure TxPLMessage.Assign(const aMessage: TxPLMessage);
@@ -100,9 +100,7 @@ end;
 
 function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-   result := Header.MessageType + '.' +
-             Source.FilterTag + '.' +
-             Schema.Tag;
+   result := Format(K_FMT_FILTER,[Header.MessageType,Source.FilterTag,Schema.Tag]);
 end;
 
 function TxPLMessage.GetRawXPL: string;
@@ -139,38 +137,38 @@ end;
 
 procedure TxPLMessage.SetRawXPL(const AValue: string);
 begin
-  with TRegExpr.Create do try
-     Expression := K_RE_MESSAGE;
-     if Exec (StrRemoveChar(aValue,#13)) then begin
-        Header.RawXPL := Match[1];
-        Body.RawXPL   := Match[2];
-     end;
-     finally Free;
-  end;
+   with TRegExpr.Create do try
+      Expression := K_RE_MESSAGE;
+      if Exec (StrRemoveChar(aValue,#13)) then begin
+         Header.RawXPL := Match[1];
+         Body.RawXPL   := Match[2];
+      end;
+      finally Free;
+   end;
 end;
 
 function TxPLMessage.LoadFromFile(aFileName: string): boolean;
 var xdoc : TXMLDocument;
     aCom : TXMLActionsType;
 begin
-     ResetValues;
-     xdoc :=  TXMLDocument.Create;
-     ReadXMLFile(xDoc,aFileName);
+   ResetValues;
+   xdoc :=  TXMLDocument.Create;
+   ReadXMLFile(xDoc,aFileName);
 
-     aCom := TXMLActionsType.Create(xDoc);
-     result := (aCom<>nil);
+   aCom := TXMLActionsType.Create(xDoc);
+   result := (aCom<>nil);
 
-     if result then ReadFromXML(aCom);
-     xdoc.Free;
+   if result then ReadFromXML(aCom);
+   xdoc.Free;
 end;
 
 procedure TxPLMessage.SaveToFile(aFileName: string);
 var xdoc : TXMLDocument;
 begin
-     xdoc :=  TXMLDocument.Create;
-     WriteToXML(nil,xDoc);
-     writeXMLFile(xdoc,aFileName);
-     xdoc.Free;
+   xdoc :=  TXMLDocument.Create;
+   WriteToXML(nil,xDoc);
+   writeXMLFile(xdoc,aFileName);
+   xdoc.Free;
 end;
 
 function TxPLMessage.WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;

@@ -186,8 +186,8 @@ end;
 
 procedure TxPLListener.SendMessage(const aRawXPL : string);
 begin
-   with TxPLMessage.Create do begin
-        RawXPL := aRawXPL;
+   with TxPLMessage.Create(aRawxPL) do begin
+//        RawXPL := aRawXPL;
         Source.Assign(Adresse);
         if IsValid then Send
                    else LogError('Error sending message :',[RawXPL]);
