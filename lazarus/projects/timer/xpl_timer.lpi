@@ -8,7 +8,7 @@
       <TargetFileExt Value=".exe"/>
       <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="3"/>
+      <ActiveEditorIndexAtStart Value="10"/>
     </General>
     <VersionInfo>
       <ProjectVersion Value=""/>
@@ -45,7 +45,7 @@
         <UnitName Value="xpl_timer"/>
         <CursorPos X="1" Y="29"/>
         <TopLine Value="15"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -626,7 +626,7 @@
         <UnitName Value="frm_about"/>
         <CursorPos X="78" Y="24"/>
         <TopLine Value="14"/>
-        <UsageCount Value="110"/>
+        <UsageCount Value="111"/>
       </Unit77>
       <Unit78>
         <Filename Value="..\..\units\xpl\frm_xplappslauncher.pas"/>
@@ -747,7 +747,7 @@
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
         <UnitName Value="uxPLListener"/>
         <CursorPos X="36" Y="325"/>
-        <TopLine Value="229"/>
+        <TopLine Value="148"/>
         <EditorIndex Value="2"/>
         <UsageCount Value="47"/>
         <Loaded Value="True"/>
@@ -763,8 +763,8 @@
         <Filename Value="..\..\units\xpl\uxplconfig.pas"/>
         <UnitName Value="uxPLConfig"/>
         <CursorPos X="1" Y="191"/>
-        <TopLine Value="181"/>
-        <EditorIndex Value="7"/>
+        <TopLine Value="157"/>
+        <EditorIndex Value="8"/>
         <UsageCount Value="46"/>
         <Loaded Value="True"/>
       </Unit94>
@@ -792,15 +792,15 @@
       <Unit98>
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\objpas\strutils.pp"/>
         <UnitName Value="strutils"/>
-        <CursorPos X="10" Y="58"/>
-        <TopLine Value="42"/>
-        <UsageCount Value="6"/>
+        <CursorPos X="17" Y="190"/>
+        <TopLine Value="79"/>
+        <UsageCount Value="10"/>
       </Unit98>
       <Unit99>
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
         <UnitName Value="uxplmessage"/>
-        <CursorPos X="81" Y="98"/>
-        <TopLine Value="172"/>
+        <CursorPos X="4" Y="7"/>
+        <TopLine Value="7"/>
         <EditorIndex Value="3"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
@@ -808,9 +808,11 @@
       <Unit100>
         <Filename Value="..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <CursorPos X="19" Y="59"/>
-        <TopLine Value="44"/>
+        <CursorPos X="11" Y="76"/>
+        <TopLine Value="7"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="13"/>
+        <Loaded Value="True"/>
       </Unit100>
       <Unit101>
         <Filename Value="..\..\..\lcl\include\customlistview.inc"/>
@@ -920,8 +922,8 @@
         <Filename Value="..\..\units\xpl\uxpladdress.pas"/>
         <UnitName Value="uxPLAddress"/>
         <CursorPos X="1" Y="1"/>
-        <TopLine Value="37"/>
-        <EditorIndex Value="6"/>
+        <TopLine Value="85"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit116>
@@ -1057,16 +1059,16 @@
         <Filename Value="compiler.inc"/>
         <CursorPos X="5" Y="3"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <UsageCount Value="27"/>
         <Loaded Value="True"/>
       </Unit135>
       <Unit136>
         <Filename Value="..\..\units\xpl\uxplheader.pas"/>
         <UnitName Value="uxPLHeader"/>
-        <CursorPos X="12" Y="25"/>
-        <TopLine Value="13"/>
-        <EditorIndex Value="5"/>
+        <CursorPos X="67" Y="125"/>
+        <TopLine Value="125"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit136>
@@ -1074,48 +1076,48 @@
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
         <UnitName Value="u_xpl_udp_socket"/>
         <CursorPos X="1" Y="1"/>
-        <TopLine Value="45"/>
-        <EditorIndex Value="4"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit137>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="24" HistoryIndex="23">
       <Position1>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="13" Column="30" TopLine="6"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="317" Column="1" TopLine="305"/>
       </Position1>
       <Position2>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="10" Column="24" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="319" Column="1" TopLine="307"/>
       </Position2>
       <Position3>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="8" Column="34" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="321" Column="1" TopLine="309"/>
       </Position3>
       <Position4>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="3" Column="9" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="323" Column="1" TopLine="311"/>
       </Position4>
       <Position5>
-        <Filename Value="compiler.inc"/>
-        <Caret Line="3" Column="5" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="324" Column="1" TopLine="312"/>
       </Position5>
       <Position6>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="30" Column="42" TopLine="16"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="26" Column="12" TopLine="14"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="314" Column="1" TopLine="302"/>
+        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
+        <Caret Line="47" Column="56" TopLine="40"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="315" Column="1" TopLine="303"/>
+        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
+        <Caret Line="20" Column="20" TopLine="17"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="316" Column="1" TopLine="304"/>
+        <Filename Value="..\..\units\xpl\uxplheader.pas"/>
+        <Caret Line="25" Column="12" TopLine="13"/>
       </Position9>
       <Position10>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
@@ -1123,84 +1125,60 @@
       </Position10>
       <Position11>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="319" Column="1" TopLine="307"/>
+        <Caret Line="333" Column="13" TopLine="313"/>
       </Position11>
       <Position12>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="321" Column="1" TopLine="309"/>
+        <Caret Line="316" Column="1" TopLine="304"/>
       </Position12>
       <Position13>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="323" Column="1" TopLine="311"/>
+        <Caret Line="317" Column="62" TopLine="305"/>
       </Position13>
       <Position14>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="324" Column="1" TopLine="312"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="26" Column="12" TopLine="14"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
-        <Caret Line="47" Column="56" TopLine="40"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
-        <Caret Line="20" Column="20" TopLine="17"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\units\xpl\uxplheader.pas"/>
-        <Caret Line="25" Column="12" TopLine="13"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="317" Column="1" TopLine="305"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="333" Column="13" TopLine="313"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="316" Column="1" TopLine="304"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="317" Column="62" TopLine="305"/>
-      </Position22>
-      <Position23>
         <Filename Value="frm_main.pas"/>
         <Caret Line="78" Column="85" TopLine="74"/>
-      </Position23>
-      <Position24>
+      </Position14>
+      <Position15>
         <Filename Value="frm_main.pas"/>
         <Caret Line="79" Column="85" TopLine="74"/>
-      </Position24>
-      <Position25>
+      </Position15>
+      <Position16>
         <Filename Value="frm_main.pas"/>
         <Caret Line="80" Column="85" TopLine="74"/>
-      </Position25>
-      <Position26>
+      </Position16>
+      <Position17>
         <Filename Value="frm_main.pas"/>
         <Caret Line="100" Column="33" TopLine="100"/>
-      </Position26>
-      <Position27>
+      </Position17>
+      <Position18>
         <Filename Value="xpl_timer.lpr"/>
         <Caret Line="28" Column="42" TopLine="15"/>
-      </Position27>
-      <Position28>
+      </Position18>
+      <Position19>
         <Filename Value="xpl_timer.lpr"/>
         <Caret Line="30" Column="3" TopLine="15"/>
-      </Position28>
-      <Position29>
+      </Position19>
+      <Position20>
         <Filename Value="frm_main.pas"/>
         <Caret Line="353" Column="74" TopLine="336"/>
-      </Position29>
-      <Position30>
+      </Position20>
+      <Position21>
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
-        <Caret Line="20" Column="57" TopLine="6"/>
-      </Position30>
+        <Caret Line="20" Column="91" TopLine="4"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
+        <Caret Line="72" Column="48" TopLine="58"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
+        <Caret Line="142" Column="23" TopLine="130"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
+        <Caret Line="72" Column="54" TopLine="59"/>
+      </Position24>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

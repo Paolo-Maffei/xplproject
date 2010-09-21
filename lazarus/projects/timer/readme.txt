@@ -74,7 +74,10 @@ v 1.5
 	Upon request (dawndusk.request message), the application sends the absolute light level in the day (1 to 6)
 	Timer actions (create timer, start,stop...) directly available thru web version of xPL Timer (actions are issued from the plugin file then it has to be up to date).
 	
-
+v 1.5.1
+    Corrected a bug that allowed xPL timer to see messages not directed to him (at library level).
+	Removed Log4Delphi dependance
+	Added direct access to log file
 
 ---
 Instructions added to standard control.basic schema
@@ -110,16 +113,3 @@ When a timer is stopped or the duration equals 0 :
 		status = stopped
 		elapsed = number of seconds between start and stop
 
-TODO : 
-Messages not targeted to me are captured, this message is interpreted as a timer start message :
-xpl-cmnd
-{
-hop=1
-source=clinique-timer.lapfr0005
-target=clinique-dirmon.lapfr0005
-}
-control.basic
-{
-current=start
-device=c:\lazout
-}
