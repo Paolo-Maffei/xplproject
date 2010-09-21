@@ -1,9 +1,8 @@
 object frmMain: TfrmMain
-  Left = 26
+  Left = 11
   Height = 459
-  Top = 163
+  Top = 142
   Width = 699
-  ActiveControl = Memo1
   Caption = 'frmMain'
   ClientHeight = 439
   ClientWidth = 699
@@ -1463,7 +1462,6 @@ object frmMain: TfrmMain
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  SessionProperties = 'Left;Top;Width;Height;lvEvents.Columns;lvTimers.Columns'
   LCLVersion = '0.9.28.2'
   object StatusBar1: TStatusBar
     Left = 0
@@ -1481,10 +1479,10 @@ object frmMain: TfrmMain
   end
   object lvEvents: TListView
     Left = 0
-    Height = 155
+    Height = 227
     Top = 189
     Width = 699
-    Align = alTop
+    Align = alClient
     Columns = <    
       item
         Caption = 'Event Name'
@@ -1559,14 +1557,6 @@ object frmMain: TfrmMain
     Width = 699
     Caption = 'ToolBar1'
     TabOrder = 4
-  end
-  object Memo1: TMemo
-    Left = 0
-    Height = 72
-    Top = 344
-    Width = 699
-    Align = alClient
-    TabOrder = 5
   end
   object TimerImages: TImageList
     left = 304
@@ -1843,6 +1833,10 @@ object frmMain: TfrmMain
       Enabled = False
       OnExecute = acNewTimerExecute
     end
+    object acLogView: TAction
+      Caption = 'Session Log File'
+      OnExecute = acLogViewExecute
+    end
   end
   object MainMenu1: TMainMenu
     left = 368
@@ -1864,6 +1858,12 @@ object frmMain: TfrmMain
         OnClick = acNewTimerExecute
       end
       object MenuItem10: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem8: TMenuItem
+        Action = acLogView
+      end
+      object MenuItem5: TMenuItem
         Caption = '-'
       end
       object MenuItem16: TMenuItem
@@ -1966,10 +1966,5 @@ object frmMain: TfrmMain
       Caption = 'Delete Event'
       OnClick = mnuDeleteEventClick
     end
-  end
-  object XMLPropStorage1: TXMLPropStorage
-    StoredValues = <>
-    left = 48
-    top = 88
   end
 end

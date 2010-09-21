@@ -1,24 +1,39 @@
 program xpl_timer;
 
-{$mode objfpc}{$H+}
+{$i compiler.inc}
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  Forms , LResources, { you can add units after this }
-  TConfiguratorUnit, frm_main, uxpltimer, SunTime, frm_about, uxPLEvent;
+  {$IFNDEF CONSOLE_APP}
+     Interfaces, // this includes the LCL widgetset
+     Forms,
+     LResources,
+     frm_xplappslauncher,
+     frm_main,
+  {$ENDIF}
+     app_main,
+     uxpltimer,
+     SunTime,
+     uxPLEvent, frm_xpllogviewer, frm_about;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
 
 begin
+{$IFNDEF CONSOLE_APP}
   {$I xpl_timer.lrs}
-  Application.Initialize;
-//  TConfiguratorUnit.doBasicConfiguration;
-  Application.CreateForm(TfrmMain, frmMain);
-  Application.CreateForm(TfrmAbout, frmAbout);
-  Application.Icon := frmMain.Icon;
-  Application.Run;
+  xPLApplication.Initialize;
+  xPLApplication.CreateForm(TfrmMain, frmMain);
+     xPLClient      := frmmain.xPLClient;
+  xPLApplication.CreateForm(TfrmAbout, frmAbout);
+//  xPLApplication.CreateForm(TfrmAppLauncher, frmAppLauncher);
+  xPLApplication.CreateForm(TfrmLogViewer, frmLogViewer);
+  xPLApplication.Icon := frmMain.Icon;
+{$ENDIF}
+  xPLApplication.Run;
+{$IFNDEF CONSOLE_APP}
+  xPLApplication.Free;
+{$ENDIF}
 end.
 

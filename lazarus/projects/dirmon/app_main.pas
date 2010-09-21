@@ -18,15 +18,18 @@ type
 TMyApplication = class(TCustomApplication)
      protected
         DirectoryList : TStringlist;
+        bTimerFound   : boolean;
         procedure DoRun; override;
         procedure PollDirectories;
         procedure SignalChanged(const aModif : string; const aDirectory : string; const aFileName : string);
         procedure SaveConfig;
         procedure LoadConfig;
+        procedure TimerFound;
      public
         constructor Create(TheOwner: TComponent); override;
         procedure OnReceived(const axPLMsg : TxPLMessage);
         procedure OnConfigDone(const fConfig : TxPLConfig);
+        procedure OnJoined(const aJoined : boolean);
         destructor Destroy; override;
      end;
 
@@ -38,7 +41,7 @@ uses uxPLConst, FileUtil, StrUtils, XmlCfg;
 
 //=====================================================================================================
 const
-     K_XPL_APP_VERSION_NUMBER = '0.8';
+     K_XPL_APP_VERSION_NUMBER = '0.85';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'dirmon';
 
@@ -190,6 +193,20 @@ begin
    end;
 end;
 
+procedure TMyApplication.TimerFound;
+begin
+   xPLClient.LogInfo('xPL Timer found',[]);
+   bTimerFound := True;
+
+   with xPLClient.PrepareMessage(K_MSG_TYPE_CMND,K_SCHEMA_CONTROL_BASIC,'*') do begin
+      Body.AddKeyValuePair('current','start');
+      Body.AddKeyValuePair('device',xPLClient.Address.Tag);
+      Body.AddKeyValuePair('frequence','60');
+      Send;
+      Destroy;
+   end;
+end;
+
 constructor TMyApplication.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -201,6 +218,7 @@ begin
   with xPLClient do begin
        OnxPLConfigDone := @OnConfigDone;
        OnxPLReceived   := @OnReceived;
+       OnxPLJoinedNet  := @OnJoined;
   end;
   xPLClient.Listen;
 end;
@@ -211,6 +229,15 @@ var aAction, aDirectory : string;
     i : integer;
     fl : TStringList;
 begin
+    if (axPLMsg.MessageType = K_MSG_TYPE_STAT) and
+       (axPLMsg.Schema.Tag = K_SCHEMA_HBEAT_APP) and
+       (axPLMsg.Body.GetValueByKey('appname') = 'xPL timer') then TimerFound;
+
+    if not bTimerFound then begin
+       xPLClient.LogWarn('xPL timer seems to be absent',[]);
+       exit;
+    end;
+
     if (axPLMsg.MessageType = K_MSG_TYPE_STAT) and                                        // Received a timer status message
        (axPLMsg.Schema.Tag = K_SCHEMA_TIMER_BASIC) and
        (axPLMsg.Body.GetValueByKey('device') = xPLClient.Address.Tag) and
@@ -247,15 +274,16 @@ end;
 
 procedure TMyApplication.OnConfigDone(const fConfig: TxPLConfig);
 begin
-   // I'm configured, so load config and initialize the polling timer
    LoadConfig;
-   with xPLClient.PrepareMessage(K_MSG_TYPE_CMND,K_SCHEMA_CONTROL_BASIC,'*') do begin
-      Body.AddKeyValuePair('current','start');
-      Body.AddKeyValuePair('device',xPLClient.Address.Tag);
-      Body.AddKeyValuePair('frequence','60');
-      Send;
-      Destroy;
-   end;
+   bTimerFound := False;
+end;
+
+procedure TMyApplication.OnJoined(const aJoined: boolean);
+begin
+   if not aJoined then exit;
+   if xPLClient.Config.ConfigNeeded then exit;
+   xPLClient.LogInfo('Probing for xPL Timer presence',[]);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10);
 end;
 
 
