@@ -22,3 +22,6 @@ xpl_dirmon
 		device=c:\test\
 		file=Nouvelle image bitmap.bmp
 		}
+		
+0.85
+	Added mechanism to test presence of xPL Timer, xpl timer can be launched before of after this app.

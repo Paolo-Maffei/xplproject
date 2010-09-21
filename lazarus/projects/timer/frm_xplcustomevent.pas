@@ -39,22 +39,22 @@ TfrmxPLCustomEvent = class(TForm)
      end;
 
 implementation { TfrmxPLCustomEvent ===========================================}
-uses uxPLEvent, uxPLMessage;
+uses uxPLEvent, u_xpl_message_gui;
 
 procedure TfrmxPLCustomEvent.BtnDisplayClick(Sender: TObject);
-var aMessage : TxPLMessage;
+var aMessage : TxPLMessageGUI;
 begin
    if edit1.Text <>'' then begin
-      aMessage := TxPLMessage.Create(edit1.Text);
+      aMessage := TxPLMessageGUI.Create(edit1.Text);
       aMessage.Edit;
       aMessage.Destroy ;
    end;
 end;
 
 procedure TfrmxPLCustomEvent.ckPersoChange(Sender: TObject);
-var aMessage : TxPLMessage;
+var aMessage : TxPLMessageGUI;
 begin
-   aMessage := TxPLMessage.Create;
+   aMessage := TxPLMessageGUI.Create;
    if edit1.caption = '' then begin
       if aMessage.SelectFile then begin
          edit1.caption := aMessage.RawXPL;

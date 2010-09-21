@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
   ComCtrls, Menus, ActnList, ExtCtrls, uxPLWebListener, uxPLMessage, SunTime,
   Grids, Buttons, uxPLConfig,  frm_xPLTimer, frm_xplrecurevent, IdCustomHTTPServer,
-  uxPLTimer, uxPLEvent,XMLPropStorage;
+  uxPLTimer, uxPLEvent;
 
 type
 
@@ -18,12 +18,12 @@ type
     acNewSingleEvent: TAction;
     acNewRecurringEvent: TAction;
     acNewTimer: TAction;
+    acLogView: TAction;
     ActionList1: TActionList;
     DownloadSelected: TAction;
     InstalledApps: TAction;
     lvEvents: TListView;
     lvTimers: TListView;
-    Memo1: TMemo;
     MainMenu1: TMainMenu;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -34,6 +34,8 @@ type
     MenuItem16: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem8: TMenuItem;
     mnuEditEvent: TMenuItem;
     mnuFireNow: TMenuItem;
     MenuItem4: TMenuItem;
@@ -55,8 +57,8 @@ type
     StatusBar1: TStatusBar;
     ToolBar1: TToolBar;
     UpdateSeed: TAction;
-    XMLPropStorage1: TXMLPropStorage;
     procedure AboutExecute(Sender: TObject);
+    procedure acLogViewExecute(Sender: TObject);
     procedure acNewEvent(anEvent : TxPLEvent);
     procedure acNewRecurringEventExecute(Sender: TObject);
     procedure acNewSingleEventExecute(Sender: TObject);
@@ -86,7 +88,7 @@ type
     function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
 
   public
-     procedure LogUpdate(const aList : TStringList);
+//     procedure LogUpdate(const aList : TStringList);
      xPLClient : TxPLWebListener;
   end;
 
@@ -94,11 +96,11 @@ var frmMain: TfrmMain;
 
 implementation {===============================================================}
 uses Frm_About, frm_xPLAppslauncher, uxPLConst, uRegExTools, StrUtils, LCLType,
-     DateUtils, uxPLMsgHeader;
+     DateUtils, frm_xPLLogViewer;
 
 {==============================================================================}
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '1.5';
+     K_XPL_APP_VERSION_NUMBER = '1.5.1';
      K_DEFAULT_VENDOR         = 'clinique';
      K_DEFAULT_DEVICE         = 'timer';
      K_DEFAULT_PORT           = '8339';
@@ -110,11 +112,16 @@ resourcestring
 procedure TfrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
+procedure TfrmMain.acLogViewExecute(Sender: TObject);
+begin
+  frmlogviewer.showmodal;
+end;
+
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
 
-procedure TfrmMain.LogUpdate(const aList: TStringList);
-begin Memo1.Lines.Add(aList[aList.Count-1]); end;
+//procedure TfrmMain.LogUpdate(const aList: TStringList);
+//begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) end;
@@ -152,16 +159,16 @@ begin acNewEvent(TxPLSingleEvent.Create(aMessage)); end;
 procedure TfrmMain.FormCreate(Sender: TObject);
 procedure initListener;
 begin
-   xPLClient := TxPLWebListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
+   xPLClient := TxPLWebListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
    with xPLClient do begin
        OnxPLControlBasic  := @OnControlBasic;
        OnxPLSensorRequest := @OnSensorRequest;
        OnxPLConfigDone    := @OnConfigDone;
        OnxPLReceived      := @OnReceive;
-       OnLogUpdate        := @LogUpdate;
+//       OnLogUpdate        := @LogUpdate;
        OnReplaceArrayedTag := @ReplaceArrayedTag;
-       Config.AddItem(K_CONFIG_LATITUDE, xpl_ctConfig);
-       Config.AddItem(K_CONFIG_LONGITUDE,xpl_ctConfig);
+       Config.AddItem(K_CONFIG_LATITUDE, K_XPL_CT_CONFIG);
+       Config.AddItem(K_CONFIG_LONGITUDE,K_XPL_CT_CONFIG);
    end;
    xPLClient.PassMyOwnMessages:=true;
    xPLClient.Listen;
@@ -241,7 +248,9 @@ begin
 end;
 
 procedure TfrmMain.OnControlBasic(const axPLMsg: TxPLMessage; const aDevice: string; const aAction : string);
+var s : string;
 begin
+   s := axPLMsg.Source.Tag;
    case AnsiIndexStr(aAction, ['halt','resume','stop','start']) of         // halt=pause - resume = resume - stop = stop - start = start
         0 : TimerList.Pause(aDevice);
         1 : TimerList.ResumeOrStartATimer(aDevice);
@@ -256,10 +265,9 @@ end;
 
 procedure TfrmMain.OnReceive(const axPLMsg: TxPLMessage);
 var aMsg : TxPLMessage;
-s:string;
     level, delta, lag : longint;
     status : string;
-    MinD,MaxD, fixdawn, fixnoon, daylength, midday : TDateTime;
+    fixdawn, fixnoon : TDateTime;
 begin
    if axPLMsg.Schema.Tag = K_SCHEMA_DAWNDUSK_REQUEST then begin
       aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_STAT,K_SCHEMA_DAWNDUSK_BASIC);
@@ -288,7 +296,6 @@ end;
 
 function TfrmMain.ReplaceArrayedTag(const aDevice: string; const aValue: string; const aVariable: string; ReturnList: TStringList ): boolean;
 var i : integer;
-    numero, appelant : string;
 begin
    if aDevice<>K_DEFAULT_DEVICE then exit;
    ReturnList.Clear;
@@ -330,7 +337,7 @@ begin
    if not assigned(lvEvents.Selected) then exit;
    s := lvEvents.Selected.Caption;
    EventList.Delete(TxPLEvent(lvEvents.Selected.Data));
-   xPLClient.LogInfo('Event ' + s + ' deleted');
+   xPLClient.LogInfo('Event %s deleted',[s]);
 end;
 
 // Timers manipulations functions ==============================================
