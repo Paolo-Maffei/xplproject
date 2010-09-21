@@ -1,5 +1,3 @@
-{ Ceci est un fichier ressource généré automatiquement par Lazarus }
-
 LazarusResources.Add('TfrmLogViewer','FORMDATA',[
   'TPF0'#13'TfrmLogViewer'#12'frmLogViewer'#4'Left'#2']'#6'Height'#3','#1#3'Top'
   +#2'Y'#5'Width'#3#144#1#7'Caption'#6#8'Log view'#12'ClientHeight'#3','#1#11'C'
