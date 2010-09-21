@@ -129,15 +129,10 @@ begin
 end;
 
 procedure TxPLMessage.Send;
-var Settings : TxPLSettings;
 begin
-   if not Assigned(fSocket) then begin                                          // The socket is created only
-      Settings := TxPLSettings.Create;                                          // if needed to avoid waste space
-      fSocket   := TxPLUDPClient.Create(Settings.BroadCastAddress);
-//      fSocket.BroadcastEnabled := True;                          // speed and time at runtime
-//      fSocket.Host := ;
-//      fSocket.Port := XPL_UDP_BASE_PORT;
-      Settings.Free;
+   if not Assigned(fSocket) then with TxPLSettings.Create do begin              // The socket is created only
+      fSocket := TxPLUDPClient.Create(BroadCastAddress);                        // if needed to avoid waste space
+      Free;
    end;
    fSocket.Send(RawXPL);
 end;

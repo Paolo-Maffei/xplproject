@@ -314,23 +314,22 @@ begin
    if bDisposing then exit;
    aMessage := TxPLMessage.Create(aString);
    with aMessage do try
-         if ((Adresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then   // It is directed to me
-            if (Schema.Classe = K_SCHEMA_CLASS_HBEAT ) and (Schema.Type_ = 'request') then HandleHBeatRequest;
-            if (Schema.Classe = K_SCHEMA_CLASS_CONFIG) then HandleConfigMessage(aMessage);
+      if ((Adresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then begin        // It is directed to me
+         if ( Schema.Classe = K_SCHEMA_CLASS_HBEAT ) and (Schema.Type_ = 'request') then HandleHBeatRequest;
+         if ( Schema.Classe = K_SCHEMA_CLASS_CONFIG) then HandleConfigMessage(aMessage);
+         if ( Adresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
 
-         if (Adresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
-
-         if (fFilterSet.MatchesFilters(aMessage) and not Config.ConfigNeeded ) and
+         if ( fFilterSet.MatchesFilters(aMessage) and not Config.ConfigNeeded ) and
             (PassMyOwnMessages or not Adresse.Equals(Source))                                                     // 0.92 : to avoid handling of my self emitted messages
-         then begin
-            if not DoSensorRequest(aMessage) then                                                                  // process messages only once
-            if not DoControlBasic (aMessage) then
-            if not DoTTSBasic     (aMessage) then
-            if not DoHBeatApp     (aMessage) then
-            if not DoMediaBasic   (aMessage) then
-            if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
-         end;
-
+            then begin
+               if not DoSensorRequest(aMessage) then                                                                  // process messages only once
+               if not DoControlBasic (aMessage) then
+               if not DoTTSBasic     (aMessage) then
+               if not DoHBeatApp     (aMessage) then
+               if not DoMediaBasic   (aMessage) then
+               if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
+            end;
+      end;
       finally Destroy;
    end;
 end;

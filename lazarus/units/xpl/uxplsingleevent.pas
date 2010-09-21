@@ -93,7 +93,7 @@ procedure TxPLSingleEvent.Fire;
 var aMessage : TxPLMessage;
 begin
      if MessageToFire='' then with fxPLMessage do begin
-         MessageType := xpl_mtTrig;
+         MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := '*';
          Body.Format_SensorBasic(fName,'generic','fired');
          Body.Schema.Tag := 'timer.basic';
