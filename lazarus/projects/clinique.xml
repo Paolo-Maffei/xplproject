@@ -9,15 +9,34 @@
 			download_url="http://glh33.free.fr/?dl_name=xpl_logger_win.zip"
 			type="tools"
   />
-   <device 	id="clinique-dirmon" 
-			description="Monitor files and directories"
+    <device 	id="clinique-dirmon" 
+			description="Monitors files and directories"
 			version="0.8"
 			info_url="http://glh33.free.fr"
 			platform="windows"
 			beta_version="none"
 			download_url="http://glh33.free.fr/?dl_name=xpl_dirmon_win.zip"
-			type="tools"
-  />
+			type="tools">
+<configItem name="webroot" description="Web server root directory" format="^[A-Za-z]:\\([^&quot;*/:?|&lt;&gt;\\.\x00-\x20]([^&quot;*/:?|&lt;&gt;\\\x00-\x1F]*[^&quot;*/:?|&lt;&gt;\\.\x00-\x20])?\\)*$" />
+    <configItem name="webport" description="Port used for local web server" format="^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$" />
+	
+			<menuItem name="Set Monitoring Point">
+        <xplMsg>control.basic
+{
+current=start
+device=%foldername%
+}
+		</xplMsg>
+		    </menuItem>
+			<menuItem name="Remove Monitoring Point">
+        <xplMsg>control.basic
+{
+current=stop
+device=%foldername%
+}
+		</xplMsg>
+    </menuItem>
+	</device>
   <device 	id="clinique-network" 
 			description="Useful to setup local base xPL parameters"
 			version="1.1.5"
