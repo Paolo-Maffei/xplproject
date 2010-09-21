@@ -206,7 +206,7 @@ begin
   fSysTimer.Interval := 1000;
   fSysTimer.Enabled  := False;
   fSysTimer.OnTimer  := @Check;
-  aMessage := aClient.PrepareMessage(xpl_mtCmnd,'control.basic');
+  aMessage := aClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
   fGrid := aGrid;
 end;
 
