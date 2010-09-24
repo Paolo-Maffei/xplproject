@@ -1,11 +1,11 @@
 object FrmMain: TFrmMain
-  Left = 9
+  Left = 26
   Height = 475
-  Top = 105
+  Top = 136
   Width = 631
   ActiveControl = PageControl1
   Caption = 'FrmMain'
-  ClientHeight = 455
+  ClientHeight = 452
   ClientWidth = 631
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
@@ -2273,23 +2273,23 @@ object FrmMain: TFrmMain
   LCLVersion = '0.9.28.2'
   object PageControl1: TPageControl
     Left = 0
-    Height = 426
+    Height = 423
     Top = 29
     Width = 631
-    ActivePage = tsBasic
+    ActivePage = tsVendor
     Align = alClient
-    TabIndex = 0
+    TabIndex = 2
     TabOrder = 0
     OnPageChanged = PageControl1PageChanged
     object tsBasic: TTabSheet
       Caption = 'Basic xPL Settings'
       ClientHeight = 398
-      ClientWidth = 623
+      ClientWidth = 629
       object Label4: TLabel
         Left = 4
         Height = 16
         Top = 83
-        Width = 148
+        Width = 179
         Caption = 'Listen for xPL messages on :'
         Font.Color = clNavy
         ParentColor = False
@@ -2299,7 +2299,7 @@ object FrmMain: TFrmMain
         Left = 4
         Height = 16
         Top = 115
-        Width = 247
+        Width = 306
         Caption = 'Broadcast address used to send xPL Messages :'
         Font.Color = clNavy
         ParentColor = False
@@ -2320,7 +2320,7 @@ object FrmMain: TFrmMain
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 86
+        ClientHeight = 87
         ClientWidth = 420
         Items.Strings = (
           'Any IP address'
@@ -2340,25 +2340,25 @@ object FrmMain: TFrmMain
       end
       object e_BroadCast: TComboBox
         Left = 260
-        Height = 23
+        Height = 27
         Top = 115
         Width = 168
-        ItemHeight = 15
+        ItemHeight = 0
         OnChange = e_ListenOnChange
         TabOrder = 1
       end
       object e_ListenOn: TComboBox
         Left = 260
-        Height = 23
+        Height = 27
         Top = 83
         Width = 168
-        ItemHeight = 15
+        ItemHeight = 0
         OnChange = e_ListenOnChange
         TabOrder = 2
       end
       object edtListenTo: TEdit
         Left = 260
-        Height = 23
+        Height = 25
         Top = 219
         Width = 160
         OnChange = e_ListenOnChange
@@ -2380,12 +2380,12 @@ object FrmMain: TFrmMain
     object tsAdanced: TTabSheet
       Caption = 'Advanced Settings'
       ClientHeight = 398
-      ClientWidth = 623
+      ClientWidth = 629
       object Label9: TLabel
         Left = 8
         Height = 16
         Top = 8
-        Width = 226
+        Width = 266
         Caption = 'Root directory for xPL apps config storing :'
         Font.Color = clNavy
         ParentColor = False
@@ -2395,7 +2395,7 @@ object FrmMain: TFrmMain
         Left = 44
         Height = 16
         Top = 152
-        Width = 69
+        Width = 77
         Caption = 'Proxy HTTP :'
         ParentColor = False
       end
@@ -2403,13 +2403,13 @@ object FrmMain: TFrmMain
         Left = 324
         Height = 16
         Top = 152
-        Width = 29
+        Width = 35
         Caption = 'Port :'
         ParentColor = False
       end
       object edtRootDir: TEdit
         Left = 8
-        Height = 23
+        Height = 25
         Top = 32
         Width = 384
         OnChange = e_ListenOnChange
@@ -2439,7 +2439,7 @@ object FrmMain: TFrmMain
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 55
+        ClientHeight = 56
         ClientWidth = 416
         Items.Strings = (
           'No proxy'
@@ -2450,7 +2450,7 @@ object FrmMain: TFrmMain
       end
       object edtHTTPProxy: TEdit
         Left = 124
-        Height = 23
+        Height = 25
         Top = 152
         Width = 192
         OnClick = e_ListenOnChange
@@ -2458,7 +2458,7 @@ object FrmMain: TFrmMain
       end
       object edtHTTPPort: TEdit
         Left = 364
-        Height = 23
+        Height = 25
         Top = 152
         Width = 64
         OnClick = e_ListenOnChange
@@ -2468,12 +2468,12 @@ object FrmMain: TFrmMain
     object tsVendor: TTabSheet
       Caption = 'Vendors plug-ins'
       ClientHeight = 398
-      ClientWidth = 623
+      ClientWidth = 629
       object Label12: TLabel
         Left = 4
         Height = 16
         Top = 11
-        Width = 88
+        Width = 106
         Caption = 'Location to use :'
         ParentColor = False
       end
@@ -2489,17 +2489,17 @@ object FrmMain: TFrmMain
       end
       object cbLocations: TComboBox
         Left = 100
-        Height = 23
+        Height = 27
         Top = 11
         Width = 304
-        ItemHeight = 15
+        ItemHeight = 0
         TabOrder = 1
       end
       object lvPlugins: TListView
         Left = 0
         Height = 355
         Top = 43
-        Width = 623
+        Width = 629
         Align = alBottom
         Anchors = [akTop, akLeft, akBottom]
         Checkboxes = True
@@ -2518,7 +2518,7 @@ object FrmMain: TFrmMain
           end        
           item
             Caption = 'Update'
-            Width = 130
+            Width = 136
           end>
         PopupMenu = popPluginList
         TabOrder = 2
@@ -2551,7 +2551,7 @@ object FrmMain: TFrmMain
       OnClick = tbReloadClick
     end
     object tbSave: TToolButton
-      Left = 63
+      Left = 69
       Top = 0
       AutoSize = True
       Caption = 'Save Settings'
@@ -2559,14 +2559,14 @@ object FrmMain: TFrmMain
       OnClick = SaveSettingsExecute
     end
     object tbUpdateSeed: TToolButton
-      Left = 93
+      Left = 99
       Top = 0
       Caption = 'Update Plugin List'
       ImageIndex = 12
       OnClick = UpdateSeedExecute
     end
     object tbDownload: TToolButton
-      Left = 215
+      Left = 238
       Top = 0
       Caption = 'Download Selected'
       ImageIndex = 5
@@ -2584,62 +2584,29 @@ object FrmMain: TFrmMain
   end
   object MainMenu1: TMainMenu
     left = 384
-    object MenuItem3: TMenuItem
-      Caption = '&Application'
-      object MenuItem7: TMenuItem
-        Caption = 'View session log journal'
-        OnClick = MenuItem7Click
-      end
-      object MenuItem5: TMenuItem
-        Action = Quit
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF001D63
-          9B1619609839145D9562105A92880D5890A4135C92FC0C578FED999999FF7171
-          71FF545454FF515151FF4F4F4FFF4C4C4CFF4A4A4AFF474747FF454545FF2567
-          9DFF3274A8FF3D7CAFFF4784B5FF4E8ABAFF3E7EADFF0C578FEAFFFFFF00FFFF
-          FF00585858FFA2A2A2FFA2A2A2FFA3A3A3FFA4A4A4FFA4A4A4FFA5A5A5FF2F6F
-          A5FF78ABD2FF78ABD3FF73A7D1FF69A0CDFF407FAEFF0F5991EAFFFFFF00FFFF
-          FF005C5C5CFFA1A1A1FF3C7340FFA0A1A1FFA3A3A3FFA3A3A3FFA4A4A4FF3674
-          AAFF7DAFD4FF5B9AC9FF5495C7FF5896C8FF4180AEFF135C94EAFFFFFF00FFFF
-          FF00606060FFA0A0A0FF3D7641FF367139FFA2A2A2FFA2A2A2FFA3A3A3FF3D79
-          B0FF82B3D7FF629FCCFF5A9AC9FF5E9BCAFF4381AFFF196098EA37823EFF347E
-          3BFF317937FF2E7534FF499150FF468F4CFF39733DFFA1A1A1FFA2A2A2FF457E
-          B4FF88B7D9FF67A3CFFF619ECCFF639FCCFF4583B1FF1F649CEA3B8742FF89CB
-          92FF84C88DFF80C688FF7BC383FF77C17FFF478F4DFF3B743FFFA1A1A1FF4C84
-          BAFF8DBBDBFF6EA8D1FF66A6D1FF5FB4DFFF4785B1FF2569A1EA3E8B46FF8FCE
-          99FF7DC687FF78C381FF73C07CFF74C07CFF79C281FF49904FFF547F57FF5489
-          BFFF94BFDDFF75ADD4FF63B8E1FF4BD4FFFF428BB8FF2C6EA6EA41904AFF94D2
-          9FFF91D09AFF8DCD96FF89CB92FF84C88DFF519858FF417C46FF9F9F9FFF5A8E
-          C4FF98C3E0FF7CB3D7FF74AFD6FF5EC4EDFF4B88B3FF3473ABEA44944DFF4291
-          4BFF3F8D48FF3D8945FF5DA465FF5AA061FF45834BFF9E9E9EFF9E9E9EFF6092
-          C9FF9EC7E2FF83B8DAFF7DB4D7FF7EB3D7FF4F89B4FF3B79B1EAFFFFFF00FFFF
-          FF00777777FF9A9A9AFF3D8A45FF498A4FFF9C9C9CFF9D9D9DFF9D9D9DFF6696
-          CCFFA2CBE3FF89BDDCFF83B9DAFF84B9DAFF518BB5FF437EB6EAFFFFFF00FFFF
-          FF007A7A7AFF999999FF529159FF999A99FF9B9B9BFF9C9C9CFF9C9C9CFF6C9A
-          D0FFA7CEE5FF8FC1DFFF89BDDCFF8BBDDCFF538DB6FF4B84BCEAFFFFFF00FFFF
-          FF007D7D7DFF999999FF999999FF9A9A9AFF9A9A9AFF9B9B9BFF9B9B9BFF6F9D
-          D3FFAAD1E7FFABD1E7FF98C7E1FF91C2DEFF568FB7FF5289C1EAFFFFFF00FFFF
-          FF00808080FF7E7E7EFF7C7C7CFF7A7A7AFF777777FF757575FF727272FF719E
-          D4FF6F9ED6FF87B2DCFFABD3E8FFA9D0E6FF5890B8FF598EC6EAFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00709ED6DB6D9CD4FF85B1DAFF5A91B9FF6093CBEAFFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF006D9CD4896A9AD2FB6697CFEE
-        }
-        OnClick = QuitExecute
-      end
-    end
     object MenuItem9: TMenuItem
-      Caption = '&?'
+      Caption = 'Application'
       object MenuItem10: TMenuItem
         Caption = 'Installed xPL apps'
         OnClick = MenuItem8Click
       end
+      object MenuItem2: TMenuItem
+        Caption = 'View session log'
+        OnClick = MenuItem2Click
+      end
+      object MenuItem7: TMenuItem
+        Caption = '-'
+      end
       object MenuItem13: TMenuItem
         Caption = '&About ...'
         OnClick = AboutExecute
+      end
+      object MenuItem4: TMenuItem
+        Caption = '-'
+      end
+      object MenuItem6: TMenuItem
+        Action = Quit
+        OnClick = QuitExecute
       end
     end
   end
