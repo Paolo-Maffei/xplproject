@@ -35,16 +35,16 @@ type
          fDiscovered : TStringList;
          procedure InitWebServer;
          procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
-
       public
+         OnCommandGet : TWebCommandGet; // read fOnCommandGet write fOnCommandGet;
+         OnReplaceTag : TWebCallReplaceTag;
+         OnReplaceArrayedTag : TWebCallReplaceArrayedTag;
+
          constructor create(aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
          procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
          procedure HBeatApp(const axPLMsg : TxPLMessage);
-         OnCommandGet : TWebCommandGet; // read fOnCommandGet write fOnCommandGet;
-         OnReplaceTag : TWebCallReplaceTag;
-         OnReplaceArrayedTag : TWebCallReplaceArrayedTag;
 
          property HtmlDir : string read fHtmlDir;
       end;
@@ -55,7 +55,7 @@ type
 
 implementation  { ==============================================================}
 uses IdStack, cRandom,  uIPutils,cStrings, StrUtils, RegExpr, uxPLConst,
-     uxPLMsgHeader,  cUtils;
+     uxPLHeader,  cUtils;
 
 { Utility functions ============================================================}
 
