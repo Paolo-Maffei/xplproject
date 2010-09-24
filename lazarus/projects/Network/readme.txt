@@ -29,6 +29,11 @@
 1.5 08/08/2010
 	Internal updates to stick to xPL Lazarus library evolution
 	Integration of latest functional updates : proxy settings, simplification of path input for root xpl directory
-	Portability validated with Linux version of Lazarus...soon to come
+	Portability validated with Linux version of Lazarus
 	Added vendor xml file viewer
 
+1.5.1 (linux update)
+        Corrected a bug in the Launch of other xPL application
+        Corrected log recording error under linux (files was not readable)
+Todo :
+ -

@@ -3,6 +3,7 @@ object frmXMLView: TfrmXMLView
   Height = 300
   Top = 119
   Width = 400
+  ActiveControl = SynEdit1
   Caption = 'frmXMLView'
   ClientHeight = 300
   ClientWidth = 400
@@ -21,6 +22,7 @@ object frmXMLView: TfrmXMLView
     ParentColor = False
     ParentFont = False
     TabOrder = 0
+    BookMarkOptions.OnChange = nil
     Gutter.Width = 57
     Gutter.MouseActions = <    
       item
@@ -728,6 +730,7 @@ object frmXMLView: TfrmXMLView
   end
   object SynXMLSyn1: TSynXMLSyn
     DefaultFilter = 'Documents XML (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
+    Enabled = False
     WantBracesParsed = False
     left = 80
     top = 56

@@ -42,6 +42,7 @@ end;
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
   SynEdit1.Lines.LoadFromFile(filepath);
+  Self.Caption := filepath;
 end;
 
 initialization
