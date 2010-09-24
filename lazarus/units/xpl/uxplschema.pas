@@ -37,7 +37,7 @@ type TxPLSchema = class
     end;
 
 implementation { ========================================================================}
-uses SysUtils, cStrings, uRegExTools;
+uses SysUtils, cStrings, uRegExpr;
 
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
 begin
@@ -59,8 +59,11 @@ end;
 
 class function TxPLSchema.IsValid(aSchema: string): boolean;
 begin
-   RegExpEngine.Expression := K_REGEXPR_SCHEMA;
-   result := RegExpEngine.Exec(aSchema);
+   with TRegExpr.Create do begin
+      Expression := K_REGEXPR_SCHEMA;
+      result := Exec(aSchema);
+      Destroy;
+   end;
 end;
 
 function TxPLSchema.Get_Tag: string;

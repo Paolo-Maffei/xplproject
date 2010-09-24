@@ -18,7 +18,7 @@ Rev 298 : Modified to enable Linux support
         Removed field AwaitingConfiguration that was redundant with Config.ConfigNeeded
 }
 
-{$mode objfpc}{$H+}
+{$i compiler.inc}{$H+}
 
 interface
 
@@ -88,7 +88,7 @@ type
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
         function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
-
+	procedure LogInfo(Const Formatting  : string; Const Data  : array of const ); override;            // Info are only stored in log file
         procedure Listen;
         procedure Dispose;
      end;
@@ -215,6 +215,13 @@ begin
      Target.Tag  := aTarget;
      Body.Schema.Tag := aSchema;
   end;
+end;
+
+procedure TxPLListener.LogInfo(const Formatting: string; const Data: array of const);
+begin
+  if not JoinedxPLNetwork
+     then inherited LogInfo(Formatting, Data)
+     else SendLOGBasic('info', Format(Formatting,Data));
 end;
 
 procedure TxPLListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
