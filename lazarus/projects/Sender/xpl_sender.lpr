@@ -1,6 +1,7 @@
 program xpl_sender;
 
 {$mode objfpc}{$H+}
+{$DEFINE FPC}
 {$IFDEF UNIX} {$DEFINE UseCThreds} {$ENDIF}
 
 uses
@@ -10,8 +11,11 @@ uses
   Interfaces, // this includes the LCL widgetset
   Forms
   { you can add units after this }, LResources, frm_main, XPL, frm_about, uxPLMessage,
-  TConfiguratorUnit,
-  frm_xplappslauncher;
+  frm_xplappslauncher,
+  frm_xpllogviewer,
+  sharedlogger,
+  u_xml_plugins,
+  u_xml_xplplugin;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 var SendMsg : TxPLMessage;
@@ -25,10 +29,10 @@ begin
      SendMsg.Send;
      SendMsg.Destroy ;
   end else begin
-     TConfiguratorUnit.doBasicConfiguration;
      Application.CreateForm(TfrmMain, frmMain);
      Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
      Application.CreateForm(TfrmAbout, frmAbout);
+     Application.CreateForm(TfrmLogViewer, frmLogViewer);
      Application.Icon := frmMain.Icon;
      Application.Run;
   end;

@@ -22,6 +22,14 @@ v 1.1
 	* Command line added : xpl_sender -s filename to send a message without gui
 v 1.5 
 	* Modifications to enable linux portability
+v 1.5.1
+        * Changed logging system that was incompatible with linux and also created
+          read only files that disabled multi applications to be launched from the
+          same directory
+        * Load / Save of xPL messages are now formatted with the same format as
+          determinator files.
+        * Added access to log file
+
 
 
 	
