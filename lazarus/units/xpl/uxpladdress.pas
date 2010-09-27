@@ -50,6 +50,7 @@ type
 
        class function ComposeAddress       (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
        class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
+       class procedure SplitVD              (const aVD : string; out aVendor : string; out aDevice : string);
        class function RandomInstance : tsInstance;
        class function HostNmInstance : tsInstance;
     end;
@@ -71,7 +72,7 @@ type
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, StrUtils, uIpUtils, pwHostName, uRegExpr;
+uses cRandom, SysUtils, StrUtils, cStrings, uIpUtils, pwHostName, uRegExpr;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -85,6 +86,9 @@ class function TxPLAddress.ComposeAddressFilter(const aVendor : tsVendor; const 
 begin
    result := Format(K_FMT_FILTER,[aVendor,aDevice,aInstance]);
 end;
+
+class procedure TxPLAddress.SplitVD(const aVD: string; out aVendor: string; out aDevice: string);
+begin StrSplitAtChar(aVD,'-',aVendor,aDevice,false); end;
 
 class function TxPLAddress.RandomInstance : tsInstance;
 begin result := AnsiLowerCase(RandomAlphaStr(sizeof(tsInstance))); end;
@@ -174,7 +178,6 @@ begin
         2 : fInstance := aValue;
    end;
 end;
-
 
 { TxPLTargetAddress Object =======================================================}
 procedure TxPLTargetAddress.ResetValues;

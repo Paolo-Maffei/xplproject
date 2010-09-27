@@ -25,7 +25,7 @@ type
 var frmAppLauncher: TfrmAppLauncher;
 
 implementation { =====================================================================}
-uses app_main, Process, cStrings;
+uses app_main, Process, cStrings, uxPLAdress;
 
 procedure TfrmAppLauncher.FormCreate(Sender: TObject);
 var sl : TStringList;
@@ -35,7 +35,8 @@ begin
      sl := xPLClient.Settings.GetxPLAppList;
      for i := 0 to sl.Count -1 do
         with lvApps.Items.Add do begin
-           StrSplitAtChar(sl[i],'-',vendor,device,false);
+//           StrSplitAtChar(sl[i],'-',vendor,device,false);
+           xPLAdress.SplitVD(sl[i],vendor,device);
            xPLClient.Settings.GetAppDetail(vendor,device,path,version);
            Caption := device;
            SubItems.Add(vendor);
