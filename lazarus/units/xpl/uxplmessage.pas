@@ -12,6 +12,7 @@ unit uxplmessage;
  0.97 : Usage of u_xml_xpldeterminator for read/write to xml format
  0.98 : Removed user interface function to u_xpl_message_gui to enable console apps
         Introduced usage of u_xpl_udp_socket_client
+ 0.99 : Modified due to schema move from Body to Header
  }
 {$mode objfpc}{$H+}
 
@@ -23,6 +24,8 @@ uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,u_xpl_udp_socket, uxPLSchema, 
 type
 
 
+
+  { TxPLMessage }
 
   TxPLMessage = class(TComponent)
      private
@@ -45,7 +48,8 @@ type
         property MessageType : string            read fHeader.fMsgType write fHeader.fMsgType ;
         property Source      : TxPLAddress       read fHeader.fSource  write fHeader.fSource  ;
         property Target      : TxPLTargetAddress read fHeader.fTarget  write fHeader.fTarget  ;
-        property Schema      : TxPLSchema        read fBody.fSchema    write fBody.fSchema;
+        //property Schema      : TxPLSchema        read fBody.fSchema    write fBody.fSchema;
+        property Schema      : TxPLSchema        read fHeader.fSchema    write fHeader.fSchema;
         property Name        : string            read fName            write fName;
         property Description : string            read fDescription     write fDescription;
         // ======================================================
@@ -66,6 +70,9 @@ type
 
         function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
         procedure ReadFromXML(const aCom : TXMLActionsType);
+
+        procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
+        procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
      end;
 
 implementation { ==============================================================}
@@ -189,6 +196,24 @@ begin
    Name := action.ExecuteOrder;
    Header.ReadFromXML(action);
    Body.ReadFromXML(action);
+end;
+
+procedure TxPLMessage.Format_HbeatApp(const aInterval: string; const aPort: string; const aIP: string);
+begin
+   Body.ResetAll;
+   Schema.Tag := K_SCHEMA_HBEAT_APP;
+   Body.AddKeyValuePair(K_HBEAT_ME_INTERVAL,aInterval);
+   Body.AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
+   Body.AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
+end;
+
+procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
+begin
+   Body.ResetAll;
+   Schema.Tag := K_SCHEMA_SENSOR_BASIC;
+   Body.AddKeyValuePair('device' ,aDevice);
+   Body.AddKeyValuePair('type'   ,aType);
+   Body.AddKeyValuePair('current',aCurrent);
 end;
 
 end.

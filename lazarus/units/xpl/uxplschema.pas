@@ -33,7 +33,7 @@ type TxPLSchema = class
         property Type_  : string read fType   write fType;
         property Tag    : string read Get_Tag write Set_Tag;
 
-        class function IsValid(aSchema : string) : boolean;
+        class function IsValid(const aSchema : string) : boolean;
     end;
 
 implementation { ========================================================================}
@@ -57,11 +57,12 @@ begin
    fType   := aSchema.Type_;
 end;
 
-class function TxPLSchema.IsValid(aSchema: string): boolean;
+class function TxPLSchema.IsValid(const aSchema: string): boolean;
 begin
-   with TRegExpr.Create do begin
+   with TRegExpr.Create do try
       Expression := K_REGEXPR_SCHEMA;
       result := Exec(aSchema);
+   finally
       Destroy;
    end;
 end;
