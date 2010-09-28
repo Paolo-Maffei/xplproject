@@ -4,9 +4,18 @@ unit u_xml_plugins;
 
 interface
 
-uses Classes, SysUtils, DOM, u_xml;
+uses Classes,
+     SysUtils,
+     DOM,
+     u_xml;
 
-type TXMLPluginType = class(TDOMElement)
+type
+
+{ TXMLPluginType }
+
+TXMLPluginType = class(TDOMElement)
+private
+  function Get_Vendor: AnsiString;
      protected
         function Get_Name: AnsiString;
         function Get_Type_: AnsiString;
@@ -14,6 +23,7 @@ type TXMLPluginType = class(TDOMElement)
         function Get_Url: AnsiString;
      public
         property Name: AnsiString read Get_Name;
+        property Vendor : AnsiString read Get_Vendor;
         property Type_: AnsiString read Get_Type_;
         property Description: AnsiString read Get_Description;
         property Url: AnsiString read Get_Url;
@@ -39,16 +49,19 @@ type TXMLPluginType = class(TDOMElement)
         property Locations: TXMLLocationsType read fLocations;
      end;
 
-var pluginsfile : TXMLPluginsFile;
-
 implementation //=========================================================================
-uses XMLRead;
-var document : TXMLDocument;
+uses XMLRead,
+     StrUtils;
+
 //========================================================================================
 function TXMLLocationType.Get_Url: AnsiString;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Url).NodeValue; end;
 
-{ TXMLPluginType }
+function TXMLPluginType.Get_Vendor: AnsiString;
+begin
+     result := ExtractWord(1,Name,[' ']);
+end;
+
 function TXMLPluginType.Get_Name: AnsiString;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 
@@ -70,16 +83,6 @@ begin
    inherited Create(aNode, K_XML_STR_Plugin);
    fLocations := TXMLLocationsType.Create(aNode, K_XML_STR_Location);
 end;
-
-// Unit initialization ===================================================================
-initialization
-   document := TXMLDocument.Create;
-   ReadXMLFile(document,'C:\ProgramData\xPL\Plugins\plugins.xml');
-   pluginsfile := TXMLPluginsFile.Create(Document.FirstChild);
-
-finalization
-   pluginsfile.destroy;
-   document.destroy;
 
 end.
 

@@ -36,7 +36,6 @@ const
   K_XML_STR_Platform = 'platform';
   K_XML_STR_Plugin_url = 'plugin_url';
   K_XML_STR_Regexp = 'regexp';
-  K_XML_STR_Choices = 'choices';
   K_XML_STR_Schema = 'schema';
   K_XML_STR_Status = 'status';
   K_XML_STR_Trigger = 'trigger';
@@ -46,6 +45,7 @@ const
   K_XML_STR_Version = 'version';
   K_XML_STR_XplMsg = 'xplMsg';
   K_XML_STR_XplPlugin = 'xpl-plugin';
+  K_XML_STR_XplhalmgrPlugin = 'xplhalmgr-plugin';
   // Globals Strings
   K_XML_STR_Expires = 'expires';
   K_XML_STR_Global = 'global';
@@ -74,7 +74,7 @@ const
   K_XML_STR_Input = 'input';
   K_XML_STR_IsGroup = 'IsGroup';
   K_XML_STR_Match = 'match';
-  K_XML_STR_MSG_TARGET = 'msg_target';
+  K_XML_STR_Msg_target = 'msg_target';
   K_XML_STR_MSG_SOURCE = 'msg_source';
   K_XML_STR_Operator = 'operator';
   K_XML_STR_Output = 'output';
@@ -103,16 +103,24 @@ const
   // XPL Configuration Strings
   K_XML_STR_Key = 'key';
   K_XML_STR_XplConfigura = 'xplConfiguration';
-
-  K_XML_STR_FORMER  = 'former';
-  K_XML_STR_CREATE  = 'createts';
-  K_XML_STR_EXPIRE  = 'expirets';
-
 type
+
+   { T_clinique_DOMElementList }
+
+   T_clinique_DOMElement = class(TDOMElement)
+   public
+      function SafeReadNode(const aValue : String) : string;
+      function SafeFindNode(const aValue : String) : string;
+   end;
+
+   T_clinique_DOMElementList = class(TDOMElementList)
+   public
+      function SafeReadNode(const aValue : String) : string;
+   end;
 
      { TXMLElementList }
 
-     generic TXMLElementList<_T> = class(TDOMElementList)
+     generic TXMLElementList<_T> = class(T_clinique_DOMElementList)
      private
        function GetDocument: TXMLDocument;
      protected
@@ -130,6 +138,47 @@ type
      end;
 
 implementation
+
+function T_clinique_DOMElement.SafeReadNode(const aValue: String): string;
+var DevNode : TDOMNode;
+begin
+   result := '';
+   DevNode := Attributes.GetNamedItem(aValue);
+   if DevNode<>nil then result := DevNode.NodeValue;
+end;
+
+function T_clinique_DOMElement.SafeFindNode(const aValue: String): string;
+var DevNode : TDOMNode;
+begin
+   result := '';
+   DevNode := FindNode(aValue);
+   if DevNode = nil then exit;
+
+   DevNode := DevNode.FirstChild;
+   if DevNode<>nil then result := DevNode.NodeValue;
+end;
+
+{ T_clinique_DOMElementList }
+
+function T_clinique_DOMElementList.SafeReadNode(const aValue: String): string;
+var DevNode : TDOMNode;
+begin
+   result := '';
+   DevNode := FNode.Attributes.GetNamedItem(aValue);
+   if DevNode<>nil then result := DevNode.NodeValue;
+end;
+
+{ TXMLElementList }
+
+function TXMLElementList.AddElement(const aName : string) : _T;
+var child : TDOMNode;
+begin
+   child := Document.CreateElement(fKeyword);
+   fRootNode.AppendChild(child);
+   TDOMElement(Child).SetAttribute(K_XML_STR_NAME, aName);
+   fList.Add(child);
+   result := _T(child);
+end;
 
 function TXMLElementList.GetDocument: TXMLDocument;
 begin result := TXMLDocument(RootNode.OwnerDocument); end;
@@ -156,15 +205,6 @@ begin
    inherited Create(fRootNode,fKeyWord);
 end;
 
-function TXMLElementList.AddElement(const aName : string) : _T;
-var child : TDOMNode;
-begin
-   child := Document.CreateElement(fKeyword);
-   fRootNode.AppendChild(child);
-   TDOMElement(Child).SetAttribute(K_XML_STR_NAME, aName);
-   fList.Add(child);
-   result := _T(child);
-end;
 
 end.
 
