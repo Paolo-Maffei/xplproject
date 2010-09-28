@@ -12,6 +12,7 @@ unit uxPLAddress;
  0.98 : Simplification of the class (cut inheritance of TxPLBaseClass)
  0.99 : Added HostNmInstance
  1.00 : Suppressed uRegExpTools
+ 1.01 : IsValid function moved to be class functions
 }
 {$mode objfpc}{$H+}
 interface
@@ -46,13 +47,13 @@ type
 
        function  FilterTag : string;
        function  Equals(anAddress : TxPLAddress) : boolean;
-       function  IsValid : boolean;                     dynamic;
 
        class function ComposeAddress       (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
        class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
        class procedure SplitVD              (const aVD : string; out aVendor : string; out aDevice : string);
        class function RandomInstance : tsInstance;
        class function HostNmInstance : tsInstance;
+       class function IsValid(const aAddress : string) : boolean;
     end;
 
     { TxPLTargetAddress }
@@ -68,11 +69,11 @@ type
 
        property  IsGeneric : boolean  read fIsGeneric write fIsGeneric;
        procedure ResetValues;         override;
-       function  IsValid : boolean;   override;
+       class function IsValid(const aAddress : string) : boolean;
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, StrUtils, cStrings, uIpUtils, pwHostName, uRegExpr;
+uses cRandom, SysUtils, StrUtils, cStrings, pwHostName, uRegExpr;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -95,6 +96,16 @@ begin result := AnsiLowerCase(RandomAlphaStr(sizeof(tsInstance))); end;
 
 class function TxPLAddress.HostNmInstance : tsInstance;
 begin result := AnsiLowerCase(InetSelfName); end;
+
+class function TxPLAddress.IsValid(const aAddress : string) : boolean;
+begin
+   with TRegExpr.Create do try
+        Expression := K_REGEXPR_ADDRESS;
+        result := Exec(aAddress);
+   finally
+      destroy;
+   end;
+end;
 
 { TxPLAddress Object ==========================================================}
 constructor TxPLAddress.Create;
@@ -161,15 +172,6 @@ begin
             (fInstance = anAddress.Instance);
 end;
 
-function TxPLAddress.IsValid : boolean;
-begin
-   with TRegExpr.Create do try
-        Expression := K_REGEXPR_ADDRESS;
-        result := Exec(Tag);
-   finally destroy;
-   end;
-end;
-
 procedure TxPLAddress.SetAddressElement(const aIndex : integer; const aValue : string);
 begin
    case aIndex of
@@ -209,11 +211,11 @@ begin
    If not fIsGeneric then inherited;
 end;
 
-function TxPLTargetAddress.IsValid : boolean;
+class function TxPLTargetAddress.IsValid(const aAddress : string) : boolean;
 begin
    with TRegExpr.Create do try
         Expression := K_REGEXPR_TARGET;
-        result := Exec(Tag);
+        result := Exec(aAddress);
    finally destroy;
    end;
 end;
