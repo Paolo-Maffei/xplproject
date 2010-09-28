@@ -75,6 +75,7 @@ type
     procedure e_ListenOnChange(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure ViewXML(Sender: TObject);
     procedure MenuItem7Click(Sender: TObject);
     procedure MenuItem8Click(Sender: TObject);
@@ -96,9 +97,16 @@ type
 var  FrmMain: TFrmMain;
 
 implementation //===============================================================
-uses SysUtils, StrUtils, IdStack, app_main,
+uses SysUtils, 
+     StrUtils, 
+     IdStack, 
+     app_main,
      {$IFDEF unix}pwhostname, {$ENDIF}
-     frm_about, uxPLConst, frm_logviewer, frm_xplappslauncher, frm_XMLView;
+     frm_about, 
+     uxPLConst, 
+     frm_logviewer, 
+     frm_xplappslauncher, 
+     frm_XMLView;
 //==============================================================================
 const K_ALL_IPS_JOCKER       = '*** ALL IP Address ***';
       K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
@@ -154,6 +162,11 @@ begin
    xPLClient.Destroy;
 end;
 
+procedure TFrmMain.FormShow(Sender: TObject);
+begin
+  Toolbar1.Images := frmAbout.ilStandardActions;
+end;
+
 procedure TFrmMain.ViewXML(Sender: TObject);
 var s : string;
 begin
@@ -200,7 +213,7 @@ var i : integer;
 begin
    cbLocations.Items.Clear ;
    for i:=0 to xPLClient.PluginList.Locations.Count-1 do
-{(*            cbLocations.Items.Add(xPLClient.PluginList.Locations[i].Url);*)}
+            cbLocations.Items.Add(xPLClient.PluginList.Locations[i].Url);
    cbLocations.Text := K_XPL_VENDOR_SEED_LOCATION;                              // Default site to use
 
    if not FileExists(xPLClient.PluginList.Name) then exit;
@@ -210,10 +223,10 @@ begin
 
    for i:=0 to xPLClient.PluginList.Plugins.Count-1 do
       with lvPlugins.Items.Add do begin
-{(*           Caption := xPLClient.PluginList.Plugins[i].Name;
+           Caption := xPLClient.PluginList.Plugins[i].Name;
            SubItems.Add(xPLClient.PluginList.Plugins[i].Type_);
            SubItems.Add(xPLClient.PluginList.Plugins[i].URL);
-           SubItems.Add('');*)}
+           SubItems.Add('');
       end;
 
    Panel1.Caption := 'Updated on '+ DateTimeToStr(xPLClient.PluginList.Updated);
