@@ -56,7 +56,7 @@ type
 procedure Register;
 
 implementation
-uses cStrings, RegExpr;
+uses cStrings;
 
 const
 //      K_sg_LAB_COL = 1;
