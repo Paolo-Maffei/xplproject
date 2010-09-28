@@ -25,7 +25,7 @@ type TMComboBox = class(TComboBox)
    procedure Register;
 
 implementation
-uses RegExpr,Graphics;
+uses uRegExpr,Graphics;
 
 procedure Register;
 begin
