@@ -23,6 +23,7 @@ unit uxPLClient;
  1.00 : Suppressed fDevice, fVendor fields, replaced by fAdresse that was present
         in uxPLListener
         Cutted inheritence from TComponent
+ 1.01 : Corrected previously inoperant ResetLog
 }
 
 {$mode objfpc}{$H+}
@@ -67,7 +68,6 @@ TxPLClient = class
 
 implementation //===============================================================
 uses IdStack,
-     uIPutils,
      filechannel,
      consolechannel;
 
@@ -144,10 +144,11 @@ begin
 end;
 
 procedure TxPLClient.ResetLog;
-var f : file;
+var f : textfile;
 begin
      Assign(f,LogFileName);
-     Reset(f);
+     ReWrite(f);
+     Writeln(f,'');
      Close(f);
 end;
 

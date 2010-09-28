@@ -12,6 +12,7 @@ unit uxPLConst;
         RegExpEngine that was available via uRegExTools unit. This unit is deleted
         from the project (bug # FS47)
  0.93 : Removed usage of symbolic constants for ConfigType
+ 0.94 Modified to move schema from Body class to Header class
  }
 
 
@@ -76,9 +77,6 @@ const
    K_FMT_FILTER       = '%s.%s.%s';
    K_ADDR_ANY_TARGET  = '*';
 
-   // Config Types
-
-
    // Message type elements ====================================================
    K_MSG_TYPE_HEAD = 'xpl-';
    K_MSG_TYPE_TRIG = K_MSG_TYPE_HEAD + 'trig';
@@ -89,21 +87,26 @@ const
    K_MSG_TYPE_DESCRIPTORS : Array[0..3] of tsMsgType = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
 
    // Message header elements ==================================================
-   K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10;
-   K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n]';
+   //K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10;
+   K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10'%s'#10;
+   //K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n]';
+   K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n][}][\n](.+)[\n]';
    K_MSG_HEADER_HOP    = 'hop';
    K_MSG_HEADER_SOURCE = 'source';
    K_MSG_HEADER_TARGET = 'target';
    K_MSG_TARGET_ANY    = '*';
 
    // Message body elements ====================================================
-   K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
+   //K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
+   K_RE_BODY_FORMAT    = '[{](.+)[}]';
    K_RE_BODY_LINE      = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
-   K_MSG_BODY_FORMAT   = '%s'#10'{'#10'%s'#10'}'#10;
+   //K_MSG_BODY_FORMAT   = '%s'#10'{'#10'%s'#10'}'#10;
+   K_MSG_BODY_FORMAT   = '{'#10'%s}'#10;
 
 
    // Message elements =========================================================
-   K_RE_MESSAGE        = '\A(.+})(.+})';
+   //K_RE_MESSAGE        = '\A(.+})(.+})';
+   K_RE_MESSAGE        = '\A(.+)({.+})';
 
    // Heart beat message elements ==============================================
    K_HBEAT_ME_APPNAME  = 'appname';
