@@ -18,11 +18,11 @@ TMedit = class(TEdit)
        fStrict  : boolean;
 
        procedure SetRegExpr(const AValue: string);
-       procedure EditingDone; override;
        procedure SetValid(const AValue: boolean);
    public
        constructor create(aOwner : TComponent); override;
        property IsValid : boolean read fValid  write SetValid;
+       procedure EditingDone; override;
    published
        property RegExpr : string read fRegExpr write SetRegExpr;
        property RegStrict : boolean read fStrict write fStrict;

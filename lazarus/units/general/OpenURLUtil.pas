@@ -76,7 +76,7 @@ begin
        Helper := 'mozilla';
   
     if Helper <> '' then
-      fpSystem(Helper + ' ' + URLUtf8 + '&');
+      fpSystem(Helper + ' ' + URLUtf8 + '&')
     else
       Result := False;
   except
