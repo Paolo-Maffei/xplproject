@@ -58,7 +58,7 @@ type  TxPLSettings = class
         function  ComposeCorrectPath(const aPath : string; const uSub : string) : string;
      public
         constructor create;
-        destructor  destroy;
+        destructor  destroy; override;
 
         property ListenToAny   : boolean read GetListenToAny   write SetListenToAny;
         property ListenToLocal : boolean read GetListenToLocal write SetListenToLocal;

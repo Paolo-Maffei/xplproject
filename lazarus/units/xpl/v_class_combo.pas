@@ -12,11 +12,11 @@ type TxPLClassCombo = class(TCombobox)
        fValid   : boolean;
 
        procedure SetRegExpr(const AValue: string);
-       procedure EditingDone; override;
+
        procedure SetValid(const AValue: boolean);
      public
        constructor create(aOwner : TComponent); override;
-
+       procedure EditingDone; override;
        property IsValid : boolean read fValid  write SetValid;
      published
        property RegExpr : string read fRegExpr write SetRegExpr;

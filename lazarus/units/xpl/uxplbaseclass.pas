@@ -6,6 +6,7 @@ unit uxPLBaseClass;
  ==============================================================================
  0.98 : String constants removed to uxPLConst
         Removed requirement of cStrings units
+ 0.99 : Cut inheritence from TComponent
  }
 
 {$mode objfpc}{$H+}
@@ -18,9 +19,10 @@ type
 
 { TxPLBaseClass }
 
-TxPLBaseClass = class(TComponent)
+     TxPLBaseClass = class
      private
        function GetCount: integer;
+       procedure SetTag(const AValue: string); dynamic;
      protected
         fClassName : string;
         fFormatString : string;
@@ -32,13 +34,13 @@ TxPLBaseClass = class(TComponent)
 
         Validator  : TRegExpr;
 
-        function  GetTag: string;                                       virtual;
-        procedure SetTag(const AValue: string);                         virtual;
+        function  GetTag: string;
+
         procedure SetString(const AIndex: integer; const AValue: string);
-        function  GetString(const AIndex: integer) : string;            virtual;
+        function  GetString(const AIndex: integer) : string;
 
      public
-        constructor Create; virtual;
+        constructor Create;
         destructor  destroy; override;
 
         property  Tag : string read GetTag write SetTag;
@@ -48,13 +50,13 @@ TxPLBaseClass = class(TComponent)
 
         procedure ResetValues;
         procedure ResetAll;
-        procedure Assign(aBaseClass : TxPLBaseClass); virtual;
+        procedure Assign(aBaseClass : TxPLBaseClass);
 
         function  AppendItem(const aName : string; const aReg : string) : integer;
         procedure DeleteItem(const aIndex : integer);
-        function  Equals(aBaseClass : TxPLBaseClass) : boolean; virtual;
-        function  IsValid : boolean; virtual;
-        function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument) : TDOMNode; virtual;
+        function  Equals(aBaseClass : TxPLBaseClass) : boolean;
+        function  IsValid : boolean;
+        function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument) : TDOMNode;
         function  ReadFromXML(aParent : TDOMNode) : TDOMNode;
     end;
 
