@@ -8,6 +8,7 @@ unit uxPLWebListener;
          Configuration handling modified to allow restart of web server after config modification
          without the need to restart the app
   0.94 : Changed to create ReplaceTag and ReplaceArrayedTag
+  0.95 : Changes made since move of schema from Body to Header
 }
 
 {$mode objfpc}{$H+}
@@ -35,6 +36,7 @@ type
          fDiscovered : TStringList;
          procedure InitWebServer;
          procedure DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
+
       public
          OnCommandGet : TWebCommandGet; // read fOnCommandGet write fOnCommandGet;
          OnReplaceTag : TWebCallReplaceTag;
@@ -43,8 +45,10 @@ type
          constructor create(aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
-         procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
+//         procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
+         procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); override;
          procedure HBeatApp(const axPLMsg : TxPLMessage);
+
 
          property HtmlDir : string read fHtmlDir;
       end;
@@ -274,15 +278,17 @@ end;
 
 procedure HandleMenuItem;
 var commande, aPar : string;
+    schema : string;
     i : integer;
 begin
    commande := ARequestInfo.Params.Values['xplMsg'];
    for i := 0 to ARequestInfo.Params.Count-1 do begin
       aPar := ARequestInfo.Params.Names[i];
       if AnsiPos('%',aPar) <> 0 then commande := AnsiReplaceStr(commande,aPar,ARequestInfo.Params.Values[aPar]);
+      StrSplitAtChar(commande,'{',schema,commande);
    end;
 
-   SendMessage(K_MSG_TYPE_CMND,self.Address.Tag,commande, true);
+   SendMessage(K_MSG_TYPE_CMND,self.Address.Tag,schema,commande, true);
 end;
 
 begin
@@ -332,14 +338,18 @@ end;
 procedure TxPLWebListener.CallConfigDone;
 begin
    InitWebServer;
-   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+//   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
    inherited CallConfigDone;
 end;
 
-procedure TxPLWebListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
+//procedure TxPLWebListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
+procedure TxPLWebListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
-   inherited FinalizeHBeatMsg(aBody,aPort,aIP);
-   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
+//   inherited FinalizeHBeatMsg(aBody,aPort,aIP);
+   inherited;
+//   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
+   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aMessage.Body.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
 end;
 
 constructor TxPLWebListener.create(aVendor, aDevice, aAppVersion, aDefaultPort: string);
