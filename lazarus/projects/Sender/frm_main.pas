@@ -7,9 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn, uxPLMessage,
-  v_msgbody_stringgrid, v_xplmsg_opendialog,
-  v_msgtype_radio, v_class_combo, MEdit, uxPLClient,Buttons;
-
+  v_msgbody_stringgrid, v_xplmsg_opendialog, uxPLPluginFile, MEdit,
+  v_msgtype_radio, v_class_combo, uxPLClient,Buttons;
 
 type
 
@@ -17,16 +16,20 @@ type
 
   TfrmMain = class(TForm)
     acInstalledApps: TAction;
+    MenuItem11: TMenuItem;
+    ViewLog: TAction;
+    Copy: TAction;
     Image1: TImage;
     ClasseImages: TImageList;
     edtSource: TMedit;
     edtTarget: TMedit;
     edt_Type: TMedit;
     MenuItem10: TMenuItem;
+    MenuItem12: TMenuItem;
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
     MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
     MenuItem8: TMenuItem;
     MenuItem9: TMenuItem;
     MsgGrid: TBodyMessageGrid;
@@ -35,7 +38,6 @@ type
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
-    MenuItem11: TMenuItem;
     MenuItem13: TMenuItem;
     Send: TAction;
     Clear: TAction;
@@ -54,14 +56,12 @@ type
     MenuItem5: TMenuItem;
     ToolBar1: TToolBar;
     ToolBar2: TToolBar;
-    ToolButton1: TToolButton;
     ToolButton10: TToolButton;
     ToolButton11: TToolButton;
     ToolButton2: TToolButton;
     ToolButton3: TToolButton;
     ToolButton5: TToolButton;
     ToolButton6: TToolButton;
-    ToolButton8: TToolButton;
     OpenDialog: TxPLMsgOpenDialog;
     SaveDialog: TxPLMsgSaveDialog;
     radMsgType: TxPLMsgTypeRadio;
@@ -71,14 +71,15 @@ type
     procedure cbClasseEditingDone(Sender: TObject);
 
     procedure ClearExecute(Sender: TObject);
+    procedure CopyExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure LoadExecute(Sender: TObject);
-    procedure MenuItem10Click(Sender: TObject);
     procedure PasteExecute(Sender: TObject);
     procedure QuitExecute(Sender: TObject);
     procedure SaveExecute(Sender: TObject);
     procedure SendExecute(Sender: TObject);
+    procedure ViewLogExecute(Sender: TObject);
 
   private
     filename : string;
@@ -88,25 +89,18 @@ type
     procedure Object2Screen(aMess : TxPLMessage);
     procedure Setfilename(aName : string);
     procedure PluginCommandExecute ( Sender: TObject );
-  public
-    xPLClient : TxPLClient;
   end;
 
 var  frmMain: TfrmMain;
 
-implementation //===============================================================
-uses frm_about, frm_xpllogviewer, uxPLAddress, cUtils, LCLType, clipbrd, DOM,
-     StrUtils, frm_xplAppsLauncher, uxPLConst, u_xml_xplplugin;
+implementation //======================================================================================
+uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile, frm_logviewer,
+     StrUtils, frm_xplAppsLauncher, uxPLConst, app_main, u_xml_xplplugin;
 
-resourcestring //===============================================================
-     K_XPL_APP_VERSION_NUMBER = '1.5.1';
-     K_DEFAULT_VENDOR = 'clinique';
-     K_DEFAULT_DEVICE = 'sender';
-
-// FrmMain =====================================================================
+// FrmMain ===========================================================================================
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-   xPLClient := TxPLClient.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
+   xPLClient := TxPLClient.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
    arrCommandes := TStringList.Create;
    SetFileName('');
    OpenDialog.InitialDir := GetCurrentDir;
@@ -114,7 +108,7 @@ begin
 
    InitPluginsMenu;
 
-   edt_Type.RegExpr  := K_REGEXPR_SCHEMA_ELEMENT;                               // No specialized component a this time
+   edt_Type.RegExpr    := K_REGEXPR_SCHEMA_ELEMENT;    // No specialized component a this time
    edtSource.RegExpr := K_REGEXPR_ADDRESS;
    edtTarget.RegExpr := K_REGEXPR_TARGET;
 
@@ -152,23 +146,28 @@ begin
 end;
 
 procedure TfrmMain.PasteExecute(Sender: TObject);
-var aMessage : TxPLMessage;
 begin
-   aMessage := TxPLMessage.create(Clipboard.AsText);
-   if aMessage.IsValid then
-      Object2Screen(aMessage)
+   SendMsg.ResetValues;
+   SendMsg.RawxPL := ClipBoard.AsText;
+   if SendMsg.IsValid then
+      Object2Screen(SendMsg)
    else
-      Application.MessageBox('Badly formated string for input','Error',MB_OK + MB_ICONERROR);
-   aMessage.Destroy;
+      xPLClient.LogWarn('Tried to paste badly formatted string from clipboard',[]);
+end;
+
+procedure TfrmMain.CopyExecute(Sender: TObject);
+begin
+   SendMsg.ResetValues;
+   if Screen2Object(SendMsg) then
+      ClipBoard.AsText:=SendMsg.RawxPL
 end;
 
 procedure TfrmMain.SendExecute(Sender: TObject);
-var aMessage : TxPLMessage;
 begin
-   aMessage := TxPLMessage.Create;
-   If Screen2Object(aMessage) then begin
-      aMessage.Send;
-      xPLClient.LogInfo('Message sent : ' + aMessage.Header.RawxPL,[]);
+   SendMsg.ResetValues;
+   If Screen2Object(SendMsg) then begin
+      SendMsg.Send;
+      xPLClient.LogInfo('Message sent : %s' ,[SendMsg.RawxPL]);
    end;
 end;
 
@@ -178,13 +177,10 @@ begin
    sError := '';
 
    aMess.MessageType := radMsgType.ItemIndex;
-   aMess.Source.Tag  := edtSource.Text;
-   aMess.Target.Tag  := edtTarget.Text;
-   aMess.Schema.ClasseAsString := cbClasse.Text;
-   aMess.Schema.TypeAsString   := edt_Type.Text;
-
-   if not aMess.Source.IsValid then sError := sError + ' Source field'#10#13;
-   if not aMess.Target.IsValid then sError := sError + ' Target field'#10#13;
+   If not TxPLAddress.IsValid(edtSource.Text) then sError += ' Source field'#10#13 else aMess.Source.Tag  := edtSource.Text;
+   If not TxPLTargetAddress.IsValid(edtTarget.Text) then sError += ' Target field'#10#13 else aMess.Target.Tag  := edtTarget.Text;
+   aMess.Schema.Classe := cbClasse.Text;
+   aMess.Schema.Type_  := edt_Type.Text;
 
    result := (sError='');
    if not result then begin
@@ -201,48 +197,38 @@ begin
    radMsgType.ItemIndex := aMess.MessageType;
    edtSource.Text       := aMess.Source.Tag;
    edtTarget.Text       := aMess.Target.Tag;
-   cbClasse.Text        := aMess.Schema.ClasseAsString;
-   edt_Type.Text        := aMess.Schema.TypeAsString;
+   cbClasse.Text        := aMess.Schema.Classe;
+   edt_Type.Text        := aMess.Schema.Type_;
    MsgGrid.Assign(aMess.Body);
 end;
 
-{= Load and Save management functions  ========================================}
+{= Load and Save management functions  ==========================================}
 procedure TfrmMain.SaveExecute(Sender: TObject);
-var aMessage : TxPLMessage;
 begin
+  SendMsg.ResetValues;
   if length(filename)>0 then saveDialog.FileName := filename;
-  aMessage := TxPLMessage.Create;
-  if (Screen2Object(aMessage) and saveDialog.Execute) then begin
-          aMessage.Name := saveDialog.FileName;
-          aMessage.SaveToFile(saveDialog.FileName);
-          xPLClient.LogInfo('Message saved : ' + aMessage.Name,[]);
+  if (Screen2Object(SendMsg) and saveDialog.Execute) then begin
+          SendMsg.Name := saveDialog.FileName;
+          SendMsg.SaveToFile(saveDialog.FileName);
+          xPLClient.LogInfo('Message saved : ' + SendMsg.Name,[]);
      end;
-  aMessage.Destroy;
 end;
 
 procedure TfrmMain.LoadExecute(Sender: TObject);
-var aMessage : TxPLMessage;
 begin
    if not OpenDialog.Execute then exit;
-
+   SendMsg.ResetValues;
    ClearExecute(self);
    SetFileName(opendialog.filename);
 
-   aMessage := TxPLMessage.Create;
-   if aMessage.LoadFromFile(FileName) then begin
-      Object2Screen(aMessage);
-      xPLClient.LogInfo('Message loaded : %s',[FileName]);
+   if SendMsg.LoadFromFile(FileName) then begin
+      Object2Screen(SendMsg);
+      xPLClient.LogInfo('Message loaded : %s' , [FileName]);
    end else
-      Application.MessageBox('Error reading xpl message file','Error',MB_OK + MB_ICONERROR);
-   aMessage.Destroy;
+      xPLClient.LogWarn('Error reading xpl message file in %s',[FileName]);
 end;
 
-procedure TfrmMain.MenuItem10Click(Sender: TObject);
-begin
-   frmlogviewer.showmodal;
-end;
-
-{= Plug-ins management functions ==============================================}
+{= Plug-ins management functions ================================================}
 procedure TFrmMain.PluginCommandExecute ( Sender: TObject );
 var aMessage : TxPLMessage;
     asender : string;
@@ -293,13 +279,16 @@ begin
        if aMenu.Count = 0 then aMenu.Free;
      end;
 end;
-{==============================================================================}
+{================================================================================}
 
 procedure TfrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
 procedure TfrmMain.acInstalledAppsExecute(Sender: TObject);
 begin frmAppLauncher.ShowModal; end;
+
+procedure TfrmMain.ViewLogExecute(Sender: TObject);
+begin frmLogViewer.ShowModal; end;
 
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;

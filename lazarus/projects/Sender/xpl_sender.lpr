@@ -5,36 +5,41 @@ program xpl_sender;
 {$IFDEF UNIX} {$DEFINE UseCThreds} {$ENDIF}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-  cthreads,
-  {$ENDIF}{$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  Forms
-  { you can add units after this }, LResources, frm_main, XPL, frm_about, uxPLMessage,
+  {$IFDEF UNIX}
+     {$IFDEF UseCThreads}
+     cthreads,
+     {$ENDIF}
+  {$ENDIF}
+  Interfaces,
+  Forms,
+  LResources, indylaz,
+  frm_main,
+  frm_about,
+  frm_logviewer,
   frm_xplappslauncher,
-  frm_xpllogviewer,
-  sharedlogger,
+  uxPLMessage,
+  XPL,
+  app_main,
   u_xml_plugins,
   u_xml_xplplugin;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
-var SendMsg : TxPLMessage;
 begin
+  Application.Title:='xpl_sender';
   {$I xpl_sender.lrs}
   Application.Initialize;
-
+  SendMsg := TxPLMessage.Create;
   if Application.HasOption('s') then begin
-     SendMsg := TxPLMessage.Create;
      SendMsg.LoadFromFile(Application.GetOptionValue('s'));
      SendMsg.Send;
-     SendMsg.Destroy ;
   end else begin
      Application.CreateForm(TfrmMain, frmMain);
-     Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
      Application.CreateForm(TfrmAbout, frmAbout);
      Application.CreateForm(TfrmLogViewer, frmLogViewer);
+     Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
      Application.Icon := frmMain.Icon;
      Application.Run;
   end;
+  SendMsg.Destroy ;
 end.
 
