@@ -7,7 +7,7 @@ interface
 uses Classes, SysUtils, u_xml, DOM;
 
 type
-     TXMLOptionType = class(T_clinique_DOMElement)
+     TXMLOptionType = class(TDOMElement)
      private
        function Get_Label_: AnsiString;
        function Get_Regexp: AnsiString;
@@ -19,7 +19,7 @@ type
      end;
      TXMLOptionsType = specialize TXMLElementList<TXMLOptionType>;
 
-     TXMLElementType = class(T_clinique_DOMElement)
+     TXMLElementType = class(TDOMElement)
      private
        function Get_Conditional_Visibility: AnsiString;
        function Get_Control_Type: AnsiString;
@@ -37,7 +37,7 @@ type
      end;
      TXMLElementsType = specialize TXMLElementList<TXMLElementType>;
 
-     TXMLCommandType = class(T_clinique_DOMElement)
+     TXMLCommandType = class(TDOMElement)
      private
        function Get_Description: AnsiString;
        function Get_Elements: TXMLElementsType;
@@ -56,7 +56,7 @@ type
      TXMLTriggerType = TXMLCommandType;
      TXMLTriggersType = specialize TXMLElementList<TXMLTriggerType>;
 
-     TXMLSchemaType = class(T_clinique_DOMElement)
+     TXMLSchemaType = class(TDOMElement)
      private
        function Get_command: AnsiString;
        function Get_Comment: AnsiString;
@@ -84,7 +84,7 @@ type
      end;
      TXMLMenuItemsType = specialize TXMLElementList<TXMLMenuItemType>;
 
-     TXMLConfigItemType = class(T_clinique_DOMElement)
+     TXMLConfigItemType = class(TDOMElement)
      private
        function Get_Description: AnsiString;
        function Get_Format: AnsiString;
@@ -96,7 +96,7 @@ type
      end;
      TXMLConfigItemsType = specialize TXMLElementList<TXMLConfigItemType>;
 
-     TXMLDeviceType = class(T_clinique_DOMElement)
+     TXMLDeviceType = class(TDOMElement)
      private
         function Get_Beta_Version: AnsiString;
         function Get_Commands: TXMLCommandsType;
@@ -144,15 +144,13 @@ type
         property Info_URL : AnsiString read Get_Info_Url;
      end;
 
-var xplpluginfile : TXMLxplpluginType;
+//var xplpluginfile : TXMLxplpluginType;
 
 implementation //=========================================================================
 uses XMLRead;
-var document : TXMLDocument;
-    aNode : TDOMNode;
 //========================================================================================
 function TXMLDeviceType.Get_Beta_Version: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Beta_version); end;
+begin Result := GetAttribute(K_XML_STR_Beta_version); end;
 
 function TXMLDeviceType.Get_Commands: TXMLCommandsType;
 begin Result := TXMLCommandsType.Create(self, K_XML_STR_Command); end;
@@ -161,22 +159,22 @@ function TXMLDeviceType.Get_ConfigItems: TXMLConfigItemsType;
 begin Result := TXMLConfigItemsType.Create(self, K_XML_STR_ConfigItem); end;
 
 function TXMLDeviceType.Get_Description: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Description); end;
+begin Result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLDeviceType.Get_Download_URL: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Download_url); end;
+begin Result := GetAttribute(K_XML_STR_Download_url); end;
 
 function TXMLDeviceType.Get_Id: AnsiString;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Id).NodeValue; end;
 
 function TXMLDeviceType.Get_Info_URL: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Info_url); end;
+begin Result := GetAttribute(K_XML_STR_Info_url); end;
 
 function TXMLDeviceType.Get_MenuItems: TXMLMenuItemsType;
 begin Result := TXMLMenuItemsType.Create(self, K_XML_STR_MenuItem); end;
 
 function TXMLDeviceType.Get_Platform_: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Platform); end;
+begin Result := GetAttribute(K_XML_STR_Platform); end;
 
 function TXMLDeviceType.Get_Schemas: TXMLSchemasType;
 begin Result := TXMLSchemasType.Create(self, K_XML_STR_Schema); end;
@@ -185,10 +183,10 @@ function TXMLDeviceType.Get_Triggers: TXMLTriggersType;
 begin Result := TXMLTriggersType.Create(self, K_XML_STR_Trigger); end;
 
 function TXMLDeviceType.Get_Type_: AnsiString;
-begin  Result := SafeReadNode(K_XML_STR_Type); end;
+begin  Result := GetAttribute(K_XML_STR_Type); end;
 
 function TXMLDeviceType.Get_Version: AnsiString;
-begin Result := SafeReadNode(K_XML_STR_Version); end;
+begin Result := GetAttribute(K_XML_STR_Version); end;
 
 { TXMLxplpluginType }
 function TXMLxplpluginType.Get_Info_Url: AnsiString;
@@ -209,7 +207,7 @@ begin inherited Create(aNode, K_XML_STR_Device); end;
 { TXMLCommandType }
 
 function TXMLCommandType.Get_Description: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Description); end;
+begin result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLCommandType.Get_Elements: TXMLElementsType;
 begin Result := TXMLElementsType.Create(self, K_XML_STR_Element); end;
@@ -226,16 +224,16 @@ begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 { TXMLElementType }
 
 function TXMLElementType.Get_Conditional_Visibility: AnsiString;
-begin result := SafeReadNode(K_XML_STR_ConditionalV); end;
+begin result := GetAttribute(K_XML_STR_ConditionalV); end;
 
 function TXMLElementType.Get_Control_Type: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Control_type); end;
+begin result := GetAttribute(K_XML_STR_Control_type); end;
 
 function TXMLElementType.Get_Default_: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Default); end;
+begin result := GetAttribute(K_XML_STR_Default); end;
 
 function TXMLElementType.Get_Label_: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Label); end;
+begin result := GetAttribute(K_XML_STR_Label); end;
 
 function TXMLElementType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
@@ -257,10 +255,10 @@ begin result := Attributes.GetNamedItem(K_XML_STR_Value).NodeValue; end;
 { TXMLConfigItemType }
 
 function TXMLConfigItemType.Get_Description: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Description); end;
+begin result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLConfigItemType.Get_Format: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Format); end;
+begin result := GetAttribute(K_XML_STR_Format); end;
 
 function TXMLConfigItemType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
@@ -268,22 +266,22 @@ begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 { TXMLSchemaType }
 
 function TXMLSchemaType.Get_command: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Command); end;
+begin result := GetAttribute(K_XML_STR_Command); end;
 
 function TXMLSchemaType.Get_Comment: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Comment); end;
+begin result := GetAttribute(K_XML_STR_Comment); end;
 
 function TXMLSchemaType.Get_Listen: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Listen); end;
+begin result := GetAttribute(K_XML_STR_Listen); end;
 
 function TXMLSchemaType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 
 function TXMLSchemaType.Get_Status: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Status); end;
+begin result := GetAttribute(K_XML_STR_Status); end;
 
 function TXMLSchemaType.Get_trigger: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Trigger); end;
+begin result := GetAttribute(K_XML_STR_Trigger); end;
 
 { TXMLMenuItemType }
 
@@ -295,7 +293,7 @@ begin Result := SafeFindNode(K_XML_STR_XplMsg); end;
 
 
 
-initialization
+{initialization
    document := TXMLDocument.Create;
    ReadXMLFile(document,'C:\ProgramData\xPL\Plugins\clinique.xml');
 
@@ -307,7 +305,7 @@ initialization
 
 finalization
    xplpluginfile.destroy;
-   document.destroy;
+   document.destroy;}
 
 end.
 
