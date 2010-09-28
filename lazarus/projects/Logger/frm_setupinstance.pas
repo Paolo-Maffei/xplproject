@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,frm_main,
-  XMLPropStorage, ComCtrls, Buttons, StdCtrls, v_msgbody_stringgrid, Grids,
+  ComCtrls, Buttons, StdCtrls, v_msgbody_stringgrid, Grids,
   v_xplmsg_opendialog;
 
 type
@@ -28,7 +28,6 @@ type
     ToolBar3: TToolBar;
     ToolButton1: TToolButton;
     ToolButton2: TToolButton;
-    XMLPropStorage: TXMLPropStorage;
     xPLMsgSaveDlg: TxPLMsgSaveDialog;
     procedure BitBtn2Click(Sender: TObject);
     procedure BitBtn3Click(Sender: TObject);
@@ -46,8 +45,8 @@ var
   frmSetupInstance: TfrmSetupInstance;
 
 implementation
-uses uxPLMessage, uxPLAddress,uxplcfgitem, cStrings,  uxPLConst, RegExpr,
-     uxPLMsgBody, XMLWrite, XMLRead, DOM;
+uses uxPLMessage, uxPLAddress,uxplcfgitem, cStrings,  uxPLConst, uRegExpr,
+     uxPLMsgBody, XMLWrite, XMLRead, DOM, app_main;
 
 procedure TfrmSetupInstance.FormShow(Sender: TObject);
 var aMessage : TxPLMessage;
@@ -90,7 +89,7 @@ begin
        HBDetail.CopyTo(aBody);
 
        xdoc :=  TXMLDocument.Create;
-       aBody.WriteToXML(xDoc.AppendChild(xDoc.CreateElement('config')),xDoc);
+       {(* aBody.WriteToXML(xDoc.AppendChild(xDoc.CreateElement('config')),xDoc); *) Ceci devra être réécrit pour utiliser xpl_xml}
        writeXMLFile(xdoc,aFileName);
        xdoc.Free;
        aBody.Free;
@@ -107,7 +106,7 @@ begin
     aBody := TxPLMsgBody.Create;
     xdoc :=  TXMLDocument.Create;
     readxmlfile(xdoc,aFilename);
-    aBody.ReadFromXML(xDoc.GetElementsByTagName('config').Item[0]);
+    {(* aBody.ReadFromXML(xDoc.GetElementsByTagName('config').Item[0]); *) Ceci devra être réécrit pour utiliser xpl xml }
     HBDetail.Assign(aBody);
     xdoc.free;
     aBody.Destroy;
@@ -150,7 +149,7 @@ end;
 
 procedure TfrmSetupInstance.tbOkClick(Sender: TObject);
 var i : integer;
-    moduletag,newtag,s,key,value : string;
+    moduletag,newtag,s,key : string;
 begin
      s := '';
      moduletag := TxPLAddress.ComposeAddress(Configuration.Vendor,Configuration.Device,Configuration.Instance);;
@@ -164,8 +163,8 @@ begin
             end;
      end;
      if length(s)>0 then
-     frmMain.xPLClient.SendMessage( K_MSG_TYPE_CMND, moduletag, 'config.response'#10'{'#10+ s + '}'#10);
-     frmMain.xPLClient.SendMessage( K_MSG_TYPE_CMND, newtag, 'config.current'#10'{'#10'command=request'#10'}'#10);
+     xPLClient.SendMessage( K_MSG_TYPE_CMND, moduletag, 'config.response',#10'{'#10+ s + '}'#10);
+     xPLClient.SendMessage( K_MSG_TYPE_CMND, newtag, 'config.current',#10'{'#10'command=request'#10'}'#10);
 end;
 
 initialization

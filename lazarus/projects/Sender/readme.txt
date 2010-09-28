@@ -29,7 +29,9 @@ v 1.5.1
         * Load / Save of xPL messages are now formatted with the same format as
           determinator files.
         * Added access to log file
-
+v 1.5.2
+	* General code review to support library evolutions
+	==> reste à finaliser la fonction Command Composer avec la librairie xpl_xml
 
 
 	

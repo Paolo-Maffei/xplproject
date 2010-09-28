@@ -40,10 +40,12 @@ Changes History :
 		* Added the option to start logging (or not) at application startup
 		* Icons added in contextual menus
 		* Introducing proxy handling capability for HTTP at xPLSettings level
-
-		
-To do :
-	Il semble que quand on 'request configuration' sur un module particulier, le message envoyé soit expédié à target=* au 
-	lieu de target=vendor.device.instance, résultat tout le monde répond
+	2.1.2
+		* General code review to support library evolutions
+		* Removed General Settings Menu to avoid code redundancy between linux and windows versions (reintroduced in xPL Network Config)
+		* Corrected an issue generating nearly empty messages when using 'Send Message To...'
+		==> reste à finaliser la fonction Command Composer avec la librairie xpl_xml
+		    (sauvegarde et chargement de configurations)
+			Ajouter le fonctionnement du menu 'commands' sous linux
 
 
