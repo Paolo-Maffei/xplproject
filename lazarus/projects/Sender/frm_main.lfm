@@ -1,13 +1,13 @@
 object frmMain: TfrmMain
-  Left = 9
+  Left = 16
   Height = 325
-  Top = 133
+  Top = 125
   Width = 354
   ActiveControl = edtSource
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'frmMain'
-  ClientHeight = 302
+  ClientHeight = 305
   ClientWidth = 354
   Icon.Data = {
     DE1D010000000100060010100000010020006804000066000000161600000100
@@ -2307,7 +2307,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 47
-    Width = 36
+    Width = 33
     Caption = 'Type :'
     ParentColor = False
   end
@@ -2315,7 +2315,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 71
-    Width = 53
+    Width = 43
     Caption = 'Source :'
     ParentColor = False
   end
@@ -2323,7 +2323,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 97
-    Width = 48
+    Width = 41
     Caption = 'Target :'
     ParentColor = False
   end
@@ -2331,7 +2331,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 125
-    Width = 59
+    Width = 49
     Caption = 'Schema :'
     ParentColor = False
   end
@@ -2371,12 +2371,12 @@ object frmMain: TfrmMain
         Action = Save
       end
       object ToolButton6: TToolButton
-        Left = 159
+        Left = 95
         Top = 0
         Action = Send
       end
       object ToolButton10: TToolButton
-        Left = 219
+        Left = 155
         Top = 0
         Action = Clear
       end
@@ -2387,20 +2387,8 @@ object frmMain: TfrmMain
         Caption = 'ToolButton11'
         Style = tbsDivider
       end
-      object ToolButton8: TToolButton
-        Left = 95
-        Top = 0
-        Action = Paste
-      end
-      object ToolButton1: TToolButton
-        Left = 125
-        Top = 0
-        Width = 34
-        Caption = 'ToolButton1'
-        Style = tbsDivider
-      end
       object ToolButton2: TToolButton
-        Left = 189
+        Left = 125
         Top = 0
         Width = 30
         Caption = 'ToolButton2'
@@ -2457,7 +2445,7 @@ object frmMain: TfrmMain
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 3
-    ClientHeight = 33
+    ClientHeight = 19
     ClientWidth = 228
     Columns = 3
     Items.Strings = (
@@ -2470,10 +2458,10 @@ object frmMain: TfrmMain
   end
   object cbClasse: TxPLClassCombo
     Left = 72
-    Height = 27
+    Height = 23
     Top = 120
     Width = 96
-    ItemHeight = 0
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       ''
@@ -2500,7 +2488,7 @@ object frmMain: TfrmMain
   end
   object edtSource: TMedit
     Left = 72
-    Height = 25
+    Height = 23
     Top = 66
     Width = 232
     TabOrder = 1
@@ -2508,7 +2496,7 @@ object frmMain: TfrmMain
   end
   object edtTarget: TMedit
     Left = 72
-    Height = 25
+    Height = 23
     Top = 92
     Width = 232
     TabOrder = 2
@@ -2516,7 +2504,7 @@ object frmMain: TfrmMain
   end
   object edt_Type: TMedit
     Left = 176
-    Height = 25
+    Height = 23
     Top = 120
     Width = 96
     TabOrder = 4
@@ -2566,49 +2554,6 @@ object frmMain: TfrmMain
           0000000000000000000000000000000000000000000000000000
         }
         OnClick = SendExecute
-      end
-      object MenuItem11: TMenuItem
-        Caption = '-'
-      end
-      object MenuItem16: TMenuItem
-        Action = Paste
-        Bitmap.Data = {
-          36040000424D3604000000000000360000002800000010000000100000000100
-          2000000000000004000064000000640000000000000000000000FFFFFF00FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF005E5E5E025B5B5B775858588A5555558A5252
-          528A4F4F4F8A4C4C4C8A4A4A4A8A4848488A4646468A444444662063984A2063
-          98CF206398FF206398FF206398FF246395FF587388FFF7F7F7FFF0F0F0FFF0F0
-          F0FFF0F0F0FFF0F0F0FFF0F0F0FFF0F0F0FFF3F3F3FA46464684206398C262A5
-          D7FF65A8DAFF64A6D9FF62A4D8FF629FD1FF758EA4FFEFEFEFFFE7E7E7FFE7E7
-          E7FFE7E7E7FFE7E7E7FFE6E6E6FFE6E6E6FFECECECFA49494984206398FF68AB
-          DCFF488ECFFF468BCEFF4387CDFF4484C6FF6885A1FFF0F0F0FFB4B4B4FFB4B4
-          B4FFB4B4B4FFB4B4B4FFB4B4B4FFB3B3B3FFEDEDEDFA4C4C4C84206398FF69AE
-          DCFF4A93D1FF488FD0FF468BCEFF4788C7FF6C88A3FFF0F0F0FFE8E8E8FFE8E8
-          E8FFE7E7E7FFE7E7E7FFE7E7E7FFE7E7E7FFEDEDEDFA4F4F4F84206398FF6BB1
-          DEFF4D97D3FF4B93D2FF488FD0FF4A8CC9FF6F8BA5FFF1F1F1FFB6B6B6FFB5B5
-          B5FFB5B5B5FFB4B4B4FFB4B4B4FFB4B4B4FFEDEDEDFA53535384206398FF6DB3
-          DFFF509CD5FF4E98D3FF4B94D1FF4C91CBFF708EA7FFF1F1F1FFE9E9E9FFE9E9
-          E9FFE8E8E8FFE8E8E8FFE8E8E8FFE7E7E7FFEDEDEDFA56565684206398FF70B5
-          E0FF529FD7FF509CD6FF4E98D4FF4F95CDFF7391AAFFF1F1F1FFB7B7B7FFB6B6
-          B6FFB6B6B6FFB6B6B6FFB5B5B5FFB5B5B5FFEEEEEEFA5A5A5A84206398FF73B7
-          E1FF57A3D7FF53A0D7FF509DD5FF5299CFFF7594ACFFF8F8F8FFF2F2F2FFF2F2
-          F2FFF2F2F2FFF2F2F2FFF2F2F2FFF1F1F1FFF4F4F4FA5E5E5E84206398FF76B9
-          E2FF5CA7D9FF58A4D8FF53A0D7FF539ED5FF618BA9FF6488A1FF6487A1FF6386
-          A0FF69879FFF4A6881FF6A6A6A8A6868688A6565658A62626263206398FF7ABB
-          E3FF61AADBFF5AA5D9FF53A0D7FF529FD7FF529FD7FF529FD7FF529FD7FF529F
-          D7FF62A3D8FF206398FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00206398FF7CBD
-          E4FF65AEDDFF62ABDCFF5EA8DAFF5CA7D9FF5CA7D9FF5CA7D9FF5CA7D9FF529F
-          D7FF62A3D8FF206398FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00206398FF7FBF
-          E4FF69B2DEFF4A9BDAFF4497DCFF4396DCFF4296DCFF4295DCFF4195DBFF519E
-          D6FF6CB2DEFF206398FFFFFFFF00FFFFFF00FFFFFF00FFFFFF00206398E071B3
-          DBFE7EBFE4FF4E9DDFFFB5EEFDFF75D4F0FF75D4F0FFB5EEFDFF4B9BDEFF6EB4
-          E0FF6DB3DFF9206398F3FFFFFF00FFFFFF00FFFFFF00FFFFFF00206398322063
-          98B2206398FF3775A4FFB6EFFEFF80DBF3FF80DBF3FFB6EFFEFF2E6EA1FF2063
-          98FF206398A520639853FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
-          FF002063982A206398FF206398FF206398FF206398FF206398FF206398F0FFFF
-          FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
-        }
-        OnClick = PasteExecute
       end
       object MenuItem15: TMenuItem
         Caption = '-'
@@ -2737,6 +2682,16 @@ object frmMain: TfrmMain
         OnClick = QuitExecute
       end
     end
+    object MenuItem10: TMenuItem
+      Caption = 'Edit'
+      object MenuItem12: TMenuItem
+        Action = Copy
+      end
+      object MenuItem18: TMenuItem
+        Action = Paste
+        OnClick = PasteExecute
+      end
+    end
     object MenuItem8: TMenuItem
       Caption = 'Command composer'
       object MenuItem14: TMenuItem
@@ -2785,13 +2740,12 @@ object frmMain: TfrmMain
     end
     object MenuItem1: TMenuItem
       Caption = '&?'
-      object MenuItem10: TMenuItem
-        Caption = 'View log file'
-        OnClick = MenuItem10Click
-      end
       object MenuItem9: TMenuItem
         Action = acInstalledApps
         OnClick = acInstalledAppsExecute
+      end
+      object MenuItem11: TMenuItem
+        Action = ViewLog
       end
       object MenuItem4: TMenuItem
         Action = About
@@ -2871,13 +2825,23 @@ object frmMain: TfrmMain
     end
     object Paste: TAction
       Caption = 'Paste from clipboard'
-      ImageIndex = 13
+      ImageIndex = 14
       OnExecute = PasteExecute
     end
     object acInstalledApps: TAction
       Caption = 'Installed xPL apps'
       ImageIndex = 17
       OnExecute = acInstalledAppsExecute
+    end
+    object Copy: TAction
+      Caption = 'Copy to clipboard'
+      ImageIndex = 13
+      OnExecute = CopyExecute
+    end
+    object ViewLog: TAction
+      Caption = 'Application log...'
+      ImageIndex = 18
+      OnExecute = ViewLogExecute
     end
   end
   object OpenDialog: TxPLMsgOpenDialog
