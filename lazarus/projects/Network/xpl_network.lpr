@@ -21,12 +21,12 @@ uses
 begin
   {$I xpl_network.lrs}
   Application.Initialize;
-  Application.CreateForm(TFrmMain, FrmMain);
-  Application.CreateForm(TFrmLogViewer, frmLogViewer);
-  Application.CreateForm(TFrmAppLauncher, frmAppLauncher);
-  Application.CreateForm(TfrmAbout, frmAbout);
+  Application.CreateForm(TfrmMain       , frmMain);
+  Application.CreateForm(TfrmAbout      , frmAbout);
+  Application.CreateForm(TfrmXMLView    , frmXMLView);
+  Application.CreateForm(TfrmLogViewer  , frmLogViewer);
+  Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
   Application.Icon := FrmMain.Icon;
-  Application.CreateForm(TfrmXMLView, frmXMLView);
   Application.Run;
 end.
 

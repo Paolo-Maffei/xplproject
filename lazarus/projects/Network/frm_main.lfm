@@ -5,7 +5,7 @@ object FrmMain: TFrmMain
   Width = 631
   ActiveControl = PageControl1
   Caption = 'FrmMain'
-  ClientHeight = 455
+  ClientHeight = 452
   ClientWidth = 631
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
@@ -2269,11 +2269,12 @@ object FrmMain: TFrmMain
   Menu = MainMenu1
   OnCreate = FormCreate
   OnDestroy = FormDestroy
+  OnShow = FormShow
   SessionProperties = 'Left;Top;PageControl1.ActivePage'
   LCLVersion = '0.9.28.2'
   object PageControl1: TPageControl
     Left = 0
-    Height = 426
+    Height = 423
     Top = 29
     Width = 631
     ActivePage = tsBasic
@@ -2284,12 +2285,12 @@ object FrmMain: TFrmMain
     object tsBasic: TTabSheet
       Caption = 'Basic xPL Settings'
       ClientHeight = 398
-      ClientWidth = 623
+      ClientWidth = 629
       object Label4: TLabel
         Left = 4
         Height = 16
         Top = 83
-        Width = 148
+        Width = 179
         Caption = 'Listen for xPL messages on :'
         Font.Color = clNavy
         ParentColor = False
@@ -2299,7 +2300,7 @@ object FrmMain: TFrmMain
         Left = 4
         Height = 16
         Top = 115
-        Width = 247
+        Width = 306
         Caption = 'Broadcast address used to send xPL Messages :'
         Font.Color = clNavy
         ParentColor = False
@@ -2320,7 +2321,7 @@ object FrmMain: TFrmMain
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 86
+        ClientHeight = 87
         ClientWidth = 420
         Items.Strings = (
           'Any IP address'
@@ -2340,25 +2341,25 @@ object FrmMain: TFrmMain
       end
       object e_BroadCast: TComboBox
         Left = 260
-        Height = 23
+        Height = 27
         Top = 115
         Width = 168
-        ItemHeight = 15
+        ItemHeight = 0
         OnChange = e_ListenOnChange
         TabOrder = 1
       end
       object e_ListenOn: TComboBox
         Left = 260
-        Height = 23
+        Height = 27
         Top = 83
         Width = 168
-        ItemHeight = 15
+        ItemHeight = 0
         OnChange = e_ListenOnChange
         TabOrder = 2
       end
       object edtListenTo: TEdit
         Left = 260
-        Height = 23
+        Height = 25
         Top = 219
         Width = 160
         OnChange = e_ListenOnChange
@@ -2379,8 +2380,8 @@ object FrmMain: TFrmMain
     end
     object tsAdanced: TTabSheet
       Caption = 'Advanced Settings'
-      ClientHeight = 398
-      ClientWidth = 623
+      ClientHeight = 401
+      ClientWidth = 629
       object Label9: TLabel
         Left = 8
         Height = 16
@@ -2439,7 +2440,7 @@ object FrmMain: TFrmMain
         ChildSizing.ShrinkVertical = crsScaleChilds
         ChildSizing.Layout = cclLeftToRightThenTopToBottom
         ChildSizing.ControlsPerLine = 1
-        ClientHeight = 55
+        ClientHeight = 56
         ClientWidth = 416
         Items.Strings = (
           'No proxy'
@@ -2467,8 +2468,8 @@ object FrmMain: TFrmMain
     end
     object tsVendor: TTabSheet
       Caption = 'Vendors plug-ins'
-      ClientHeight = 398
-      ClientWidth = 623
+      ClientHeight = 401
+      ClientWidth = 629
       object Label12: TLabel
         Left = 4
         Height = 16
@@ -2492,14 +2493,14 @@ object FrmMain: TFrmMain
         Height = 23
         Top = 11
         Width = 304
-        ItemHeight = 15
+        ItemHeight = 0
         TabOrder = 1
       end
       object lvPlugins: TListView
         Left = 0
-        Height = 355
+        Height = 358
         Top = 43
-        Width = 623
+        Width = 629
         Align = alBottom
         Anchors = [akTop, akLeft, akBottom]
         Checkboxes = True
@@ -2518,7 +2519,7 @@ object FrmMain: TFrmMain
           end        
           item
             Caption = 'Update'
-            Width = 130
+            Width = 136
           end>
         PopupMenu = popPluginList
         TabOrder = 2
@@ -2550,7 +2551,7 @@ object FrmMain: TFrmMain
       OnClick = tbReloadClick
     end
     object tbSave: TToolButton
-      Left = 45
+      Left = 51
       Top = 0
       AutoSize = True
       Caption = 'Save Settings'
@@ -2558,14 +2559,14 @@ object FrmMain: TFrmMain
       OnClick = SaveSettingsExecute
     end
     object tbUpdateSeed: TToolButton
-      Left = 75
+      Left = 81
       Top = 0
       Caption = 'Update Plugin List'
       ImageIndex = 12
       OnClick = UpdateSeedExecute
     end
     object tbDownload: TToolButton
-      Left = 179
+      Left = 202
       Top = 0
       Caption = 'Download Selected'
       ImageIndex = 5
