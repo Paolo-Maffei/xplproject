@@ -51,7 +51,6 @@ object frmSetupInstance: TfrmSetupInstance
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
-    Images = frmAbout.ilStandardActions
     List = True
     ShowCaptions = True
     TabOrder = 0
@@ -63,7 +62,7 @@ object frmSetupInstance: TfrmSetupInstance
       OnClick = tbOkClick
     end
     object ToolButton1: TToolButton
-      Left = 205
+      Left = 204
       Top = 0
       Width = 23
       Caption = 'ToolButton1'
@@ -84,7 +83,7 @@ object frmSetupInstance: TfrmSetupInstance
       Style = tbsSeparator
     end
     object BitBtn2: TBitBtn
-      Left = 228
+      Left = 227
       Height = 24
       Top = 0
       Width = 100
@@ -130,7 +129,7 @@ object frmSetupInstance: TfrmSetupInstance
       TabOrder = 0
     end
     object BitBtn3: TBitBtn
-      Left = 328
+      Left = 327
       Height = 24
       Top = 0
       Width = 100
@@ -190,7 +189,6 @@ object frmSetupInstance: TfrmSetupInstance
     OnEditingDone = HBDetailEditingDone
     OnSelection = HBDetailSelection
     RowOptions = [roAllowAppend, roAllowDelete, roAllowInsert, roAllowKeys]
-    OnRowsChanged = nil
     ColWidths = (
       15
       125
@@ -228,11 +226,6 @@ object frmSetupInstance: TfrmSetupInstance
       ''
     )
     TabOrder = 2
-  end
-  object XMLPropStorage: TXMLPropStorage
-    StoredValues = <>
-    left = 216
-    top = 83
   end
   object xPLMsgSaveDlg: TxPLMsgSaveDialog
     DefaultExt = '.xpl'

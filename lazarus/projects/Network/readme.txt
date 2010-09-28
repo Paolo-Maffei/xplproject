@@ -37,4 +37,4 @@
 v 1.5.2
 	* General code review to support library evolutions
 	==> reste à finaliser la fonction Command Composer avec la librairie xpl_xml
-
+	

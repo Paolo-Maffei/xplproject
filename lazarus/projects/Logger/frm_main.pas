@@ -31,9 +31,6 @@ type
     Memo1: TMemo;
     MenuItem13: TMenuItem;
     MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
-    MenuItem17: TMenuItem;
-    MenuItem18: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem20: TMenuItem;
     MenuItem7: TMenuItem;
@@ -89,17 +86,16 @@ type
     procedure acAppSettingsExecute(Sender: TObject);
     procedure acDiscoverExecute(Sender: TObject);
     procedure acLoggingExecute(Sender: TObject);
-    procedure acNetworkSettingsExecute(Sender: TObject);
     procedure acPluginDetailExecute(Sender: TObject);
     procedure acRequestConfigExecute(Sender: TObject);
     procedure acSetupInstanceExecute(Sender: TObject);
-    procedure acVendorPluginsExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     function CheckFilter(aMsg : TxPLMessage): boolean;
     procedure ExportExecute(Sender: TObject);
     procedure FilterExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvMessagesColumnClick(Sender: TObject; Column: TListColumn);
     procedure lvMessagesDblClick(Sender: TObject);
     procedure lvMessagesSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -117,8 +113,6 @@ type
     LastSortedColumn: integer;
     Ascending: boolean;
 
-    bConfirmExit : boolean;
-
     iReceivedMsg : integer;
     iLoggedMsg : integer;
     dtLogStart : TDateTime;
@@ -132,7 +126,6 @@ type
     procedure AddToTreeview(aMessageNum : integer);
     procedure RequestConfig(aTarget : tsAddress);
   public
-     xPLClient : TxPLListener;
      procedure ApplySettings(Sender : TObject);
   end;
 
@@ -151,18 +144,10 @@ var
   FrmMain: TFrmMain;
 
 implementation { TFrmLogger =============================================================}
-uses frm_xplappslauncher, frm_AppSettings, //cDateTime,
-     StrUtils, frm_xpllogviewer, u_xpl_message_gui,
+uses frm_xplappslauncher, frm_AppSettings,
+     StrUtils, frm_logviewer, u_xpl_message_gui, app_main,
      uxPLAddress, uxplHeader,  frm_PluginDetail,
-     cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance,
-     frm_networksettings, frm_vendorplugins;
-
-// ======================================================================================
-resourcestring
-     K_XPL_APP_VERSION_NUMBER = '2.1';
-     K_DEFAULT_VENDOR = 'clinique';
-     K_DEFAULT_DEVICE = 'logger';
-     K_ROOT_NODE_NAME = 'xPL Network';
+     cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance;
 
 // ======================================================================================
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -171,13 +156,6 @@ begin
   saveDialog.Filter := 'txt file|*.txt';
   saveDialog.DefaultExt := 'txt';
   saveDialog.FilterIndex := 1;
-
-  bConfirmExit := True;
-
-  xPLClient := TxPLListener.Create(self,K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER);
-  xPLClient.OnxPLReceived  := @OnMessageReceived;
-  xPLClient.PassMyOwnMessages := True;
-  Self.Caption := xPLClient.AppName;
 
   clbType.Items.Add(K_MSG_TYPE_TRIG);
   clbType.Items.Add(K_MSG_TYPE_STAT);
@@ -200,8 +178,11 @@ begin
   topNode := tvMessages.Items.AddChild(nil,K_ROOT_NODE_NAME);
   tvMessages.Selected := topNode;
 
+  xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER,false);
+  xPLClient.OnxPLReceived  := @OnMessageReceived;
+  xPLClient.PassMyOwnMessages := True;
+  Self.Caption := xPLClient.AppName;
   xPLClient.Listen;
-  xPLClient.AwaitingConfiguration := false;
 end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
@@ -210,23 +191,16 @@ begin
   Messages.Destroy;
 end;
 
+procedure TFrmMain.FormShow(Sender: TObject);
+begin
+    Toolbar2.Images := frmAbout.ilStandardActions;
+end;
+
 procedure TFrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
 procedure TFrmMain.acLoggingExecute(Sender: TObject);
 begin frmLogViewer.Showmodal; end;
-
-procedure TFrmMain.acNetworkSettingsExecute(Sender: TObject);
-begin
- {$IFDEF WINDOWS}
- frmNetworkSettings.ShowModal;
- {$ELSE}
- Application.MessageBox('Not implemented in this version','Info',mb_OK);
- {$ENDIF}
-end;
-
-procedure TFrmMain.acVendorPluginsExecute(Sender: TObject);
-begin frmVendorPlugins.ShowModal; end;
 
 procedure TFrmMain.FilterExecute(Sender: TObject);
 begin { Nothing to do but the function must be present } end;
@@ -253,13 +227,13 @@ end;
 
 procedure TFrmMain.acDiscoverExecute(Sender: TObject);
 begin
-   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST,#10'command=request'#10'}'#10);
 end;
 
 procedure TFrmMain.RequestConfig(aTarget : tsAddress);
 begin
-   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
-   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST,'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT,'{'#10'command=request'#10'}'#10);
 end;
 
 procedure TFrmMain.acRequestConfigExecute(Sender: TObject);
@@ -289,7 +263,7 @@ var i, elt : integer;
 begin
      result := true;
      for i:=0 to clbSchema.Items.Count-1 do begin
-         ch := aMsg.Schema.ClasseAsString;
+         ch := aMsg.Schema.Classe;
          elt := clbSchema.Items.IndexOf(ch);
          if elt<>-1 then result := result and clbSchema.Checked[elt];
      end;
@@ -339,15 +313,15 @@ end;
 
 
 procedure TFrmMain.mnuSendMessageClick(Sender: TObject);
-var aMessage : txPLMessageGUI;
 begin
-     aMessage := TxPLMessageGUI.Create ;
-     aMessage.Header.Source := xPLClient.Address;
-     aMessage.Header.Target.Tag := GetSourceAddress;
-     aMessage.Body.Schema.ClasseAsString:='class';                                        // 2.0.3 feature
-     aMessage.Body.Schema.TypeAsString:='basic';                                          // 2.0.3
-     aMessage.Body.AddKeyValuePair('key','value');                                        // 2.0.3
-     aMessage.ShowForEdit([boSave,boSend]) ;                                              // Potential issue here : aMessage not destroyed
+   with TxPLMessageGUI.Create do begin
+     Header.Source.Assign(xPLClient.Address);
+     Header.Target.Tag := GetSourceAddress;
+     Schema.Tag := K_SCHEMA_CONTROL_BASIC;
+     MessageType:= K_MSG_TYPE_CMND;                                         // 2.1.2 correction
+     Body.AddKeyValuePair('key','value');                                   // 2.0.3
+     ShowForEdit([boSave,boSend]) ;                                         // Potential issue here : aMessage not destroyed
+   end;
 end;
 
 procedure TFrmMain.lvMessagesColumnClick(Sender: TObject; Column: TListColumn);
@@ -419,9 +393,7 @@ end;
 
 procedure TFrmMain.QuitExecute(Sender: TObject);
 begin
-  if (not bConfirmExit) or
-     (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES)
-  then Close;
+  if (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) then Close;
 end;
 
 procedure TFrmMain.acSetupInstanceExecute(Sender: TObject);
@@ -453,7 +425,7 @@ begin
    acSetupInstance.Visible := ckConfigList.Checked or acPluginDetail.Visible;
    mnuCommands.Visible := acSetupInstance.Visible;
    if ConfElmts.plug_detail<>nil then begin
-{$IFDEF WINDOWS}       // At the time, don't understand why this fails under linux
+{$IFDEF WINDOWS}       {(* At the time, don't understand why this fails under linux *)}
       mnuCommands.Clear;
       for i := 0 to ConfElmts.plug_detail.Commands.Count-1 do begin
           aMenu := TMenuItem.Create(self);
@@ -528,7 +500,7 @@ var s : array[0..4] of string;
     i : integer;
 begin
      with lvMessages.Items.Add,TxPLMessage(Messages.Objects[aMessageNum]) do begin
-        if frmAppSettings.ckIcons.Checked then ImageIndex := Ord(Schema.Classe)
+        if frmAppSettings.ckIcons.Checked then ImageIndex := clbSchema.Items.IndexOf(Schema.Classe)
                                           else ImageIndex := TxPLHeader.MsgTypeAsOrdinal(MessageType);
 
         for i:=0 to 4 do
@@ -570,7 +542,7 @@ end;
 
 procedure HandleConfigMessages;
 begin
-   if ((axPLMessage.Body.Keys.Count=0 ) or (axPLMessage.Schema.Classe<>xpl_scConfig) or (axPLMessage.MessageType<>K_MSG_TYPE_STAT)) then exit;      // Don't handle config request messages
+   if ((axPLMessage.Body.Keys.Count=0 ) or (axPLMessage.Schema.Classe<>K_SCHEMA_CLASS_CONFIG) or (axPLMessage.MessageType<>K_MSG_TYPE_STAT)) then exit;      // Don't handle config request messages
    case AnsiIndexStr(axPLMessage.Schema.Tag, [K_SCHEMA_CONFIG_CURRENT,K_SCHEMA_CONFIG_LIST]) of
         0 : Config_Elmts.config_current:= axPLMessage.Body.RawxPL;
         1 : Config_Elmts.config_list:= axPLMessage.Body.RawxPL;
