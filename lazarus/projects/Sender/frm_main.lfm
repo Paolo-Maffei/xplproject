@@ -7,7 +7,7 @@ object frmMain: TfrmMain
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'frmMain'
-  ClientHeight = 305
+  ClientHeight = 302
   ClientWidth = 354
   Icon.Data = {
     DE1D010000000100060010100000010020006804000066000000161600000100
@@ -2307,7 +2307,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 47
-    Width = 33
+    Width = 36
     Caption = 'Type :'
     ParentColor = False
   end
@@ -2315,7 +2315,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 71
-    Width = 43
+    Width = 53
     Caption = 'Source :'
     ParentColor = False
   end
@@ -2323,7 +2323,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 97
-    Width = 41
+    Width = 48
     Caption = 'Target :'
     ParentColor = False
   end
@@ -2331,7 +2331,7 @@ object frmMain: TfrmMain
     Left = 16
     Height = 16
     Top = 125
-    Width = 49
+    Width = 59
     Caption = 'Schema :'
     ParentColor = False
   end
@@ -2445,7 +2445,7 @@ object frmMain: TfrmMain
     ChildSizing.ShrinkVertical = crsScaleChilds
     ChildSizing.Layout = cclLeftToRightThenTopToBottom
     ChildSizing.ControlsPerLine = 3
-    ClientHeight = 19
+    ClientHeight = 33
     ClientWidth = 228
     Columns = 3
     Items.Strings = (
@@ -2458,10 +2458,10 @@ object frmMain: TfrmMain
   end
   object cbClasse: TxPLClassCombo
     Left = 72
-    Height = 23
+    Height = 27
     Top = 120
     Width = 96
-    ItemHeight = 15
+    ItemHeight = 0
     ItemIndex = 0
     Items.Strings = (
       ''
@@ -2488,7 +2488,7 @@ object frmMain: TfrmMain
   end
   object edtSource: TMedit
     Left = 72
-    Height = 23
+    Height = 25
     Top = 66
     Width = 232
     TabOrder = 1
@@ -2496,7 +2496,7 @@ object frmMain: TfrmMain
   end
   object edtTarget: TMedit
     Left = 72
-    Height = 23
+    Height = 25
     Top = 92
     Width = 232
     TabOrder = 2
@@ -2504,7 +2504,7 @@ object frmMain: TfrmMain
   end
   object edt_Type: TMedit
     Left = 176
-    Height = 23
+    Height = 25
     Top = 120
     Width = 96
     TabOrder = 4
@@ -2686,6 +2686,7 @@ object frmMain: TfrmMain
       Caption = 'Edit'
       object MenuItem12: TMenuItem
         Action = Copy
+        OnClick = CopyExecute
       end
       object MenuItem18: TMenuItem
         Action = Paste
@@ -2746,6 +2747,7 @@ object frmMain: TfrmMain
       end
       object MenuItem11: TMenuItem
         Action = ViewLog
+        OnClick = ViewLogExecute
       end
       object MenuItem4: TMenuItem
         Action = About
