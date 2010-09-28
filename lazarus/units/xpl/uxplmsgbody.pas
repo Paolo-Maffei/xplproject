@@ -10,12 +10,13 @@ unit uxplmsgbody;
  0.97 : Use of uxPLConst
  0.98 : Added method to clean empty body elements ('value=')
  0.99 : Switched local type of xml writing to use u_xml_xpldeterminator
- }
+ 1.01 : Switched schema from Body to Header
+}
 {$mode objfpc}{$H+}
 
 interface
 
-uses uxPLSchema, Classes, uxPLBaseClass, u_xml_xpldeterminator;
+uses Classes, uxPLBaseClass, u_xml_xpldeterminator;
 
 type
 
@@ -25,18 +26,18 @@ type
     private
 //      fItmNames: TStringList;
 //      fItmValues: TStringList;
-       fSchema : txPLSchema;
+//       fSchema : txPLSchema;
        function GetRawxPL : string;
        procedure SetTag(const AValue: string); override;
      public
        property Keys     : TStringList read fItmNames;
        property Values   : TStringList read fItmValues;
-       property Schema   : TxPLSchema  read FSchema;
+//       property Schema   : TxPLSchema  read FSchema;
 
        property RawxPL   : string      read GetRawxPL write setTag;
 
        constructor create; override;
-       destructor  destroy; override;
+//       destructor  destroy; override;
 
        procedure ResetValues;
        procedure CleanEmptyValues;
@@ -51,32 +52,32 @@ type
        procedure ReadFromXML(aAction : TXMLxplActionType);
 
        // Standard described bodies ===========================================
-       procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
-       procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
+       //procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
+       //procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
 
      end;
 
 implementation {===============================================================}
-uses cStrings, sysutils, uRegExpr, uxPLConst, uRegExTools;
+uses cStrings, sysutils, uRegExpr, uxPLConst;
 
 constructor TxPLMsgBody.create;
 begin
      inherited Create;
      fClassName := 'xPLBody';
 
-     fSchema := TxPLSchema.Create;
+//     fSchema := TxPLSchema.Create;
 end;
 
-destructor TxPLMsgBody.destroy;
-begin
-     Schema.Destroy;
-     inherited;
-end;
+//destructor TxPLMsgBody.destroy;
+//begin
+//     Schema.Destroy;
+//     inherited;
+//end;
 
 procedure TxPLMsgBody.ResetValues;
 begin
   inherited ResetAll;
-  Schema.ResetValues;
+//  Schema.ResetValues;
 end;
 
 procedure TxPLMsgBody.CleanEmptyValues;
@@ -90,7 +91,7 @@ end;
 procedure TxPLMsgBody.Assign(const aBody: TxPLMsgBody);
 begin
   inherited Assign(TxPLBaseClass(aBody));
-  fSchema := aBody.Schema;
+//  fSchema := aBody.Schema;
 end;
 
 function TxPLMsgBody.GetRawxPL: string;
@@ -98,10 +99,11 @@ const BodyLineFmt = '%s=%s'#10;
 var i : integer;
 begin
    result := '';
-   if TxPLSchema.IsValid(Schema.Tag) then begin
+//   if TxPLSchema.IsValid(Schema.Tag) then begin
       for i:= 0 to ItemCount-1 do result += Format(BodyLineFmt,[fItmNames[i],fItmValues[i]]);
-      result := Format(K_MSG_BODY_FORMAT,[Schema.Tag,result]);
-    end;
+//      result := Format(K_MSG_BODY_FORMAT,[Schema.Tag,result]);
+      result := Format(K_MSG_BODY_FORMAT,[result]);
+//    end;
 end;
 
 {------------------------------------------------------------------------
@@ -141,7 +143,7 @@ end;
 procedure TxPLMsgBody.WriteToXML(aAction : TXMLxplActionType);
 var i : integer;
 begin
-   aAction.Msg_Schema:=Schema.Tag;
+//   aAction.Msg_Schema:=Schema.Tag;
    with aAction.xplActions do
         for i:= 0 to ItemCount-1 do
             AddElement(intToStr(i)).Expression := Keys[i]+'='+Values[i];
@@ -151,7 +153,7 @@ procedure TxPLMsgBody.ReadFromXML(aAction : TXMLxplActionType);
 var i : integer;
     Actions : TXMLxplActionParamsType;
 begin
-   Schema.Tag := aAction.Msg_Schema;
+//   Schema.Tag := aAction.Msg_Schema;
    Actions := aAction.xplActions;
    for i := 0 to Actions.Count-1 do
        self.AddKeyValue(Actions.Element[i].Expression);
@@ -163,9 +165,10 @@ begin
    with TRegExpr.Create do try
         Expression := K_RE_BODY_FORMAT;
         if Exec(StrRemoveChar(aValue,#13)) then begin
-           Schema.Tag := AnsiLowerCase(Match[1]);
+//           Schema.Tag := AnsiLowerCase(Match[1]);
            Expression := K_RE_BODY_LINE;
-           Exec(Match[2]);
+//           Exec(Match[2]);
+           Exec(Match[1]);
            repeat
                  AddKeyValue(Match[1]);
            until not ExecNext;
@@ -175,23 +178,23 @@ begin
 end;
 
 // Standard defined bodies ===============================================================
-procedure TxPLMsgBody.Format_HbeatApp(const aInterval : string; const aPort : string; const aIP : string);
+{procedure TxPLMsgBody.Format_HbeatApp(const aInterval : string; const aPort : string; const aIP : string);
 begin
    ResetAll;
    Schema.Tag := K_SCHEMA_HBEAT_APP;
    AddKeyValuePair(K_HBEAT_ME_INTERVAL,aInterval);
    AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
    AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
-end;
+end;}
 
-procedure TxPLMsgBody.Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
+{procedure TxPLMsgBody.Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
 begin
    ResetAll;
    Schema.Tag := K_SCHEMA_SENSOR_BASIC;
    AddKeyValuePair('device' ,aDevice);
    AddKeyValuePair('type'   ,aType);
    AddKeyValuePair('current',aCurrent);
-end;
+end;}
 
 end.
 
