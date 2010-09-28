@@ -18,7 +18,7 @@ Rev 298 : Modified to enable Linux support
         Removed field AwaitingConfiguration that was redundant with Config.ConfigNeeded
 }
 
-{$i compiler.inc}{$H+}
+{$mode objfpc}{$H+}
 
 interface
 
@@ -68,7 +68,7 @@ type
         procedure HandleHBeatRequest;   dynamic;
         procedure SendHeartBeatMessage; dynamic;
         procedure SendConfigRequestMsg(aTarget : string);
-        procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); dynamic;
+        procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
 
         property Config              : TxPLConfig read fConfig;
@@ -84,11 +84,11 @@ type
         function DoMediaBasic   (aMessage : TxPLMessage) : boolean;
 
         procedure UDPRead(const aString : string);
-        procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
+        procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
         function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
-	procedure LogInfo(Const Formatting  : string; Const Data  : array of const ); override;            // Info are only stored in log file
+	procedure LogInfo(Const Formatting  : string; Const Data  : array of const );
         procedure Listen;
         procedure Dispose;
      end;
@@ -171,12 +171,13 @@ begin
    IncomingSocket.Active := False;
 end;
 
-procedure TxPLListener.SendMessage(const aMsgType : tsMsgType; const aDest : string; const aRawBody : string; const bClean : boolean = false);
+procedure TxPLListener.SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
 begin
    with TxPLMessage.Create do begin
           Source.Assign(Address);
           MessageType := aMsgType;
           Target.Tag  := aDest;
+          Schema.Tag  := aSchema;
           Body.RawxPL := aRawBody;
           if bClean then Body.CleanEmptyValues;
           Send;
@@ -187,7 +188,6 @@ end;
 procedure TxPLListener.SendMessage(const aRawXPL : string);
 begin
    with TxPLMessage.Create(aRawxPL) do begin
-//        RawXPL := aRawXPL;
         Source.Assign(Adresse);
         if IsValid then Send
                    else LogError('Error sending message :',[RawXPL]);
@@ -213,7 +213,7 @@ begin
      Source.Assign(Adresse);
      MessageType := aMsgType;
      Target.Tag  := aTarget;
-     Body.Schema.Tag := aSchema;
+     Schema.Tag := aSchema;
   end;
 end;
 
@@ -224,35 +224,34 @@ begin
      else SendLOGBasic('info', Format(Formatting,Data));
 end;
 
-procedure TxPLListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
+procedure TxPLListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
-   aBody.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
-   aBody.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
-   aBody.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
+   aMessage.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
+   aMessage.Body.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
+   aMessage.Body.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
 
-   if Config.ConfigNeeded then aBody.Schema.Classe := K_SCHEMA_CLASS_CONFIG;       // Change Schema class in this case
-   if bDisposing  then aBody.Schema.Type_ := 'end';                         // Change Schema type in this case
+   if Config.ConfigNeeded then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG;       // Change Schema class in this case
+   if bDisposing  then aMessage.Schema.Type_ := 'end';                         // Change Schema type in this case
 end;
 
 procedure TxPLListener.SendHeartBeatMessage;
 var i : integer;
-    aBody : TxPLMsgBody;
+    aMessage : TxPLMessage;
 begin
-     aBody := TxPLMsgBody.Create;
+   aMessage := TxPLMessage.Create;
 
-     for i:=0 to IncomingSocket.Bindings.Count-1 do begin
-         FinalizeHBeatMsg(aBody,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
-         if Assigned(OnxPLHBeatPrepare) and (not Config.ConfigNeeded) then OnxPLHBeatPrepare(aBody);
-         SendMessage(K_MSG_TYPE_STAT,'*',aBody.RawxPL);
-     end;
-
-     aBody.Destroy;
+   for i:=0 to IncomingSocket.Bindings.Count-1 do begin
+       FinalizeHBeatMsg(aMessage,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
+       if Assigned(OnxPLHBeatPrepare) and (not Config.ConfigNeeded) then OnxPLHBeatPrepare(aMessage.Body);
+       SendMessage(K_MSG_TYPE_STAT,K_ADDR_ANY_TARGET,aMessage.Schema.Tag,aMessage.Body.RawxPL);
+   end;
+   aMessage.Destroy;
 end;
 
 procedure TxPLListener.SendConfigRequestMsg(aTarget : string);
 begin
-   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST+#10'{'#10'command=request'#10'}'#10);
-   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT+#10'{'#10'command=request'#10'}'#10);
+   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST,'{'#10'command=request'#10'}'#10);
+   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT,'{'#10'command=request'#10'}'#10);
 end;
 
 procedure TxPLListener.TimerElapsed(Sender: TObject);
@@ -281,14 +280,14 @@ begin
 
      case AnsiIndexStr(aMessage.Schema.Type_, ['current', 'list', 'response']) of
           0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
-                 Schema.Tag := aMessage.Body.Schema.Tag;
+                 Schema.Tag := aMessage.Schema.Tag;
                  for i := 0 to fConfig.Count-1 do
                      for j:= 0 to fConfig[i].ValueCount -1 do
                          Body.AddKeyValuePair(fConfig[i].Key,fConfig[i].Values[j]);
                  Send;
               end;
           1 : begin                                                                                   // config.list message handling
-                Schema.Tag := aMessage.Body.Schema.Tag;
+                  Schema.Tag := aMessage.Schema.Tag;
                 for i := 0 to fConfig.Count-1 do
                     Body.AddKeyValuePair( fConfig[i].ConfigType,
                                           fConfig[i].Key + fConfig[i].MaxValueAsString);
@@ -311,8 +310,8 @@ end;
 
 procedure TxPLListener.HandleHBeatRequest;
 begin
-     HBReqTimer.Interval := Random(4000) + 2000;     // Choose a random value between 2 and 6 seconds
-     HBReqTimer.Enabled  := True;
+   HBReqTimer.Interval := Random(4000) + 2000;     // Choose a random value between 2 and 6 seconds
+   HBReqTimer.Enabled  := True;
 end;
 
 procedure TxPLListener.UDPRead(const aString : string);
