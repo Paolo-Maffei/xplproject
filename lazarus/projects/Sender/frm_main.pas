@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn, uxPLMessage,
-  v_msgbody_stringgrid, v_xplmsg_opendialog, uxPLPluginFile, MEdit,
+  v_msgbody_stringgrid, v_xplmsg_opendialog, MEdit,
   v_msgtype_radio, v_class_combo, uxPLClient,Buttons;
 
 type
@@ -94,7 +94,7 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, uxPLVendorFile, frm_logviewer,
+uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, frm_logviewer,
      StrUtils, frm_xplAppsLauncher, uxPLConst, app_main, u_xml_xplplugin;
 
 // FrmMain ===========================================================================================
@@ -108,7 +108,7 @@ begin
 
    InitPluginsMenu;
 
-   edt_Type.RegExpr    := K_REGEXPR_SCHEMA_ELEMENT;    // No specialized component a this time
+   edt_Type.RegExpr  := K_REGEXPR_SCHEMA_ELEMENT;    // No specialized component a this time
    edtSource.RegExpr := K_REGEXPR_ADDRESS;
    edtTarget.RegExpr := K_REGEXPR_TARGET;
 
@@ -147,7 +147,6 @@ end;
 
 procedure TfrmMain.PasteExecute(Sender: TObject);
 begin
-   SendMsg.ResetValues;
    SendMsg.RawxPL := ClipBoard.AsText;
    if SendMsg.IsValid then
       Object2Screen(SendMsg)
@@ -157,14 +156,12 @@ end;
 
 procedure TfrmMain.CopyExecute(Sender: TObject);
 begin
-   SendMsg.ResetValues;
    if Screen2Object(SendMsg) then
       ClipBoard.AsText:=SendMsg.RawxPL
 end;
 
 procedure TfrmMain.SendExecute(Sender: TObject);
 begin
-   SendMsg.ResetValues;
    If Screen2Object(SendMsg) then begin
       SendMsg.Send;
       xPLClient.LogInfo('Message sent : %s' ,[SendMsg.RawxPL]);
@@ -175,7 +172,8 @@ function TfrmMain.Screen2Object(aMess : TxPLMessage) : boolean;
 var sError : string;
 begin
    sError := '';
-
+   aMess.ResetValues;
+//   aMess.Body.CleanEmptyValues;
    aMess.MessageType := radMsgType.ItemIndex;
    If not TxPLAddress.IsValid(edtSource.Text) then sError += ' Source field'#10#13 else aMess.Source.Tag  := edtSource.Text;
    If not TxPLTargetAddress.IsValid(edtTarget.Text) then sError += ' Target field'#10#13 else aMess.Target.Tag  := edtTarget.Text;
@@ -188,7 +186,6 @@ begin
       Application.MessageBox(PChar(sError),'Error',1);
       exit;
    end;
-
    MsgGrid.CopyTo(aMess.Body);
 end;
 
@@ -205,7 +202,6 @@ end;
 {= Load and Save management functions  ==========================================}
 procedure TfrmMain.SaveExecute(Sender: TObject);
 begin
-  SendMsg.ResetValues;
   if length(filename)>0 then saveDialog.FileName := filename;
   if (Screen2Object(SendMsg) and saveDialog.Execute) then begin
           SendMsg.Name := saveDialog.FileName;
@@ -217,7 +213,6 @@ end;
 procedure TfrmMain.LoadExecute(Sender: TObject);
 begin
    if not OpenDialog.Execute then exit;
-   SendMsg.ResetValues;
    ClearExecute(self);
    SetFileName(opendialog.filename);
 
@@ -280,7 +275,6 @@ begin
      end;
 end;
 {================================================================================}
-
 procedure TfrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
