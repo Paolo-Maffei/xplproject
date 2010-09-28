@@ -18,15 +18,18 @@ unit uxplmessage;
 
 interface
 
-uses classes,uxPLHeader, uxPLAddress, uxPLMsgBody,u_xpl_udp_socket, uxPLSchema, DOM, uxPLConst,
-     u_xml_xpldeterminator;
+uses classes,
+     DOM,
+     uxPLHeader,
+     uxPLAddress,
+     uxPLMsgBody,
+     uxPLSchema,
+     uxPLConst,
+     u_xpl_udp_socket,
+     u_xml_xpldeterminator,
+     u_xml_xplplugin;
 
 type
-
-
-
-  { TxPLMessage }
-
   TxPLMessage = class(TComponent)
      private
         fHeader   : TxPLHeader;
@@ -69,7 +72,8 @@ type
         procedure SaveToFile(aFileName : string);
 
         function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
-        procedure ReadFromXML(const aCom : TXMLActionsType);
+        procedure ReadFromXML(const aCom : TXMLActionsType); overload;
+        procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
         procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
         procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
@@ -137,7 +141,7 @@ procedure TxPLMessage.Send;
 begin
    if not Assigned(fSocket) then with TxPLSettings.Create do begin              // The socket is created only
       fSocket := TxPLUDPClient.Create(BroadCastAddress);                        // if needed to avoid waste space
-      Free;
+      Destroy;
    end;
    fSocket.Send(RawXPL);
 end;
@@ -196,6 +200,14 @@ begin
    Name := action.ExecuteOrder;
    Header.ReadFromXML(action);
    Body.ReadFromXML(action);
+end;
+
+procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);
+begin
+   Description := aCom.description;
+   Name := aCom.name;
+   Header.ReadFromXML(aCom);
+   Body.ReadFromXML(aCom);
 end;
 
 procedure TxPLMessage.Format_HbeatApp(const aInterval: string; const aPort: string; const aIP: string);

@@ -49,7 +49,7 @@ TxPLClient = class
       public
         constructor Create(const aVendor : string; aDevice : string; const aAppVersion : string);
         destructor  Destroy; override;
-        procedure   LogInfo (Const Formatting : string; Const Data : array of const );            // Info are only stored in log file
+        procedure   LogInfo (Const Formatting : string; Const Data : array of const ); dynamic;   // Info are only stored in log file
         procedure   LogError(Const Formatting : string; Const Data : array of const );            // Error are stored as error in log, displayed and stop the app
         procedure   LogWarn (Const Formatting : string; Const Data : array of const );            // Warn are stored in log, displayed but doesn't stop the app
         function    RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;

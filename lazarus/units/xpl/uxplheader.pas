@@ -27,7 +27,8 @@ interface
 uses uxPLAddress,
      uxPLConst,
      uxPLSchema,
-     u_xml_xpldeterminator;
+     u_xml_xpldeterminator,
+     u_xml_xplplugin;
 
 type { TxPLHeader }
 
@@ -58,7 +59,8 @@ type { TxPLHeader }
        function IsValid : boolean;
 
        procedure WriteToXML(aAction : TXMLxplActionType);
-       procedure ReadFromXML(aAction : TXMLxplActionType);
+       procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
+       procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
        class function MsgTypeAsOrdinal(const aMsgType : tsMsgType) : integer;
      end;
@@ -107,15 +109,19 @@ begin
              (MsgTypeAsOrdinal(MessageType) <> -1);
 end;
 
-procedure TxPLHeader.ReadFromXML(aAction : TXMLxplActionType);
-var mt : string;
+procedure TxPLHeader.ReadFromXML(const aAction : TXMLxplActionType);
 begin
-   mt := aAction.Msg_Type;
-   if not AnsiContainsStr(mt,K_MSG_TYPE_HEAD) then mt := K_MSG_TYPE_HEAD + mt;            // In vendor plugin file 'xpl-stat' is written 'stat'
-   MessageType := mt;                                                                     // then keep same code for both origins
+   MessageType := aAction.Msg_Type;
    Target.Tag  := aAction.Msg_Target;
    Source.Tag  := aAction.Msg_Source;
    Schema.Tag  := aAction.Msg_Schema;
+end;
+
+procedure TxPLHeader.ReadFromXML(const aCom: TXMLCommandType);
+begin
+   MessageType := K_MSG_TYPE_HEAD + aCom.msg_type;
+   Target.Tag  := K_MSG_TARGET_ANY;
+   Schema.Tag  := aCom.msg_schema;
 end;
 
 class function TxPLHeader.MsgTypeAsOrdinal(const aMsgType: tsMsgType): integer;

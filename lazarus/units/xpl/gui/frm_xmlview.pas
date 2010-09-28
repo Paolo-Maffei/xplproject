@@ -36,12 +36,13 @@ uses frm_about;
 
 procedure TfrmXMLView.tbLaunchClick(Sender: TObject);
 begin
-  Close;
+   Close;
 end;
 
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
-  SynEdit1.Lines.LoadFromFile(filepath);
+   Caption := FilePath;
+   SynEdit1.Lines.LoadFromFile(filepath);
 end;
 
 initialization

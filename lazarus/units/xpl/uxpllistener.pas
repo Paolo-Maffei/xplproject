@@ -87,8 +87,9 @@ type
         procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
+        procedure SendLOGBasic(const aLevel : string; const aString : string);
         function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
-	procedure LogInfo(Const Formatting  : string; Const Data  : array of const );
+	procedure LogInfo(Const Formatting  : string; Const Data  : array of const ); override;            // Info are only stored in log file
         procedure Listen;
         procedure Dispose;
      end;
@@ -199,6 +200,17 @@ procedure TxPLListener.SendOSDBasic(const aString: string);
 begin
    with PrepareMessage(K_MSG_TYPE_CMND,K_SCHEMA_OSD_BASIC) do try
       Body.AddKeyValuePair('command','write');
+      Body.AddKeyValuePair('text',aString);
+      Send;
+   finally
+      destroy;
+   end;
+end;
+
+procedure TxPLListener.SendLOGBasic(const aLevel : string; const aString: string);
+begin
+   with PrepareMessage(K_MSG_TYPE_TRIG,'log.basic') do try
+      Body.AddKeyValuePair('type',aLevel);
       Body.AddKeyValuePair('text',aString);
       Send;
    finally

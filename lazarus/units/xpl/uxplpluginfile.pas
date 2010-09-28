@@ -60,7 +60,7 @@ type
      end;
 
 implementation //========================================================================
-uses XMLRead, uRegExpr, u_xml_xpldeterminator;
+uses XMLRead, uRegExpr;
 
 resourcestring // XML Vendor file entry and field variable names ========================
    K_VF_Command     = 'command';
@@ -69,9 +69,9 @@ resourcestring // XML Vendor file entry and field variable names ===============
    K_VF_Description = 'description';
    K_VF_Info_url    = 'info_url';
    K_VF_NAME        = 'name';
-   K_VF_Device      = 'device';
+//   K_VF_Device      = 'device';
    K_VF_Id          = 'id';
-   K_VF_Vendor      = 'vendor';
+//   K_VF_Vendor      = 'vendor';
    K_VF_Version     = 'version';
    K_VF_Platform    = 'platform';
    K_VF_Beta        = 'beta_version';
@@ -114,11 +114,11 @@ function TxPLDevice.CommandAsMessage(const aCommand: string): TxPLMessage;
 var aNode : TDOMNode;
 begin
    result := nil;
-   aNode  := Command(aCommand);
+(*   aNode  := Command(aCommand);
    if not Assigned(aNode) then exit;
 
    Result := TxPLMessage.Create;
-   Result.ReadFromXML(TXMLActionsType(aNode));       // check later this hazardous type casting it may surely crash here
+   Result.ReadFromXML(TXMLActionsType(aNode));       // check later this hazardous type casting it may surely crash here*)
 end;
 
 function TxPLDevice.GetElementList(const aEltName : string ): TStringList;

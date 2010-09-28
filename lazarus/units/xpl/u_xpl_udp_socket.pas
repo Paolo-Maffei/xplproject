@@ -64,7 +64,7 @@ end;
 
 // TxPLUDPServer ===============================================================
 constructor TxPLUDPServer.Create(const axPLSettings : TxPLSettings; const aReceivedProc : TUDPReceivedEvent);
-var i : integer;
+{$IFDEF WINDOWS} var i : integer; {$ENDIF}
 begin
    inherited Create;
    Bindings.Clear;
@@ -82,7 +82,7 @@ begin
       dec(i);
    end;
 {$ELSE}
-   AddBinding(fSetting.ListenOnAddress);
+   AddBinding(fSettings.ListenOnAddress);
 {$ENDIF}
 
    If Bindings.Count > 0 then Active := True;
