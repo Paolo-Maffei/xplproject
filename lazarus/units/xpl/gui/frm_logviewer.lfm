@@ -1,0 +1,65 @@
+object frmLogViewer: TfrmLogViewer
+  Left = 177
+  Height = 300
+  Top = 108
+  Width = 400
+  Caption = 'Log view'
+  ClientHeight = 300
+  ClientWidth = 400
+  OnShow = FormShow
+  LCLVersion = '0.9.28.2'
+  object Memo1: TMemo
+    Left = 0
+    Height = 274
+    Top = 26
+    Width = 400
+    Align = alClient
+    TabOrder = 0
+  end
+  object ToolBar3: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 400
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar2'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    List = True
+    ShowCaptions = True
+    TabOrder = 1
+    object tbLaunch: TToolButton
+      Left = 1
+      Top = 0
+      Action = Quit
+    end
+    object ToolButton2: TToolButton
+      Left = 81
+      Top = 0
+      Width = 12
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
+    object ToolButton3: TToolButton
+      Left = 93
+      Top = 0
+      Action = Empty
+    end
+  end
+  object ActionList1: TActionList
+    left = 96
+    top = 72
+    object Quit: TAction
+      Caption = 'Close'
+      ImageIndex = 0
+      OnExecute = QuitExecute
+    end
+    object Empty: TAction
+      Caption = 'Empty log'
+      ImageIndex = 4
+      OnExecute = EmptyExecute
+    end
+  end
+end
