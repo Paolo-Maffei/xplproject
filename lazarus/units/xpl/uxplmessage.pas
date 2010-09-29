@@ -64,7 +64,8 @@ type
         destructor  Destroy; override;
         procedure   Assign(const aMessage : TxPLMessage); overload;
 
-        function FilterTag : tsFilter; // Return a message like a filter string
+        function SourceFilterTag : tsFilter; // Return a message like a filter string
+        function TargetFilterTag : tsFilter;
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
 
@@ -109,10 +110,16 @@ begin
 end;
 
 
-function TxPLMessage.FilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+function TxPLMessage.SourceFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
    result := Format(K_FMT_FILTER,[Header.MessageType,Source.FilterTag,Schema.Tag]);
 end;
+
+function TxPLMessage.TargetFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+begin
+   result := Format(K_FMT_FILTER,[Header.MessageType,Target.FilterTag,Schema.Tag]);
+end;
+
 
 function TxPLMessage.GetRawXPL: string;
 begin

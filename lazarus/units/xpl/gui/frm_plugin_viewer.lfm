@@ -1,0 +1,298 @@
+object frmPluginViewer: TfrmPluginViewer
+  Left = 210
+  Height = 379
+  Top = 126
+  Width = 613
+  Caption = 'frmPluginViewer'
+  ClientHeight = 379
+  ClientWidth = 613
+  OnShow = FormShow
+  LCLVersion = '0.9.28.2'
+  object ToolBar3: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 613
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar2'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    List = True
+    ShowCaptions = True
+    TabOrder = 0
+    object tbLaunch: TToolButton
+      Left = 1
+      Top = 0
+      Caption = 'Close'
+      ImageIndex = 0
+      OnClick = tbLaunchClick
+    end
+    object ToolButton1: TToolButton
+      Left = 81
+      Top = 0
+      Caption = 'View source...'
+      OnClick = ToolButton1Click
+    end
+  end
+  object tvPlugin: TTreeView
+    Left = 0
+    Height = 353
+    Top = 26
+    Width = 181
+    Align = alLeft
+    DefaultItemHeight = 17
+    TabOrder = 1
+    OnSelectionChanged = tvPluginSelectionChanged
+  end
+  object Panel1: TPanel
+    Left = 186
+    Height = 353
+    Top = 26
+    Width = 427
+    Align = alClient
+    ClientHeight = 353
+    ClientWidth = 427
+    TabOrder = 2
+    object PageControl1: TPageControl
+      Left = 1
+      Height = 351
+      Top = 1
+      Width = 425
+      ActivePage = TabSheet1
+      Align = alClient
+      TabIndex = 2
+      TabOrder = 0
+      object tsPlugin: TTabSheet
+        Caption = 'tsPlugin'
+        ClientHeight = 323
+        ClientWidth = 417
+        object Label8: TLabel
+          Left = 7
+          Height = 16
+          Top = 5
+          Width = 39
+          Caption = 'Vendor'
+          ParentColor = False
+        end
+        object Label11: TLabel
+          Left = 7
+          Height = 16
+          Top = 37
+          Width = 40
+          Caption = 'Version'
+          ParentColor = False
+        end
+        object Label12: TLabel
+          Left = 7
+          Height = 16
+          Top = 70
+          Width = 59
+          Caption = 'Plugin URL'
+          ParentColor = False
+        end
+        object Label13: TLabel
+          Left = 7
+          Height = 16
+          Top = 102
+          Width = 46
+          Caption = 'Info URL'
+          ParentColor = False
+        end
+        object edtPluginVendor: TEdit
+          Left = 73
+          Height = 23
+          Top = 5
+          Width = 256
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object edtPluginVersion: TEdit
+          Left = 73
+          Height = 23
+          Top = 37
+          Width = 256
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object edtPluginURL: TEdit
+          Left = 73
+          Height = 23
+          Top = 70
+          Width = 256
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object edtPluginInfoURL: TEdit
+          Left = 73
+          Height = 23
+          Top = 102
+          Width = 264
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 3
+        end
+      end
+      object tsDevice: TTabSheet
+        Caption = 'tsDevice'
+        ClientHeight = 323
+        ClientWidth = 417
+        object Label1: TLabel
+          Left = 7
+          Height = 16
+          Top = 13
+          Width = 11
+          Caption = 'Id'
+          ParentColor = False
+        end
+        object Label3: TLabel
+          Left = 8
+          Height = 16
+          Top = 104
+          Width = 27
+          Caption = 'Type'
+          ParentColor = False
+        end
+        object Label4: TLabel
+          Left = 216
+          Height = 16
+          Top = 37
+          Width = 47
+          Caption = 'Platform'
+          ParentColor = False
+        end
+        object Label5: TLabel
+          Left = 216
+          Height = 16
+          Top = 70
+          Width = 74
+          Caption = 'Stable version'
+          ParentColor = False
+        end
+        object Label6: TLabel
+          Left = 217
+          Height = 16
+          Top = 106
+          Width = 65
+          Caption = 'Beta version'
+          ParentColor = False
+        end
+        object Label7: TLabel
+          Left = 7
+          Height = 16
+          Top = 136
+          Width = 61
+          Caption = 'Description'
+          ParentColor = False
+        end
+        object Label9: TLabel
+          Left = 6
+          Height = 16
+          Top = 208
+          Width = 60
+          Caption = 'Device Info'
+          ParentColor = False
+        end
+        object Label10: TLabel
+          Left = 6
+          Height = 16
+          Top = 240
+          Width = 55
+          Caption = 'Download'
+          ParentColor = False
+        end
+        object edtDeviceDescription: TMemo
+          Left = 34
+          Height = 58
+          Top = 136
+          Width = 320
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 0
+        end
+        object edtDeviceId: TEdit
+          Left = 49
+          Height = 23
+          Top = 13
+          Width = 176
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 1
+        end
+        object edtDeviceType_: TEdit
+          Left = 88
+          Height = 23
+          Top = 104
+          Width = 104
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 2
+        end
+        object edtDevicePlatform: TEdit
+          Left = 266
+          Height = 23
+          Top = 37
+          Width = 88
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 3
+        end
+        object edtDeviceStableVersion: TEdit
+          Left = 266
+          Height = 23
+          Top = 70
+          Width = 88
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 4
+        end
+        object edtDeviceBetaVersion: TEdit
+          Left = 266
+          Height = 23
+          Top = 104
+          Width = 88
+          BorderStyle = bsNone
+          ReadOnly = True
+          TabOrder = 5
+        end
+        object edtDeviceInfoURL: TEdit
+          Left = 34
+          Height = 23
+          Top = 208
+          Width = 320
+          BorderStyle = bsNone
+          Color = clBtnFace
+          Font.Color = clBlue
+          Font.Style = [fsUnderline]
+          ParentFont = False
+          TabOrder = 6
+        end
+        object edtDeviceDownloadURL: TEdit
+          Left = 34
+          Height = 23
+          Top = 240
+          Width = 320
+          BorderStyle = bsNone
+          Color = clBtnFace
+          Font.Color = clBlue
+          Font.Style = [fsUnderline]
+          ParentFont = False
+          TabOrder = 7
+        end
+      end
+      object TabSheet1: TTabSheet
+        Caption = 'TabSheet1'
+      end
+    end
+  end
+  object Splitter1: TSplitter
+    Left = 181
+    Height = 353
+    Top = 26
+    Width = 5
+  end
+end
