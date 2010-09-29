@@ -3447,6 +3447,7 @@ object FrmMain: TFrmMain
     }
   end
   object PopupMenu1: TPopupMenu
+    OnPopup = PopupMenu1Popup
     left = 280
     top = 104
     object MenuItem7: TMenuItem

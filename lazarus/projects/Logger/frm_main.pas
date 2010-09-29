@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,IdFTP,
-  ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, frm_About, uxPLConfig,
-  uxPLMessage, uxPLPluginFile,uxPLListener, ExtCtrls,MCheckListBox, uxPLConst;
+  ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, frm_About, uxPLConfig, u_xml_xplplugin,
+  uxPLMessage, uxPLListener, ExtCtrls,MCheckListBox, uxPLConst;
 
 type
 
@@ -103,6 +103,7 @@ type
     procedure mnuCommandClick(Sender: TObject);
     procedure PauseExecute(Sender: TObject);
     procedure PlayExecute(Sender: TObject);
+    procedure PopupMenu1Popup(Sender: TObject);
     procedure QuitExecute(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
     procedure tvMessagesSelectionChanged(Sender: TObject);
@@ -131,7 +132,7 @@ type
 
   TConfigurationRecord = class
      plug_config : TxPLConfig;
-     plug_detail : TxPLDevice;
+     plug_detail : TXMLDeviceType;
      config_current: string;
      config_list   : string;
      Device        : tsDevice;
@@ -144,10 +145,22 @@ var
   FrmMain: TFrmMain;
 
 implementation { TFrmLogger =============================================================}
-uses frm_xplappslauncher, frm_AppSettings,
-     StrUtils, frm_logviewer, u_xpl_message_gui, app_main,
-     uxPLAddress, uxplHeader,  frm_PluginDetail,
-     cRandom, LCLType, ClipBrd, uxPLFilter, cutils, cStrings, frm_SetupInstance;
+uses frm_xplappslauncher,
+     frm_AppSettings,
+     StrUtils,
+     frm_logviewer,
+     u_xpl_message_gui,
+     app_main,
+     uxPLAddress,
+     uxplHeader,
+     frm_PluginDetail,
+     cRandom,
+     LCLType,
+     ClipBrd,
+     uxPLFilter,
+     cutils,
+     cStrings,
+     frm_SetupInstance;
 
 // ======================================================================================
 procedure TFrmMain.FormCreate(Sender: TObject);
@@ -181,6 +194,7 @@ begin
   xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER,false);
   xPLClient.OnxPLReceived  := @OnMessageReceived;
   xPLClient.PassMyOwnMessages := True;
+  xPLClient.SeeAll := True;
   Self.Caption := xPLClient.AppName;
   xPLClient.Listen;
 end;
@@ -391,6 +405,9 @@ begin
   iLoggedMsg := 0;
 end;
 
+procedure TFrmMain.PopupMenu1Popup(Sender: TObject);
+begin tvMessagesChange(Sender, tvMessages.Selected); end;                       // 2.1.2 : Configure menu now appear as soon as possible
+
 procedure TFrmMain.QuitExecute(Sender: TObject);
 begin
   if (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) then Close;
@@ -424,17 +441,19 @@ begin
    end;
    acSetupInstance.Visible := ckConfigList.Checked or acPluginDetail.Visible;
    mnuCommands.Visible := acSetupInstance.Visible;
-   if ConfElmts.plug_detail<>nil then begin
+   if mnuCommands.Visible then begin
+      if ConfElmts.plug_detail<>nil then begin
 {$IFDEF WINDOWS}       {(* At the time, don't understand why this fails under linux *)}
-      mnuCommands.Clear;
-      for i := 0 to ConfElmts.plug_detail.Commands.Count-1 do begin
-          aMenu := TMenuItem.Create(self);
-          aMenu.Caption := ConfElmts.plug_detail.Commands[i];
-          aMenu.OnClick := @mnuCommandClick;
-          mnuCommands.Add(aMenu);
-      end;
+         mnuCommands.Clear;
+         for i := 0 to ConfElmts.plug_detail.Commands.Count-1 do begin
+             aMenu := TMenuItem.Create(self);
+             aMenu.Caption := ConfElmts.plug_detail.Commands[i].Name;
+             aMenu.OnClick := @mnuCommandClick;
+             mnuCommands.Add(aMenu);
+         end;
 {$ENDIF}
-      mnuCommands.Enabled := (mnuCommands.Count > 0);
+        mnuCommands.Enabled := (mnuCommands.Count > 0);
+      end;
    end;
 end;
 
@@ -442,16 +461,21 @@ procedure TFrmMain.mnuCommandClick(Sender: TObject);
 var sCommand : string;
     node : TTreeNode;
     ConfElmts : TConfigurationRecord;
-    aMessage : TxPLMessage;
+    i : integer;
 begin
      sCommand := TMenuItem(Sender).Caption;
      node := tvMessages.Selected;
      if node.Data = nil then exit;
      ConfElmts := TConfigurationRecord(Node.Data);
-     aMessage:=ConfElmts.plug_detail.CommandAsMessage(sCommand);
-     aMessage.Target.Tag := GetSourceAddress;
-     xPLClient.SendMessage(aMessage.RawXPL);
-     aMessage.Free;
+     with TxPLMessage.Create do begin
+        for i:=0 to ConfElmts.plug_detail.Commands.Count-1 do
+            if ConfElmts.plug_detail.Commands[i].Name = sCommand then
+               ReadFromXML(ConfElmts.plug_detail.Commands[i]);
+        Target.Tag := GetSourceAddress;
+        Source.Assign(xPLClient.Address);
+        Send;
+        Destroy;
+     end;
 end;
 
 procedure TFrmMain.GetSourceChain(var c1: string; var c2: string; var c3: string);
@@ -484,15 +508,17 @@ end;
 
 procedure TFrmMain.tvMessagesSelectionChanged(Sender: TObject);
 var i : integer;
-    c1,c2,c3 : string;
+    c1,c2,c3,sfilter : string;
 begin
    GetSourceChain(c1,c2,c3);
    CurrentTreeFilter := '*.' + TxPLAddress.ComposeAddressFilter(c1,c2,c3) + '.*.*';
    lvMessages.items.Clear;
 
-   for i := 0 to Messages.Count -1 do
-       if TxPLFilters.Matches(CurrentTreeFilter, TxPLMessage(Messages.Objects[i]).FilterTag) then
-            AddToTreeview(i);
+   for i := 0 to Messages.Count -1 do begin
+       if frmAppSettings.rgFilterBy.ItemIndex=0 then sfilter := TxPLMessage(Messages.Objects[i]).SourceFilterTag
+                                                else sfilter := TxPLMessage(Messages.Objects[i]).TargetFilterTag;
+       if TxPLFilters.Matches(CurrentTreeFilter, sfilter) then AddToTreeview(i);
+   end;
 end;
 
 procedure TFrmMain.AddToTreeview(aMessageNum : integer);
@@ -526,18 +552,18 @@ procedure TFrmMain.OnMessageReceived(const axPLMessage: TxPLMessage);
 var anode1, anode2, anode3 : TTreeNode;
     Config_Elmts :   TConfigurationRecord;
 
-function SeekPlugin(Vendor : tsVendor; Device : tsDevice) : TxPLDevice;
+function SeekPlugin(Vendor : tsVendor; Device : tsDevice) : TXMLDeviceType;
 begin
    result := nil;
    result := xPLClient.PluginList.GetDevice(Vendor,Device);
 end;
-function SeekConfig(aDevice : TxPLDevice) : TxPLConfig;
+function SeekConfig(aDevice : TXMLDeviceType) : TxPLConfig;
 begin
    result := nil;
    if not Assigned(aDevice) then exit;
 
    result := TxPLConfig.Create(xPLClient);
-   result.ReadFromXML(aDevice.Node);
+   result.ReadFromXML(aDevice);
 end;
 
 procedure HandleConfigMessages;
@@ -581,9 +607,8 @@ begin
 
    StatusBar1.Panels[0].Text := StatusString;
 
-   if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.FilterTag) then
-        AddToTreeview(Messages.Count-1);
-
+   //if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.SourceFilterTag) then AddToTreeview(Messages.Count-1);
+   tvMessagesSelectionChanged(self);
    HandleConfigMessages;
 end;
 

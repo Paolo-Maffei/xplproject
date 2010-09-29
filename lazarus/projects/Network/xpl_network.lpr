@@ -14,7 +14,7 @@ uses
   frm_logviewer,
   frm_xplappslauncher,
   u_xml_plugins,
-  frm_XMLView;
+  frm_XMLView, frm_plugin_viewer;
 
 {$IFDEF WINDOWS}{$R xpl_network.rc}{$ENDIF}
 
@@ -27,6 +27,7 @@ begin
   Application.CreateForm(TfrmLogViewer  , frmLogViewer);
   Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
   Application.Icon := FrmMain.Icon;
+  Application.CreateForm(TfrmPluginViewer, frmPluginViewer);
   Application.Run;
 end.
 

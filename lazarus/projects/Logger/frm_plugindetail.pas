@@ -33,7 +33,6 @@ type
     edtDescription: TMemo;
     tbOk2: TToolButton;
     ToolBar3: TToolBar;
-    ToolButton2: TToolButton;
     procedure edtDeviceURLClick(Sender: TObject);
     procedure edtDownloadURLClick(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -47,23 +46,22 @@ type
 var
   frmPluginDetail: TfrmPluginDetail;
 
-implementation
-uses OpenURLUtil;
-
-{ TfrmPluginDetail }
+implementation // ==============================================================
+uses OpenURLUtil, frm_About;
 
 procedure TfrmPluginDetail.FormShow(Sender: TObject);
 begin
-     edtDescription.Lines.Clear;
-     edtDescription.Lines.Add(Configuration.plug_detail.description);
-     edtDeviceURL.Text := Configuration.plug_detail.InfoURL;
-     edtStableVersion.Text := Configuration.plug_detail.Version;
-     edtVendor.Text        := Configuration.plug_detail.VendorTag;
-     edtDevice.Text        := Configuration.plug_detail.Name;
-     edtPlatform.Text      := Configuration.plug_detail.Platforme;
-     edtBetaVersion.Text   := Configuration.plug_detail.BetaVersion;
-     edtDownloadURL.Text   := Configuration.plug_detail.DownloadURL;
-     edtType.Text          := Configuration.plug_detail.AppType;
+   Toolbar3.Images := frmAbout.ilStandardActions;
+   edtDescription.Lines.Clear;
+   edtDescription.Lines.Add(Configuration.plug_detail.description);
+   edtDeviceURL.Text := Configuration.plug_detail.info_url;
+   edtStableVersion.Text := Configuration.plug_detail.Version;
+   edtVendor.Text        := Configuration.plug_detail.Vendor;
+   edtDevice.Text        := Configuration.plug_detail.Device;
+   edtPlatform.Text      := Configuration.plug_detail.platform_;
+   edtBetaVersion.Text   := Configuration.plug_detail.beta_version;
+   edtDownloadURL.Text   := Configuration.plug_detail.download_url;
+   edtType.Text          := Configuration.plug_detail.type_;
 end;
 
 procedure TfrmPluginDetail.tbOk2Click(Sender: TObject);
