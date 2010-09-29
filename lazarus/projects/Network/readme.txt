@@ -34,7 +34,7 @@
 1.5.1 (linux update)
         Corrected a bug in the Launch of other xPL application
         Corrected log recording error under linux (files was not readable)
-v 1.5.2
+v 1.6
 	* General code review to support library evolutions
-	==> reste à finaliser la fonction Command Composer avec la librairie xpl_xml
+	* Added an enhanced plugin file viewer, may evolve to a file editor in the future.
 	

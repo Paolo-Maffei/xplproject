@@ -1,8 +1,10 @@
+{ Ceci est un fichier ressource généré automatiquement par Lazarus }
+
 LazarusResources.Add('TfrmMain','FORMDATA',[
   'TPF0'#8'TfrmMain'#7'frmMain'#4'Left'#2#16#6'Height'#3'E'#1#3'Top'#2'}'#5'Wid'
   +'th'#3'b'#1#13'ActiveControl'#7#9'edtSource'#11'BorderIcons'#11#12'biSystemM'
   +'enu'#0#11'BorderStyle'#7#8'bsDialog'#7'Caption'#6#7'frmMain'#12'ClientHeigh'
-  +'t'#3'.'#1#11'ClientWidth'#3'b'#1#9'Icon.Data'#10#226#29#1#0#222#29#1#0#0#0#1
+  +'t'#3'1'#1#11'ClientWidth'#3'b'#1#9'Icon.Data'#10#226#29#1#0#222#29#1#0#0#0#1
   +#0#6#0#16#16#0#0#1#0' '#0'h'#4#0#0'f'#0#0#0#22#22#0#0#1#0' '#0#16#8#0#0#206#4
   +#0#0' !'#0#0#1#0' '#0','#17#0#0#222#12#0#0'01'#0#0#1#0' '#0'p&'#0#0#10#30#0#0
   +'@A'#0#0#1#0' '#0'0C'#0#0'zD'#0#0'`a'#0#0#1#0' '#0'4'#150#0#0#170#135#0#0'('
@@ -3128,11 +3130,11 @@ LazarusResources.Add('TfrmMain','FORMDATA',[
   +#255#255#255#255#255#255#255#255#255#255#255#255#255#4'Menu'#7#9'MainMenu1'#8
   +'OnCreate'#7#10'FormCreate'#9'OnDestroy'#7#11'FormDestroy'#10'LCLVersion'#6#8
   +'0.9.28.2'#0#6'TLabel'#6'Label1'#4'Left'#2#16#6'Height'#2#16#3'Top'#2'/'#5'W'
-  +'idth'#2'$'#7'Caption'#6#6'Type :'#11'ParentColor'#8#0#0#6'TLabel'#6'Label2'
-  +#4'Left'#2#16#6'Height'#2#16#3'Top'#2'G'#5'Width'#2'5'#7'Caption'#6#8'Source'
+  +'idth'#2'!'#7'Caption'#6#6'Type :'#11'ParentColor'#8#0#0#6'TLabel'#6'Label2'
+  +#4'Left'#2#16#6'Height'#2#16#3'Top'#2'G'#5'Width'#2'+'#7'Caption'#6#8'Source'
   +' :'#11'ParentColor'#8#0#0#6'TLabel'#6'Label3'#4'Left'#2#16#6'Height'#2#16#3
-  +'Top'#2'a'#5'Width'#2'0'#7'Caption'#6#8'Target :'#11'ParentColor'#8#0#0#6'TL'
-  +'abel'#6'Label4'#4'Left'#2#16#6'Height'#2#16#3'Top'#2'}'#5'Width'#2';'#7'Cap'
+  +'Top'#2'a'#5'Width'#2')'#7'Caption'#6#8'Target :'#11'ParentColor'#8#0#0#6'TL'
+  +'abel'#6'Label4'#4'Left'#2#16#6'Height'#2#16#3'Top'#2'}'#5'Width'#2'1'#7'Cap'
   +'tion'#6#8'Schema :'#11'ParentColor'#8#0#0#6'TImage'#6'Image1'#4'Left'#3#22#1
   +#6'Height'#2#21#3'Top'#2'x'#5'Width'#2#26#0#0#8'TToolBar'#8'ToolBar1'#4'Left'
   ,#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'b'#1#7'Caption'#6#8'ToolBar1'#8'Ta'
@@ -3161,18 +3163,18 @@ LazarusResources.Add('TfrmMain','FORMDATA',[
   +'tical'#7#24'crsHomogenousChildResize'#28'ChildSizing.ShrinkHorizontal'#7#14
   +'crsScaleChilds'#26'ChildSizing.ShrinkVertical'#7#14'crsScaleChilds'#18'Chil'
   +'dSizing.Layout'#7#29'cclLeftToRightThenTopToBottom'#27'ChildSizing.Controls'
-  +'PerLine'#2#3#12'ClientHeight'#2'!'#11'ClientWidth'#3#228#0#7'Columns'#2#3#13
+  +'PerLine'#2#3#12'ClientHeight'#2#19#11'ClientWidth'#3#228#0#7'Columns'#2#3#13
   +'Items.Strings'#1#6#7'Trigger'#6#6'Status'#6#7'Command'#0#8'TabOrder'#2#0#8
-  +'bShowAny'#8#0#0#14'TxPLClassCombo'#8'cbClasse'#4'Left'#2'H'#6'Height'#2#27#3
-  +'Top'#2'x'#5'Width'#2'`'#10'ItemHeight'#2#0#9'ItemIndex'#2#0#13'Items.String'
-  +'s'#1#6#0#6#5'audio'#6#3'cid'#6#6'config'#6#7'control'#6#8'datetime'#6#2'db'
+  +'bShowAny'#8#0#0#14'TxPLClassCombo'#8'cbClasse'#4'Left'#2'H'#6'Height'#2#23#3
+  +'Top'#2'x'#5'Width'#2'`'#10'ItemHeight'#2#15#9'ItemIndex'#2#0#13'Items.Strin'
+  +'gs'#1#6#0#6#5'audio'#6#3'cid'#6#6'config'#6#7'control'#6#8'datetime'#6#2'db'
   +#6#6'dguide'#6#5'hbeat'#6#3'osd'#6#6'remote'#6#7'sendmsg'#6#6'sensor'#6#3'tt'
   +'s'#6#3'ups'#6#6'webcam'#6#3'x10'#0#13'OnEditingDone'#7#19'cbClasseEditingDo'
   +'ne'#8'TabOrder'#2#3#7'RegExpr'#6#19'^([0-9a-z/-]{1,8})$'#0#0#6'TMedit'#9'ed'
-  +'tSource'#4'Left'#2'H'#6'Height'#2#25#3'Top'#2'B'#5'Width'#3#232#0#8'TabOrde'
-  +'r'#2#1#9'RegStrict'#9#0#0#6'TMedit'#9'edtTarget'#4'Left'#2'H'#6'Height'#2#25
+  +'tSource'#4'Left'#2'H'#6'Height'#2#23#3'Top'#2'B'#5'Width'#3#232#0#8'TabOrde'
+  +'r'#2#1#9'RegStrict'#9#0#0#6'TMedit'#9'edtTarget'#4'Left'#2'H'#6'Height'#2#23
   +#3'Top'#2'\'#5'Width'#3#232#0#8'TabOrder'#2#2#9'RegStrict'#9#0#0#6'TMedit'#8
-  +'edt_Type'#4'Left'#3#176#0#6'Height'#2#25#3'Top'#2'x'#5'Width'#2'`'#8'TabOrd'
+  +'edt_Type'#4'Left'#3#176#0#6'Height'#2#23#3'Top'#2'x'#5'Width'#2'`'#8'TabOrd'
   +'er'#2#4#9'RegStrict'#9#0#0#9'TMainMenu'#9'MainMenu1'#4'left'#3'@'#1#3'top'#2
   +' '#0#9'TMenuItem'#9'MenuItem3'#7'Caption'#6#8'&Message'#0#9'TMenuItem'#10'M'
   +'enuItem13'#6'Action'#7#4'Send'#11'Bitmap.Data'#10':'#4#0#0'6'#4#0#0'BM6'#4#0

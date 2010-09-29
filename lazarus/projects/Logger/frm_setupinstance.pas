@@ -44,9 +44,15 @@ type
 var
   frmSetupInstance: TfrmSetupInstance;
 
-implementation
-uses uxPLMessage, uxPLAddress,uxplcfgitem, cStrings,  uxPLConst, uRegExpr,
-     uxPLMsgBody, XMLWrite, XMLRead, DOM, app_main;
+implementation // ==============================================================
+uses frm_About,
+     uxPLMessage,
+     uxPLAddress,
+     uxplcfgitem,
+     cStrings,
+     uxPLConst,
+     uRegExpr,
+     app_main;
 
 procedure TfrmSetupInstance.FormShow(Sender: TObject);
 var aMessage : TxPLMessage;
@@ -54,6 +60,7 @@ var aMessage : TxPLMessage;
     s : string;
 begin
    Caption := 'Configuration of ' + TxPLAddress.ComposeAddress(Configuration.Vendor,Configuration.Device,Configuration.Instance);
+   ToolBar3.Images := frmAbout.ilStandardActions;
    HBDetail.Clear;
    HBDetail.PossibleKeys.Clear;
    HBDetail.Visible := True;
@@ -79,37 +86,34 @@ end;
 
 
 procedure TfrmSetupInstance.BitBtn3Click(Sender: TObject);
-var aFileName : string;
-    aBody     : TxPLMsgBody;
-    xdoc : TXMLDocument;
+var aMessage  : TxPLMessage;
 begin
     if xPLMsgSaveDlg.Execute then begin
-       aFileName := xPLMsgSaveDlg.FileName;
-       aBody := TxPLMsgBody.Create;
-       HBDetail.CopyTo(aBody);
-
-       xdoc :=  TXMLDocument.Create;
-       {(* aBody.WriteToXML(xDoc.AppendChild(xDoc.CreateElement('config')),xDoc); *) Ceci devra être réécrit pour utiliser xpl_xml}
-       writeXMLFile(xdoc,aFileName);
-       xdoc.Free;
-       aBody.Free;
+       aMessage := TxPLMessage.Create;
+       HBDetail.CopyTo(aMessage.Body);
+       aMessage.SaveToFile(xPLMsgSaveDlg.FileName);
+       AMessage.Destroy;
     end;
 end;
 
 procedure TfrmSetupInstance.BitBtn2Click(Sender: TObject);
-var aFileName : string;
-    aBody     : TxPLMsgBody;
-    xdoc : TXMLDocument;
+var //aFileName : string;
+    //aBody     : TxPLMsgBody;
+    //xdoc : TXMLDocument;
+    aMessage : TxPLMessage;
 begin
     if not OpenMessage.Execute then exit;
-    aFilename := OpenMessage.FileName;
-    aBody := TxPLMsgBody.Create;
-    xdoc :=  TXMLDocument.Create;
-    readxmlfile(xdoc,aFilename);
+//    aFilename := ;
+    aMessage := TxPLMessage.Create;
+//    aBody := TxPLMsgBody.Create;
+//    xdoc :=  TXMLDocument.Create;
+    aMessage.LoadFromFile(OpenMessage.FileName);
+//    readxmlfile(xdoc,aFilename);
     {(* aBody.ReadFromXML(xDoc.GetElementsByTagName('config').Item[0]); *) Ceci devra être réécrit pour utiliser xpl xml }
-    HBDetail.Assign(aBody);
-    xdoc.free;
-    aBody.Destroy;
+    HBDetail.Assign(aMessage.Body);
+    aMessage.Destroy;
+//    xdoc.free;
+//    aBody.Destroy;
 end;
 
 procedure TfrmSetupInstance.HBDetailSelection(Sender: TObject; aCol, aRow: Integer);
@@ -158,7 +162,7 @@ begin
            key := HBDetail.GetKey(i);
             s += HBDetail.GetKeyValuePair(i) + #10;
             if key='newconf' then begin             // Handle special case of module name
-               value := HBDetail.GetValue(i);
+//               value := HBDetail.GetValue(i);
                newtag := TxPLAddress.ComposeAddress( Configuration.Vendor,Configuration.Device,HBDetail.GetValue(i));
             end;
      end;

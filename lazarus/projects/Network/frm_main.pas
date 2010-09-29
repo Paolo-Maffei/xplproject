@@ -106,7 +106,8 @@ uses SysUtils,
      uxPLConst, 
      frm_logviewer, 
      frm_xplappslauncher, 
-     frm_XMLView;
+     frm_XMLView,
+     frm_plugin_viewer;
 //==============================================================================
 const K_ALL_IPS_JOCKER       = '*** ALL IP Address ***';
       K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
@@ -172,8 +173,8 @@ var s : string;
 begin
    if lvPlugins.Selected = nil then exit;
    s := lvPlugins.Selected.Caption;
-   frmXMLView.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
-   frmXMLView.Show;
+   frmPluginViewer.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
+   frmPluginViewer.Show;
 end;
 
 procedure TFrmMain.PageControl1PageChanged(Sender: TObject);

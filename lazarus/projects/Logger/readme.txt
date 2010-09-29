@@ -40,12 +40,10 @@ Changes History :
 		* Added the option to start logging (or not) at application startup
 		* Icons added in contextual menus
 		* Introducing proxy handling capability for HTTP at xPLSettings level
-	2.1.2
+	2.2
 		* General code review to support library evolutions
 		* Removed General Settings Menu to avoid code redundancy between linux and windows versions (reintroduced in xPL Network Config)
 		* Corrected an issue generating nearly empty messages when using 'Send Message To...'
-		==> reste à finaliser la fonction Command Composer avec la librairie xpl_xml
-		    (sauvegarde et chargement de configurations)
-			Ajouter le fonctionnement du menu 'commands' sous linux
-
-
+		* Configure menu now appear as soon as configuration elements are received
+		* Added ability to display messages either by target or by source in the tree view
+		... afficher le plugin file à partir du nom du vendor dans le treeview

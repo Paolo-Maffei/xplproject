@@ -94,7 +94,7 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, DOM, frm_logviewer,
+uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, frm_logviewer,
      StrUtils, frm_xplAppsLauncher, uxPLConst, app_main, u_xml_xplplugin;
 
 // FrmMain ===========================================================================================
@@ -173,7 +173,6 @@ var sError : string;
 begin
    sError := '';
    aMess.ResetValues;
-//   aMess.Body.CleanEmptyValues;
    aMess.MessageType := radMsgType.ItemIndex;
    If not TxPLAddress.IsValid(edtSource.Text) then sError += ' Source field'#10#13 else aMess.Source.Tag  := edtSource.Text;
    If not TxPLTargetAddress.IsValid(edtTarget.Text) then sError += ' Target field'#10#13 else aMess.Target.Tag  := edtTarget.Text;

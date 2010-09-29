@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, XMLPropStorage, StdCtrls, Buttons;
+  ComCtrls, XMLPropStorage, StdCtrls, Buttons, ExtCtrls;
 
 type
 
@@ -19,6 +19,7 @@ TfrmAppSettings = class(TForm)
         ckShowPreview: TCheckBox;
         Label1: TLabel;
         ListBox1: TListBox;
+        rgFilterBy: TRadioGroup;
         ToolBar3: TToolBar;
         tbOk: TToolButton;
         UpDown1: TUpDown;

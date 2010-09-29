@@ -1,7 +1,7 @@
 object frmPluginDetail: TfrmPluginDetail
-  Left = 277
+  Left = 38
   Height = 274
-  Top = 250
+  Top = 370
   Width = 418
   BorderIcons = []
   BorderStyle = bsToolWindow
@@ -93,7 +93,6 @@ object frmPluginDetail: TfrmPluginDetail
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
-    Images = frmAbout.ilStandardActions
     List = True
     ShowCaptions = True
     TabOrder = 0
@@ -103,13 +102,6 @@ object frmPluginDetail: TfrmPluginDetail
       Caption = 'Close'
       ImageIndex = 0
       OnClick = tbOk2Click
-    end
-    object ToolButton2: TToolButton
-      Left = 91
-      Top = 0
-      Width = 23
-      Caption = 'ToolButton2'
-      Style = tbsSeparator
     end
   end
   object edtDescription: TMemo
