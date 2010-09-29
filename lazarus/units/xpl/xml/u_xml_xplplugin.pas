@@ -4,7 +4,10 @@ unit u_xml_xplplugin;
 
 interface
 
-uses Classes, SysUtils, u_xml, DOM;
+uses Classes,
+     SysUtils,
+     u_xml,
+     DOM;
 
 type
      TXMLOptionType = class(TDOMElement)
@@ -96,12 +99,15 @@ type
      end;
      TXMLConfigItemsType = specialize TXMLElementList<TXMLConfigItemType>;
 
+     { TXMLDeviceType }
+
      TXMLDeviceType = class(TDOMElement)
      private
         function Get_Beta_Version: AnsiString;
         function Get_Commands: TXMLCommandsType;
         function Get_ConfigItems: TXMLConfigItemsType;
         function Get_Description: AnsiString;
+        function Get_Device: AnsiString;
         function Get_Download_URL: AnsiString;
         function Get_Id: AnsiString;
         function Get_Info_URL: AnsiString;
@@ -110,9 +116,12 @@ type
         function Get_Schemas: TXMLSchemasType;
         function Get_Triggers: TXMLTriggersType;
         function Get_Type_: AnsiString;
+        function Get_Vendor: AnsiString;
         function Get_Version: AnsiString;
      public
-        property id : AnsiString read Get_Id;
+        property id : AnsiString read Get_Id;                                   // formed v-d in the xml file
+        property vendor : AnsiString read Get_Vendor;                           // return only V
+        property device : AnsiString read Get_Device;                           // return only D
         property Version : AnsiString read Get_Version;
         property Description : AnsiString read Get_Description;
         property info_url : AnsiString read Get_Info_URL;
@@ -129,6 +138,8 @@ type
 
      TXMLDevicesType = specialize TXMLElementList<TXMLDeviceType>;
 
+     { TXMLxplpluginType }
+
      TXMLxplpluginType = class(TXMLDevicesType)
      private
         function Get_Info_Url: AnsiString;
@@ -136,7 +147,8 @@ type
         function Get_Version: AnsiString;
 	function Get_Vendor : AnsiString;
      public
-        constructor Create(ANode: TDOMNode); overload;
+        constructor Create(const ANode: TDOMNode); overload;
+        constructor Create(const aFileName : string); overload;
      published
         property Version: AnsiString read Get_Version;
 	property Vendor : AnsiString read Get_Vendor;
@@ -144,10 +156,9 @@ type
         property Info_URL : AnsiString read Get_Info_Url;
      end;
 
-//var xplpluginfile : TXMLxplpluginType;
-
 implementation //=========================================================================
-uses XMLRead;
+uses XMLRead,
+     StrUtils;
 //========================================================================================
 function TXMLDeviceType.Get_Beta_Version: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Beta_version); end;
@@ -166,6 +177,12 @@ begin Result := GetAttribute(K_XML_STR_Download_url); end;
 
 function TXMLDeviceType.Get_Id: AnsiString;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Id).NodeValue; end;
+
+function TXMLDeviceType.Get_Device: AnsiString;
+begin Result := AnsiRightStr(Id,Length(Id)-AnsiPos('-',Id)); end;
+
+function TXMLDeviceType.Get_Vendor: AnsiString;
+begin Result := AnsiLeftStr(Id,AnsiPos('-',Id)-1); end;
 
 function TXMLDeviceType.Get_Info_URL: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Info_url); end;
@@ -201,8 +218,21 @@ begin result := SafeReadNode(K_XML_STR_Version); end;
 function TXMLxplpluginType.Get_Vendor: AnsiString;
 begin result := SafeReadNode(K_XML_STR_Vendor); end;
 
-constructor TXMLxplpluginType.Create(ANode: TDOMNode);
+constructor TXMLxplpluginType.Create(const ANode: TDOMNode);
 begin inherited Create(aNode, K_XML_STR_Device); end;
+
+constructor TXMLxplpluginType.Create(const aFileName: string);
+var aDoc : TXMLDocument;
+    aNode : TDOMNode;
+begin
+   aDoc := TXMLDocument.Create;
+   ReadXMLFile(aDoc,aFileName);
+   aNode := aDoc.FirstChild;
+   while (aNode.NodeName <> K_XML_STR_XplPlugin) and
+         (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) do
+         aNode := aDoc.FirstChild.NextSibling;
+   Create(aNode);
+end;
 
 { TXMLCommandType }
 
@@ -290,22 +320,6 @@ begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 
 function TXMLMenuItemType.Get_xplmsg: AnsiString;
 begin Result := SafeFindNode(K_XML_STR_XplMsg); end;
-
-
-
-{initialization
-   document := TXMLDocument.Create;
-   ReadXMLFile(document,'C:\ProgramData\xPL\Plugins\clinique.xml');
-
-   aNode := Document.FirstChild;
-   while aNode.NodeName <> K_XML_STR_XplPlugin do begin
-         aNode := Document.FirstChild.NextSibling;
-   end;
-   xplpluginfile := TXMLxplpluginType.Create(aNode);
-
-finalization
-   xplpluginfile.destroy;
-   document.destroy;}
 
 end.
 

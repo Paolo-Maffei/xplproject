@@ -13,13 +13,19 @@ unit uxPLConfig;
         Configuration files are now stored in the config directory hold by xplsettings.
  0.94 : Added ability to avoid need to load config
  0.95 : Cutted inheritance from TComponent
+ 0.96 : Added use of u_xmlxplplugin
  }
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Classes, SysUtils, uxPLConst,  uxPLCfgItem, XmlCfg, DOM, uxPLPluginFile;
+uses Classes,
+     SysUtils,
+     uxPLConst,
+     uxPLCfgItem,
+     XmlCfg,
+     u_xml_xplplugin;
 
 type
 
@@ -30,7 +36,7 @@ TxPLConfig = class//(TComponent)
         fConfigNeeded: Boolean;                               // Indicates if a configuration is needed by design for this app
         fConfigItems : TList;
         fxmlconfig : TXmlConfig;
-        fDeviceInVendorFile : TxPLDevice;
+        fDeviceInVendorFile : TXMLDeviceType;
 
         function GetInstance: string;
         function GetInterval: integer;
@@ -61,9 +67,10 @@ TxPLConfig = class//(TComponent)
         property Items : TList read fConfigItems;
         property ConfigNeeded : boolean read fConfigNeeded;
         property XmlFile : TXmlConfig read fxmlconfig;
-        property DeviceInVendorFile : TxPLDevice read fDeviceInVendorFile;
+        property DeviceInVendorFile : TXMLDeviceType read fDeviceInVendorFile;
 
-        procedure ReadFromXML(const aDeviceNode : TDOMNode);
+//        procedure ReadFromXML(const aDeviceNode : TDOMNode);
+        procedure ReadFromXML(const aDeviceType : TXMLDeviceType);
         // Filter specific
         function  FilterCount : integer;
 
@@ -103,20 +110,28 @@ begin
    for i := 0 to Items.Count-1 do Item[i].Clear;
 end;
 
-procedure TxPLConfig.ReadFromXML(const aDeviceNode: TDOMNode);
-var Child : TDOMNode;
-    cfg_name, cfg_desc, cfg_frmt : string;
+//procedure TxPLConfig.ReadFromXML(const aDeviceNode: TDOMNode);
+procedure TxPLConfig.ReadFromXML(const aDeviceType : TXMLDeviceType);
+//var Child : TDOMNode;
+//    cfg_name, cfg_desc, cfg_frmt : string;
+var i : integer;
 begin
-   Child := aDeviceNode.FirstChild;
-   while Assigned(Child) do begin
-         if Child.NodeName = 'configItem' then begin
-            cfg_name   := TDOMElement(Child).GetAttribute('name');
-            cfg_desc   := TDOMElement(Child).GetAttribute('description');
-            cfg_frmt   := TDOMElement(Child).GetAttribute('format');
-            AddItem(cfg_name,K_XPL_CT_CONFIG,cfg_desc,cfg_frmt);
-         end;
-         Child := Child.NextSibling;
+   for i:=0 to aDeviceType.ConfigItems.Count-1 do begin
+      AddItem( aDeviceType.ConfigItems[i].name,
+               K_XPL_CT_CONFIG,
+               aDeviceType.ConfigItems[i].description,
+               aDeviceType.ConfigItems[i].format );
    end;
+//   Child := aDeviceNode.FirstChild;
+//   while Assigned(Child) do begin
+//         if Child.NodeName = 'configItem' then begin
+//            cfg_name   := TDOMElement(Child).GetAttribute('name');
+//            cfg_desc   := TDOMElement(Child).GetAttribute('description');
+//            cfg_frmt   := TDOMElement(Child).GetAttribute('format');
+//            AddItem(cfg_name,K_XPL_CT_CONFIG,cfg_desc,cfg_frmt);
+//         end;
+//         Child := Child.NextSibling;
+//   end;
 end;
 
 function TxPLConfig.GetItem(Index : integer): TxPLConfigItem;

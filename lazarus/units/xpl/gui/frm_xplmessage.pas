@@ -73,9 +73,14 @@ type
   end;
 
 implementation // TFrmxPLMessage ===============================================================
-uses clipbrd, LCLType, cStrings, cUtils, StrUtils;
-{ TfrmxPLMessage }
+uses frm_About,
+     clipbrd,
+     LCLType,
+     cStrings,
+     cUtils,
+     StrUtils;
 
+// =============================================================================================
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);
 begin
   Stream     := TStringStream.Create('');
@@ -164,10 +169,8 @@ end;
 procedure TFrmxPLMessage.DisplayMessage;
 var j : integer;
     arrStr : StringArray;
-    s : string;
 begin
    mmoMessage.Lines.Clear;
-   s := xPLMessage.RawxPL;
    arrStr := StrSplit(xPLMessage.RawXPL,#10);
 
    for j:=0 to high(arrStr) do
@@ -178,7 +181,7 @@ begin
    Stream.Position := 0;
    KHexEditor1.LoadFromStream(Stream);
 
-   edtFilter.Text := xPLMessage.FilterTag;
+   edtFilter.Text := xPLMessage.SourceFilterTag;
    edtSource.Text := xPLMessage.Source.Tag;
    edtName.Text   := xPLMessage.Name;
 end;
@@ -186,6 +189,7 @@ end;
 procedure TfrmxPLMessage.FormShow(Sender: TObject);
 begin
    xPLMessage := TxPLMessage(Owner);
+   ToolBar3.Images := frmAbout.ilStandardActions;
    acLoad.Visible  := (boLoad in buttonOptions);
    MsgSave.Visible := (boSave in buttonOptions);
    MsgCopy.Visible := (boCopy in buttonOptions);

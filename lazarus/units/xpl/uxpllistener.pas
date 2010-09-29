@@ -16,6 +16,7 @@ unit uxPLListener;
 Rev 298 : Modified to enable Linux support
  0.97 : Removed fAdresse field, moved to TxPLClient object
         Removed field AwaitingConfiguration that was redundant with Config.ConfigNeeded
+ 0.98 : Added SeeAll variable to enable logger to see messages not targetted to him
 }
 
 {$mode objfpc}{$H+}
@@ -60,6 +61,7 @@ type
         OnxPLMediaBasic    : TxPLMediaBasic   ;
         PassMyOwnMessages  : Boolean;
         JoinedxPLNetwork   : Boolean;                    // This should be read only by other objects
+        SeeAll             : Boolean;                    // This variable may only be set to true for a logger to let him see all messages
 
         constructor create(const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
         destructor destroy; override;
@@ -103,6 +105,7 @@ begin
    inherited Create(aVendor, aDevice, aAppVersion);
 
    PassMyOwnMessages := false;
+   SeeAll            := false;
 
    fConfig          := TxPLConfig.Create(self, bConfigNeeded);
    Adresse.Instance := fConfig.Instance;                                             // Instance name will be determined by configuration need or not
@@ -347,7 +350,7 @@ begin
                if not DoMediaBasic   (aMessage) then
                if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
             end;
-      end;
+      end else if SeeAll then OnxPLReceived(aMessage);
       finally Destroy;
    end;
 end;

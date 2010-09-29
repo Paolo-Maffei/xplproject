@@ -109,7 +109,7 @@ begin
      result := true;
      for i:= 0 to FilterCount -1 do
          result := result and Matches(  fConfig.Item[iFilterIndex].Values[i],
-                                        aMessage.FilterTag);
+                                        aMessage.SourceFilterTag);
 end;
 
 end.

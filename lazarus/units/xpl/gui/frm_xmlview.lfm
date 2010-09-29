@@ -1,7 +1,7 @@
 object frmXMLView: TfrmXMLView
-  Left = 86
+  Left = 72
   Height = 352
-  Top = 108
+  Top = 219
   Width = 704
   ActiveControl = SynEdit1
   Caption = 'frmXMLView'
@@ -11,7 +11,7 @@ object frmXMLView: TfrmXMLView
   LCLVersion = '0.9.28.2'
   object SynEdit1: TSynEdit
     Left = 0
-    Height = 334
+    Height = 326
     Top = 26
     Width = 704
     Align = alClient
@@ -22,7 +22,6 @@ object frmXMLView: TfrmXMLView
     ParentColor = False
     ParentFont = False
     TabOrder = 0
-    BookMarkOptions.OnChange = nil
     Gutter.Width = 57
     Gutter.MouseActions = <    
       item
@@ -716,7 +715,6 @@ object frmXMLView: TfrmXMLView
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
-    Images = frmAbout.ilStandardActions
     List = True
     ShowCaptions = True
     TabOrder = 1
