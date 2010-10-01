@@ -14,7 +14,7 @@ uses
   frm_logviewer,
   frm_xplappslauncher,
   u_xml_plugins,
-  frm_XMLView, frm_plugin_viewer;
+  frm_XMLView, frm_plugin_viewer, XPL;
 
 {$IFDEF WINDOWS}{$R xpl_network.rc}{$ENDIF}
 
