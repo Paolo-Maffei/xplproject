@@ -15,6 +15,7 @@ object frmLogViewer: TfrmLogViewer
     Top = 26
     Width = 589
     Align = alClient
+    ScrollBars = ssVertical
     TabOrder = 0
   end
   object ToolBar3: TToolBar

@@ -41,6 +41,7 @@ end;
 
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
+   ToolBar3.Images := frmabout.ilStandardActions;
    Caption := FilePath;
    SynEdit1.Lines.LoadFromFile(filepath);
 end;

@@ -22,6 +22,7 @@ object frmXMLView: TfrmXMLView
     ParentColor = False
     ParentFont = False
     TabOrder = 0
+    BookMarkOptions.OnChange = nil
     Gutter.Width = 57
     Gutter.MouseActions = <    
       item
