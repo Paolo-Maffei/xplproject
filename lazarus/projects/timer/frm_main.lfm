@@ -1789,7 +1789,6 @@ object frmMain: TfrmMain
     }
   end
   object ActionList1: TActionList
-    Images = frmAbout.ilStandardActions
     left = 336
     object Quit: TAction
       Caption = 'Quit'
@@ -1862,6 +1861,7 @@ object frmMain: TfrmMain
       end
       object MenuItem8: TMenuItem
         Action = acLogView
+        OnClick = acLogViewExecute
       end
       object MenuItem5: TMenuItem
         Caption = '-'

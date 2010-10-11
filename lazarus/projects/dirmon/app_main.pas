@@ -280,7 +280,7 @@ begin                                                                           
    if not aJoined then exit;
    if xPLClient.Config.ConfigNeeded then exit;
    xPLClient.LogInfo('Probing for xPL Timer presence',[]);
-   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10);
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10);
 end;
 
 procedure TMyApplication.OnHBeatApp(const axPLMsg: TxPLMessage);                          // Try to detect presence of clinique-timer

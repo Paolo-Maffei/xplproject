@@ -34,7 +34,10 @@
 1.5.1 (linux update)
         Corrected a bug in the Launch of other xPL application
         Corrected log recording error under linux (files was not readable)
-v 1.6
+v 2.0
 	* General code review to support library evolutions
-	* Added an enhanced plugin file viewer, may evolve to a file editor in the future.
+	* Added an enhanced plugin file viewer/editor
+	* Corrected code to detect plugin file download error
+		Handle plugin url if the url includes the .xml extension in the filename
+	
 	

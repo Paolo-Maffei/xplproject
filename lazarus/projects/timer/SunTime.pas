@@ -26,7 +26,7 @@ unit SunTime;
 interface
 
 uses
-  Windows,Messages, SysUtils, Classes;
+  Windows, SysUtils, Classes;
 
 type
 

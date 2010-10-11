@@ -170,11 +170,21 @@ end;
 
 procedure TFrmMain.ViewXML(Sender: TObject);
 var s : string;
+//    plugin : TXMLxplPluginType;
 begin
    if lvPlugins.Selected = nil then exit;
    s := lvPlugins.Selected.Caption;
-   frmPluginViewer.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
-   frmPluginViewer.Show;
+//   plugin := TXMLxplpluginType.Create(s);
+//   if plugin.Valid then begin
+//   end else begin
+   if s = 'xPL Schema Collection' then begin                                       // Handle this specific special case
+      frmXMLView.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
+      frmXMLView.Show;
+   end else begin
+      frmPluginViewer.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
+      frmPluginViewer.Show;
+   end;
+//   plugin.destroy;
 end;
 
 procedure TFrmMain.PageControl1PageChanged(Sender: TObject);
