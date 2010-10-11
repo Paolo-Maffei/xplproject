@@ -9,13 +9,9 @@ uses Classes,
      DOM,
      u_xml;
 
-type
-
-{ TXMLPluginType }
-
-TXMLPluginType = class(TDOMElement)
-private
-  function Get_Vendor: AnsiString;
+type TXMLPluginType = class(TDOMElement)
+     private
+        function Get_Vendor: AnsiString;
      protected
         function Get_Name: AnsiString;
         function Get_Type_: AnsiString;
@@ -53,28 +49,27 @@ implementation //===============================================================
 uses XMLRead,
      StrUtils;
 
-//========================================================================================
+// TXMLLocationType ======================================================================
 function TXMLLocationType.Get_Url: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Url).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Url);            end;
 
+// TXMLPluginType ========================================================================
 function TXMLPluginType.Get_Vendor: AnsiString;
-begin
-     result := ExtractWord(1,Name,[' ']);
-end;
-
-function TXMLPluginType.Get_Name: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
-
-function TXMLPluginType.Get_Type_: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Type).NodeValue; end;
+begin Result := ExtractWord(1,Name,[' ']);              end;
 
 function TXMLPluginType.Get_Description: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Description).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Description);    end;
 
 function TXMLPluginType.Get_Url: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Url).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Url);            end;
 
-{ TXMLPluginsType }
+function TXMLPluginType.Get_Type_: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Type);           end;
+
+function TXMLPluginType.Get_Name: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Name);           end;
+
+// TXMLPluginsFile =======================================================================
 function TXMLPluginsFile.Get_Version: AnsiString;
 begin result := FNode.Attributes.GetNamedItem(K_XML_STR_Version).NodeValue; end;
 

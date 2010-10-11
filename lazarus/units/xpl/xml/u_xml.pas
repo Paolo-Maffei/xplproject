@@ -27,20 +27,22 @@ const
   K_XML_STR_Format          = 'format';
   K_XML_STR_Id              = 'id';
   K_XML_STR_Info_url        = 'info_url';
-  K_XML_STR_Label           = 'label';
-  K_XML_STR_Listen          = 'listen';
-  K_XML_STR_MenuItem        = 'menuItem';
-  K_XML_STR_Msg_schema      = 'msg_schema';
-  K_XML_STR_Msg_type        = 'msg_type';
+  K_XML_STR_LABEL           = 'label';
+  K_XML_STR_MIN_VAL         = 'min_val';
+  K_XML_STR_MAX_VAL         = 'max_val';
+  K_XML_STR_LISTEN          = 'listen';
+  K_XML_STR_MENUITEM        = 'menuItem';
+  K_XML_STR_MSG_SCHEMA      = 'msg_schema';
+  K_XML_STR_MSG_TYPE        = 'msg_type';
   K_XML_STR_Option          = 'option';
   K_XML_STR_Platform        = 'platform';
-  K_XML_STR_Plugin_url      = 'plugin_url';
+  K_XML_STR_PLUGIN_URL      = 'plugin_url';
   K_XML_STR_Regexp          = 'regexp';
   K_XML_STR_Schema          = 'schema';
   K_XML_STR_Status          = 'status';
   K_XML_STR_Trigger         = 'trigger';
   K_XML_STR_Type            = 'type';
-  K_XML_STR_Value           = 'value';
+  K_XML_STR_VALUE           = 'value';
   K_XML_STR_Vendor          = 'vendor';
   K_XML_STR_Version         = 'version';
   K_XML_STR_XplMsg          = 'xplMsg';
@@ -112,6 +114,7 @@ type
       function SafeReadNode(const aValue : String) : string;
       function SafeFindNode(const aValue : String) : string;
       procedure SafeChangeNode(const aNodeName: String; const aValue : string);
+      procedure SafeAddNode(const aNodeName: String; const aValue : string);
    end;
 
    T_clinique_DOMElementList = class(TDOMElementList)
@@ -125,16 +128,17 @@ type
 
      generic TXMLElementList<_T> = class(T_clinique_DOMElementList)
      private
+       fKeyName : string;
        function GetDocument: TXMLDocument;
      protected
-//        fDocument : TXMLDocument;
         fRootNode : TDOMNode;
         fKeyWord  : string;
         function Get_Element (Index: Integer): _T;
      public
-        constructor Create(const aDocument : TXMLDocument; const aLabel : string); overload;
-        constructor Create(const aNode : TDOMNode; const aLabel : string);         overload;
+        constructor Create(const aDocument : TXMLDocument; const aLabel : string; const aKeyName : string); overload;
+        constructor Create(const aNode : TDOMNode; const aLabel : string; const aKeyName : string);         overload;
         function    AddElement(const aName : string) : _T;
+        procedure   RemoveElement(const aName : string);
         procedure EmptyList;
         property Element[Index: Integer]: _T read Get_Element; default;
         property RootNode : TDOMNode read fRootNode;
@@ -142,7 +146,7 @@ type
      end;
 
 implementation
-   uses XMLWrite;
+
 function T_clinique_DOMElement.SafeReadNode(const aValue: String): string;
 var DevNode : TDOMNode;
 begin
@@ -173,6 +177,14 @@ begin
    AppendChild(NewNode);
 end;
 
+procedure T_clinique_DOMElement.SafeAddNode(const aNodeName: String; const aValue: string);
+var NewNode : TDOMNode;
+begin
+   NewNode := OwnerDocument.CreateElement(aNodeName);
+   NewNode.AppendChild(OwnerDocument.CreateTextNode(aValue));
+   AppendChild(NewNode);
+end;
+
 { T_clinique_DOMElementList }
 
 function T_clinique_DOMElementList.SafeReadNode(const aValue: String): string;
@@ -195,9 +207,21 @@ var child : TDOMNode;
 begin
    child := Document.CreateElement(fKeyword);
    fRootNode.AppendChild(child);
-   TDOMElement(Child).SetAttribute(K_XML_STR_NAME, aName);
+   TDOMElement(Child).SetAttribute(fKeyName, aName);
    fList.Add(child);
    result := _T(child);
+end;
+
+procedure TXMLElementList.RemoveElement(const aName: string);
+var child : TDOMNode;
+begin
+   child := fRootNode.FirstChild;
+   repeat
+      if TDOMElement(Child).GetAttribute(fKeyName) = aName then begin
+         fRootNode.RemoveChild(child);
+         child := nil;
+      end else child := child.NextSibling;
+   until (child = nil);
 end;
 
 procedure TXMLElementList.EmptyList;
@@ -214,20 +238,16 @@ begin
    Result := _T(Item[Index]);
 end;
 
-constructor TXMLElementList.Create(const aDocument : TXMLDocument; const aLabel : string);
+constructor TXMLElementList.Create(const aDocument : TXMLDocument; const aLabel : string; const aKeyName : string);
 begin
-//   fDocument := aDocument;
-//   fRootNode := aDocument.FirstChild;
-//   fKeyWord  := aLabel;
-//   inherited Create(fRootNode,fKeyWord);
-   Create(aDocument.FirstChild,aLabel);
+   Create(aDocument.FirstChild,aLabel,aKeyName);
 end;
 
-constructor TXMLElementList.Create(const aNode : TDOMNode; const aLabel : string);
+constructor TXMLElementList.Create(const aNode : TDOMNode; const aLabel : string; const aKeyName : string);
 begin
    fRootNode := aNode;
    fKeyWord  := aLabel;
-
+   fKeyName  := aKeyName;
    inherited Create(fRootNode,fKeyWord);
 end;
 
