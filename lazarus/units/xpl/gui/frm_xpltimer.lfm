@@ -7,7 +7,7 @@ object frmxPLTimer: TfrmxPLTimer
   ClientHeight = 242
   ClientWidth = 378
   OnShow = FormShow
-  LCLVersion = '0.9.26.2'
+  LCLVersion = '0.9.28.2'
   object Label3: TLabel
     Left = 16
     Height = 16
@@ -57,7 +57,9 @@ object frmxPLTimer: TfrmxPLTimer
     ParentColor = False
   end
   object ToolBar2: TToolBar
+    Left = 0
     Height = 25
+    Top = 0
     Width = 378
     ButtonHeight = 23
     ButtonWidth = 30
@@ -68,6 +70,7 @@ object frmxPLTimer: TfrmxPLTimer
     object sbOk: TSpeedButton
       Left = 1
       Height = 23
+      Top = 0
       Width = 75
       Caption = 'Ok'
       Color = clBtnFace
@@ -113,6 +116,7 @@ object frmxPLTimer: TfrmxPLTimer
     object sbCancel: TSpeedButton
       Left = 76
       Height = 23
+      Top = 0
       Width = 75
       Caption = 'Cancel'
       Color = clBtnFace
@@ -174,10 +178,10 @@ object frmxPLTimer: TfrmxPLTimer
   end
   object cbRange: TComboBox
     Left = 96
-    Height = 21
+    Height = 23
     Top = 107
     Width = 144
-    ItemHeight = 13
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       'global'
@@ -202,10 +206,10 @@ object frmxPLTimer: TfrmxPLTimer
   end
   object cbMode: TComboBox
     Left = 96
-    Height = 21
+    Height = 23
     Top = 135
     Width = 144
-    ItemHeight = 13
+    ItemHeight = 15
     ItemIndex = 0
     Items.Strings = (
       'ascending'

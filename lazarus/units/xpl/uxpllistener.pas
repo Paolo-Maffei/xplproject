@@ -234,9 +234,8 @@ end;
 
 procedure TxPLListener.LogInfo(const Formatting: string; const Data: array of const);
 begin
-  if not JoinedxPLNetwork
-     then inherited LogInfo(Formatting, Data)
-     else SendLOGBasic('info', Format(Formatting,Data));
+   inherited LogInfo(Formatting, Data);
+   if JoinedxPLNetwork then SendLOGBasic('info', Format(Formatting,Data));
 end;
 
 procedure TxPLListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);

@@ -50,7 +50,7 @@ TfrmxPLRecurEvent = class(TfrmxPLSingleEvent)
   end;
 
 implementation { TfrmxPLRecurEvent ============================================}
-uses DateUtils, cRandom, uxPLMsgHeader, uxPLRecurEvent;
+uses DateUtils, cRandom, uxPLRecurEvent;
 {==============================================================================}
 
 procedure TfrmxPLRecurEvent.leIntervalChange(Sender: TObject);

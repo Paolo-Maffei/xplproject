@@ -34,7 +34,6 @@ type
      public
        property Keys     : TStringList read fItmNames;
        property Values   : TStringList read fItmValues;
-
        property RawxPL   : string      read GetRawxPL write setTag;
 
 //       constructor create; override;
@@ -48,9 +47,9 @@ type
        procedure AddKeyValue(const aKeyValuePair : string);
        function  GetValueByKey(const aKeyValue: string; aDefVal : string = '') : string;
 
-       procedure WriteToXML(aAction : TXMLxplActionType);
+       procedure WriteToXML (const aAction : TXMLxplActionType);
        procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
-       procedure ReadFromXML(const aCom: TXMLCommandType); overload;
+       procedure ReadFromXML(const aCom    : TXMLCommandType  ); overload;
      end;
 
 implementation {===============================================================}
@@ -124,7 +123,7 @@ begin
      AddKeyValuePair(AnsiLowerCase(left),right);
 end;
 
-procedure TxPLMsgBody.WriteToXML(aAction : TXMLxplActionType);
+procedure TxPLMsgBody.WriteToXML(const aAction : TXMLxplActionType);
 var i : integer;
 begin
    with aAction.xplActions do

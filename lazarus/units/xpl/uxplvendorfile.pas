@@ -69,8 +69,7 @@ uses uGetHTTP,
      cStrings,
      IdHTTP,
      StrUtils,
-     uRegExpr,
-     Dialogs;
+     uRegExpr;
 
 {type TVendorPluginFile = class
         Node : TDomNode;
@@ -146,20 +145,24 @@ begin
 end;
 
 function TxPLVendorSeedFile.GetDistantFile(const sLocation : string; const sDestination : string) : boolean;
+var s : string;
 begin
    result := GetHTTPFile( sLocation, sDestination,
                           ifThen(fSettings.UseProxy,fSettings.HTTPProxSrvr,''),
-                          ifThen(fSettings.UseProxy,fSettings.HTTPProxPort,''));
+                          ifThen(fSettings.UseProxy,fSettings.HTTPProxPort,''), s);
 end;
 
 function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
-var i : integer;
+var i : LongWord;
 begin
-   for i := 0 to fPluginsFile.Count-1 do begin
+   result := '';
+   i := 0;
+   repeat
       if fPluginsFile[i].Name = aPluginName then
          result := fSettings.PluginDirectory +
-                   copyright(fPluginsFile[i].URL, length(fPluginsFile[i].URL)-LastDelimiter('/',fPluginsFile[i].URL))+ K_FEXT_XML
-   end;
+                   copyright(fPluginsFile[i].URL, length(fPluginsFile[i].URL)-LastDelimiter('/',fPluginsFile[i].URL))+ K_FEXT_XML;
+      inc(i);
+   until (i > fPluginsFile.Count) or (result <> '')
 end;
 
 
@@ -199,13 +202,16 @@ end;}
 
 
 function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
-var i : integer;
+var i : LongWord;
+    url : string;
 begin
    i := 0;
    result := false;
    while ((result=false) and (i<fPluginsFile.Count)) do begin
       if fPluginsFile[i].Name = aPluginName then begin
-         result := GetDistantFile( fPluginsFile[i].URL + K_FEXT_XML, GetPluginFilePath(aPluginName));
+         url := fPluginsFile[i].URL;
+         if not AnsiEndsStr(K_FEXT_XML, url) then url += K_FEXT_XML;
+         result := GetDistantFile( url, GetPluginFilePath(aPluginName));
       end;
       inc(i);
    end;
@@ -220,11 +226,8 @@ end;
 //end;
 
 function TxPLVendorSeedFile.VendorFile(const aVendor: tsVendor): TXMLxplpluginType;
-var i : integer;
-    //vpf : TVendorPluginFile;
+var i : LongWord;
     fn : string;
-    document : TXMLDocument;
-    aNode : TDOMNode;
 begin
    result := nil;
    i := 0;
@@ -232,15 +235,11 @@ begin
       if fPluginsFile[i].Vendor = aVendor then begin
          fn := fSettings.PluginDirectory + AnsilowerCase(aVendor) + K_FEXT_XML;
          if fileexists(fn) then begin
-       {     document := TXMLDocument.Create;
-            ReadXMLFile(document,fn);
-            aNode := Document.FirstChild;
-            while (aNode.NodeName <> K_XML_STR_XplPlugin) and
-                  (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) do
-                  aNode := Document.FirstChild.NextSibling;
-
-            result := TXMLxplpluginType.Create(aNode);}
             result := TXMLxplpluginType.Create(fn);
+            if not result.valid then begin
+               result.Destroy;
+               result := nil;
+            end;
          end;
       end;
       inc(i);

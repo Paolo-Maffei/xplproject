@@ -62,7 +62,7 @@ type
      fSunEventType : TxPLSunEventType;
      fSunTime      : TSunTime;
      fMessage      : TxPLMessage;
-     fSubject      : ^TDateTime;
+     //fSubject      : ^TDateTime;
   public
      constructor Create(const aSource : TxPLAddress; const aSunTime : TSunTime; const aType : TxPLSunEventType);
      destructor  Destroy; override;
@@ -139,7 +139,7 @@ type
 
 implementation //========================================================================
 uses SysUtils, uxPLConst,  strUtils, frm_xPLRecurEvent,
-     frm_xPLSingleEvent,  uxplmsgheader, DateUtils, cRandom;
+     frm_xPLSingleEvent,  DateUtils, cRandom;
 
 { TxPLEvent =============================================================================}
 constructor TxPLEvent.Create(const aName: string; const aEnabled: boolean; const aNext: TDateTime);
@@ -311,8 +311,8 @@ begin
      if MessageToFire='' then with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := '*';
-         Body.Format_SensorBasic(fName,'generic','fired');
-         Body.Schema.Tag := 'timer.basic';
+         Format_SensorBasic(fName,'generic','fired');
+         Schema.Tag := 'timer.basic';
          Send;
      end else begin
          aMessage:=TxPLMessage.Create(MessageToFire);

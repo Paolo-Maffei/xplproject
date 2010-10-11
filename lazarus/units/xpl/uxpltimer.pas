@@ -84,7 +84,7 @@ type
 
 
 implementation //===============================================================
-uses frm_xplTimer, Controls, uxPLMsgHeader, DateUtils, StrUtils, uxPLConst;
+uses frm_xplTimer, Controls, DateUtils, StrUtils, uxPLConst;
 
 {==============================================================================}
 function DateTimeDiff(Start, Stop : TDateTime) : int64;
@@ -214,8 +214,9 @@ begin
 
    with fxPLMessage do begin
        MessageType := K_MSG_TYPE_STAT;    // as xpl-mtStat this message will be a broadcast, target assumed by message object
-       Body.Format_SensorBasic(fName,'generic',Status);
-       Body.Schema.Tag := 'timer.basic';
+       Format_SensorBasic(fName,'generic',Status);
+       Target.Tag := Self.Target;
+       Schema.Tag := 'timer.basic';
        Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
        Send;
    end;
@@ -231,8 +232,8 @@ begin
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
-      Body.Format_SensorBasic(fName,'generic',Status);
-      Body.Schema.Tag := 'timer.basic';
+      Format_SensorBasic(fName,'generic',Status);
+      Schema.Tag := 'timer.basic';
       Send;
    end;
 
@@ -253,9 +254,9 @@ begin
       with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := Self.Target;
-         Body.Format_SensorBasic(fName,'generic',StopReason);
+         Format_SensorBasic(fName,'generic',StopReason);
          Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-         Body.Schema.Tag := 'timer.basic';
+         Schema.Tag := 'timer.basic';
          Send;
       end;
    end;
@@ -274,9 +275,9 @@ begin
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
-      Body.Format_SensorBasic(fName,'generic',Status);
+      Format_SensorBasic(fName,'generic',Status);
       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-      Body.Schema.Tag := 'timer.basic';
+      Schema.Tag := 'timer.basic';
       Send;
    end; 
 end;
