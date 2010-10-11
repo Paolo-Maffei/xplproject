@@ -4,41 +4,60 @@ unit u_xml_xplplugin;
 
 interface
 
-uses Classes,
-     SysUtils,
-     u_xml,
+uses u_xml,
      DOM;
 
 type
-     TXMLOptionType = class(TDOMElement)
+
+     { TXMLOptionType }
+
+     TXMLOptionType = class(T_clinique_DOMElement)
      private
        function Get_Label_: AnsiString;
-       function Get_Regexp: AnsiString;
        function Get_Value: AnsiString;
+       procedure Set_Label_(const AValue: AnsiString);
+       procedure Set_Value(const AValue: AnsiString);
      published
-        property value : AnsiString read Get_Value;
-        property label_ : AnsiString read Get_Label_;
-        property Regexp : AnsiString read Get_Regexp;
+        property value : AnsiString read Get_Value write Set_Value;
+        property label_ : AnsiString read Get_Label_ write Set_Label_;
      end;
      TXMLOptionsType = specialize TXMLElementList<TXMLOptionType>;
 
-     TXMLElementType = class(TDOMElement)
+     { TXMLElementType }
+
+     TXMLElementType = class(T_clinique_DOMElement)
      private
        function Get_Conditional_Visibility: AnsiString;
        function Get_Control_Type: AnsiString;
        function Get_Default_: AnsiString;
        function Get_Label_: AnsiString;
+       function Get_max_val: AnsiString;
+       function Get_min_val: AnsiString;
        function Get_Name: AnsiString;
        function Get_Options: TXMLOptionsType;
+       function Get_regexp: AnsiString;
+       procedure Set_Conditional_Visibility(const AValue: AnsiString);
+       procedure set_Control_Type(const AValue: AnsiString);
+       procedure Set_default_(const AValue: AnsiString);
+       procedure Set_Label_(const AValue: AnsiString);
+       procedure Set_max_val(const AValue: AnsiString);
+       procedure Set_min_val(const AValue: AnsiString);
+       procedure Set_Name(const AValue: AnsiString);
+       procedure Set_regexp(const AValue: AnsiString);
      published
-        property name : AnsiString read Get_Name;
-        property label_ : AnsiString read Get_Label_;
-        property control_type : AnsiString read Get_Control_Type;
-        property default_ : AnsiString read Get_Default_;
-        property conditional_visibility : AnsiString read Get_Conditional_Visibility;
+        property name : AnsiString read Get_Name write Set_Name;
+        property label_ : AnsiString read Get_Label_ write Set_Label_;
+        property control_type : AnsiString read Get_Control_Type write Set_Control_Type;
+        property min_val : AnsiString read Get_min_val write Set_min_val;
+        property max_val : AnsiString read Get_max_val write Set_max_val;
+        property regexp  : AnsiString read Get_regexp write Set_regexp;
+        property default_ : AnsiString read Get_Default_ write Set_default_;
+        property conditional_visibility : AnsiString read Get_Conditional_Visibility write Set_Conditional_Visibility;
         property Options : TXMLOptionsType read Get_Options;
      end;
      TXMLElementsType = specialize TXMLElementList<TXMLElementType>;
+
+     { TXMLCommandType }
 
      TXMLCommandType = class(TDOMElement)
      private
@@ -47,17 +66,21 @@ type
        function Get_msg_schema: AnsiString;
        function Get_msg_type: AnsiString;
        function Get_Name: AnsiString;
+       procedure Set_Description(const AValue: AnsiString);
+       procedure Set_msg_type(const AValue: AnsiString);
+       procedure Set_Name(const AValue: AnsiString);
+       procedure Set_Schema(const AValue: AnsiString);
      published
-        property msg_type : AnsiString read Get_msg_type;
-        property name : AnsiString read Get_Name;
-        property description : AnsiString read Get_Description;
-        property msg_schema : AnsiString read Get_msg_schema;
+        property msg_type : AnsiString read Get_msg_type write Set_msg_type;
+        property name : AnsiString read Get_Name write Set_Name;
+        property description : AnsiString read Get_Description write Set_Description;
+        property msg_schema : AnsiString read Get_msg_schema write Set_Schema;
         property elements : TXMLElementsType read Get_Elements;
      end;
      TXMLCommandsType = specialize TXMLElementList<TXMLCommandType>;
 
-     TXMLTriggerType = TXMLCommandType;
-     TXMLTriggersType = specialize TXMLElementList<TXMLTriggerType>;
+     //TXMLTriggerType = TXMLCommandType;                                                    // Did not kept these types as they are redundant
+     //TXMLTriggersType = specialize TXMLElementList<TXMLTriggerType>;                       // with Command
 
      { TXMLSchemaType }
 
@@ -72,13 +95,14 @@ type
        procedure Set_Command(const AValue: AnsiString); inline;
        procedure Set_Comment(const AValue: AnsiString); inline;
        procedure Set_Listen (const AValue: AnsiString); inline;
+       procedure Set_Name(const AValue: AnsiString);
        procedure Set_Status (const AValue: AnsiString); inline;
        procedure Set_Trigger(const AValue: AnsiString); inline;
      published
-        property name : AnsiString read Get_Name;
+        property name    : AnsiString read Get_Name write Set_Name;
         property command : AnsiString read Get_command write Set_Command;
-        property status : AnsiString  read Get_Status  write Set_Status;
-        property listen : AnsiString  read Get_Listen  write Set_Listen;
+        property status  : AnsiString read Get_Status  write Set_Status;
+        property listen  : AnsiString read Get_Listen  write Set_Listen;
         property trigger : AnsiString read Get_trigger write Set_Trigger;
         property comment : AnsiString read Get_Comment write Set_Comment;
      end;
@@ -90,9 +114,10 @@ type
      private
        function Get_Name: AnsiString;
        function Get_xplmsg: AnsiString;
+       procedure Set_Name(const AValue: AnsiString);
        procedure Set_xplmsg(const AValue: AnsiString);
      published
-        property name : AnsiString read Get_Name;
+        property name : AnsiString read Get_Name write Set_Name;
         property xplmsg : AnsiString read Get_xplmsg write Set_xplmsg;
      end;
      TXMLMenuItemsType = specialize TXMLElementList<TXMLMenuItemType>;
@@ -128,7 +153,7 @@ type
         function Get_MenuItems: TXMLMenuItemsType;
         function Get_Platform_: AnsiString;
         function Get_Schemas: TXMLSchemasType;
-        function Get_Triggers: TXMLTriggersType;
+        function Get_Triggers: TXMLCommandsType;
         function Get_Type_: AnsiString;
         function Get_Vendor: AnsiString;
         function Get_Version: AnsiString;
@@ -154,7 +179,7 @@ type
         property Commands     : TXMLCommandsType    read Get_Commands;
         property ConfigItems  : TXMLConfigItemsType read Get_ConfigItems;
         property Schemas      : TXMLSchemasType     read Get_Schemas;
-        property Triggers     : TXMLTriggersType    read Get_Triggers;
+        property Triggers     : TXMLCommandsType    read Get_Triggers;
         property MenuItems    : TXMLMenuItemsType   read Get_MenuItems;
      end;
 
@@ -166,49 +191,55 @@ type
      protected
         fFileName : AnsiString;
         fDoc      : TXMLDocument;
+        fValid    : Boolean;
      private
         function Get_Info_Url: AnsiString;
         function Get_Plugin_Url: AnsiString;
         function Get_Version: AnsiString;
 	function Get_Vendor : AnsiString;
-procedure Set_Info_URL(const AValue: AnsiString);
-procedure Set_Plugin_URL(const AValue: AnsiString);
-procedure Set_Version(const AValue: AnsiString);
-//        procedure Set_Version(const AValue: AnsiString);
+        procedure Set_Info_URL(const AValue: AnsiString);
+        procedure Set_Plugin_URL(const AValue: AnsiString);
+        procedure Set_Version(const AValue: AnsiString);
      public
         constructor Create(const ANode: TDOMNode); overload;
         constructor Create(const aFileName : string); overload;
         destructor  Destroy; override;
         procedure   Save;
+        function    AddElement(const aName : string) : TXMLDeviceType;
      published
         property Version: AnsiString read Get_Version write Set_Version;
 	property Vendor : AnsiString read Get_Vendor;
         property Plugin_URL : AnsiString read Get_Plugin_Url write Set_Plugin_URL;
         property Info_URL : AnsiString read Get_Info_Url write Set_Info_URL;
+        property Valid : boolean read FValid;
      end;
 
 implementation //=========================================================================
-uses XMLRead,
+uses uXMLRead,
      XMLWrite,
+     SysUtils,
      StrUtils;
 //========================================================================================
+function TXMLDeviceType.Get_Platform_: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Platform);     end;
+
+function TXMLDeviceType.Get_Type_: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Type);         end;
+
+function TXMLDeviceType.Get_Version: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Version);      end;
+
 function TXMLDeviceType.Get_Beta_Version: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Beta_version); end;
 
-procedure TXMLDeviceType.Set_Beta_Version(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Beta_version, aValue); end;
-
-function TXMLDeviceType.Get_Commands: TXMLCommandsType;
-begin Result := TXMLCommandsType.Create(self, K_XML_STR_Command); end;
-
-function TXMLDeviceType.Get_ConfigItems: TXMLConfigItemsType;
-begin Result := TXMLConfigItemsType.Create(self, K_XML_STR_ConfigItem); end;
-
 function TXMLDeviceType.Get_Description: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Description); end;
+begin Result := GetAttribute(K_XML_STR_Description);  end;
 
 function TXMLDeviceType.Get_Download_URL: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Download_url); end;
+
+function TXMLDeviceType.Get_Info_URL: AnsiString;
+begin Result := GetAttribute(K_XML_STR_Info_url);     end;
 
 function TXMLDeviceType.Get_Id: AnsiString;
 begin Result := Attributes.GetNamedItem(K_XML_STR_Id).NodeValue; end;
@@ -219,35 +250,32 @@ begin Result := AnsiRightStr(Id,Length(Id)-AnsiPos('-',Id)); end;
 function TXMLDeviceType.Get_Vendor: AnsiString;
 begin Result := AnsiLeftStr(Id,AnsiPos('-',Id)-1); end;
 
-procedure TXMLDeviceType.Set_Device(const AValue: AnsiString);                            // We protect modification of the vendor at this level
-begin SetAttribute(K_XML_STR_Id, Vendor + '-' + aValue); end;
-
-function TXMLDeviceType.Get_Info_URL: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Info_url); end;
-
 function TXMLDeviceType.Get_MenuItems: TXMLMenuItemsType;
-begin Result := TXMLMenuItemsType.Create(self, K_XML_STR_MenuItem); end;
+begin result := TXMLMenuItemsType.Create(self, K_XML_STR_MenuItem,K_XML_STR_NAME); end;
 
-function TXMLDeviceType.Get_Platform_: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Platform); end;
+function TXMLDeviceType.Get_Schemas: TXMLSchemasType;
+begin result := TXMLSchemasType.Create(self, K_XML_STR_Schema,K_XML_STR_NAME); end;
+
+function TXMLDeviceType.Get_Triggers: TXMLCommandsType;
+begin result := TXMLCommandsType.Create(self, K_XML_STR_Trigger,K_XML_STR_NAME); end;
+
+function TXMLDeviceType.Get_Commands: TXMLCommandsType;
+begin result := TXMLCommandsType.Create(self, K_XML_STR_Command,K_XML_STR_NAME); end;
+
+function TXMLDeviceType.Get_ConfigItems: TXMLConfigItemsType;
+begin result := TXMLConfigItemsType.Create(self, K_XML_STR_ConfigItem,K_XML_STR_NAME); end;
 
 procedure TXMLDeviceType.Set_Platform_(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Platform, aValue); end;
 
-function TXMLDeviceType.Get_Schemas: TXMLSchemasType;
-begin Result := TXMLSchemasType.Create(self, K_XML_STR_Schema); end;
+procedure TXMLDeviceType.Set_Device(const AValue: AnsiString);                            // We protect modification of the vendor at this level
+begin SetAttribute(K_XML_STR_Id, Vendor + '-' + aValue); end;
 
-function TXMLDeviceType.Get_Triggers: TXMLTriggersType;
-begin Result := TXMLTriggersType.Create(self, K_XML_STR_Trigger); end;
-
-function TXMLDeviceType.Get_Type_: AnsiString;
-begin  Result := GetAttribute(K_XML_STR_Type); end;
+procedure TXMLDeviceType.Set_Beta_Version(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Beta_version, aValue); end;
 
 procedure TXMLDeviceType.Set_Type_(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Type, aValue); end;
-
-function TXMLDeviceType.Get_Version: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Version); end;
 
 procedure TXMLDeviceType.Set_Version(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Version, aValue); end;
@@ -284,19 +312,26 @@ procedure TXMLxplpluginType.Set_Version(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_Version,aValue); end;
 
 constructor TXMLxplpluginType.Create(const ANode: TDOMNode);
-begin inherited Create(aNode, K_XML_STR_Device); end;
+begin inherited Create(aNode, K_XML_STR_Device, K_XML_STR_Id); end;
 
 constructor TXMLxplpluginType.Create(const aFileName: string);
 var aNode : TDOMNode;
 begin
    fFileName := aFileName;
    fDoc := TXMLDocument.Create;
-   ReadXMLFile(fDoc,fFileName);
-   aNode := fDoc.FirstChild;
-   while (aNode.NodeName <> K_XML_STR_XplPlugin) and
-         (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) do
-         aNode := fDoc.FirstChild.NextSibling;
-   Create(aNode);
+   fValid := True;
+   try
+      ReadXMLFile(fDoc,fFileName);
+   except
+      fValid := False;
+   end;
+   if fValid then begin
+      aNode := fDoc.FirstChild;
+      while (aNode.NodeName <> K_XML_STR_XplPlugin) and
+            (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) do
+            aNode := fDoc.FirstChild.NextSibling;
+      Create(aNode);
+   end;
 end;
 
 destructor TXMLxplpluginType.Destroy;
@@ -311,22 +346,41 @@ begin
    WriteXML(RootNode,fFileName);
 end;
 
+function TXMLxplpluginType.AddElement(const aName: string): TXMLDeviceType;
+begin
+  Result:=inherited AddElement(Vendor + '-' + aName);
+end;
+
 { TXMLCommandType }
 
 function TXMLCommandType.Get_Description: AnsiString;
 begin result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLCommandType.Get_Elements: TXMLElementsType;
-begin Result := TXMLElementsType.Create(self, K_XML_STR_Element); end;
+begin
+   Result := TXMLElementsType.Create(self, K_XML_STR_Element,K_XML_STR_NAME );
+end;
 
 function TXMLCommandType.Get_msg_schema: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Msg_schema).NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Msg_schema); end;
 
 function TXMLCommandType.Get_msg_type: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Msg_type).NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Msg_type); end;
 
 function TXMLCommandType.Get_Name: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Name); end;
+
+procedure TXMLCommandType.Set_Description(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Description,aValue); end;
+
+procedure TXMLCommandType.Set_msg_type(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Msg_type, aValue);      end;
+
+procedure TXMLCommandType.Set_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Name,aValue); end;
+
+procedure TXMLCommandType.Set_Schema(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Msg_schema,aValue); end;
 
 { TXMLElementType }
 
@@ -342,22 +396,62 @@ begin result := GetAttribute(K_XML_STR_Default); end;
 function TXMLElementType.Get_Label_: AnsiString;
 begin result := GetAttribute(K_XML_STR_Label); end;
 
+function TXMLElementType.Get_max_val: AnsiString;
+begin result := GetAttribute(K_XML_STR_MAX_VAL); end;
+
+function TXMLElementType.Get_min_val: AnsiString;
+begin result := GetAttribute(K_XML_STR_MIN_VAL); end;
+
 function TXMLElementType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 
 function TXMLElementType.Get_Options: TXMLOptionsType;
-begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option); end;
+begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option,K_XML_STR_VALUE); end;
+
+procedure TXMLElementType.Set_Conditional_Visibility(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_ConditionalV, aValue); end;
+
+procedure TXMLElementType.set_control_type(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Control_type, aValue); end;
+
+procedure TXMLElementType.Set_default_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Default, aValue); end;
+
+procedure TXMLElementType.Set_Label_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Label, aValue); end;
+
+procedure TXMLElementType.Set_max_val(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_MAX_VAL, aValue); end;
+
+procedure TXMLElementType.Set_min_val(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_MIN_VAL, aValue); end;
+
+procedure TXMLElementType.Set_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Name, aValue); end;
+
+function TXMLElementType.Get_regexp: AnsiString;
+begin Result := SafeFindNode(K_XML_STR_REGEXP); end;
+
+procedure TXMLElementType.Set_regexp(const AValue: AnsiString);
+begin
+   if FindNode(K_XML_STR_REGEXP) <> nil
+      then SafeChangeNode(K_XML_STR_REGEXP,AValue)
+      else SafeAddNode   (K_XML_STR_REGEXP,AValue);
+end;
 
 { TXMLOptionType }
 
 function TXMLOptionType.Get_Label_: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Label).NodeValue; end;
-
-function TXMLOptionType.Get_Regexp: AnsiString;
-begin Result := FindNode(K_XML_STR_Regexp).FirstChild.NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Label); end;
 
 function TXMLOptionType.Get_Value: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Value).NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Value); end;
+
+procedure TXMLOptionType.Set_Label_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Label, aValue);   end;
+
+procedure TXMLOptionType.Set_Value(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Value, aValue);   end;
 
 { TXMLConfigItemType }
 
@@ -388,7 +482,7 @@ function TXMLSchemaType.Get_Listen: AnsiString;
 begin result := GetAttribute(K_XML_STR_Listen); end;
 
 function TXMLSchemaType.Get_Name: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin result := GetAttribute(K_XML_STR_Name); end;
 
 function TXMLSchemaType.Get_Status: AnsiString;
 begin result := GetAttribute(K_XML_STR_Status); end;
@@ -396,20 +490,23 @@ begin result := GetAttribute(K_XML_STR_Status); end;
 function TXMLSchemaType.Get_trigger: AnsiString;
 begin result := GetAttribute(K_XML_STR_Trigger); end;
 
-procedure TXMLSchemaType.Set_Command(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Command,aValue); end;
+procedure TXMLSchemaType.Set_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Name,aValue); end;
 
 procedure TXMLSchemaType.Set_Comment(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Comment,aValue); end;
+begin if aValue<>'' then  SetAttribute(K_XML_STR_Comment,aValue ); end;
+
+procedure TXMLSchemaType.Set_Command(const AValue: AnsiString);
+begin if aValue<>'' then SetAttribute(K_XML_STR_Command,aValue  ); end;
 
 procedure TXMLSchemaType.Set_Listen(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Listen,aValue); end;
+begin if aValue<>'' then SetAttribute(K_XML_STR_Listen,aValue   ); end;
 
 procedure TXMLSchemaType.Set_Status(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Status,aValue); end;
+begin if aValue<>'' then SetAttribute(K_XML_STR_Status,aValue   ); end;
 
 procedure TXMLSchemaType.Set_Trigger(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Trigger,aValue); end;
+begin if aValue<>'' then SetAttribute(K_XML_STR_Trigger,aValue  ); end;
 
 { TXMLMenuItemType }
 
@@ -417,7 +514,13 @@ function TXMLMenuItemType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
 
 function TXMLMenuItemType.Get_xplmsg: AnsiString;
-begin Result := SafeFindNode(K_XML_STR_XplMsg); end;
+begin
+   if FindNode(K_XML_STR_XplMsg) = nil then SafeAddNode(K_XML_STR_XplMsg,'message.schema'#10'{'#10'}'#10);
+   Result := SafeFindNode(K_XML_STR_XplMsg);
+end;
+
+procedure TXMLMenuItemType.Set_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Name, aValue); end;
 
 procedure TXMLMenuItemType.Set_xplmsg(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_XplMsg,AValue); end;
