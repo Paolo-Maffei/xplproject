@@ -10,9 +10,9 @@ uses
 var xPLClient : TxPLClient;
 
 const //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '1.6';
+     K_XPL_APP_VERSION_NUMBER = '2.0';
      K_DEFAULT_VENDOR         = 'clinique';
-     K_DEFAULT_DEVICE         = 'Network_Config';
+     K_DEFAULT_DEVICE         = 'netconf';
 
 implementation
 

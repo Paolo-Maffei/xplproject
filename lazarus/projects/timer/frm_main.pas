@@ -5,7 +5,7 @@ unit frm_main;
 interface
                                          
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs, StdCtrls,
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls, uxPLWebListener, uxPLMessage, SunTime,
   Grids, Buttons, uxPLConfig,  frm_xPLTimer, frm_xplrecurevent, IdCustomHTTPServer,
   uxPLTimer, uxPLEvent;
@@ -95,12 +95,17 @@ type
 var frmMain: TfrmMain;
 
 implementation {===============================================================}
-uses Frm_About, frm_xPLAppslauncher, uxPLConst, uRegExTools, StrUtils, LCLType,
-     DateUtils, frm_xPLLogViewer;
+uses Frm_About,
+     uxPLConst,
+     StrUtils,
+     LCLType,
+     uRegExpr,
+     DateUtils,
+     frm_LogViewer;
 
 {==============================================================================}
 resourcestring
-     K_XPL_APP_VERSION_NUMBER = '1.5.1';
+     K_XPL_APP_VERSION_NUMBER = '1.5.2';
      K_DEFAULT_VENDOR         = 'clinique';
      K_DEFAULT_DEVICE         = 'timer';
      K_DEFAULT_PORT           = '8339';
@@ -119,9 +124,6 @@ end;
 
 procedure TfrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
-
-//procedure TfrmMain.LogUpdate(const aList: TStringList);
-//begin Memo1.Lines.Add(aList[aList.Count-1]); end;
 
 procedure TfrmMain.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin CanClose := (Application.MessageBox('Do you want to quit ?','Confirm',MB_YESNO) = IDYES) end;
@@ -165,7 +167,6 @@ begin
        OnxPLSensorRequest := @OnSensorRequest;
        OnxPLConfigDone    := @OnConfigDone;
        OnxPLReceived      := @OnReceive;
-//       OnLogUpdate        := @LogUpdate;
        OnReplaceArrayedTag := @ReplaceArrayedTag;
        Config.AddItem(K_CONFIG_LATITUDE, K_XPL_CT_CONFIG);
        Config.AddItem(K_CONFIG_LONGITUDE,K_XPL_CT_CONFIG);
@@ -194,21 +195,22 @@ begin
    acNewRecurringEvent.Enabled := true;
    acNewTimer.Enabled := true;
 
-   with RegExpEngine do begin
+   with TRegExpr.Create do begin
         Expression := K_RE_LATITUDE;
-        if RegExpEngine.Exec(xPLClient.Config.ItemName[K_CONFIG_LATITUDE].Value) then begin
+        if Exec(xPLClient.Config.ItemName[K_CONFIG_LATITUDE].Value) then begin
            Suntime.Latitude.Degrees := StrToInt(Match[1]);
            Suntime.Latitude.Minutes := StrToInt(Match[2]);
            Suntime.Latitude.Seconds := StrToInt(Match[3]);
            Suntime.Latitude.Dir     := Match[4];
         end;
         Expression := K_RE_LONGITUDE;
-        if RegExpEngine.Exec(xPLClient.Config.ItemName[K_CONFIG_LONGITUDE].Value) then begin
+        if Exec(xPLClient.Config.ItemName[K_CONFIG_LONGITUDE].Value) then begin
            Suntime.Longitude.Degrees := StrToInt(Match[1]);
            Suntime.Longitude.Minutes := StrToInt(Match[2]);
            Suntime.Longitude.Seconds := StrToInt(Match[3]);
            Suntime.Longitude.Dir     := Match[4];
         end;
+        destroy;
    end;
 
    if not Assigned(Dawn) then Dawn := TxPLSunEvent.Create(xPLClient.Address,Suntime,setDawn);
@@ -248,9 +250,7 @@ begin
 end;
 
 procedure TfrmMain.OnControlBasic(const axPLMsg: TxPLMessage; const aDevice: string; const aAction : string);
-var s : string;
 begin
-   s := axPLMsg.Source.Tag;
    case AnsiIndexStr(aAction, ['halt','resume','stop','start']) of         // halt=pause - resume = resume - stop = stop - start = start
         0 : TimerList.Pause(aDevice);
         1 : TimerList.ResumeOrStartATimer(aDevice);

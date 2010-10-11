@@ -2413,7 +2413,7 @@ object frmMain: TfrmMain
       125
     )
     Cells = (
-      5
+      4
       0
       0
       'Keys'
@@ -2426,9 +2426,6 @@ object frmMain: TfrmMain
       2
       0
       'Values'
-      2
-      1
-      '='
     )
   end
   object radMsgType: TxPLMsgTypeRadio
