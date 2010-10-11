@@ -64,7 +64,7 @@ type
 
 
 implementation //===============================================================
-uses SysUtils, DateUtils, frm_xPLRecurEvent, cRandom, uxPLMsgHeader, uxPLConst;
+uses SysUtils, DateUtils, frm_xPLRecurEvent, cRandom, uxPLConst;
 
 { TxPLRecurEvent }
 

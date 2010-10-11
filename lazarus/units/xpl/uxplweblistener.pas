@@ -15,7 +15,7 @@ unit uxPLWebListener;
 
 interface
 
-uses uxPLListener,Classes, SysUtils, IdGlobal, uxPLMsgBody, uxPLMessage,
+uses uxPLListener,Classes, SysUtils, IdGlobal, uxPLMessage,
      IdHTTPServer, IdContext,IdCustomHTTPServer;
 
 type
@@ -58,8 +58,8 @@ type
          //procedure HtmlReplaceVar(aVarNames : array of string;aValues : array of string; var aPage : widestring);
 
 implementation  { ==============================================================}
-uses IdStack, cRandom,  uIPutils,cStrings, StrUtils, RegExpr, uxPLConst,
-     uxPLHeader,  cUtils;
+uses IdStack, cRandom,  cStrings, StrUtils, uRegExpr, uxPLConst,
+     cUtils;
 
 { Utility functions ============================================================}
 
@@ -202,8 +202,8 @@ begin
    else if aVariable = 'menuitem'   then begin
            if Assigned(Config.DeviceInVendorFile) then
               for i:=0 to Config.DeviceInVendorFile.MenuItems.Count-1 do begin
-                  menuName   := Config.DeviceInVendorFile.MenuItems[i];
-                  menuAction := Config.DeviceInVendorFile.MenuItem(menuName);
+                  menuName   := Config.DeviceInVendorFile.MenuItems[i].Name;
+                  menuAction := Config.DeviceInVendorFile.MenuItems[i].xPLMsg; //(menuName);
                   with TRegExpr.Create do begin
                        EntryZone  := '';
                        Expression :=K_MNU_ITEM_RE_PARAMETER;                              // Search for parameters

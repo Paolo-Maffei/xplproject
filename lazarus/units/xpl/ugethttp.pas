@@ -8,10 +8,10 @@ uses
   Classes, SysUtils;
 
   //procedure WGetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string);
-  function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
+  function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string; out StrOut : string) : boolean;
 
 implementation
-uses LCLType,IdURI,httpprothandler;
+uses LCLType,IdURI,uhttpprothandler;
 
 {procedure WGetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string);
 var GURL : TIdURI;
@@ -30,20 +30,16 @@ begin
     GURL.Destroy;
 end;}
 
-function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string) : boolean;
+function GetHTTPFile(aSourceURI, aTargetFile,ProxySrvr,ProxyPort : string; out StrOut : string) : boolean;
 var GURL : TIdURI;
 begin
-    result := true;
     GURL := TIdURI.Create;
     GURL.URI := aSourceURI;
 
     if THTTPProtHandler.CanHandleURL(GURL) then
        with THTTPProtHandler.Create(aTargetFile,ProxySrvr,ProxyPort) do begin
-          try
-            GetFile(GURL);
-          except
-            on E : Exception do result := false ;
-          end;
+          StrOut :=  GetFile(GURL);
+          result := (StrOut = '');
           Destroy;
     end;
     GURL.Destroy;

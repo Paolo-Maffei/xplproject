@@ -44,7 +44,7 @@ type
   end;
 
 implementation //===============================================================
-uses SysUtils, frm_xPLRecurEvent, frm_xPLSingleEvent, Controls, uxplmsgheader, uxPLConst;
+uses SysUtils, frm_xPLRecurEvent, frm_xPLSingleEvent, Controls, uxPLConst;
 
 constructor TxPLSingleEvent.Create(const aMsg : TxPLMessage);
 begin
@@ -95,8 +95,8 @@ begin
      if MessageToFire='' then with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := '*';
-         Body.Format_SensorBasic(fName,'generic','fired');
-         Body.Schema.Tag := 'timer.basic';
+         Format_SensorBasic(fName,'generic','fired');
+         Schema.Tag := 'timer.basic';
          Send;
      end else begin
          aMessage:=TxPLMessage.Create(MessageToFire);

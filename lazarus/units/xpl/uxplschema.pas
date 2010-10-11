@@ -9,14 +9,18 @@ unit uxPLSchema;
  0.97 : Usage of uxPLConst
  0.98 : Typing of fClasse and fType variables
  0.99 : Usage of uRegExTools
- Rev 256 : Removed usage of symbolic constants
+ 1.00 : Removed usage of symbolic constants
 }
 {$mode objfpc}{$H+}
 interface
 
 uses uxPLConst;
 
-type TxPLSchema = class
+type
+
+{ TxPLSchema }
+
+TxPLSchema = class
      private
         fClasse : String;
         fType   : String;
@@ -34,6 +38,7 @@ type TxPLSchema = class
         property Tag    : string read Get_Tag write Set_Tag;
 
         class function IsValid(const aSchema : string) : boolean;
+        class function FormatTag(const aClasse : string; const aType : string) : string;
     end;
 
 implementation { ========================================================================}
@@ -66,6 +71,9 @@ begin
       Destroy;
    end;
 end;
+
+class function TxPLSchema.FormatTag(const aClasse: string; const aType: string): string;
+begin Result := Format(K_FMT_SCHEMA,[aClasse,aType]); end;
 
 function TxPLSchema.Get_Tag: string;
 begin

@@ -37,7 +37,7 @@ TfrmxPLTimer = class(TForm)
 
 
 implementation { TxPLTimer ====================================================}
-uses uxPLMsgHeader, uxPLTimer;
+uses uxPLTimer;
 
 { TfrmxPLTimer ================================================================}
 procedure TfrmxPLTimer.FormShow(Sender: TObject);

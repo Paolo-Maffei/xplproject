@@ -95,6 +95,7 @@ const
    K_MSG_HEADER_SOURCE = 'source';
    K_MSG_HEADER_TARGET = 'target';
    K_MSG_TARGET_ANY    = '*';
+   K_MSG_HEADER_DUMMY  = 'me-me.me';
 
    // Message body elements ====================================================
    //K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
