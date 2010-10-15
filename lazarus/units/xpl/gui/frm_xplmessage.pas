@@ -74,6 +74,7 @@ type
 
 implementation // TFrmxPLMessage ===============================================================
 uses frm_About,
+     app_main,
      clipbrd,
      LCLType,
      cStrings,
@@ -89,7 +90,7 @@ end;
 procedure TfrmxPLMessage.DoSendExecute(Sender: TObject);
 begin
    mmoMessageExit(sender);
-  xPLMessage.Send;
+   xPLClient.Send(xPLMessage);
 end;
 
 procedure TfrmxPLMessage.acLoadExecute(Sender: TObject);

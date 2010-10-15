@@ -22,7 +22,7 @@ type
      end;
 
 implementation { TfrmxPLSingleEvent ===========================================}
-uses uxPLSingleEvent;
+uses uxPLEvent;
 
 function TfrmxPLSingleEvent.ValidateFields: boolean;
 begin

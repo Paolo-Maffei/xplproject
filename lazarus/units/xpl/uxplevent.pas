@@ -138,7 +138,7 @@ type
   end;
 
 implementation //========================================================================
-uses SysUtils, uxPLConst,  strUtils, frm_xPLRecurEvent,
+uses SysUtils, uxPLConst,  strUtils, frm_xPLRecurEvent, app_main,
      frm_xPLSingleEvent,  DateUtils, cRandom;
 
 { TxPLEvent =============================================================================}
@@ -313,11 +313,12 @@ begin
          Target.Tag  := '*';
          Format_SensorBasic(fName,'generic','fired');
          Schema.Tag := 'timer.basic';
-         Send;
+         xPLClient.Send(fxPLMessage);
      end else begin
          aMessage:=TxPLMessage.Create(MessageToFire);
          aMessage.Source.Assign(fxPLMessage.Source);
-         aMessage.Send;
+         xPLClient.Send(aMessage);
+//         aMessage.Send;
          aMessage.Destroy ;
      end;
 end;
@@ -373,7 +374,8 @@ end;
 
 procedure TxPLSunEvent.Fire;
 begin
-   fMessage.Send;
+//   fMessage.Send;
+   xPLClient.Send(fMessage);
 end;
 
 procedure TxPLSunEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);

@@ -84,7 +84,7 @@ type
 
 
 implementation //===============================================================
-uses frm_xplTimer, Controls, DateUtils, StrUtils, uxPLConst;
+uses frm_xplTimer, Controls, DateUtils, StrUtils, uxPLConst, app_main;
 
 {==============================================================================}
 function DateTimeDiff(Start, Stop : TDateTime) : int64;
@@ -218,7 +218,7 @@ begin
        Target.Tag := Self.Target;
        Schema.Tag := 'timer.basic';
        Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-       Send;
+       xPLClient.Send(fxPLMessage);
    end;
 end;
 
@@ -234,7 +234,7 @@ begin
       Target.Tag := Self.Target;
       Format_SensorBasic(fName,'generic',Status);
       Schema.Tag := 'timer.basic';
-      Send;
+      xPLClient.Send(fxPLMessage);
    end;
 
 end;
@@ -257,7 +257,7 @@ begin
          Format_SensorBasic(fName,'generic',StopReason);
          Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
          Schema.Tag := 'timer.basic';
-         Send;
+         xPLClient.Send(fxPLMessage);
       end;
    end;
 end;
@@ -278,7 +278,7 @@ begin
       Format_SensorBasic(fName,'generic',Status);
       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
       Schema.Tag := 'timer.basic';
-      Send;
+      xPLClient.Send(fxPLMessage);
    end; 
 end;
 

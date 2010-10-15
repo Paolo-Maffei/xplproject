@@ -8,7 +8,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="$(LazarusDir)\components\indy-10.2.0.3\fpc\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\lib\i386-win32\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;\home\gael\svn\units\general\multilog-0.5\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\"/>
+        <OtherUnitFiles Value="E:\00.Apps\lazarus\SVN\units\general\;E:\00.Apps\lazarus\SVN\units\general\multilog-0.5\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\"/>
         <UnitOutputDirectory Value="C:\LazOut"/>
       </SearchPaths>
       <Parsing>
