@@ -21,17 +21,17 @@ uses
   XPL,
   app_main,
   u_xml_plugins,
-  u_xml_xplplugin;
+  u_xml_xplplugin, u_xpl_sender;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 begin
   Application.Title:='xpl_sender';
   {$I xpl_sender.lrs}
   Application.Initialize;
-  SendMsg := TxPLMessage.Create;
+  SendMsg   := TxPLMessage.Create;
   if Application.HasOption('s') then begin
      SendMsg.LoadFromFile(Application.GetOptionValue('s'));
-     SendMsg.Send;
+     xPLClient.Send(SendMsg);
   end else begin
      Application.CreateForm(TfrmMain, frmMain);
      Application.CreateForm(TfrmAbout, frmAbout);

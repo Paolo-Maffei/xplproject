@@ -1559,7 +1559,8 @@ object frmMain: TfrmMain
     TabOrder = 4
   end
   object TimerImages: TImageList
-    left = 304
+    left = 240
+    top = 56
     Bitmap = {
       4C69070000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -1789,7 +1790,8 @@ object frmMain: TfrmMain
     }
   end
   object ActionList1: TActionList
-    left = 336
+    left = 296
+    top = 56
     object Quit: TAction
       Caption = 'Quit'
       Hint = 'Quit the application'
@@ -1838,7 +1840,8 @@ object frmMain: TfrmMain
     end
   end
   object MainMenu1: TMainMenu
-    left = 368
+    left = 344
+    top = 64
     object MenuItem6: TMenuItem
       Caption = 'Application'
       object MenuItem12: TMenuItem

@@ -101,6 +101,7 @@ uses Frm_About,
      LCLType,
      uRegExpr,
      DateUtils,
+     moon,
      frm_LogViewer;
 
 {==============================================================================}
@@ -156,7 +157,9 @@ procedure TfrmMain.acNewRecurringEventExecute(Sender: TObject);
 begin acNewEvent(TxPLRecurEvent.Create(aMessage));  end;
 
 procedure TfrmMain.acNewSingleEventExecute(Sender: TObject);
-begin acNewEvent(TxPLSingleEvent.Create(aMessage)); end;
+begin
+   acNewEvent(TxPLSingleEvent.Create(aMessage));
+end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
 procedure initListener;
@@ -184,7 +187,13 @@ end;
 
 procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
 begin
-   if not assigned(aMessage)  then aMessage := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
+   if not assigned(aMessage)  then begin
+//      aMessage := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
+      aMessage := TxPLMessage.Create;
+      aMessage.MessageType:=K_MSG_TYPE_CMND;
+      aMessage.Schema.Tag:='control.basic';
+      aMessage.Target.IsGeneric := True;
+   end;
    if not assigned(eventlist) then eventlist := TxPLEventList.Create(xPLClient, lvEvents);
    if not assigned(timerlist) then timerlist := TxPLTimerList.Create(xPLClient, lvTimers);
 
@@ -264,16 +273,16 @@ begin
 end;
 
 procedure TfrmMain.OnReceive(const axPLMsg: TxPLMessage);
-var aMsg : TxPLMessage;
+var //aMsg : TxPLMessage;
     level, delta, lag : longint;
     status : string;
     fixdawn, fixnoon : TDateTime;
 begin
    if axPLMsg.Schema.Tag = K_SCHEMA_DAWNDUSK_REQUEST then begin
-      aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_STAT,K_SCHEMA_DAWNDUSK_BASIC);
-      aMsg.Body.AddKeyValue('type=daynight');
+//      aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_STAT,K_SCHEMA_DAWNDUSK_BASIC);
+//      aMsg.Body.AddKeyValue('type=daynight');
       status := IfThen (Dawn.Next>Dusk.Next,'day','night');
-      aMsg.Body.AddKeyValue( 'status=' + status );
+//      aMsg.Body.AddKeyValue( 'status=' + status );
 
       level := 0;
       if status = 'day' then begin
@@ -288,9 +297,11 @@ begin
          lag := MinutesBetween(FixDawn,FixNoon);
          level := Round(6/lag * (lag-delta));
       end;
-      aMsg.Body.AddKeyValue('level=' + IntToStr(level));
-      aMsg.Send;
-      aMsg.Destroy;
+//      aMsg.Body.AddKeyValue('level=' + IntToStr(level));
+//      aMsg.Send;
+      xPLClient.SendMessage(K_MSG_TYPE_STAT,K_MSG_TARGET_ANY,K_SCHEMA_DAWNDUSK_BASIC,['type','status','level'],['daynight',status,IntToStr(level)]);
+//      xPLClient.Send(aMsg);
+//      aMsg.Destroy;
    end;
 end;
 
