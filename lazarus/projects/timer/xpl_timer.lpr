@@ -16,7 +16,7 @@ uses
      app_main,
      uxpltimer,
      SunTime,
-     uxPLEvent, frm_logviewer, frm_about;
+     uxPLEvent, frm_logviewer, frm_about, khex;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
 
@@ -32,8 +32,5 @@ begin
   xPLApplication.Icon := frmMain.Icon;
 {$ENDIF}
   xPLApplication.Run;
-{$IFNDEF CONSOLE_APP}
-  xPLApplication.Free;
-{$ENDIF}
 end.
 

@@ -6,31 +6,29 @@ interface
 
 uses
   Classes, SysUtils,
-  {$IFDEF CONSOLE_APP}
-          CustApp,
-  {$ELSE}
-          Forms,
-  {$ENDIF}
+  CustApp,
   uxPLMessage,
   uxPLWebListener,
   uxPLConfig,
   Weathers,
-  IdCustomHTTPServer,
-  fpTimer;
+  IdCustomHTTPServer;
 
-type TMyApplication = class({$IFDEF CONSOLE_APP}TCustomApplication{$ELSE}TApplication{$ENDIF})
+type
+
+{ TMyApplication }
+
+TMyApplication = class(TCustomApplication)
      protected
-        Timer1     : TfpTimer;
+        fURI : string;
         Weather,Backup : TWeather;
-        {$IFDEF CONSOLE_APP}
-           procedure DoRun; override;
-        {$ENDIF}
+        procedure DoRun; override;
         procedure SendSensors(bCheckDifference : boolean);
-        procedure Timer1Timer(Sender: TObject);
      public
         constructor Create(TheOwner: TComponent); override;
         procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
         procedure OnConfigDone(const fConfig : TxPLConfig);
+        procedure OnReceived(const axPLMsg : TxPLMessage);
+        procedure OnPrereqMet;
         procedure CommandGet(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo);
         destructor Destroy; override;
      end;
@@ -47,8 +45,8 @@ const
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
+     K_WEATHER_URI = 'http://xoap.weather.com/weather/local/%s?cc=*&dayf=5&link=xoap&prod=xoap&par=%s&key=%s';
 
-{$IFDEF CONSOLE_APP}
 procedure TMyApplication.DoRun;
 var ErrorMsg: String;
 begin
@@ -69,19 +67,22 @@ begin
   end;
   Terminate;
 end;
-{$ENDIF}
 
 procedure TMyApplication.SendSensors(bCheckDifference: boolean);
 procedure IssueSensor(aValue,aDevice,aType : string);
-var aMessage : TxPLMessage;
+//var aMsg : TxPLMessage;
 begin
-   aMessage := xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'sensor.basic');
-   aMessage.Body.AddKeyValuePair('device',aDevice);
-   aMessage.Body.AddKeyValuePair('type',aType);
-   aMessage.Body.AddKeyValuePair('current',aValue);
-   aMessage.Body.AddKeyValuePair('timestamp',Weather.Courant.ChaineDateHeure);
-   aMessage.Send;
-   aMessage.Destroy;
+//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,K_SCHEMA_SENSOR_BASIC);
+//   with aMsg do begin
+//        Body.AddKeyValuePair('device',aDevice);
+//        Body.AddKeyValuePair('type',aType);
+//        Body.AddKeyValuePair('current',aValue);
+//        Body.AddKeyValuePair('timestamp',Weather.Courant.ChaineDateHeure);
+//        xPLClient.Send(aMsg);
+//        Destroy;
+//   end;
+   xPLClient.SendMessage( K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, K_SCHEMA_SENSOR_BASIC,
+                          ['device','type','current','timestamp'],[aDevice,aType,aValue,Weather.Courant.ChaineDateHeure]);
 end;
 begin
    if assigned(Weather) then with Weather do begin
@@ -105,36 +106,30 @@ begin
    end;
 end;
 
-procedure TMyApplication.Timer1Timer(Sender: TObject);
-begin
-   Timer1.Interval := 30*60*1000;                        // Reset Timer interval to 30mn
-   Weather.MettreAJour;
-   SendSensors(true);
-end;
-
 constructor TMyApplication.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   StopOnException:=True;
-  Timer1 := TfpTimer.Create(self);
-  Timer1.OnTimer:=@Timer1Timer;
   xPLClient := TxPLWebListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
   with xPLClient do begin
        OnxPLSensorRequest := @OnSensorRequest;
        OnxPLConfigDone    := @OnConfigDone;
        OnCommandGet       := @CommandGet;
+       OnxPLPrereqMet     := @OnPrereqMet;
+       OnxPLReceived      := @OnReceived;
        Config.AddItem('partnerid', K_XPL_CT_CONFIG);
        Config.AddItem('licensekey',K_XPL_CT_CONFIG);
        Config.AddItem('zipcode'  , K_XPL_CT_CONFIG);
        Config.AddItem('unitsystem',K_XPL_CT_CONFIG);
        Config.AddItem('translation',K_XPL_CT_CONFIG,'us');
+       PrereqList.Add('timer=0');
+       PrereqList.Add('netget=0');
+       Listen;
   end;
-  xPLClient.Listen;
 end;
 
 destructor TMyApplication.Destroy;
 begin
-  Timer1.Destroy;
   xPLClient.Destroy;
   inherited Destroy;
 end;
@@ -143,39 +138,78 @@ procedure TMyApplication.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevi
 begin
    if not ((aDevice = 'weather') and (aAction = 'current')) then exit;
 
-   Weather.MettreAJour;
+   Weather.MettreAJour(GetTempDir + 'weather.xml',xPLClient.Config.ItemName['unitsystem'].Value);
    SendSensors(false);
 end;
 
 procedure TMyApplication.OnConfigDone(const fConfig: TxPLConfig);
 var ageofinfo : tdatetime;
-    hour, min, sec, msec, elapsed, timetoupdate : word;
+//    hour, min, sec, msec, elapsed, timetoupdate : word;
 
 begin
   if not Assigned(Weather) then begin
-     Backup  := TWeather.Create(self);
-     Weather := TWeather.Create( self,
-                                 xPLClient.Config.ItemName['zipcode'].Value ,
-                                 xPLClient.Config.ItemName['licensekey'].Value ,
-                                 xPLClient.Config.ItemName['partnerid'].Value ,
-                                 xPLClient.Config.ItemName['unitsystem'].Value
-             );
-     Weather.MettreAJour;                                   // Initialisation des données
-
-     AgeOfInfo  := Now - Weather.Courant.TimeStamp;
-     DecodeTime(AgeOfInfo, hour, min, sec, msec);           // Should always be between 0 and 30 minutes
-     Elapsed := min * 60 + sec;
-     TimeToUpdate := 30* 60 - Elapsed;
-     Timer1.Interval := (TimeToUpdate + 120) * 1000;        // Adjust next timer tick to website update
-     Timer1.Enabled := True;
-
-     SendSensors(true);
-     Backup.Assign(Weather);
+     Backup  := TWeather.Create;
+     Weather := TWeather.Create;
+     fURI := Format(K_WEATHER_URI,[ xPLClient.Config.ItemName['zipcode'].Value ,
+                                    xPLClient.Config.ItemName['partnerid'].Value ,
+                                    xPLClient.Config.ItemName['licensekey'].Value]);
+//     AgeOfInfo  := Now - Weather.Courant.TimeStamp;
+//     DecodeTime(AgeOfInfo, hour, min, sec, msec);           // Should always be between 0 and 30 minutes
+//     Elapsed := min * 60 + sec;
+//     TimeToUpdate := 30* 60 - Elapsed;
+//     Timer1.Interval := (TimeToUpdate + 120) * 1000;        // Adjust next timer tick to website update
+//     Timer1.Enabled := True;
 
      xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'weather');
      xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'winddir');
      xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'moon');
   end;
+end;
+
+procedure TMyApplication.OnReceived(const axPLMsg: TxPLMessage);
+//var aMsg : TxPLMessage;
+begin
+   with axPLMsg do begin
+      if (MessageType = K_MSG_TYPE_STAT) and                                        // Received a timer status message
+         (Schema.Tag = K_SCHEMA_TIMER_BASIC) and
+         (Body.GetValueByKey('device') = xPLClient.Address.Tag) and                    // from the timer I created
+         (Body.GetValueByKey('current') = 'started') then begin                        // that says he's alive
+//         aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'netget.basic',xPLClient.PrereqList.Values['netget']);
+         xPLClient.SendMessage( K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['netget'],'netget.basic',
+                                ['protocol','uri','destdir','destfn'],['http',fURI,GetTempDir,'weather.xml']);
+//         with aMsg do begin
+//              Body.AddKeyValuePair('protocol','http');
+//              Body.AddKeyValuePair('uri', fURI);
+//              Body.AddKeyValuePair('destdir',GetTempDir);
+//              Body.AddKeyValuePair('destfn','weather.xml');
+//              xPLClient.Send(aMsg);
+//              Destroy;
+//         end;
+      end else
+      if (MessageType = K_MSG_TYPE_TRIG) and
+         (Schema.Tag = 'netget.basic') and
+         (Body.GetValueByKey('uri') = fURI) and
+         (Body.GetValueByKey('current') = 'done') then begin
+            Weather.MettreAJour(GetTempDir + 'weather.xml',xPLClient.Config.ItemName['unitsystem'].Value);
+            SendSensors(true);
+            Backup.Assign(Weather);
+         end;
+   end;
+end;
+
+procedure TMyApplication.OnPrereqMet;
+//var aMsg : TxPLMessage;
+begin
+//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic',xPLClient.PrereqList.Values['timer']);
+//   with aMsg do begin
+//      Body.AddKeyValuePair('current','start');
+//      Body.AddKeyValuePair('device',xPLClient.Address.Tag);
+//      Body.AddKeyValuePair('frequence',IntToStr(30 * 60));                      // Start a 30mn timer
+//      xPLClient.Send(aMsg);
+//      Destroy;
+//   end;
+   xPLClient.SendMessage( K_MSG_TYPE_CMND, xPLClient.PrereqList.Values['timer'], 'control.basic',
+                          ['current','device','frequence'],['start',xPLClient.Address.Tag,IntToStr(30 * 60)]);
 end;
 
 procedure TMyApplication.CommandGet(var aPageContent: widestring; ARequestInfo: TIdHTTPRequestInfo);
@@ -185,7 +219,7 @@ var
 begin
       s := StrReplace('{%weatherdesc%}',xPLClient.Translate('weather',Weather.Courant.Texte),aPageContent,false);
       s := StrReplace('{%weathericon%}',Weather.Courant.Icone,s,false);
-      s := StrReplace('{%timestamp%}',Weather.Courant.ChaineDateHeure,s,false);                   // date and time of prevision creation at weather.com
+      s := StrReplace('{%timestamp%}',Weather.Courant.ChaineDateHeure,s,false); // date and time of prevision creation at weather.com
       s := StrReplace('{%temperature%}',Weather.Courant.Temperature,s,false);
       s := StrReplace('{%felt-temp%}',Weather.Courant.TempRessentie,s,false);
       s := StrReplace('{%barometer%}',Weather.Courant.Pression.Valeur,s,false);

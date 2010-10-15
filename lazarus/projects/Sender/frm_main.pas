@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   ComCtrls, Menus, ActnList, ExtCtrls, StdCtrls, Grids, EditBtn, uxPLMessage,
   v_msgbody_stringgrid, v_xplmsg_opendialog, MEdit,
-  v_msgtype_radio, v_class_combo, uxPLClient,Buttons;
+  v_msgtype_radio, v_class_combo, Buttons;
 
 type
 
@@ -94,13 +94,13 @@ type
 var  frmMain: TfrmMain;
 
 implementation //======================================================================================
-uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, frm_logviewer,
+uses frm_about, uxPLAddress, cUtils, LCLType, clipbrd, frm_logviewer, u_xpl_sender,
      StrUtils, frm_xplAppsLauncher, uxPLConst, app_main, u_xml_xplplugin;
 
 // FrmMain ===========================================================================================
 procedure TfrmMain.FormCreate(Sender: TObject);
 begin
-   xPLClient := TxPLClient.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
+   xPLClient := TxPLSender.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
    arrCommandes := TStringList.Create;
    SetFileName('');
    OpenDialog.InitialDir := GetCurrentDir;
@@ -163,7 +163,8 @@ end;
 procedure TfrmMain.SendExecute(Sender: TObject);
 begin
    If Screen2Object(SendMsg) then begin
-      SendMsg.Send;
+      xPLClient.Send(SendMsg);
+//      SendMsg.Send;
       xPLClient.LogInfo('Message sent : %s' ,[SendMsg.RawxPL]);
    end;
 end;
@@ -178,6 +179,7 @@ begin
    If not TxPLTargetAddress.IsValid(edtTarget.Text) then sError += ' Target field'#10#13 else aMess.Target.Tag  := edtTarget.Text;
    aMess.Schema.Classe := cbClasse.Text;
    aMess.Schema.Type_  := edt_Type.Text;
+   xPLClient.Address.Tag:=edtSource.Text;
 
    result := (sError='');
    if not result then begin

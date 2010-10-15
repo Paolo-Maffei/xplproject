@@ -33,6 +33,15 @@ v 1.6
 	* General code review to support library evolutions
 	* Now supports copy to clipboard function
 	* Message saving format unified
+	* Supports use of {SYS::VARIABLES} : 
+			{SYS::TIMESTAMP},{SYS::DATE_YMD},{SYS::DATE_UK},{SYS::DATE_US},
+			{SYS::DATE},{SYS::DAY},{SYS::MONTH},{SYS::YEAR},{SYS::TIME},
+			{SYS::HOUR},{SYS::MINUTE},{SYS::SECOND}
+	
+	
+
+TO DO : 	
+There seems to be an error when saving messages causing the application to crash
 
 
 	

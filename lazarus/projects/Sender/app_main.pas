@@ -4,11 +4,12 @@ unit app_main;
 
 interface
 
-uses
-  Classes, SysUtils, uxPLClient, uxPLMessage;
+uses Classes,
+     uxPLMessage,
+     u_xpl_sender;
 
-var xPLClient : TxPLClient;
-    SendMsg   : TxPLMessage;
+var SendMsg   : TxPLMessage;
+    xPLClient : TxPLSender;
 
 const //======================================================================================
      K_XPL_APP_VERSION_NUMBER = '1.6';

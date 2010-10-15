@@ -78,6 +78,21 @@ v 1.5.1
     Corrected a bug that allowed xPL timer to see messages not directed to him (at library level).
 	Removed Log4Delphi dependance
 	Added direct access to log file
+	
+v 1.5.2
+	Corrected : 
+		- a bug affecting targetted timer ticks (message sent to wrong device)
+		- a problem in the window representing timers when frenquency > 100
+		- bug when closing timer window
+		- problem when sliding in single and recurrent events to 23:59
+
+Todo :
+	- Ajouter le calcul des saisons
+	- Ajouter le calcul des changements d'heure
+	- Ajouter le chargement d'évènements quotidiens (éphémérides)
+
+
+
 
 ---
 Instructions added to standard control.basic schema

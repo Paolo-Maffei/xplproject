@@ -21,7 +21,6 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
-    Images = frmAbout.ilStandardActions
     TabOrder = 0
     object sbOk: TSpeedButton
       Left = 1

@@ -26,3 +26,5 @@ xpl_dirmon
 0.85
 	Added mechanism to test presence of xPL Timer, xpl timer can be launched before of after this app.
 	Added small web interface that allow to directly set / remove monitoring points
+0.9
+	Moved prerequisite management from Dirmon to xPLListener (internal library feature)

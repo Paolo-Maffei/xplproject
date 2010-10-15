@@ -8,8 +8,7 @@ uses
   Classes, SysUtils,
   CustApp,
   uxPLMessage,
-  uxPLWebListener,
-  uxPLConfig;
+  uxPLWebListener;
 
 type
 
@@ -18,18 +17,14 @@ type
 TMyApplication = class(TCustomApplication)
      protected
         DirectoryList : TStringlist;
-        TimerVDI   : string;
         procedure DoRun; override;
         procedure PollDirectories;
         procedure SignalChanged(const aModif : string; const aDirectory : string; const aFileName : string);
         procedure SaveConfig;
-        procedure LoadConfig;
      public
         constructor Create(TheOwner: TComponent); override;
         procedure OnReceived(const axPLMsg : TxPLMessage);
-        procedure OnConfigDone(const fConfig : TxPLConfig);
-        procedure OnJoined(const aJoined : boolean);
-        procedure OnHBeatApp(const axPLMsg : TxPLMessage);
+        procedure OnPrereqMet;
         destructor Destroy; override;
         function  ReplaceArrayedTag(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean;
      end;
@@ -42,7 +37,7 @@ uses uxPLConst, FileUtil, StrUtils, XmlCfg;
 
 //=====================================================================================================
 const
-     K_XPL_APP_VERSION_NUMBER = '0.85';
+     K_XPL_APP_VERSION_NUMBER = '0.9';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'dirmon';
      K_DEFAULT_PORT   = '8340';
@@ -136,14 +131,17 @@ begin
 end;
 
 procedure TMyApplication.SignalChanged(const aModif : string; const aDirectory: string; const aFileName: string);
+//var aMsg : TxPLMessage;
 begin
-   with xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'control.basic','*') do begin
-        Body.AddKeyValuePair('current',aModif);
-        Body.AddKeyValuePair('device',aDirectory);
-        Body.AddKeyValuePair('file',aFileName);
-        Send;
-        Destroy;
-   end;
+//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,'control.basic','*');
+//   with aMsg do begin
+//        Body.AddKeyValuePair('current',aModif);
+   //     Body.AddKeyValuePair('device',aDirectory);
+   //     Body.AddKeyValuePair('file',aFileName);
+   //     xPLClient.Send(aMsg);
+   //     Destroy;
+   //end;
+   xPLClient.SendMessage(K_MSG_TYPE_TRIG,K_MSG_TARGET_ANY,'control.basic',['current','device','file'],[aModif,aDirectory,aFileName]);
 end;
 
 procedure TMyApplication.SaveConfig;
@@ -169,32 +167,6 @@ begin
    Config.Flush;
 end;
 
-procedure TMyApplication.LoadConfig;
-var config : TXmlConfig;
-    i,maxi,j,maxj : integer;
-    filelist : TStringList;
-    fr : tfilerecord;
-begin
-   config := xPLClient.Config.XmlFile;
-   maxi := Config.GetValue('dirmon/count',0)-1;
-   for i:=0 to maxi do begin
-       directorylist.Add(Config.GetValue('dirmon/dir_' + intToStr(i) + '/name',''));
-       xPLClient.LogInfo('Restoring monitoring on %s',[directorylist[i]]);
-       FileList:=TStringList.Create;
-       FileList.Sorted:=true;
-       FileList.Duplicates:=dupIgnore;
-       directorylist.objects[i] := filelist;
-       maxj := Config.GetValue('dirmon/dir_' + intToStr(i) + '/count',0)-1;
-       for j:=0 to maxj do begin
-          fr := TFileRecord.Create;
-          FileList.Add(Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/name',''));
-          FileList.Objects[j] := fr;
-          fr.Size:=Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/size',0);
-          fr.Time:=Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/ts',0);
-       end;
-   end;
-end;
-
 constructor TMyApplication.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
@@ -203,13 +175,12 @@ begin
   DirectoryList.Sorted := true;
   StopOnException:=True;
   xPLClient := TxPLWebListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER, K_DEFAULT_PORT);
-  xPLClient.PassMyOwnMessages:=true;
   with xPLClient do begin
-       OnxPLConfigDone := @OnConfigDone;
+       PassMyOwnMessages:=true;
        OnxPLReceived   := @OnReceived;
-       OnxPLJoinedNet  := @OnJoined;
-       OnxPLHBeatApp   := @OnHBeatApp;
+       OnxPLPrereqMet  := @OnPrereqMet;
        OnReplaceArrayedTag := @ReplaceArrayedTag;
+       PrereqList.Add('timer=0');
   end;
   xPLClient.Listen;
 end;
@@ -220,10 +191,7 @@ var aAction, aDirectory : string;
     i : integer;
     fl : TStringList;
 begin
-    if TimerVDI='' then begin
-       xPLClient.LogWarn('xPL timer seems to be absent',[]);
-       exit;
-    end;
+   if not xPLClient.PrereqMet then exit;
 
     if (axPLMsg.MessageType = K_MSG_TYPE_STAT) and                                        // Received a timer status message
        (axPLMsg.Schema.Tag = K_SCHEMA_TIMER_BASIC) and
@@ -269,41 +237,43 @@ begin
    result := (ReturnList.Count >0);
 end;
 
-procedure TMyApplication.OnConfigDone(const fConfig: TxPLConfig);
-begin
-   LoadConfig;
-   TimerVDI := '';
-end;
-
-procedure TMyApplication.OnJoined(const aJoined: boolean);                                // As soon as I'm connected to the xPL Network
+procedure TMyApplication.OnPrereqMet;                                // As soon as I'm connected to the xPL Network
+var config : TXmlConfig;
+    i,maxi,j,maxj : integer;
+    filelist : TStringList;
+    fr : tfilerecord;
+//    aMsg : TxPLMessage;
 begin                                                                                     // send hb request to locate clinique-timer
-   if not aJoined then exit;
    if xPLClient.Config.ConfigNeeded then exit;
-   xPLClient.LogInfo('Probing for xPL Timer presence',[]);
-   xPLClient.SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10);
-end;
+//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic',xPLClient.PrereqList.Values['timer']);
+//   with aMsg do begin
+//      Body.AddKeyValuePair('current','start');
+//      Body.AddKeyValuePair('device',xPLClient.Address.Tag);
+//      Body.AddKeyValuePair('frequence','60');
+//      xPLClient.Send(aMsg);
+//      Destroy;
+//   end;
+   xPLClient.SendMessage(K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['timer'],'control.basic',['current','device','frequence'],['start',xPLClient.Address.Tag,'60']);
 
-procedure TMyApplication.OnHBeatApp(const axPLMsg: TxPLMessage);                          // Try to detect presence of clinique-timer
-begin
-   xPLClient.HBeatApp(axPLMsg);                                                           // When it is detected, launch a message to
-   if TimerVDI<>'' then exit;                                                             // initialise timer associated with this
-                                                                                          // application
-   if (axPLMsg.MessageType = K_MSG_TYPE_STAT) and
-      (axPLMsg.Schema.Tag = K_SCHEMA_HBEAT_APP) and
-      (axPLMsg.Source.Device = 'timer') then begin
-
-      xPLClient.LogInfo('xPL Timer found',[]);
-      TimerVDI := axPLMsg.Source.Tag;
-      with xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic',TimerVDI) do begin
-         Body.AddKeyValuePair('current','start');
-         Body.AddKeyValuePair('device',xPLClient.Address.Tag);
-         Body.AddKeyValuePair('frequence','60');
-         Send;
-         Destroy;
-      end;
+   config := xPLClient.Config.XmlFile;
+   maxi := Config.GetValue('dirmon/count',0)-1;
+   for i:=0 to maxi do begin
+       directorylist.Add(Config.GetValue('dirmon/dir_' + intToStr(i) + '/name',''));
+       xPLClient.LogInfo('Restoring monitoring on %s',[directorylist[i]]);
+       FileList:=TStringList.Create;
+       FileList.Sorted:=true;
+       FileList.Duplicates:=dupIgnore;
+       directorylist.objects[i] := filelist;
+       maxj := Config.GetValue('dirmon/dir_' + intToStr(i) + '/count',0)-1;
+       for j:=0 to maxj do begin
+          fr := TFileRecord.Create;
+          FileList.Add(Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/name',''));
+          FileList.Objects[j] := fr;
+          fr.Size:=Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/size',0);
+          fr.Time:=Config.GetValue('dirmon/dir_'+intToStr(i)+'/file_'+intToStr(j)+'/ts',0);
+       end;
    end;
 end;
-
 
 initialization
    xPLApplication:=TMyApplication.Create(nil);

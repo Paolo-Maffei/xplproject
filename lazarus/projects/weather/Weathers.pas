@@ -177,11 +177,9 @@ type
   end;
 
   { TWeather }
-  TWeather = class(TComponent)
+  TWeather = class
   private
      fSystem    : string;
-     fURI       : string;
-     fDestination : string;
      FCourant : TCourant;
      FPrevisions : TPrevisions;
      FLocalite   : TLocalite;
@@ -190,9 +188,7 @@ type
      function StorePressureValue(aValue : string) : string;
      function StoreSpeedValue   (aValue : string) : string;
   public
-     constructor Create(aOwner : TComponent; aZip, aLicense, aPartnerid, aSystem : string);
-     constructor Create(aOwner : TComponent); override;
-     function MettreAJour : boolean;
+     function MettreAJour(aFile : string; aSystem : string) : boolean;
      procedure Assign(aWeather : TWeather); overload;
 
      property Courant : TCourant read FCourant;
@@ -203,7 +199,6 @@ type
 implementation {====================================================================================}
 uses DateUtils,
      StrUtils,
-     uGetHTTP,
      DOM,
      XMLRead,
      cStrings,
@@ -212,7 +207,6 @@ uses DateUtils,
      app_main;
 
 const
-   K_WEATHER_URI = 'http://xoap.weather.com/weather/local/%s?cc=*&dayf=5&link=xoap&prod=xoap&par=%s&key=%s';
    rsMetric = 'metric';
    rsNA = 'N/A';
 
@@ -236,28 +230,13 @@ begin
 end;
 
 function WeatherDt2XPLDt(const aDateTime : string) : string;                  // Takes a string like : 07/2/09 02:30 PM Local Time
-var back_dat_format, back_tim_format : string;                                //         and returns  20090729143000
-    hour,minute,left,right : string;
-    dt : tdatetime;
+var    dt : tdatetime;                                                        //         and returns  20090729143000
 begin
    dt := WeatherDt2Dt(aDateTime);
    result := FormatDateTime('yyyymmddhhmm',dt) + '00';
 end;
 
 { TWeather ========================================================================================}
-constructor TWeather.Create(aOwner: TComponent; aZip, aLicense, aPartnerid,  aSystem: string);
-begin
-  Create(aOwner);
-  fSystem      := aSystem;
-  fURI         := Format(K_WEATHER_URI,[aZip,aPartnerId,aLicense]);
-  fDestination := GetTempDir + 'weather.xml';
-end;
-
-constructor TWeather.Create(aOwner: TComponent);
-begin
-  inherited Create(aOwner);
-end;
-
 function TWeather.StoreDegreeValue(aValue : string) : string;       // by default, weather.com supplies values in farenheit
 var adb : double;
 begin                                                               // let's translate it
@@ -300,14 +279,11 @@ begin                                                               // let's tra
     end;
 end;
 
-function TWeather.MettreAJour : boolean;
-var
-   aDoc : TXMLDocument;
-   Fichier : file of byte;
-   N,N2 : TDOMNode;
-   NL : TDOMNodeList;
-   i : integer;
-   s : string;
+function TWeather.MettreAJour(aFile : string; aSystem : string) : boolean;
+var aDoc : TXMLDocument;
+    N,N2 : TDOMNode;
+    NL : TDOMNodeList;
+    i : integer;
 
   // Récupération de la prévision d'une demi journée <part>...</part>
   procedure RecupererPrevisionDemiJour(var P : TDemiPrevision; Node : TDOMNode);
@@ -355,15 +331,12 @@ var
 
 
 begin
+  fSystem := aSystem;
   Result := false;
-  GetHTTPFile(fURI,fDestination,xPLClient.Settings.HTTPProxSrvr,xPLClient.Settings.HTTPProxPort);
-  AssignFile(fichier,fDestination);
-  Reset(Fichier);
-  if FileSize(Fichier)>0 then begin
-     CloseFile(Fichier);
-     aDoc := TXMLDocument.Create;
-     with aDoc do try
-        ReadXMLFile(aDoc,fdestination);
+
+  aDoc := TXMLDocument.Create;
+  with aDoc do try
+        ReadXMLFile(aDoc,aFile);
 
         N := DocumentElement.FindNode('loc');
         FLocalite.ID := TDOMElement(N).GetAttribute('id');
@@ -430,14 +403,11 @@ begin
      finally
         free;
      end;
-  end;
 end;
 
 procedure TWeather.Assign(aWeather: TWeather);
 begin
      fSystem    := aWeather.fSystem;
-     fURI       := aWeather.fURI;
-     fDestination := aWeather.fDestination;
      FCourant := aWeather.FCourant;
      FPrevisions := aWeather.fPrevisions;
      FLocalite   := aWeather.fLocalite;
