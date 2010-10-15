@@ -166,8 +166,10 @@ var h, m : integer;
     reste : integer;
 begin
    h := fTrack.Position div 3600;
+   if h > 23 then h := 23;
    reste := fTrack.position - (h * 3600);
    m := reste div 60;
+   if m > 59 then m := 59;
    fName.Caption :=  FormatDateTime('hh:nn',EncodeTime(h,m,0,0));
 end;
 

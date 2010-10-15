@@ -5,12 +5,9 @@ unit u_xml_xplplugin;
 interface
 
 uses u_xml,
-     DOM;
+    DOM;
 
 type
-
-     { TXMLOptionType }
-
      TXMLOptionType = class(T_clinique_DOMElement)
      private
        function Get_Label_: AnsiString;
@@ -57,6 +54,7 @@ type
      end;
      TXMLElementsType = specialize TXMLElementList<TXMLElementType>;
 
+
      { TXMLCommandType }
 
      TXMLCommandType = class(TDOMElement)
@@ -92,12 +90,12 @@ type
        function Get_Name: AnsiString;
        function Get_Status: AnsiString;
        function Get_trigger: AnsiString;
-       procedure Set_Command(const AValue: AnsiString); inline;
-       procedure Set_Comment(const AValue: AnsiString); inline;
-       procedure Set_Listen (const AValue: AnsiString); inline;
+       procedure Set_Command(const AValue: AnsiString);
+       procedure Set_Comment(const AValue: AnsiString);
+       procedure Set_Listen (const AValue: AnsiString);
        procedure Set_Name(const AValue: AnsiString);
-       procedure Set_Status (const AValue: AnsiString); inline;
-       procedure Set_Trigger(const AValue: AnsiString); inline;
+       procedure Set_Status (const AValue: AnsiString);
+       procedure Set_Trigger(const AValue: AnsiString);
      published
         property name    : AnsiString read Get_Name write Set_Name;
         property command : AnsiString read Get_command write Set_Command;
@@ -382,77 +380,6 @@ begin SetAttribute(K_XML_STR_Name,aValue); end;
 procedure TXMLCommandType.Set_Schema(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Msg_schema,aValue); end;
 
-{ TXMLElementType }
-
-function TXMLElementType.Get_Conditional_Visibility: AnsiString;
-begin result := GetAttribute(K_XML_STR_ConditionalV); end;
-
-function TXMLElementType.Get_Control_Type: AnsiString;
-begin result := GetAttribute(K_XML_STR_Control_type); end;
-
-function TXMLElementType.Get_Default_: AnsiString;
-begin result := GetAttribute(K_XML_STR_Default); end;
-
-function TXMLElementType.Get_Label_: AnsiString;
-begin result := GetAttribute(K_XML_STR_Label); end;
-
-function TXMLElementType.Get_max_val: AnsiString;
-begin result := GetAttribute(K_XML_STR_MAX_VAL); end;
-
-function TXMLElementType.Get_min_val: AnsiString;
-begin result := GetAttribute(K_XML_STR_MIN_VAL); end;
-
-function TXMLElementType.Get_Name: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
-
-function TXMLElementType.Get_Options: TXMLOptionsType;
-begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option,K_XML_STR_VALUE); end;
-
-procedure TXMLElementType.Set_Conditional_Visibility(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_ConditionalV, aValue); end;
-
-procedure TXMLElementType.set_control_type(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Control_type, aValue); end;
-
-procedure TXMLElementType.Set_default_(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Default, aValue); end;
-
-procedure TXMLElementType.Set_Label_(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Label, aValue); end;
-
-procedure TXMLElementType.Set_max_val(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_MAX_VAL, aValue); end;
-
-procedure TXMLElementType.Set_min_val(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_MIN_VAL, aValue); end;
-
-procedure TXMLElementType.Set_Name(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Name, aValue); end;
-
-function TXMLElementType.Get_regexp: AnsiString;
-begin Result := SafeFindNode(K_XML_STR_REGEXP); end;
-
-procedure TXMLElementType.Set_regexp(const AValue: AnsiString);
-begin
-   if FindNode(K_XML_STR_REGEXP) <> nil
-      then SafeChangeNode(K_XML_STR_REGEXP,AValue)
-      else SafeAddNode   (K_XML_STR_REGEXP,AValue);
-end;
-
-{ TXMLOptionType }
-
-function TXMLOptionType.Get_Label_: AnsiString;
-begin result := GetAttribute(K_XML_STR_Label); end;
-
-function TXMLOptionType.Get_Value: AnsiString;
-begin result := GetAttribute(K_XML_STR_Value); end;
-
-procedure TXMLOptionType.Set_Label_(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Label, aValue);   end;
-
-procedure TXMLOptionType.Set_Value(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_Value, aValue);   end;
-
 { TXMLConfigItemType }
 
 function TXMLConfigItemType.Get_Description: AnsiString;
@@ -524,6 +451,77 @@ begin SetAttribute(K_XML_STR_Name, aValue); end;
 
 procedure TXMLMenuItemType.Set_xplmsg(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_XplMsg,AValue); end;
+
+{ TXMLOptionType }
+
+function TXMLOptionType.Get_Label_: AnsiString;
+begin result := GetAttribute(K_XML_STR_Label); end;
+
+function TXMLOptionType.Get_Value: AnsiString;
+begin result := GetAttribute(K_XML_STR_Value); end;
+
+procedure TXMLOptionType.Set_Label_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Label, aValue);   end;
+
+procedure TXMLOptionType.Set_Value(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Value, aValue);   end;
+
+{ TXMLElementType }
+
+function TXMLElementType.Get_Conditional_Visibility: AnsiString;
+begin result := GetAttribute(K_XML_STR_ConditionalV); end;
+
+function TXMLElementType.Get_Control_Type: AnsiString;
+begin result := GetAttribute(K_XML_STR_Control_type); end;
+
+function TXMLElementType.Get_Default_: AnsiString;
+begin result := GetAttribute(K_XML_STR_Default); end;
+
+function TXMLElementType.Get_Label_: AnsiString;
+begin result := GetAttribute(K_XML_STR_Label); end;
+
+function TXMLElementType.Get_max_val: AnsiString;
+begin result := GetAttribute(K_XML_STR_MAX_VAL); end;
+
+function TXMLElementType.Get_min_val: AnsiString;
+begin result := GetAttribute(K_XML_STR_MIN_VAL); end;
+
+function TXMLElementType.Get_Name: AnsiString;
+begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+
+function TXMLElementType.Get_Options: TXMLOptionsType;
+begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option,K_XML_STR_VALUE); end;
+
+procedure TXMLElementType.Set_Conditional_Visibility(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_ConditionalV, aValue); end;
+
+procedure TXMLElementType.set_control_type(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Control_type, aValue); end;
+
+procedure TXMLElementType.Set_default_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Default, aValue); end;
+
+procedure TXMLElementType.Set_Label_(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Label, aValue); end;
+
+procedure TXMLElementType.Set_max_val(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_MAX_VAL, aValue); end;
+
+procedure TXMLElementType.Set_min_val(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_MIN_VAL, aValue); end;
+
+procedure TXMLElementType.Set_Name(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_Name, aValue); end;
+
+function TXMLElementType.Get_regexp: AnsiString;
+begin Result := SafeFindNode(K_XML_STR_REGEXP); end;
+
+procedure TXMLElementType.Set_regexp(const AValue: AnsiString);
+begin
+   if FindNode(K_XML_STR_REGEXP) <> nil
+      then SafeChangeNode(K_XML_STR_REGEXP,AValue)
+      else SafeAddNode   (K_XML_STR_REGEXP,AValue);
+end;
 
 end.
 

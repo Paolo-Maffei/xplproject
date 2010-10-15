@@ -37,7 +37,7 @@ type
 
 { TxPLClient }
 
-TxPLClient = class
+  TxPLClient = class
       protected
         fAppVersion    : string;
         fSettings      : TxPLSettings;

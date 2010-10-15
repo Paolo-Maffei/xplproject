@@ -103,7 +103,7 @@ end;
 
 function TxPLHeader.IsValid: boolean;
 begin
-   result := TxPLAddress.IsValid(Source.Tag) and
+   result := //TxPLAddress.IsValid(Source.Tag) and
              TxPLTargetAddress.IsValid(Target.Tag) and
              TxPLSchema.IsValid(Schema.Tag) and
              (MsgTypeAsOrdinal(MessageType) <> -1);

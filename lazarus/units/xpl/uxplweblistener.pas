@@ -339,7 +339,8 @@ procedure TxPLWebListener.CallConfigDone;
 begin
    InitWebServer;
 //   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
-   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+//   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
+   SendHBeatRequestMsg;
    inherited CallConfigDone;
 end;
 

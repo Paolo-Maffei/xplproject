@@ -1,14 +1,14 @@
 object frmAbout: TfrmAbout
   Left = 84
-  Height = 216
+  Height = 281
   Top = 266
-  Width = 497
+  Width = 594
   ActiveControl = btnOk
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'About...'
-  ClientHeight = 216
-  ClientWidth = 497
+  ClientHeight = 281
+  ClientWidth = 594
   OnCreate = FormCreate
   SessionProperties = 'Left;Top'
   LCLVersion = '0.9.28.2'
@@ -518,17 +518,17 @@ object frmAbout: TfrmAbout
   object Label1: TLabel
     Left = 120
     Height = 16
-    Top = 192
+    Top = 256
     Width = 242
     Caption = 'Downloads and updates at http://glh33.free.fr'
     ParentColor = False
   end
   object mmoCredits: TMemo
     Left = 120
-    Height = 128
+    Height = 184
     Top = 56
-    Width = 368
-    Color = clBtnFace
+    Width = 464
+    Color = clInfoBk
     Lines.Strings = (
       'By Clinique'
       ''
@@ -547,13 +547,31 @@ object frmAbout: TfrmAbout
     TabOrder = 0
   end
   object btnOk: TButton
-    Left = 413
+    Left = 509
     Height = 25
-    Top = 8
+    Top = 247
     Width = 75
     Caption = '&Ok'
     ModalResult = 2
     TabOrder = 1
+  end
+  object btnReadme: TButton
+    Left = 509
+    Height = 25
+    Top = 8
+    Width = 75
+    Caption = 'Readme'
+    OnClick = btnReadmeClick
+    TabOrder = 2
+  end
+  object btnLicense: TButton
+    Left = 424
+    Height = 25
+    Top = 8
+    Width = 75
+    Caption = 'License'
+    OnClick = btnLicenseClick
+    TabOrder = 3
   end
   object ilStandardActions: TImageList
     ShareImages = True

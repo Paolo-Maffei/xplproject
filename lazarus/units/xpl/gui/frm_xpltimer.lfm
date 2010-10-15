@@ -195,6 +195,7 @@ object frmxPLTimer: TfrmxPLTimer
     Height = 23
     Top = 168
     Width = 82
+    MaxValue = 10000000
     TabOrder = 4
   end
   object seFrequence: TSpinEdit
@@ -202,6 +203,7 @@ object frmxPLTimer: TfrmxPLTimer
     Height = 23
     Top = 200
     Width = 82
+    MaxValue = 100000000
     TabOrder = 5
   end
   object cbMode: TComboBox

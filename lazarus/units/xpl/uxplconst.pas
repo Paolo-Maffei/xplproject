@@ -140,6 +140,7 @@ const
    K_SCHEMA_CONTROL_BASIC  = 'control.basic';
    K_SCHEMA_TIMER_BASIC    = 'timer.basic';
    K_SCHEMA_OSD_BASIC      = 'osd.basic';
+   K_SCHEMA_LOG_BASIC      = 'log.basic';
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
    K_SCHEMA_MEDIA_BASIC    = 'media.basic';
    K_SCHEMA_X10_BASIC      = 'x10.basic';

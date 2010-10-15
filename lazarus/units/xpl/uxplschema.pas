@@ -14,13 +14,7 @@ unit uxPLSchema;
 {$mode objfpc}{$H+}
 interface
 
-uses uxPLConst;
-
-type
-
-{ TxPLSchema }
-
-TxPLSchema = class
+type TxPLSchema = class
      private
         fClasse : String;
         fType   : String;
@@ -38,11 +32,14 @@ TxPLSchema = class
         property Tag    : string read Get_Tag write Set_Tag;
 
         class function IsValid(const aSchema : string) : boolean;
-        class function FormatTag(const aClasse : string; const aType : string) : string;
+        class function FormatTag(const aClasse : string; const aType : string) : string; inline;
     end;
 
 implementation { ========================================================================}
-uses SysUtils, cStrings, uRegExpr;
+uses SysUtils,
+     cStrings,
+     uRegExpr,
+     uxPLConst;
 
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
 begin
@@ -73,11 +70,13 @@ begin
 end;
 
 class function TxPLSchema.FormatTag(const aClasse: string; const aType: string): string;
-begin Result := Format(K_FMT_SCHEMA,[aClasse,aType]); end;
+begin
+   Result := Format(K_FMT_SCHEMA,[aClasse,aType]);
+end;
 
 function TxPLSchema.Get_Tag: string;
 begin
-   Result := Format(K_FMT_SCHEMA,[Classe,Type_]);
+   Result := FormatTag(Classe,Type_);
 end;
 
 procedure TxPLSchema.Set_Tag(const aValue: string);

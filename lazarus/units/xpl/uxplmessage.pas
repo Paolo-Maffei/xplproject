@@ -13,6 +13,9 @@ unit uxplmessage;
  0.98 : Removed user interface function to u_xpl_message_gui to enable console apps
         Introduced usage of u_xpl_udp_socket_client
  0.99 : Modified due to schema move from Body to Header
+ 1.00 : Added system variable handling
+        Ripped off fSocket and sending capabilities from TxPLMessage object, moved
+        to dedicated TxPLSender object
  }
 {$mode objfpc}{$H+}
 
@@ -25,39 +28,34 @@ uses classes,
      uxPLMsgBody,
      uxPLSchema,
      uxPLConst,
-     u_xpl_udp_socket,
      u_xml_xpldeterminator,
      u_xml_xplplugin;
 
 type
-  TxPLMessage = class(TComponent)
+
+     { TxPLMessage }
+
+     TxPLMessage = class(TComponent)
      private
         fHeader   : TxPLHeader;
         fBody     : TxPLMsgBody;
-        fSocket   : TxPLUDPClient;
         fName     : string;
         fDescription : string;
 
         function GetRawXPL: string;
-
         procedure SetRawXPL(const AValue: string);
+
      public
-        property Header   : TxPLHeader read fHeader;
-        property Body     : TxPLMsgBody   read fBody;
-        property RawXPL   : string read GetRawXPL write SetRawXPL;
-
-        // Shortcut properties ==================================
-
+        property Header      : TxPLHeader        read fHeader;
+        property Body        : TxPLMsgBody       read fBody;
+        property RawXPL      : string            read GetRawXPL        write SetRawXPL        ;
         property MessageType : string            read fHeader.fMsgType write fHeader.fMsgType ;
         property Source      : TxPLAddress       read fHeader.fSource  write fHeader.fSource  ;
         property Target      : TxPLTargetAddress read fHeader.fTarget  write fHeader.fTarget  ;
-        //property Schema      : TxPLSchema        read fBody.fSchema    write fBody.fSchema;
-        property Schema      : TxPLSchema        read fHeader.fSchema    write fHeader.fSchema;
-        property Name        : string            read fName            write fName;
-        property Description : string            read fDescription     write fDescription;
-        // ======================================================
+        property Schema      : TxPLSchema        read fHeader.fSchema  write fHeader.fSchema  ;
+        property Name        : string            read fName            write fName            ;
+        property Description : string            read fDescription     write fDescription     ;
 
-        procedure Send;
         procedure ResetValues;
 
         constructor create(const aRawxPL : string = ''); overload;
@@ -68,6 +66,7 @@ type
         function TargetFilterTag : tsFilter;
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
+        function ProcessedxPL : string;
 
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
@@ -81,8 +80,14 @@ type
      end;
 
 implementation { ==============================================================}
-Uses SysUtils, uxPLSettings, uRegExpr, cStrings, XMLRead, XMLWrite;
+Uses SysUtils,
+     uxPLSettings,
+     uRegExpr,
+     cStrings,
+     XMLRead,
+     XMLWrite;
 
+// TxPLMessage =================================================================
 constructor TxPLMessage.Create(const aRawxPL : string = '');
 begin
    fHeader   := TxPLHeader.Create;
@@ -98,7 +103,6 @@ end;
 
 destructor TxPLMessage.Destroy;
 begin
-   if Assigned(fSocket) then fSocket.Destroy;
    Header.Destroy;
    Body.Destroy;
 end;
@@ -125,7 +129,7 @@ function TxPLMessage.GetRawXPL: string;
 begin
    result := Header.RawxPL;
    result += Body.RawxPL;
-//   if (Header.IsValid and Body.IsValid) then
+//   if IsValid then
 //        result := Header.RawxPL + Body.RawxPL
 //   else
 //        Raise Exception.Create('Unable to build valid xPL from supplied fields : ' + Header.Rawxpl + Body.Rawxpl );
@@ -144,13 +148,23 @@ begin
    if anItem = 'Type'   then result := Header.MessageType;
 end;
 
-procedure TxPLMessage.Send;
+function TxPLMessage.ProcessedxPL: string;
 begin
-   if not Assigned(fSocket) then with TxPLSettings.Create do begin              // The socket is created only
-      fSocket := TxPLUDPClient.Create(BroadCastAddress);                        // if needed to avoid waste space
-      Destroy;
-   end;
-   fSocket.Send(RawXPL);
+   result := RawxPL;
+   if AnsiPos('{SYS::', result) = 0 then exit;                                  // Avoid to search the needle if no one present
+
+   result := StrReplace('{SYS::TIMESTAMP}', FormatDateTime('yyyymmddhhnnss', now), result);
+   result := StrReplace('{SYS::DATE_YMD}' , FormatDateTime('yyyy/mm/dd'    , now), result);
+   result := StrReplace('{SYS::DATE_UK}'  , FormatDateTime('dd/mm/yyyy'    , now), result);
+   result := StrReplace('{SYS::DATE_US}'  , FormatDateTime('mm/dd/yyyy'    , now), result);
+   result := StrReplace('{SYS::DATE}'     , FormatDateTime('dd/mm/yyyy'    , now), result);
+   result := StrReplace('{SYS::DAY}'      , FormatDateTime('dd'            , now), result);
+   result := StrReplace('{SYS::MONTH}'    , FormatDateTime('m'             , now), result);
+   result := StrReplace('{SYS::YEAR}'     , FormatDateTime('yyyy'          , now), result);
+   result := StrReplace('{SYS::TIME}'     , FormatDateTime('hh:nn:ss'      , now), result);
+   result := StrReplace('{SYS::HOUR}'     , FormatDateTime('hh'            , now), result);
+   result := StrReplace('{SYS::MINUTE}'   , FormatDateTime('nn'            , now), result);
+   result := StrReplace('{SYS::SECOND}'   , FormatDateTime('ss'            , now), result);
 end;
 
 procedure TxPLMessage.SetRawXPL(const AValue: string);
