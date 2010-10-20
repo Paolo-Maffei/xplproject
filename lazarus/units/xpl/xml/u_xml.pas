@@ -50,6 +50,9 @@ const
   K_XML_STR_XplhalmgrPlugin = 'xplhalmgr-plugin';
   // Globals Strings
   K_XML_STR_Expires         = 'expires';
+  K_XML_STR_CREATE          = 'createts';
+  K_XML_STR_FORMER          = 'former';
+  K_XML_STR_EXPIRE          = 'expirets';
   K_XML_STR_Global          = 'global';
   K_XML_STR_Lastupdate      = 'lastupdate';
   // Event Strings
@@ -231,7 +234,9 @@ begin
 end;
 
 function TXMLElementList.GetDocument: TXMLDocument;
-begin result := TXMLDocument(RootNode.OwnerDocument); end;
+begin
+   result := TXMLDocument(RootNode.OwnerDocument);
+end;
 
 function TXMLElementList.Get_Element(Index: Integer): _T;
 begin

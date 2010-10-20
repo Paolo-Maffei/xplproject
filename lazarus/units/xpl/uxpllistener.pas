@@ -392,7 +392,6 @@ function TxPLListener.DoHBeatApp(aMessage: TxPLMessage): boolean;
 var i : integer;
 begin
    result := false;
-   if not Assigned(OnxPLHBeatApp) then exit;
    if aMessage.MessageType <> K_MSG_TYPE_STAT then exit;
    if aMessage.Schema.Tag  <> K_SCHEMA_HBEAT_APP then exit;
    if aMessage.Source.Tag = Adresse.Tag then exit;
@@ -404,7 +403,8 @@ begin
       end;
       if fPrereqMet then DoxPLPrereqMet;
    end;
-   OnxPLHBeatApp( aMessage);
+
+   if Assigned(OnxPLHBeatApp) then OnxPLHBeatApp( aMessage);
 
    result := true;
 end;
@@ -428,6 +428,9 @@ begin
 
      result := true;
 end;
+
+
+
 
 end.
 

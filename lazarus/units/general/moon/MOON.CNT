@@ -1,0 +1,65 @@
+:Base MOON.HLP>main
+:Title TMoon
+1 General
+2 Contents=Contents
+2 Version history=History
+1 Astronomical Algorithms
+2 AgeOfTheMoon=AgeOfTheMoon
+2 Aphel=Aphel
+2 Apogee=Apogee
+2 CurrentPhase=CurrentPhase
+2 Eclipse=Eclipse
+2 Lunation=Lunation
+2 MoonCoordinates=MoonCoordinates
+2 MoonDiameter=MoonDiameter
+2 MoonDistance=MoonDistance
+2 Moon rise, transit and set=Moonrise
+2 NearestPhase=NearestPhase
+2 NextBlueMoon=NextBlueMoon
+2 NextPhase=NextPhase
+2 Perigee=Perigee
+2 Perihel=Perihel
+2 PreviousPhase=PreviousPhase
+2 Seasons=Seasons
+2 StarTime=StarTime
+2 SunCoordinates=SunCoordinates
+2 SunDiameter=SunDiameter
+2 SunDistance=SunDistance
+2 Sun rise, transit and set=SunRise
+2 Twilight=Twilight
+1 Calendar Calculations
+2 ChineseDate=ChineseDate
+2 Corrected calendar functions=Corrected_calendar_functions
+2 EasterDate=EasterDate
+2 JewishDate=JewishDate
+2 JulianDate=JulianDate
+2 Gregorian and julian calendar=Gregorian_and_julian_calendar
+2 PesachDate=PesachDate
+2 WeekNumber=WeekNumber
+1 TMoon component
+2 TMoon=TMoon
+2 Date=TMoon.Date
+2 Icon=TMoon.Icon
+2 MoonSize=TMoon.MoonSize
+2 Moonstyle=TMoon.Moonstyle
+2 Rotation=TMoon.Rotation
+2 ShowApollo11=TMoon.ShowApollo11
+1 Type reference
+2 TMoon
+3 TRotate=TRotate
+3 TMoonSize=TMoonSize
+3 TMoonStyle=TMoonStyle
+2 Exceptions
+3 E_NoRiseSet=E_NoRiseSet
+3 E_OutOfAlgorithmRange=E_OutOfAlgorithmRange
+2 TChineseZodiac=TChineseZodiac
+2 TChineseStem=TChineseStem
+2 TChineseDate=TChineseDate
+2 TChineseCycle=TChineseCycle
+2 TEclipse=TEclipse
+2 TMoonPhase=TMoonPhase
+2 TSeason=TSeason
+1 Book reference
+2 Meeus - Astronomical Algorithms=Meeus
+2 Steel - Marking Time=Steel
+2 Dershowitz, Reingold - Calendrical Calculations=Reingold
