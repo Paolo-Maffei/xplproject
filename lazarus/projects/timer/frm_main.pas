@@ -78,9 +78,9 @@ type
     eventlist : TxPLEventList;
     timerlist : TxPLTimerList;
     SunTime   : TSuntime;
-    Dawn      : TxPLSunEvent;
-    Dusk      : TxPLSunEvent;
-    Noon      : TxPLSunEvent;
+    Dawn, Dusk, Noon : TxPLSunEvent;
+    fSpring,fWinter,fSummer,fAutumn : TxPLSeasonEvent;
+
     procedure OnConfigDone(const fConfig : TxPLConfig);
     procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
     procedure OnControlBasic (const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
@@ -225,10 +225,18 @@ begin
    if not Assigned(Dawn) then Dawn := TxPLSunEvent.Create(xPLClient.Address,Suntime,setDawn);
    if not Assigned(Dusk) then Dusk := TxPLSunEvent.Create(xPLClient.Address,Suntime,setDusk);
    if not Assigned(Noon) then Noon := TxPLSunEvent.Create(xPLClient.Address,Suntime,setNoon);
+   if not Assigned(fSpring) then fSpring := TxPLSeasonEvent.Create(Spring);
+   if not Assigned(fWinter) then fWinter := TxPLSeasonEvent.Create(Winter);
+   if not Assigned(fAutumn) then fAutumn := TxPLSeasonEvent.Create(Autumn);
+   if not Assigned(fSummer) then fSummer := TxPLSeasonEvent.Create(Summer);
 
    EventList.Add(Dawn.Name, Dawn);
    EventList.Add(Dusk.Name, Dusk);
    EventList.Add(Noon.Name, Noon);
+   EventList.Add(fSpring.Name,fSpring);
+   EventList.Add(fWinter.Name,fWinter);
+   EventList.Add(fAutumn.Name,fAutumn);
+   EventList.Add(fSummer.Name,fSummer);
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
@@ -236,6 +244,10 @@ begin
    if Assigned(Dawn) then EventList.Delete(Dawn);
    if Assigned(Dusk) then EventList.Delete(Dusk);
    if Assigned(Noon) then EventList.Delete(Noon);
+   if Assigned(fSpring) then EventList.Delete(fSpring);
+   if Assigned(fWinter) then EventList.Delete(fWinter);
+   if Assigned(fAutumn) then EventList.Delete(fAutumn);
+   if Assigned(fSummer) then EventList.Delete(fSummer);
 
    Suntime.Destroy;
 
@@ -297,11 +309,9 @@ begin
          lag := MinutesBetween(FixDawn,FixNoon);
          level := Round(6/lag * (lag-delta));
       end;
-//      aMsg.Body.AddKeyValue('level=' + IntToStr(level));
-//      aMsg.Send;
+
       xPLClient.SendMessage(K_MSG_TYPE_STAT,K_MSG_TARGET_ANY,K_SCHEMA_DAWNDUSK_BASIC,['type','status','level'],['daynight',status,IntToStr(level)]);
-//      xPLClient.Send(aMsg);
-//      aMsg.Destroy;
+
    end;
 end;
 

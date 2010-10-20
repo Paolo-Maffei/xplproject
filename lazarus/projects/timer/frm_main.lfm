@@ -1559,8 +1559,8 @@ object frmMain: TfrmMain
     TabOrder = 4
   end
   object TimerImages: TImageList
-    left = 240
-    top = 56
+    left = 256
+    top = 64
     Bitmap = {
       4C69070000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -1790,8 +1790,8 @@ object frmMain: TfrmMain
     }
   end
   object ActionList1: TActionList
-    left = 296
-    top = 56
+    left = 488
+    top = 64
     object Quit: TAction
       Caption = 'Quit'
       Hint = 'Quit the application'
@@ -1840,7 +1840,7 @@ object frmMain: TfrmMain
     end
   end
   object MainMenu1: TMainMenu
-    left = 344
+    left = 328
     top = 64
     object MenuItem6: TMenuItem
       Caption = 'Application'
@@ -1919,8 +1919,8 @@ object frmMain: TfrmMain
     end
   end
   object popmnuTimer: TPopupMenu
-    left = 8
-    top = 56
+    left = 408
+    top = 64
     object MnuEditTimer: TMenuItem
       Caption = 'Edit Timer'
       OnClick = MnuEditTimerClick
@@ -1938,7 +1938,7 @@ object frmMain: TfrmMain
     end
   end
   object popmnuEvents: TPopupMenu
-    left = 8
+    left = 256
     top = 232
     object mnuEditEvent: TMenuItem
       Caption = 'Edit'
