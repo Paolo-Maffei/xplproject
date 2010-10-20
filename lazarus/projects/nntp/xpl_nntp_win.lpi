@@ -6,15 +6,16 @@
     <General>
       <MainUnit Value="0"/>
       <TargetFileExt Value=".exe"/>
-      <Title Value="xpl_netget"/>
+      <Title Value="xpl_nntp"/>
+      <Icon Value="0"/>
       <UseXPManifest Value="True"/>
-      <ActiveEditorIndexAtStart Value="0"/>
+      <ActiveEditorIndexAtStart Value="1"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <CurrentVersionNr Value="1"/>
-      <CurrentBuildNr Value="3471"/>
+      <CurrentBuildNr Value="18"/>
       <ProjectVersion Value="1.0.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -34,20 +35,20 @@
         <PackageName Value="LCL"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="197">
+    <Units Count="207">
       <Unit0>
-        <Filename Value="xpl_netget.lpr"/>
+        <Filename Value="xpl_nntp.lpr"/>
         <IsPartOfProject Value="True"/>
-        <UnitName Value="xpl_netget"/>
-        <CursorPos X="43" Y="5"/>
+        <UnitName Value="xpl_nntp"/>
+        <CursorPos X="1" Y="14"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="1"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
         <Filename Value="frm_send.pas"/>
-        <ComponentName Value="frm_xpl_netget"/>
+        <ComponentName Value="frm_xpl_nntp"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_send"/>
         <CursorPos X="11" Y="3"/>
@@ -448,8 +449,8 @@
         <UsageCount Value="10"/>
       </Unit57>
       <Unit58>
-        <Filename Value="netgets.pas"/>
-        <UnitName Value="netgets"/>
+        <Filename Value="nntps.pas"/>
+        <UnitName Value="nntps"/>
         <CursorPos X="33" Y="356"/>
         <TopLine Value="299"/>
         <UsageCount Value="47"/>
@@ -636,7 +637,7 @@
         <UsageCount Value="5"/>
       </Unit82>
       <Unit83>
-        <Filename Value="xpl_netget.lrs"/>
+        <Filename Value="xpl_nntp.lrs"/>
         <CursorPos X="1" Y="2073"/>
         <TopLine Value="2037"/>
         <UsageCount Value="8"/>
@@ -806,9 +807,9 @@
       <Unit105>
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
         <UnitName Value="uxplmessage"/>
-        <CursorPos X="38" Y="50"/>
-        <TopLine Value="40"/>
-        <EditorIndex Value="2"/>
+        <CursorPos X="1" Y="96"/>
+        <TopLine Value="80"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="16"/>
         <Loaded Value="True"/>
       </Unit105>
@@ -816,10 +817,8 @@
         <Filename Value="..\..\units\xpl\ugethttp.pas"/>
         <UnitName Value="uGetHTTP"/>
         <CursorPos X="21" Y="40"/>
-        <TopLine Value="1"/>
-        <EditorIndex Value="9"/>
+        <TopLine Value="8"/>
         <UsageCount Value="13"/>
-        <Loaded Value="True"/>
       </Unit106>
       <Unit107>
         <Filename Value="..\..\units\general\indy\httpprothandler.pas"/>
@@ -860,10 +859,10 @@
       <Unit112>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
         <UnitName Value="uxPLListener"/>
-        <CursorPos X="36" Y="45"/>
-        <TopLine Value="40"/>
-        <EditorIndex Value="6"/>
-        <UsageCount Value="38"/>
+        <CursorPos X="34" Y="45"/>
+        <TopLine Value="25"/>
+        <EditorIndex Value="2"/>
+        <UsageCount Value="41"/>
         <Loaded Value="True"/>
       </Unit112>
       <Unit113>
@@ -871,9 +870,7 @@
         <UnitName Value="uxplmsgbody"/>
         <CursorPos X="5" Y="28"/>
         <TopLine Value="27"/>
-        <EditorIndex Value="3"/>
         <UsageCount Value="15"/>
-        <Loaded Value="True"/>
       </Unit113>
       <Unit114>
         <Filename Value="uxplconst.pas"/>
@@ -901,11 +898,9 @@
       <Unit117>
         <Filename Value="..\..\units\xpl\uxplconfig.pas"/>
         <UnitName Value="uxPLConfig"/>
-        <CursorPos X="18" Y="68"/>
-        <TopLine Value="68"/>
-        <EditorIndex Value="5"/>
+        <CursorPos X="34" Y="69"/>
+        <TopLine Value="48"/>
         <UsageCount Value="28"/>
-        <Loaded Value="True"/>
       </Unit117>
       <Unit118>
         <Filename Value="..\..\..\fpc\2.2.2\source\packages\fcl-xml\src\xmlcfg.pp"/>
@@ -938,11 +933,9 @@
       <Unit122>
         <Filename Value="..\..\units\xpl\uxpladdress.pas"/>
         <UnitName Value="uxPLAddress"/>
-        <CursorPos X="1" Y="148"/>
-        <TopLine Value="132"/>
-        <EditorIndex Value="4"/>
+        <CursorPos X="1" Y="173"/>
+        <TopLine Value="157"/>
         <UsageCount Value="22"/>
-        <Loaded Value="True"/>
       </Unit122>
       <Unit123>
         <Filename Value="..\..\units\xpl\uxplbaseclass.pas"/>
@@ -954,9 +947,11 @@
       <Unit124>
         <Filename Value="..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <CursorPos X="99" Y="101"/>
-        <TopLine Value="1"/>
+        <CursorPos X="1" Y="146"/>
+        <TopLine Value="130"/>
+        <EditorIndex Value="3"/>
         <UsageCount Value="27"/>
+        <Loaded Value="True"/>
       </Unit124>
       <Unit125>
         <Filename Value="..\..\units\general\RegExpr\RegExpr.pas"/>
@@ -1116,9 +1111,7 @@
         <UnitName Value="uxPLClient"/>
         <CursorPos X="1" Y="40"/>
         <TopLine Value="40"/>
-        <EditorIndex Value="8"/>
         <UsageCount Value="24"/>
-        <Loaded Value="True"/>
       </Unit146>
       <Unit147>
         <Filename Value="..\..\units\xpl\uxplsettings.pas"/>
@@ -1247,10 +1240,10 @@
       <Unit164>
         <Filename Value="app_main.pas"/>
         <UnitName Value="app_main"/>
-        <CursorPos X="17" Y="147"/>
-        <TopLine Value="130"/>
+        <CursorPos X="82" Y="56"/>
+        <TopLine Value="32"/>
         <EditorIndex Value="0"/>
-        <UsageCount Value="39"/>
+        <UsageCount Value="42"/>
         <Loaded Value="True"/>
       </Unit164>
       <Unit165>
@@ -1262,9 +1255,11 @@
       <Unit166>
         <Filename Value="..\..\units\xpl\uxplfilter.pas"/>
         <UnitName Value="uxPLFilter"/>
-        <CursorPos X="21" Y="14"/>
-        <TopLine Value="1"/>
-        <UsageCount Value="8"/>
+        <CursorPos X="1" Y="113"/>
+        <TopLine Value="84"/>
+        <EditorIndex Value="5"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit166>
       <Unit167>
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\win32\classes.pp"/>
@@ -1283,8 +1278,8 @@
       <Unit169>
         <Filename Value="..\..\..\fpc\2.2.4\source\packages\fcl-xml\src\xmlcfg.pp"/>
         <UnitName Value="XMLCfg"/>
-        <CursorPos X="20" Y="79"/>
-        <TopLine Value="60"/>
+        <CursorPos X="3" Y="48"/>
+        <TopLine Value="48"/>
         <UsageCount Value="13"/>
       </Unit169>
       <Unit170>
@@ -1342,7 +1337,7 @@
         <IsPartOfProject Value="True"/>
         <CursorPos X="1" Y="1"/>
         <TopLine Value="1"/>
-        <UsageCount Value="51"/>
+        <UsageCount Value="57"/>
       </Unit177>
       <Unit178>
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\win\sysutils.pp"/>
@@ -1396,9 +1391,7 @@
         <UnitName Value="CustApp"/>
         <CursorPos X="14" Y="80"/>
         <TopLine Value="64"/>
-        <EditorIndex Value="11"/>
         <UsageCount Value="15"/>
-        <Loaded Value="True"/>
       </Unit185>
       <Unit186>
         <Filename Value="..\..\..\lcl\include\fileutil.inc"/>
@@ -1449,160 +1442,224 @@
       <Unit193>
         <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
         <UnitName Value="u_xml_xplplugin"/>
-        <CursorPos X="20" Y="7"/>
-        <TopLine Value="1"/>
-        <EditorIndex Value="13"/>
+        <CursorPos X="77" Y="207"/>
+        <TopLine Value="133"/>
         <UsageCount Value="16"/>
-        <Loaded Value="True"/>
       </Unit193>
       <Unit194>
         <Filename Value="..\..\units\general\uhttpprothandler.pas"/>
         <UnitName Value="uhttpprothandler"/>
         <CursorPos X="1" Y="82"/>
         <TopLine Value="71"/>
-        <EditorIndex Value="10"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit194>
       <Unit195>
         <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
         <UnitName Value="IdHTTP"/>
         <CursorPos X="1" Y="2049"/>
         <TopLine Value="2033"/>
-        <EditorIndex Value="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit195>
       <Unit196>
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
-        <CursorPos X="6" Y="24"/>
-        <TopLine Value="29"/>
-        <EditorIndex Value="7"/>
-        <UsageCount Value="10"/>
+        <CursorPos X="121" Y="101"/>
+        <TopLine Value="101"/>
+        <EditorIndex Value="6"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit196>
+      <Unit197>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdNNTP.pas"/>
+        <UnitName Value="IdNNTP"/>
+        <CursorPos X="40" Y="190"/>
+        <TopLine Value="190"/>
+        <UsageCount Value="11"/>
+      </Unit197>
+      <Unit198>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdMessageClient.pas"/>
+        <UnitName Value="IdMessageClient"/>
+        <CursorPos X="35" Y="430"/>
+        <TopLine Value="414"/>
+        <UsageCount Value="10"/>
+      </Unit198>
+      <Unit199>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdExplicitTLSClientServerBase.pas"/>
+        <UnitName Value="IdExplicitTLSClientServerBase"/>
+        <CursorPos X="45" Y="111"/>
+        <TopLine Value="95"/>
+        <UsageCount Value="10"/>
+      </Unit199>
+      <Unit200>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdTCPClient.pas"/>
+        <UnitName Value="IdTCPClient"/>
+        <CursorPos X="38" Y="147"/>
+        <TopLine Value="131"/>
+        <UsageCount Value="10"/>
+      </Unit200>
+      <Unit201>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdTCPConnection.pas"/>
+        <UnitName Value="IdTCPConnection"/>
+        <CursorPos X="34" Y="365"/>
+        <TopLine Value="339"/>
+        <UsageCount Value="10"/>
+      </Unit201>
+      <Unit202>
+        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdComponent.pas"/>
+        <UnitName Value="IdComponent"/>
+        <CursorPos X="3" Y="105"/>
+        <TopLine Value="89"/>
+        <UsageCount Value="10"/>
+      </Unit202>
+      <Unit203>
+        <Filename Value="..\..\units\xpl\uxplglobals.pas"/>
+        <UnitName Value="uxplglobals"/>
+        <CursorPos X="1" Y="195"/>
+        <TopLine Value="179"/>
+        <UsageCount Value="10"/>
+      </Unit203>
+      <Unit204>
+        <Filename Value="..\..\units\general\decal\src\decal.pas"/>
+        <UnitName Value="DeCAL"/>
+        <CursorPos X="1" Y="4321"/>
+        <TopLine Value="4305"/>
+        <UsageCount Value="10"/>
+      </Unit204>
+      <Unit205>
+        <Filename Value="..\..\units\xpl\xml\u_xml.pas"/>
+        <UnitName Value="u_xml"/>
+        <CursorPos X="33" Y="233"/>
+        <TopLine Value="41"/>
+        <UsageCount Value="10"/>
+      </Unit205>
+      <Unit206>
+        <Filename Value="..\..\units\xpl\xml\u_xml_globals.pas"/>
+        <UnitName Value="u_xml_globals"/>
+        <CursorPos X="6" Y="43"/>
+        <TopLine Value="35"/>
+        <UsageCount Value="10"/>
+      </Unit206>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="727" Column="1" TopLine="711"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="157" Column="1" TopLine="141"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="730" Column="1" TopLine="714"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="147" Column="62" TopLine="79"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="731" Column="1" TopLine="715"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="129" Column="1" TopLine="101"/>
       </Position3>
       <Position4>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="733" Column="1" TopLine="717"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="130" Column="1" TopLine="101"/>
       </Position4>
       <Position5>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2025" Column="1" TopLine="2009"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="131" Column="1" TopLine="101"/>
       </Position5>
       <Position6>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2027" Column="1" TopLine="2011"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="132" Column="1" TopLine="101"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2028" Column="1" TopLine="2012"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="133" Column="1" TopLine="101"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2029" Column="1" TopLine="2013"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="135" Column="1" TopLine="119"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2031" Column="1" TopLine="2015"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="129" Column="1" TopLine="101"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2032" Column="1" TopLine="2016"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="130" Column="1" TopLine="101"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2037" Column="1" TopLine="2021"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="131" Column="1" TopLine="101"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2038" Column="1" TopLine="2022"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="132" Column="1" TopLine="101"/>
       </Position12>
       <Position13>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2039" Column="1" TopLine="2023"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="133" Column="1" TopLine="101"/>
       </Position13>
       <Position14>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2040" Column="1" TopLine="2024"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="141" Column="1" TopLine="120"/>
       </Position14>
       <Position15>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2042" Column="1" TopLine="2026"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="142" Column="1" TopLine="138"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2045" Column="1" TopLine="2029"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="166" Column="1" TopLine="150"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <Caret Line="2046" Column="1" TopLine="2030"/>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="139" Column="16" TopLine="57"/>
       </Position17>
       <Position18>
         <Filename Value="app_main.pas"/>
-        <Caret Line="112" Column="71" TopLine="106"/>
+        <Caret Line="166" Column="1" TopLine="150"/>
       </Position18>
       <Position19>
         <Filename Value="app_main.pas"/>
-        <Caret Line="103" Column="77" TopLine="96"/>
+        <Caret Line="170" Column="26" TopLine="157"/>
       </Position19>
       <Position20>
         <Filename Value="app_main.pas"/>
-        <Caret Line="113" Column="1" TopLine="97"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position20>
       <Position21>
         <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
-        <Caret Line="45" Column="36" TopLine="40"/>
+        <Caret Line="421" Column="45" TopLine="399"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
-        <Caret Line="50" Column="38" TopLine="40"/>
+        <Filename Value="..\..\units\xpl\uxpllistener.pas"/>
+        <Caret Line="45" Column="34" TopLine="25"/>
       </Position22>
       <Position23>
         <Filename Value="app_main.pas"/>
-        <Caret Line="118" Column="1" TopLine="101"/>
+        <Caret Line="160" Column="20" TopLine="1"/>
       </Position23>
       <Position24>
         <Filename Value="app_main.pas"/>
-        <Caret Line="116" Column="29" TopLine="100"/>
+        <Caret Line="178" Column="50" TopLine="162"/>
       </Position24>
       <Position25>
         <Filename Value="app_main.pas"/>
-        <Caret Line="102" Column="3" TopLine="94"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position25>
       <Position26>
         <Filename Value="app_main.pas"/>
-        <Caret Line="118" Column="33" TopLine="94"/>
+        <Caret Line="138" Column="73" TopLine="121"/>
       </Position26>
       <Position27>
         <Filename Value="app_main.pas"/>
-        <Caret Line="131" Column="52" TopLine="103"/>
+        <Caret Line="82" Column="1" TopLine="66"/>
       </Position27>
       <Position28>
         <Filename Value="app_main.pas"/>
-        <Caret Line="116" Column="1" TopLine="97"/>
+        <Caret Line="31" Column="38" TopLine="15"/>
       </Position28>
       <Position29>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="89" Column="21" TopLine="73"/>
+        <Filename Value="xpl_nntp.lpr"/>
+        <Caret Line="16" Column="27" TopLine="1"/>
       </Position29>
       <Position30>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="147" Column="14" TopLine="130"/>
+        <Filename Value="xpl_nntp.lpr"/>
+        <Caret Line="15" Column="1" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1612,7 +1669,7 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
       <Libraries Value="C:\lazarus\components\indy-10.2.0.3\lazarus\"/>
-      <OtherUnitFiles Value="$(LazarusDir)\svn\units\general\fndUtl328\Utils\;E:\00.Apps\lazarus\SVN\units\general\multilog-0.5\;$(LazarusDir)\svn\units\general\RegExpr\;$(LazarusDir)\svn\units\general\fndUtl328\Datastructs\;$(LazarusDir)\svn\units\xpl\;$(LazarusDir)\svn\units\xpl\xml\;$(LazarusDir)\svn\units\general\;E:\00.Apps\lazarus\SVN\units\general\fndUtl328\System\"/>
+      <OtherUnitFiles Value="$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\svn\units\general\multilog-0.5\;$(LazarusDir)\svn\units\general\decal\src\;$(LazarusDir)\svn\units\general\RegExpr\;$(LazarusDir)\svn\units\general\fndUtl328\Datastructs\;$(LazarusDir)\svn\units\xpl\;$(LazarusDir)\svn\units\xpl\xml\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\fndUtl328\System\"/>
       <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>

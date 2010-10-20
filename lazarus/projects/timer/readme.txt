@@ -90,6 +90,7 @@ Todo :
 	- Ajouter le calcul des saisons
 	- Ajouter le calcul des changements d'heure
 	- Ajouter le chargement d'évènements quotidiens (éphémérides)
+	- Ajouter la possibilité de faire 'fire' sur un timer comme c'est déjà le cas pour un event;
 
 
 
