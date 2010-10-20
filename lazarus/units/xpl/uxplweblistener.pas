@@ -68,7 +68,7 @@ begin
      result := StrReplace(#13#10,'<br>',aSList.Text,false);
 end;
 { TxPLWebListener ==============================================================}
-resourcestring
+const
    K_CONFIG_LIB_SERVER_ROOT = 'webroot';
 
 destructor TxPLWebListener.destroy;
@@ -337,7 +337,7 @@ end;
 
 procedure TxPLWebListener.CallConfigDone;
 begin
-   InitWebServer;
+  InitWebServer;
 //   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
 //   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
    SendHBeatRequestMsg;

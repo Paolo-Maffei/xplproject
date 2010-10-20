@@ -73,17 +73,17 @@ begin Result := GetAttribute(K_XML_STR_FORMER);end;
 function TXMLGlobalType.Get_LastUpdate: TDateTime;                                        // Input field is formed like that : 2010-08-17T15:08:28.9063908+02:00
 var str : string;
 begin
-   Str := Attributes.GetNamedItem(K_XML_STR_Lastupdate).NodeValue;
+   Str := GetAttribute(K_XML_STR_Lastupdate);
    Str := AnsiLeftStr( Str, AnsiPos( '.', Str)-1);                                        // Cut before '.'
    Str := StrRemoveChar( Str, '-');                                                       // Remove '-' char
    Result := ISO8601StringAsDateTime(Str);
 end;
 
 function TXMLGlobalType.Get_Name: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Name); end;
 
 function TXMLGlobalType.Get_Value: AnsiString;
-begin Result := Attributes.GetNamedItem(K_XML_STR_Value).NodeValue; end;
+begin Result := GetAttribute(K_XML_STR_Value); end;
 
 procedure TXMLglobalType.Set_Comment(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_COMMENT,AValue); end;

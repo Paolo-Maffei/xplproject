@@ -2,7 +2,8 @@ unit uxPLEvent;
 
 interface
 
-uses Controls, ExtCtrls, Classes, XMLCfg, uxPLMessage, SunTime, uxPLAddress, ComCtrls, uxPLListener;
+uses Controls, ExtCtrls, Classes, XMLCfg, uxPLMessage, SunTime,
+     uxPLAddress, ComCtrls, uxPLListener, MOON;
 
 type
 
@@ -70,6 +71,20 @@ type
      procedure   Check(bAndFire : boolean =true);    override;
      procedure   Fire;                               override;
 
+     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
+  end;
+
+  { TxPLSeasonEvent }
+
+  TxPLSeasonEvent = class(TxPLEvent)
+  private
+     fType : TSeason;
+     function GetNextOccurence : TDateTime;
+  public
+     constructor Create(const type_ : TSeason);
+     function Edit : boolean; override;
+     procedure Check(bAndFire : boolean =true);    override;
+     procedure   Fire;                             override;
      procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
   end;
 
@@ -178,7 +193,11 @@ begin
    fSysTimer.Interval := 1000;
    fSysTimer.Enabled  := False;
    fSysTimer.OnTimer  := @Check;
-   aMessage := aClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
+//   aMessage := aClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
+   aMessage := TxPLMessage.Create;
+   aMessage.MessageType:= K_MSG_TYPE_CMND;
+   aMessage.Schema.Tag := 'control.basic';
+   aMessage.Target.IsGeneric:=true;
    fGrid := aGrid;
 end;
 
@@ -292,6 +311,54 @@ begin
    fDescription   := '';
 end;
 
+constructor TxPLSeasonEvent.Create(const type_ : TSeason);
+var sName : string;
+begin
+   fType := type_;
+   case fType of
+        Winter : sName := 'winter';
+        Autumn : sName := 'autumn';
+        Spring : sName := 'spring';
+        Summer : sName := 'summer';
+   end;
+
+   inherited Create(sName, true, GetNextOccurence);
+   fEventType     := 'season';
+end;
+
+function TxPLSeasonEvent.Edit: boolean;
+begin
+  result := false;
+end;
+
+procedure TxPLSeasonEvent.Check(bAndFire: boolean);
+begin
+   inherited Check(bAndFire);
+   if not fEnabled then begin                      // I've just been fired
+      fEnabled := true;
+      fNextExecution := GetNextOccurence;
+   end;
+end;
+
+procedure TxPLSeasonEvent.Fire;
+begin
+   xPLClient.SendMessage(K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, 'timer.basic',['season'],[Name]);
+end;
+
+procedure TxPLSeasonEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+begin { DO NOTHING } end;
+
+function TxPLSeasonEvent.GetNextOccurence : TDateTime;
+var myYear, myMonth, myDay : Word;
+begin
+   DecodeDate(now, myYear, myMonth, myDay);
+   result := StartSeason(myYear, fType);
+   if result < now then begin
+      inc(myYear);
+      result := StartSeason(myYear, fType);
+   end;
+end;
+
 constructor TxPLSingleEvent.Create(const aMsg : TxPLMessage);
 begin
    Create(aMsg, '', true, now);
@@ -374,7 +441,6 @@ end;
 
 procedure TxPLSunEvent.Fire;
 begin
-//   fMessage.Send;
    xPLClient.Send(fMessage);
 end;
 
