@@ -35,6 +35,7 @@ type
     procedure AboutExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure IdHTTP1Connected(Sender: TObject);
     procedure IdHTTP1Redirect(Sender: TObject; var dest: string; var NumRedirect: Integer; var Handled: boolean; var VMethod: TIdHTTPMethod);
     procedure Timer1Timer(Sender: TObject);
 
@@ -171,6 +172,11 @@ begin
    xPLClient.Destroy;
    ts.Destroy;
    Stream.Destroy;
+end;
+
+procedure TfrmMain.IdHTTP1Connected(Sender: TObject);
+begin
+
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);

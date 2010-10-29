@@ -1,24 +1,18 @@
 program xpl_free;
 
-{$mode objfpc}{$H+}
+{$i compiler.inc}
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  Forms,
-  TConfiguratorUnit,
-  { you can add units after this }LResources, frm_about, frm_main, indylaz, uRegExTools;
+  app_main;
 
 {$IFDEF WINDOWS}{$R xpl_free.rc}{$ENDIF}
 
 begin
-  {$I xpl_free.lrs}
-  Application.Initialize;
-  Application.CreateForm(TfrmMain, frmMain);
-  Application.CreateForm(TfrmAbout, frmAbout);
-  //Application.Icon := frmMain.Icon;
-  Application.Run;
+  xPLApplication.Title := 'xpl_free';
+  xPLApplication.Run;
+  xPLApplication.Free;
 end.
 

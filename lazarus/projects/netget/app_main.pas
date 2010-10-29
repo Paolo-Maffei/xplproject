@@ -23,6 +23,7 @@ type
         destructor Destroy; override;
         procedure HTTPGet(aMsg : TxPLMessage);
         procedure HTTPDownload(aMsg : TxPLMessage);
+        procedure HTTPSDownload(aMsg : TxPLMessage);
      end;
 
 var  xPLApplication : TMyApplication;
@@ -34,7 +35,8 @@ uses uxPLConst,
      uGetHTTP,
      uRegExpr,
      StrUtils,
-     IdHTTP;
+     IdHTTP,
+     IdSSLOpenSSL;
 
 //==============================================================================
 const
@@ -96,7 +98,7 @@ begin
    Parameters := TStringList.Create;
 
    HTTPConn := TIdHTTP.Create;
-   if xPLClient.Settings.HTTPProxSrvr<>'' then begin
+   if xPLClient.Settings.UseProxy then begin
       HTTPConn.ProxyParams.ProxyServer:=xPLClient.Settings.HTTPProxSrvr;
       HTTPConn.ProxyParams.ProxyPort:=StrToInt(xPLClient.Settings.HTTPProxPort);
    end;
@@ -133,9 +135,52 @@ begin
    aDestDir  := aMsg.Body.GetValueByKey('destdir');
    aFileName := aMsg.Body.GetValueByKey('destfn');
    strOut    := '';
-   GetHTTPFile(aURI,aDestDir + aFileName,xPLClient.Settings.HTTPProxSrvr,xPLClient.Settings.HTTPProxPort,strOut);
-   xPLClient.SendMessage( K_MSG_TYPE_TRIG,aMsg.Source.Tag,'netget.basic',
-                          ['uri','current'],[aURI,IfThen(strOut = '','done','error')]);
+   with xPLClient do begin
+      GetHTTPFile(aURI,aDestDir + aFileName,ifthen(settings.useproxy,Settings.HTTPProxSrvr,''),Settings.HTTPProxPort,strOut);
+      aMsg.Body.AddKeyValuePair('current',IfThen(strOut = '','done','error'));
+      aMsg.MessageType := K_MSG_TYPE_TRIG;
+      aMsg.Target.Assign(aMsg.Source);
+      xPLClient.Send(aMsg);
+   end;
+end;
+
+procedure TMyApplication.HTTPSDownload(aMsg : TxPLMessage);
+var TmpFileStream : TFileStream;
+    aURI, aDestDir, aFileName, strOut : string;
+    IdHTTP : TIdHTTP;
+    IdSSLIOHandlerSocketOpenSSL : TIdSSLIOHandlerSocketOpenSSL;
+begin
+   aURI      := aMsg.Body.GetValueByKey('uri');
+   aDestDir  := aMsg.Body.GetValueByKey('destdir');
+   aFileName := aMsg.Body.GetValueByKey('destfn');
+
+   IdSSLIOHandlerSocketOpenSSL := TIdSSLIOHandlerSocketOpenSSL.Create;
+   IdHTTP := TIdHTTP.Create;
+
+   with IdHTTP do begin
+        if xPLClient.Settings.UseProxy then begin
+           ProxyParams.ProxyServer:=xPLClient.Settings.HTTPProxSrvr;
+           ProxyParams.ProxyPort:=StrToInt(xPLClient.Settings.HTTPProxPort);
+        end;
+        IOHandler := IdSSLIOHandlerSocketOpenSSL;
+        HandleRedirects := True;
+   end;
+
+   try
+      TmpFileStream := TFileStream.Create(aDestDir + aFileName, fmCreate);
+      strOut := 'done';
+      try
+         IdHTTP.Get(aURI, TmpFileStream);
+      except
+         strOut := 'error';
+      end;
+   finally
+      FreeAndNil(TmpFileStream);
+      //if strOut = 'error' then Delete(aDestDir + aFileName);
+      IdHTTP.Destroy;
+      IdSSLIOHandlerSocketOpenSSL.Destroy;
+      xPLClient.SendMessage( K_MSG_TYPE_TRIG,aMsg.Source.Tag,K_SCHEMA_NETGET_BASIC, ['uri','current'],[aURI,strOut]);
+   end;
 end;
 
 procedure TMyApplication.OnReceived(const axPLMsg: TxPLMessage);
@@ -145,8 +190,11 @@ begin
       aProtocol := axPLMsg.Body.GetValueByKey('protocol');
       aURI      := axPLMsg.Body.GetValueByKey('uri');
       xPLClient.LogInfo('Retrieving %s',[aURI]);
-      if aProtocol='get' then HTTPGet(axPLMsg) else
-      if aProtocol = 'http' then HTTPDownload(axPLMsg);
+      Case AnsiIndexStr(aProtocol,['get','http','https']) of
+           0 : HTTPGet(axPLMsg);
+           1 : HTTPDownload(axPLMsg);
+           2 : HTTPSDownload(axPLMsg);
+      end;
    end;
 end;
 

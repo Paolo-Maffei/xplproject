@@ -1,6 +1,6 @@
 program xpl_frog;
 
-{$mode objfpc}{$H+}
+{$i compiler.inc}
 
 uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
@@ -8,8 +8,8 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms,
-  TConfiguratorUnit,
-  { you can add units after this }LResources, frm_about, frm_main, indylaz, uRegExTools;
+  app_main,
+  { you can add units after this }LResources, frm_about, frm_main, indylaz;
 
 {$IFDEF WINDOWS}{$R xpl_frog.rc}{$ENDIF}
 

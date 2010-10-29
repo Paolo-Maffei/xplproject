@@ -196,6 +196,7 @@ begin
 
   xPLClient    := TxPLListener.Create(K_DEFAULT_VENDOR, K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER, False);
   xPLClient.OnxPLReceived := @OnMessageReceived;
+  xPLClient.OnxPLHBeatApp := @OnMessageReceived;                                // This is needed to allow logger to see all messages
   xPLClient.PassMyOwnMessages := True;
   xPLClient.SeeAll := True;
   Self.Caption := xPLClient.AppName;
@@ -704,8 +705,8 @@ begin
 
   StatusBar1.Panels[0].Text := StatusString;
 
-  //if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.SourceFilterTag) then AddToTreeview(Messages.Count-1);
-  tvMessagesSelectionChanged(self);
+  if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.SourceFilterTag) then AddToTreeview(Messages.Count-1);
+  //tvMessagesSelectionChanged(self);
   HandleConfigMessages;
 end;
 

@@ -2341,9 +2341,9 @@ object FrmMain: TFrmMain
     Height = 499
     Top = 26
     Width = 1022
-    ActivePage = TabSheet1
+    ActivePage = TabSheet2
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Monitoring'
@@ -2444,7 +2444,7 @@ object FrmMain: TFrmMain
       object Label3: TLabel
         Left = 4
         Height = 16
-        Top = 10
+        Top = 6
         Width = 76
         Caption = 'Message Type'
         ParentColor = False
@@ -2452,7 +2452,7 @@ object FrmMain: TFrmMain
       object Label2: TLabel
         Left = 172
         Height = 16
-        Top = 10
+        Top = 6
         Width = 43
         Caption = 'Schema'
         ParentColor = False
@@ -2460,7 +2460,7 @@ object FrmMain: TFrmMain
       object clbType: TMCheckListBox
         Left = 4
         Height = 152
-        Top = 25
+        Top = 21
         Width = 156
         Font.Height = -13
         ItemHeight = 0
@@ -2470,7 +2470,7 @@ object FrmMain: TFrmMain
       object clbSchema: TMCheckListBox
         Left = 172
         Height = 152
-        Top = 25
+        Top = 21
         Width = 156
         Font.Height = -13
         ItemHeight = 0
@@ -2480,7 +2480,7 @@ object FrmMain: TFrmMain
       object ckConfigList: TCheckBox
         Left = 4
         Height = 19
-        Top = 190
+        Top = 182
         Width = 134
         Caption = 'Got Configuration list'
         TabOrder = 2
@@ -2489,7 +2489,7 @@ object FrmMain: TFrmMain
       object ckCurrentConf: TCheckBox
         Left = 3
         Height = 19
-        Top = 214
+        Top = 206
         Width = 157
         Caption = 'Got Current configuration'
         TabOrder = 3
@@ -2512,8 +2512,8 @@ object FrmMain: TFrmMain
     SimplePanel = False
   end
   object ActionList1: TActionList
-    left = 352
-    top = 128
+    left = 576
+    top = 120
     object Quit: TAction
       Caption = 'Quit'
       Hint = 'Quit the application'
@@ -2598,8 +2598,8 @@ object FrmMain: TFrmMain
     end
   end
   object MainMenu1: TMainMenu
-    left = 360
-    top = 216
+    left = 576
+    top = 232
     object MenuItem3: TMenuItem
       Caption = '&Application'
       object MenuItem12: TMenuItem
@@ -2821,12 +2821,12 @@ object FrmMain: TFrmMain
     end
   end
   object SaveDialog: TSaveDialog
-    left = 416
-    top = 352
+    left = 576
+    top = 344
   end
   object ClasseImages: TImageList
-    left = 416
-    top = 160
+    left = 576
+    top = 176
     Bitmap = {
       4C69100000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -3344,8 +3344,8 @@ object FrmMain: TFrmMain
     }
   end
   object TypeImages: TImageList
-    left = 488
-    top = 216
+    left = 576
+    top = 288
     Bitmap = {
       4C69030000001000000010000000890000008800000095181400910E0817A737
       268EC97C60D9DCA887F5E6B996FCE4B48EF9D1996FE9985E34B47A380A452407
@@ -3448,8 +3448,8 @@ object FrmMain: TFrmMain
   end
   object PopupMenu1: TPopupMenu
     OnPopup = PopupMenu1Popup
-    left = 280
-    top = 104
+    left = 576
+    top = 64
     object MenuItem7: TMenuItem
       Action = acDiscover
       Bitmap.Data = {

@@ -2,7 +2,8 @@ xpl_netget
 
 0.8 This tools allows to download or parse a distant page.
 
-
+Todo : 
+Allow https protocol to be handled (for xPL free);
 
 Sample of download message :
 xpl-cmnd

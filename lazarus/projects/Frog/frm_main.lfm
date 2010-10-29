@@ -2348,22 +2348,6 @@ object frmMain: TfrmMain
       end
     end
   end
-  object IdHTTP1: TIdHTTP
-    AllowCookies = True
-    HandleRedirects = True
-    ProxyParams.BasicAuthentication = False
-    ProxyParams.ProxyPort = 0
-    Request.ContentLength = -1
-    Request.Date = 0
-    Request.Expires = 0
-    Request.LastModified = 0
-    Request.Accept = 'text/html, */*'
-    Request.BasicAuthentication = False
-    Request.UserAgent = 'Mozilla/3.0 (compatible; Indy Library)'
-    HTTPOptions = [hoForceEncodeParams]
-    left = 16
-    top = 8
-  end
   object DLFTP: TIdFTP
     OnDisconnected = DLFTPDisconnected
     OnWorkBegin = DLFTPWorkBegin
@@ -2407,10 +2391,5 @@ object frmMain: TfrmMain
   object IdAntiFreeze1: TIdAntiFreeze
     left = 200
     top = 8
-  end
-  object GeneralTimer: TTimer
-    OnTimer = GeneralTimerTimer
-    left = 104
-    top = 174
   end
 end

@@ -175,7 +175,7 @@ begin
          (Body.GetValueByKey('device') = xPLClient.Address.Tag) and                    // from the timer I created
          (Body.GetValueByKey('current') = 'started') then begin                        // that says he's alive
 //         aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'netget.basic',xPLClient.PrereqList.Values['netget']);
-         xPLClient.SendMessage( K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['netget'],'netget.basic',
+         xPLClient.SendMessage( K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['netget'],K_SCHEMA_NETGET_BASIC,
                                 ['protocol','uri','destdir','destfn'],['http',fURI,GetTempDir,'weather.xml']);
 //         with aMsg do begin
 //              Body.AddKeyValuePair('protocol','http');
