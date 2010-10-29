@@ -223,8 +223,8 @@ begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ; end;
 
 function TxPLSettings.ComposeCorrectPath(const aPath: string; const uSub: string ): string;
 begin
-     result := aPath;
-     PathEnsureSuffix(result);
+     result := PathInclSuffix(aPath);
+//     PathEnsureSuffix(result);
      result += uSub;
      PathEnsureSuffix(result);
 end;

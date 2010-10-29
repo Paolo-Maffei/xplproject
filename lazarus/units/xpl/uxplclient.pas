@@ -33,11 +33,9 @@ interface
 uses  Classes, SysUtils,
       uXPLSettings, uxPLVendorFile, sharedlogger, uxPLConst, uxPLAddress;
 
-type
+type  TxPLLogUpdate = procedure(const aString : string) of object;
 
-{ TxPLClient }
-
-  TxPLClient = class
+      TxPLClient = class
       protected
         fAppVersion    : string;
         fSettings      : TxPLSettings;
@@ -47,6 +45,8 @@ type
         fAdresse       : TxPLAddress;
         procedure RegisterMe;
       public
+        OnLogUpdate : TxPLLogUpdate;
+
         constructor Create(const aVendor : string; aDevice : string; const aAppVersion : string);
         destructor  Destroy; override;
         procedure   LogInfo (Const Formatting : string; Const Data : array of const ); dynamic;   // Info are only stored in log file
@@ -99,6 +99,7 @@ end;
 procedure TxPLClient.LogInfo(Const Formatting  : string; Const Data  : array of const);
 begin
    Logger.Send(Format(Formatting,Data));
+   if Assigned(OnLogUpdate) then OnLogUpdate(Format(Formatting,Data));
 end;
 
 procedure TxPLClient.LogWarn(Const Formatting  : string; Const Data  : array of const);
