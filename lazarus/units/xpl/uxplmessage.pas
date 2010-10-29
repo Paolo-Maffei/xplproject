@@ -81,7 +81,6 @@ type
 
 implementation { ==============================================================}
 Uses SysUtils,
-     uxPLSettings,
      uRegExpr,
      cStrings,
      XMLRead,
@@ -235,6 +234,8 @@ procedure TxPLMessage.Format_HbeatApp(const aInterval: string; const aPort: stri
 begin
    Body.ResetAll;
    Schema.Tag := K_SCHEMA_HBEAT_APP;
+   MessageType:= K_MSG_TYPE_STAT;
+   Target.IsGeneric := True;
    Body.AddKeyValuePair(K_HBEAT_ME_INTERVAL,aInterval);
    Body.AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
    Body.AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);

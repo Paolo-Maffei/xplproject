@@ -20,6 +20,9 @@ unit uxPLConst;
 
 interface
 
+const
+   K_BODY_ELMT_VALUE_MAX_LEN = 128;
+
 type
    tsVendor   = string[8];
    tsDevice   = string[8];
@@ -30,7 +33,7 @@ type
    tsSchema   = string[8 + 1 + 8];
    tsMsgType  = string;                       //string[8];
    tsBodyElmtName  = string[16];
-   tsBodyElmtValue = string[128];
+   tsBodyElmtValue = string[K_BODY_ELMT_VALUE_MAX_LEN];
 
    tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];             //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
@@ -42,6 +45,7 @@ const
    K_FEXT_XML         = '.xml';
    K_FEXT_PHP         = '.php';
    K_FEXT_TXT         = '.txt';
+   K_FEXT_AU          = '.au';
    K_FEXT_PAS         = 'pas';
 
    // General ==================================================================
@@ -98,12 +102,12 @@ const
    K_MSG_HEADER_DUMMY  = 'me-me.me';
 
    // Message body elements ====================================================
+   K_BODY_ELMT_DELIMITER = '=';
    //K_RE_BODY_FORMAT    = '([_a-zA-Z\d\-\.]+.[_a-zA-Z\d\-]+\.[_a-zA-Z\d\-]+).+[{](.+)[}]';
-   K_RE_BODY_FORMAT    = '[{](.+)[}]';
-   K_RE_BODY_LINE      = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
+   K_RE_BODY_FORMAT      = '[{](.+)[}]';
+   K_RE_BODY_LINE        = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
    //K_MSG_BODY_FORMAT   = '%s'#10'{'#10'%s'#10'}'#10;
-   K_MSG_BODY_FORMAT   = '{'#10'%s}'#10;
-
+   K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
 
    // Message elements =========================================================
    //K_RE_MESSAGE        = '\A(.+})(.+})';
@@ -143,6 +147,7 @@ const
    K_SCHEMA_LOG_BASIC      = 'log.basic';
    K_SCHEMA_TTS_BASIC      = 'tts.basic';
    K_SCHEMA_MEDIA_BASIC    = 'media.basic';
+   K_SCHEMA_NETGET_BASIC   = 'netget.basic';
    K_SCHEMA_X10_BASIC      = 'x10.basic';
    K_SCHEMA_DAWNDUSK_BASIC = 'dawndusk.basic';
    K_SCHEMA_DAWNDUSK_REQUEST = 'dawndusk.request';
