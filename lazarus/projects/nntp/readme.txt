@@ -5,7 +5,9 @@ Pre-requisite : xpl timer must be present
 0.8 This tools allows to monitor a nntp thread
 
 
-
+TODO : 
+	Le module ne semble plus répondre aux hbeat request une fois qu'il a lancé un check des groupes pour la première fois
+	
 Start the monitoring of a group : 
 xpl-cmnd
 {

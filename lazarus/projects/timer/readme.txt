@@ -91,6 +91,7 @@ Todo :
 	- Ajouter le calcul des changements d'heure
 	- Ajouter le chargement d'évènements quotidiens (éphémérides)
 	- Ajouter la possibilité de faire 'fire' sur un timer comme c'est déjà le cas pour un event;
+	- Supprimer un timer initié par une application sur réception de hbeat.end de l'application ?
 
 
 

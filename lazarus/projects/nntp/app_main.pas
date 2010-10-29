@@ -84,7 +84,7 @@ begin
    i := StrToInt(xPLClient.Config.XMLFile.GetValue('Monitored/groups', '0')) - 1;
    while i>=0 do begin
       fMonitored.Add(xPLClient.Config.XMLFile.GetValue('Monitored/groups/N' + IntToStr(i),''));
-      xPLClient.LogInfo('Restoring monitoring of "%s" at index : %s',[fMonitored.Names[i],fMonitored.ValueFromIndex[i]]);
+      xPLClient.LogInfo('Restoring monitoring of "%s" at index : %s',[fMonitored.Names[fMonitored.Count-1],fMonitored.ValueFromIndex[fMonitored.Count-1]]);
       dec(i);
    end;
 end;
@@ -102,6 +102,7 @@ constructor TMyApplication.Create(TheOwner: TComponent);
 begin
   inherited Create(TheOwner);
   fMonitored := TStringList.Create;
+  fMonitored.Duplicates := dupIgnore;
   IdNNTP := TIdNNTP.Create;
   xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
   with xPLClient do begin
@@ -178,12 +179,12 @@ procedure TMyApplication.OnControlBasic(const axPLMsg: TxPLMessage; const aDevic
 const chaine = 'Ok boss, I will no%s monitor %s';
 var i : integer;
 begin
-   if aAction =  'start' then begin
+   i := fMonitored.IndexOfName(aDevice);
+   if (aAction =  'start') and ( i = -1) then begin
       fMonitored.Add(aDevice + '=0');
       xPLClient.LogInfo(chaine,['w', aDevice]);
-   end else if aAction = 'stop' then begin
-       i := fMonitored.IndexOfName(aDevice);
-       if i<>-1 then fMonitored.Delete(i);
+   end else if (aAction = 'stop') and (i <> -1) then begin
+       fMonitored.Delete(i);
        xPLClient.LogInfo(chaine,[' longer', aDevice]);
    end;
    WriteToXML;

@@ -1,7 +1,7 @@
 object frmMain: TfrmMain
-  Left = 25
+  Left = 502
   Height = 280
-  Top = 120
+  Top = 192
   Width = 528
   BorderWidth = 2
   Caption = 'frmMain'
@@ -1164,6 +1164,7 @@ object frmMain: TfrmMain
   end
   object IdHTTP1: TIdHTTP
     IOHandler = IdSSLIOHandlerSocketOpenSSL1
+    OnConnected = IdHTTP1Connected
     AllowCookies = True
     HandleRedirects = True
     ProxyParams.BasicAuthentication = False
