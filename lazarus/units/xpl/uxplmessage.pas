@@ -71,7 +71,7 @@ type
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
 
-        function  WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
+        function  WriteToXML(aDoc : TXMLDocument): TXMLxplActionType;
         procedure ReadFromXML(const aCom : TXMLActionsType); overload;
         procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
@@ -112,7 +112,6 @@ begin
   Body.Assign(aMessage.Body);
 end;
 
-
 function TxPLMessage.SourceFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
    result := Format(K_FMT_FILTER,[Header.MessageType,Source.FilterTag,Schema.Tag]);
@@ -123,15 +122,9 @@ begin
    result := Format(K_FMT_FILTER,[Header.MessageType,Target.FilterTag,Schema.Tag]);
 end;
 
-
 function TxPLMessage.GetRawXPL: string;
 begin
-   result := Header.RawxPL;
-   result += Body.RawxPL;
-//   if IsValid then
-//        result := Header.RawxPL + Body.RawxPL
-//   else
-//        Raise Exception.Create('Unable to build valid xPL from supplied fields : ' + Header.Rawxpl + Body.Rawxpl );
+   result := Header.RawxPL + Body.RawxPL;
 end;
 
 function TxPLMessage.IsValid: boolean;
@@ -197,14 +190,14 @@ procedure TxPLMessage.SaveToFile(aFileName: string);
 var xdoc : TXMLDocument;
 begin
    xdoc :=  TXMLDocument.Create;
-   WriteToXML(nil,xDoc);
+   WriteToXML(xDoc);
    writeXMLFile(xdoc,aFileName);
    xdoc.Free;
 end;
 
-function TxPLMessage.WriteToXML(aParent : TDOMNode; aDoc : TXMLDocument): TXMLxplActionType;
+function TxPLMessage.WriteToXML(aDoc : TXMLDocument): TXMLxplActionType;
 begin
-   result := TXMLxplActionType(aDoc.AppendChild(TXMLOutput.Create(aDoc).xplactions.AddElement(Name)));
+   result := TXMLxplActionType.Create(aDoc);
    result.Display_Name:=Description;
    result.ExecuteOrder:=Name;
    Header.WriteToXML(result);
