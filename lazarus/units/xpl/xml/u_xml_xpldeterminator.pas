@@ -79,6 +79,7 @@ type
     procedure Set_Msg_Type(const AValue: AnsiString);
 
   public
+     constructor Create(AOwner: TDOMDocument);
      property ExecuteOrder: AnsiString read Get_ExecuteOrder write Set_ExecuteOrder;
      property Display_Name: AnsiString read Get_DisplayName write Set_Display_Name;
      property Msg_Type : AnsiString read Get_Msg_Type write Set_Msg_Type;
@@ -184,9 +185,20 @@ begin Result := GetAttribute(K_XML_STR_Match); end;
 function TXMLinput.Get_xplconditions: TXMLConditionsType;
 begin Result := TXMLConditionsType.Create(self, K_XML_STR_XplCondition); end;
 
+
+constructor TXMLxplActionType.Create(AOwner: TDOMDocument);                                    // Special entry point created
+begin                                                                                          // to enable saving xpl messages
+   inherited Create(aOwner);                                                                   // in dedicated xml documents
+   FNodeName := K_XML_STR_XplAction;
+   FParentNode := aOwner.DocumentElement;
+   aOwner.AppendChild(self);
+end;
+
 { TXMLoutput }
 function TXMLoutput.Get_xplActions: TXMLActionsType;
-begin Result := TXMLActionsType.Create(self, K_XML_STR_XplAction); end;
+begin
+   Result := TXMLActionsType.Create(self, K_XML_STR_XplAction,K_XML_STR_Display_name);
+end;
 
 { TXMLdeterminatorType }
 function TXMLdeterminatorType.Get_Description: AnsiString;
@@ -240,7 +252,9 @@ function TXMLxplActionType.Get_Msg_Type: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Msg_type); end;
 
 function TXMLxplActionType.Get_xplActionParams: TXMLxplActionParamsType;
-begin Result := TXMLxplActionParamsType.Create(self, K_XML_STR_XplActionPar); end;
+begin                                                                                       // The Id is not needed as a keyword
+   Result := TXMLxplActionParamsType.Create(self, K_XML_STR_XplActionPar,K_XML_STR_Id);     // by spec of this xml file but I need
+end;                                                                                        // one to be present
 
 procedure TXMLxplActionType.Set_Display_Name(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Display_name,aValue); end;

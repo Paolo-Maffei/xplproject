@@ -135,7 +135,7 @@ type
        function GetDocument: TXMLDocument;
      protected
         fRootNode : TDOMNode;
-        fKeyWord  : string;
+        fKeyWord  : string;                                         // Name of the attribute used as a key in the list
         function Get_Element (Index: Integer): _T;
      public
         constructor Create(const aDocument : TXMLDocument; const aLabel : string; const aKeyName : string); overload;
