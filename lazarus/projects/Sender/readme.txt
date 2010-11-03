@@ -29,7 +29,7 @@ v 1.5.1
         * Load / Save of xPL messages are now formatted with the same format as
           determinator files.
         * Added access to log file
-v 1.6
+v 1.6.1
 	* General code review to support library evolutions
 	* Now supports copy to clipboard function
 	* Message saving format unified
@@ -38,10 +38,6 @@ v 1.6
 			{SYS::DATE},{SYS::DAY},{SYS::MONTH},{SYS::YEAR},{SYS::TIME},
 			{SYS::HOUR},{SYS::MINUTE},{SYS::SECOND}
 	
-	
-
-TO DO : 	
-There seems to be an error when saving messages causing the application to crash
 
 
 	

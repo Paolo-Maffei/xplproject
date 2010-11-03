@@ -41,4 +41,7 @@ Todo :
 		=> catcher l'erreur et réouvrir la connexion
 	Récupérer les statistiques de la ligne (vitesse DL)
 	Intégrer les informations produites par PyGrenouille ?
+	Utiliser les nouvelles API : 
+	* API d’export de la liste des chaînes et des abonnements :
+	* API de télécommande virtuelle :
 	

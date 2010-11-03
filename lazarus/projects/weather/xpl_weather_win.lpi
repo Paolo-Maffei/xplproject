@@ -14,7 +14,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <CurrentVersionNr Value="1"/>
-      <CurrentBuildNr Value="3219"/>
+      <CurrentBuildNr Value="3220"/>
       <ProjectVersion Value="1.0.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -1242,7 +1242,7 @@
         <Filename Value="app_main.pas"/>
         <UnitName Value="app_main"/>
         <CursorPos X="3" Y="210"/>
-        <TopLine Value="190"/>
+        <TopLine Value="180"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="28"/>
         <Loaded Value="True"/>

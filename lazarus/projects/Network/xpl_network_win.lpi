@@ -48,7 +48,7 @@
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_network"/>
         <CursorPos X="7" Y="11"/>
-        <TopLine Value="2"/>
+        <TopLine Value="1"/>
         <EditorIndex Value="3"/>
         <UsageCount Value="173"/>
         <Loaded Value="True"/>
@@ -198,7 +198,7 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_main"/>
         <CursorPos X="64" Y="111"/>
-        <TopLine Value="115"/>
+        <TopLine Value="111"/>
         <EditorIndex Value="0"/>
         <UsageCount Value="163"/>
         <Loaded Value="True"/>
