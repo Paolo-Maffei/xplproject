@@ -97,23 +97,13 @@ begin
 end;
 
 procedure TfrmSetupInstance.BitBtn2Click(Sender: TObject);
-var //aFileName : string;
-    //aBody     : TxPLMsgBody;
-    //xdoc : TXMLDocument;
-    aMessage : TxPLMessage;
 begin
     if not OpenMessage.Execute then exit;
-//    aFilename := ;
-    aMessage := TxPLMessage.Create;
-//    aBody := TxPLMsgBody.Create;
-//    xdoc :=  TXMLDocument.Create;
-    aMessage.LoadFromFile(OpenMessage.FileName);
-//    readxmlfile(xdoc,aFilename);
-    {(* aBody.ReadFromXML(xDoc.GetElementsByTagName('config').Item[0]); *) Ceci devra être réécrit pour utiliser xpl xml }
-    HBDetail.Assign(aMessage.Body);
-    aMessage.Destroy;
-//    xdoc.free;
-//    aBody.Destroy;
+    with TxPLMessage.Create do begin
+      LoadFromFile(OpenMessage.FileName);
+      HBDetail.Assign(Body);
+      Destroy;
+    end;
 end;
 
 procedure TfrmSetupInstance.HBDetailSelection(Sender: TObject; aCol, aRow: Integer);
@@ -156,7 +146,7 @@ var i : integer;
     moduletag,newtag,s,key : string;
 begin
      s := '';
-     moduletag := TxPLAddress.ComposeAddress(Configuration.Vendor,Configuration.Device,Configuration.Instance);;
+     moduletag := TxPLAddress.ComposeAddress(Configuration.Vendor,Configuration.Device,Configuration.Instance);
      newtag    := moduletag;
      for i := 1 to HBDetail.Rowcount-1 do begin   // Browse all configuration items
            key := HBDetail.GetKey(i);

@@ -46,4 +46,9 @@ Changes History :
 		* Corrected an issue generating nearly empty messages when using 'Send Message To...'
 		* Configure menu now appear as soon as configuration elements are received
 		* Added ability to display messages either by target or by source in the tree view
+	2.2.1
+		* Resolved a bug when saving / loading xpl messages (also when saving load configuration elements).
+				
+		
+TODO
 		... afficher le plugin file à partir du nom du vendor dans le treeview
