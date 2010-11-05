@@ -1,11 +1,21 @@
 unit uxPLTimer;
+{==============================================================================
+  UnitName      = uxPLTimer
+  UnitDesc      = xPL timer management object and function
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.90 : Initial version
+ 0.91 : Removed call to TTimer object replaced by TfpTimer (console mode
+        compatibility requirement
+ 0.92 : Modification to stick to timer.basic schema as described in xpl website
+}
 
 {$mode objfpc}{$H+}
 
 interface
 
 uses
-  Classes, SysUtils, XMLCfg, uxPLListener, uxPLMessage, ComCtrls, ExtCtrls;
+  Classes, SysUtils, XMLCfg, uxPLListener, uxPLMessage, ComCtrls, fpTimer;
 
 type
   TxPLTimer = class(TComponent)
@@ -54,7 +64,7 @@ type
   private
      aMessage  : TxPLMessage;
      fGrid : TListView;
-     fSysTimer : TTimer;
+     fSysTimer : TfpTimer;
      function GetTimer(Index : integer): TxPLTimer;
   public
      constructor Create(const aClient : TxPLListener; const aGrid : TListView);
@@ -214,10 +224,12 @@ begin
 
    with fxPLMessage do begin
        MessageType := K_MSG_TYPE_STAT;    // as xpl-mtStat this message will be a broadcast, target assumed by message object
-       Format_SensorBasic(fName,'generic',Status);
+       Body.ResetValues;
+       Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
+//       Format_SensorBasic(fName,'generic',Status);
        Target.Tag := Self.Target;
-       Schema.Tag := 'timer.basic';
-       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
+       Schema.Tag := K_SCHEMA_TIMER_BASIC;
+//       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
        xPLClient.Send(fxPLMessage);
    end;
 end;
@@ -232,8 +244,10 @@ begin
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
-      Format_SensorBasic(fName,'generic',Status);
-      Schema.Tag := 'timer.basic';
+      Body.ResetValues;
+      Body.AddKeyValuePairs(['device','current'],[fName,Status]);
+//      Format_SensorBasic(fName,'generic',Status);
+      Schema.Tag := K_SCHEMA_TIMER_BASIC;
       xPLClient.Send(fxPLMessage);
    end;
 
@@ -254,9 +268,11 @@ begin
       with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
          Target.Tag  := Self.Target;
-         Format_SensorBasic(fName,'generic',StopReason);
-         Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-         Schema.Tag := 'timer.basic';
+         Body.ResetValues;
+         Body.AddKeyValuePairs(['device','current','elapsed'],[fName,fStopReason,IntToStr(DateTimeDiff(StartTime, Now))]);
+//         Format_SensorBasic(fName,'generic',StopReason);
+//         Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
+         Schema.Tag := K_SCHEMA_TIMER_BASIC;
          xPLClient.Send(fxPLMessage);
       end;
    end;
@@ -275,9 +291,11 @@ begin
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
       Target.Tag := Self.Target;
-      Format_SensorBasic(fName,'generic',Status);
-      Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-      Schema.Tag := 'timer.basic';
+      Body.ResetValues;
+      Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
+//      Format_SensorBasic(fName,'generic',Status);
+//      Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
+      Schema.Tag := K_SCHEMA_TIMER_BASIC;
       xPLClient.Send(fxPLMessage);
    end; 
 end;
@@ -452,11 +470,11 @@ begin result := TxPLTimer(Objects[Index]); end;
 constructor TxPLTimerList.Create(const aClient: TxPLListener; const aGrid : TListView);
 begin
   inherited Create;
-  fSysTimer := TTimer.Create(nil);
+  fSysTimer := TfpTimer.Create(nil);
   fSysTimer.Interval := 1000;
   fSysTimer.Enabled  := False;
   fSysTimer.OnTimer  := @Check;
-  aMessage := aClient.PrepareMessage(K_MSG_TYPE_TRIG,'timer.basic');
+  aMessage := aClient.PrepareMessage(K_MSG_TYPE_TRIG,K_SCHEMA_TIMER_BASIC);
   fGrid := aGrid;
 end;
 

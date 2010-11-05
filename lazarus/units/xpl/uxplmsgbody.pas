@@ -14,6 +14,7 @@ unit uxplmsgbody;
  1.01 : Switched schema from Body to Header
  1.02 : Added auto cut / reassemble of long body variable into multiple lines
         Removed usage of cStrings
+ 1.03 : Added AddKeyValuePairs
 }
 {$mode objfpc}{$H+}
 
@@ -28,6 +29,7 @@ type TxPLMsgBody = class(TxPLBaseClass)
         private
            function GetRawxPL : string;
            procedure SetTag(const AValue: string);
+           procedure AddKeyValuePair(const aKey, aValue : string);              // This one moved to private because of creation of AddKeyValuePairs
         public
            property Keys     : TStringList read fItmNames;
            property Values   : TStringList read fItmValues;
@@ -36,7 +38,7 @@ type TxPLMsgBody = class(TxPLBaseClass)
            procedure ResetValues;
            procedure CleanEmptyValues;
 
-           procedure AddKeyValuePair(const aKey, aValue : string);
+           procedure AddKeyValuePairs(const aKeys, aValues : array of string);
            procedure AddKeyValue(const aKeyValuePair : string);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
 
@@ -111,6 +113,12 @@ begin
            else result := aDefVal;
 end;
 
+procedure TxPLMsgBody.AddKeyValuePairs(const aKeys, aValues : Array of string);
+var i : integer;
+begin
+   for i := low(aKeys) to High(aKeys) do AddKeyValuePair(aKeys[i],aValues[i]);
+end;
+
 procedure TxPLMsgBody.AddKeyValuePair(const aKey: string; const aValue: string);
 var i,c : integer;
     s : StringArray;
@@ -157,10 +165,7 @@ begin
    ResetValues;
    with TRegExpr.Create do try
         Expression := K_RE_BODY_FORMAT;
-        if Exec(
-//                 StrRemoveChar(aValue,#13)
-                   AnsiReplaceStr(aValue,#13,'')
-                 ) then begin
+        if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
            Expression := K_RE_BODY_LINE;
            Exec(Match[1]);
            repeat

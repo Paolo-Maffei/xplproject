@@ -25,6 +25,8 @@ const
   K_XML_STR_Download_url    = 'download_url';
   K_XML_STR_Element         = 'element';
   K_XML_STR_Format          = 'format';
+  K_XML_STR_CONFIGTYPE      = 'configtype';
+  K_XML_STR_MAXVALUE        = 'maxvalues';
   K_XML_STR_Id              = 'id';
   K_XML_STR_Info_url        = 'info_url';
   K_XML_STR_LABEL           = 'label';
@@ -133,6 +135,7 @@ type
      private
        fKeyName : string;
        function GetDocument: TXMLDocument;
+       function Get_ElementByName(aName : string): _T;
      protected
         fRootNode : TDOMNode;
         fKeyWord  : string;                                         // Name of the attribute used as a key in the list
@@ -144,6 +147,7 @@ type
         procedure   RemoveElement(const aName : string);
         procedure EmptyList;
         property Element[Index: Integer]: _T read Get_Element; default;
+        property ElementByName[aName : string] : _T read Get_ElementByName;
         property RootNode : TDOMNode read fRootNode;
         property Document : TXMLDocument read GetDocument;
      end;
@@ -236,6 +240,15 @@ end;
 function TXMLElementList.GetDocument: TXMLDocument;
 begin
    result := TXMLDocument(RootNode.OwnerDocument);
+end;
+
+function TXMLElementList.Get_ElementByName(aName : string): _T;
+var i : integer;
+begin
+   result := nil;
+   i := count;
+   for i :=  0 to Count-1 do
+       if _T(Item[i]).GetAttribute(fKeyName) = aName then result := _T(Item[i]);
 end;
 
 function TXMLElementList.Get_Element(Index: Integer): _T;

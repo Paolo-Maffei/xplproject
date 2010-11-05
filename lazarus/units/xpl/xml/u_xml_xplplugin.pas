@@ -124,15 +124,25 @@ type
 
      TXMLConfigItemType = class(TDOMElement)
      private
-       function Get_Description: AnsiString;
-       function Get_Format: AnsiString;
-       function Get_Name: AnsiString;
-       procedure Set_Description(const AValue: AnsiString);
-       procedure Set_Format(const AValue: AnsiString);
+       function Get_ConfigType: AnsiString;
+        function Get_Description: AnsiString;
+        function Get_Format: AnsiString;
+        function Get_MaxValue: integer;
+        function Get_Name: AnsiString;
+        function Get_Values: TXMLOptionsType;
+        procedure Set_ConfigType(const AValue: AnsiString);
+        procedure Set_Description(const AValue: AnsiString);
+        procedure Set_Format(const AValue: AnsiString);
+        procedure Set_MaxValue(const AValue: integer);
      published
-        property name : AnsiString read Get_Name;
-        property description : AnsiString read Get_Description write Set_Description;
-        property format : AnsiString read Get_Format write Set_Format;
+        property name : AnsiString read Get_Name;                                               // Base info used in plugin file
+        property description : AnsiString read Get_Description write Set_Description;           // Base info used in plugin file
+        property format : AnsiString read Get_Format write Set_Format;                          // Base info used in plugin file
+        property MaxValue : integer read Get_MaxValue write Set_MaxValue;                       // Extended used in config files
+        property ConfigType : AnsiString read Get_ConfigType write Set_ConfigType;              // Extended used in config files
+        property Values : TXMLOptionsType read Get_Values;
+     public
+        function MaxValueAsString : string;
      end;
      TXMLConfigItemsType = specialize TXMLElementList<TXMLConfigItemType>;
 
@@ -382,20 +392,41 @@ begin SetAttribute(K_XML_STR_Msg_schema,aValue); end;
 
 { TXMLConfigItemType }
 
+function TXMLConfigItemType.Get_ConfigType: AnsiString;
+begin result := GetAttribute(K_XML_STR_CONFIGTYPE) end;
+
 function TXMLConfigItemType.Get_Description: AnsiString;
 begin result := GetAttribute(K_XML_STR_Description); end;
 
 function TXMLConfigItemType.Get_Format: AnsiString;
 begin result := GetAttribute(K_XML_STR_Format); end;
 
+function TXMLConfigItemType.Get_MaxValue: integer;
+begin result := StrToInt(GetAttribute(K_XML_STR_MAXVALUE)); end;
+
 function TXMLConfigItemType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+
+function TXMLConfigItemType.Get_Values: TXMLOptionsType;
+begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option,K_XML_STR_VALUE); end;
+
+procedure TXMLConfigItemType.Set_ConfigType(const AValue: AnsiString);
+begin SetAttribute(K_XML_STR_CONFIGTYPE,aValue); end;
 
 procedure TXMLConfigItemType.Set_Description(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Description,aValue); end;
 
 procedure TXMLConfigItemType.Set_Format(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Format,aValue); end;
+
+procedure TXMLConfigItemType.Set_MaxValue(const AValue: integer);
+begin SetAttribute(K_XML_STR_MAXVALUE,IntToStr(aValue)); end;
+
+function TXMLConfigItemType.MaxValueAsString: string;
+begin
+   result := '';
+   if MaxValue<>1 then result := '[' + IntToStr(MaxValue) + ']';
+end;
 
 { TXMLSchemaType }
 
