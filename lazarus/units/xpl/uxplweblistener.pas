@@ -282,10 +282,10 @@ var commande, aPar : string;
     i : integer;
 begin
    commande := ARequestInfo.Params.Values['xplMsg'];
+   StrSplitAtChar(commande,#10,schema,commande);
    for i := 0 to ARequestInfo.Params.Count-1 do begin
       aPar := ARequestInfo.Params.Names[i];
       if AnsiPos('%',aPar) <> 0 then commande := AnsiReplaceStr(commande,aPar,ARequestInfo.Params.Values[aPar]);
-      StrSplitAtChar(commande,'{',schema,commande);
    end;
 
    SendMessage(K_MSG_TYPE_CMND,self.Address.Tag,schema,commande, true);

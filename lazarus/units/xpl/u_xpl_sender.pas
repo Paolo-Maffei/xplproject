@@ -25,7 +25,6 @@ type
         fSocket : TxPLUDPClient;
      protected
         procedure Send(const aMessage : string);      overload;
-        function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
      public
         property Address             : TxPLAddress read fAdresse;
         property Instance            : string read fAdresse.fInstance;
@@ -34,13 +33,13 @@ type
         destructor destroy; override;
 
         procedure Send(const aMessage : TxPLMessage);
-        procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
-        procedure SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const Keys : array of string; const Values : Array of string);
+        procedure SendMessage(const aMsgType : tsMsgType; const aDest, aSchema : string; const aRawBody : string; const bClean : boolean = false);
+        procedure SendMessage(const aMsgType : tsMsgType; const aDest, aSchema : string; const Keys, Values : Array of string);
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
         procedure SendLOGBasic(const aLevel : string; const aString : string);
-
-        procedure SendConfigRequestMsg(aTarget : string);
+        function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
+        procedure SendConfigRequestMsg(const aTarget : string);
         procedure SendHBeatRequestMsg;
      end;
 
@@ -113,18 +112,19 @@ begin
    SendMessage(K_MSG_TYPE_TRIG,K_MSG_TARGET_ANY,K_SCHEMA_LOG_BASIC,['type','text'],[aLevel,aString]);
 end;
 
-procedure TxPLSender.SendMessage(const aMsgType: tsMsgType; const aDest: string; const aSchema: string; const Keys: array of string; const Values: array of string);
+procedure TxPLSender.SendMessage(const aMsgType: tsMsgType; const aDest, aSchema: string; const Keys, Values: array of string);
 var aMsg : TxPLMessage;
-    i : integer;
+//    i : integer;
 begin
    aMsg := PrepareMessage(aMsgType, aSchema, aDest);
-   for i := low(Keys) to High(Keys) do
-       aMsg.Body.AddKeyValuePair(Keys[i],Values[i]);
+   aMsg.Body.AddKeyValuePairs(Keys,Values);
+//   for i := low(Keys) to High(Keys) do
+//       aMsg.Body.AddKeyValuePair(Keys[i],Values[i]);
    Send(aMsg);
    aMsg.Destroy;
 end;
 
-procedure TxPLSender.SendConfigRequestMsg(aTarget : string);
+procedure TxPLSender.SendConfigRequestMsg(const aTarget : string);
 begin
    SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST,['command'],['request']);
    SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT,['command'],['request']);

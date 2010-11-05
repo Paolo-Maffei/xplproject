@@ -198,9 +198,8 @@ end;
 procedure TxPLListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
    aMessage.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
-   aMessage.Body.AddKeyValuePair(K_HBEAT_ME_APPNAME, AppName);
-   aMessage.Body.AddKeyValuePair(K_HBEAT_ME_VERSION, fAppVersion);
-
+   aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION],
+                                   [AppName            , fAppVersion]);
    if Config.ConfigNeeded then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG;                     // Change Schema class in this case
    if bDisposing  then aMessage.Schema.Type_ := 'end';                                              // Change Schema type in this case
 end;
@@ -238,7 +237,7 @@ end;
 
 procedure TxPLListener.HandleConfigMessage(aMessage: TxPLMessage);
 var i,j : integer;
-
+    keys, values : Array of string;
 begin
   if aMessage.Header.MessageType <> K_MSG_TYPE_CMND then exit;
 
@@ -247,20 +246,26 @@ begin
      Source.Assign(Adresse);
      Target.IsGeneric := True;
      Body.ResetValues;
-
+     SetLength(keys, fConfig.Count);
+     SetLength(Values, fConfig.Count);
      case AnsiIndexStr(aMessage.Schema.Type_, ['current', 'list', 'response']) of
           0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
                  Schema.Tag := aMessage.Schema.Tag;
                  for i := 0 to fConfig.Count-1 do
-                     for j:= 0 to fConfig[i].ValueCount -1 do
-                         Body.AddKeyValuePair(fConfig[i].Key,fConfig[i].Values[j]);
+                     for j:= 0 to fConfig[i].ValueCount -1 do begin
+                        Keys[i] := fConfig[i].Key;
+                        Values[i] := fConfig[i].Values[j];
+                     end;
+                 Body.AddKeyValuePairs(Keys,Values);
                  Send(ProcessedxPL);
               end;
           1 : begin                                                                                   // config.list message handling
-                  Schema.Tag := aMessage.Schema.Tag;
-                for i := 0 to fConfig.Count-1 do
-                    Body.AddKeyValuePair( fConfig[i].ConfigType,
-                                          fConfig[i].Key + fConfig[i].MaxValueAsString);
+                Schema.Tag := aMessage.Schema.Tag;
+                for i := 0 to fConfig.Count-1 do begin
+                    Keys[i] := fConfig[i].ConfigType;
+                    Values[i] := fConfig[i].Key + fConfig[i].MaxValueAsString;
+                end;
+                Body.AddKeyValuePairs(Keys,Values);
                 Send(ProcessedxPL);
               end;
           2 : begin                                                                                   // config.response message handling
@@ -306,7 +311,7 @@ end;
 
 procedure TxPLListener.DoxPLPrereqMet;
 begin
-   LogInfo('Prerequisite modules found',[]);
+   LogInfo('All required modules found',[]);
    if Assigned(OnxPLPrereqMet) then OnxPLPrereqMet;
 end;
 
@@ -322,7 +327,7 @@ begin
    if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet(true);
 
    if not fPrereqMet then begin;
-      LogInfo('Probing for presence of prerequisite modules : %s',[PrereqList.CommaText]);
+      LogInfo('Probing for presence of required modules : %s',[PrereqList.CommaText]);
       SendHBeatRequestMsg;
    end;
 end;

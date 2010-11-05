@@ -101,10 +101,13 @@ type
     property xplconditions: TXMLConditionsType read Get_xplconditions;
   end;
 
+  { TXMLoutput }
+
   TXMLoutput = class(TDOMElement)
   private
     function Get_xplActions: TXMLActionsType;
   public
+    constructor Create(AOwner: TDOMDocument);
     property xplactions: TXMLActionsType read Get_xplActions;
   end;
 
@@ -198,6 +201,14 @@ end;
 function TXMLoutput.Get_xplActions: TXMLActionsType;
 begin
    Result := TXMLActionsType.Create(self, K_XML_STR_XplAction,K_XML_STR_Display_name);
+end;
+
+constructor TXMLoutput.Create(AOwner: TDOMDocument);
+begin
+   inherited Create(aOwner);                                                                   // in dedicated xml documents
+   FNodeName := K_XML_STR_Output;
+   FParentNode := aOwner.DocumentElement;
+   aOwner.AppendChild(self);
 end;
 
 { TXMLdeterminatorType }

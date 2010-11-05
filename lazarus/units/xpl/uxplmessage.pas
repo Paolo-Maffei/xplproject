@@ -16,6 +16,7 @@ unit uxplmessage;
  1.00 : Added system variable handling
         Ripped off fSocket and sending capabilities from TxPLMessage object, moved
         to dedicated TxPLSender object
+ 1.01 : Added Strings property
  }
 {$mode objfpc}{$H+}
 
@@ -44,7 +45,6 @@ type
 
         function GetRawXPL: string;
         procedure SetRawXPL(const AValue: string);
-
      public
         property Header      : TxPLHeader        read fHeader;
         property Body        : TxPLMsgBody       read fBody;
@@ -55,6 +55,7 @@ type
         property Schema      : TxPLSchema        read fHeader.fSchema  write fHeader.fSchema  ;
         property Name        : string            read fName            write fName            ;
         property Description : string            read fDescription     write fDescription     ;
+
 
         procedure ResetValues;
 
@@ -67,12 +68,14 @@ type
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
         function ProcessedxPL : string;
-
+        function Strings     : TStringList;
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
 
-        function  WriteToXML(aDoc : TXMLDocument): TXMLxplActionType;
+        function  WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType; overload;
+        procedure WriteToXML(const aCom : TXMLxplActionType); overload;
         procedure ReadFromXML(const aCom : TXMLActionsType); overload;
+        procedure ReadFromXML(const aCom : TXMLxplActionType); overload;
         procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
         procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
@@ -83,6 +86,7 @@ implementation { ==============================================================}
 Uses SysUtils,
      uRegExpr,
      cStrings,
+     cUtils,
      XMLRead,
      XMLWrite;
 
@@ -159,13 +163,22 @@ begin
    result := StrReplace('{SYS::SECOND}'   , FormatDateTime('ss'            , now), result);
 end;
 
+function TxPLMessage.Strings: TStringList;
+var arrStr : StringArray;
+    j      : integer;
+begin
+    result := TStringList.Create;
+    arrStr := StrSplit(RawXPL,#10);
+    for j:=0 to high(arrStr) do result.Add(arrStr[j]);
+end;
+
 procedure TxPLMessage.SetRawXPL(const AValue: string);
 begin
    with TRegExpr.Create do try
       Expression := K_RE_MESSAGE;
       if Exec (StrRemoveChar(aValue,#13)) then begin
          Header.RawXPL := Match[1];
-         Body.RawXPL   := Match[2];
+         Body.RawXPL   := Match[3];
       end;
       finally Free;
    end;
@@ -195,24 +208,35 @@ begin
    xdoc.Free;
 end;
 
-function TxPLMessage.WriteToXML(aDoc : TXMLDocument): TXMLxplActionType;
+function TxPLMessage.WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType;
 begin
    result := TXMLxplActionType.Create(aDoc);
-   result.Display_Name:=Description;
-   result.ExecuteOrder:=Name;
-   Header.WriteToXML(result);
-   Body.WriteToXML(result);
+   WriteToXML(result);
+end;
+
+procedure TxPLMessage.WriteToXML(const aCom: TXMLxplActionType);
+begin
+   aCom.Display_Name:=Description;
+   aCom.ExecuteOrder:=Name;
+   Header.WriteToXML(aCom);
+   Body.WriteToXML(aCom);
 end;
 
 procedure TxPLMessage.ReadFromXML(const aCom : TXMLActionsType);
-var action :TXMLxplActionType;
+//var action :TXMLxplActionType;
 begin
    if aCom.Count<=0 then exit;
-   action := aCom.Element[0];
-   Description := action.Display_Name;
-   Name := action.ExecuteOrder;
-   Header.ReadFromXML(action);
-   Body.ReadFromXML(action);
+//   action := aCom.Element[0];
+   ReadFromXML(aCom.Element[0]);
+end;
+
+procedure TxPLMessage.ReadFromXML(const aCom: TXMLxplActionType);
+begin
+   self.ResetValues;
+   Description := aCom.Display_Name;
+   Name := aCom.ExecuteOrder;
+   Header.ReadFromXML(aCom);
+   Body.ReadFromXML(aCom);
 end;
 
 procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);
@@ -229,18 +253,20 @@ begin
    Schema.Tag := K_SCHEMA_HBEAT_APP;
    MessageType:= K_MSG_TYPE_STAT;
    Target.IsGeneric := True;
-   Body.AddKeyValuePair(K_HBEAT_ME_INTERVAL,aInterval);
-   Body.AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
-   Body.AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
+   Body.AddKeyValuePairs( [K_HBEAT_ME_INTERVAL, K_HBEAT_ME_PORT, K_HBEAT_ME_REMOTEIP],
+                          [aInterval,           aPort,           aIP]);
+//   Body.AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
+//   Body.AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
 end;
 
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin
    Body.ResetAll;
    Schema.Tag := K_SCHEMA_SENSOR_BASIC;
-   Body.AddKeyValuePair('device' ,aDevice);
-   Body.AddKeyValuePair('type'   ,aType);
-   Body.AddKeyValuePair('current',aCurrent);
+   Body.AddKeyValuePairs( ['device' , 'type' , 'current'],
+                          [aDevice  , aType  ,  aCurrent]);
+//   Body.AddKeyValuePair(   ,);
+//   Body.AddKeyValuePair(,);
 end;
 
 end.

@@ -78,7 +78,6 @@ uses frm_About,
      clipbrd,
      LCLType,
      cStrings,
-     cUtils,
      StrUtils;
 
 // =============================================================================================
@@ -168,14 +167,9 @@ begin
 end;
 
 procedure TFrmxPLMessage.DisplayMessage;
-var j : integer;
-    arrStr : StringArray;
 begin
    mmoMessage.Lines.Clear;
-   arrStr := StrSplit(xPLMessage.RawXPL,#10);
-
-   for j:=0 to high(arrStr) do
-       if arrStr[j]<>'' then mmoMessage.Lines.Add(arrStr[j]);
+   mmoMessage.Lines.AddStrings(xPLMessage.Strings);
 
    Stream.Position := 0;
    Stream.WriteString(xPLMessage.RawXPL);

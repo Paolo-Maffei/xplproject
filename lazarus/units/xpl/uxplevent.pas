@@ -1,5 +1,14 @@
 unit uxPLEvent;
 
+{==============================================================================
+  UnitName      = uxPLEvent
+  UnitDesc      = xPL timer management object and function
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 0.90 : Initial version
+ 0.91 : Modification to stick to timer.basic schema as described in xpl website
+}
+
 interface
 
 uses Controls, ExtCtrls, Classes, XMLCfg, uxPLMessage, SunTime,
@@ -196,7 +205,7 @@ begin
 //   aMessage := aClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic');
    aMessage := TxPLMessage.Create;
    aMessage.MessageType:= K_MSG_TYPE_CMND;
-   aMessage.Schema.Tag := 'control.basic';
+   aMessage.Schema.Tag := K_SCHEMA_TIMER_BASIC;
    aMessage.Target.IsGeneric:=true;
    fGrid := aGrid;
 end;
@@ -342,7 +351,7 @@ end;
 
 procedure TxPLSeasonEvent.Fire;
 begin
-   xPLClient.SendMessage(K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, 'timer.basic',['season'],[Name]);
+   xPLClient.SendMessage(K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, K_SCHEMA_TIMER_BASIC,['season'],[Name]);
 end;
 
 procedure TxPLSeasonEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
@@ -377,15 +386,16 @@ var aMessage : TxPLMessage;
 begin
      if MessageToFire='' then with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
-         Target.Tag  := '*';
-         Format_SensorBasic(fName,'generic','fired');
-         Schema.Tag := 'timer.basic';
+         Target.IsGeneric := True;
+         Body.ResetValues;
+         Body.AddKeyValuePairs(['device','current'],[fName,'fired']);
+//         Format_SensorBasic(fName,'generic','fired');
+         Schema.Tag := K_SCHEMA_TIMER_BASIC;
          xPLClient.Send(fxPLMessage);
      end else begin
          aMessage:=TxPLMessage.Create(MessageToFire);
          aMessage.Source.Assign(fxPLMessage.Source);
          xPLClient.Send(aMessage);
-//         aMessage.Send;
          aMessage.Destroy ;
      end;
 end;
@@ -480,10 +490,9 @@ begin
   fMessage.Source.Assign(aSource);
   fMessage.MessageType := K_MSG_TYPE_TRIG;
   fMessage.Target.Tag  := '*';
-  fMessage.Body.AddKeyValuePair('type',fEventType);
   fMessage.Schema.Tag  := K_SCHEMA_DAWNDUSK_BASIC;
-  fMessage.Body.AddKeyValuePair('status',aName);
-
+  fMessage.Body.AddKeyValuePairs(['status','type'],[aName,fEventType]);
+//  fMessage.Body.AddKeyValuePair('type',fEventType);
   inherited Create(aName,True,aNext);
 end;
 
