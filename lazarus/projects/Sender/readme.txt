@@ -38,6 +38,7 @@ v 1.6.1
 			{SYS::DATE},{SYS::DAY},{SYS::MONTH},{SYS::YEAR},{SYS::TIME},
 			{SYS::HOUR},{SYS::MINUTE},{SYS::SECOND}
 	
-
+v 1.6.2
+	* Corrected code when pasting message containing {SYS::VARIABLES}
 
 	

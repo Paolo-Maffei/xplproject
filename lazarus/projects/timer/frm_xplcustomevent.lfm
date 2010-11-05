@@ -179,13 +179,13 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
         Left = 12
         Height = 19
         Top = 9
-        Width = 59
+        Width = 62
         Caption = 'Enabled'
         TabOrder = 1
       end
       object Edit1: TEdit
         Left = 308
-        Height = 25
+        Height = 23
         Top = 41
         Width = 80
         TabOrder = 2
@@ -203,7 +203,7 @@ object frmxPLCustomEvent: TfrmxPLCustomEvent
         Left = 12
         Height = 19
         Top = 49
-        Width = 145
+        Width = 157
         Caption = 'Fire Personalized message'
         OnChange = ckPersoChange
         TabOrder = 4

@@ -39,5 +39,10 @@ v 2.0
 	* Added an enhanced plugin file viewer/editor
 	* Corrected code to detect plugin file download error
 		Handle plugin url if the url includes the .xml extension in the filename
+		
+		
+Todo : 
+	Dans l'éditeur de plugins, il est possible d'ajouter une ligne dans les éléments de commandes sans passer par les boutons new... ce qui génère une erreur ensuite.
+	L'éditeur de plugin ne prend pas en compte le fait que les sous éléments des commandes soient modifiés pour activer le bouton de sauvegarde.	
 	
 	

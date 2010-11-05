@@ -1,7 +1,6 @@
 xpl_timer
 
 All configuration must be done (through xplhal or dcm, or xpl_configurator) before it operates.
-Sample xpl messages provided can be used with xpl_sender to test the timer program.
 
 ---
 Revision History
@@ -85,48 +84,21 @@ v 1.5.2
 		- a problem in the window representing timers when frenquency > 100
 		- bug when closing timer window
 		- problem when sliding in single and recurrent events to 23:59
+		
+v 1.6
+	*** This version now relies only on timer.basic schema, previously used control.basic removed ***
+	*** Check dependecies with you determinators/scripts when deploying it if you used previous versions ***
+	Described timer message schema on the xpl website : http://xplproject.org.uk/wiki/index.php?title=Schema_-_TIMER#TIMER_Message_Specification
+	Corrected display problem when resizing timer window
+	Ability to do 'Fire Now' on Timer (it was already possible on events).
+	Added seasons
+	Recompiled to be compatible with xpl message format saved by latest versions of xpl sender, xpl logger
+		* Message sent can also include {SYS::VARIABLE} parameters (please see xPL Sender readme file)
+	Vendor file updated to reflect these changes
 
 Todo :
-	- Ajouter le calcul des saisons
 	- Ajouter le calcul des changements d'heure
 	- Ajouter le chargement d'évènements quotidiens (éphémérides)
-	- Ajouter la possibilité de faire 'fire' sur un timer comme c'est déjà le cas pour un event;
 	- Supprimer un timer initié par une application sur réception de hbeat.end de l'application ?
 
-
-
-
----
-Instructions added to standard control.basic schema
-
-Message type xpl-cmnd
-	current = start
-		device = name of the timer
-		duration = 0 | empty or integer value
-			If an integer value is provided the timer will count down to 0
-			If a 0 or no value provided, the timer will endless count until a stop is received
-		range	   = local | global (optional)
-		frequence = 0 | empty or integer value
-			If a value is indicated, the status of this timer will be triggered on this frequency base (a tick every x seconds)
-		Starts a new timer based.
-		Parameter duration indicates how many seconds it lasts.
-		Range indicates wheter events related to that timer will be adressed to '*' or only the module starting it. Local by default.
-	current = halt
-	current = resume
-	current = stop
-
-sensor.request schema
-  request= current
-  device = name of the timer
-	No status returned for stopped timers
-  
-
-Send messages.
-A trigger is fired on every event for a timer : pause, resume, start stop, went off
-
-When a timer is stopped or the duration equals 0 : 
-	xpl-trig timer.basic
-		name = timername
-		status = stopped
-		elapsed = number of seconds between start and stop
 
