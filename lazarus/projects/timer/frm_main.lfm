@@ -1479,8 +1479,8 @@ object frmMain: TfrmMain
   end
   object lvEvents: TListView
     Left = 0
-    Height = 227
-    Top = 189
+    Height = 208
+    Top = 208
     Width = 699
     Align = alClient
     Columns = <    
@@ -1508,8 +1508,8 @@ object frmMain: TfrmMain
   end
   object lvTimers: TListView
     Left = 0
-    Height = 183
-    Top = 0
+    Height = 202
+    Top = 1
     Width = 699
     Align = alTop
     Columns = <    
@@ -1545,7 +1545,7 @@ object frmMain: TfrmMain
     Cursor = crVSplit
     Left = 0
     Height = 5
-    Top = 184
+    Top = 203
     Width = 699
     Align = alTop
     ResizeAnchor = akTop
@@ -1553,14 +1553,14 @@ object frmMain: TfrmMain
   object ToolBar1: TToolBar
     Left = 0
     Height = 1
-    Top = 183
+    Top = 0
     Width = 699
     Caption = 'ToolBar1'
     TabOrder = 4
   end
   object TimerImages: TImageList
-    left = 256
-    top = 64
+    left = 240
+    top = 80
     Bitmap = {
       4C69070000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -1921,6 +1921,13 @@ object frmMain: TfrmMain
   object popmnuTimer: TPopupMenu
     left = 408
     top = 64
+    object mnuFireNowTimer: TMenuItem
+      Caption = 'Fire now !'
+      OnClick = mnuFireNowTimerClick
+    end
+    object MenuItem11: TMenuItem
+      Caption = '-'
+    end
     object MnuEditTimer: TMenuItem
       Caption = 'Edit Timer'
       OnClick = MnuEditTimerClick
@@ -1947,9 +1954,9 @@ object frmMain: TfrmMain
     object MenuItem3: TMenuItem
       Caption = '-'
     end
-    object mnuFireNow: TMenuItem
+    object mnuFireNowEvent: TMenuItem
       Caption = 'Fire now !'
-      OnClick = mnuFireNowClick
+      OnClick = mnuFireNowEventClick
     end
     object MenuItem2: TMenuItem
       Caption = '-'

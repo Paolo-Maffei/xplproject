@@ -7,15 +7,12 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs, IdFTP,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, frm_About,
-  uxPLConfig, u_xml_xplplugin,
+  uxPLConfig, u_xml_xplplugin, u_xml_xpldeterminator, DOM,
   uxPLMessage, uxPLListener, ExtCtrls, MCheckListBox, uxPLConst;
 
 type
 
   { TFrmMain }
-
-  { TLoggerListener }
-
   TFrmMain = class(TForm)
     About:     TAction;
     acAppSettings: TAction;
@@ -119,7 +116,9 @@ type
     iLoggedMsg:   integer;
     dtLogStart:   TDateTime;
 
-    Messages: TStringList;
+    xPLOutput : TXMLOutput;
+    xdoc : TXMLDocument;
+    fooMessage : TxPLMessage;
 
     procedure OnMessageReceived(const axPLMessage: TxPLMessage);
     function StatusString: string;
@@ -148,30 +147,28 @@ var
 implementation { TFrmLogger =============================================================}
 
 uses frm_xplappslauncher,
-  frm_AppSettings,
-  StrUtils,
-  frm_logviewer,
-  u_xpl_message_gui,
-  app_main,
-  uxPLAddress,
-  uxplHeader,
-  frm_PluginDetail,
-  cRandom,
-  LCLType,
-  ClipBrd,
-  uxPLFilter,
-  cutils,
-  cStrings,
-  frm_SetupInstance;
+     frm_AppSettings,
+     StrUtils,
+     frm_logviewer,
+     u_xpl_message_gui,
+     app_main,
+     uxPLAddress,
+     uxplHeader,
+     frm_PluginDetail,
+     LCLType,
+     ClipBrd,
+     uxPLFilter,
+     frm_SetupInstance,
+     XMLWrite;
 
 // ======================================================================================
 procedure TFrmMain.FormCreate(Sender: TObject);
-var
-  k: integer;
+var k: integer;
 begin
-  saveDialog.Filter      := 'txt file|*.txt';
-  saveDialog.DefaultExt  := 'txt';
+  saveDialog.Filter      := 'xml file|*.xml';
+  saveDialog.DefaultExt  := 'xml';
   saveDialog.FilterIndex := 1;
+  memo1.Lines.Delimiter  := #10;
 
   clbType.Items.Add(K_MSG_TYPE_TRIG);
   clbType.Items.Add(K_MSG_TYPE_STAT);
@@ -180,7 +177,8 @@ begin
   for k := Low(K_XPL_CLASS_DESCRIPTORS) to High(K_XPL_CLASS_DESCRIPTORS) do
     clbSchema.Items.Add(K_XPL_CLASS_DESCRIPTORS[k]);
 
-  Messages := TStringList.Create;
+  xdoc := TXMLDocument.Create;
+  xPLOutput := TXMLOutput.Create(xdoc);
 
   ClearExecute(self);
 
@@ -195,54 +193,47 @@ begin
   tvMessages.Selected := topNode;
 
   xPLClient    := TxPLListener.Create(K_DEFAULT_VENDOR, K_DEFAULT_DEVICE, K_XPL_APP_VERSION_NUMBER, False);
-  xPLClient.OnxPLReceived := @OnMessageReceived;
-  xPLClient.OnxPLHBeatApp := @OnMessageReceived;                                // This is needed to allow logger to see all messages
-  xPLClient.PassMyOwnMessages := True;
-  xPLClient.SeeAll := True;
-  Self.Caption := xPLClient.AppName;
-  xPLClient.Listen;
+  with xPLClient do begin
+       OnxPLReceived := @OnMessageReceived;
+       OnxPLHBeatApp := @OnMessageReceived;                                // This is needed to allow logger to see all messages
+       PassMyOwnMessages := True;
+       SeeAll := True;
+       Self.Caption := AppName;
+       Listen;
+  end;
+  fooMessage := TxPLMessage.Create;
 end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
 begin
-  xPLClient.Destroy;
-  Messages.Destroy;
+   xPLClient.Destroy;
+   xPLOutput.Destroy;
+   fooMessage.Destroy;
+   xDoc.Destroy;
 end;
 
 procedure TFrmMain.FormShow(Sender: TObject);
-begin
-  Toolbar2.Images := frmAbout.ilStandardActions;
-end;
+begin Toolbar2.Images := frmAbout.ilStandardActions; end;
 
 procedure TFrmMain.AboutExecute(Sender: TObject);
-begin
-  FrmAbout.ShowModal;
-end;
+begin FrmAbout.ShowModal; end;
 
 procedure TFrmMain.acLoggingExecute(Sender: TObject);
-begin
-  frmLogViewer.Showmodal;
-end;
+begin frmLogViewer.Showmodal; end;
 
 procedure TFrmMain.FilterExecute(Sender: TObject);
-begin { Nothing to do but the function must be present }
-end;
+begin { Nothing to do but the function must be present } end;
 
-procedure TFrmMain.ApplySettings(Sender: TObject);
-// Correction bug FS#39
-var
-  i: integer;
-  //    This method is also called by frmAppSettings
-begin
-  //    after having load the application default setup
-  with frmAppSettings do
-  begin
+procedure TFrmMain.ApplySettings(Sender: TObject);                              // Correction bug FS#39
+var i: integer;                                                                 //    This method is also called by frmAppSettings
+begin                                                                           //    after having load the application default setup
+  with frmAppSettings do begin
     if ckIcons.Checked then
       lvMessages.SmallImages := ClasseImages
     else
       lvMessages.SmallImages := TypeImages;
     if ckAutoStartLogging.Checked then
-      PlayExecute(self)                                // 2.0.3 feature
+      PlayExecute(self)                                                         // 2.0.3 feature
     else
       PauseExecute(self);
     for i := 0 to lvMessages.Columns.Count - 1 do
@@ -254,49 +245,47 @@ end;
 
 procedure TFrmMain.acAppSettingsExecute(Sender: TObject);
 begin
-  frmAppSettings.ShowModal;
-  ApplySettings(Sender);
+   frmAppSettings.ShowModal;
+   ApplySettings(Sender);
 end;
 
 procedure TFrmMain.acDiscoverExecute(Sender: TObject);
 begin
-  xPLClient.SendHBeatRequestMsg;
+   xPLClient.SendHBeatRequestMsg;
 end;
 
 procedure TFrmMain.RequestConfig(aTarget: tsAddress);
 begin
-  xPLClient.SendConfigRequestMsg(aTarget);
+   xPLClient.SendConfigRequestMsg(aTarget);
 end;
 
 procedure TFrmMain.acRequestConfigExecute(Sender: TObject);
 begin
-  RequestConfig(GetSourceAddress);
+   RequestConfig(GetSourceAddress);
 end;
 
 procedure TFrmMain.acPluginDetailExecute(Sender: TObject);
-var
-  ConfElmts: TConfigurationRecord;
+var ConfElmts: TConfigurationRecord;
 begin
   ConfElmts := TConfigurationRecord(tvMessages.Selected.Data);
-  if ConfElmts = nil then
-    exit;
+  if ConfElmts = nil then exit;
+
   frmPluginDetail.Configuration := ConfElmts;
   frmPluginDetail.ShowModal;
 end;
 
 procedure TFrmMain.ClearExecute(Sender: TObject);
 begin
-  iLoggedMsg   := 0;
-  iReceivedMsg := 0;
-  lvMessages.Items.Clear;
-  PlayExecute(self);
-  Messages.Clear;
+   iLoggedMsg   := 0;
+   iReceivedMsg := 0;
+   lvMessages.Items.Clear;
+   PlayExecute(self);
+   xPLOutput.xPLActions.EmptyList;
 end;
 
 function TFrmMain.CheckFilter(aMsg: TxPLMessage): boolean;
-var
-  i, elt: integer;
-  ch:     string;
+var i, elt : integer;
+    ch :     string;
 begin
   Result := True;
   for i := 0 to clbSchema.Items.Count - 1 do
@@ -316,71 +305,33 @@ begin
 end;
 
 procedure TFrmMain.ExportExecute(Sender: TObject);
-const
-  CHAR_SEP = ';';
-var
-  i, j: integer;
-  Str:  string;
 begin
-  if not SaveDialog.Execute then
-    exit;
-
-  Str := '';
-
-  for i := 0 to lvMessages.Items.Count - 1 do
-  begin
-    if (i <> 0) then
-      Str += #13#10;
-    for j := 0 to (lvMessages.Items[i].SubItems.Count - 2) do
-      Str += lvMessages.Items[i].SubItems[j] + Char_SEP;
-  end;
-
-  with TStringList.Create do
-    try
-      Add(Str);
-      SaveToFile(SaveDialog.FileName);
-    finally
-      Free;
-    end;
+   if SaveDialog.Execute then WriteXMLFile(xDoc,SaveDialog.FileName);
 end;
 
-procedure TFrmMain.lvMessagesSelectItem(Sender: TObject; Item: TListItem;
-  Selected: boolean);
-var
-  j:      integer;
-  aMsg:   TxPLMessage;
-  arrStr: StringArray;
+procedure TFrmMain.lvMessagesSelectItem(Sender: TObject; Item: TListItem; Selected: boolean);
 begin
-  aMsg := TxPLMessage(Messages.Objects[StrToInt(Item.SubItems[4])]);
-
-  memo1.Lines.Clear;
-  arrStr := StrSplit(aMsg.RawXPL, #10);
-
-  for j := 0 to high(arrStr) do
-    if arrStr[j] <> '' then
-      memo1.Lines.Add(arrStr[j]);
+   fooMessage.ReadFromXML(xPLOutput.xPLActions.Element[StrToInt(Item.SubItems[4])]);
+   memo1.Lines.Clear;
+   memo1.Lines.AddStrings(fooMessage.Strings);
 end;
 
 
 procedure TFrmMain.mnuSendMessageClick(Sender: TObject);
 begin
-  with TxPLMessageGUI.Create do
-  begin
-    Header.Source.Assign(xPLClient.Address);
-    Header.Target.Tag := GetSourceAddress;
-    Schema.Tag  := K_SCHEMA_CONTROL_BASIC;
-    MessageType := K_MSG_TYPE_CMND;
-    // 2.1.2 correction
-    Body.AddKeyValuePair('key', 'value');                                   // 2.0.3
-    ShowForEdit([boSave, boSend]);
-    // Potential issue here : aMessage not destroyed
+   with TxPLMessageGUI(fooMessage) do begin
+        Header.Source.Assign(xPLClient.Address);
+        Header.Target.Tag := GetSourceAddress;
+        Schema.Tag  := K_SCHEMA_CONTROL_BASIC;
+        MessageType := K_MSG_TYPE_CMND;                                         // 2.1.2 correction
+        Body.AddKeyValuePair('key', 'value');                                   // 2.0.3
+        ShowForEdit([boSave, boSend]);
   end;
 end;
 
 procedure TFrmMain.lvMessagesColumnClick(Sender: TObject; Column: TListColumn);
-var
-  sl: TStringList; //used for sorting
-  counter, target, SubItemsColumnCount, IndexOfCurrentColumn: integer;
+var sl: TStringList;                                                           //used for sorting
+    counter, target, SubItemsColumnCount, IndexOfCurrentColumn: integer;
 begin
   if Column.Index = LastSortedColumn then
     Ascending := not Ascending
@@ -429,58 +380,56 @@ begin
 end;
 
 procedure TFrmMain.lvMessagesDblClick(Sender: TObject);
-var
-  i: integer;
+var i: integer;
 begin
-  if not assigned(lvMessages.Selected) then
-    exit;
+   if not assigned(lvMessages.Selected) then exit;
 
-  i := StrToInt(lvMessages.Selected.SubItems[4]);
-  with TxPLMessageGUI(Messages.Objects[i]) do
-    Show([boSave, boCopy, boSend]);
+   i := StrToInt(lvMessages.Selected.SubItems[4]);
+   with TxPLMessageGUI(fooMessage) do begin
+      ReadFromXML(xPLOutput.xPLActions.Element[i]);
+      Show([boSave, boCopy, boSend]);
+   end;
 end;
 
 procedure TFrmMain.PauseExecute(Sender: TObject);
 begin
-  Pause.Enabled := False;
-  Play.Enabled  := not Pause.Enabled;
+   Pause.Enabled := False;
+   Play.Enabled  := not Pause.Enabled;
 end;
 
 procedure TFrmMain.PlayExecute(Sender: TObject);
 begin
-  Pause.Enabled := True;
-  Play.Enabled  := not Pause.Enabled;
-  dtLogStart    := now;
-  iLoggedMsg    := 0;
+   Pause.Enabled := True;
+   Play.Enabled  := not Pause.Enabled;
+   dtLogStart    := now;
+   iLoggedMsg    := 0;
 end;
 
 procedure TFrmMain.PopupMenu1Popup(Sender: TObject);
 begin
-  tvMessagesChange(Sender, tvMessages.Selected);
-end;                       // 2.1.2 : Configure menu now appear as soon as possible
+   tvMessagesChange(Sender, tvMessages.Selected);                               // 2.1.2 : Configure menu now appear as soon as possible
+end;
 
 procedure TFrmMain.QuitExecute(Sender: TObject);
 begin
-  if (Application.MessageBox('Do you want to quit ?', 'Confirm', MB_YESNO) = idYes) then
-    Close;
+   if (Application.MessageBox('Do you want to quit ?', 'Confirm', MB_YESNO) = idYes)
+      then Close;
 end;
 
 procedure TFrmMain.acSetupInstanceExecute(Sender: TObject);
-var
-  ConfElmts: TConfigurationRecord;
+var ConfElmts: TConfigurationRecord;
 begin
-  ConfElmts := TConfigurationRecord(tvMessages.Selected.Data);
-  if ConfElmts = nil then
-    exit;
-  frmSetupInstance.Configuration := ConfElmts;
-  frmSetupInstance.ShowModal;
+   ConfElmts := TConfigurationRecord(tvMessages.Selected.Data);
+   if ConfElmts = nil then exit;
+
+   frmSetupInstance.Configuration := ConfElmts;
+   frmSetupInstance.ShowModal;
 end;
 
 procedure TFrmMain.tvMessagesChange(Sender: TObject; Node: TTreeNode);
-var
-  ConfElmts: TConfigurationRecord;
-  i:     integer;
-  aMenu: tmenuitem;
+var ConfElmts: TConfigurationRecord;
+    i:     integer;
+    aMenu: tmenuitem;
 begin
   acDiscover.Visible      := (Node = TopNode);
   acRequestConfig.Visible := (Node.Data <> nil);
@@ -578,49 +527,37 @@ begin
 end;
 
 procedure TFrmMain.tvMessagesSelectionChanged(Sender: TObject);
-var
-  i: integer;
-  c1, c2, c3, sfilter: string;
+var i: integer;
+    c1, c2, c3, sfilter: string;
 begin
-  GetSourceChain(c1, c2, c3);
-  CurrentTreeFilter := '*.' + TxPLAddress.ComposeAddressFilter(c1, c2, c3) + '.*.*';
-  lvMessages.items.Clear;
-
-  for i := 0 to Messages.Count - 1 do
-  begin
-    if frmAppSettings.rgFilterBy.ItemIndex = 0 then
-      sfilter := TxPLMessage(Messages.Objects[i]).SourceFilterTag
-    else
-      sfilter := TxPLMessage(Messages.Objects[i]).TargetFilterTag;
-    if TxPLFilters.Matches(CurrentTreeFilter, sfilter) then
-      AddToTreeview(i);
-  end;
+   GetSourceChain(c1, c2, c3);
+   CurrentTreeFilter := '*.' + TxPLAddress.ComposeAddressFilter(c1, c2, c3) + '.*.*';
+   lvMessages.items.Clear;
+   for i:=0 to xPLOutput.xPLActions.Count-1 do begin
+      fooMessage.ReadFromXML(xPLOutput.xPLActions[i]);
+      sFilter := IfThen(frmAppSettings.rgFilterBy.ItemIndex = 0,fooMessage.SourceFilterTag,fooMessage.TargetFilterTag);
+      if TxPLFilters.Matches(CurrentTreeFilter, sfilter) then AddToTreeview(i);
+   end;
 end;
 
 procedure TFrmMain.AddToTreeview(aMessageNum: integer);
-var
-  s: array[0..4] of string;
-  i: integer;
+var s: array[0..4] of string;
+    i: integer;
 begin
-  with lvMessages.Items.Add, TxPLMessage(Messages.Objects[aMessageNum]) do
-  begin
+   fooMessage.ReadFromXML(xPLOutput.xPLActions[aMessageNum]);
+   with lvMessages.Items.Add, fooMessage do begin
     if frmAppSettings.ckIcons.Checked then
       ImageIndex := clbSchema.Items.IndexOf(Schema.Classe)
     else
       ImageIndex := TxPLHeader.MsgTypeAsOrdinal(MessageType);
 
     for i := 0 to 4 do
-      if frmAppSettings.ListBox1.Items[i] = 'Time' then
-        s[i] := Messages[aMessageNum]
-      else
-        s[i] := ElementByName(frmAppSettings.ListBox1.Items[i]);
-
+        s[i] := IfThen( frmAppSettings.ListBox1.Items[i] = 'Time',
+                        xPLOutput.xPLActions[aMessageNum].ExecuteOrder,
+                        ElementByName(frmAppSettings.ListBox1.Items[i]));
     Caption := s[0];
-    for i := 1 to 4 do
-      SubItems.Add(s[i]);
-
-    SubItems.Add(IntToStr(aMessageNum));
-    // Stores the number of the message in the tv
+    for i := 1 to 4 do SubItems.Add(s[i]);
+    SubItems.Add(IntToStr(aMessageNum));                                        // Stores the number of the message in the tv
   end;
 end;
 
@@ -635,9 +572,9 @@ begin
 end;
 
 procedure TFrmMain.OnMessageReceived(const axPLMessage: TxPLMessage);
-var
-  anode1, anode2, anode3: TTreeNode;
-  Config_Elmts: TConfigurationRecord;
+var anode1, anode2, anode3: TTreeNode;
+    Config_Elmts: TConfigurationRecord;
+    aAction : TXMLxplActionType;
 
   function SeekPlugin(Vendor: tsVendor; Device: tsDevice): TXMLDeviceType;
   begin
@@ -648,8 +585,7 @@ var
   function SeekConfig(aDevice: TXMLDeviceType): TxPLConfig;
   begin
     Result := nil;
-    if not Assigned(aDevice) then
-      exit;
+    if not Assigned(aDevice) then exit;
 
     Result := TxPLConfig.Create(xPLClient);
     Result.ReadFromXML(aDevice);
@@ -671,14 +607,15 @@ var
 begin
   Inc(iReceivedMsg);
 
-  if Play.Enabled or (Filter.Checked and (not CheckFilter(axPLMessage))) then
-    exit;
+  if Play.Enabled or (Filter.Checked and (not CheckFilter(axPLMessage))) then exit;
 
   Inc(iLoggedMsg);
-  Messages.AddObject(TimeToStr(Now), TxPLMessage.Create(axPLMessage.RawXPL));
+  aAction := xPLOutput.xPLActions.AddElement('');
+  axPLMessage.Name := TimeToStr(Now);                                           // Message arrival will be stored in Execute Order under xml form
+  axPLMessage.WriteToXML(aAction);
 
   with axPLMessage.Source do
-  begin                                             // Update left pane if needed
+  begin                                                                         // Update left pane if needed
     anode1 := topNode.FindNode(Vendor);
     if anode1 = nil then
       anode1 := tvMessages.Items.AddChild(topNode, Vendor);
@@ -688,7 +625,7 @@ begin
       anode2 := tvMessages.Items.AddChild(aNode1, Device);
     anode3   := anode2.FindNode(Instance);
     if anode3 = nil then
-    begin                              // Add a new application instance to the treeview
+    begin                                                                       // Add a new application instance to the treeview
       aNode3      := tvMessages.Items.AddChild(aNode2, Instance);
       Config_Elmts := TConfigurationRecord.Create;
       Config_Elmts.plug_detail := SeekPlugin(Vendor, Device);
@@ -705,7 +642,7 @@ begin
 
   StatusBar1.Panels[0].Text := StatusString;
 
-  if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.SourceFilterTag) then AddToTreeview(Messages.Count-1);
+  if TxPLFilters.Matches(CurrentTreeFilter,axPLMessage.SourceFilterTag) then AddToTreeview(xPLOutput.xPLActions.Count-1);
   //tvMessagesSelectionChanged(self);
   HandleConfigMessages;
 end;

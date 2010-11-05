@@ -1,3 +1,5 @@
+xPL Logger
+
 Changes History : 
 	0.9.8 : * Status bar shows 'hub not found' until a hub is found
 		* Save a message as file (format compatible with sender)
@@ -48,7 +50,15 @@ Changes History :
 		* Added ability to display messages either by target or by source in the tree view
 	2.2.1
 		* Resolved a bug when saving / loading xpl messages (also when saving load configuration elements).
+		
+	2.2.2 (internal / test realease)
+		* Message are no longueur internally stored as stringlist but using TXMLOuput structure from u_xml this
+		  enables : 
+			- better code coverage for testing
+			- Exporting xPL Logger file export is now complete and done in xml format
 				
 		
 TODO
 		... afficher le plugin file à partir du nom du vendor dans le treeview
+		... créer la fonction 'importer' puisque maintenant on travaille en XML
+		Erreur : send a message to doesn't open an empty message
