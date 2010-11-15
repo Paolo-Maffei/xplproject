@@ -43,14 +43,14 @@ Public Class comfort
     CommsOK = False
     bEnableLogging = False
     TimerCount = 1
-    myXplListener = New xpllib.XplListener("johnb-comfort", 1, EventLog)
+        myXplListener = New xpllib.XplListener("johnb-comfort", "1", EventLog)
 
     ' Add supported remote config items
-    myXplListener.ConfigItems.Add("ucmhost", "", xpllib.xplConfigTypes.xReconf)    
-    myXplListener.ConfigItems.Add("ucmport", "1001", xpllib.xplConfigTypes.xReconf)    
-    myXplListener.ConfigItems.Add("usercode", "1234", xpllib.xplConfigTypes.xReconf)    
-    myXplListener.ConfigItems.Add("clocksync", "Y", xpllib.xplConfigTypes.xOption)    
-    myXplListener.ConfigItems.Add("x10", "N", xpllib.xplConfigTypes.xOption)    
+        myXplListener.ConfigItems.Define("ucmhost", "", xpllib.xplConfigTypes.xReconf, 1)
+        myXplListener.ConfigItems.Define("ucmport", "1001", xpllib.xplConfigTypes.xReconf, 1)
+        myXplListener.ConfigItems.Define("usercode", "1234", xpllib.xplConfigTypes.xReconf, 1)
+        myXplListener.ConfigItems.Define("clocksync", "Y", xpllib.xplConfigTypes.xOption, 1)
+        myXplListener.ConfigItems.Define("x10", "N", xpllib.xplConfigTypes.xOption, 1)
     myXplListener.Listen()
     If Not myXplListener.AwaitingConfiguration Then
       ' Go ahead and set things up
