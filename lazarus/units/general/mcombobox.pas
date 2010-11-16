@@ -29,7 +29,7 @@ uses uRegExpr,Graphics;
 
 procedure Register;
 begin
-  RegisterComponents('Clinique',[TMComboBox]);
+  RegisterComponents('xPL Components',[TMComboBox]);
 end;
 
 procedure TMComboBox.SetRegExpr(const AValue: string);

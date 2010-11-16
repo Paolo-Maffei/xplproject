@@ -141,8 +141,11 @@ type
         property MaxValue : integer read Get_MaxValue write Set_MaxValue;                       // Extended used in config files
         property ConfigType : AnsiString read Get_ConfigType write Set_ConfigType;              // Extended used in config files
         property Values : TXMLOptionsType read Get_Values;
+
      public
         function MaxValueAsString : string;
+        function AsInteger : integer;
+        function Value     : string;                                                            // A shortcut to the first value of the values array
      end;
      TXMLConfigItemsType = specialize TXMLElementList<TXMLConfigItemType>;
 
@@ -405,7 +408,9 @@ function TXMLConfigItemType.Get_MaxValue: integer;
 begin result := StrToInt(GetAttribute(K_XML_STR_MAXVALUE)); end;
 
 function TXMLConfigItemType.Get_Name: AnsiString;
-begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
+begin
+   result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue;
+end;
 
 function TXMLConfigItemType.Get_Values: TXMLOptionsType;
 begin Result := TXMLOptionsType.Create(self, K_XML_STR_Option,K_XML_STR_VALUE); end;
@@ -421,6 +426,17 @@ begin SetAttribute(K_XML_STR_Format,aValue); end;
 
 procedure TXMLConfigItemType.Set_MaxValue(const AValue: integer);
 begin SetAttribute(K_XML_STR_MAXVALUE,IntToStr(aValue)); end;
+
+function TXMLConfigItemType.AsInteger: integer;
+begin
+   result := -1;
+   if Values.Count > 0 then result := StrToInt(Values[0].Value);
+end;
+
+function TXMLConfigItemType.Value: string;
+begin
+   result := Values[0].Value;
+end;
 
 function TXMLConfigItemType.MaxValueAsString: string;
 begin

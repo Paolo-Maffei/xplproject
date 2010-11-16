@@ -8,6 +8,8 @@ unit uxPLTimer;
  0.91 : Removed call to TTimer object replaced by TfpTimer (console mode
         compatibility requirement
  0.92 : Modification to stick to timer.basic schema as described in xpl website
+ 0.93 : Removed inheritance from TComponent
+        Removed XMLCfg usage, use u_xml instead
 }
 
 {$mode objfpc}{$H+}
@@ -15,7 +17,7 @@ unit uxPLTimer;
 interface
 
 uses
-  Classes, SysUtils, XMLCfg, uxPLListener, uxPLMessage, ComCtrls, fpTimer;
+  Classes, SysUtils, uxPLListener, uxPLMessage, ComCtrls, fpTimer, u_xml_config, DOM;
 
 type
   TxPLTimer = class(TComponent)
@@ -31,7 +33,7 @@ type
     fMode          : integer;                        //1 : up, 2 : down, 3 : recurrent
     fStatus        : integer;                        //0 : stopped, 1 : started ; 2 : halted
   public
-     Target  : string;
+     Target    : string;
      StartTime : TDateTime;
      Remaining : cardinal;
      Frequence : cardinal;
@@ -40,8 +42,8 @@ type
      constructor Create(const aMsg : TxPLMessage);
      function    Edit  : boolean;
 
-     procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); dynamic;
+     procedure WriteToXML (const aCfgfile : TDOMElement); dynamic;
+     procedure ReadFromXML(const aCfgfile : TDOMElement); dynamic;
      function SendStatus : boolean;
      function Pause : boolean;
      function ResumeOrStart : boolean;
@@ -70,8 +72,8 @@ type
      constructor Create(const aClient : TxPLListener; const aGrid : TListView);
      destructor  Destroy;
 
-     procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string);
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string);
+     procedure WriteToXML (const aCfgfile : TXMLLocalsType);
+     procedure ReadFromXML(const aCfgfile : TXMLLocalsType);
      procedure Check(Sender: TObject);
      procedure ToGrid    (const anItem : integer);
 
@@ -94,7 +96,14 @@ type
 
 
 implementation //===============================================================
-uses frm_xplTimer, Controls, DateUtils, StrUtils, uxPLConst, app_main;
+uses frm_xplTimer,
+     Controls,
+     DateUtils,
+     StrUtils,
+     uxPLConst,
+     frm_main,
+     u_xml,
+     app_main;
 
 {==============================================================================}
 function DateTimeDiff(Start, Stop : TDateTime) : int64;
@@ -142,7 +151,7 @@ end;
 constructor TxPLTimer.Create(const aMsg : TxPLMessage);
 begin
      fxPLMessage := aMsg;
-     Target := '*';                // Default values;
+     Target := '*';
      fMode  := 1;
 end;
 
@@ -154,18 +163,39 @@ begin
    aForm.Destroy;
 end;
 
-procedure TxPLTimer.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLTimer.WriteToXML(const aCfgfile: TDOMElement);
 begin
-   with aCfgFile do begin
-        SetValue(aRootPath + '/Name'     , fName);
-        SetValue(aRootPath + '/Target'   , Target);
-        SetValue(aRootPath + '/StartTime', DateTimeToStr(StartTime));
-        SetValue(aRootPath + '/Remaining', Remaining);
-        SetValue(aRootPath + '/Status'   , Status);
-//        SetValue(aRootPath + '/Range'    , Range);
-        SetValue(aRootPath + '/Mode'     , Mode);
-        SetValue(aRootPath + '/Frequence', Frequence);
-        SetValue(aRootPath + '/EstimatedEnd', IfThen(EstimatedEnd = 0,'0',DateTimeToStr(EstimatedEnd)));
+   aCfgFile.SetAttribute(K_XML_STR_Name , fName);
+   aCfgFile.SetAttribute('target'   , Target);
+   aCfgFile.SetAttribute('starttime', DateTimeToStr(StartTime));
+   aCfgFile.SetAttribute('remaining', IntToStr(Remaining));
+   aCfgFile.SetAttribute('status'   , Status);
+   aCfgFile.SetAttribute('mode'     , Mode);
+   aCfgFile.SetAttribute('frequence', IntToStr(Frequence));
+   aCfgFile.SetAttribute('estimatedend', IfThen(EstimatedEnd = 0,'0',DateTimeToStr(EstimatedEnd)));
+end;
+
+procedure TxPLTimer.ReadFromXML(const aCfgfile: TDOMElement);
+var sEstimatedEnd : string;
+begin
+   fName     := aCfgFile.GetAttribute(K_XML_STR_Name);
+   Target    := aCfgFile.GetAttribute('target');
+   StartTime := StrToDateTime( aCfgFile.GetAttribute('starttime'));
+   Status    := aCfgFile.GetAttribute('status');   // default : started
+   Mode      := aCfgFile.GetAttribute('mode'); // default : ascending
+   Remaining := StrToInt(aCfgFile.GetAttribute('remaining')); // default : 0
+   Frequence := StrToInt(aCfgFile.GetAttribute('frequence')); // default : 0
+   sEstimatedEnd := aCfgFile.GetAttribute('estimatedend');
+
+   if sEstimatedEnd = '0' then begin                                            // This timer goes up from start
+      EstimatedEnd := 0;
+      Remaining := DateTimeDiff(StartTime, Now);                                // Recalculate elapsed time
+   end else begin
+      EstimatedEnd := StrToDateTime(sEstimatedEnd);                             // this timer goes down from start until duration
+      if EstimatedEnd < Now then
+          Remaining := 1                                                        // this will stop it on next tick
+      else
+          Remaining := DateTimeDiff(Now,EstimatedEnd);
    end;
 end;
 
@@ -173,7 +203,7 @@ procedure TxPLTimer.Init(const aDevice : string; const aSource: string; const aR
 begin
    fName := aDevice;
    StartTime := now();
-   if aRange = 'local' then target := aSource else target := '*';
+   Target := IfThen(aRange = 'local', aSource, '*');
    Remaining := StrToIntDef(aDuration,0);
    Frequence := StrToIntDef(aFrequence,0);
 
@@ -192,31 +222,6 @@ begin
      ResumeOrStart;
 end;
 
-procedure TxPLTimer.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
-var sEstimatedEnd : string;
-begin
-   fName     := aCfgFile.GetValue(aRootPath + '/Name', '');
-   Target    := aCfgFile.GetValue(aRootPath + '/Target','*');
-   sEstimatedEnd := aCfgFile.GetValue(aRootPath + '/StartTime', '');
-   StartTime := StrToDateTime( aCfgFile.GetValue(aRootPath + '/StartTime', ''));
-   Status    := aCfgFile.GetValue(aRootPath + '/Status','started');
-   Mode      := aCfgFile.GetValue(aRootPath + '/Mode','ascending');
-   Remaining := aCfgFile.GetValue(aRootPath + '/Remaining',0);
-   Frequence := aCfgFile.GetValue(aRootPath + '/Frequence',0);
-
-   sEstimatedEnd := aCfgFile.GetValue(aRootPath + '/EstimatedEnd','');
-   if sEstimatedEnd = '0' then begin                                            // This timer goes up from start
-      EstimatedEnd := 0;
-      Remaining := DateTimeDiff(StartTime, Now);                                // Recalculate elapsed time
-   end else begin
-      EstimatedEnd := StrToDateTime(sEstimatedEnd);                             // this timer goes down from start until duration
-      if EstimatedEnd < Now then
-          Remaining := 1                                                        // this will stop it on next tick
-      else
-          Remaining := DateTimeDiff(Now,EstimatedEnd);
-   end;
-end;
-
 function TxPLTimer.SendStatus : boolean;
 begin
    result := (Status <> 'stopped');
@@ -227,7 +232,7 @@ begin
        Body.ResetValues;
        Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
 //       Format_SensorBasic(fName,'generic',Status);
-       Target.Tag := Self.Target;
+       Target.Tag := self.Target;
        Schema.Tag := K_SCHEMA_TIMER_BASIC;
 //       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
        xPLClient.Send(fxPLMessage);
@@ -243,7 +248,7 @@ begin
 
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
-      Target.Tag := Self.Target;
+      Target.Tag := self.Target;
       Body.ResetValues;
       Body.AddKeyValuePairs(['device','current'],[fName,Status]);
 //      Format_SensorBasic(fName,'generic',Status);
@@ -267,7 +272,7 @@ begin
 
       with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
-         Target.Tag  := Self.Target;
+         Target.Tag := self.Target;
          Body.ResetValues;
          Body.AddKeyValuePairs(['device','current','elapsed'],[fName,fStopReason,IntToStr(DateTimeDiff(StartTime, Now))]);
 //         Format_SensorBasic(fName,'generic',StopReason);
@@ -290,7 +295,7 @@ begin
 
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
-      Target.Tag := Self.Target;
+      Target.Tag := self.Target;
       Body.ResetValues;
       Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
 //      Format_SensorBasic(fName,'generic',Status);
@@ -399,26 +404,25 @@ begin
   fGrid.Items[index].Delete ;
 end;
 
-procedure TxPLTimerList.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLTimerList.WriteToXML(const aCfgfile: TXMLLocalsType);
 var i : integer;
+    elmt : TDOMElement;
 begin
-    for i:=0 to Count-1 do
-        TxPLTimer(Objects[i]).WriteToXML(aCfgfile, aRootPath + '/Timer_' + intToStr(i));
-    aCfgfile.SetValue(aRootPath + '/TimerCount', Count);
+    for i:=0 to Count-1 do begin
+        elmt := aCfgFile.AddElement(TxPLTimer(Objects[i]).TimerName);
+        TxPLTimer(Objects[i]).WriteToXML(elmt);
+    end;
 end;
 
-procedure TxPLTimerList.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLTimerList.ReadFromXML(const aCfgfile : TXMLLocalsType);
 var i : integer;
     aTimer  : TxPLTimer;
 begin
    self.Clear;
-   i := StrToInt(aCfgfile.GetValue(aRootPath +'/TimerCount', '0')) - 1;
-   while i>=0 do begin
+   for i:=0 to aCfgFile.Count-1 do begin
       aTimer := TxPLTimer.Create(aMessage);
-      aTimer.ReadFromXML(aCfgfile, aRootPath +'/Timer_' + intToStr(i));
+      aTimer.ReadFromXML(aCfgFile[i]);
       Add(aTimer);
-//      Objects[ Add(aTimer.fName) ] := aTimer;
-      dec(i);
    end;
 end;
 

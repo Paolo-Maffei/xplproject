@@ -35,7 +35,7 @@ uses uRegExpr;
 
 procedure Register;
 begin
-  RegisterComponents('Clinique',[TMEdit]);
+  RegisterComponents('xPL Components',[TMEdit]);
 end;
 
 procedure TMedit.SetRegExpr(const AValue: string);

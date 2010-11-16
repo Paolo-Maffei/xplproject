@@ -12,7 +12,8 @@ unit uxPLConst;
         RegExpEngine that was available via uRegExTools unit. This unit is deleted
         from the project (bug # FS47)
  0.93 : Removed usage of symbolic constants for ConfigType
- 0.94 Modified to move schema from Body class to Header class
+ 0.94 : Modified to move schema from Body class to Header class
+ 0.95 : Added 'my' (=clinique) key configuration strings
  }
 
 
@@ -47,6 +48,14 @@ const
    K_FEXT_TXT         = '.txt';
    K_FEXT_AU          = '.au';
    K_FEXT_PAS         = 'pas';
+
+   // My key configuration strings =============================================
+   K_SET_COUNTRY      = 'country';
+   K_SET_LANGUAGE     = 'language';
+   K_SET_UNITSYSTEM   = 'unit';
+   K_SET_WEBDIR       = 'webdir';
+   K_SET_LATITUDE     = 'latitude';
+   K_SET_LONGITUDE    = 'longitude';
 
    // General ==================================================================
    K_STR_TRUE = 'true';
@@ -220,6 +229,8 @@ const
    K_RE_MAC_ADDRESS  = '([0-9a-fA-F][0-9a-fA-F]:){5}([0-9a-fA-F][0-9a-fA-F])';  // Network card mac address
    K_RE_LATITUDE     = '([0-8][0-9]|[9][0])\.([0-9][0-9])\.([0-9][0-9])([NS]|[ns])';
    K_RE_LONGITUDE    = '([01][0-7]|[00][0-9][0-9]|[1][8][0])\.([0-9][0-9])\.([0-9][0-9])([EW]|[ew])';
+   K_RE_PORTNUMBER   = '^(6553[0-5]|655[0-2]\d|65[0-4]\d\d|6[0-4]\d{3}|[1-5]\d{4}|[1-9]\d{0,3}|0)$';
+   K_RE_DIRECTORY    = '^[A-Za-z]:\\([^"*/:?|<>\\.\x00-\x20]([^"*/:?|<>\\\x00-\x1F]*[^"*/:?|<>\\.\x00-\x20])?\\)*$';
 
 
 

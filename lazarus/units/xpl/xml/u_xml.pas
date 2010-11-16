@@ -144,6 +144,7 @@ type
         constructor Create(const aDocument : TXMLDocument; const aLabel : string; const aKeyName : string); overload;
         constructor Create(const aNode : TDOMNode; const aLabel : string; const aKeyName : string);         overload;
         function    AddElement(const aName : string) : _T;
+//        function    Exists(const aName : string) : boolean;
         procedure   RemoveElement(const aName : string);
         procedure EmptyList;
         property Element[Index: Integer]: _T read Get_Element; default;
@@ -211,13 +212,27 @@ end;
 
 function TXMLElementList.AddElement(const aName : string) : _T;
 var child : TDOMNode;
+
 begin
-   child := Document.CreateElement(fKeyword);
-   fRootNode.AppendChild(child);
-   TDOMElement(Child).SetAttribute(fKeyName, aName);
-   fList.Add(child);
-   result := _T(child);
+   result := ElementByName[aName];
+   if TObject(result) = nil then begin
+      child := Document.CreateElement(fKeyword);
+      fRootNode.AppendChild(child);
+      TDOMElement(Child).SetAttribute(fKeyName, aName);
+      fList.Add(child);
+      result := _T(child);
+   end;
 end;
+
+{function TXMLElementList.Exists(const aName: string): boolean;
+var i : integer;
+begin
+   result := true;
+   i := count;
+   for i :=  0 to Count-1 do
+       if _T(Item[i]).GetAttribute(fKeyName) = aName then exit;
+   result := false;
+end;}
 
 procedure TXMLElementList.RemoveElement(const aName: string);
 var child : TDOMNode;

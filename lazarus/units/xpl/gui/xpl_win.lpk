@@ -2,13 +2,13 @@
 <CONFIG>
   <Package Version="3">
     <PathDelim Value="\"/>
-    <Name Value="XPL"/>
+    <Name Value="xpl_win"/>
     <CompilerOptions>
       <Version Value="8"/>
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="$(LazarusDir)\components\indy-10.2.0.3\fpc\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\lib\i386-win32\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;;$(LazarusDir)\components\log4delphi-0.7\src\delphi\;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util\;$(LazarusDir)\svn\units\general\indy\;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\$(LCLWidgetType)\;$(LazarusDir)\components\codetools\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\components\custom\;$(LazarusDir)\packager\units\$(TargetCPU)-$(TargetOS)\;$(LazarusDir)\svn\units\general\;$(LazarusDir)\svn\units\general\regexpr\;$(LazarusDir)\svn\units\general\fndUtl328\Utils\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\;$(LazarusDir)\components\indy-10.2.0.3\fpc\"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\"/>
         <UnitOutputDirectory Value="C:\LazOut"/>
       </SearchPaths>
       <Parsing>
@@ -21,56 +21,51 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="10">
+    <Files Count="9">
       <Item1>
-        <Filename Value="v_msgbody_stringgrid.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="v_msgbody_stringgrid"/>
-      </Item1>
-      <Item2>
         <Filename Value="v_xplmsg_opendialog.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_xplmsg_opendialog"/>
-      </Item2>
-      <Item3>
+      </Item1>
+      <Item2>
         <Filename Value="v_msgtype_radio.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_msgtype_radio"/>
-      </Item3>
-      <Item4>
+      </Item2>
+      <Item3>
         <Filename Value="v_class_combo.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_class_combo"/>
+      </Item3>
+      <Item4>
+        <Filename Value="..\..\general\TreeListView.pas"/>
+        <UnitName Value="TreeListView"/>
       </Item4>
       <Item5>
-        <Filename Value="..\general\TreeListView.pas"/>
-        <UnitName Value="TreeListView"/>
-      </Item5>
-      <Item6>
-        <Filename Value="..\general\MStringGrid.pas"/>
+        <Filename Value="..\..\general\MStringGrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MStringGrid"/>
-      </Item6>
-      <Item7>
-        <Filename Value="..\general\medit.pas"/>
+      </Item5>
+      <Item6>
+        <Filename Value="..\..\general\medit.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MEdit"/>
-      </Item7>
-      <Item8>
-        <Filename Value="..\general\mchecklistbox.pas"/>
+      </Item6>
+      <Item7>
+        <Filename Value="..\..\general\mchecklistbox.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MCheckListBox"/>
-      </Item8>
-      <Item9>
-        <Filename Value="..\general\mcombobox.pas"/>
+      </Item7>
+      <Item8>
+        <Filename Value="..\..\general\mcombobox.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MComboBox"/>
-      </Item9>
-      <Item10>
-        <Filename Value="ucontrols.pas"/>
+      </Item8>
+      <Item9>
+        <Filename Value="v_msgbody_stringgrid.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="uControls"/>
-      </Item10>
+        <UnitName Value="v_msgbody_stringgrid"/>
+      </Item9>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">

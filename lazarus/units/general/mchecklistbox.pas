@@ -37,7 +37,7 @@ resourcestring
 
 procedure Register;
 begin
-	RegisterComponents('Clinique', [TMCheckListBox]);
+	RegisterComponents('xPL Components', [TMCheckListBox]);
 end;
 
 constructor TMCheckListBox.Create(AOwner: TComponent);
