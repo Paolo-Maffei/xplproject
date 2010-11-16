@@ -22,7 +22,7 @@ TMyApplication = class(TCustomApplication)
         fURI : string;
         Weather,Backup : TWeather;
         procedure DoRun; override;
-        procedure SendSensors(bCheckDifference : boolean);
+        procedure SendSensors(bCheckDifference : boolean; sensorname : string ='');
      public
         constructor Create(TheOwner: TComponent); override;
         procedure OnSensorRequest(const axPLMsg : TxPLMessage; const aDevice : string; const aAction : string);
@@ -41,68 +41,40 @@ uses uxPLConst, cStrings;
 
 //=====================================================================================================
 const
-     K_XPL_APP_VERSION_NUMBER = '3.0';
+     K_XPL_APP_VERSION_NUMBER = '3.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
      K_WEATHER_URI = 'http://xoap.weather.com/weather/local/%s?cc=*&dayf=5&link=xoap&prod=xoap&par=%s&key=%s';
 
 procedure TMyApplication.DoRun;
-var ErrorMsg: String;
 begin
-  ErrorMsg:=CheckOptions('h','help');
-  if ErrorMsg<>'' then begin
-    ShowException(Exception.Create(ErrorMsg));
-    Terminate;
-    Exit;
-  end;
-
-  if HasOption('h','help') then begin
-    Terminate;
-    Exit;
-  end;
-
-  while true do begin
-        CheckSynchronize;
-  end;
-  Terminate;
+   CheckSynchronize;
 end;
 
-procedure TMyApplication.SendSensors(bCheckDifference: boolean);
+procedure TMyApplication.SendSensors(bCheckDifference: boolean; sensorname : string ='');
 procedure IssueSensor(aValue,aDevice,aType : string);
-//var aMsg : TxPLMessage;
 begin
-//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_TRIG,K_SCHEMA_SENSOR_BASIC);
-//   with aMsg do begin
-//        Body.AddKeyValuePair('device',aDevice);
-//        Body.AddKeyValuePair('type',aType);
-//        Body.AddKeyValuePair('current',aValue);
-//        Body.AddKeyValuePair('timestamp',Weather.Courant.ChaineDateHeure);
-//        xPLClient.Send(aMsg);
-//        Destroy;
-//   end;
    xPLClient.SendMessage( K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, K_SCHEMA_SENSOR_BASIC,
                           ['device','type','current','timestamp'],[aDevice,aType,aValue,Weather.Courant.ChaineDateHeure]);
 end;
 begin
    if assigned(Weather) then with Weather do begin
-      if not bCheckDifference or (Weather.Courant.Texte           <> Backup.Courant.Texte           ) then IssueSensor(Weather.Courant.Texte           ,'description' ,'generic');
-      if not bCheckDifference or (Weather.Courant.Temperature     <> Backup.Courant.Temperature     ) then IssueSensor(Weather.Courant.Temperature     ,'temperature' ,'temp');
-      if not bCheckDifference or (Weather.Courant.TempRessentie   <> Backup.Courant.TempRessentie   ) then IssueSensor(Weather.Courant.TempRessentie   ,'felt-temp'   ,'temp');
-      if not bCheckDifference or (Weather.Courant.Pression.Valeur <> Backup.Courant.Pression.Valeur ) then IssueSensor(Weather.Courant.Pression.Valeur ,'barometer'   ,'pressure');
-      if not bCheckDifference or (Weather.Courant.Pression.Variation <> Backup.Courant.Pression.Variation      ) then IssueSensor(Weather.Courant.Pression.Variation      ,'press-var'  ,'generic');
-      if not bCheckDifference or (Weather.Courant.Vent.Vitesse    <> Backup.Courant.Vent.Vitesse    ) then IssueSensor(Weather.Courant.Vent.Vitesse    ,'wind-speed'  ,'speed');
-      if not bCheckDifference or (Weather.Courant.Vent.Gust       <> Backup.Courant.Vent.Gust       ) then IssueSensor(Weather.Courant.Vent.Gust       ,'wind-gust'   ,'speed');
-      if not bCheckDifference or (Weather.Courant.Vent.Sens       <> Backup.Courant.Vent.Sens       ) then IssueSensor(Weather.Courant.Vent.Sens       ,'wind-dir'    ,'direction');
-      if not bCheckDifference or (Weather.Courant.Humidite        <> Backup.Courant.Humidite        ) then IssueSensor(Weather.Courant.Humidite        ,'humidity'    ,'humidity');
-      if not bCheckDifference or (Weather.Courant.Visibilite      <> Backup.Courant.Visibilite      ) then IssueSensor(Weather.Courant.Visibilite      ,'visibility'  ,'distance');
-      if not bCheckDifference or (Weather.Courant.UV.Indice       <> Backup.Courant.UV.Indice       ) then IssueSensor(Weather.Courant.UV.Indice       ,'uv'          ,'uv');
-      if not bCheckDifference or (Weather.Courant.Dewp            <> Backup.Courant.Dewp            ) then IssueSensor(Weather.Courant.Dewp            ,'dewpoint'    ,'temp');
-      if not bCheckDifference or (Weather.Localite.Sunrise        <> Backup.Localite.Sunrise        ) then IssueSensor(Weather.Localite.Sunrise        ,'sunrise'     ,'generic');
-      if not bCheckDifference or (Weather.Localite.Sunset         <> Backup.Localite.Sunset         ) then IssueSensor(Weather.Localite.Sunset         ,'sunset'      ,'generic');
-      if not bCheckDifference or (Weather.Courant.Lune.Texte      <> Backup.Courant.Lune.Texte      ) then IssueSensor(Weather.Courant.Lune.Texte      ,'moon-phase'  ,'generic');
-
-      with Weather, Courant do  xPLClient.LogInfo('Weather data loaded for %s',[Lieu]);
+      if ((sensorname='') or (sensorname='description')) and  (not bCheckDifference or (Weather.Courant.Texte           <> Backup.Courant.Texte           )) then IssueSensor(Weather.Courant.Texte           ,'description' ,'generic');
+      if ((sensorname='') or (sensorname='temperature')) and  (not bCheckDifference or (Weather.Courant.Temperature     <> Backup.Courant.Temperature     )) then IssueSensor(Weather.Courant.Temperature     ,'temperature' ,'temp');
+      if ((sensorname='') or (sensorname='felt-temp')) and  (not bCheckDifference or (Weather.Courant.TempRessentie   <> Backup.Courant.TempRessentie   )) then IssueSensor(Weather.Courant.TempRessentie   ,'felt-temp'   ,'temp');
+      if ((sensorname='') or (sensorname='barometer')) and  (not bCheckDifference or (Weather.Courant.Pression.Valeur <> Backup.Courant.Pression.Valeur )) then IssueSensor(Weather.Courant.Pression.Valeur ,'barometer'   ,'pressure');
+      if ((sensorname='') or (sensorname='press-var')) and  (not bCheckDifference or (Weather.Courant.Pression.Variation <> Backup.Courant.Pression.Variation      )) then IssueSensor(Weather.Courant.Pression.Variation      ,'press-var'  ,'generic');
+      if ((sensorname='') or (sensorname='wind-speed')) and  (not bCheckDifference or (Weather.Courant.Vent.Vitesse    <> Backup.Courant.Vent.Vitesse    )) then IssueSensor(Weather.Courant.Vent.Vitesse    ,'wind-speed'  ,'speed');
+      if ((sensorname='') or (sensorname='wind-gust')) and  (not bCheckDifference or (Weather.Courant.Vent.Gust       <> Backup.Courant.Vent.Gust       )) then IssueSensor(Weather.Courant.Vent.Gust       ,'wind-gust'   ,'speed');
+      if ((sensorname='') or (sensorname='wind-dir')) and  (not bCheckDifference or (Weather.Courant.Vent.Sens       <> Backup.Courant.Vent.Sens       )) then IssueSensor(Weather.Courant.Vent.Sens       ,'wind-dir'    ,'direction');
+      if ((sensorname='') or (sensorname='humidity')) and  (not bCheckDifference or (Weather.Courant.Humidite        <> Backup.Courant.Humidite        )) then IssueSensor(Weather.Courant.Humidite        ,'humidity'    ,'humidity');
+      if ((sensorname='') or (sensorname='visibility')) and  (not bCheckDifference or (Weather.Courant.Visibilite      <> Backup.Courant.Visibilite      )) then IssueSensor(Weather.Courant.Visibilite      ,'visibility'  ,'distance');
+      if ((sensorname='') or (sensorname='uv')) and  (not bCheckDifference or (Weather.Courant.UV.Indice       <> Backup.Courant.UV.Indice       )) then IssueSensor(Weather.Courant.UV.Indice       ,'uv'          ,'uv');
+      if ((sensorname='') or (sensorname='dewpoint')) and  (not bCheckDifference or (Weather.Courant.Dewp            <> Backup.Courant.Dewp            )) then IssueSensor(Weather.Courant.Dewp            ,'dewpoint'    ,'temp');
+      if ((sensorname='') or (sensorname='sunrise')) and  (not bCheckDifference or (Weather.Localite.Sunrise        <> Backup.Localite.Sunrise       ) ) then IssueSensor(Weather.Localite.Sunrise        ,'sunrise'     ,'generic');
+      if ((sensorname='') or (sensorname='sunset')) and  (not bCheckDifference or (Weather.Localite.Sunset         <> Backup.Localite.Sunset        )) then IssueSensor(Weather.Localite.Sunset         ,'sunset'      ,'generic');
+      if ((sensorname='') or (sensorname='moon-phase')) and  (not bCheckDifference or (Weather.Courant.Lune.Texte      <> Backup.Courant.Lune.Texte      )) then IssueSensor(Weather.Courant.Lune.Texte      ,'moon-phase'  ,'generic');
    end;
 end;
 
@@ -124,6 +96,7 @@ begin
        Config.AddItem('translation',K_XPL_CT_CONFIG,'us');
        PrereqList.Add('timer=0');
        PrereqList.Add('netget=0');
+       PassMyOwnMessages := true;
        Listen;
   end;
 end;
@@ -136,15 +109,13 @@ end;
 
 procedure TMyApplication.OnSensorRequest(const axPLMsg: TxPLMessage; const aDevice: string; const aAction: string);
 begin
-   if not ((aDevice = 'weather') and (aAction = 'current')) then exit;
+   if (aAction <> 'current') then exit;
 
    Weather.MettreAJour(GetTempDir + 'weather.xml',xPLClient.Config.ItemName['unitsystem'].Value);
-   SendSensors(false);
+   SendSensors(false, aDevice);
 end;
 
 procedure TMyApplication.OnConfigDone(const fConfig: TxPLConfig);
-var ageofinfo : tdatetime;
-//    hour, min, sec, msec, elapsed, timetoupdate : word;
 
 begin
   if not Assigned(Weather) then begin
@@ -153,12 +124,6 @@ begin
      fURI := Format(K_WEATHER_URI,[ xPLClient.Config.ItemName['zipcode'].Value ,
                                     xPLClient.Config.ItemName['partnerid'].Value ,
                                     xPLClient.Config.ItemName['licensekey'].Value]);
-//     AgeOfInfo  := Now - Weather.Courant.TimeStamp;
-//     DecodeTime(AgeOfInfo, hour, min, sec, msec);           // Should always be between 0 and 30 minutes
-//     Elapsed := min * 60 + sec;
-//     TimeToUpdate := 30* 60 - Elapsed;
-//     Timer1.Interval := (TimeToUpdate + 120) * 1000;        // Adjust next timer tick to website update
-//     Timer1.Enabled := True;
 
      xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'weather');
      xPLClient.RegisterLocaleDomain(xPLClient.Config.ItemName['translation'].Value,'winddir');
@@ -167,30 +132,21 @@ begin
 end;
 
 procedure TMyApplication.OnReceived(const axPLMsg: TxPLMessage);
-//var aMsg : TxPLMessage;
 begin
    with axPLMsg do begin
-      if (MessageType = K_MSG_TYPE_STAT) and                                        // Received a timer status message
+      if (MessageType = K_MSG_TYPE_STAT) and                                           // Received a timer status message
          (Schema.Tag = K_SCHEMA_TIMER_BASIC) and
          (Body.GetValueByKey('device') = xPLClient.Address.Tag) and                    // from the timer I created
          (Body.GetValueByKey('current') = 'started') then begin                        // that says he's alive
-//         aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'netget.basic',xPLClient.PrereqList.Values['netget']);
          xPLClient.SendMessage( K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['netget'],K_SCHEMA_NETGET_BASIC,
                                 ['protocol','uri','destdir','destfn'],['http',fURI,GetTempDir,'weather.xml']);
-//         with aMsg do begin
-//              Body.AddKeyValuePair('protocol','http');
-//              Body.AddKeyValuePair('uri', fURI);
-//              Body.AddKeyValuePair('destdir',GetTempDir);
-//              Body.AddKeyValuePair('destfn','weather.xml');
-//              xPLClient.Send(aMsg);
-//              Destroy;
-//         end;
       end else
       if (MessageType = K_MSG_TYPE_TRIG) and
-         (Schema.Tag = 'netget.basic') and
+         (Schema.Tag = K_SCHEMA_NETGET_BASIC) and
          (Body.GetValueByKey('uri') = fURI) and
          (Body.GetValueByKey('current') = 'done') then begin
             Weather.MettreAJour(GetTempDir + 'weather.xml',xPLClient.Config.ItemName['unitsystem'].Value);
+            with Weather, Courant do  xPLClient.LogInfo('Weather data loaded for %s',[Lieu]);
             SendSensors(true);
             Backup.Assign(Weather);
          end;
@@ -198,18 +154,9 @@ begin
 end;
 
 procedure TMyApplication.OnPrereqMet;
-//var aMsg : TxPLMessage;
 begin
-//   aMsg := xPLClient.PrepareMessage(K_MSG_TYPE_CMND,'control.basic',xPLClient.PrereqList.Values['timer']);
-//   with aMsg do begin
-//      Body.AddKeyValuePair('current','start');
-//      Body.AddKeyValuePair('device',xPLClient.Address.Tag);
-//      Body.AddKeyValuePair('frequence',IntToStr(30 * 60));                      // Start a 30mn timer
-//      xPLClient.Send(aMsg);
-//      Destroy;
-//   end;
-   xPLClient.SendMessage( K_MSG_TYPE_CMND, xPLClient.PrereqList.Values['timer'], 'control.basic',
-                          ['current','device','frequence'],['start',xPLClient.Address.Tag,IntToStr(30 * 60)]);
+   xPLClient.SendMessage( K_MSG_TYPE_CMND, xPLClient.PrereqList.Values['timer'], K_SCHEMA_TIMER_BASIC,
+                          ['action','device','frequence'],['start',xPLClient.Address.Tag,IntToStr(30 * 60)]);
 end;
 
 procedure TMyApplication.CommandGet(var aPageContent: widestring; ARequestInfo: TIdHTTPRequestInfo);
