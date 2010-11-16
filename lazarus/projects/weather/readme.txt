@@ -51,5 +51,8 @@ v 3.0
 	The app now put its working file (weather.xml) in the users temp directory
 	The app is now aware of proxy settings whenever present
 
-v 3.1
+v 3.1 November 2010
 	The app now use xPL Timer and xPL netget instead of self contained mechanisms
+	Updated the application to last xPL Timer schema (timer.basic instead of control.basic)
+	Sensor value can now be retrieved indepently via sensor.request schema (description, dew-point, felt-temp...),
+	see vendor file for detailed description
