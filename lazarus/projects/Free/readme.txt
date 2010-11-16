@@ -44,4 +44,7 @@ Todo :
 	Utiliser les nouvelles API : 
 	* API d’export de la liste des chaînes et des abonnements :
 	* API de télécommande virtuelle :
+	Récupérer le nom du NRA et l'adresse de l'installation qui sont disponibles dans la console de gestion
+		(celà permettrait d'identifier automatiquement la latitude / longitude par exemple).
+		
 	
