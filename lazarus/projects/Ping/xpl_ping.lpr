@@ -1,28 +1,20 @@
 program xpl_ping;
 
-{$mode objfpc}{$H+}
+{$i compiler.inc}
 
 uses
 
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  TConfiguratorUnit,
-  Forms , LResources,
-  MkPinger , frm_main, frm_about;  {HostEditorF}
-
+  app_main,
+  MkPinger;
 
 {$IFDEF WINDOWS}{$R xpl_ping.rc}{$ENDIF}
 
 begin
-  {$I xpl_ping.lrs}
-  Application.Title:='xpl ping';
-  Application.Initialize;
-  TConfiguratorUnit.doBasicConfiguration;
-  Application.CreateForm(TfrmMain, frmMain);
-  Application.CreateForm(TfrmAbout,frmAbout);
-  Application.Icon := frmMain.Icon;
-  Application.Run;
+  xPLApplication.Title:='xpl ping';
+  xPLApplication.Run;
+  xPLApplication.Free;
 end.
 
