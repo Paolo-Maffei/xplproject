@@ -95,10 +95,13 @@ v 1.6
 	Recompiled to be compatible with xpl message format saved by latest versions of xpl sender, xpl logger
 		* Message sent can also include {SYS::VARIABLE} parameters (please see xPL Sender readme file)
 	Vendor file updated to reflect these changes
+v 1.6.1
+    * Recompiled to use new config file format. Please delete previous file to avoid error at launch.
 
 Todo :
 	- Ajouter le calcul des changements d'heure
 	- Ajouter le chargement d'évènements quotidiens (éphémérides)
 	- Supprimer un timer initié par une application sur réception de hbeat.end de l'application ?
+	- Le plugin file de xpl timer ne reflete pas ses fonctionnalités sur le schema dawndusk
 
 

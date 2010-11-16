@@ -11,7 +11,7 @@ var  xPLApplication : TApplication;
      xPLClient      : TxPLWebListener;
 
 const
-     K_XPL_APP_VERSION_NUMBER = '1.6';
+     K_XPL_APP_VERSION_NUMBER = '1.6.1';
      K_DEFAULT_VENDOR         = 'clinique';
      K_DEFAULT_DEVICE         = 'timer';
      K_DEFAULT_PORT           = '8339';

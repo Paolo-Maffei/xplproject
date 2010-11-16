@@ -33,6 +33,8 @@ type
     MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem16: TMenuItem;
+    MenuItem17: TMenuItem;
+    MenuItem18: TMenuItem;
     mnuFireNowTimer: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -69,6 +71,8 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure lvEventsDblClick(Sender: TObject);
+    procedure MenuItem17Click(Sender: TObject);
+    procedure MenuItem18Click(Sender: TObject);
     procedure mnuEditEventClick(Sender: TObject);
     procedure mnuFireNowEventClick(Sender: TObject);
     procedure mnuDeleteEventClick(Sender: TObject);
@@ -105,8 +109,13 @@ uses Frm_About,
      uRegExpr,
      DateUtils,
      moon,
+     u_xml,
+     u_xml_config,
+     DOM,
      app_main,
-     frm_LogViewer;
+     frm_LogViewer,
+     frm_xplappslauncher,
+     frm_xPLActionList;
 
 {==============================================================================}
 const
@@ -151,11 +160,11 @@ begin
 end;
 
 procedure TfrmMain.acNewRecurringEventExecute(Sender: TObject);
-begin acNewEvent(TxPLRecurEvent.Create(aMessage));  end;
+begin acNewEvent(TxPLRecurEvent.Create); (*(aMessage)); *) end;
 
 procedure TfrmMain.acNewSingleEventExecute(Sender: TObject);
 begin
-   acNewEvent(TxPLSingleEvent.Create(aMessage));
+   acNewEvent(TxPLSingleEvent.Create); (*(aMessage)*) ;
 end;
 
 procedure TfrmMain.FormCreate(Sender: TObject);
@@ -166,8 +175,8 @@ begin
        OnxPLConfigDone    := @OnConfigDone;
        OnxPLReceived      := @OnReceive;
        OnReplaceArrayedTag := @ReplaceArrayedTag;
-       Config.AddItem(K_CONFIG_LATITUDE, K_XPL_CT_CONFIG);
-       Config.AddItem(K_CONFIG_LONGITUDE,K_XPL_CT_CONFIG);
+       Config.AddItem(K_CONFIG_LATITUDE, K_XPL_CT_CONFIG,'',K_RE_LATITUDE,1);
+       Config.AddItem(K_CONFIG_LONGITUDE,K_XPL_CT_CONFIG,'',K_RE_LONGITUDE,1);
    end;
    xPLClient.PassMyOwnMessages:=true;
    xPLClient.Listen;
@@ -181,6 +190,7 @@ begin
 end;
 
 procedure TfrmMain.OnConfigDone(const fConfig: TxPLConfig);
+var ListRoot : TDOMElement;
 begin
    if not assigned(aMessage) then begin
       aMessage := TxPLMessage.Create;
@@ -191,8 +201,10 @@ begin
    if not assigned(eventlist) then eventlist := TxPLEventList.Create(xPLClient, lvEvents);
    if not assigned(timerlist) then timerlist := TxPLTimerList.Create(xPLClient, lvTimers);
 
-   timerList.ReadFromXML(xPLClient.Config.XmlFile,'TimerList');
-   eventList.ReadFromXML(xPLClient.Config.XmlFile,'EventList');
+   ListRoot := xPLClient.Config.ConfigFile.LocalData.ElementByName['TimerList'];
+   if ListRoot<>nil then timerList.ReadFromXML(TXMLLocalsType.Create(ListRoot,'timers',K_XML_STR_Name));
+   ListRoot := xPLClient.Config.ConfigFile.LocalData.ElementByName['EventList'];
+   if ListRoot<>nil then eventList.ReadFromXML(TXMLLocalsType.Create(ListRoot,'events',K_XML_STR_Name));
 
    acNewSingleEvent.Enabled := true;
    acNewRecurringEvent.Enabled := true;
@@ -234,6 +246,7 @@ begin
 end;
 
 procedure TfrmMain.FormDestroy(Sender: TObject);
+var ListRoot : TDOMElement;
 begin
    if Assigned(Dawn) then EventList.Delete(Dawn);
    if Assigned(Dusk) then EventList.Delete(Dusk);
@@ -248,12 +261,14 @@ begin
    if Assigned(aMessage) then aMessage.Destroy;
 
    if Assigned(timerlist) then begin
-      timerlist.WriteToXML(xPLClient.Config.XmlFile,'TimerList');
+      ListRoot := xPLClient.Config.ConfigFile.LocalData.AddElement('TimerList');
+      timerlist.WriteToXML(TXMLLocalsType.Create(ListRoot,'timers',K_XML_STR_Name));
       timerlist.destroy;
    end;
 
    if Assigned(eventlist) then begin
-      eventlist.WriteToXML(xPLClient.Config.XmlFile,'EventList');
+      ListRoot := xPLClient.Config.ConfigFile.LocalData.AddElement('EventList');
+      eventlist.WriteToXML(TXMLLocalsType.Create(ListRoot,'events',K_XML_STR_Name));
       eventlist.destroy;
    end;
    if Assigned(xPLClient) then xPLClient.destroy;
@@ -343,6 +358,24 @@ end;
 procedure TFrmMain.lvEventsDblClick(Sender: TObject);
 begin
    if Assigned(lvEvents.Selected) then TxPLEvent(lvEvents.Selected.Data).Edit;
+end;
+
+procedure TfrmMain.MenuItem17Click(Sender: TObject);
+var ListRoot : TDOMElement;
+    eventslist : TXMLLocalsType;
+    event      : TDOMElement;
+begin
+  ListRoot := xPLClient.Config.ConfigFile.LocalData.ElementByName['EventList'];
+  eventslist := TXMLLocalsType.Create(ListRoot,'events',K_XML_STR_Name);
+  event := eventslist[0];
+  frmActionList.event := event;
+  frmActionList.ShowModal;
+
+end;
+
+procedure TfrmMain.MenuItem18Click(Sender: TObject);
+begin
+  frmAppLauncher.ShowModal;
 end;
 
 procedure TfrmMain.mnuFireNowEventClick(Sender: TObject);                            // FS#27 Ajout fonctionnalité Fire Now
