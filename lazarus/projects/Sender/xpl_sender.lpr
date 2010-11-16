@@ -16,9 +16,8 @@ uses
   frm_main,
   frm_about,
   frm_logviewer,
-  frm_xplappslauncher,
+  frm_xplappslauncher, xpl_win,
   uxPLMessage,
-  XPL,
   app_main,
   u_xml_plugins,
   u_xml_xplplugin, u_xpl_sender;
