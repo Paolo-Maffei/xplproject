@@ -2277,9 +2277,9 @@ object FrmMain: TFrmMain
     Height = 426
     Top = 29
     Width = 631
-    ActivePage = tsVendor
+    ActivePage = tsBasic
     Align = alClient
-    TabIndex = 2
+    TabIndex = 0
     TabOrder = 0
     OnPageChanged = PageControl1PageChanged
     object tsBasic: TTabSheet
@@ -2408,6 +2408,40 @@ object FrmMain: TFrmMain
         Caption = 'Port :'
         ParentColor = False
       end
+      object Label1: TLabel
+        Left = 8
+        Height = 16
+        Top = 203
+        Width = 50
+        Caption = 'Country :'
+        ParentColor = False
+      end
+      object Label2: TLabel
+        Left = 8
+        Height = 16
+        Top = 235
+        Width = 59
+        Caption = 'Language :'
+        ParentColor = False
+      end
+      object Label5: TLabel
+        Left = 8
+        Height = 16
+        Top = 267
+        Width = 70
+        Caption = 'Unit System :'
+        ParentColor = False
+      end
+      object Label13: TLabel
+        Left = 8
+        Height = 16
+        Top = 299
+        Width = 177
+        Caption = 'Root directory for xPL web apps  :'
+        Font.Color = clNavy
+        ParentColor = False
+        ParentFont = False
+      end
       object edtRootDir: TEdit
         Left = 8
         Height = 23
@@ -2464,6 +2498,54 @@ object FrmMain: TFrmMain
         Width = 64
         OnClick = e_ListenOnChange
         TabOrder = 4
+      end
+      object cbISO3166: TComboBox
+        Left = 84
+        Height = 23
+        Top = 203
+        Width = 172
+        ItemHeight = 15
+        OnChange = e_ListenOnChange
+        TabOrder = 5
+      end
+      object cbISO639: TComboBox
+        Left = 84
+        Height = 23
+        Top = 235
+        Width = 172
+        ItemHeight = 15
+        OnChange = e_ListenOnChange
+        TabOrder = 6
+      end
+      object cbMeasure: TComboBox
+        Left = 84
+        Height = 23
+        Top = 267
+        Width = 172
+        ItemHeight = 15
+        Items.Strings = (
+          'metric'
+          'us'
+        )
+        OnChange = e_ListenOnChange
+        TabOrder = 7
+      end
+      object edtWebDir: TEdit
+        Left = 8
+        Height = 23
+        Top = 323
+        Width = 384
+        OnChange = e_ListenOnChange
+        TabOrder = 8
+      end
+      object BtnShowDirSelect1: TButton
+        Left = 404
+        Height = 25
+        Top = 323
+        Width = 24
+        Caption = '...'
+        OnClick = BtnShowDirSelect1Click
+        TabOrder = 9
       end
     end
     object tsVendor: TTabSheet
@@ -2695,8 +2777,8 @@ object FrmMain: TFrmMain
     left = 488
   end
   object popPluginList: TPopupMenu
-    left = 525
-    top = 56
+    left = 472
+    top = 80
     object mnuSelectAll: TMenuItem
       Caption = 'Select All'
       OnClick = Select_Do

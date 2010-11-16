@@ -16,15 +16,24 @@ type
   TFrmMain = class(TForm)
     About: TAction;
     BtnShowDirSelect: TButton;
+    BtnShowDirSelect1: TButton;
+    cbISO639: TComboBox;
+    cbMeasure: TComboBox;
     cbLocations: TComboBox;
+    cbISO3166: TComboBox;
     edtHTTPPort: TEdit;
     edtHTTPProxy: TEdit;
     edtRootDir: TEdit;
+    edtWebDir: TEdit;
     IdDayTime1: TIdDayTime;
     InstalledApps: TAction;
+    Label1: TLabel;
     Label10: TLabel;
     Label11: TLabel;
     Label12: TLabel;
+    Label13: TLabel;
+    Label2: TLabel;
+    Label5: TLabel;
     Label9: TLabel;
     lvPlugins: TListView;
     MenuItem1: TMenuItem;
@@ -70,6 +79,7 @@ type
     tsBasic: TTabSheet;
     tsVendor: TTabSheet;
     procedure AboutExecute(Sender: TObject);
+    procedure BtnShowDirSelect1Click(Sender: TObject);
     procedure BtnShowDirSelectClick(Sender: TObject);
     procedure DownloadSelectedExecute(Sender: TObject);
     procedure e_ListenOnChange(Sender: TObject);
@@ -103,7 +113,9 @@ uses SysUtils,
      app_main,
      {$IFDEF unix}pwhostname, {$ENDIF}
      frm_about, 
-     uxPLConst, 
+     uxPLConst,
+     u_xml_iso_3166,
+     u_xml_iso_639,
      frm_logviewer, 
      frm_xplappslauncher, 
      frm_XMLView,
@@ -123,6 +135,9 @@ end;
 procedure TFrmMain.AboutExecute(Sender: TObject);
 begin FrmAbout.ShowModal; end;
 
+procedure TFrmMain.BtnShowDirSelect1Click(Sender: TObject);
+begin if SelectDirectoryDialog1.Execute then edtWebDir.Text := SelectDirectoryDialog1.FileName; end;
+
 procedure TFrmMain.QuitExecute(Sender: TObject);
 begin Close; end;
 
@@ -136,7 +151,10 @@ procedure TFrmMain.BtnShowDirSelectClick(Sender: TObject);
 begin if SelectDirectoryDialog1.Execute then edtRootDir.Text := SelectDirectoryDialog1.FileName; end;
 
 procedure TFrmMain.FormCreate(Sender: TObject);
-var i : integer;
+var i,max : integer;
+    s : string;
+    child3166 : TXMLISO3166Type;
+    child639 : TXMLISO639Type;
 begin
   xPLClient    := TxPLClient.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
   Self.Caption := xPLClient.AppName;
@@ -156,6 +174,29 @@ begin
   tbReloadClick(self);                                                             // Loads current active values stored in registry
   PageControl1.ActivePage := tsBasic;
   PageControl1PageChanged(self);
+
+  max := ISO3166File.Count;
+  for i:=0 to max-1 do begin
+      child3166 := ISO3166File[i];
+      cbISO3166.Items.Add(child3166.name);
+  end;
+
+  max := ISO639File.Count;
+  for i:=0 to max-1 do begin
+      child639 := ISO639File[i];
+      cbISO639.Items.Add(Child639.name);
+  end;
+
+  s := xPLClient.Settings.ReadKeyString(K_SET_COUNTRY);
+  child3166 := ISO3166File.ElementByName[s];
+  if child3166<>nil then cbISO3166.Text := child3166.name;
+
+  s := xPLClient.Settings.ReadKeyString(K_SET_LANGUAGE);
+  child639 := ISO639File.ElementByName[s];
+  if child639<>nil then cbISO639.Text := child639.name;
+
+  cbMeasure.Text := xPLClient.Settings.ReadKeyString(K_SET_UNITSYSTEM);
+  edtWebDir.Text := xPLClient.Settings.ReadKeyString(K_SET_WEBDIR);
 end;
 
 procedure TFrmMain.FormDestroy(Sender: TObject);
@@ -170,13 +211,9 @@ end;
 
 procedure TFrmMain.ViewXML(Sender: TObject);
 var s : string;
-//    plugin : TXMLxplPluginType;
 begin
    if lvPlugins.Selected = nil then exit;
    s := lvPlugins.Selected.Caption;
-//   plugin := TXMLxplpluginType.Create(s);
-//   if plugin.Valid then begin
-//   end else begin
    if s = 'xPL Schema Collection' then begin                                       // Handle this specific special case
       frmXMLView.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
       frmXMLView.Show;
@@ -184,7 +221,6 @@ begin
       frmPluginViewer.FilePath := xPLClient.PluginList.GetPluginFilePath(s);
       frmPluginViewer.Show;
    end;
-//   plugin.destroy;
 end;
 
 procedure TFrmMain.PageControl1PageChanged(Sender: TObject);
@@ -296,6 +332,8 @@ procedure TFrmMain.e_ListenOnChange(Sender: TObject);                           
 begin tbSave.Enabled:=True; end;                                                          // save button 'on'
 
 procedure TFrmMain.SaveSettingsExecute(Sender: TObject);
+var child3166 : TXMLISO3166Type;
+    child639  : TXMLISO639Type;
 begin
    with xPLClient.Settings do begin
         BroadCastAddress := e_BroadCast.text;
@@ -315,8 +353,18 @@ begin
 
         SharedConfigDir := edtRootDir.Text;
 
+        child3166 := ISO3166File[cbIso3166.ItemIndex];
+        if (child3166<>nil) then xPLClient.Settings.WriteKeyString(K_SET_COUNTRY,child3166.alpha_2_code);
+
+        child639 := ISO639File[cbIso639.ItemIndex];
+        if (child639<>nil) then xPLClient.Settings.WriteKeyString(K_SET_LANGUAGE,child639.iso_639_1_code);
+
+        xPLClient.Settings.WriteKeyString(K_SET_UNITSYSTEM,cbMeasure.Text);
+        xPLClient.Settings.WriteKeyString(K_SET_WEBDIR,edtWebDir.Text);
+
         xPLClient.LogWarn(COMMENT_LINE_1,[]);
         xPLClient.LogInfo(COMMENT_LINE_2,[]);
+
    end;
 end;
 
