@@ -23,6 +23,7 @@ Rev 298 : Modified to enable Linux support
         both to a hbeat request and a few seconds after to send it's own hbeat
         *** TODO : applications has up to 6 seconds to answer an HBeatRequest,
         *** the module should take this in account to decide that prereq are not met
+ 1.02 : Modifications due to uxPLConfig evolutions (usage of u_xml_config)
 }
 
 {$mode objfpc}{$H+}
@@ -95,11 +96,12 @@ type
         function  DoTTSBasic     (aMessage : TxPLMessage) : boolean;
         function  DoHBeatApp     (aMessage : TxPLMessage) : boolean;
         function  DoMediaBasic   (aMessage : TxPLMessage) : boolean;
-
+//        function AppDataNode: TDOMNode;
         procedure UDPRead(const aString : string);
 	procedure LogInfo(Const Formatting  : string; Const Data  : array of const ); override;            // Info are only stored in log file
         procedure Listen;
         procedure Dispose;
+
      end;
 
 implementation { ==============================================================}
@@ -114,14 +116,12 @@ begin
    SeeAll            := false;
    fPrereqList       := TStringList.Create;
    fConfig           := TxPLConfig.Create(self, bConfigNeeded);
-   Adresse.Instance  := fConfig.Instance;                                       // Instance name will be determined by configuration need or not
+   Adresse.Instance  := fConfig.ItemName[K_CONF_NEWCONF].Value;                         // Instance name will be determined by configuration need or not
    fFilterSet        := TxPLFilters.Create(fConfig);
 
    HBTimer    := TfpTimer.Create(nil);
       HBTimer.Interval    := NOHUB_HBEAT * 1000;
       HBTimer.OnTimer     := @TimerElapsed;
-//   HBReqTimer := TfpTimer.Create(nil);
-//      HBReqTimer.OnTimer  := @TimerElapsed;
 
    JoinedxPLNetwork := false;
    bDisposing := False;
@@ -135,7 +135,6 @@ begin
      fFilterSet.Destroy;
      IncomingSocket.Destroy;
      fConfig.Destroy;
-//     HBReqTimer.Destroy;
      HBTimer.Destroy;
 
      inherited destroy;
@@ -172,10 +171,9 @@ end;
 procedure TxPLListener.Listen;
 begin                                                       
    bDisposing := false;
-   Config.Load;
    fPrereqMet := not (fPrereqList.Count > 0);
-   if not Config.ConfigNeeded then begin
-      Adresse.Instance := fConfig.Instance;
+   if Config.IsValid then begin
+      Adresse.Instance := fConfig.ItemName[K_CONF_NEWCONF].Value;
       CallConfigDone;
    end;
    InitSocket;
@@ -197,10 +195,10 @@ end;
 
 procedure TxPLListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
-   aMessage.Format_HbeatApp(IntToStr(fConfig.HBInterval),aPort,aIP);
+   aMessage.Format_HbeatApp(fConfig.ItemName[K_CONF_INTERVAL].Value,aPort,aIP);
    aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION],
                                    [AppName            , fAppVersion]);
-   if Config.ConfigNeeded then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG;                     // Change Schema class in this case
+   if not Config.IsValid then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG;                     // Change Schema class in this case
    if bDisposing  then aMessage.Schema.Type_ := 'end';                                              // Change Schema type in this case
 end;
 
@@ -212,9 +210,8 @@ begin
 
    for i:=0 to IncomingSocket.Bindings.Count-1 do begin
        FinalizeHBeatMsg(aMessage,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
-       if Assigned(OnxPLHBeatPrepare) and (not Config.ConfigNeeded) then OnxPLHBeatPrepare(aMessage.Body);
+       if Assigned(OnxPLHBeatPrepare) and (Config.IsValid) then OnxPLHBeatPrepare(aMessage.Body);
        Send(aMessage);
-//       SendMessage(K_MSG_TYPE_STAT,K_ADDR_ANY_TARGET,aMessage.Schema.Tag,aMessage.Body.RawxPL);
    end;
    aMessage.Destroy;
 end;
@@ -222,21 +219,17 @@ end;
 
 procedure TxPLListener.TimerElapsed(Sender: TObject);
 begin
-//     if HBReqTimer.Enabled then HBReqTimer.Enabled := False;
-//   HBTimer.Enabled := false;
-
    if not JoinedxPLNetwork then begin                                                               // Initial probing
       inc(iNoHubTimerCount,NOHUB_HBEAT);                                                            // Still a high frequency ?
       if iNoHubTimerCount > NOHUB_TIMEOUT then ChangeTimerFrequency(NOHUB_LOWERFREQ * 1000);
    end else
       ChangeTimerFrequency(HBTimer.Tag);                                                            // Always restore initial Interval
 
-//   HBTimer.Enabled := true;
    SendHeartBeatMessage;
 end;
 
 procedure TxPLListener.HandleConfigMessage(aMessage: TxPLMessage);
-var i,j : integer;
+var i,j,k : integer;
     keys, values : Array of string;
 begin
   if aMessage.Header.MessageType <> K_MSG_TYPE_CMND then exit;
@@ -246,24 +239,35 @@ begin
      Source.Assign(Adresse);
      Target.IsGeneric := True;
      Body.ResetValues;
-     SetLength(keys, fConfig.Count);
-     SetLength(Values, fConfig.Count);
      case AnsiIndexStr(aMessage.Schema.Type_, ['current', 'list', 'response']) of
           0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
                  Schema.Tag := aMessage.Schema.Tag;
-                 for i := 0 to fConfig.Count-1 do
-                     for j:= 0 to fConfig[i].ValueCount -1 do begin
-                        Keys[i] := fConfig[i].Key;
-                        Values[i] := fConfig[i].Values[j];
+                 k := 0;
+                 for i := 0 to fConfig.Count-1 do begin
+                     if fConfig[i].Values.Count = 0 then begin
+                        inc(k);
+                        SetLength(keys,k);
+                        SetLength(values,k);
+                        Keys[k-1] := fConfig[i].Name;
+                     end else
+                     for j:= 0 to fConfig[i].Values.Count -1 do begin
+                        inc(k);
+                        SetLength(keys,k);
+                        SetLength(values,k);
+                        Keys[K-1] := fConfig[i].Name;
+                        Values[K-1] := fConfig[i].Values[j].Value;
                      end;
+                 end;
                  Body.AddKeyValuePairs(Keys,Values);
                  Send(ProcessedxPL);
               end;
           1 : begin                                                                                   // config.list message handling
+                SetLength(keys, fConfig.Count);
+                SetLength(Values, fConfig.Count);
                 Schema.Tag := aMessage.Schema.Tag;
                 for i := 0 to fConfig.Count-1 do begin
                     Keys[i] := fConfig[i].ConfigType;
-                    Values[i] := fConfig[i].Key + fConfig[i].MaxValueAsString;
+                    Values[i] := fConfig[i].Name + fConfig[i].MaxValueAsString;
                 end;
                 Body.AddKeyValuePairs(Keys,Values);
                 Send(ProcessedxPL);
@@ -272,11 +276,14 @@ begin
                 fConfig.ResetValues;
                 for i:= 0 to aMessage.Body.ItemCount-1 do
                     fConfig.SetItem( AnsiLowerCase(aMessage.Body.Keys[i]), aMessage.Body.Values[i]);  // Some configuration elements may need to be upper/lower sensitive
-                Adresse.Instance := fConfig.Instance;                                                 // Instance name may have changed
-                SendHeartBeatMessage;
-                fConfig.Save;
-                LogInfo(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]);
-                CallConfigDone;
+                if fConfig.IsValid then begin
+                  Adresse.Instance := fConfig.ItemName[K_CONF_NEWCONF].Value;                         // Instance name may have changed
+                  SendHeartBeatMessage;
+                  fConfig.Save;
+                  LogInfo(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]);
+                  CallConfigDone;
+
+                end else LogWarn('Bad config information received',[]);
               end;
      end;
      finally destroy;
@@ -293,8 +300,7 @@ begin
          if ( Schema.Classe = K_SCHEMA_CLASS_HBEAT ) and (Schema.Type_ = 'request') then ChangeTimerFrequency(Random(4000) + 2000); // Choose a random value between 2 and 6 seconds
          if ( Schema.Classe = K_SCHEMA_CLASS_CONFIG) then HandleConfigMessage(aMessage);
          if ( Adresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
-
-         if ( fFilterSet.MatchesFilters(aMessage) and not Config.ConfigNeeded ) and
+         if ( fFilterSet.MatchesFilters(aMessage) and Config.IsValid ) and
             (PassMyOwnMessages or not Adresse.Equals(Source))                                                     // 0.92 : to avoid handling of my self emitted messages
             then begin
                if not DoSensorRequest(aMessage) then                                                                  // process messages only once
@@ -322,7 +328,7 @@ begin
 
    JoinedxPLNetwork := true;
    iNoHubTimerCount := 0;
-   HBTimer.Interval := fConfig.HBInterval * 60000;
+   HBTimer.Interval := StrToInt(fConfig.ItemName[K_CONF_INTERVAL].Value) * 60000;
    HBTimer.Tag      := HBTimer.Interval;                                        // Store reference HBInterval to preserve it when handling Hbeat request
    if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet(true);
 

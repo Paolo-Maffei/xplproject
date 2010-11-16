@@ -7,12 +7,14 @@ unit uxPLEvent;
  ==============================================================================
  0.90 : Initial version
  0.91 : Modification to stick to timer.basic schema as described in xpl website
+ 0.92 : Removed inheritance from TComponent
+        Removed XMLCfg usage, use u_xml instead
 }
 
 interface
 
-uses Controls, ExtCtrls, Classes, XMLCfg, uxPLMessage, SunTime,
-     uxPLAddress, ComCtrls, uxPLListener, MOON;
+uses Controls, ExtCtrls, Classes,  uxPLMessage, SunTime,
+     uxPLAddress, ComCtrls, uxPLListener, MOON, DOM, u_xml_config;
 
 type
 
@@ -27,8 +29,8 @@ type
 
   public
       constructor Create(const aName : string; const aEnabled : boolean; const aNext : TDateTime);
-      function  WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string) : boolean; virtual;
-      procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); virtual; abstract;
+      function WriteToXML (const aCfgfile : TDOMElement) : boolean; virtual;
+      procedure ReadFromXML(const aCfgfile : TDOMElement); virtual; abstract;
 
       function    Edit  : boolean;                 virtual; abstract;
       procedure   Check(bAndFire : boolean =true); virtual;
@@ -54,8 +56,9 @@ type
      constructor Create(const aClient : TxPLListener; const aGrid : TListView);
      destructor  Destroy; override;
 
-     procedure WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string);
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string);
+     procedure WriteToXML (const aCfgfile : TXMLLocalsType);
+     procedure ReadFromXML(const aCfgfile : TXMLLocalsType);
+
      procedure Check(Sender: TObject);
      procedure ToGrid(const anItem : integer);
 
@@ -80,7 +83,7 @@ type
      procedure   Check(bAndFire : boolean =true);    override;
      procedure   Fire;                               override;
 
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
+     procedure ReadFromXML(const aCfgfile : TDOMElement); override;
   end;
 
   { TxPLSeasonEvent }
@@ -94,7 +97,7 @@ type
      function Edit : boolean; override;
      procedure Check(bAndFire : boolean =true);    override;
      procedure   Fire;                             override;
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
+     procedure ReadFromXML(const aCfgfile : TDOMElement); override;
   end;
 
 
@@ -105,22 +108,22 @@ type
 
      fSingleEvent   : boolean;
      fxPLMessage    : TxPLMessage;
-     fMessageToFire : string;
+//     fMessageToFire : string;
      fDescription   : widestring;
 
 
   public
-     constructor Create(const aMsg : TxPLMessage);
-     constructor Create(const aMsg : TxPLMessage; const aName: string; const bEnabled : boolean; const dtNext : TDateTime);
+     constructor Create; //(const aMsg : TxPLMessage);
+     constructor Create(const aName: string; const bEnabled : boolean; const dtNext : TDateTime);
 
-     function  WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string) : boolean; override;
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
+     function WriteToXML (const aCfgfile : TDOMElement) : boolean; override;
+     procedure ReadFromXML(const aCfgfile : TDOMElement); override;
 
      function    Edit  : boolean;                 override;
      procedure   Fire;                            override;
 
   published
-     property MessageToFire : string read fMessageToFire write fMessageToFire;
+     property MessageToFire : TxPLMessage read fxPLMessage write fxPLMessage;
      property IsSingleEvent : boolean read fSingleEvent;
 
      property Description   : widestring read fDescription write fDescription;
@@ -145,7 +148,7 @@ type
      procedure SetRecurrence (const aRecurr: string);
 
   public
-     constructor Create(const aMsg : TxPLMessage);
+     constructor Create; //(const aMsg : TxPLMessage);
      property RecurrenceAsString : string read Getrecurrence write SetRecurrence;
      property StartInDay     : TTime   read fStartInDay write fStartInDay;
      property StopInDay      : TTime   read fStopInDay write fStopInDay;
@@ -155,8 +158,9 @@ type
      property RecurrenceType : TxPLEventRecurrenceType read fRecurrenceType write fRecurrenceType;
      property WeekMap        : string read fWeekMap write fWeekMap;
 
-     function WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string) : boolean; override;
-     procedure ReadFromXML(const aCfgfile : TXmlConfig; const aRootPath : string); override;
+//     function WriteToXML (const aCfgfile : TXmlConfig; const aRootPath : string) : boolean; override;
+     function WriteToXML (const aCfgfile : TDOMElement) : boolean; override;
+     procedure ReadFromXML(const aCfgfile : TDOMElement); override;
      function    Edit : boolean;                  override;
      procedure   Check(bAndFire : boolean =true); override;
   end;
@@ -174,7 +178,7 @@ begin
    fNextExecution := aNext;
 end;
 
-function TxPLEvent.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string): boolean;
+function TxPLEvent.WriteToXML (const aCfgfile : TDOMElement) : boolean;
 begin result :=  false; end;
 
 procedure TxPLEvent.Check(bAndFire: boolean);
@@ -216,26 +220,45 @@ begin
    inherited;
 end;
 
-procedure TxPLEventList.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLEventList.WriteToXML(const aCfgfile: TXMLLocalsType);
 var i, evCount : integer;
+    elmt : TDOMElement;
 begin
-   evCount := 0;
-   for i:=0 to Count -1 do
-      if Events[i].WriteToXML(aCfgFile, aRootPath + '/Event_' + intToStr(evCount)) then inc(evCount);
-   aCfgfile.SetValue(aRootPath + '/EventCount', intToStr(evCount));
+   for i:=0 to Count-1 do begin
+        elmt := aCfgFile.AddElement(TxPLEvent(Objects[i]).Name);
+        TxPLEvent(Objects[i]).WriteToXML(elmt);
+   end;
 end;
 
-procedure TxPLEventList.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLEventList.ReadFromXML(const aCfgfile : TXMLLocalsType);
 var i : integer;
     anEvent : TxPLSingleEvent;
     aRecur  : TxPLRecurEvent;
 begin
-   self.Clear;
+//   self.Clear;
+//
+//   i := StrToInt(aCfgfile.GetValue(aRootPath + '/EventCount','0')) -1;
+   //while i>=0 do begin
+   //
+   //   anEvent.ReadFromXML(aCfgfile, aRootPath + '/Event_' + intToStr(i));
+   //   if anEvent.IsSingleEvent then
+   //      if anEvent.Over then
+   //         anEvent.Destroy
+   //      else
+   //         Objects[Add(anEvent.Name)] := anEvent
+   //   else begin
+   //      anEvent.Destroy;
+   //      aRecur := TXPLRecurEvent.Create(aMessage);
+   //      aRecur.ReadFromXML(aCfgfile, aRootPath + '/Event_' + intToStr(i));
+   //      Objects[Add(aRecur.Name)] := aRecur;
+   //   end;
+   //   dec(i);
+   //end;
 
-   i := StrToInt(aCfgfile.GetValue(aRootPath + '/EventCount','0')) -1;
-   while i>=0 do begin
-      anEvent := TxPLSingleEvent.Create(aMessage);
-      anEvent.ReadFromXML(aCfgfile, aRootPath + '/Event_' + intToStr(i));
+   self.Clear;
+   for i:=0 to aCfgFile.Count-1 do begin
+      anEvent := TxPLSingleEvent.Create; //(aMessage);
+      anEvent.ReadFromXML(aCfgFile[i]);
       if anEvent.IsSingleEvent then
          if anEvent.Over then
             anEvent.Destroy
@@ -243,11 +266,10 @@ begin
             Objects[Add(anEvent.Name)] := anEvent
       else begin
          anEvent.Destroy;
-         aRecur := TXPLRecurEvent.Create(aMessage);
-         aRecur.ReadFromXML(aCfgfile, aRootPath + '/Event_' + intToStr(i));
+         aRecur := TXPLRecurEvent.Create; //(aMessage);
+         aRecur.ReadFromXML(aCfgfile[i]);
          Objects[Add(aRecur.Name)] := aRecur;
       end;
-      dec(i);
    end;
 end;
 
@@ -311,12 +333,12 @@ begin
 end;
 
 { TxPLSingleEvent ========================================================================}
-constructor TxPLSingleEvent.Create(const aMsg : TxPLMessage; const aName: string; const bEnabled : boolean; const dtNext : TDateTime);
+constructor TxPLSingleEvent.Create(const aName: string; const bEnabled : boolean; const dtNext : TDateTime);
 begin
    inherited Create(aName, bEnabled, dtNext);
    fSingleEvent   := True;
    fEventType     := 'Single';
-   fxPLMessage    := aMsg;
+//   fxPLMessage    := aMsg;
    fDescription   := '';
 end;
 
@@ -354,7 +376,7 @@ begin
    xPLClient.SendMessage(K_MSG_TYPE_TRIG, K_MSG_TARGET_ANY, K_SCHEMA_TIMER_BASIC,['season'],[Name]);
 end;
 
-procedure TxPLSeasonEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLSeasonEvent.ReadFromXML(const aCfgfile : TDOMElement);
 begin { DO NOTHING } end;
 
 function TxPLSeasonEvent.GetNextOccurence : TDateTime;
@@ -368,9 +390,9 @@ begin
    end;
 end;
 
-constructor TxPLSingleEvent.Create(const aMsg : TxPLMessage);
+constructor TxPLSingleEvent.Create; //(const aMsg : TxPLMessage);
 begin
-   Create(aMsg, '', true, now);
+   Create('', true, now);
 end;
 
 function TxPLSingleEvent.Edit: boolean;
@@ -382,44 +404,51 @@ begin
 end;
 
 procedure TxPLSingleEvent.Fire;
-var aMessage : TxPLMessage;
+//var aMessage : TxPLMessage;
 begin
-     if MessageToFire='' then with fxPLMessage do begin
-         MessageType := K_MSG_TYPE_TRIG;
-         Target.IsGeneric := True;
-         Body.ResetValues;
-         Body.AddKeyValuePairs(['device','current'],[fName,'fired']);
+//     if MessageToFire='' then with fxPLMessage do begin
+     if not Assigned(fxPLMessage) then
+        xPLClient.SendMessage(K_MSG_TYPE_TRIG,'*',K_SCHEMA_TIMER_BASIC,['device','current'],[fName,'fired'])
+//         MessageType := K_MSG_TYPE_TRIG;
+//         Target.IsGeneric := True;
+//         Body.ResetValues;
+//         Body.AddKeyValuePairs(['device','current'],[fName,'fired']);
 //         Format_SensorBasic(fName,'generic','fired');
-         Schema.Tag := K_SCHEMA_TIMER_BASIC;
-         xPLClient.Send(fxPLMessage);
-     end else begin
-         aMessage:=TxPLMessage.Create(MessageToFire);
-         aMessage.Source.Assign(fxPLMessage.Source);
-         xPLClient.Send(aMessage);
-         aMessage.Destroy ;
-     end;
+//         Schema.Tag := K_SCHEMA_TIMER_BASIC;
+//         xPLClient.Send(fxPLMessage);
+     else //begin
+//         aMessage:=TxPLMessage.Create(MessageToFire);
+//         aMessage.Source.Assign(fxPLMessage.Source);
+//         xPLClient.Send(aMessage);
+//         aMessage.Destroy ;
+           xPLClient.Send(fxPLMessage);
+//     end;
 end;
 
-function TxPLSingleEvent.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string) : boolean;
+function TxPLSingleEvent.WriteToXML (const aCfgfile : TDOMElement) : boolean;
+var s : string;
 begin
-   aCfgFile.SetValue(aRootPath + '/Name'     , Name);
-   aCfgFile.SetValue(aRootPath + '/Next'     , DateTimeToStr(Next));
-   aCfgFile.SetValue(aRootPath + '/Enabled'  , Enabled);
-   aCfgFile.SetValue(aRootPath + '/IsSingle' , IsSingleEvent);
-   aCfgFile.SetValue(aRootPath + '/MsgToFire' , fMessageToFire);
-   aCfgFile.SetValue(aRootPath + '/Description' , fDescription);
-
+   aCfgFile.SetAttribute('name'     , Name);
+   aCfgFile.SetAttribute('next'     , DateTimeToStr(Next));
+   aCfgFile.SetAttribute('enabled'  , EnabledAsString);
+   aCfgFile.SetAttribute('issingle' , Ifthen(IsSingleEvent,'Yes','No'));
+   s := '';
+   If fxPLMessage<>nil then s:=fxPLMessage.RawxPL;
+   aCfgFile.SetAttribute('msgtofire' , s);
+   aCfgFile.SetAttribute('description' , fDescription);
    result := true;
 end;
 
-procedure TxPLSingleEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLSingleEvent.ReadFromXML(const aCfgfile : TDOMElement);
+var s : string;
 begin
-   Name         := aCfgFile.GetValue(aRootPath + '/Name', '');
-   Next         := StrToDateTime(aCfgFile.GetValue(aRootPath + '/Next', ''));
-   Enabled      := aCfgFile.GetValue(aRootPath + '/Enabled', false);
-   fSingleEvent := aCfgFile.GetValue(aRootPath + '/IsSingle', true);
-   fMessageToFire := aCfgFile.GetValue(aRootPath + '/MsgToFire', '');
-   fDescription := aCfgFile.GetValue(aRootPath + '/Description', '');
+   Name         := aCfgFile.GetAttribute('name');
+   Next         := StrToDateTime(aCfgFile.GetAttribute('next'));
+   Enabled      := (aCfgFile.GetAttribute('enabled')='Yes');
+   fSingleEvent := (aCfgFile.GetAttribute('issingle')='Yes');
+   s := aCfgFile.GetAttribute('msgtofire');
+   if s<>'' then fxPLMessage := TxPLMessage.Create(s);
+   fDescription := aCfgFile.GetAttribute('description');
    Check(false);                                                                          // This is done to recalc the event when loaded without firing it
 end;
 
@@ -454,7 +483,7 @@ begin
    xPLClient.Send(fMessage);
 end;
 
-procedure TxPLSunEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLSunEvent.ReadFromXML(const aCfgfile : TDOMElement);
 begin { DO NOTHING } end;
 
 constructor TxPLSunEvent.Create(const aSource : TxPLAddress; const aSunTime : TSunTime; const aType : TxPLSunEventType);
@@ -505,9 +534,9 @@ end;
 function TxPLSunEvent.Edit: boolean;
 begin result := false; end;                                                               // No edition possible on it
 
-constructor TxPLRecurEvent.Create(const aMsg : TxPLMessage);
+constructor TxPLRecurEvent.Create; //(const aMsg : TxPLMessage);
 begin
-     inherited Create(aMsg);
+     inherited Create;
      fRecurrenceType := er_Daily;
      fStartInDay := now;
      fStopInDay  := IncMinute(fStartInDay,60);
@@ -603,31 +632,31 @@ begin
    if aRecurr = 'Weekly' then fRecurrenceType := er_Weekly;
 end;
 
-
-function TxPLRecurEvent.WriteToXML(const aCfgfile: TXmlConfig; const aRootPath: string) : boolean;
+function TxPLRecurEvent.WriteToXML (const aCfgfile : TDOMElement) : boolean;
 begin
-  inherited WriteToXML(aCfgfile, aRootPath);
-  aCfgFile.SetValue(aRootPath + '/Recurrence'    , RecurrenceAsString);
-  aCfgFile.SetValue(aRootPath + '/StartInDay'    , DateTimeToStr(fStartInDay));
-  aCfgFile.SetValue(aRootPath + '/StopInDay'     , DateTimeToStr(fStopInDay));
-  aCfgFile.SetValue(aRootPath + '/Random'        , fRandom);
-  aCfgFile.SetValue(aRootPath + '/Interval'      , fInterval);
-  aCfgFile.SetValue(aRootPath + '/DayRecurrence' , fDayRecurrence);
-  aCfgFile.SetValue(aRootPath + '/WeekMap'       , fWeekMap);
+  inherited WriteToXML(aCfgfile);
+
+  aCfgFile.SetAttribute('recurrence'    , RecurrenceAsString);
+  aCfgFile.SetAttribute('startinday'    , DateTimeToStr(fStartInDay));
+  aCfgFile.SetAttribute('stopinday'     , DateTimeToStr(fStopInDay));
+  aCfgFile.SetAttribute('random'        , IntToStr(fRandom));
+  aCfgFile.SetAttribute('interval'      , IntToStr(fInterval));
+  aCfgFile.SetAttribute('dayrecurrence' , IntToStr(fDayRecurrence));
+  aCfgFile.SetAttribute('weekmap'       , fWeekMap);
 
   Result :=  true;
 end;
 
-procedure TxPLRecurEvent.ReadFromXML(const aCfgfile: TXmlConfig; const aRootPath: string);
+procedure TxPLRecurEvent.ReadFromXML(const aCfgfile : TDOMElement);
 begin
-  RecurrenceAsString := aCfgFile.GetValue(aRootPath + '/Recurrence', '');
-  fStartInDay        := StrToDateTime(aCfgFile.GetValue(aRootPath + '/StartInDay', ''));
-  fStopInDay         := StrToDateTime(aCfgFile.GetValue(aRootPath + '/StopInDay', ''));
-  fRandom            := aCfgFile.GetValue(aRootPath + '/Random', 0);
-  fInterval          := aCfgFile.GetValue(aRootPath + '/Interval', 0);
-  fDayRecurrence     := aCfgFile.GetValue(aRootPath + '/DayRecurrence', 0);
-  fWeekMap           := aCfgFile.GetValue(aRootPath + '/WeekMap','1111111');
-  inherited ReadFromXML(aCfgfile, aRootPath);
+  RecurrenceAsString := aCfgFile.GetAttribute('recurrence');
+  fStartInDay        := StrToDateTime(aCfgFile.GetAttribute('startinday'));
+  fStopInDay         := StrToDateTime(aCfgFile.GetAttribute('stopinday'));
+  fRandom            := StrToInt(aCfgFile.GetAttribute('random'));
+  fInterval          := StrToInt(aCfgFile.GetAttribute('interval'));
+  fDayRecurrence     := StrToInt(aCfgFile.GetAttribute('dayrecurrence'));
+  fWeekMap           := aCfgFile.GetAttribute('weekmap');
+  inherited ReadFromXML(aCfgfile);
 end;
 
 end.

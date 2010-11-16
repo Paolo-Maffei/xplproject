@@ -114,12 +114,9 @@ end;
 
 procedure TxPLSender.SendMessage(const aMsgType: tsMsgType; const aDest, aSchema: string; const Keys, Values: array of string);
 var aMsg : TxPLMessage;
-//    i : integer;
 begin
    aMsg := PrepareMessage(aMsgType, aSchema, aDest);
    aMsg.Body.AddKeyValuePairs(Keys,Values);
-//   for i := low(Keys) to High(Keys) do
-//       aMsg.Body.AddKeyValuePair(Keys[i],Values[i]);
    Send(aMsg);
    aMsg.Destroy;
 end;

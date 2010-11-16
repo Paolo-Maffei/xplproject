@@ -121,7 +121,7 @@ resourcestring
 
 procedure Register;
 begin
-	RegisterComponents('Clinique', [TMStringGrid]);
+	RegisterComponents('xPL Components', [TMStringGrid]);
 end;
 
 function TMStringGrid.AppendMenu(aCaption : string; aProc : TNotifyEvent ) : TMenuItem;

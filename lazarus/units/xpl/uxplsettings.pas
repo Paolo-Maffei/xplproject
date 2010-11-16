@@ -27,7 +27,11 @@ interface
 
 uses  Registry,Classes;
 
-type  TxPLSettings = class
+type
+
+{ TxPLSettings }
+
+TxPLSettings = class
       private
         fRegistry : TRegistry;
 
@@ -50,10 +54,8 @@ type  TxPLSettings = class
         procedure SetListenToLocal    (const bValue : boolean); inline;
         procedure SetListenToAny      (const bValue : boolean); inline;
 
-        function  ReadKeyString (const aKeyName : string; const aDefault : string = '') : string;
         procedure SetRootxPLDir (const AValue: string);
         procedure SetUseProxy   (const AValue: boolean);
-        procedure WriteKeyString(const aKeyName : string; const aValue : string);
 
         function  ComposeCorrectPath(const aPath : string; const uSub : string) : string;
      public
@@ -78,8 +80,11 @@ type  TxPLSettings = class
 
         function GetxPLAppList : TStringList;
 
-        procedure GetAppDetail(const aVendor : string; const aDevice : string; out aPath : string; out aVersion : string);
-        procedure SetAppDetail(const aVendor : string; const aDevice : string; const aVersion: string);
+        procedure GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion : string);
+        procedure SetAppDetail(const aVendor, aDevice, aVersion: string);
+
+        function  ReadKeyString (const aKeyName : string; const aDefault : string = '') : string;
+        procedure WriteKeyString(const aKeyName : string; const aValue : string);
 
         class procedure EnsureDirectoryExists(const aDirectoryName : string);
      end;
@@ -224,7 +229,6 @@ begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ; end;
 function TxPLSettings.ComposeCorrectPath(const aPath: string; const uSub: string ): string;
 begin
      result := PathInclSuffix(aPath);
-//     PathEnsureSuffix(result);
      result += uSub;
      PathEnsureSuffix(result);
 end;
@@ -266,7 +270,7 @@ begin
    aAppListe.Destroy;
 end;
 
-procedure TxPLSettings.GetAppDetail(const aVendor : string; const aDevice : string; out aPath: string; out aVersion: string);
+procedure TxPLSettings.GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion: string);
 begin
    fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                             // Redondant but mandatory for reg.xml compatibility
    fRegistry.OpenKey (K_XPL_ROOT_KEY, False);
@@ -276,13 +280,14 @@ begin
    aPath    := fRegistry.ReadString(K_XPL_REG_PATH_KEY);
 end;
 
-procedure TxPLSettings.SetAppDetail(const aVendor : string; const aDevice : string; const aVersion: string);
+procedure TxPLSettings.SetAppDetail(const aVendor, aDevice, aVersion: string);
 begin
    fRegistry.RootKey := HKEY_LOCAL_MACHINE;                                             // Redondant but mandatory for reg.xml compatibility
    fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);
    fRegistry.WriteString(K_XPL_REG_VERSION_KEY,aVersion);
    fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0))
 end;
+
 
 end.
 

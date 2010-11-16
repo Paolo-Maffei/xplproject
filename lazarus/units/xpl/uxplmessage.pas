@@ -42,6 +42,7 @@ type
         fBody     : TxPLMsgBody;
         fName     : string;
         fDescription : string;
+        fExecuteOrder : integer;
 
         function GetRawXPL: string;
         procedure SetRawXPL(const AValue: string);
@@ -55,6 +56,7 @@ type
         property Schema      : TxPLSchema        read fHeader.fSchema  write fHeader.fSchema  ;
         property Name        : string            read fName            write fName            ;
         property Description : string            read fDescription     write fDescription     ;
+        property ExecuteOrder : integer          read fExecuteOrder    write fExecuteOrder    ;
 
 
         procedure ResetValues;
@@ -216,25 +218,23 @@ end;
 
 procedure TxPLMessage.WriteToXML(const aCom: TXMLxplActionType);
 begin
-   aCom.Display_Name:=Description;
-   aCom.ExecuteOrder:=Name;
+   aCom.Display_Name := Name;
+   aCom.ExecuteOrder := IntToStr(fExecuteOrder);
    Header.WriteToXML(aCom);
    Body.WriteToXML(aCom);
 end;
 
 procedure TxPLMessage.ReadFromXML(const aCom : TXMLActionsType);
-//var action :TXMLxplActionType;
 begin
    if aCom.Count<=0 then exit;
-//   action := aCom.Element[0];
    ReadFromXML(aCom.Element[0]);
 end;
 
 procedure TxPLMessage.ReadFromXML(const aCom: TXMLxplActionType);
 begin
    self.ResetValues;
-   Description := aCom.Display_Name;
-   Name := aCom.ExecuteOrder;
+   ExecuteOrder:= StrToIntDef(aCom.ExecuteOrder,0);
+   Name := aCom.Display_Name;
    Header.ReadFromXML(aCom);
    Body.ReadFromXML(aCom);
 end;
@@ -255,8 +255,6 @@ begin
    Target.IsGeneric := True;
    Body.AddKeyValuePairs( [K_HBEAT_ME_INTERVAL, K_HBEAT_ME_PORT, K_HBEAT_ME_REMOTEIP],
                           [aInterval,           aPort,           aIP]);
-//   Body.AddKeyValuePair(K_HBEAT_ME_PORT    ,aPort);
-//   Body.AddKeyValuePair(K_HBEAT_ME_REMOTEIP,aIP);
 end;
 
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
@@ -265,8 +263,6 @@ begin
    Schema.Tag := K_SCHEMA_SENSOR_BASIC;
    Body.AddKeyValuePairs( ['device' , 'type' , 'current'],
                           [aDevice  , aType  ,  aCurrent]);
-//   Body.AddKeyValuePair(   ,);
-//   Body.AddKeyValuePair(,);
 end;
 
 end.

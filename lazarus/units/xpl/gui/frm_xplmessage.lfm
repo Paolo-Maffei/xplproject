@@ -47,11 +47,11 @@ object frmxPLMessage: TfrmxPLMessage
     end
     object TabSheet2: TTabSheet
       Caption = 'Raw'
-      ClientHeight = 279
+      ClientHeight = 241
       ClientWidth = 423
       object KHexEditor1: TKHexEditor
         Left = 0
-        Height = 279
+        Height = 241
         Top = 0
         Width = 423
         AddressMode = eamDec
@@ -70,7 +70,7 @@ object frmxPLMessage: TfrmxPLMessage
     end
     object TabSheet3: TTabSheet
       Caption = 'Elements'
-      ClientHeight = 279
+      ClientHeight = 241
       ClientWidth = 423
       object Label1: TLabel
         Left = 7
@@ -173,6 +173,7 @@ object frmxPLMessage: TfrmxPLMessage
         ParentColor = False
         ParentFont = False
         TabOrder = 3
+        BookMarkOptions.OnChange = nil
         Gutter.Width = 12
         Gutter.MouseActions = <        
           item

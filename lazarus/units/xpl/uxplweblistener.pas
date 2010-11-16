@@ -9,6 +9,7 @@ unit uxPLWebListener;
          without the need to restart the app
   0.94 : Changed to create ReplaceTag and ReplaceArrayedTag
   0.95 : Changes made since move of schema from Body to Header
+  0.96 : Added /data path to web server
 }
 
 {$mode objfpc}{$H+}
@@ -19,7 +20,6 @@ uses uxPLListener,Classes, SysUtils, IdGlobal, uxPLMessage,
      IdHTTPServer, IdContext,IdCustomHTTPServer;
 
 type
-      //TWebCommandGet = procedure(var aPageContent : widestring; aParam, aValue : string) of object;
       TWebCommandGet = procedure(var aPageContent : widestring; ARequestInfo: TIdHTTPRequestInfo) of object;
       TWebCallReplaceTag       = function(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean of object;
       TWebCallReplaceArrayedTag= function(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean of object;
@@ -28,7 +28,6 @@ type
 
       TxPLWebListener = class(TxPLListener)
       protected
-         //fOnCommandGet : TxPLWebCommandGet;
 
       private
          fWebServer : TIdHTTPServer;
@@ -45,7 +44,6 @@ type
          constructor create(aVendor, aDevice, aAppVersion, aDefaultPort : string);
          destructor destroy; override;
          procedure CallConfigDone; override;
-//         procedure FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string); override;
          procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); override;
          procedure HBeatApp(const axPLMsg : TxPLMessage);
 
@@ -55,17 +53,29 @@ type
 
          // HTML flow handling utilities
          function StringListToHtml(aSList : TStrings) : widestring;
-         //procedure HtmlReplaceVar(aVarNames : array of string;aValues : array of string; var aPage : widestring);
 
 implementation  { ==============================================================}
 uses IdStack, cRandom,  cStrings, StrUtils, uRegExpr, uxPLConst,
-     cUtils;
+     cUtils, XMLWrite;
 
 { Utility functions ============================================================}
 
 function StringListToHtml(aSList : TStrings) : widestring;
 begin
      result := StrReplace(#13#10,'<br>',aSList.Text,false);
+end;
+
+function StreamToString(Stream : TStream) : String;
+var ms : TMemoryStream;
+begin
+  Result := '';
+  ms := TMemoryStream.Create;
+  try
+    ms.LoadFromStream(Stream);
+    SetString(Result,PChar(ms.memory),ms.Size);
+  finally
+    ms.free;
+  end;
 end;
 { TxPLWebListener ==============================================================}
 const
@@ -90,12 +100,12 @@ begin
 
      with fWebServer.Bindings.Add do begin
           IP:=K_IP_LOCALHOST;
-          Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
+          Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Values[0].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
      if Settings.ListenOnAddress<>K_IP_LOCALHOST then with fWebServer.Bindings.Add do begin
           IP:=Settings.ListenOnAddress;
-          Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Value,K_IP_DEFAULT_WEB_PORT);
+          Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Values[0].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
      LogInfo(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]);
@@ -111,7 +121,7 @@ begin
      end;
 
      fWebServer.OnCommandGet:=@DoCommandGet;
-     fHtmlDir := Config.ItemName[K_CONFIG_LIB_SERVER_ROOT].Value;
+     fHtmlDir := Config.ItemName[K_CONFIG_LIB_SERVER_ROOT].Values[0].Value;
 
      LogInfo(K_WEB_MSG_ROOT_DIR,[fHtmlDir]);
 end;
@@ -122,6 +132,7 @@ var LFilename: string;
     s  : widestring;
     aParam,aValue : string;
     RegExpr : TRegExpr;
+    Page : TMemoryStream;
 
 function LoadAFile(aFileName : string) : widestring;
 var sl : tstringlist;
@@ -159,7 +170,7 @@ begin
    else if aVariable = 'devicename' then ReplaceString := Device
    else if aVariable = 'appversion'   then ReplaceString := AppVersion
    else if aVariable = 'hubstatus'    then ReplaceString := Format(K_MSG_HUB_FOUND,[IfThen(JoinedxPLNetWork,'','not')])
-   else if aVariable = 'configstatus' then ReplaceString := Format(K_MSG_CONFIGURED,[IfThen(Config.ConfigNeeded,'pending','done')]);
+   else if aVariable = 'configstatus' then ReplaceString := Format(K_MSG_CONFIGURED,[IfThen(Config.IsValid,'done','pending')]);
    result := ReplaceString<>'';
 end;
 
@@ -294,6 +305,12 @@ end;
 begin
    LFilename := ARequestInfo.Document;
    if LFilename = '/' then LFilename := '/' + self.Address.Device + '/index.html';           // If no filename specified, we search one based on our own app name
+   if LFilename = '/data' then begin                                                       // Handle special case
+      Page := TMemoryStream.Create;
+      WriteXML(Config.ConfigFile.Document,Page);
+      aResponseInfo.ContentText := StreamToString(Page);
+      Page.Destroy;
+   end else begin
    LPathname := HtmlDir + LFilename;
    if FileExists(LPathName) then begin
       if ExtractFileExt(LFileName)='.html' then begin
@@ -321,6 +338,7 @@ begin
       AResponseInfo.ResponseNo := 404;
       AResponseInfo.ContentText := Format(K_WEB_ERR_404,[LPathName]);
    end;
+   end;
 end;
 
 procedure TxPLWebListener.HBeatApp(const axPLMsg: TxPLMessage);
@@ -338,19 +356,14 @@ end;
 procedure TxPLWebListener.CallConfigDone;
 begin
   InitWebServer;
-//   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST+#10'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
-//   SendMessage(K_MSG_TYPE_CMND,'*',K_SCHEMA_HBEAT_REQUEST,'{'#10'command=request'#10'}'#10); // Issue a general Hbeat request to enhance other web app discovery
    SendHBeatRequestMsg;
    inherited CallConfigDone;
 end;
 
-//procedure TxPLWebListener.FinalizeHBeatMsg(const aBody  : TxPLMsgBody; const aPort : string; const aIP : string);
 procedure TxPLWebListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
-//   inherited FinalizeHBeatMsg(aBody,aPort,aIP);
    inherited;
-//   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aBody.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
-   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Value<>'' then aMessage.Body.AddKeyValuePair(K_HBEAT_ME_WEB_PORT,Config.ItemName[K_HBEAT_ME_WEB_PORT].Value);
+   if Config.ItemName[K_HBEAT_ME_WEB_PORT].Values[0].Value<>'' then aMessage.Body.AddKeyValuePairs([K_HBEAT_ME_WEB_PORT],[Config.ItemName[K_HBEAT_ME_WEB_PORT].Values[0].Value]);
 end;
 
 constructor TxPLWebListener.create(aVendor, aDevice, aAppVersion, aDefaultPort: string);
@@ -358,8 +371,8 @@ begin
    inherited Create(aVendor,aDevice,aAppVersion);
    fDiscovered := TStringList.Create;
    fDiscovered.Duplicates := dupIgnore;
-   Config.AddItem(K_HBEAT_ME_WEB_PORT,K_XPL_CT_CONFIG,aDefaultPort);
-   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,K_XPL_CT_CONFIG,ExtractFilePath(ParamStr(0)) + 'html');
+   Config.AddItem(K_HBEAT_ME_WEB_PORT     ,K_XPL_CT_CONFIG,'',K_RE_PORTNUMBER,1,aDefaultPort);
+   Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,K_XPL_CT_CONFIG,'',K_RE_DIRECTORY, 1,'');
    OnxPLHBeatApp := @HBeatApp;
    LogInfo(K_MSG_LISTENER_STARTED,[AppName,aAppVersion]);
 end;
