@@ -14,7 +14,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <CurrentVersionNr Value="1"/>
-      <CurrentBuildNr Value="2508"/>
+      <CurrentBuildNr Value="2515"/>
       <ProjectVersion Value="1.0.0.1"/>
     </VersionInfo>
     <PublishOptions>
@@ -31,8 +31,7 @@
     </RunParams>
     <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="XPL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="xpl_win"/>
       </Item1>
       <Item2>
         <PackageName Value="indylaz"/>
@@ -41,14 +40,14 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="144">
+    <Units Count="146">
       <Unit0>
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_sender"/>
-        <CursorPos X="1" Y="44"/>
-        <TopLine Value="13"/>
-        <EditorIndex Value="6"/>
+        <CursorPos X="40" Y="25"/>
+        <TopLine Value="14"/>
+        <EditorIndex Value="4"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -669,9 +668,11 @@
       <Unit85>
         <Filename Value="..\..\units\general\MStringGrid.pas"/>
         <UnitName Value="MStringGrid"/>
-        <CursorPos X="25" Y="89"/>
-        <TopLine Value="79"/>
-        <UsageCount Value="7"/>
+        <CursorPos X="43" Y="124"/>
+        <TopLine Value="103"/>
+        <EditorIndex Value="12"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit85>
       <Unit86>
         <Filename Value="..\..\units\general\khexeditor.pas"/>
@@ -697,9 +698,9 @@
       <Unit89>
         <Filename Value="..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <CursorPos X="187" Y="111"/>
-        <TopLine Value="88"/>
-        <EditorIndex Value="11"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="8"/>
         <UsageCount Value="31"/>
         <Loaded Value="True"/>
       </Unit89>
@@ -808,7 +809,7 @@
         <Filename Value="..\..\units\xpl\uxplheader.pas"/>
         <UnitName Value="uxPLHeader"/>
         <CursorPos X="7" Y="168"/>
-        <TopLine Value="146"/>
+        <TopLine Value="147"/>
         <EditorIndex Value="2"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
@@ -830,9 +831,9 @@
         <Filename Value="app_main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_main"/>
-        <CursorPos X="39" Y="12"/>
+        <CursorPos X="22" Y="12"/>
         <TopLine Value="1"/>
-        <EditorIndex Value="12"/>
+        <EditorIndex Value="9"/>
         <UsageCount Value="34"/>
         <Loaded Value="True"/>
       </Unit107>
@@ -841,7 +842,7 @@
         <UnitName Value="u_xml_xpldeterminator"/>
         <CursorPos X="44" Y="197"/>
         <TopLine Value="181"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="5"/>
         <UsageCount Value="21"/>
         <Loaded Value="True"/>
       </Unit108>
@@ -900,9 +901,11 @@
       <Unit116>
         <Filename Value="..\..\units\general\medit.pas"/>
         <UnitName Value="MEdit"/>
-        <CursorPos X="7" Y="34"/>
+        <CursorPos X="37" Y="38"/>
         <TopLine Value="34"/>
+        <EditorIndex Value="13"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit116>
       <Unit117>
         <Filename Value="..\..\..\components\powtils\pwhostname.pas"/>
@@ -943,17 +946,13 @@
         <UnitName Value="Clipbrd"/>
         <CursorPos X="1" Y="264"/>
         <TopLine Value="248"/>
-        <EditorIndex Value="4"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit121>
       <Unit122>
         <Filename Value="..\..\..\lcl\include\clipbrd.inc"/>
         <CursorPos X="1" Y="478"/>
         <TopLine Value="462"/>
-        <EditorIndex Value="5"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit122>
       <Unit123>
         <Filename Value="..\..\units\general\RegExpr\uRegExpr.pas"/>
@@ -972,9 +971,11 @@
       <Unit125>
         <Filename Value="..\..\units\general\mcombobox.pas"/>
         <UnitName Value="MComboBox"/>
-        <CursorPos X="7" Y="28"/>
+        <CursorPos X="37" Y="32"/>
         <TopLine Value="19"/>
+        <EditorIndex Value="15"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit125>
       <Unit126>
         <Filename Value="..\..\units\general\findControl.pas"/>
@@ -1004,8 +1005,8 @@
         <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
         <UnitName Value="u_xml_plugins"/>
         <CursorPos X="17" Y="78"/>
-        <TopLine Value="46"/>
-        <EditorIndex Value="10"/>
+        <TopLine Value="55"/>
+        <EditorIndex Value="7"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit129>
@@ -1040,7 +1041,7 @@
         <UnitName Value="u_xml"/>
         <CursorPos X="46" Y="214"/>
         <TopLine Value="197"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="6"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit134>
@@ -1049,9 +1050,7 @@
         <UnitName Value="DOM"/>
         <CursorPos X="17" Y="227"/>
         <TopLine Value="227"/>
-        <EditorIndex Value="8"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit135>
       <Unit136>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
@@ -1064,9 +1063,11 @@
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="u_xpl_sender"/>
-        <CursorPos X="1" Y="66"/>
-        <TopLine Value="53"/>
+        <CursorPos X="64" Y="67"/>
+        <TopLine Value="46"/>
+        <EditorIndex Value="10"/>
         <UsageCount Value="28"/>
+        <Loaded Value="True"/>
       </Unit137>
       <Unit138>
         <Filename Value="..\..\..\fpc\2.2.4\source\packages\fcl-xml\src\xmlwrite.pp"/>
@@ -1110,8 +1111,26 @@
         <TopLine Value="1"/>
         <UsageCount Value="10"/>
       </Unit143>
+      <Unit144>
+        <Filename Value="..\..\units\xpl\gui\v_msgbody_stringgrid.pas"/>
+        <UnitName Value="v_msgbody_stringgrid"/>
+        <CursorPos X="1" Y="1"/>
+        <TopLine Value="1"/>
+        <EditorIndex Value="11"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit144>
+      <Unit145>
+        <Filename Value="..\..\units\general\mchecklistbox.pas"/>
+        <UnitName Value="MCheckListBox"/>
+        <CursorPos X="43" Y="40"/>
+        <TopLine Value="25"/>
+        <EditorIndex Value="14"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit145>
     </Units>
-    <JumpHistory Count="15" HistoryIndex="14">
+    <JumpHistory Count="23" HistoryIndex="22">
       <Position1>
         <Filename Value="..\..\units\xpl\uxplheader.pas"/>
         <Caret Line="156" Column="1" TopLine="140"/>
@@ -1172,6 +1191,38 @@
         <Filename Value="..\..\units\xpl\uxplmessage.pas"/>
         <Caret Line="169" Column="1" TopLine="153"/>
       </Position15>
+      <Position16>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="12" Column="22" TopLine="1"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="103" Column="83" TopLine="88"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="140" Column="83" TopLine="124"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="149" Column="45" TopLine="124"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="152" Column="44" TopLine="124"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="160" Column="29" TopLine="144"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <Caret Line="152" Column="16" TopLine="144"/>
+      </Position23>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
