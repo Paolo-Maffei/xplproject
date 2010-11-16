@@ -1,9 +1,16 @@
 xpl_netget
 
-0.8 This tools allows to download or parse a distant page.
+0.8 
+   This tools allows to download or parse a distant page.
+   
+0.9
+   Added handling of https protocol
+   
+0.9.1
+   Recompiled to use new config file format. Please delete previous file to avoid error at launch.
 
 Todo : 
-Allow https protocol to be handled (for xPL free);
+Il semble que Netget pose un réel problème de performance
 
 Sample of download message :
 xpl-cmnd
@@ -33,5 +40,7 @@ netget.basic
 protocol=get
 uri=http://www.infobel.com/fr/france/Inverse.aspx?q=France
 qphone=0475026474
-regexpr=QName=(.*?)&amp;QNum
+regexpr=QName=(.*?)&amp;QNum	
 }
+
+
