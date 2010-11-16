@@ -48,9 +48,9 @@ implementation // ==============================================================
 uses frm_About,
      uxPLMessage,
      uxPLAddress,
-     uxplcfgitem,
      cStrings,
      uxPLConst,
+     u_xml_xplplugin,
      uRegExpr,
      app_main;
 
@@ -78,7 +78,7 @@ begin
    end;
 
    if Assigned(Configuration.Plug_Config) then
-      for j:=0 to Configuration.Plug_Config.Count-1 do HBDetail.PossibleKeys.Add(Configuration.Plug_Config [j].Key);
+      for j:=0 to Configuration.Plug_Config.Count-1 do HBDetail.PossibleKeys.Add(Configuration.Plug_Config [j].Name);
 
    aMessage.Destroy;
 end;
@@ -107,7 +107,7 @@ begin
 end;
 
 procedure TfrmSetupInstance.HBDetailSelection(Sender: TObject; aCol, aRow: Integer);
-var confitem : TxPLConfigItem;
+var confitem : TXMLConfigItemType;
 begin
    if not Assigned(Configuration.Plug_Config) then exit;
    memo1.lines.Clear ;
@@ -124,7 +124,7 @@ begin Close; end;
 
 procedure TfrmSetupInstance.HBDetailEditingDone(Sender: TObject);
 var f,s : string;
-    confitem : TxPLConfigItem;
+    confitem : TXMLConfigItemType;
     fValidator : TRegExpr;
 begin
    if not Assigned(Configuration.Plug_Config) then exit;                                  // The plugin may be absent
