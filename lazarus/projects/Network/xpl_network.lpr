@@ -7,14 +7,14 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, Forms, LResources,
+  Interfaces, Forms, LResources, multiloglaz,
   app_main,
   frm_main,
   frm_about,
   frm_logviewer,
   frm_xplappslauncher,
   u_xml_plugins,
-  frm_XMLView, frm_plugin_viewer, XPL, u_xml_xplplugin_ex;
+  frm_XMLView, frm_plugin_viewer, xpl_win, u_xml_xplplugin_ex;
 
 {$IFDEF WINDOWS}{$R xpl_network.rc}{$ENDIF}
 
