@@ -10,7 +10,7 @@ uses
 var xPLClient : TxPLListener;
 
 const //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '2.2.2';
+     K_XPL_APP_VERSION_NUMBER = '2.2.4';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'logger';
      K_ROOT_NODE_NAME = 'xPL Network';

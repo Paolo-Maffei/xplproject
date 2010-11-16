@@ -10,9 +10,9 @@ uses
   Forms,
   LResources,
   app_main,
-  frm_main, XPL, frm_about, frm_appsettings,
+  frm_main, frm_about, frm_appsettings,
   frm_setupinstance,
-  frm_logviewer, indylaz, frm_plugindetail, u_xml_config;
+  frm_logviewer, xpl_win, indylaz, frm_plugindetail, u_xml_config;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 

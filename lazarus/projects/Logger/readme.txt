@@ -56,9 +56,13 @@ Changes History :
 		  enables : 
 			- better code coverage for testing
 			- Exporting xPL Logger file export is now complete and done in xml format
+	2.2.3
+		* Corrected an error when using 'Send a Message' that left last message content in the window
+		* Menu 'Command' (right click on a module do display possible commands available from the vendor file) back to work
+	2.2.4
+		* Recompiled to use new config file format. Please delete previous file to avoid error at launch.
 				
 		
 TODO
 		... afficher le plugin file à partir du nom du vendor dans le treeview
 		... créer la fonction 'importer' puisque maintenant on travaille en XML
-		Erreur : send a message to doesn't open an empty message

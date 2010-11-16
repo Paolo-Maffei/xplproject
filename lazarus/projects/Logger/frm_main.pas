@@ -324,7 +324,8 @@ begin
         Header.Target.Tag := GetSourceAddress;
         Schema.Tag  := K_SCHEMA_CONTROL_BASIC;
         MessageType := K_MSG_TYPE_CMND;                                         // 2.1.2 correction
-        Body.AddKeyValuePair('key', 'value');                                   // 2.0.3
+        Body.ResetAll;
+        Body.AddKeyValuePairs(['key'], ['value']);                              // 2.0.3
         ShowForEdit([boSave, boSend]);
   end;
 end;
@@ -473,23 +474,20 @@ var
   node: TTreeNode;
   ConfElmts: TConfigurationRecord;
   i:    integer;
-  aMsg: TxPLMessage;
 begin
   sCommand := TMenuItem(Sender).Caption;
   node     := tvMessages.Selected;
-  if node.Data = nil then
-    exit;
+  if node.Data = nil then exit;
+
   ConfElmts := TConfigurationRecord(Node.Data);
-  aMsg      := TxPLMessage.Create;
-  with aMsg do
-  begin
+  with fooMessage do   begin
+    Body.ResetAll;
     for i := 0 to ConfElmts.plug_detail.Commands.Count - 1 do
       if ConfElmts.plug_detail.Commands[i].Name = sCommand then
         ReadFromXML(ConfElmts.plug_detail.Commands[i]);
     Target.Tag := GetSourceAddress;
     Source.Assign(xPLClient.Address);
-    xPLClient.Send(aMsg);
-    Destroy;
+    TxPLMessageGUI(fooMessage).ShowForEdit([boSave, boSend]);
   end;
 end;
 
