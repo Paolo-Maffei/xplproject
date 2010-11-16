@@ -1876,6 +1876,10 @@ object frmMain: TfrmMain
     end
     object MenuItem7: TMenuItem
       Caption = '?'
+      object MenuItem18: TMenuItem
+        Caption = 'New Item13'
+        OnClick = MenuItem18Click
+      end
       object MenuItem9: TMenuItem
         Action = About
         Bitmap.Data = {
@@ -1916,6 +1920,10 @@ object frmMain: TfrmMain
         }
         OnClick = AboutExecute
       end
+      object MenuItem17: TMenuItem
+        Caption = 'New Item12'
+        OnClick = MenuItem17Click
+      end
     end
   end
   object popmnuTimer: TPopupMenu
@@ -1945,8 +1953,8 @@ object frmMain: TfrmMain
     end
   end
   object popmnuEvents: TPopupMenu
-    left = 256
-    top = 232
+    left = 120
+    top = 280
     object mnuEditEvent: TMenuItem
       Caption = 'Edit'
       OnClick = mnuEditEventClick

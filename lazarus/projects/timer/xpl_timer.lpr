@@ -16,7 +16,7 @@ uses
      app_main,
      uxpltimer,
      SunTime,
-     uxPLEvent, frm_logviewer, frm_about, khex;
+     uxPLEvent, frm_logviewer, frm_about, xpl_win, khex, frm_xplactionlist;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
 
@@ -27,7 +27,8 @@ begin
   xPLApplication.CreateForm(TfrmMain, frmMain);
      xPLClient      := frmmain.xPLClient;
   xPLApplication.CreateForm(TfrmAbout, frmAbout);
-//  xPLApplication.CreateForm(TfrmAppLauncher, frmAppLauncher);
+  xPLApplication.CreateForm(TfrmAppLauncher, frmAppLauncher);
+  xPLApplication.CreateForm(TFrmActionList, frmActionList);
   xPLApplication.CreateForm(TfrmLogViewer, frmLogViewer);
   xPLApplication.Icon := frmMain.Icon;
 {$ENDIF}

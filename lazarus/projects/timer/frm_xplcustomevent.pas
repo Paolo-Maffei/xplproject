@@ -39,7 +39,9 @@ TfrmxPLCustomEvent = class(TForm)
      end;
 
 implementation { TfrmxPLCustomEvent ===========================================}
-uses uxPLEvent, u_xpl_message_gui;
+uses uxPLEvent,
+     u_xpl_message_gui,
+     uxPLMessage;
 
 procedure TfrmxPLCustomEvent.BtnDisplayClick(Sender: TObject);
 var aMessage : TxPLMessageGUI;
@@ -89,8 +91,10 @@ begin
    with Self.Owner as TxPLSingleEvent do begin
       Name := edtName.Text;
       Enabled := checkbox1.Checked;
-      if ckPerso.Checked then MessageToFire := edit1.Text
-                         else MessageToFire := '';
+//      if ckPerso.Checked then MessageToFire := edit1.Text
+//                         else MessageToFire := '';
+      if ckPerso.Checked then MessageToFire := TxPLMessage.Create(edit1.Text)
+                         else MessageToFire := nil;
       Description := mmoDescription.Text;
    end;
 end;
@@ -100,7 +104,7 @@ begin
    with Self.Owner as TxPLSingleEvent do begin
       edtName.Text := Name;
       checkbox1.Checked := Enabled;
-      edit1.Caption := MessageToFire;
+      if Assigned(MessageToFire) then edit1.Caption := MessageToFire.RawxPL;
       ckPerso.Checked := length(edit1.Caption)>0;
       mmoDescription.Text := Description;
    end;
