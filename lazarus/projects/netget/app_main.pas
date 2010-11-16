@@ -40,7 +40,7 @@ uses uxPLConst,
 
 //==============================================================================
 const
-     K_XPL_APP_VERSION_NUMBER = '0.9';
+     K_XPL_APP_VERSION_NUMBER = '0.9.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'netget';
 
@@ -59,32 +59,16 @@ begin
 end;
 
 procedure TMyApplication.DoRun;
-var ErrorMsg: String;
 begin
-  ErrorMsg:=CheckOptions('h','help');
-  if ErrorMsg<>'' then begin
-    ShowException(Exception.Create(ErrorMsg));
-    Terminate;
-    Exit;
-  end;
-
-  if HasOption('h','help') then begin
-    Terminate;
-    Exit;
-  end;
-
-  while true do begin
-        CheckSynchronize;
-  end;
-  Terminate;
+   CheckSynchronize;
 end;
 
 constructor TMyApplication.Create(TheOwner: TComponent);
 begin
-  inherited Create(TheOwner);
-  xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER,false);
-  xPLClient.OnxPLReceived   := @OnReceived;
-  xPLClient.Listen;
+   inherited Create(TheOwner);
+   xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER,false);
+   xPLClient.OnxPLReceived   := @OnReceived;
+   xPLClient.Listen;
 end;
 
 procedure TMyApplication.HTTPGet(aMsg : TxPLMessage);
@@ -115,10 +99,9 @@ begin
         aMsg.Target.Tag  := aMsg.Source.Tag;
         Expression := aRegExpr;
         if Exec(StreamToString(Page)) then begin
-           aMsg.Body.AddKeyValuePair('current','success');
-           aMsg.Body.AddKeyValuePair('result',Match[1]);
+           aMsg.Body.AddKeyValuePairs(['current','result'],['success',Match[1]]);
         end else
-           aMsg.Body.AddKeyValuePair('current','failed');
+           aMsg.Body.AddKeyValuePairs(['current'],['failed']);
         xPLClient.Send(aMsg);
         Destroy;
    end;
@@ -137,7 +120,7 @@ begin
    strOut    := '';
    with xPLClient do begin
       GetHTTPFile(aURI,aDestDir + aFileName,ifthen(settings.useproxy,Settings.HTTPProxSrvr,''),Settings.HTTPProxPort,strOut);
-      aMsg.Body.AddKeyValuePair('current',IfThen(strOut = '','done','error'));
+      aMsg.Body.AddKeyValuePairs(['current'],[IfThen(strOut = '','done','error')]);
       aMsg.MessageType := K_MSG_TYPE_TRIG;
       aMsg.Target.Assign(aMsg.Source);
       xPLClient.Send(aMsg);
