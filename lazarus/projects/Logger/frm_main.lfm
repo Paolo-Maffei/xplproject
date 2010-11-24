@@ -2281,7 +2281,6 @@ object FrmMain: TFrmMain
     Caption = 'ToolBar2'
     EdgeBorders = [ebTop, ebBottom]
     EdgeInner = esNone
-    Flat = False
     List = True
     ShowCaptions = True
     TabOrder = 1
@@ -2512,7 +2511,7 @@ object FrmMain: TFrmMain
     SimplePanel = False
   end
   object ActionList1: TActionList
-    left = 576
+    left = 528
     top = 120
     object Quit: TAction
       Caption = 'Quit'

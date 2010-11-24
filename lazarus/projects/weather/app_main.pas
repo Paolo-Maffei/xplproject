@@ -41,7 +41,7 @@ uses uxPLConst, cStrings;
 
 //=====================================================================================================
 const
-     K_XPL_APP_VERSION_NUMBER = '3.1';
+     K_XPL_APP_VERSION_NUMBER = '3.1.1';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'weather';
      K_DEFAULT_PORT   = '8333';
@@ -89,11 +89,11 @@ begin
        OnCommandGet       := @CommandGet;
        OnxPLPrereqMet     := @OnPrereqMet;
        OnxPLReceived      := @OnReceived;
-       Config.AddItem('partnerid', K_XPL_CT_CONFIG);
-       Config.AddItem('licensekey',K_XPL_CT_CONFIG);
-       Config.AddItem('zipcode'  , K_XPL_CT_CONFIG);
-       Config.AddItem('unitsystem',K_XPL_CT_CONFIG);
-       Config.AddItem('translation',K_XPL_CT_CONFIG,'us');
+       Config.AddItem('partnerid'  , K_XPL_CT_CONFIG, 'Partner ID delivered by weather.com','^[A-Za-z0-9]{1,50}$');
+       Config.AddItem('licensekey' , K_XPL_CT_CONFIG, 'License key delivered by weather.com','^[A-Za-z0-9]{1,50}$');
+       Config.AddItem('zipcode'    , K_XPL_CT_CONFIG, 'Code of the city','^[A-Za-z0-9]{1,50}$');
+       Config.AddItem('unitsystem' , K_XPL_CT_CONFIG, 'Either `us` or `metric` system','us|metric');
+       Config.AddItem('translation', K_XPL_CT_CONFIG, 'Language used to display weather informations','us|fr',1,'us');
        PrereqList.Add('timer=0');
        PrereqList.Add('netget=0');
        PassMyOwnMessages := true;
@@ -135,14 +135,14 @@ procedure TMyApplication.OnReceived(const axPLMsg: TxPLMessage);
 begin
    with axPLMsg do begin
       if (MessageType = K_MSG_TYPE_STAT) and                                           // Received a timer status message
-         (Schema.Tag = K_SCHEMA_TIMER_BASIC) and
-         (Body.GetValueByKey('device') = xPLClient.Address.Tag) and                    // from the timer I created
+         (Schema.RawxPL = K_SCHEMA_TIMER_BASIC) and
+         (Body.GetValueByKey('device') = xPLClient.Address.RawxPL) and                    // from the timer I created
          (Body.GetValueByKey('current') = 'started') then begin                        // that says he's alive
          xPLClient.SendMessage( K_MSG_TYPE_CMND,xPLClient.PrereqList.Values['netget'],K_SCHEMA_NETGET_BASIC,
                                 ['protocol','uri','destdir','destfn'],['http',fURI,GetTempDir,'weather.xml']);
       end else
       if (MessageType = K_MSG_TYPE_TRIG) and
-         (Schema.Tag = K_SCHEMA_NETGET_BASIC) and
+         (Schema.RawxPL = K_SCHEMA_NETGET_BASIC) and
          (Body.GetValueByKey('uri') = fURI) and
          (Body.GetValueByKey('current') = 'done') then begin
             Weather.MettreAJour(GetTempDir + 'weather.xml',xPLClient.Config.ItemName['unitsystem'].Value);
@@ -156,7 +156,7 @@ end;
 procedure TMyApplication.OnPrereqMet;
 begin
    xPLClient.SendMessage( K_MSG_TYPE_CMND, xPLClient.PrereqList.Values['timer'], K_SCHEMA_TIMER_BASIC,
-                          ['action','device','frequence'],['start',xPLClient.Address.Tag,IntToStr(30 * 60)]);
+                          ['action','device','frequence'],['start',xPLClient.Address.RawxPL,IntToStr(30 * 60)]);
 end;
 
 procedure TMyApplication.CommandGet(var aPageContent: widestring; ARequestInfo: TIdHTTPRequestInfo);

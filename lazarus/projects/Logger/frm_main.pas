@@ -321,8 +321,8 @@ procedure TFrmMain.mnuSendMessageClick(Sender: TObject);
 begin
    with TxPLMessageGUI(fooMessage) do begin
         Header.Source.Assign(xPLClient.Address);
-        Header.Target.Tag := GetSourceAddress;
-        Schema.Tag  := K_SCHEMA_CONTROL_BASIC;
+        Header.Target.RawxPL := GetSourceAddress;
+        Schema.RawxPL := K_SCHEMA_CONTROL_BASIC;
         MessageType := K_MSG_TYPE_CMND;                                         // 2.1.2 correction
         Body.ResetAll;
         Body.AddKeyValuePairs(['key'], ['value']);                              // 2.0.3
@@ -485,7 +485,7 @@ begin
     for i := 0 to ConfElmts.plug_detail.Commands.Count - 1 do
       if ConfElmts.plug_detail.Commands[i].Name = sCommand then
         ReadFromXML(ConfElmts.plug_detail.Commands[i]);
-    Target.Tag := GetSourceAddress;
+    Target.RawxPL := GetSourceAddress;
     Source.Assign(xPLClient.Address);
     TxPLMessageGUI(fooMessage).ShowForEdit([boSave, boSend]);
   end;
@@ -595,7 +595,7 @@ var anode1, anode2, anode3: TTreeNode;
       (axPLMessage.Schema.Classe <> K_SCHEMA_CLASS_CONFIG) or
       (axPLMessage.MessageType <> K_MSG_TYPE_STAT)) then
       exit;      // Don't handle config request messages
-    case AnsiIndexStr(axPLMessage.Schema.Tag,
+    case AnsiIndexStr(axPLMessage.Schema.RawxPL,
         [K_SCHEMA_CONFIG_CURRENT, K_SCHEMA_CONFIG_LIST]) of
       0: Config_Elmts.config_current := axPLMessage.Body.RawxPL;
       1: Config_Elmts.config_list    := axPLMessage.Body.RawxPL;
