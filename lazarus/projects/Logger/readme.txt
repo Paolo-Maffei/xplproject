@@ -61,6 +61,7 @@ Changes History :
 		* Menu 'Command' (right click on a module do display possible commands available from the vendor file) back to work
 	2.2.4
 		* Recompiled to use new config file format. Please delete previous file to avoid error at launch.
+		* Send message box can now handle xPL messages defined in vendor file
 				
 		
 TODO

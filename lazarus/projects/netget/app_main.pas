@@ -4,22 +4,18 @@ unit app_main;
 
 interface
 
-uses
-  Classes, SysUtils,
-  CustApp,
-  uxPLMessage,
-  uxPLListener;
+uses Classes,
+     SysUtils,
+     CustApp,
+     uxPLMessage,
+     uxPLListener;
 
-type
-
-{ TMyApplication }
-
-  TMyApplication = class(TCustomApplication)
+type TMyApplication = class(TCustomApplication)
      protected
         procedure DoRun; override;
      public
         constructor Create(TheOwner: TComponent); override;
-        procedure OnReceived(const axPLMsg : TxPLMessage);
+        procedure OnCmndReceived(const aMsg : TxPLMessage);
         destructor Destroy; override;
         procedure HTTPGet(aMsg : TxPLMessage);
         procedure HTTPDownload(aMsg : TxPLMessage);
@@ -67,8 +63,9 @@ constructor TMyApplication.Create(TheOwner: TComponent);
 begin
    inherited Create(TheOwner);
    xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER,false);
-   xPLClient.OnxPLReceived   := @OnReceived;
+   xPLClient.OnHookedCmnd    := @OnCmndReceived;
    xPLClient.Listen;
+   Title := xPLClient.AppName;
 end;
 
 procedure TMyApplication.HTTPGet(aMsg : TxPLMessage);
@@ -96,7 +93,7 @@ begin
    HTTPConn.Post(aUri,Parameters,Page);
    with TRegExpr.Create do begin
         aMsg.MessageType := K_MSG_TYPE_TRIG;
-        aMsg.Target.Tag  := aMsg.Source.Tag;
+        aMsg.Target.RawxPL  := aMsg.Source.RawxPL;
         Expression := aRegExpr;
         if Exec(StreamToString(Page)) then begin
            aMsg.Body.AddKeyValuePairs(['current','result'],['success',Match[1]]);
@@ -162,21 +159,21 @@ begin
       //if strOut = 'error' then Delete(aDestDir + aFileName);
       IdHTTP.Destroy;
       IdSSLIOHandlerSocketOpenSSL.Destroy;
-      xPLClient.SendMessage( K_MSG_TYPE_TRIG,aMsg.Source.Tag,K_SCHEMA_NETGET_BASIC, ['uri','current'],[aURI,strOut]);
+      xPLClient.SendMessage( K_MSG_TYPE_TRIG,aMsg.Source.RawxPL,K_SCHEMA_NETGET_BASIC, ['uri','current'],[aURI,strOut]);
    end;
 end;
 
-procedure TMyApplication.OnReceived(const axPLMsg: TxPLMessage);
+procedure TMyApplication.OnCmndReceived(const aMsg: TxPLMessage);
 var aProtocol,aURI : string;
 begin
-   if (axPLMsg.MessageType = K_MSG_TYPE_CMND) and (axPLMsg.Schema.Tag = 'netget.basic') then begin
-      aProtocol := axPLMsg.Body.GetValueByKey('protocol');
-      aURI      := axPLMsg.Body.GetValueByKey('uri');
-      xPLClient.LogInfo('Retrieving %s',[aURI]);
+   if AnsiCompareText(aMsg.Schema.RawxPL,K_SCHEMA_NETGET_BASIC) = 0 then begin
+      aProtocol := aMsg.Body.GetValueByKey('protocol');
+      aURI      := aMsg.Body.GetValueByKey('uri');
+      xPLClient.Log('Retrieving %s',[aURI]);
       Case AnsiIndexStr(aProtocol,['get','http','https']) of
-           0 : HTTPGet(axPLMsg);
-           1 : HTTPDownload(axPLMsg);
-           2 : HTTPSDownload(axPLMsg);
+           0 : HTTPGet(aMsg);
+           1 : HTTPDownload(aMsg);
+           2 : HTTPSDownload(aMsg);
       end;
    end;
 end;

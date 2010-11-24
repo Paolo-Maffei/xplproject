@@ -97,11 +97,13 @@ v 1.6
 	Vendor file updated to reflect these changes
 v 1.6.1
     * Recompiled to use new config file format. Please delete previous file to avoid error at launch.
+	
+v 1.7
+	* Dawndusk functions moved to xPL CalEvent
+	* Season functions moved to xPL CalEvent
 
 Todo :
-	- Ajouter le calcul des changements d'heure
-	- Ajouter le chargement d'évènements quotidiens (éphémérides)
 	- Supprimer un timer initié par une application sur réception de hbeat.end de l'application ?
-	- Le plugin file de xpl timer ne reflete pas ses fonctionnalités sur le schema dawndusk
+	
 
 

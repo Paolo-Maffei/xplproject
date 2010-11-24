@@ -2277,9 +2277,9 @@ object FrmMain: TFrmMain
     Height = 426
     Top = 29
     Width = 631
-    ActivePage = tsBasic
+    ActivePage = tsAdanced
     Align = alClient
-    TabIndex = 0
+    TabIndex = 1
     TabOrder = 0
     OnPageChanged = PageControl1PageChanged
     object tsBasic: TTabSheet
@@ -2411,7 +2411,7 @@ object FrmMain: TFrmMain
       object Label1: TLabel
         Left = 8
         Height = 16
-        Top = 203
+        Top = 235
         Width = 50
         Caption = 'Country :'
         ParentColor = False
@@ -2419,7 +2419,7 @@ object FrmMain: TFrmMain
       object Label2: TLabel
         Left = 8
         Height = 16
-        Top = 235
+        Top = 267
         Width = 59
         Caption = 'Language :'
         ParentColor = False
@@ -2427,7 +2427,7 @@ object FrmMain: TFrmMain
       object Label5: TLabel
         Left = 8
         Height = 16
-        Top = 267
+        Top = 299
         Width = 70
         Caption = 'Unit System :'
         ParentColor = False
@@ -2435,12 +2435,20 @@ object FrmMain: TFrmMain
       object Label13: TLabel
         Left = 8
         Height = 16
-        Top = 299
+        Top = 331
         Width = 177
         Caption = 'Root directory for xPL web apps  :'
         Font.Color = clNavy
         ParentColor = False
         ParentFont = False
+      end
+      object Label6: TLabel
+        Left = 8
+        Height = 16
+        Top = 203
+        Width = 28
+        Caption = 'City :'
+        ParentColor = False
       end
       object edtRootDir: TEdit
         Left = 8
@@ -2502,7 +2510,7 @@ object FrmMain: TFrmMain
       object cbISO3166: TComboBox
         Left = 84
         Height = 23
-        Top = 203
+        Top = 235
         Width = 172
         ItemHeight = 15
         OnChange = e_ListenOnChange
@@ -2511,7 +2519,7 @@ object FrmMain: TFrmMain
       object cbISO639: TComboBox
         Left = 84
         Height = 23
-        Top = 235
+        Top = 267
         Width = 172
         ItemHeight = 15
         OnChange = e_ListenOnChange
@@ -2520,7 +2528,7 @@ object FrmMain: TFrmMain
       object cbMeasure: TComboBox
         Left = 84
         Height = 23
-        Top = 267
+        Top = 299
         Width = 172
         ItemHeight = 15
         Items.Strings = (
@@ -2533,7 +2541,7 @@ object FrmMain: TFrmMain
       object edtWebDir: TEdit
         Left = 8
         Height = 23
-        Top = 323
+        Top = 355
         Width = 384
         OnChange = e_ListenOnChange
         TabOrder = 8
@@ -2541,11 +2549,18 @@ object FrmMain: TFrmMain
       object BtnShowDirSelect1: TButton
         Left = 404
         Height = 25
-        Top = 323
+        Top = 355
         Width = 24
         Caption = '...'
         OnClick = BtnShowDirSelect1Click
         TabOrder = 9
+      end
+      object edtCity: TEdit
+        Left = 84
+        Height = 23
+        Top = 203
+        Width = 172
+        TabOrder = 10
       end
     end
     object tsVendor: TTabSheet
@@ -2777,8 +2792,8 @@ object FrmMain: TFrmMain
     left = 488
   end
   object popPluginList: TPopupMenu
-    left = 472
-    top = 80
+    left = 488
+    top = 136
     object mnuSelectAll: TMenuItem
       Caption = 'Select All'
       OnClick = Select_Do

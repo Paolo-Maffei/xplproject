@@ -9,14 +9,12 @@ uses
   {$IFNDEF CONSOLE_APP}
      Interfaces, // this includes the LCL widgetset
      Forms,
-     LResources, indylaz,
+     LResources, JclCounter, indylaz,
      frm_xplappslauncher,
      frm_main,
   {$ENDIF}
-     app_main,
-     uxpltimer,
-     SunTime,
-     uxPLEvent, frm_logviewer, frm_about, xpl_win, khex, frm_xplactionlist;
+     app_main, uxpltimer, uxPLEvent, frm_logviewer, frm_about, xpl_win,
+     khex, frm_xplactionlist, u_xpl_event_gui;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
 

@@ -13,32 +13,33 @@ uses
   Interfaces,
   Forms,
   LResources, indylaz,
-  frm_main,
   frm_about,
   frm_logviewer,
-  frm_xplappslauncher, xpl_win,
+  frm_xplappslauncher,
+  xpl_win,
   uxPLMessage,
   app_main,
+  uxPLConst,
   u_xml_plugins,
-  u_xml_xplplugin, u_xpl_sender;
+  u_xml_xplplugin,
+  u_xpl_message_GUI,
+  u_xpl_sender;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
+
 begin
   Application.Title:='xpl_sender';
   {$I xpl_sender.lrs}
   Application.Initialize;
-  SendMsg   := TxPLMessage.Create;
+  xPLClient     := TxPLSender.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
+  xPLMessageGUI := TxPLMessageGUI.Create;
   if Application.HasOption('s') then begin
-     SendMsg.LoadFromFile(Application.GetOptionValue('s'));
-     xPLClient.Send(SendMsg);
+     xPLMessageGUI.LoadFromFile(Application.GetOptionValue('s'));
+     xPLClient.Send(xPLMessageGUI);
   end else begin
-     Application.CreateForm(TfrmMain, frmMain);
      Application.CreateForm(TfrmAbout, frmAbout);
-     Application.CreateForm(TfrmLogViewer, frmLogViewer);
-     Application.CreateForm(TfrmAppLauncher, frmAppLauncher);
-     Application.Icon := frmMain.Icon;
-     Application.Run;
+     xPLMessageGUI.ShowForEdit([ boLoad, boSave, boCopy, boSend, boClose, boAbout],true);
   end;
-  SendMsg.Destroy ;
+  xPLMessageGUI.Destroy ;
 end.
 

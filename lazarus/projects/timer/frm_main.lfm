@@ -1560,7 +1560,7 @@ object frmMain: TfrmMain
   end
   object TimerImages: TImageList
     left = 240
-    top = 80
+    top = 72
     Bitmap = {
       4C69070000001000000010000000FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
       FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
@@ -1877,7 +1877,7 @@ object frmMain: TfrmMain
     object MenuItem7: TMenuItem
       Caption = '?'
       object MenuItem18: TMenuItem
-        Caption = 'New Item13'
+        Caption = 'Launch xPL app...'
         OnClick = MenuItem18Click
       end
       object MenuItem9: TMenuItem
@@ -1919,10 +1919,6 @@ object frmMain: TfrmMain
           FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
         }
         OnClick = AboutExecute
-      end
-      object MenuItem17: TMenuItem
-        Caption = 'New Item12'
-        OnClick = MenuItem17Click
       end
     end
   end

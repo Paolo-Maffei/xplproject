@@ -21,6 +21,7 @@ type
     cbMeasure: TComboBox;
     cbLocations: TComboBox;
     cbISO3166: TComboBox;
+    edtCity: TEdit;
     edtHTTPPort: TEdit;
     edtHTTPProxy: TEdit;
     edtRootDir: TEdit;
@@ -34,6 +35,7 @@ type
     Label13: TLabel;
     Label2: TLabel;
     Label5: TLabel;
+    Label6: TLabel;
     Label9: TLabel;
     lvPlugins: TListView;
     MenuItem1: TMenuItem;
@@ -119,6 +121,7 @@ uses SysUtils,
      frm_logviewer, 
      frm_xplappslauncher, 
      frm_XMLView,
+     Multilog,
      frm_plugin_viewer;
 //==============================================================================
 const K_ALL_IPS_JOCKER       = '*** ALL IP Address ***';
@@ -194,7 +197,7 @@ begin
   s := xPLClient.Settings.ReadKeyString(K_SET_LANGUAGE);
   child639 := ISO639File.ElementByName[s];
   if child639<>nil then cbISO639.Text := child639.name;
-
+  edtCity.Text   := xPLClient.Settings.ReadKeyString(K_SET_CITY);
   cbMeasure.Text := xPLClient.Settings.ReadKeyString(K_SET_UNITSYSTEM);
   edtWebDir.Text := xPLClient.Settings.ReadKeyString(K_SET_WEBDIR);
 end;
@@ -308,7 +311,7 @@ procedure TFrmMain.UpdateSeedExecute(Sender: TObject);
 begin
    Screen.Cursor  := crHourGlass;
    xPLClient.PluginList.Update(cbLocations.Text);
-   xPLClient.LogInfo('Seed file %s',[Panel1.Caption]);
+   xPLClient.Log('Seed file %s',[Panel1.Caption]);
    LoadVendorSettings;
    Screen.Cursor := crDefault;
 end;
@@ -358,12 +361,12 @@ begin
 
         child639 := ISO639File[cbIso639.ItemIndex];
         if (child639<>nil) then xPLClient.Settings.WriteKeyString(K_SET_LANGUAGE,child639.iso_639_1_code);
-
+        xPLClient.Settings.WriteKeyString(K_SET_CITY,edtCity.Text);
         xPLClient.Settings.WriteKeyString(K_SET_UNITSYSTEM,cbMeasure.Text);
         xPLClient.Settings.WriteKeyString(K_SET_WEBDIR,edtWebDir.Text);
 
-        xPLClient.LogWarn(COMMENT_LINE_1,[]);
-        xPLClient.LogInfo(COMMENT_LINE_2,[]);
+        xPLClient.Log(COMMENT_LINE_1,[], ltWarning);
+        xPLClient.Log(COMMENT_LINE_2,[]);
 
    end;
 end;
