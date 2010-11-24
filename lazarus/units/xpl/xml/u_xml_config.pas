@@ -27,6 +27,7 @@ type
         procedure   Save;
      published
         property LocalData : TXMLLocalsType read Get_LocalData;
+        property Document  : TXMLDocument   read fDoc;
      end;
 
 implementation { TXMLxplconfigType }

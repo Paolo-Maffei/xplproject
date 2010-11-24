@@ -27,18 +27,12 @@ interface
 
 uses  Registry,Classes;
 
-type
-
-{ TxPLSettings }
-
-TxPLSettings = class
+type  TxPLSettings = class
       private
         fRegistry : TRegistry;
-
         fHTTPProxPort, fHTTPProxSrvr,
         fRootxPLDir,   fBroadCastAddress,
         fListenOnAddress , fListenToAddresses : string;
-
         fUseProxy: boolean;
 
         function  GetListenOnAll     : boolean;
@@ -62,21 +56,21 @@ TxPLSettings = class
         constructor create;
         destructor  destroy; override;
 
-        property ListenToAny   : boolean read GetListenToAny   write SetListenToAny;
-        property ListenToLocal : boolean read GetListenToLocal write SetListenToLocal;
-        property ListenOnAll   : boolean read GetListenOnAll   write SetListenOnAll;
-        property UseProxy      : boolean read fUseProxy        write SetUseProxy;
-        property BroadCastAddress  : string read fBroadCastAddress  write SetBroadCastAddress;
-        property ListenOnAddress   : string read fListenOnAddress   write SetListenOnAddress;
-        property ListenToAddresses : string read fListenToAddresses write SetListenToAddresses;
-        property HTTPProxSrvr : string read fHTTPProxSrvr write SetHTTPProxSrvr;
-        property HTTPProxPort : string read fHTTPProxPort write SetHTTPProxPort;
+        property ListenToAny       : boolean read GetListenToAny     write SetListenToAny;
+        property ListenToLocal     : boolean read GetListenToLocal   write SetListenToLocal;
+        property ListenOnAll       : boolean read GetListenOnAll     write SetListenOnAll;
+        property UseProxy          : boolean read fUseProxy          write SetUseProxy;
+        property BroadCastAddress  : string  read fBroadCastAddress  write SetBroadCastAddress;
+        property ListenOnAddress   : string  read fListenOnAddress   write SetListenOnAddress;
+        property ListenToAddresses : string  read fListenToAddresses write SetListenToAddresses;
+        property HTTPProxSrvr      : string  read fHTTPProxSrvr      write SetHTTPProxSrvr;
+        property HTTPProxPort      : string  read fHTTPProxPort      write SetHTTPProxPort;
+        property SharedConfigDir   : string  read fRootxPLDir        write SetRootxPLDir;
 
-        property SharedConfigDir  : string read fRootxPLDir write SetRootxPLDir;
-        function PluginDirectory  : string;                                             // In the root, directory where plugin are stored
-        function LoggingDirectory : string;                                             // In the root, where logs are stored
-        function ConfigDirectory  : string;                                             // Directory to store device configuration files
-        function IsValid          : Boolean;
+        function PluginDirectory   : string;                                            // In the root, directory where plugin are stored
+        function LoggingDirectory  : string;                                            // In the root, where logs are stored
+        function ConfigDirectory   : string;                                            // Directory to store device configuration files
+        function IsValid           : Boolean;
 
         function GetxPLAppList : TStringList;
 
@@ -85,8 +79,6 @@ TxPLSettings = class
 
         function  ReadKeyString (const aKeyName : string; const aDefault : string = '') : string;
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
-
-        class procedure EnsureDirectoryExists(const aDirectoryName : string);
      end;
 
 implementation // ======================================================================
@@ -94,7 +86,7 @@ uses SysUtils, StrUtils, cFileUtils, uxPLConst;
 
 const // Registry Key and values constants =============================================
    K_XPL_ROOT_KEY               = '\Software\xPL\';
-   K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                        // \software\xpl\vendor\device\
+   K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                            // \software\xpl\vendor\device\
    K_XPL_REG_VERSION_KEY        = 'version';
    K_XPL_REG_PATH_KEY           = 'path';
    K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
@@ -115,8 +107,8 @@ function OnGetAppName : string;                                                 
 begin                                                                                   // requesting common xPL applications shared
    result := 'xPL';                                                                     // directory - works in conjunction with
 end;                                                                                    // OnGetApplicationName
-// TxPLSettings ========================================================================
-class procedure TxPLSettings.EnsureDirectoryExists(const aDirectoryName: string);
+
+procedure EnsureDirectoryExists(const aDirectoryName: string);
 begin
    if not DirectoryExists(aDirectoryName) then CreateDir(aDirectoryName);
 end;
@@ -135,10 +127,10 @@ begin
    fHttpProxPort     := ReadKeyString(K_REGISTRY_HTTP_PROX_PORT);
    fHttpProxSrvr     := ReadKeyString(K_REGISTRY_HTTP_PROX_SRVR);
 
-   EnsureDirectoryExists(SharedConfigDir );                                           // 1.1.1 Correction
-   EnsureDirectoryExists(LoggingDirectory);                                           // 1.1.2 complement
-   EnsureDirectoryExists(ConfigDirectory );                                           // 0.95 complement
-   EnsureDirectoryExists(PluginDirectory );                                           // 1.1.1 Correction
+   EnsureDirectoryExists(SharedConfigDir );                                             // 1.1.1 Correction
+   EnsureDirectoryExists(LoggingDirectory);                                             // 1.1.2 complement
+   EnsureDirectoryExists(ConfigDirectory );                                             // 0.95 complement
+   EnsureDirectoryExists(PluginDirectory );                                             // 1.1.1 Correction
 end;
 
 destructor TxPLSettings.destroy;
@@ -213,24 +205,24 @@ end;
 
 function TxPLSettings.GetListenOnAll : boolean;
 begin
-   result := ((ListenOnAddress = K_XPL_SETTINGS_NETWORK_ANY)
-           or (ListenOnAddress = K_XPL_SETTINGS_NETWORK_LOCAL));
+   result := AnsiIndexStr( ListenOnAddress,
+                           [K_XPL_SETTINGS_NETWORK_ANY,K_XPL_SETTINGS_NETWORK_LOCAL] )
+                           <> -1 ;
 end;
 
 procedure TxPLSettings.SetListenOnAll(const bValue : boolean);
-begin ListenOnAddress := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL); end;
+begin ListenOnAddress := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL);           end;
 
 procedure TxPLSettings.SetListenToLocal(const bValue : boolean);
-begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL); end;
+begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL);         end;
 
 procedure TxPLSettings.SetListenToAny(const bValue : boolean);
-begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ; end;
+begin ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ;          end;
 
 function TxPLSettings.ComposeCorrectPath(const aPath: string; const uSub: string ): string;
 begin
-     result := PathInclSuffix(aPath);
-     result += uSub;
-     PathEnsureSuffix(result);
+   result := PathInclSuffix(aPath) + uSub;
+   PathEnsureSuffix(result);
 end;
 
 function TxPLSettings.PluginDirectory: string;
@@ -244,8 +236,8 @@ begin result := ComposeCorrectPath(SharedConfigDir,K_XPL_SETTINGS_SUBDIR_CONF); 
 
 function TxPLSettings.IsValid: Boolean;                                                 // Just checks that all basic values
 begin                                                                                   // have been initialized
-     result := (length(BroadCastAddress) *
-                length(ListenOnAddress ) *
+     result := (length(BroadCastAddress ) *
+                length(ListenOnAddress  ) *
                 length(ListenToAddresses)) <>0;
 end;
 

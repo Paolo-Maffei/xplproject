@@ -17,9 +17,13 @@ unit uxPLTimer;
 interface
 
 uses
-  Classes, SysUtils, uxPLListener, uxPLMessage, ComCtrls, fpTimer, u_xml_config, DOM;
+  Classes, SysUtils, uxPLListener, uxPLMessage, ComCtrls,
+  fpTimer, u_xml_config,  DOM;
 
 type
+
+  { TxPLTimer }
+
   TxPLTimer = class(TComponent)
   private
     function GetMode: string;
@@ -32,12 +36,13 @@ type
     fxPLMessage    : TxPLMessage;
     fMode          : integer;                        //1 : up, 2 : down, 3 : recurrent
     fStatus        : integer;                        //0 : stopped, 1 : started ; 2 : halted
+
   public
      Target    : string;
-     StartTime : TDateTime;
+     Start_Time : TDateTime;
      Remaining : cardinal;
-     Frequence : cardinal;
-     EstimatedEnd : TDateTime;
+     Frequency : cardinal;
+     Estimated_End_Time : TDateTime;
 
      constructor Create(const aMsg : TxPLMessage);
      function    Edit  : boolean;
@@ -51,13 +56,12 @@ type
      function Stopped : boolean;
      function Range : string;
      procedure Tick;         // This procedure should be called every second by owner
-     procedure Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequence : string);
+     procedure Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequency : string);
   published
 
      property StopReason : string read fStopReason;
      property TimerName  : string read fName write fName;
      property Mode       : string read GetMode write SetMode;
-//     property Range      : string read GetRange write SetRange;
      property Status     : string read GetStatus write SetStatus;
   end;
 
@@ -86,14 +90,11 @@ type
      function  SendStatus(const sTimer : string) : boolean; overload;
 
      function ResumeOrStartATimer(const sTimer: string) : boolean;
-     procedure Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequence : string);
+     procedure Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequency : string);
   public
      property xPLMessage : TxPLMessage read aMessage;
      property Timers[Index : integer] : TxPLTimer read GetTimer;
   end;
-
-
-
 
 implementation //===============================================================
 uses frm_xplTimer,
@@ -123,14 +124,14 @@ begin
   end;
 end;
 
-procedure TxPLTimer.SetMode(const AValue: string);
-begin
-  fMode := AnsiIndexStr(aValue, ['ascending','descending','recurrent']) + 1;
-end;
-
 function TxPLTimer.Range: string;
 begin
   if Target = '*' then result := 'global' else result := 'local';
+end;
+
+procedure TxPLTimer.SetMode(const AValue: string);
+begin
+  fMode := AnsiIndexStr(aValue, ['ascending','descending','recurrent']) + 1;
 end;
 
 function TxPLTimer.GetStatus: string;
@@ -165,58 +166,58 @@ end;
 
 procedure TxPLTimer.WriteToXML(const aCfgfile: TDOMElement);
 begin
-   aCfgFile.SetAttribute(K_XML_STR_Name , fName);
+   aCfgFile.SetAttribute(K_XML_STR_Name , TimerName);
    aCfgFile.SetAttribute('target'   , Target);
-   aCfgFile.SetAttribute('starttime', DateTimeToStr(StartTime));
+   aCfgFile.SetAttribute('Start_Time', DateTimeToStr(Start_Time));
    aCfgFile.SetAttribute('remaining', IntToStr(Remaining));
    aCfgFile.SetAttribute('status'   , Status);
    aCfgFile.SetAttribute('mode'     , Mode);
-   aCfgFile.SetAttribute('frequence', IntToStr(Frequence));
-   aCfgFile.SetAttribute('estimatedend', IfThen(EstimatedEnd = 0,'0',DateTimeToStr(EstimatedEnd)));
+   aCfgFile.SetAttribute('Frequency', IntToStr(Frequency));
+   aCfgFile.SetAttribute('Estimated_End_Time', IfThen(Estimated_End_Time = 0,'0',DateTimeToStr(Estimated_End_Time)));
 end;
 
 procedure TxPLTimer.ReadFromXML(const aCfgfile: TDOMElement);
-var sEstimatedEnd : string;
+var sEstimated_End_Time : string;
 begin
-   fName     := aCfgFile.GetAttribute(K_XML_STR_Name);
+   TimerName := aCfgFile.GetAttribute(K_XML_STR_Name);
    Target    := aCfgFile.GetAttribute('target');
-   StartTime := StrToDateTime( aCfgFile.GetAttribute('starttime'));
+   Start_Time := StrToDateTime( aCfgFile.GetAttribute('Start_Time'));
    Status    := aCfgFile.GetAttribute('status');   // default : started
    Mode      := aCfgFile.GetAttribute('mode'); // default : ascending
    Remaining := StrToInt(aCfgFile.GetAttribute('remaining')); // default : 0
-   Frequence := StrToInt(aCfgFile.GetAttribute('frequence')); // default : 0
-   sEstimatedEnd := aCfgFile.GetAttribute('estimatedend');
+   Frequency := StrToInt(aCfgFile.GetAttribute('Frequency')); // default : 0
+   sEstimated_End_Time := aCfgFile.GetAttribute('Estimated_End_Time');
 
-   if sEstimatedEnd = '0' then begin                                            // This timer goes up from start
-      EstimatedEnd := 0;
-      Remaining := DateTimeDiff(StartTime, Now);                                // Recalculate elapsed time
+   if sEstimated_End_Time = '0' then begin                                            // This timer goes up from start
+      Estimated_End_Time := 0;
+      Remaining := DateTimeDiff(Start_Time, Now);                                // Recalculate elapsed time
    end else begin
-      EstimatedEnd := StrToDateTime(sEstimatedEnd);                             // this timer goes down from start until duration
-      if EstimatedEnd < Now then
+      Estimated_End_Time := StrToDateTime(sEstimated_End_Time);                             // this timer goes down from start until duration
+      if Estimated_End_Time < Now then
           Remaining := 1                                                        // this will stop it on next tick
       else
-          Remaining := DateTimeDiff(Now,EstimatedEnd);
+          Remaining := DateTimeDiff(Now,Estimated_End_Time);
    end;
 end;
 
-procedure TxPLTimer.Init(const aDevice : string; const aSource: string; const aRange: string; const aDuration: string; const aFrequence: string);
+procedure TxPLTimer.Init(const aDevice : string; const aSource: string; const aRange: string; const aDuration: string; const aFrequency: string);
 begin
    fName := aDevice;
-   StartTime := now();
+   Start_Time := now();
    Target := IfThen(aRange = 'local', aSource, '*');
    Remaining := StrToIntDef(aDuration,0);
-   Frequence := StrToIntDef(aFrequence,0);
+   Frequency := StrToIntDef(aFrequency,0);
 
    Case Remaining of
        0 : begin                        // O sec remaining, it is a UP or RECURRENT timer
-           EstimatedEnd := 0;
-           if Frequence = 0
+           Estimated_End_Time := 0;
+           if Frequency = 0
               then fMode := 1
               else fMode := 3;
            end;
        else begin                       // x secs remaining, it is a DOWN timer
             fMode := 2;
-            EstimatedEnd := IncSecond(StartTime, Remaining);
+            Estimated_End_Time := IncSecond(Start_Time, Remaining);
        end;
      end;
      ResumeOrStart;
@@ -230,11 +231,10 @@ begin
    with fxPLMessage do begin
        MessageType := K_MSG_TYPE_STAT;    // as xpl-mtStat this message will be a broadcast, target assumed by message object
        Body.ResetValues;
-       Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
-//       Format_SensorBasic(fName,'generic',Status);
-       Target.Tag := self.Target;
-       Schema.Tag := K_SCHEMA_TIMER_BASIC;
-//       Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
+       Body.AddKeyValuePairs( [ 'device', 'current', 'elapsed'],
+                              [ fName,    Status,    IntToStr(DateTimeDiff(Start_Time, Now))]);
+       Target.RawxPL := self.Target;
+       Schema.RawxPL := K_SCHEMA_TIMER_BASIC;
        xPLClient.Send(fxPLMessage);
    end;
 end;
@@ -248,11 +248,11 @@ begin
 
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
-      Target.Tag := self.Target;
+      Target.RawxPL := self.Target;
       Body.ResetValues;
-      Body.AddKeyValuePairs(['device','current'],[fName,Status]);
-//      Format_SensorBasic(fName,'generic',Status);
-      Schema.Tag := K_SCHEMA_TIMER_BASIC;
+      Body.AddKeyValuePairs([ 'device', 'current'],
+                            [ Name,    Status]);
+      Schema.RawxPL := K_SCHEMA_TIMER_BASIC;
       xPLClient.Send(fxPLMessage);
    end;
 
@@ -263,7 +263,7 @@ begin
    result := (Status <> 'stopped');
    if result then begin
       Status := 'stopped';
-      EstimatedEnd := Now;
+      Estimated_End_Time := Now;
       if Remaining > 0 then
          fStopReason := 'stopped'
       else
@@ -272,12 +272,11 @@ begin
 
       with fxPLMessage do begin
          MessageType := K_MSG_TYPE_TRIG;
-         Target.Tag := self.Target;
+         Target.RawxPL := self.Target;
          Body.ResetValues;
-         Body.AddKeyValuePairs(['device','current','elapsed'],[fName,fStopReason,IntToStr(DateTimeDiff(StartTime, Now))]);
-//         Format_SensorBasic(fName,'generic',StopReason);
-//         Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-         Schema.Tag := K_SCHEMA_TIMER_BASIC;
+         Body.AddKeyValuePairs( [ 'device', 'current',   'elapsed'],
+                                [ Name,    fStopReason, IntToStr(DateTimeDiff(Start_Time, Now))]);
+         Schema.RawxPL := K_SCHEMA_TIMER_BASIC;
          xPLClient.Send(fxPLMessage);
       end;
    end;
@@ -295,12 +294,11 @@ begin
 
    with fxPLMessage do begin
       MessageType := K_MSG_TYPE_TRIG;
-      Target.Tag := self.Target;
+      Target.RawxPL := self.Target;
       Body.ResetValues;
-      Body.AddKeyValuePairs(['device','current','elapsed'],[fName,Status,IntToStr(DateTimeDiff(StartTime, Now))]);
-//      Format_SensorBasic(fName,'generic',Status);
-//      Body.AddKeyValuePair('elapsed',IntToStr(DateTimeDiff(StartTime, Now)));
-      Schema.Tag := K_SCHEMA_TIMER_BASIC;
+      Body.AddKeyValuePairs( [ 'device', 'current', 'elapsed'],
+                             [ Name,    Status,    IntToStr(DateTimeDiff(Start_Time, Now))]);
+      Schema.RawxPL := K_SCHEMA_TIMER_BASIC;
       xPLClient.Send(fxPLMessage);
    end; 
 end;
@@ -310,17 +308,17 @@ begin
    case AnsiIndexStr(status, ['started','halted']) of
         0 : begin
                Case fMode of
-                    1 : Inc(Remaining);
-                    2 : Dec(Remaining);
+                    1 : Remaining := Remaining + 1;
+                    2 : Remaining := Remaining - 1;
                     3 : begin
-                           Inc(Remaining);
-                           if Remaining mod Frequence = 0 then SendStatus;
+                           Remaining := Remaining + 1;
+                           if Remaining mod Frequency = 0 then SendStatus;
                         end;
                     end;
                  if (Remaining=0) then Stop;
             end;
-        1 : if EstimatedEnd <> 0 then
-               EstimatedEnd := IncSecond(now, Remaining);
+        1 : if Estimated_End_Time <> 0 then
+               Estimated_End_Time := IncSecond(now, Remaining);
    end;
 end;
 
@@ -372,7 +370,7 @@ begin
    result := TxPLTimer(Objects[i]).SendStatus;
 end;
 
-procedure TxPLTimerList.Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequence : string);
+procedure TxPLTimerList.Init(const aDevice : string; const aSource : string; const aRange : string; const aDuration : string; const aFrequency : string);
 var current : integer;
 begin
      current := IndexOf(aDevice);
@@ -381,7 +379,7 @@ begin
         Objects[current] := TxPLTimer.Create(aMessage);
      end;
 
-     TxPLTimer(Objects[current]).Init(aDevice,aSource,aRange, aDuration, aFrequence);
+     TxPLTimer(Objects[current]).Init(aDevice,aSource,aRange, aDuration, aFrequency);
 end;
 
 function TxPLTimerList.Add(const S: string): Integer;
@@ -392,7 +390,7 @@ end;
 
 function TxPLTimerList.Add(const aTimer: TxPLTimer): integer;
 begin
-  Result:= Add(aTimer.fName);
+  Result:= Add(aTimer.TimerName);
   aTimer.fxPLMessage := aMessage;
   Objects[result] := aTimer;
 end;
@@ -441,12 +439,12 @@ end;
 procedure TxPLTimerList.ToGrid(const anItem: integer);
 var item : tListItem;
     aTimer : TxPLTimer;
-    sEstimatedEnd : string;
+    sEstimated_End_Time : string;
 begin
    if fGrid.items.Count<=anItem then begin
       item := fGrid.Items.Add ;
       item.SubItems.Add(''); // Source
-      item.SubItems.Add(''); // Starttime
+      item.SubItems.Add(''); // Start_Time
       item.SubItems.Add(''); // Remaining
       item.SubItems.Add(''); // Estimated End
       item.SubItems.Add(''); // Status
@@ -455,15 +453,15 @@ begin
    else item := fGrid.Items[anItem];
    aTimer := TxPLTimer(Objects[anItem]);
 
-   sEstimatedEnd := IfThen(aTimer.EstimatedEnd <> 0,DateTimeToStr(aTimer.EstimatedEnd));
+   sEstimated_End_Time := IfThen(aTimer.Estimated_End_Time <> 0,DateTimeToStr(aTimer.Estimated_End_Time));
 
    item.ImageIndex := aTimer.fMode;
 
-   item.Caption := aTimer.fName;
+   item.Caption := aTimer.TimerName;
    item.SubItems[0] := aTimer.Target;
-   item.SubItems[1] := DateTimeToStr(aTimer.StartTime);
+   item.SubItems[1] := DateTimeToStr(aTimer.Start_Time);
    item.SubItems[2] := IntToStr(aTimer.Remaining);
-   item.SubItems[3] := sEstimatedEnd;
+   item.SubItems[3] := sEstimated_End_Time;
    item.SubItems[4] := aTimer.Status;
    item.Data := aTimer;
 end;

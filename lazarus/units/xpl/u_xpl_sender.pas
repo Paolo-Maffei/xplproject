@@ -44,6 +44,8 @@ type
      end;
 
 implementation { ==============================================================}
+uses Multilog;
+
 constructor TxPLSender.create(const aVendor: tsVendor; const aDevice: tsDevice; const aAppVersion: string);
 begin
   inherited create(aVendor, aDevice, aAppVersion);
@@ -86,7 +88,7 @@ begin
    with aMsg do begin
       Source.Assign(Adresse);
       if IsValid then Send(aMsg)
-                 else LogError('Error sending message : %s',[RawXPL]);
+                 else Log('Error sending message : %s',[RawXPL], ltError);
       Destroy;
    end;
 end;
@@ -97,8 +99,8 @@ begin
   with Result do begin
      Source.Assign(Adresse);
      MessageType := aMsgType;
-     Target.Tag  := aTarget;
-     Schema.Tag  := aSchema;
+     Target.RawxPL  := aTarget;
+     Schema.RawxPL  := aSchema;
   end;
 end;
 

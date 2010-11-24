@@ -22,14 +22,19 @@ type TButtonOption = (
                 boLoad,
                 boSave,
                 boCopy,
-                boSend);
+                boSend,
+                boClose,
+                boOk,
+                boAbout);
      TButtonOptions = set of TButtonOption;
+
+     { TxPLMessageGUI }
 
      TxPLMessageGUI = class(TxPLMessage)
         public
            function  Edit : boolean;     dynamic;
            procedure Show(options : TButtonOptions);
-           procedure ShowForEdit(options : TButtonOptions);
+           procedure ShowForEdit(const options : TButtonOptions; const bModal : boolean = false; const bAdvancedMode : boolean = false);
            function  SelectFile : boolean;
      end;
 
@@ -38,12 +43,14 @@ uses frm_xPLMessage,
      v_xplmsg_opendialog,
      Controls;
 
-procedure TxPLMessageGUI.ShowForEdit(options : TButtonOptions);
+procedure TxPLMessageGUI.ShowForEdit(const options: TButtonOptions; const bModal: boolean; const bAdvancedMode : boolean = false);
 begin
    with TfrmxPLMessage.Create(self) do try
         buttonOptions := options;
         mmoMessage.ReadOnly := false;
-        Show;
+        tsRaw.TabVisible := bAdvancedMode;
+        tsPSScript.TabVisible := tsRaw.Visible;
+        if bModal then ShowModal else Show;
    finally
    end;
 end;

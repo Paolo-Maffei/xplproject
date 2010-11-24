@@ -10,6 +10,8 @@ unit uxPLSchema;
  0.98 : Typing of fClasse and fType variables
  0.99 : Usage of uRegExTools
  1.00 : Removed usage of symbolic constants
+ 1.01 : Added default value initialisation
+        Renamed Tag property to RawxPL
 }
 {$mode objfpc}{$H+}
 interface
@@ -19,20 +21,20 @@ type TxPLSchema = class
         fClasse : String;
         fType   : String;
 
-        procedure Set_Tag   (const aValue : string);
-        function  Get_Tag : string;
+        procedure Set_RawxPL (const aValue : string);
+        function  Get_RawxPL : string;
      public
         Constructor Create(const aClasse : string = ''; const aType : string = '');
 
         procedure ResetValues;
         procedure Assign(aSchema : TxPLSchema);
 
-        property Classe : string read fClasse write fClasse;
-        property Type_  : string read fType   write fType;
-        property Tag    : string read Get_Tag write Set_Tag;
+        property Classe : string read fClasse    write fClasse;
+        property Type_  : string read fType      write fType;
+        property RawxPL : string read Get_RawxPL write Set_RawxPL;
 
         class function IsValid(const aSchema : string) : boolean;
-        class function FormatTag(const aClasse : string; const aType : string) : string; inline;
+        class function FormatRawxPL(const aClasse : string; const aType : string) : string; inline;
     end;
 
 implementation { ========================================================================}
@@ -43,14 +45,14 @@ uses SysUtils,
 
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
 begin
-   fClasse := aClasse;
-   fType   := aType;
+   ResetValues;
+   if aClasse<>'' then fClasse := aClasse;
+   if aType<>'' then   fType   := aType;
 end;
 
 procedure TxPLSchema.ResetValues;
 begin
-   fClasse := '';
-   fType   := '';
+   RawxPL := K_SCHEMA_CONTROL_BASIC;
 end;
 
 procedure TxPLSchema.Assign(aSchema: TxPLSchema);
@@ -69,17 +71,17 @@ begin
    end;
 end;
 
-class function TxPLSchema.FormatTag(const aClasse: string; const aType: string): string;
+class function TxPLSchema.FormatRawxPL(const aClasse: string; const aType: string): string;
 begin
    Result := Format(K_FMT_SCHEMA,[aClasse,aType]);
 end;
 
-function TxPLSchema.Get_Tag: string;
+function TxPLSchema.Get_RawxPL: string;
 begin
-   Result := FormatTag(Classe,Type_);
+   Result := FormatRawxPL(Classe,Type_);
 end;
 
-procedure TxPLSchema.Set_Tag(const aValue: string);
+procedure TxPLSchema.Set_RawxPL(const aValue: string);
 begin
    StrSplitAtChar(aValue,K_SCHEMA_SEPARATOR,fClasse,fType);
 end;

@@ -81,7 +81,7 @@ procedure TXMLMenuItemTypeEx.Set_Body(const AValue: string);
 var aSchema : TxPLSchema;
 begin
    aSchema := Schema;
-   xPLMsg := aSchema.Tag + #10 + aValue;
+   xPLMsg := aSchema.RawxPL + #10 + aValue;
    aSchema.Destroy;
 end;
 
@@ -99,7 +99,7 @@ end;
 function TXMLSchemaTypeEx.Get_Schema: TxPLSchema;
 begin
    result := TxPLSchema.Create;
-   result.Tag:= Name;
+   result.RawxPL:= Name;
 end;
 
 { TXMLCommandType }
@@ -107,7 +107,7 @@ end;
 function TXMLCommandTypeEx.Get_Schema: TxPLSchema;
 begin
    result := TxPLSchema.Create;
-   result.Tag:= msg_schema;
+   result.RawxPL:= msg_schema;
 end;
 
 end.

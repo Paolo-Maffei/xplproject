@@ -1,11 +1,11 @@
 object frmxPLTimer: TfrmxPLTimer
   Left = 23
-  Height = 242
+  Height = 233
   Top = 216
-  Width = 378
+  Width = 370
   Caption = 'frmxPLTimer'
-  ClientHeight = 242
-  ClientWidth = 378
+  ClientHeight = 233
+  ClientWidth = 370
   OnShow = FormShow
   LCLVersion = '0.9.28.2'
   object Label3: TLabel
@@ -60,7 +60,7 @@ object frmxPLTimer: TfrmxPLTimer
     Left = 0
     Height = 25
     Top = 0
-    Width = 378
+    Width = 370
     ButtonHeight = 23
     ButtonWidth = 30
     Caption = 'ToolBar2'

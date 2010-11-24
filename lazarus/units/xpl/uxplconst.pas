@@ -50,6 +50,7 @@ const
    K_FEXT_PAS         = 'pas';
 
    // My key configuration strings =============================================
+   K_SET_CITY         = 'city';
    K_SET_COUNTRY      = 'country';
    K_SET_LANGUAGE     = 'language';
    K_SET_UNITSYSTEM   = 'unit';
@@ -58,7 +59,7 @@ const
    K_SET_LONGITUDE    = 'longitude';
 
    // General ==================================================================
-   K_STR_TRUE = 'true';
+   K_STR_TRUE  = 'true';
    K_STR_FALSE = 'false';
 
    // Websites =================================================================
@@ -107,7 +108,7 @@ const
    K_MSG_HEADER_SOURCE = 'source';
    K_MSG_HEADER_TARGET = 'target';
    K_MSG_TARGET_ANY    = '*';
-   K_MSG_HEADER_DUMMY  = 'me-me.me';
+   K_MSG_HEADER_DUMMY  = 'v-d.i';
 
    // Message body elements ====================================================
    K_BODY_ELMT_DELIMITER = '=';
@@ -166,6 +167,11 @@ const
 
    // Messages to display ======================================================
    K_MSG_HUB_FOUND       = 'xPL Network %s found';
+   K_MSG_LOGGING         = 'Logging to file : %s';
+   K_MSG_CONF_ERROR      = 'Badly formed config information received';
+   K_MSG_PREREQ_MET      = 'All required modules found';
+   K_MSG_PREREQ_PROBING  = 'Probing for presence of required modules : %s';
+   K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
    K_MSG_CONFIGURED      = 'Configuration %s';
    K_MSG_APP_STARTED     = 'Application %s started';
    K_MSG_APP_STOPPED     = 'Application %s stopped';
@@ -180,6 +186,7 @@ const
    K_MSG_ERROR_PLUGIN    = 'No device description found in vendor plugin file - please consider updating';
    K_MSG_ERROR_VENDOR    = 'Unable to open vendor file (%s)';
    K_MSG_OK_PLUGIN       = 'Configuration elements loaded from vendor plugin file';
+   K_MSG_VERSION_ERROR   = 'Application version (%s) differs from description in vendor file (%s) - please consider updating';
    K_MSG_GENERIC_ERROR   = '%s error raised, with message : %s';
    K_MSG_LISTENER_STARTED= '%s v%s started';
 

@@ -55,8 +55,15 @@ type
          function StringListToHtml(aSList : TStrings) : widestring;
 
 implementation  { ==============================================================}
-uses IdStack, cRandom,  cStrings, StrUtils, uRegExpr, uxPLConst,
-     cUtils, XMLWrite;
+uses IdStack,
+     cRandom,
+     cStrings,
+     StrUtils,
+     uRegExpr,
+     uxPLConst,
+     cUtils,
+     Multilog,
+     XMLWrite;
 
 { Utility functions ============================================================}
 
@@ -84,7 +91,7 @@ const
 destructor TxPLWebListener.destroy;
 begin
   if Assigned(fWebServer) then begin
-     LogInfo(K_WEB_MSG_SRV_STOP,[]);
+     Log(K_WEB_MSG_SRV_STOP,[]);
      fWebServer.Active := false;
      FreeAndNil(fWebServer);
   end;
@@ -108,7 +115,7 @@ begin
           Port:=StrToIntDef(Config.ItemName[K_HBEAT_ME_WEB_PORT].Values[0].Value,K_IP_DEFAULT_WEB_PORT);
      end;
 
-     LogInfo(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]);
+     Log(K_WEB_MSG_PORT,[fWebServer.Bindings[0].Port]);
 
      with fWebServer do try
         AutoStartSession := True;
@@ -117,13 +124,13 @@ begin
         SessionState := True;
         Active:=true;
      except
-        on E : Exception do LogError(K_MSG_GENERIC_ERROR,[E.ClassName,E.Message]);
+        on E : Exception do Log(K_MSG_GENERIC_ERROR,[E.ClassName,E.Message],ltError);
      end;
 
      fWebServer.OnCommandGet:=@DoCommandGet;
      fHtmlDir := Config.ItemName[K_CONFIG_LIB_SERVER_ROOT].Values[0].Value;
 
-     LogInfo(K_WEB_MSG_ROOT_DIR,[fHtmlDir]);
+     Log(K_WEB_MSG_ROOT_DIR,[fHtmlDir]);
 end;
 
 procedure TxPLWebListener.DoCommandGet(AContext: TIdContext; ARequestInfo: TIdHTTPRequestInfo; AResponseInfo: TIdHTTPResponseInfo);
@@ -299,7 +306,7 @@ begin
       if AnsiPos('%',aPar) <> 0 then commande := AnsiReplaceStr(commande,aPar,ARequestInfo.Params.Values[aPar]);
    end;
 
-   SendMessage(K_MSG_TYPE_CMND,self.Address.Tag,schema,commande, true);
+   SendMessage(K_MSG_TYPE_CMND,self.Address.RawxPL,schema,commande, true);
 end;
 
 begin
@@ -374,7 +381,7 @@ begin
    Config.AddItem(K_HBEAT_ME_WEB_PORT     ,K_XPL_CT_CONFIG,'',K_RE_PORTNUMBER,1,aDefaultPort);
    Config.AddItem(K_CONFIG_LIB_SERVER_ROOT,K_XPL_CT_CONFIG,'',K_RE_DIRECTORY, 1,'');
    OnxPLHBeatApp := @HBeatApp;
-   LogInfo(K_MSG_LISTENER_STARTED,[AppName,aAppVersion]);
+   Log(K_MSG_LISTENER_STARTED,[AppName,aAppVersion]);
 end;
 
 end.

@@ -41,7 +41,7 @@ const
   K_XML_STR_PLUGIN_URL      = 'plugin_url';
   K_XML_STR_Regexp          = 'regexp';
   K_XML_STR_Schema          = 'schema';
-  K_XML_STR_Status          = 'status';
+  K_XML_STR_STATUS          = 'status';
   K_XML_STR_Trigger         = 'trigger';
   K_XML_STR_Type            = 'type';
   K_XML_STR_VALUE           = 'value';
@@ -70,7 +70,12 @@ const
   K_XML_STR_Recurring       = 'recurring';
   K_XML_STR_Runsub          = 'runsub';
   K_XML_STR_Starttime       = 'starttime';
-  K_XML_STR_Tag             = 'tag';
+  K_XML_STR_TAG             = 'tag';
+  // Timer Strings
+  K_XML_STR_ESTIMATED_END_TIME = 'estimatedend';
+  K_XML_STR_FREQUENCY = 'frequency';
+  K_XML_STR_MODE      = 'mode';
+  K_XML_STR_REMAINING = 'remaining';
   // Determinator Strings
   K_XML_STR_Determinator    = 'determinator';
   K_XML_STR_Display_name    = 'display_name';

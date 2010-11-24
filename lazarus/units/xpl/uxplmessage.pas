@@ -45,7 +45,9 @@ type
         fExecuteOrder : integer;
 
         function GetRawXPL: string;
+        function Get_Strings: TStringList;
         procedure SetRawXPL(const AValue: string);
+        procedure Set_Strings(const AValue: TStringList);
      public
         property Header      : TxPLHeader        read fHeader;
         property Body        : TxPLMsgBody       read fBody;
@@ -57,7 +59,7 @@ type
         property Name        : string            read fName            write fName            ;
         property Description : string            read fDescription     write fDescription     ;
         property ExecuteOrder : integer          read fExecuteOrder    write fExecuteOrder    ;
-
+        property Strings     : TStringList       read Get_Strings      write Set_Strings;
 
         procedure ResetValues;
 
@@ -70,7 +72,6 @@ type
         function IsValid : boolean;
         function ElementByName(const anItem : string) : string;
         function ProcessedxPL : string;
-        function Strings     : TStringList;
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
 
@@ -120,17 +121,38 @@ end;
 
 function TxPLMessage.SourceFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-   result := Format(K_FMT_FILTER,[Header.MessageType,Source.FilterTag,Schema.Tag]);
+   result := Format(K_FMT_FILTER,[Header.MessageType,Source.FilterTag,Schema.RawxPL]);
 end;
 
 function TxPLMessage.TargetFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-   result := Format(K_FMT_FILTER,[Header.MessageType,Target.FilterTag,Schema.Tag]);
+   result := Format(K_FMT_FILTER,[Header.MessageType,Target.FilterTag,Schema.RawxPL]);
 end;
 
 function TxPLMessage.GetRawXPL: string;
 begin
    result := Header.RawxPL + Body.RawxPL;
+end;
+
+function TxPLMessage.Get_Strings: TStringList;
+var arrStr : StringArray;
+    j      : integer;
+begin
+    result := TStringList.Create;
+    arrStr := StrSplit(RawXPL,#10);
+    for j:=0 to high(arrStr) do result.Add(arrStr[j]);
+end;
+
+procedure TxPLMessage.Set_Strings(const AValue: TStringList);
+var s : string;
+    j : integer;
+begin
+   s:= '';
+
+   for j:=0 to aValue.Count-1 do
+       s += (aValue[j] + #10);
+
+   RawxPL := s;
 end;
 
 function TxPLMessage.IsValid: boolean;
@@ -140,9 +162,9 @@ end;
 
 function TxPLMessage.ElementByName(const anItem: string): string;
 begin
-   if anItem = 'Schema' then result := Schema.Tag;
-   if anItem = 'Source' then result := Source.Tag;
-   if anItem = 'Target' then result := Target.Tag;
+   if anItem = 'Schema' then result := Schema.RawxPL;
+   if anItem = 'Source' then result := Source.RawxPL;
+   if anItem = 'Target' then result := Target.RawxPL;
    if anItem = 'Type'   then result := Header.MessageType;
 end;
 
@@ -163,15 +185,6 @@ begin
    result := StrReplace('{SYS::HOUR}'     , FormatDateTime('hh'            , now), result);
    result := StrReplace('{SYS::MINUTE}'   , FormatDateTime('nn'            , now), result);
    result := StrReplace('{SYS::SECOND}'   , FormatDateTime('ss'            , now), result);
-end;
-
-function TxPLMessage.Strings: TStringList;
-var arrStr : StringArray;
-    j      : integer;
-begin
-    result := TStringList.Create;
-    arrStr := StrSplit(RawXPL,#10);
-    for j:=0 to high(arrStr) do result.Add(arrStr[j]);
 end;
 
 procedure TxPLMessage.SetRawXPL(const AValue: string);
@@ -241,6 +254,7 @@ end;
 
 procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);
 begin
+   self.ResetValues;
    Description := aCom.description;
    Name := aCom.name;
    Header.ReadFromXML(aCom);
@@ -250,7 +264,7 @@ end;
 procedure TxPLMessage.Format_HbeatApp(const aInterval: string; const aPort: string; const aIP: string);
 begin
    Body.ResetAll;
-   Schema.Tag := K_SCHEMA_HBEAT_APP;
+   Schema.RawxPL := K_SCHEMA_HBEAT_APP;
    MessageType:= K_MSG_TYPE_STAT;
    Target.IsGeneric := True;
    Body.AddKeyValuePairs( [K_HBEAT_ME_INTERVAL, K_HBEAT_ME_PORT, K_HBEAT_ME_REMOTEIP],
@@ -260,7 +274,7 @@ end;
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin
    Body.ResetAll;
-   Schema.Tag := K_SCHEMA_SENSOR_BASIC;
+   Schema.RawxPL := K_SCHEMA_SENSOR_BASIC;
    Body.AddKeyValuePairs( ['device' , 'type' , 'current'],
                           [aDevice  , aType  ,  aCurrent]);
 end;

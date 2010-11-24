@@ -13,6 +13,8 @@ unit uxPLAddress;
  0.99 : Added HostNmInstance
  1.00 : Suppressed uRegExpTools
  1.01 : IsValid function moved to be class functions
+ 1.02 : Added default value initialisation
+        Renamed Tag property to RawxPL
 }
 {$mode objfpc}{$H+}
 interface
@@ -28,8 +30,8 @@ type
        fDevice   : string;
        fInstance : string;
 
-       function  GetTag: string;                        dynamic;
-       procedure SetTag   (const aValue: string);       dynamic;
+       function  GetRawxPL: string;               dynamic;
+       procedure SetRawxPL(const aValue: string); dynamic;
        procedure SetAddressElement(const aIndex : integer; const aValue : string); dynamic;
     public
        constructor Create;
@@ -43,14 +45,15 @@ type
        property Device   : string index 1 read fDevice   write SetAddressElement;
        property Instance : string index 2 read fInstance write SetAddressElement;
 
-       property Tag      : string read GetTag    write SetTag;
+       property RawxPL      : string read GetRawxPL    write SetRawxPL;
 
        function  FilterTag : string;
        function  Equals(anAddress : TxPLAddress) : boolean;
+       function  IsValid : boolean;
 
        class function ComposeAddress       (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
        class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
-       class procedure SplitVD              (const aVD : string; out aVendor : string; out aDevice : string);
+       class procedure SplitVD             (const aVD     : string;   out aVendor, aDevice : string);
        class function RandomInstance : tsInstance;
        class function HostNmInstance : tsInstance;
        class function IsValid(const aAddress : string) : boolean;
@@ -61,8 +64,8 @@ type
     TxPLTargetAddress = class(TxPLAddress)
        fIsGeneric : boolean;
 
-       procedure SetTag(const AValue: string); override;
-       function  GetTag: string;               override;
+       procedure SetRawxPL(const AValue: string); override;
+       function  GetRawxPL: string;               override;
        procedure SetAddressElement(const aIndex : integer; const aValue : string); override;
     public
        constructor Create;
@@ -88,7 +91,7 @@ begin
    result := Format(K_FMT_FILTER,[aVendor,aDevice,aInstance]);
 end;
 
-class procedure TxPLAddress.SplitVD(const aVD: string; out aVendor: string; out aDevice: string);
+class procedure TxPLAddress.SplitVD(const aVD: string; out aVendor, aDevice: string);
 begin StrSplitAtChar(aVD,'-',aVendor,aDevice,false); end;
 
 class function TxPLAddress.RandomInstance : tsInstance;
@@ -117,8 +120,8 @@ constructor TxPLAddress.Create(const aVendor : tsVendor; const aDevice : tsDevic
 begin
    Create;
 
-   Vendor := aVendor;
-   Device := aDevice;
+   Vendor   := aVendor;
+   Device   := aDevice;
    Instance := aInstance;
 end;
 
@@ -130,9 +133,10 @@ end;
 
 procedure TxPLAddress.ResetValues;
 begin
-   fVendor   := '';
-   fDevice   := '';
-   fInstance := '';
+   RawxPL := K_MSG_HEADER_DUMMY;
+//   fVendor   := '';
+//   fDevice   := '';
+//   fInstance := '';
 end;
 
 procedure TxPLAddress.Assign(anAddress: TxPLAddress);
@@ -142,12 +146,12 @@ begin
    fInstance := anAddress.Instance;
 end;
 
-function TxPLAddress.GetTag: string;
+function TxPLAddress.GetRawxPL: string;
 begin
    Result := Format(K_FMT_ADDRESS,[fVendor,fDevice,fInstance]);
 end;
 
-procedure TxPLAddress.SetTag(const aValue: string);
+procedure TxPLAddress.SetRawxPL(const aValue: string);
 begin
    with TRegExpr.Create do try
         Expression := K_REGEXPR_ADDRESS;
@@ -156,7 +160,8 @@ begin
            fDevice   := Match[2];
            fInstance := Match[3];
         end;
-   finally destroy
+   finally
+        destroy
    end;
 end;
 
@@ -167,9 +172,9 @@ end;
 
 function TxPLAddress.Equals(anAddress: TxPLAddress): boolean;
 begin
-  result := (fVendor   = anAddress.Vendor) and
-            (fDevice   = anAddress.Device) and
-            (fInstance = anAddress.Instance);
+  result := ( fVendor   = anAddress.Vendor   ) and
+            ( fDevice   = anAddress.Device   ) and
+            ( fInstance = anAddress.Instance );
 end;
 
 procedure TxPLAddress.SetAddressElement(const aIndex : integer; const aValue : string);
@@ -179,6 +184,11 @@ begin
         1 : fDevice   := aValue;
         2 : fInstance := aValue;
    end;
+end;
+
+function TxPLAddress.IsValid : boolean;
+begin
+   result := TxPLAddress.IsValid(RawxPL);
 end;
 
 { TxPLTargetAddress Object =======================================================}
@@ -194,9 +204,9 @@ begin
                                  else inherited;
 end;
 
-function TxPLTargetAddress.GetTag: string;
+function TxPLTargetAddress.GetRawxPL: string;
 begin
-   Result := IfThen( fIsGeneric, K_ADDR_ANY_TARGET, inherited GetTag);
+   Result := IfThen( fIsGeneric, K_ADDR_ANY_TARGET, inherited GetRawxPL);
 end;
 
 constructor TxPLTargetAddress.Create;
@@ -205,7 +215,7 @@ begin
   fIsGeneric := True;
 end;
 
-procedure TxPLTargetAddress.SetTag(const AValue: string);
+procedure TxPLTargetAddress.SetRawxPL(const AValue: string);
 begin
    fIsGeneric := (aValue=K_ADDR_ANY_TARGET);
    If not fIsGeneric then inherited;

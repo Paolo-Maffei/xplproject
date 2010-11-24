@@ -1,9 +1,9 @@
 { Ceci est un fichier ressource généré automatiquement par Lazarus }
 
 LazarusResources.Add('TfrmxPLTimer','FORMDATA',[
-  'TPF0'#12'TfrmxPLTimer'#11'frmxPLTimer'#4'Left'#2#23#6'Height'#3#242#0#3'Top'
-  +#3#216#0#5'Width'#3'z'#1#7'Caption'#6#11'frmxPLTimer'#12'ClientHeight'#3#242
-  +#0#11'ClientWidth'#3'z'#1#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.28.'
+  'TPF0'#12'TfrmxPLTimer'#11'frmxPLTimer'#4'Left'#2#23#6'Height'#3#233#0#3'Top'
+  +#3#216#0#5'Width'#3'r'#1#7'Caption'#6#11'frmxPLTimer'#12'ClientHeight'#3#233
+  +#0#11'ClientWidth'#3'r'#1#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#8'0.9.28.'
   +'2'#0#6'TLabel'#6'Label3'#4'Left'#2#16#6'Height'#2#16#3'Top'#2'('#5'Width'#2
   +'*'#7'Caption'#6#7'Name : '#11'ParentColor'#8#0#0#6'TLabel'#6'Label4'#4'Left'
   +#2#16#6'Height'#2#16#3'Top'#2'H'#5'Width'#2')'#7'Caption'#6#8'Target :'#11'P'
@@ -14,7 +14,7 @@ LazarusResources.Add('TfrmxPLTimer','FORMDATA',[
   +'eight'#2#16#3'Top'#3#200#0#5'Width'#2'>'#7'Caption'#6#11'Frequence :'#11'Pa'
   +'rentColor'#8#0#0#6'TLabel'#6'Label6'#4'Left'#2#16#6'Height'#2#16#3'Top'#3
   +#135#0#5'Width'#2'H'#7'Caption'#6#12'Timer Mode :'#11'ParentColor'#8#0#0#8'T'
-  +'ToolBar'#8'ToolBar2'#4'Left'#2#0#6'Height'#2#25#3'Top'#2#0#5'Width'#3'z'#1
+  +'ToolBar'#8'ToolBar2'#4'Left'#2#0#6'Height'#2#25#3'Top'#2#0#5'Width'#3'r'#1
   +#12'ButtonHeight'#2#23#11'ButtonWidth'#2#30#7'Caption'#6#8'ToolBar2'#11'Edge'
   +'Borders'#11#8'ebBottom'#0#9'EdgeOuter'#7#8'esRaised'#8'TabOrder'#2#0#0#12'T'
   +'SpeedButton'#4'sbOk'#4'Left'#2#1#6'Height'#2#23#3'Top'#2#0#5'Width'#2'K'#7

@@ -24,13 +24,14 @@ Rev 298 : Modified to enable Linux support
         *** TODO : applications has up to 6 seconds to answer an HBeatRequest,
         *** the module should take this in account to decide that prereq are not met
  1.02 : Modifications due to uxPLConfig evolutions (usage of u_xml_config)
+ 1.03 : Added hook system (needs vendor.xml to be up to date)
 }
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Classes, SysUtils, u_xpl_udp_socket,
+uses Classes, SysUtils, u_xpl_udp_socket, Multilog,
      uxPLMessage, uxPLConfig,  uXPLFilter, fpTimer,
      uxPLMsgBody,  u_xpl_sender, uxPLConst;
 
@@ -50,12 +51,14 @@ type
       TxPLListener = class(TxPLSender)
       private
         fConfig  : TxPLConfig;
-        fPrereqList : TStringList;                                              // Handles list of needed modules in device=VDI form
-        fPrereqMet  : boolean;
-        IncomingSocket : TxPLUDPServer;
-        HBTimer(*, HBReqTimer*) : TFPTimer;                                     // HBReqTimer is dedicated to hbeat requests
-        fFilterSet : TxPLFilters;
+        fPrereqList ,                                                           // Handles list of needed modules in device=VDI form
+                                                                   // List of xpl-cmnd that will be captured, issued from vendor fil
+        fHookedSchema    : TStringList;
+        IncomingSocket   : TxPLUDPServer;
         iNoHubTimerCount : integer;
+        fPrereqMet : boolean;
+        HBTimer    : TFPTimer;                                     // HBReqTimer is dedicated to hbeat requests
+        fFilterSet : TxPLFilters;
         bDisposing : Boolean;
 
         procedure InitSocket();
@@ -71,6 +74,9 @@ type
         OnxPLTTSBasic      : TxPLTTSBasic     ;
         OnxPLHBeatApp      : TxPLHBeatApp     ;
         OnxPLMediaBasic    : TxPLMediaBasic   ;
+        OnHookedCmnd       : TxPLReceivedEvent;
+        OnHookedTrig       : TxPLReceivedEvent;
+        OnHookedStat       : TxPLReceivedEvent;
         PassMyOwnMessages  : Boolean;
         JoinedxPLNetwork   : Boolean;                                           // This should be read only by other objects
         SeeAll             : Boolean;                                           // This variable may only be set to true for a logger to let him see all messages
@@ -79,7 +85,6 @@ type
         destructor destroy; override;
         procedure CallConfigDone; dynamic;
         procedure TimerElapsed(Sender : TObject);
-//        procedure HandleHBeatRequest;   dynamic;
         procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
         procedure SendHeartBeatMessage; dynamic;
@@ -96,16 +101,19 @@ type
         function  DoTTSBasic     (aMessage : TxPLMessage) : boolean;
         function  DoHBeatApp     (aMessage : TxPLMessage) : boolean;
         function  DoMediaBasic   (aMessage : TxPLMessage) : boolean;
-//        function AppDataNode: TDOMNode;
+        function  DoHookedCmnd   (aMessage : TxPLMessage) : boolean;
+        function  DoHookedTrig   (aMessage : TxPLMessage) : boolean;
+        function  DoHookedStat   (aMessage : TxPLMessage) : boolean;
         procedure UDPRead(const aString : string);
-	procedure LogInfo(Const Formatting  : string; Const Data  : array of const ); override;            // Info are only stored in log file
+	procedure Log    (Const Formatting : string; Const Data : array of const; Const LogType : integer = ltInfo); override;            // Info are only stored in log file
         procedure Listen;
         procedure Dispose;
 
      end;
 
 implementation { ==============================================================}
-uses StrUtils;
+uses StrUtils,
+     u_xml_xplplugin;
 
 { TxPLListener ================================================================}
 constructor TxPLListener.create(const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string; const bConfigNeeded : boolean = true);
@@ -115,6 +123,7 @@ begin
    PassMyOwnMessages := false;
    SeeAll            := false;
    fPrereqList       := TStringList.Create;
+   fHookedSchema       := TStringList.Create;
    fConfig           := TxPLConfig.Create(self, bConfigNeeded);
    Adresse.Instance  := fConfig.ItemName[K_CONF_NEWCONF].Value;                         // Instance name will be determined by configuration need or not
    fFilterSet        := TxPLFilters.Create(fConfig);
@@ -132,6 +141,7 @@ destructor TxPLListener.destroy;
 begin
      if not bDisposing then Dispose;
      fPrereqList.Destroy;
+     fHookedSchema.Destroy;
      fFilterSet.Destroy;
      IncomingSocket.Destroy;
      fConfig.Destroy;
@@ -146,12 +156,12 @@ begin
    try
      IncomingSocket:=TxPLUDPServer.create(Settings,@UDPRead);
      If IncomingSocket.Active then begin                             // Lets be sure we found an address to bind to
-        LogInfo(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
+        Log(K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
         HBTimer.Enabled  := True;
         TimerElapsed(self);
-     end else LogError(K_MSG_IP_ERROR,[]);
+     end else Log(K_MSG_IP_ERROR,[], ltError);
    except
-     LogError(K_MSG_UDP_ERROR,[]);
+     Log(K_MSG_UDP_ERROR,[], ltError);
    end;
 end;
 
@@ -164,11 +174,13 @@ end;
 
 procedure TxPLListener.CallConfigDone;
 begin
-   LogInfo(K_MSG_CONFIG_LOADED,[]);
+   Log(K_MSG_CONFIG_LOADED,[]);
    if Assigned(OnxPLConfigDone) then OnxPLConfigDone(fConfig);                 // Assume that this can never be done if NoConfig has been specified !
 end;
 
 procedure TxPLListener.Listen;
+var i : integer;
+    schemas : TXMLSchemasType;
 begin                                                       
    bDisposing := false;
    fPrereqMet := not (fPrereqList.Count > 0);
@@ -176,6 +188,11 @@ begin
       Adresse.Instance := fConfig.ItemName[K_CONF_NEWCONF].Value;
       CallConfigDone;
    end;
+
+   Schemas := Config.DeviceInVendorFile.Schemas;
+   for i := 0 to Schemas.Count-1 do
+       if Schemas[i].Command or Schemas[i].Listen then fHookedSchema.Add(Schemas[i].Name);
+
    InitSocket;
 end;
 
@@ -183,13 +200,13 @@ procedure TxPLListener.Dispose;
 begin
    bDisposing := True;
    if JoinedxPLNetwork then SendHeartBeatMessage;
-   if IncomingSocket.Active then LogInfo(K_MSG_BIND_RELEASED,[]);
+   if IncomingSocket.Active then Log(K_MSG_BIND_RELEASED,[]);
    IncomingSocket.Active := False;
 end;
 
-procedure TxPLListener.LogInfo(const Formatting: string; const Data: array of const);
+procedure TxPLListener.Log(Const Formatting : string; Const Data : array of const; Const LogType : integer);
 begin
-   inherited LogInfo(Formatting, Data);
+   inherited;
    if JoinedxPLNetwork and not bDisposing then SendLOGBasic('info', Format(Formatting,Data));
 end;
 
@@ -241,7 +258,7 @@ begin
      Body.ResetValues;
      case AnsiIndexStr(aMessage.Schema.Type_, ['current', 'list', 'response']) of
           0 : if aMessage.Body.GetValueByKey('command') = 'request' then begin                        // config.current message handling
-                 Schema.Tag := aMessage.Schema.Tag;
+                 Schema.RawxPL := aMessage.Schema.RawxPL;
                  k := 0;
                  for i := 0 to fConfig.Count-1 do begin
                      if fConfig[i].Values.Count = 0 then begin
@@ -264,7 +281,7 @@ begin
           1 : begin                                                                                   // config.list message handling
                 SetLength(keys, fConfig.Count);
                 SetLength(Values, fConfig.Count);
-                Schema.Tag := aMessage.Schema.Tag;
+                Schema.RawxPL := aMessage.Schema.RawxPL;
                 for i := 0 to fConfig.Count-1 do begin
                     Keys[i] := fConfig[i].ConfigType;
                     Values[i] := fConfig[i].Name + fConfig[i].MaxValueAsString;
@@ -280,10 +297,10 @@ begin
                   Adresse.Instance := fConfig.ItemName[K_CONF_NEWCONF].Value;                         // Instance name may have changed
                   SendHeartBeatMessage;
                   fConfig.Save;
-                  LogInfo(K_MSG_CONFIG_RECEIVED,[aMessage.Source.Tag]);
+                  Log(K_MSG_CONFIG_RECEIVED,[aMessage.Source.RawxPL]);
                   CallConfigDone;
 
-                end else LogWarn('Bad config information received',[]);
+                end else Log(K_MSG_CONF_ERROR,[], ltWarning);
               end;
      end;
      finally destroy;
@@ -296,7 +313,7 @@ begin
    if bDisposing then exit;
    aMessage := TxPLMessage.Create(aString);
    with aMessage do try
-      if ((Adresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.Tag)) then begin  // It is directed to me
+      if ((Adresse.Equals(Target)) or (Target.Isgeneric) or fFilterSet.CheckGroup(Target.RawxPL)) then begin  // It is directed to me
          if ( Schema.Classe = K_SCHEMA_CLASS_HBEAT ) and (Schema.Type_ = 'request') then ChangeTimerFrequency(Random(4000) + 2000); // Choose a random value between 2 and 6 seconds
          if ( Schema.Classe = K_SCHEMA_CLASS_CONFIG) then HandleConfigMessage(aMessage);
          if ( Adresse.Equals(Source) and (not JoinedxPLNetwork)) then DoxPLJoinedNet(true);
@@ -308,6 +325,9 @@ begin
                if not DoTTSBasic     (aMessage) then
                if not DoHBeatApp     (aMessage) then
                if not DoMediaBasic   (aMessage) then
+               if not DoHookedCmnd   (aMessage) then
+               if not DoHookedTrig   (aMessage) then
+               if not DoHookedStat   (aMessage) then
                if Assigned(OnxPLReceived)       then OnxPLReceived(aMessage);
             end;
       end else if SeeAll then OnxPLReceived(aMessage);
@@ -317,13 +337,13 @@ end;
 
 procedure TxPLListener.DoxPLPrereqMet;
 begin
-   LogInfo('All required modules found',[]);
+   Log(K_MSG_PREREQ_MET,[]);
    if Assigned(OnxPLPrereqMet) then OnxPLPrereqMet;
 end;
 
 procedure TxPLListener.DoxPLJoinedNet(aJoined: boolean);
 begin
-   LogInfo(K_MSG_HUB_FOUND,[IfThen(aJoined,'','not')]);
+   Log(K_MSG_HUB_FOUND,[IfThen(aJoined,'','not')]);
    if aJoined <> true then exit; { TODO -oGLH : Le cas contraire (perte de hub) devrait etre géré ultérieurement}
 
    JoinedxPLNetwork := true;
@@ -333,7 +353,7 @@ begin
    if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet(true);
 
    if not fPrereqMet then begin;
-      LogInfo('Probing for presence of required modules : %s',[PrereqList.CommaText]);
+      Log(K_MSG_PREREQ_PROBING,[PrereqList.CommaText]);
       SendHBeatRequestMsg;
    end;
 end;
@@ -351,7 +371,7 @@ begin
      result := false;
      if not Assigned(OnxPLSensorRequest) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
-     if aMessage.Schema.Tag  <> K_SCHEMA_SENSOR_REQUEST then exit;
+     if aMessage.Schema.RawxPL  <> K_SCHEMA_SENSOR_REQUEST then exit;
 
      OnxPLSensorRequest( aMessage, aMessage.Body.GetValueByKey('device'),
                                    aMessage.Body.GetValueByKey('request')
@@ -373,7 +393,7 @@ begin
      result := false;
      if not Assigned(OnxPLControlBasic) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
-     if aMessage.Schema.Tag  <> K_SCHEMA_CONTROL_BASIC then exit;
+     if aMessage.Schema.RawxPL  <> K_SCHEMA_CONTROL_BASIC then exit;
 
      OnxPLControlBasic( aMessage, aMessage.Body.GetValueByKey('device'),
                                   aMessage.Body.GetValueByKey('current')
@@ -395,8 +415,8 @@ begin
      result := false;
      if not Assigned(OnxPLTTSBasic) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
-     if aMessage.Schema.Tag  <> K_SCHEMA_TTS_BASIC then exit;
-     if aMessage.Source.Tag = Adresse.Tag then exit;
+     if aMessage.Schema.RawxPL  <> K_SCHEMA_TTS_BASIC then exit;
+     if aMessage.Source.RawxPL = Adresse.RawxPL then exit;
      OnxPLTTSBasic( aMessage, aMessage.Body.GetValueByKey('speech') );
 
      result := true;
@@ -415,12 +435,12 @@ var i : integer;
 begin
    result := false;
    if aMessage.MessageType <> K_MSG_TYPE_STAT then exit;
-   if aMessage.Schema.Tag  <> K_SCHEMA_HBEAT_APP then exit;
-   if aMessage.Source.Tag = Adresse.Tag then exit;
+   if aMessage.Schema.RawxPL  <> K_SCHEMA_HBEAT_APP then exit;
+   if aMessage.Source.RawxPL = Adresse.RawxPL then exit;
    if not fPrereqMet then begin
       fPrereqMet := true;
       for i:=0 to PrereqList.Count-1 do begin
-          if aMessage.Source.Device = PrereqList.Names[i] then PrereqList.ValueFromIndex[i]:=aMessage.Source.Tag;
+          if aMessage.Source.Device = PrereqList.Names[i] then PrereqList.ValueFromIndex[i]:=aMessage.Source.RawxPL;
           fPrereqMet := fPrereqMet and (PrereqList.ValueFromIndex[i]<>'0')
       end;
       if fPrereqMet then DoxPLPrereqMet;
@@ -444,11 +464,41 @@ begin
      result := false;
      if not Assigned(OnxPLMediaBasic) then exit;
      if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
-     if aMessage.Schema.Tag  <> K_SCHEMA_MEDIA_BASIC then exit;
-     if aMessage.Source.Tag = Adresse.Tag then exit;
+     if aMessage.Schema.RawxPL  <> K_SCHEMA_MEDIA_BASIC then exit;
+     if aMessage.Source.RawxPL = Adresse.RawxPL then exit;
      OnxPLMediaBasic( aMessage, aMessage.Body.GetValueByKey('command'),aMessage.Body.GetValueByKey('mp'));
 
      result := true;
+end;
+
+function TxPLListener.DoHookedCmnd(aMessage: TxPLMessage): boolean;
+begin
+   result := false;
+   if not Assigned(OnHookedCmnd) then exit;
+   if aMessage.MessageType <> K_MSG_TYPE_CMND then exit;
+   if fHookedSchema.IndexOf(aMessage.Schema.RawxPL) = -1 then exit;
+   OnHookedCmnd(aMessage);
+   result := true;
+end;
+
+function TxPLListener.DoHookedTrig(aMessage: TxPLMessage): boolean;
+begin
+   result := false;
+   if not Assigned(OnHookedTrig) then exit;
+   if aMessage.MessageType <> K_MSG_TYPE_TRIG then exit;
+   if fHookedSchema.IndexOf(aMessage.Schema.RawxPL) = -1 then exit;
+   OnHookedTrig(aMessage);
+   result := true;
+end;
+
+function TxPLListener.DoHookedStat(aMessage: TxPLMessage): boolean;
+begin
+   result := false;
+   if not Assigned(OnHookedStat) then exit;
+   if aMessage.MessageType <> K_MSG_TYPE_STAT then exit;
+   if fHookedSchema.IndexOf(aMessage.Schema.RawxPL) = -1 then exit;
+   OnHookedStat(aMessage);
+   result := true;
 end;
 
 

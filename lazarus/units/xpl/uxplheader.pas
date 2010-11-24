@@ -36,12 +36,12 @@ type { TxPLHeader }
      private
        fSource  : TxPLAddress;
        fTarget  : TxPLTargetAddress;
+       fSchema  : TxPLSchema;
        fMsgType : tsMsgType;
        fHop     : integer;
-       fSchema  : txPLSchema;
 
        function  GetRawxPL : string;
-       procedure SetRawxPL(aRawXPL : string);
+       procedure SetRawxPL(const aRawXPL : string);
        procedure SetMessageType(const AValue: tsMsgType);
      public
        property MessageType : tsMsgType         read fMsgType  write SetMessageType;
@@ -58,7 +58,7 @@ type { TxPLHeader }
 
        function IsValid : boolean;
 
-       procedure WriteToXML(aAction : TXMLxplActionType);
+       procedure WriteToXML (const aAction : TXMLxplActionType);
        procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
        procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
@@ -75,12 +75,14 @@ begin
    fSource := TxPLAddress.Create;
    fTarget := TxPLTargetAddress.Create;
    fSchema := TxPLSchema.Create;
+   ResetValues;
 end;
 
 destructor TxPLHeader.destroy;
 begin
    Source.Destroy;
    Target.Destroy;
+   Schema.Destroy;
 end;
 
 procedure TxPLHeader.Assign(const aHeader: TxPLHeader);
@@ -89,7 +91,7 @@ begin
    Target.Assign(aHeader.Target);
    Schema.Assign(aHeader.Schema);
    MessageType := aHeader.MessageType;
-   Hop := aHeader.Hop;
+   Hop         := aHeader.Hop;
 end;
 
 procedure TxPLHeader.ResetValues;
@@ -98,30 +100,29 @@ begin
    Target.ResetValues;
    Schema.ResetValues;
    fMsgType := K_MSG_TYPE_CMND;
-   fHop := 1;
+   fHop     := 1;
 end;
 
-function TxPLHeader.IsValid: boolean;
-begin
-   result := //TxPLAddress.IsValid(Source.Tag) and
-             TxPLTargetAddress.IsValid(Target.Tag) and
-             TxPLSchema.IsValid(Schema.Tag) and
+function TxPLHeader.IsValid: boolean;                                           // This test is by design not
+begin                                                                           // targetted to test Source.RawxPL
+   result := TxPLTargetAddress.IsValid(Target.RawxPL) and                       // because this field will always be filled
+             TxPLSchema.IsValid(Schema.RawxPL) and                              // by the xPLClient of the application
              (MsgTypeAsOrdinal(MessageType) <> -1);
 end;
 
 procedure TxPLHeader.ReadFromXML(const aAction : TXMLxplActionType);
 begin
-   MessageType := aAction.Msg_Type;
-   Target.Tag  := aAction.Msg_Target;
-   Source.Tag  := aAction.Msg_Source;
-   Schema.Tag  := aAction.Msg_Schema;
+   MessageType   := aAction.Msg_Type;
+   Target.RawxPL := aAction.Msg_Target;
+   Source.RawxPL := aAction.Msg_Source;
+   Schema.RawxPL := aAction.Msg_Schema;
 end;
 
 procedure TxPLHeader.ReadFromXML(const aCom: TXMLCommandType);
 begin
-   MessageType := K_MSG_TYPE_HEAD + aCom.msg_type;
-   Target.Tag  := K_MSG_TARGET_ANY;
-   Schema.Tag  := aCom.msg_schema;
+   MessageType   := K_MSG_TYPE_HEAD + aCom.msg_type;
+   Target.RawxPL := K_MSG_TARGET_ANY;
+   Schema.RawxPL := aCom.msg_schema;
 end;
 
 class function TxPLHeader.MsgTypeAsOrdinal(const aMsgType: tsMsgType): integer;
@@ -129,29 +130,31 @@ begin
    Result := AnsiIndexStr(aMsgType,[K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND]);
 end;
 
-procedure TxPLHeader.WriteToXML(aAction : TXMLxplActionType);
+procedure TxPLHeader.WriteToXML(const aAction : TXMLxplActionType);
 begin
-   aAction.Msg_Type:=MessageType;
-   aAction.Msg_Target:=Target.Tag;
-   aAction.Msg_Source:=Source.Tag;
-   aAction.Msg_Schema:=Schema.Tag;
+   aAction.Msg_Type   := MessageType;
+   aAction.Msg_Target := Target.RawxPL;
+   aAction.Msg_Source := Source.RawxPL;
+   aAction.Msg_Schema := Schema.RawxPL;
 end;
 
 function TxPLHeader.GetRawxPL: string;
 begin
-   If IsValid
-      then result := Format(K_MSG_HEADER_FORMAT,[MessageType,Hop,Source.Tag,Target.Tag,Schema.Tag])
-      else result := '';
+   Result := IfThen( IsValid ,
+                     Format(K_MSG_HEADER_FORMAT,[MessageType,Hop,Source.RawxPL,Target.RawxPL,Schema.RawxPL]))
+//   If IsValid
+//      then result :=
+//      else result := '';
 end;
 
 procedure TxPLHeader.SetMessageType(const AValue: tsMsgType);
 begin
    if MessageType = aValue then exit;
-   if aValue = K_MSG_TYPE_STAT then Target.Tag := K_MSG_TARGET_ANY;                                // Rule of XPL : xpl-stat are always broadcast
+   if aValue = K_MSG_TYPE_STAT then Target.IsGeneric := True;                   // Rule of XPL : xpl-stat are always broadcast
    fMsgType := aValue;
 end;
 
-procedure TxPLHeader.SetRawXpl(aRawXPL : string);
+procedure TxPLHeader.SetRawXpl(const aRawXPL : string);
 var i : integer;
 begin
    ResetValues;
@@ -163,12 +166,12 @@ begin
            while i<=7 do begin
               Case AnsiIndexStr(Match[i],[K_MSG_HEADER_HOP,K_MSG_HEADER_SOURCE,K_MSG_HEADER_TARGET]) of
                    0 : fHop := StrToInt(Match[i+1]);
-                   1 : Source.Tag := Match[i+1];
-                   2 : Target.Tag := Match[i+1];
+                   1 : Source.RawxPL := Match[i+1];
+                   2 : Target.RawxPL := Match[i+1];
               end;
               i += 2;
            end;
-           Schema.Tag := Match[9];
+           Schema.RawxPL := Match[9];
         end;
    finally Destroy;
    end;
