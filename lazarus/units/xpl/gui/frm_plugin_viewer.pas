@@ -20,6 +20,10 @@ type
     cbCommandClasse: TxPLClassCombo;
     cbCommandType: TMedit;
     cbType:    TComboBox;
+    ckStatus: TCheckBox;
+    ckListen: TCheckBox;
+    ckTrigger: TCheckBox;
+    ckCommand: TCheckBox;
     edtMenuItemName: TEdit;
     edtCommandName: TEdit;
     GroupBox1: TGroupBox;
@@ -28,10 +32,6 @@ type
     mgMenuItemBody: TBodyMessageGrid;
     cbSchemaClasse: TxPLClassCombo;
     cbMenuItemClasse: TxPLClassCombo;
-    cbStatus:  TComboBox;
-    cbListen:  TComboBox;
-    cbTrigger: TComboBox;
-    cbCommand: TComboBox;
     edtMaxVal: TEdit;
     edtMinVal: TEdit;
     edtDevicePlatform: TComboBox;
@@ -57,10 +57,6 @@ type
     Label13:   TLabel;
     Label14:   TLabel;
     Label15:   TLabel;
-    Label16:   TLabel;
-    Label17:   TLabel;
-    Label18:   TLabel;
-    Label19:   TLabel;
     Label2:    TLabel;
     Label20:   TLabel;
     Label21:   TLabel;
@@ -235,10 +231,10 @@ begin
       cbSchemaClasse.Text := aSchema.Classe;
       cbSchemaType.Text := aSchema.Type_;
       aSchema.Destroy;
-      cbCommand.Text  := TXMLSchemaType(aNode.Data).command;
-      cbStatus.Text   := TXMLSchemaType(aNode.Data).status;
-      cbListen.Text   := TXMLSchemaType(aNode.Data).listen;
-      cbTrigger.Text  := TXMLSchemaType(aNode.Data).trigger;
+      ckCommand.Checked  := TXMLSchemaType(aNode.Data).command;
+      ckStatus.Checked   := TXMLSchemaType(aNode.Data).status;
+      ckListen.Checked   := TXMLSchemaType(aNode.Data).listen;
+      ckTrigger.Checked  := TXMLSchemaType(aNode.Data).trigger;
       edtComment.Text := TXMLSchemaType(aNode.Data).comment;
     end;
     if ((TDOMElement(aNode.Data).NodeName = K_XML_STR_COMMAND) or
@@ -515,7 +511,7 @@ begin
     abody.ResetAll;
     mgMenuItemBody.CopyTo(aBody);
     TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Body(aBody.RawxPL);
-    TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Schema(TxPLSchema.FormatTag(cbMenuItemClasse.Text, edtMenuItemType.Text));
+    TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Schema(TxPLSchema.FormatRawxPL(cbMenuItemClasse.Text, edtMenuItemType.Text));
     TXMLMenuItemType(tvPlugin.Selected.Data).Name := edtMenuItemName.Text;
     aBody.Destroy;
     tvPlugin.Selected.Text := TXMLMenuItemType(tvPlugin.Selected.Data).Name;
@@ -538,19 +534,19 @@ begin
   end;
   if NoteBook.ActivePageComponent = pgSchema then
   begin
-    TXMLSchemaType(tvPlugin.Selected.Data).command := cbCommand.Text;
+    TXMLSchemaType(tvPlugin.Selected.Data).command := ckCommand.Checked;
     TXMLSchemaType(tvPlugin.Selected.Data).comment := edtComment.Text;
-    TXMLSchemaType(tvPlugin.Selected.Data).status := cbStatus.Text;
-    TXMLSchemaType(tvPlugin.Selected.Data).listen := cbListen.Text;
-    TXMLSchemaType(tvPlugin.Selected.Data).trigger := cbTrigger.Text;
-    TXMLSchemaType(tvPlugin.Selected.Data).Name := TxPLSchema.FormatTag(cbSchemaClasse.Text, cbSchemaType.Text);
+    TXMLSchemaType(tvPlugin.Selected.Data).status := ckStatus.Checked;
+    TXMLSchemaType(tvPlugin.Selected.Data).listen := ckListen.Checked;
+    TXMLSchemaType(tvPlugin.Selected.Data).trigger := ckTrigger.Checked;
+    TXMLSchemaType(tvPlugin.Selected.Data).Name := TxPLSchema.FormatRawxPL(cbSchemaClasse.Text, cbSchemaType.Text);
     tvPlugin.Selected.Text := TXMLSchemaType(tvPlugin.Selected.Data).Name;
   end;
   if NoteBook.ActivePageComponent = pgCommand then
   begin
     TXMLCommandType(tvPlugin.Selected.Data).Name     := edtCommandName.Text;
     TXMLCommandType(tvPlugin.Selected.Data).description := edtCommandDescription.Text;
-    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatTag(cbCommandClasse.Text, cbCommandType.Text);
+    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatRawxPL(cbCommandClasse.Text, cbCommandType.Text);
     TXMLCommandType(tvPlugin.Selected.Data).msg_type := cbType.Text;
     for i := 1 to sgCommandElements.RowCount - 1 do
     begin
@@ -566,7 +562,7 @@ begin
   begin
     TXMLCommandType(tvPlugin.Selected.Data).Name     := edtCommandName.Text;
     TXMLCommandType(tvPlugin.Selected.Data).description := edtCommandDescription.Text;
-    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatTag(cbCommandClasse.Text, cbCommandType.Text);
+    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatRawxPL(cbCommandClasse.Text, cbCommandType.Text);
     TXMLCommandType(tvPlugin.Selected.Data).msg_type := cbType.Text;
     for i := 1 to sgCommandElements.RowCount - 1 do
     begin

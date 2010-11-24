@@ -6,15 +6,18 @@ unit uxPLConfig;
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
  0.91 : Initial full version of this file
- 0.92 : Removal of format and descriptions from this unit, they shall be handled from PluginFile
-        ==> we make the assumption that provided values have by checked through Regexpr by the configurator tool
- 0.93 : Declaration of configuration items is now based on the content of the vendor.xml file
-        The AddItem is now moved as private, shouldn't be called by
+ 0.92 : Removal of format and descriptions from this unit, they shall be handled
+        from PluginFile
+        ==> we make the assumption that provided values have by checked through
+        Regexpr by the configurator tool
+ 0.93 : Declaration of configuration items is now based on the content of the
+        vendor.xml file . The AddItem is now moved as private, shouldn't be called
         Configuration files are now stored in the config directory hold by xplsettings.
  0.94 : Added ability to avoid need to load config
  0.95 : Cutted inheritance from TComponent
  0.96 : Added use of u_xmlxplplugin
  0.97 : Dropped uxplCfgItem, replaced by u_xml_config
+ 0.98 : Added version control of the device in vendor file versus current application
  }
 
 {$mode objfpc}{$H+}
@@ -51,8 +54,8 @@ type
         function Count : integer;
 
         property Item[Index : integer] : TXMLConfigItemType read GetItem; default;
-        property ItemName[s : string] : TXMLConfigItemType read GetItemByStr;
-        property DeviceInVendorFile : TXMLDeviceType read fDeviceInVendorFile;
+        property ItemName[s : string]  : TXMLConfigItemType read GetItemByStr;
+        property DeviceInVendorFile    : TXMLDeviceType     read fDeviceInVendorFile;
         property ConfigFile : TXMLxplConfigFile read fConfigFile;
         procedure ReadFromXML(const aDeviceType : TXMLDeviceType);
         // Filter specific
@@ -63,6 +66,7 @@ type
 implementation { =======================================================================}
 uses uxPLListener,
      StrUtils,
+     Multilog,
      uxPLAddress,
      uRegExpr;
 
@@ -77,8 +81,10 @@ begin
       AddItem(K_CONF_FILTER  , K_XPL_CT_OPTION, K_DESC_FILTER  , K_RE_FILTER  , K_XPL_CFG_MAX_FILTERS,'');
       AddItem(K_CONF_GROUP   , K_XPL_CT_OPTION, K_DESC_GROUP   , K_RE_GROUP   , K_XPL_CFG_MAX_GROUPS,'');
       fDeviceInVendorFile := PluginList.GetDevice(Vendor,Device);
-      if not Assigned(fDeviceInVendorFile) then LogInfo(K_MSG_ERROR_PLUGIN,[]);
-
+      if not Assigned(fDeviceInVendorFile)                                                // Control that the vendor file is present
+         then Log(K_MSG_ERROR_PLUGIN,[], ltError)                                         // and updated, if not it will stop
+         else if (fDeviceInVendorFile.Version <> AppVersion) then                         // with an error
+                 Log(K_MSG_VERSION_ERROR,[AppVersion,fDeviceInVendorFile.Version], ltError)
    end;
 end;
 

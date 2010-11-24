@@ -19,6 +19,8 @@ inherited frmxPLRecurEvent: TfrmxPLRecurEvent
   inherited PageControl1: TPageControl
     Height = 417
     Width = 440
+    ActivePage = tsStandardProp
+    TabIndex = 0
     inherited tsStandardProp: TTabSheet
       ClientHeight = 389
       ClientWidth = 432
@@ -257,13 +259,13 @@ inherited frmxPLRecurEvent: TfrmxPLRecurEvent
     inherited tsAdvancedProp: TTabSheet
       ClientHeight = 389
       ClientWidth = 432
-      inherited BtnDisplay: TButton
-        Left = 236
-        Top = 49
-        OnClick = BtnDisplayClick
-      end
-      inherited ckPerso: TCheckBox
-        OnChange = ckPersoChange
+      object btnActionList: TButton[3]
+        Left = 129
+        Height = 25
+        Top = 79
+        Width = 259
+        Caption = 'Edit Action List'
+        TabOrder = 2
       end
     end
   end

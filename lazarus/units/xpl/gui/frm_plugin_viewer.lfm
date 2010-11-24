@@ -72,7 +72,7 @@ object frmPluginViewer: TfrmPluginViewer
       Width = 698
       Align = alClient
       OnPageChanged = NotebookPageChanged
-      PageIndex = 5
+      PageIndex = 4
       TabOrder = 0
       object pgPlugin: TPage
         Caption = 'pgPlugin'
@@ -459,38 +459,6 @@ object frmPluginViewer: TfrmPluginViewer
           Caption = 'Comment'
           ParentColor = False
         end
-        object Label18: TLabel
-          Left = 9
-          Height = 16
-          Top = 142
-          Width = 39
-          Caption = 'Trigger'
-          ParentColor = False
-        end
-        object Label19: TLabel
-          Left = 10
-          Height = 16
-          Top = 108
-          Width = 32
-          Caption = 'Listen'
-          ParentColor = False
-        end
-        object Label17: TLabel
-          Left = 10
-          Height = 16
-          Top = 74
-          Width = 33
-          Caption = 'Status'
-          ParentColor = False
-        end
-        object Label16: TLabel
-          Left = 10
-          Height = 16
-          Top = 43
-          Width = 58
-          Caption = 'Command'
-          ParentColor = False
-        end
         object Label24: TLabel
           Left = 7
           Height = 16
@@ -508,63 +476,7 @@ object frmPluginViewer: TfrmPluginViewer
           Color = 14678520
           OnChange = edtDeviceIdEditingDone
           OnEditingDone = edtDeviceIdEditingDone
-          TabOrder = 6
-        end
-        object cbCommand: TComboBox
-          Left = 82
-          Height = 23
-          Top = 43
-          Width = 101
-          Color = 14678520
-          ItemHeight = 15
-          Items.Strings = (
-            'true'
-            'false'
-          )
-          OnChange = edtDeviceIdEditingDone
           TabOrder = 2
-        end
-        object cbStatus: TComboBox
-          Left = 82
-          Height = 23
-          Top = 74
-          Width = 101
-          Color = 14678520
-          ItemHeight = 15
-          Items.Strings = (
-            'true'
-            'false'
-          )
-          OnChange = edtDeviceIdEditingDone
-          TabOrder = 3
-        end
-        object cbListen: TComboBox
-          Left = 82
-          Height = 23
-          Top = 108
-          Width = 101
-          Color = 14678520
-          ItemHeight = 15
-          Items.Strings = (
-            'true'
-            'false'
-          )
-          OnChange = edtDeviceIdEditingDone
-          TabOrder = 4
-        end
-        object cbTrigger: TComboBox
-          Left = 82
-          Height = 23
-          Top = 142
-          Width = 101
-          Color = 14678520
-          ItemHeight = 15
-          Items.Strings = (
-            'true'
-            'false'
-          )
-          OnChange = edtDeviceIdEditingDone
-          TabOrder = 5
         end
         object cbSchemaClasse: TxPLClassCombo
           Left = 82
@@ -606,6 +518,38 @@ object frmPluginViewer: TfrmPluginViewer
           OnChange = edtDeviceIdEditingDone
           TabOrder = 1
           RegStrict = True
+        end
+        object ckCommand: TCheckBox
+          Left = 82
+          Height = 19
+          Top = 43
+          Width = 77
+          Caption = 'Command'
+          TabOrder = 3
+        end
+        object ckStatus: TCheckBox
+          Left = 82
+          Height = 19
+          Top = 75
+          Width = 52
+          Caption = 'Status'
+          TabOrder = 4
+        end
+        object ckListen: TCheckBox
+          Left = 82
+          Height = 19
+          Top = 107
+          Width = 51
+          Caption = 'Listen'
+          TabOrder = 5
+        end
+        object ckTrigger: TCheckBox
+          Left = 82
+          Height = 19
+          Top = 139
+          Width = 58
+          Caption = 'Trigger'
+          TabOrder = 6
         end
       end
       object pgCommand: TPage

@@ -5,7 +5,7 @@ unit u_xml_xplplugin;
 interface
 
 uses u_xml,
-    DOM;
+     DOM;
 
 type
      TXMLOptionType = class(T_clinique_DOMElement)
@@ -84,25 +84,33 @@ type
 
      TXMLSchemaType = class(TDOMElement)
      private
-       function Get_command: AnsiString;
+       function Get_command: boolean;
+//       function Get_command: AnsiString;
        function Get_Comment: AnsiString;
-       function Get_Listen: AnsiString;
+       function Get_Listen: boolean;
+//       function Get_Listen: AnsiString;
        function Get_Name: AnsiString;
-       function Get_Status: AnsiString;
-       function Get_trigger: AnsiString;
-       procedure Set_Command(const AValue: AnsiString);
+       function Get_Status: boolean;
+       function Get_trigger: boolean;
+       procedure Set_Command(const AValue: boolean);
+//       function Get_Status: AnsiString;
+//       function Get_trigger: AnsiString;
+//       procedure Set_Command(const AValue: AnsiString);
        procedure Set_Comment(const AValue: AnsiString);
-       procedure Set_Listen (const AValue: AnsiString);
+       procedure Set_Listen(const AValue: boolean);
+//       procedure Set_Listen (const AValue: AnsiString);
        procedure Set_Name(const AValue: AnsiString);
-       procedure Set_Status (const AValue: AnsiString);
-       procedure Set_Trigger(const AValue: AnsiString);
+       procedure Set_Status(const AValue: boolean);
+       procedure Set_Trigger(const AValue: boolean);
+//       procedure Set_Status (const AValue: AnsiString);
+//       procedure Set_Trigger(const AValue: AnsiString);
      published
         property name    : AnsiString read Get_Name write Set_Name;
-        property command : AnsiString read Get_command write Set_Command;
-        property status  : AnsiString read Get_Status  write Set_Status;
-        property listen  : AnsiString read Get_Listen  write Set_Listen;
-        property trigger : AnsiString read Get_trigger write Set_Trigger;
         property comment : AnsiString read Get_Comment write Set_Comment;
+        property command : boolean read Get_command write Set_Command;
+        property status  : boolean read Get_Status  write Set_Status;
+        property listen  : boolean read Get_Listen  write Set_Listen;
+        property trigger : boolean read Get_trigger write Set_Trigger;
      end;
      TXMLSchemasType = specialize TXMLElementList<TXMLSchemaType>;
 
@@ -229,7 +237,8 @@ implementation //===============================================================
 uses uXMLRead,
      XMLWrite,
      SysUtils,
-     StrUtils;
+     StrUtils,
+     uxPLConst;
 //========================================================================================
 function TXMLDeviceType.Get_Platform_: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Platform);     end;
@@ -446,41 +455,73 @@ end;
 
 { TXMLSchemaType }
 
-function TXMLSchemaType.Get_command: AnsiString;
-begin result := GetAttribute(K_XML_STR_Command); end;
+//function TXMLSchemaType.Get_command: AnsiString;
+//begin result := GetAttribute(K_XML_STR_Command); end;
+//function TXMLSchemaType.Get_Listen: AnsiString;
+//begin result := GetAttribute(K_XML_STR_Listen); end;
+//function TXMLSchemaType.Get_Status: AnsiString;
+//begin result := GetAttribute(K_XML_STR_Status); end;
+//function TXMLSchemaType.Get_trigger: AnsiString;
+//begin result := GetAttribute(K_XML_STR_Trigger); end;
+
+function TXMLSchemaType.Get_command: boolean;
+begin
+   result := (AnsiCompareText(GetAttribute(K_XML_STR_Command),K_STR_TRUE) = 0);
+end;
 
 function TXMLSchemaType.Get_Comment: AnsiString;
 begin result := GetAttribute(K_XML_STR_Comment); end;
 
-function TXMLSchemaType.Get_Listen: AnsiString;
-begin result := GetAttribute(K_XML_STR_Listen); end;
+function TXMLSchemaType.Get_Listen: boolean;
+begin result := (AnsiCompareText(GetAttribute(K_XML_STR_Listen),K_STR_TRUE) = 0); end;
 
 function TXMLSchemaType.Get_Name: AnsiString;
 begin result := GetAttribute(K_XML_STR_Name); end;
 
-function TXMLSchemaType.Get_Status: AnsiString;
-begin result := GetAttribute(K_XML_STR_Status); end;
+function TXMLSchemaType.Get_Status: boolean;
+begin result := (AnsiCompareText(GetAttribute(K_XML_STR_Status),K_STR_TRUE) = 0); end;
 
-function TXMLSchemaType.Get_trigger: AnsiString;
-begin result := GetAttribute(K_XML_STR_Trigger); end;
+function TXMLSchemaType.Get_trigger: boolean;
+begin result := (AnsiCompareText(GetAttribute(K_XML_STR_Trigger),K_STR_TRUE) = 0); end;
+
+procedure TXMLSchemaType.Set_Command(const AValue: boolean);
+begin SetAttribute(K_XML_STR_Command,IfThen(aValue,K_STR_TRUE,K_STR_FALSE)); end;
 
 procedure TXMLSchemaType.Set_Name(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Name,aValue); end;
 
+procedure TXMLSchemaType.Set_Status(const AValue: boolean);
+begin SetAttribute(K_XML_STR_Status,IfThen(aValue,K_STR_TRUE,K_STR_FALSE)); end;
+
+procedure TXMLSchemaType.Set_Trigger(const AValue: boolean);
+begin SetAttribute(K_XML_STR_Trigger,IfThen(aValue,K_STR_TRUE,K_STR_FALSE)); end;
+
 procedure TXMLSchemaType.Set_Comment(const AValue: AnsiString);
 begin if aValue<>'' then  SetAttribute(K_XML_STR_Comment,aValue ); end;
 
-procedure TXMLSchemaType.Set_Command(const AValue: AnsiString);
-begin if aValue<>'' then SetAttribute(K_XML_STR_Command,aValue  ); end;
+procedure TXMLSchemaType.Set_Listen(const AValue: boolean);
+begin SetAttribute(K_XML_STR_Listen,IfThen(aValue,K_STR_TRUE,K_STR_FALSE)); end;
 
-procedure TXMLSchemaType.Set_Listen(const AValue: AnsiString);
-begin if aValue<>'' then SetAttribute(K_XML_STR_Listen,aValue   ); end;
+//procedure TXMLSchemaType.Set_Command(const AValue: AnsiString);
+//begin if aValue<>'' then SetAttribute(K_XML_STR_Command,aValue  ); end;
+//
+//procedure TXMLSchemaType.Set_Listen(const AValue: AnsiString);
+//begin if aValue<>'' then SetAttribute(K_XML_STR_Listen,aValue   ); end;
+//
+//procedure TXMLSchemaType.Set_Status(const AValue: AnsiString);
+//begin if aValue<>'' then SetAttribute(K_XML_STR_Status,aValue   ); end;
+//
+//procedure TXMLSchemaType.Set_Trigger(const AValue: AnsiString);
+//begin if aValue<>'' then SetAttribute(K_XML_STR_Trigger,aValue  ); end;
 
-procedure TXMLSchemaType.Set_Status(const AValue: AnsiString);
-begin if aValue<>'' then SetAttribute(K_XML_STR_Status,aValue   ); end;
-
-procedure TXMLSchemaType.Set_Trigger(const AValue: AnsiString);
-begin if aValue<>'' then SetAttribute(K_XML_STR_Trigger,aValue  ); end;
+//function TXMLSchemaType.CommandAsBoolean: boolean;
+//begin result := (AnsiCompareText(Command,K_STR_TRUE) = 0); end;
+//
+//function TXMLSchemaType.StatusAsBoolean: boolean;
+//begin result := (AnsiCompareText(Status,K_STR_TRUE) = 0); end;
+//
+//function TXMLSchemaType.ListenAsBoolean: boolean;
+//begin result := (AnsiCompareText(Trigger,K_STR_TRUE) = 0); end;
 
 { TXMLMenuItemType }
 

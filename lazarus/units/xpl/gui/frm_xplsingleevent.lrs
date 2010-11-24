@@ -16,8 +16,5 @@ LazarusResources.Add('TfrmxPLSingleEvent','FORMDATA',[
   +'eTime'#5#0#0#0#0#0#0#215#156#14'@'#15'DisplaySettings'#11#14'dsShowHeadings'
   +#14'dsShowDayNames'#17'dsShowWeekNumbers'#13'dsStartMonday'#0#0#0#0#241#9'TT'
   +'abSheet'#14'tsAdvancedProp'#12'ClientHeight'#3'&'#1#11'ClientWidth'#3#184#1
-  +#0#241#9'TCheckBox'#9'CheckBox1'#5'Width'#2'>'#0#0#241#5'TEdit'#5'Edit1'#6'H'
-  +'eight'#2#23#7'Visible'#8#0#0#241#7'TButton'#10'BtnDisplay'#7'OnClick'#7#15
-  +'BtnDisplayClick'#0#0#241#9'TCheckBox'#7'ckPerso'#5'Width'#3#157#0#8'OnChang'
-  +'e'#7#13'ckPersoChange'#0#0#0#0#0
+  +#0#0#0#0
 ]);

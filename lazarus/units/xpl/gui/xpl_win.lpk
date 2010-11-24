@@ -21,7 +21,7 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="9">
+    <Files Count="10">
       <Item1>
         <Filename Value="v_xplmsg_opendialog.pas"/>
         <HasRegisterProc Value="True"/>
@@ -66,6 +66,11 @@
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_msgbody_stringgrid"/>
       </Item9>
+      <Item10>
+        <Filename Value="ucontrols.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="ucontrols"/>
+      </Item10>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">

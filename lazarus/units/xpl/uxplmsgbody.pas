@@ -41,6 +41,7 @@ type TxPLMsgBody = class(TxPLBaseClass)
            procedure AddKeyValuePairs(const aKeys, aValues : array of string);
            procedure AddKeyValue(const aKeyValuePair : string);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
+           procedure SetValueByKey(const aKeyValue, aDefVal : string);
 
            procedure WriteToXML (const aAction : TXMLxplActionType);
            procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
@@ -112,6 +113,14 @@ begin
            end
            else result := aDefVal;
 end;
+
+procedure TxPLMsgBody.SetValueByKey(const aKeyValue, aDefVal : string);
+var c,i : integer;
+begin
+   i := Keys.IndexOf(aKeyValue);
+   if i>=0 then Values[i] := aDefVal;
+end;
+
 
 procedure TxPLMsgBody.AddKeyValuePairs(const aKeys, aValues : Array of string);
 var i : integer;

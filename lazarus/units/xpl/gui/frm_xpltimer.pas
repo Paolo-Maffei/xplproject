@@ -37,7 +37,8 @@ TfrmxPLTimer = class(TForm)
 
 
 implementation { TxPLTimer ====================================================}
-uses uxPLTimer;
+uses uxPLTimer,
+     frm_xplactionlist;
 
 { TfrmxPLTimer ================================================================}
 procedure TfrmxPLTimer.FormShow(Sender: TObject);
@@ -48,7 +49,7 @@ begin
       edtTarget.Text := Target;
       cbRange.Text := Range;
       seDuration.Value := Remaining;
-      seFrequence.Value := Frequence;
+      seFrequence.Value := Frequency;
       edtName.Text := aTimer.TimerName;
       cbRange.Text := aTimer.Range;
       cbMode.Text  := aTimer.Mode;
@@ -58,14 +59,14 @@ end;
 
 procedure TfrmxPLTimer.cbModeChange(Sender: TObject);
 begin
-     seFrequence.Enabled := (cbMode.Text = 'recurrent');
-     seDuration.Enabled  := (cbMode.Text = 'descending');
+   seFrequence.Enabled := (cbMode.Text = 'recurrent');
+   seDuration.Enabled  := (cbMode.Text = 'descending');
 end;
 
 procedure TfrmxPLTimer.sbCancelClick(Sender: TObject);
 begin
-     Close;
-     ModalResult := mrCancel;
+   Close;
+   ModalResult := mrCancel;
 end;
 
 procedure TfrmxPLTimer.sbOkClick(Sender: TObject);
@@ -73,7 +74,7 @@ begin
    if not seFrequence.Enabled then seFrequence.Value :=0;
    if not seDuration.Enabled then seDuration.Value :=0;
 
-   TxPLTimer(Self.Owner).Init(edtName.Text,edtTarget.Text,cbRange.Text,seDuration.Text ,seFrequence.Text);
+   TxPLTimer(Owner).Init(edtName.Text,edtTarget.Text,cbRange.Text,seDuration.Text ,seFrequence.Text);
 
    Close;
    ModalResult := mrOk;

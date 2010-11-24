@@ -9,7 +9,7 @@ interface
 uses
     v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, TreeListView, 
   MStringGrid, MEdit, MCheckListBox, MComboBox, v_msgbody_stringgrid, 
-  LazarusPackageIntf;
+  uControls, LazarusPackageIntf;
 
 implementation
 
@@ -23,6 +23,7 @@ begin
   RegisterUnit('MCheckListBox', @MCheckListBox.Register); 
   RegisterUnit('MComboBox', @MComboBox.Register); 
   RegisterUnit('v_msgbody_stringgrid', @v_msgbody_stringgrid.Register); 
+  RegisterUnit('uControls', @uControls.Register); 
 end; 
 
 initialization

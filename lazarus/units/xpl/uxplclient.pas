@@ -30,10 +30,18 @@ unit uxPLClient;
 
 interface
 
-uses  Classes, SysUtils,
-      uXPLSettings, uxPLVendorFile, sharedlogger, uxPLConst, uxPLAddress;
+uses  Classes,
+      SysUtils,
+      uXPLSettings,
+      uxPLVendorFile,
+      sharedlogger,
+      multilog,
+      uxPLConst,
+      uxPLAddress;
 
 type  TxPLLogUpdate = procedure(const aString : string) of object;
+
+      { TxPLClient }
 
       TxPLClient = class
       protected
@@ -49,9 +57,7 @@ type  TxPLLogUpdate = procedure(const aString : string) of object;
 
         constructor Create(const aVendor : string; aDevice : string; const aAppVersion : string);
         destructor  Destroy; override;
-        procedure   LogInfo (Const Formatting : string; Const Data : array of const ); dynamic;   // Info are only stored in log file
-        procedure   LogError(Const Formatting : string; Const Data : array of const );            // Error are stored as error in log, displayed and stop the app
-        procedure   LogWarn (Const Formatting : string; Const Data : array of const );            // Warn are stored in log, displayed but doesn't stop the app
+        procedure   Log     (Const Formatting : string; Const Data : array of const; Const LogType : integer = ltInfo); dynamic;
         function    RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function    Translate(Const aDomain : string; Const aString : string) : string;
         procedure   ResetLog;
@@ -69,6 +75,7 @@ type  TxPLLogUpdate = procedure(const aString : string) of object;
 implementation //===============================================================
 uses IdStack,
      filechannel,
+     StrUtils,
      consolechannel;
 
 // TxPLClient ==================================================================
@@ -89,33 +96,26 @@ begin
 
    if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
    Logger.Channels.Add(TFileChannel.Create(LogFileName));
-   LogInfo('Logging to file : %s',[LogFileName]);
+   Log(K_MSG_LOGGING,[LogFileName]);
 
    fPluginList := TxPLVendorSeedFile.Create(fSettings);
-   if not fPluginList.IsValid then LogWarn(K_MSG_ERROR_VENDOR,[fPluginList.Name]);
-   if not fSettings.IsValid   then LogWarn(K_MSG_NETWORK_SETTINGS,[]);
+   if not fPluginList.IsValid then Log(K_MSG_ERROR_VENDOR,[fPluginList.Name], ltWarning);
+   if not fSettings.IsValid   then Log(K_MSG_NETWORK_SETTINGS,[], ltWarning);
 end;
 
-procedure TxPLClient.LogInfo(Const Formatting  : string; Const Data  : array of const);
-begin
-   Logger.Send(Format(Formatting,Data));
-   if Assigned(OnLogUpdate) then OnLogUpdate(Format(Formatting,Data));
-end;
-
-procedure TxPLClient.LogWarn(Const Formatting  : string; Const Data  : array of const);
+procedure TxPLClient.Log(const Formatting: string; const Data: array of const; const LogType: integer);
 var s : string;
 begin
    s := Format(Formatting,Data);
-   Logger.SendWarning(s);
-   Raise Exception.Create(s);
-end;
-
-procedure TxPLClient.LogError(Const Formatting  : string; Const Data  : array of const);
-var s : string;
-begin
-   s := Format(Formatting,Data);
-   Logger.SendError(s);
-   Raise Exception.Create(s);
+   if Assigned(OnLogUpdate) then OnLogUpdate(s);
+   Case LogType of
+        ltInfo    : Logger.Send(s);                                             // Info are only stored in log file
+        ltWarning : Logger.SendWarning(s);                                      // Warn are stored in log, displayed but doesn't stop the app
+        ltError   : begin                                                       // Error are stored as error in log, displayed and stop the app
+                       Logger.SendError(s);
+                       Raise Exception.Create(s);
+                    end;
+   end;
 end;
 
 function TxPLClient.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
@@ -132,30 +132,28 @@ begin
    i := fLocaleDomains.AddObject(aDomain,TStringList.Create);
    TStringList(fLocaleDomains.Objects[i]).LoadFromFile(f);
    TStringList(fLocaleDomains.Objects[i]).Sort;
-   LogInfo('Localisation file loaded for : %s',[aDomain]);
+   Log(K_MSG_LOCALISATION,[aDomain]);
 end;
 
 function TxPLClient.Translate(const aDomain: string; const aString : string): string;
 var i : integer;
 begin
-   result := '';
    i := fLocaleDomains.IndexOf(aDomain);
-   if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString];
-   if length(result)=0 then result := aString;
+   Result := IfThen( i<>-1, TStringList(fLocaleDomains.Objects[i]).Values[aString], aString);
 end;
 
 procedure TxPLClient.ResetLog;
 var f : textfile;
 begin
-     Assign(f,LogFileName);
-     ReWrite(f);
-     Writeln(f,'');
-     Close(f);
+   Assign(f,LogFileName);
+   ReWrite(f);
+   Writeln(f,'');
+   Close(f);
 end;
 
 destructor TxPLClient.Destroy;
 begin
-   LogInfo(K_MSG_APP_STOPPED,[AppName]);
+   Log(K_MSG_APP_STOPPED,[AppName]);
    fPluginList.Destroy;
    fSettings.Destroy;
    fLocaleDomains.Destroy;
