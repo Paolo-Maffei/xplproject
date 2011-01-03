@@ -40,14 +40,14 @@ type
   { TXMLMenuItemTypeEx }
 
   TXMLMenuItemTypeEx = class(TXMLMenuItemType)
-     function Get_Body: TxPLMsgBody;
+     function Get_Body: TxPLBody;
      function Get_Schema: TxPLSchema;
   public
      procedure Set_Schema(const aValue : string);
      procedure Set_Body  (const aValue : string);
   published
      property Schema : TxPLSchema read Get_Schema;
-     property Body   : TxPLMsgBody read Get_Body;
+     property Body   : TxPLBody   read Get_Body;
   end;
 
 implementation
@@ -57,12 +57,12 @@ uses uxPLMessage,
 
 { TXMLMenuItemTypeEx }
 
-function TXMLMenuItemTypeEx.Get_Body: TxPLMsgBody;
+function TXMLMenuItemTypeEx.Get_Body: TxPLBody;
 var aMsg : TxPLMessage;
 begin
      aMsg := TxPLMessage.Create;
      aMsg.RawXPL:= Format(K_MSG_HEADER_FORMAT,[K_MSG_TYPE_CMND,0,K_MSG_HEADER_DUMMY,K_MSG_TARGET_ANY,xPLMsg]);
-     result := TxPLMsgBody.Create;
+     result := TxPLBody.Create;
      result.Assign(aMsg.Body);
      aMsg.Destroy;
 end;
@@ -86,7 +86,7 @@ begin
 end;
 
 procedure TXMLMenuItemTypeEx.Set_Schema(const AValue: string);
-var aBody   : TxPLMsgBody;
+var aBody   : TxPLBody;
 begin
    aBody := Body;
    xPLMsg := aValue + #10 + aBody.RawxPL;

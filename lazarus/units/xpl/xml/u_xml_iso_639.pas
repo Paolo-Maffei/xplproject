@@ -18,7 +18,7 @@ type TXMLISO639Type = class(TDOMElement)
      public
         property iso_639_2B_code : AnsiString read Get_iso_639_2B_code;
         property iso_639_2T_code : AnsiString read Get_iso_639_2T_code;
-        property iso_639_1_code  : AnsiString read Get_iso_639_1_code;
+        property iso_639_1_code  : AnsiString read Get_iso_639_1_code;          // This code is not always present !!!
         property name : AnsiString read Get_name;
      end;
      TXMLISO639sType = specialize TXMLElementList<TXMLISO639Type>;

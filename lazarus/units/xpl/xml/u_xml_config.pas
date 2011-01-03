@@ -17,6 +17,7 @@ type
 
      TXMLxplconfigFile = class(TXMLConfigItemsType)
      private
+       FLocalData : TXMLLocalsType;
        function Get_LocalData: TXMLLocalsType;
      protected
         fFileName    : AnsiString;
@@ -36,7 +37,8 @@ uses XMLRead,
 
 function TXMLxplconfigFile.Get_LocalData: TXMLLocalsType;
 begin
-   result := TXMLLocalsType.Create(fDoc.DocumentElement.FindNode('appdata'), 'localdata','id');
+   if not Assigned(fLocalData) then fLocalData := TXMLLocalsType.Create(fDoc.DocumentElement.FindNode('appdata'), 'localdata','id');
+   Result := flocalData;
 end;
 
 constructor TXMLxplconfigFile.Create(const aFileName: string);
