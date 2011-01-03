@@ -114,10 +114,8 @@ type
     procedure FormClose(Sender: TObject; var CloseAction: TCloseAction);
     procedure FormShow(Sender: TObject);
     procedure NotebookPageChanged(Sender: TObject);
-    procedure sgCommandElementsSelectCell(Sender: TObject; aCol, aRow: integer;
-      var CanSelect: boolean);
-    procedure sgCommandElementsSelectEditor(Sender: TObject;
-      aCol, aRow: integer; var Editor: TWinControl);
+    procedure sgCommandElementsSelectCell(Sender: TObject; aCol, aRow: integer; var CanSelect: boolean);
+    procedure sgCommandElementsSelectEditor(Sender: TObject; aCol, aRow: integer; var Editor: TWinControl);
     procedure sgDropDownExit(Sender: TObject);
     procedure tbAddClick(Sender: TObject);
     procedure tbDel2Click(Sender: TObject);
@@ -129,7 +127,7 @@ type
     { private declarations }
     plugin:  TXMLxplpluginType;
     topNode: TTreeNode;
-    aBody:   TxPLMsgBody;
+    aBody:   TxPLBody;
   public
     { public declarations }
     filePath: string;
@@ -348,8 +346,8 @@ begin
   if TXMLCommandType(aNode.Data).Elements.Count = 0 then  exit;
   if sgCommandElements.Cells[2, aRow] = 'numeric' then begin
     pcCommand.ActivePageIndex := 2;
-    edtMinVal.Text := TXMLCommandType(aNode.Data).elements[aRow - 1].Min_Val;
-    edtMaxVal.Text := TXMLCommandType(aNode.Data).elements[aRow - 1].Max_Val;
+    edtMinVal.Text := IntToSTr(TXMLCommandType(aNode.Data).elements[aRow - 1].Min_Val);
+    edtMaxVal.Text := IntToStr(TXMLCommandType(aNode.Data).elements[aRow - 1].Max_Val);
   end
   else
   if sgCommandElements.Cells[2, aRow] = 'dropdownlist' then begin
@@ -626,12 +624,12 @@ end;
 
 procedure TfrmPluginViewer.edtMaxValExit(Sender: TObject);
 begin
-  TXMLElementType(sgCommandElements.Objects[0, sgCommandElements.Row]).max_val := edtMaxVal.Text;
+  TXMLElementType(sgCommandElements.Objects[0, sgCommandElements.Row]).max_val := StrToInt(edtMaxVal.Text);
 end;
 
 procedure TfrmPluginViewer.edtMinValExit(Sender: TObject);
 begin
-  TXMLElementType(sgCommandElements.Objects[0, sgCommandElements.Row]).min_val := edtMinVal.Text;
+  TXMLElementType(sgCommandElements.Objects[0, sgCommandElements.Row]).min_val := StrToInt(edtMinVal.Text);
 end;
 
 procedure TfrmPluginViewer.edtRegExpExit(Sender: TObject);
