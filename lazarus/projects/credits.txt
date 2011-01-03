@@ -1,0 +1,13 @@
+By Clinique
+
+Thanks to 
+   - All the mad people involved in the xPL project
+   - All those passionate guys at www.touteladomotique.com  
+   - Everyone who registered or posted on my blog glh33.free.fr
+   - INDY components for all the fantastic network layer they built
+   - Florian Klaempfland Carl Eric Codere for RegExpr component
+   - RemObjects for the PascalScript components and libs
+   - Scott Crevier for his temperature icon set
+   - Kambiz R. Khojasteh for the SunTime component
+   - YOU for reading this, using my apps, and supporting us
+   - Icons of the Nuvola pack
