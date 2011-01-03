@@ -45,7 +45,8 @@ uses frm_xPLMessage,
 
 procedure TxPLMessageGUI.ShowForEdit(const options: TButtonOptions; const bModal: boolean; const bAdvancedMode : boolean = false);
 begin
-   with TfrmxPLMessage.Create(self) do try
+   with TfrmxPLMessage.Create(nil) do try
+        xPLMessage := self;
         buttonOptions := options;
         mmoMessage.ReadOnly := false;
         tsRaw.TabVisible := bAdvancedMode;
@@ -57,7 +58,8 @@ end;
 
 function TxPLMessageGUI.Edit : boolean;
 begin
-   with TfrmxPLMessage.Create(self) do try
+   with TfrmxPLMessage.Create(nil) do try
+        xPLMessage := self;
         result := (ShowModal = mrOk);
    finally
         Destroy;
@@ -66,7 +68,8 @@ end;
 
 procedure TxPLMessageGUI.Show(options : TButtonOptions);
 begin
-   with TfrmxPLMessage.Create(self) do try
+   with TfrmxPLMessage.Create(nil) do try
+        xPLMessage := self;
         buttonOptions := options;
         Show;
    finally
@@ -75,7 +78,7 @@ end;
 
 function TxPLMessageGUI.SelectFile: boolean;
 begin
-   with TxPLMsgOpenDialog.create(self) do try
+   with TxPLMsgOpenDialog.create(nil) do try
         result := Execute;
         if result then LoadFromFile(FileName);
    finally

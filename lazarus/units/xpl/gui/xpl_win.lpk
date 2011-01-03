@@ -8,7 +8,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="$(LazarusDir)\components\indy-10.2.0.3\fpc\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\lib\i386-win32\;$(LazarusDir)\components\indy-10.2.0.3\lazarus\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\components\KHex\;E:\01.SourceSafe\08.Lazarus\components\KHex\source\;E:\01.SourceSafe\08.Lazarus\components\KHex\packages\khexeditor\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\"/>
         <UnitOutputDirectory Value="C:\LazOut"/>
       </SearchPaths>
       <Parsing>
@@ -69,14 +69,13 @@
       <Item10>
         <Filename Value="ucontrols.pas"/>
         <HasRegisterProc Value="True"/>
-        <UnitName Value="ucontrols"/>
+        <UnitName Value="uControls"/>
       </Item10>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="1">
       <Item1>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="zcomponent"/>
       </Item1>
     </RequiredPkgs>
     <UsageOptions>

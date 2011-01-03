@@ -24,7 +24,7 @@ type
         fComboEdit : TComboBox;
         fPossibleKey : TStringList;
 //        fPossibleVal : TStringList;
-        fReferencedBody : TxPLMsgBody;
+        fReferencedBody : TxPLBody;
 //        fModeMenu       : TMenuItem;
         procedure AfterRowChanged(Sender: TObject; ARow: Integer);
         procedure fComboEditEditingDone(Sender: TObject);
@@ -42,8 +42,8 @@ type
 
         procedure NewLine(aKey, aValue : string);
         procedure NewLine(aLine : string);
-        procedure Assign(const aBody   : TxPLMsgBody); overload;
-        procedure CopyTo(const aBody   : TxPLMsgBody);
+        procedure Assign(const aBody   : TxPLBody); overload;
+        procedure CopyTo(const aBody   : TxPLBody);
         function  GetKey(aRow : integer) : string;
         function  GetValue(aRow : integer) : string;
         function  GetKeyValuePair(aRow : integer) : string;
@@ -210,7 +210,7 @@ begin
      NewLine(sLeft,sRight);
 end;
 
-procedure TBodyMessageGrid.Assign(const aBody: TxPLMsgBody);
+procedure TBodyMessageGrid.Assign(const aBody: TxPLBody);
 var i : integer;
 begin
      Clear;
@@ -223,7 +223,7 @@ begin
      end;
 end;
 
-procedure TBodyMessageGrid.CopyTo(const aBody: TxPLMsgBody);
+procedure TBodyMessageGrid.CopyTo(const aBody: TxPLBody);
 var i : integer;
     ch : string;
 begin

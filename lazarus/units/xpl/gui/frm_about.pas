@@ -19,7 +19,11 @@ uses Forms,
      StdCtrls,
      LResources;
 
-type TfrmAbout = class(TForm)
+type
+
+{ TfrmAbout }
+
+TfrmAbout = class(TForm)
         btnOk: TButton;
         btnReadme: TButton;
         btnLicense: TButton;
@@ -32,6 +36,7 @@ type TfrmAbout = class(TForm)
         procedure btnLicenseClick(Sender: TObject);
         procedure btnReadmeClick(Sender: TObject);
         procedure FormCreate(Sender: TObject);
+        procedure FormShow(Sender: TObject);
      end;
 
 var  frmAbout: TfrmAbout;
@@ -46,16 +51,20 @@ const
      K_FILE_LICENSE = 'license.txt';
      K_FILE_README  = 'readme.txt';
      K_VERSION_STR  = 'Version %s';
-     K_CREDITS_STR = '%s Compiled with Lazarus version %s';
+     K_CREDITS_STR  = '%s Compiled with Lazarus version %s';
 
 // =============================================================================
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-   lblAppName.Caption := xPLClient.AppName;
-   lblVersion.Caption := Format(K_VERSION_STR,[xPLClient.AppVersion]);
    mmoCredits.Text    := Format(K_CREDITS_STR,[mmoCredits.Text,lcl_version]);
    btnReadme.Visible  := FileExists(K_FILE_README);
    btnLicense.Visible := FileExists(K_FILE_LICENSE);
+end;
+
+procedure TfrmAbout.FormShow(Sender: TObject);
+begin
+   lblAppName.Caption := xPLClient.AppName;
+   lblVersion.Caption := Format(K_VERSION_STR,[xPLClient.AppVersion]);
 end;
 
 procedure TfrmAbout.btnReadmeClick(Sender: TObject);
