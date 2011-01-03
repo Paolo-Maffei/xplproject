@@ -28,8 +28,8 @@ type
        function Get_Control_Type: AnsiString;
        function Get_Default_: AnsiString;
        function Get_Label_: AnsiString;
-       function Get_max_val: AnsiString;
-       function Get_min_val: AnsiString;
+       function Get_max_val: integer;
+       function Get_min_val: integer;
        function Get_Name: AnsiString;
        function Get_Options: TXMLOptionsType;
        function Get_regexp: AnsiString;
@@ -37,19 +37,19 @@ type
        procedure set_Control_Type(const AValue: AnsiString);
        procedure Set_default_(const AValue: AnsiString);
        procedure Set_Label_(const AValue: AnsiString);
-       procedure Set_max_val(const AValue: AnsiString);
-       procedure Set_min_val(const AValue: AnsiString);
+       procedure Set_max_val(const AValue: integer);
+       procedure Set_min_val(const AValue: integer);
        procedure Set_Name(const AValue: AnsiString);
        procedure Set_regexp(const AValue: AnsiString);
      published
-        property name : AnsiString read Get_Name write Set_Name;
-        property label_ : AnsiString read Get_Label_ write Set_Label_;
-        property control_type : AnsiString read Get_Control_Type write Set_Control_Type;
-        property min_val : AnsiString read Get_min_val write Set_min_val;
-        property max_val : AnsiString read Get_max_val write Set_max_val;
-        property regexp  : AnsiString read Get_regexp write Set_regexp;
-        property default_ : AnsiString read Get_Default_ write Set_default_;
-        property conditional_visibility : AnsiString read Get_Conditional_Visibility write Set_Conditional_Visibility;
+        property name : AnsiString read Get_Name  write Set_Name;
+        property label_ : AnsiString read Get_Label_  write Set_Label_;
+        property control_type : AnsiString read Get_Control_Type  write Set_Control_Type;
+        property min_val : integer read Get_min_val  write Set_min_val;
+        property max_val : integer read Get_max_val  write Set_max_val;
+        property regexp  : AnsiString read Get_regexp  write Set_regexp;
+        property default_ : AnsiString read Get_Default_  write Set_default_;
+        property conditional_visibility : AnsiString read Get_Conditional_Visibility  write Set_Conditional_Visibility;
         property Options : TXMLOptionsType read Get_Options;
      end;
      TXMLElementsType = specialize TXMLElementList<TXMLElementType>;
@@ -336,6 +336,7 @@ begin inherited Create(aNode, K_XML_STR_Device, K_XML_STR_Id); end;
 
 constructor TXMLxplpluginType.Create(const aFileName: string);
 var aNode : TDOMNode;
+    back  : TDOMNode;
 begin
    fFileName := aFileName;
    fDoc := TXMLDocument.Create;
@@ -347,10 +348,16 @@ begin
    end;
    if fValid then begin
       aNode := fDoc.FirstChild;
+      back  := nil;
       while (aNode.NodeName <> K_XML_STR_XplPlugin) and
-            (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) do
-            aNode := fDoc.FirstChild.NextSibling;
-      Create(aNode);
+            (aNode.NodeName<>K_XML_STR_XplhalmgrPlugin) and
+            (back <> aNode) do begin                                 // Avoid looping infinitely on the same node
+               aNode := fDoc.FirstChild.NextSibling;
+               back := aNode;
+            end;
+      fValid := (aNode.FirstChild<>nil);
+      fValid := fValid and (aNode.FirstChild.Attributes<>nil);
+      if fValid then Create(aNode);
    end;
 end;
 
@@ -374,7 +381,7 @@ end;
 { TXMLCommandType }
 
 function TXMLCommandType.Get_Description: AnsiString;
-begin result := GetAttribute(K_XML_STR_Description); end;
+begin result := AnsiReplaceStr(GetAttribute(K_XML_STR_Description),'''',' '); end;
 
 function TXMLCommandType.Get_Elements: TXMLElementsType;
 begin
@@ -408,7 +415,9 @@ function TXMLConfigItemType.Get_ConfigType: AnsiString;
 begin result := GetAttribute(K_XML_STR_CONFIGTYPE) end;
 
 function TXMLConfigItemType.Get_Description: AnsiString;
-begin result := GetAttribute(K_XML_STR_Description); end;
+begin
+   result := AnsiReplaceStr(GetAttribute(K_XML_STR_Description),'''',' ');
+end;
 
 function TXMLConfigItemType.Get_Format: AnsiString;
 begin result := GetAttribute(K_XML_STR_Format); end;
@@ -568,11 +577,11 @@ begin result := GetAttribute(K_XML_STR_Default); end;
 function TXMLElementType.Get_Label_: AnsiString;
 begin result := GetAttribute(K_XML_STR_Label); end;
 
-function TXMLElementType.Get_max_val: AnsiString;
-begin result := GetAttribute(K_XML_STR_MAX_VAL); end;
+function TXMLElementType.Get_max_val: integer;
+begin result := StrToIntDef(GetAttribute(K_XML_STR_MAX_VAL),-1); end;
 
-function TXMLElementType.Get_min_val: AnsiString;
-begin result := GetAttribute(K_XML_STR_MIN_VAL); end;
+function TXMLElementType.Get_min_val: integer;
+begin result := StrToIntDef(GetAttribute(K_XML_STR_MIN_VAL),-1); end;
 
 function TXMLElementType.Get_Name: AnsiString;
 begin result := Attributes.GetNamedItem(K_XML_STR_Name).NodeValue; end;
@@ -592,11 +601,11 @@ begin SetAttribute(K_XML_STR_Default, aValue); end;
 procedure TXMLElementType.Set_Label_(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Label, aValue); end;
 
-procedure TXMLElementType.Set_max_val(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_MAX_VAL, aValue); end;
+procedure TXMLElementType.Set_max_val(const AValue: integer);
+begin SetAttribute(K_XML_STR_MAX_VAL, IntToStr(aValue)); end;
 
-procedure TXMLElementType.Set_min_val(const AValue: AnsiString);
-begin SetAttribute(K_XML_STR_MIN_VAL, aValue); end;
+procedure TXMLElementType.Set_min_val(const AValue: integer);
+begin SetAttribute(K_XML_STR_MIN_VAL, IntToStr(aValue)); end;
 
 procedure TXMLElementType.Set_Name(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Name, aValue); end;

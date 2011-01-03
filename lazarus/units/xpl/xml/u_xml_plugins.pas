@@ -55,7 +55,7 @@ begin Result := GetAttribute(K_XML_STR_Url);            end;
 
 // TXMLPluginType ========================================================================
 function TXMLPluginType.Get_Vendor: AnsiString;
-begin Result := ExtractWord(1,Name,[' ']);              end;
+begin Result := AnsiLowerCase(ExtractWord(1,Name,[' '])); end;
 
 function TXMLPluginType.Get_Description: AnsiString;
 begin Result := GetAttribute(K_XML_STR_Description);    end;
