@@ -16,7 +16,7 @@ unit uxPLVendorFile;
 
 interface
 
-uses Classes, SysUtils, DOM, XMLRead, uxPLSettings, uxPLConst,
+uses Classes, SysUtils, DOM, XMLRead, u_xpl_settings_reg, uxPLConst,
 u_xml_plugins, u_xml_xplplugin;
 
 type

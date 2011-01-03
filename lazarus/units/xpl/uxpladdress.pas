@@ -13,8 +13,8 @@ unit uxPLAddress;
  0.99 : Added HostNmInstance
  1.00 : Suppressed uRegExpTools
  1.01 : IsValid function moved to be class functions
- 1.02 : Added default value initialisation
-        Renamed Tag property to RawxPL
+ 1.02 : Added default value initialisation. Renamed Tag property to RawxPL
+ 1.03 : Host named instance can not handled the same way between linux and win : dropped
 }
 {$mode objfpc}{$H+}
 interface
@@ -55,7 +55,6 @@ type
        class function ComposeAddressFilter (const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : string;
        class procedure SplitVD             (const aVD     : string;   out aVendor, aDevice : string);
        class function RandomInstance : tsInstance;
-       class function HostNmInstance : tsInstance;
        class function IsValid(const aAddress : string) : boolean;
     end;
 
@@ -76,7 +75,11 @@ type
     end;
 
 implementation { ==============================================================}
-uses cRandom, SysUtils, StrUtils, cStrings, pwHostName, uRegExpr;
+uses cRandom,
+     SysUtils,
+     StrUtils,
+     cStrings,
+     uRegExpr;
 
 { General Helper function =====================================================}
 class function TxPLAddress.ComposeAddress(const aVendor : tsVendor; const aDevice : tsDevice; const aInstance : tsInstance) : tsAddress;
@@ -96,9 +99,6 @@ begin StrSplitAtChar(aVD,'-',aVendor,aDevice,false); end;
 
 class function TxPLAddress.RandomInstance : tsInstance;
 begin result := AnsiLowerCase(RandomAlphaStr(sizeof(tsInstance))); end;
-
-class function TxPLAddress.HostNmInstance : tsInstance;
-begin result := AnsiLowerCase(InetSelfName); end;
 
 class function TxPLAddress.IsValid(const aAddress : string) : boolean;
 begin
@@ -134,9 +134,6 @@ end;
 procedure TxPLAddress.ResetValues;
 begin
    RawxPL := K_MSG_HEADER_DUMMY;
-//   fVendor   := '';
-//   fDevice   := '';
-//   fInstance := '';
 end;
 
 procedure TxPLAddress.Assign(anAddress: TxPLAddress);

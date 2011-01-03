@@ -4,36 +4,32 @@ unit uxplmsgbody;
   UnitDesc      = xPL Message Body management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
- 0.91 : Added XMLWrite and read method
- 0.95 : Modified XML read / write format
  0.96 : Rawdata passed are no longer transformed to lower case, then Body lowers
         schema, type and body item keys but not body item values
  0.97 : Use of uxPLConst
  0.98 : Added method to clean empty body elements ('value=')
- 0.99 : Switched local type of xml writing to use u_xml_xpldeterminator
  1.01 : Switched schema from Body to Header
  1.02 : Added auto cut / reassemble of long body variable into multiple lines
         Removed usage of cStrings
  1.03 : Added AddKeyValuePairs
+ 1.04 : Class renamed TxPLBody
 }
 {$mode objfpc}{$H+}
 
 interface
 
 uses Classes,
-     uxPLBaseClass,
-     u_xml_xpldeterminator,
-     u_xml_xplplugin;
+     uxPLBaseClass;
 
-type TxPLMsgBody = class(TxPLBaseClass)
+type TxPLBody = class(TxPLBaseClass)
         private
            function GetRawxPL : string;
-           procedure SetTag(const AValue: string);
+           procedure SetRawxPL(const AValue: string);
            procedure AddKeyValuePair(const aKey, aValue : string);              // This one moved to private because of creation of AddKeyValuePairs
         public
            property Keys     : TStringList read fItmNames;
            property Values   : TStringList read fItmValues;
-           property RawxPL   : string      read GetRawxPL write setTag;
+           property RawxPL   : string      read GetRawxPL write SetRawxPL;
 
            procedure ResetValues;
            procedure CleanEmptyValues;
@@ -42,10 +38,10 @@ type TxPLMsgBody = class(TxPLBaseClass)
            procedure AddKeyValue(const aKeyValuePair : string);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
            procedure SetValueByKey(const aKeyValue, aDefVal : string);
-
-           procedure WriteToXML (const aAction : TXMLxplActionType);
+//           procedure ReadFromTable(const id : integer; const tbBody : string);
+(*           procedure WriteToXML (const aAction : TXMLxplActionType);
            procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
-           procedure ReadFromXML(const aCom    : TXMLCommandType  ); overload;
+           procedure ReadFromXML(const aCom    : TXMLCommandType  ); overload;*)
         end;
 
 implementation {===============================================================}
@@ -71,13 +67,13 @@ begin
    end;
 end;
 
-// TxPLMsgBody ================================================================
-procedure TxPLMsgBody.ResetValues;
+// TxPLBody ================================================================
+procedure TxPLBody.ResetValues;
 begin
    inherited ResetAll;
 end;
 
-procedure TxPLMsgBody.CleanEmptyValues;
+procedure TxPLBody.CleanEmptyValues;
 var i : integer;
 begin
    i := 0;
@@ -85,7 +81,7 @@ begin
       if Values[i]='' then DeleteItem(i) else inc(i);
 end;
 
-function TxPLMsgBody.GetRawxPL: string;
+function TxPLBody.GetRawxPL: string;
 const BodyLineFmt = '%s=%s'#10;
 var i : integer;
 begin
@@ -102,7 +98,7 @@ end;
           aDefVal   : value returned if not found
    OUT : found value or default value
  ------------------------------------------------------------------------}
-function TxPLMsgBody.GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
+function TxPLBody.GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
 var c,i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
@@ -114,21 +110,21 @@ begin
            else result := aDefVal;
 end;
 
-procedure TxPLMsgBody.SetValueByKey(const aKeyValue, aDefVal : string);
-var c,i : integer;
+procedure TxPLBody.SetValueByKey(const aKeyValue, aDefVal : string);
+var i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
    if i>=0 then Values[i] := aDefVal;
 end;
 
 
-procedure TxPLMsgBody.AddKeyValuePairs(const aKeys, aValues : Array of string);
+procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues : Array of string);
 var i : integer;
 begin
    for i := low(aKeys) to High(aKeys) do AddKeyValuePair(aKeys[i],aValues[i]);
 end;
 
-procedure TxPLMsgBody.AddKeyValuePair(const aKey: string; const aValue: string);
+procedure TxPLBody.AddKeyValuePair(const aKey: string; const aValue: string);
 var i,c : integer;
     s : StringArray;
 begin
@@ -140,7 +136,7 @@ begin
    end;
 end;
 
-procedure TxPLMsgBody.AddKeyValue(const aKeyValuePair: string);
+procedure TxPLBody.AddKeyValue(const aKeyValuePair: string);
 var i : integer;
 begin
    i := AnsiPos(K_BODY_ELMT_DELIMITER,aKeyValuePair);
@@ -148,28 +144,28 @@ begin
                                    Copy(aKeyValuePair,i+1,length(aKeyValuePair)-i + 1));
 end;
 
-procedure TxPLMsgBody.WriteToXML(const aAction : TXMLxplActionType);
+(*procedure TxPLBody.WriteToXML(const aAction : TXMLxplActionType);
 var i : integer;
 begin
    for i:= 0 to ItemCount-1 do
        aAction.xplActions.AddElement(intToStr(i)).Expression := Keys[i] + K_BODY_ELMT_DELIMITER + Values[i];
 end;
 
-procedure TxPLMsgBody.ReadFromXML(const aAction : TXMLxplActionType);
+procedure TxPLBody.ReadFromXML(const aAction : TXMLxplActionType);
 var i : integer;
 begin
    for i := 0 to aAction.xplActions.Count-1 do
        AddKeyValue(aAction.xplActions.Element[i].Expression);
 end;
 
-procedure TxPLMsgBody.ReadFromXML(const aCom: TXMLCommandType);
+procedure TxPLBody.ReadFromXML(const aCom: TXMLCommandType);
 var i : integer;
 begin
    for i := 0 to aCom.elements.Count-1 do
        AddKeyValuePair(aCom.Elements[i].Name, aCom.Elements[i].default_);
-end;
+end;*)
 
-procedure TxPLMsgBody.SetTag(const AValue: string);
+procedure TxPLBody.SetRawxPL(const AValue: string);
 begin
    ResetValues;
    with TRegExpr.Create do try
