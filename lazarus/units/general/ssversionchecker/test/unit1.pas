@@ -14,8 +14,10 @@ type
 
   TForm1 = class(TForm)
     Label1: TLabel;
+    procedure FormActivate(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure UpdateAvailable(sender : TObject);
     procedure NoUpdate(sender : TObject);
   private
@@ -29,6 +31,7 @@ var
   Form1: TForm1; 
 
 implementation
+uses Windows, Messages, frm_DownloadFile;
 
 { TForm1 }
 
@@ -41,7 +44,11 @@ begin
   vChecker.DownloadNode := '/xpl-plugin[@vendor="clinique"]/device[@id="clinique-logger"]/attribute::download_url';
   vChecker.OnUpdateFound := @UpdateAvailable;
   vChecker.OnNoUpdateFound:= @NoUpdate;
-  vChecker.CheckVersion;
+end;
+
+procedure TForm1.FormActivate(Sender: TObject);
+begin
+
 end;
 
 procedure TForm1.FormDestroy(Sender: TObject);
@@ -49,9 +56,17 @@ begin
   vChecker.Destroy;
 end;
 
+procedure TForm1.FormShow(Sender: TObject);
+begin
+ vChecker.CheckVersion;
+end;
+
 procedure TForm1.UpdateAvailable(sender: TObject);
 begin
    label1.Caption:='update available : ' + vChecker.ServerVersion + ' at ' + vChecker.DownloadURL;
+   if Application.MessageBox('Do you want to download new version ?','Update available', MB_YESNO + MB_ICONQUESTION) = IDYES then begin
+      ShowFrmDownloadFile( vChecker.DownloadURL, '', true, true, true);
+   end;
 end;
 
 procedure TForm1.NoUpdate(sender: TObject);
