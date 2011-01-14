@@ -1,15 +1,11 @@
 unit uxplmessage;
 {==============================================================================
   UnitName      = uxplmessage
-  UnitVersion   = 0.91
   UnitDesc      = xPL Message management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
- 0.91 : Added XMLWrite and read methods
- 0.95 : Modified to XML read/write com²patible with xml files from other vendors
-        Name and Description fields added
+ 0.95 : Name and Description fields added
  0.96 : Usage of uxPLConst
- 0.97 : Usage of u_xml_xpldeterminator for read/write to xml format
  0.98 : Removed user interface function to u_xpl_message_gui to enable console apps
         Introduced usage of u_xpl_udp_socket_client
  0.99 : Modified due to schema move from Body to Header
@@ -23,49 +19,38 @@ unit uxplmessage;
 interface
 
 uses classes,
-     DOM,
+     uxPLCustomMessage,
      uxPLHeader,
      uxPLAddress,
      uxPLMsgBody,
      uxPLSchema,
      uxPLConst,
-     u_xml_xpldeterminator,
-     u_xml_xplplugin;
+     uxPLClient
+     ;
 
-type
+type        (*TODO : nettoyer ce code suite à la modification de l'héritage via TxPLCustomMessage*)
 
      { TxPLMessage }
 
-     TxPLMessage = class(TComponent)
+     TxPLMessage = class(TxPLCustomMessage) //(TComponent)
      private
-        fHeader   : TxPLHeader;
-        fBody     : TxPLMsgBody;
-        fName     : string;
-        fDescription : string;
+        fName         : string;
+        fDescription  : string;
         fExecuteOrder : integer;
+        fClient       : TxPLClient;
 
-        function GetRawXPL: string;
-        function Get_Strings: TStringList;
+        function  GetRawXPL: string;
+        function  Get_Strings: TStringList;
         procedure SetRawXPL(const AValue: string);
         procedure Set_Strings(const AValue: TStringList);
      public
-        property Header      : TxPLHeader        read fHeader;
-        property Body        : TxPLMsgBody       read fBody;
-        property RawXPL      : string            read GetRawXPL        write SetRawXPL        ;
-        property MessageType : string            read fHeader.fMsgType write fHeader.fMsgType ;
-        property Source      : TxPLAddress       read fHeader.fSource  write fHeader.fSource  ;
-        property Target      : TxPLTargetAddress read fHeader.fTarget  write fHeader.fTarget  ;
-        property Schema      : TxPLSchema        read fHeader.fSchema  write fHeader.fSchema  ;
-        property Name        : string            read fName            write fName            ;
-        property Description : string            read fDescription     write fDescription     ;
-        property ExecuteOrder : integer          read fExecuteOrder    write fExecuteOrder    ;
-        property Strings     : TStringList       read Get_Strings      write Set_Strings;
+        property MsgName      : string            read fName            write fName            ;
+        property Description  : string            read fDescription     write fDescription     ;
+        property ExecuteOrder : integer           read fExecuteOrder    write fExecuteOrder    ;
+        property Strings      : TStringList       read Get_Strings      write Set_Strings;
 
-        procedure ResetValues;
-
-        constructor create(const aRawxPL : string = ''); overload;
-        destructor  Destroy; override;
-        procedure   Assign(const aMessage : TxPLMessage); overload;
+        constructor create;
+        constructor create(const aClient : TxPLClient; const aRawxPL : string = ''); overload;
 
         function SourceFilterTag : tsFilter; // Return a message like a filter string
         function TargetFilterTag : tsFilter;
@@ -74,12 +59,13 @@ type
         function ProcessedxPL : string;
         function  LoadFromFile(aFileName : string) : boolean;
         procedure SaveToFile(aFileName : string);
+        procedure ReadFromTable(const id : integer; const tbHeader, tbBody : string);
 
-        function  WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType; overload;
-        procedure WriteToXML(const aCom : TXMLxplActionType); overload;
-        procedure ReadFromXML(const aCom : TXMLActionsType); overload;
-        procedure ReadFromXML(const aCom : TXMLxplActionType); overload;
-        procedure ReadFromXML(const aCom : TXMLCommandType); overload;
+//        function  WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType; overload;
+//        procedure WriteToXML(const aCom : TXMLxplActionType); overload;
+//        procedure ReadFromXML(const aCom : TXMLActionsType); overload;
+//        procedure ReadFromXML(const aCom : TXMLxplActionType); overload;
+//        procedure ReadFromXML(const aCom : TXMLCommandType); overload;
 
         procedure Format_HbeatApp   (const aInterval : string; const aPort : string; const aIP : string);
         procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
@@ -89,34 +75,21 @@ implementation { ==============================================================}
 Uses SysUtils,
      uRegExpr,
      cStrings,
-     cUtils,
-     XMLRead,
-     XMLWrite;
+     cUtils;
 
 // TxPLMessage =================================================================
-constructor TxPLMessage.Create(const aRawxPL : string = '');
+constructor TxPLMessage.Create(const aClient : TxPLClient; const aRawxPL : string = '');
 begin
-   fHeader   := TxPLHeader.Create;
-   fBody     := TxPLMsgBody.Create;
-   if aRawxPL<>'' then RawXPL := aRawXPL;
+   inherited Create(aRawxPL);
+//   fHeader   := TxPLHeader.Create;
+//   fBody     := TxPLBody.Create;
+   fClient   := aClient;
+//   if aRawxPL<>'' then RawXPL := aRawXPL;
 end;
 
-procedure TxPLMessage.ResetValues;
+constructor TxPLMessage.create;
 begin
-   Header.ResetValues;
-   Body.ResetValues;
-end;
-
-destructor TxPLMessage.Destroy;
-begin
-   Header.Destroy;
-   Body.Destroy;
-end;
-
-procedure TxPLMessage.Assign(const aMessage: TxPLMessage);
-begin
-  Header.Assign(aMessage.Header);
-  Body.Assign(aMessage.Body);
+  Create(nil,'');
 end;
 
 function TxPLMessage.SourceFilterTag: tsFilter;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
@@ -200,30 +173,31 @@ begin
 end;
 
 function TxPLMessage.LoadFromFile(aFileName: string): boolean;
-var xdoc : TXMLDocument;
-    aCom : TXMLActionsType;
+var f : textfile;
+    fichier,ligne : string;
 begin
-   ResetValues;
-   xdoc :=  TXMLDocument.Create;
-   ReadXMLFile(xDoc,aFileName);
-
-   aCom := TXMLActionsType.Create(xDoc);
-   result := (aCom<>nil);
-
-   if result then ReadFromXML(aCom);
-   xdoc.Free;
+   System.Assign(f,aFileName);
+   Reset(f);
+   fichier := '';
+   while not eof(f) do begin
+      System.Readln(f, ligne);
+      fichier += #10+ligne;
+   end;
+   RawxPL := fichier;
+   Close(f);
+   Result := IsValid;
 end;
 
 procedure TxPLMessage.SaveToFile(aFileName: string);
-var xdoc : TXMLDocument;
+var f : textfile;
 begin
-   xdoc :=  TXMLDocument.Create;
-   WriteToXML(xDoc);
-   writeXMLFile(xdoc,aFileName);
-   xdoc.Free;
+   System.Assign(f,aFileName);
+   ReWrite(f);
+   Writeln(f, RawxPL);
+   Close(f);
 end;
 
-function TxPLMessage.WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType;
+(*function TxPLMessage.WriteToXML(const aDoc : TXMLDocument): TXMLxplActionType;
 begin
    result := TXMLxplActionType.Create(aDoc);
    WriteToXML(result);
@@ -250,20 +224,44 @@ begin
    Name := aCom.Display_Name;
    Header.ReadFromXML(aCom);
    Body.ReadFromXML(aCom);
+end;  *)
+
+procedure TxPLMessage.ReadFromTable(const id: integer; const tbHeader, tbBody: string);
+const K_SELECT = 'select * from %s where comtrig_id=%d';
+begin
+   with fClient.DBSettings.GetDataSet(Format(K_SELECT,[tbHeader,id])) do begin
+        if RecordCount=1 then begin
+           ResetValues;
+           Description   := FieldByName('description').AsString;
+           MsgName       := FieldByName('name').AsString;
+           MessageType   := K_MSG_TYPE_HEAD + FieldByName('msg_type').AsString;
+           Target.RawxPL := K_MSG_TARGET_ANY;
+           Schema.RawxPL := FieldByName('msg_schema').AsString;
+
+           with fClient.DBSettings.GetDataSet(Format(K_SELECT,[tbBody,id])) do begin
+                if RecordCount>0 then repeat
+                   Body.AddKeyValuePairs([FieldByName('name').AsString],[FieldByName('default_').AsString]);
+                   Next;
+                until eof;
+                Destroy;
+           end;
+        end;
+        Destroy;
+   end;
 end;
 
-procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);
+(*procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);
 begin
    self.ResetValues;
    Description := aCom.description;
    Name := aCom.name;
    Header.ReadFromXML(aCom);
    Body.ReadFromXML(aCom);
-end;
+end;*)
 
 procedure TxPLMessage.Format_HbeatApp(const aInterval: string; const aPort: string; const aIP: string);
 begin
-   Body.ResetAll;
+   Body.ResetValues;
    Schema.RawxPL := K_SCHEMA_HBEAT_APP;
    MessageType:= K_MSG_TYPE_STAT;
    Target.IsGeneric := True;
@@ -273,7 +271,7 @@ end;
 
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin
-   Body.ResetAll;
+   Body.ResetValues;
    Schema.RawxPL := K_SCHEMA_SENSOR_BASIC;
    Body.AddKeyValuePairs( ['device' , 'type' , 'current'],
                           [aDevice  , aType  ,  aCurrent]);

@@ -4,8 +4,6 @@ unit uxPLHeader;
   UnitDesc      = xPL Message Header management object and function
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
- 0.91 : Added XMLWrite and Read Methods, Source and Target Addresses
- 0.95 : Modified XML read and Write format to be closer to other vendors
  0.96 : Rawdata passed are no longer transformed to lower case, then Header has
         to lower it
  0.97 : Added Assign method
@@ -15,8 +13,6 @@ unit uxPLHeader;
         avoiding multiple tanstyping
         Renamed the class from TxPLMsgHeader to TxPLHeader
  1.00 : Suppressed usage of uRegExTools to correct bug #FS47
- Rev 256 : Replaced string constants with u_xml string constants
-         Switched local type of xml writing to use u_xml_xpldeterminator
  1.1    Switched schema from Body to Header
         optimizations in SetRawxPL to avoid inutile loops
  }
@@ -26,9 +22,7 @@ interface
 
 uses uxPLAddress,
      uxPLConst,
-     uxPLSchema,
-     u_xml_xpldeterminator,
-     u_xml_xplplugin;
+     uxPLSchema;
 
 type { TxPLHeader }
 
@@ -57,17 +51,20 @@ type { TxPLHeader }
        procedure ResetValues;
 
        function IsValid : boolean;
-
-       procedure WriteToXML (const aAction : TXMLxplActionType);
+//       procedure ReadFromTable(const id : integer; const tbHeader : string);
+(*       procedure WriteToXML (const aAction : TXMLxplActionType);
        procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
-       procedure ReadFromXML(const aCom : TXMLCommandType); overload;
+       procedure ReadFromXML(const aCom : TXMLCommandType); overload;*)
 
        class function MsgTypeAsOrdinal(const aMsgType : tsMsgType) : integer;
      end;
 
 
 implementation {=========================================================================}
-uses SysUtils, Classes, uRegExpr, StrUtils;
+uses SysUtils,
+     Classes,
+     uRegExpr,
+     StrUtils;
 
 { TxPLHeader Object =====================================================================}
 constructor TxPLHeader.create;
@@ -110,7 +107,7 @@ begin                                                                           
              (MsgTypeAsOrdinal(MessageType) <> -1);
 end;
 
-procedure TxPLHeader.ReadFromXML(const aAction : TXMLxplActionType);
+(*procedure TxPLHeader.ReadFromXML(const aAction : TXMLxplActionType);
 begin
    MessageType   := aAction.Msg_Type;
    Target.RawxPL := aAction.Msg_Target;
@@ -123,28 +120,25 @@ begin
    MessageType   := K_MSG_TYPE_HEAD + aCom.msg_type;
    Target.RawxPL := K_MSG_TARGET_ANY;
    Schema.RawxPL := aCom.msg_schema;
-end;
+end;*)
 
 class function TxPLHeader.MsgTypeAsOrdinal(const aMsgType: tsMsgType): integer;
 begin
    Result := AnsiIndexStr(aMsgType,[K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND]);
 end;
 
-procedure TxPLHeader.WriteToXML(const aAction : TXMLxplActionType);
+(*procedure TxPLHeader.WriteToXML(const aAction : TXMLxplActionType);
 begin
    aAction.Msg_Type   := MessageType;
    aAction.Msg_Target := Target.RawxPL;
    aAction.Msg_Source := Source.RawxPL;
    aAction.Msg_Schema := Schema.RawxPL;
-end;
+end;*)
 
 function TxPLHeader.GetRawxPL: string;
 begin
    Result := IfThen( IsValid ,
-                     Format(K_MSG_HEADER_FORMAT,[MessageType,Hop,Source.RawxPL,Target.RawxPL,Schema.RawxPL]))
-//   If IsValid
-//      then result :=
-//      else result := '';
+                     Format(K_MSG_HEADER_FORMAT,[MessageType,Hop,Source.RawxPL,Target.RawxPL,Schema.RawxPL]));
 end;
 
 procedure TxPLHeader.SetMessageType(const AValue: tsMsgType);

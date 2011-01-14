@@ -18,26 +18,36 @@ unit uxplmsgbody;
 
 interface
 
-uses Classes,
-     uxPLBaseClass;
+uses Classes;
 
-type TxPLBody = class(TxPLBaseClass)
+type TxPLBody = class //(TxPLBaseClass)
         private
+          fKeys, fValues : TStringList;
            function GetRawxPL : string;
            procedure SetRawxPL(const AValue: string);
            procedure AddKeyValuePair(const aKey, aValue : string);              // This one moved to private because of creation of AddKeyValuePairs
+           function GetCount: integer; inline;
+           procedure DeleteItem(const aIndex : integer);
+           function  AppendItem(const aName : string) : integer;
         public
-           property Keys     : TStringList read fItmNames;
-           property Values   : TStringList read fItmValues;
-           property RawxPL   : string      read GetRawxPL write SetRawxPL;
+           constructor Create;
+           destructor  Destroy;
 
+           property Keys     : TStringList read fKeys;
+           property Values   : TStringList read fValues;
+           property RawxPL   : string      read GetRawxPL write SetRawxPL;
+           property  ItemCount : integer read GetCount;
            procedure ResetValues;
            procedure CleanEmptyValues;
+           procedure Assign(const aBody : TxPLBody);
+           function  IsValid : boolean;
 
            procedure AddKeyValuePairs(const aKeys, aValues : array of string);
            procedure AddKeyValue(const aKeyValuePair : string);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
            procedure SetValueByKey(const aKeyValue, aDefVal : string);
+           function  IsKeyPresent(const aKey : string) : boolean;
+
 //           procedure ReadFromTable(const id : integer; const tbBody : string);
 (*           procedure WriteToXML (const aAction : TXMLxplActionType);
            procedure ReadFromXML(const aAction : TXMLxplActionType); overload;
@@ -68,9 +78,56 @@ begin
 end;
 
 // TxPLBody ================================================================
+constructor TxPLBody.Create;
+begin
+   fKeys   := TStringList.Create;
+   fValues := TStringList.Create;
+end;
+
+destructor TxPLBody.destroy;
+begin
+   fKeys.Free;
+   fValues.Free;
+end;
+
+function TxPLBody.GetCount: integer;
+begin
+   result := fKeys.Count;
+end;
+
 procedure TxPLBody.ResetValues;
 begin
-   inherited ResetAll;
+   Keys.Clear;
+   Values.Clear;
+end;
+
+procedure TxPLBody.DeleteItem(const aIndex: integer);
+begin
+   Keys.Delete(aIndex);
+   Values.Delete(aIndex);
+end;
+
+function TxPLBody.AppendItem(const aName : string) : integer;
+begin
+     result := Keys.Add(aName);
+     Values.Add('');
+end;
+
+procedure TxPLBody.Assign(const aBody : TxPLBody);
+//var i : integer;
+begin
+   ResetValues;
+   Keys.AddStrings(aBody.Keys);
+   Values.AddStrings(aBody.Values);
+//     for i:=0 to aBody.ItemCount-1 do begin
+//         AppendItem(aBody.fItmNames[i], aBody.fRegExpr[i]);
+//         fItmValues[i] := aBody.fItmValues[i];
+//     end;
+end;
+
+function TxPLBody.IsValid: boolean;
+begin
+   result := Values.Count > 0;
 end;
 
 procedure TxPLBody.CleanEmptyValues;
@@ -86,7 +143,7 @@ const BodyLineFmt = '%s=%s'#10;
 var i : integer;
 begin
    result := '';
-   for i:= 0 to ItemCount-1 do result += Format(BodyLineFmt,[fItmNames[i],fItmValues[i]]);
+   for i:= 0 to ItemCount-1 do result += Format(BodyLineFmt,[Keys[i],Values[i]]);
    result := Format(K_MSG_BODY_FORMAT,[result]);
 end;
 
@@ -117,6 +174,11 @@ begin
    if i>=0 then Values[i] := aDefVal;
 end;
 
+function TxPLBody.IsKeyPresent(const aKey: string): boolean;
+begin
+   result := (Keys.IndexOf(aKey)<>-1);
+end;
+
 
 procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues : Array of string);
 var i : integer;
@@ -131,8 +193,8 @@ begin
    if aKey = '' then exit;
    s := StrCutBySize(aValue,K_BODY_ELMT_VALUE_MAX_LEN);
    for c:=low(s) to high(s) do begin                                            // 1.02 : iterate till we reach the end
-      i := AppendItem(aKey,'(.*)');                                             // of a string potentially longueur than 128 char
-      fItmValues[i] := s[c];
+      i := AppendItem(aKey);                                                    // of a string potentially longueur than 128 char
+      Values[i] := s[c];
    end;
 end;
 
