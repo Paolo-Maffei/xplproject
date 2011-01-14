@@ -19,7 +19,9 @@ uses Classes,
      IdUDPServer,
      IdTelnetServer,
      IdSocketHandle,
-     uxPLSettings;
+     u_xpl_settings_reg;
+
+const XPL_UDP_BASE_PORT     : Integer = 3865;                                   // Port used by devices to send messages
 
 type TUDPReceivedEvent = procedure(const aString : string) of object;
 
@@ -28,15 +30,25 @@ type TUDPReceivedEvent = procedure(const aString : string) of object;
            constructor Create(const aBroadCastAddress : string);
      end;
 
+     { TxPLUDPServer }
+
      TxPLUDPServer = class(TIdUDPServer)                                        // Connexion used to listen to xPL messages
         private
            fOnReceived : TUDPReceivedEvent;
            fSettings   : TxPLSettings;
 
-           procedure AddBinding(const aIP : string);
-        public
-           constructor Create(const axPLSettings : TxPLSettings; const aReceivedProc : TUDPReceivedEvent);
+           procedure AddBinding(const aIP : string; const aPort : integer);
            procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+        public
+           constructor Create(
+                       const aReceivedProc : TUDPReceivedEvent;                 // Callback procedure used to deliver read messages
+                       const aPort : integer = 0);                              // Port used for the binding, 0 = dynamic
+           destructor  Destroy; override;
+
+        published
+           property    Basic_xPL_Settings : TxPLSettings read fSettings;
+           property    Bindings: TIdSocketHandles read FBindings;               // Inherited property
+//           property    Bindings           :
      end;
 
      TXHCPServer = class(TIdTelnetServer)                                       // Connexion used to listen XHCP messages
@@ -48,8 +60,7 @@ implementation //===============================================================
 uses  IdStack,
       SysUtils;
 
-const XPL_UDP_BASE_PORT     : Integer = 3865;
-      XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
+const XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
       XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                  // First port used to try to open the listening port
       XPL_BASE_PORT_RANGE   : Integer = 512;                                    //       Range of port to scan for trying to bind socket
 
@@ -63,7 +74,7 @@ begin
 end;
 
 // TxPLUDPServer ===============================================================
-constructor TxPLUDPServer.Create(const axPLSettings : TxPLSettings; const aReceivedProc : TUDPReceivedEvent);
+constructor TxPLUDPServer.Create(const aReceivedProc : TUDPReceivedEvent; const aPort : integer = 0);
 {$IFDEF WINDOWS} var i : integer; {$ENDIF}
 begin
    inherited Create;
@@ -71,14 +82,15 @@ begin
    BufferSize   := XPL_MAX_MSG_SIZE;
    OnUDPRead    := @UDPRead;
    fOnReceived  := aReceivedProc;
-   fSettings    := axPLSettings;
+   fSettings    := TxPLSettings.create;
+   if not fSettings.IsValid then exit;                                          // Active property will remain to false
 
 {$IFDEF WINDOWS}
    i := gstack.LocalAddresses.Count-1;
    while i>=0 do begin
       if fSettings.ListenOnAll or
          (gStack.LocalAddresses[i] = fSettings.ListenOnAddress)
-      then AddBinding(gstack.LocalAddresses[i]);
+      then AddBinding(gstack.LocalAddresses[i], aPort);
       dec(i);
    end;
 {$ELSE}
@@ -88,14 +100,24 @@ begin
    If Bindings.Count > 0 then Active := True;
 end;
 
-procedure TxPLUDPServer.AddBinding(const aIP : string);
+procedure TxPLUDPServer.AddBinding(const aIP : string; const aPort : integer);
 begin
    with Bindings.Add do begin
-      ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-      ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-      Port := 0;
-      IP   := aIP;
+      if aPort = 0 then begin                                                   // Dynamically assign port
+         ClientPortMin := XPL_BASE_DYNAMIC_PORT;
+         ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
+         Port := aPort;
+      end
+      else                                                                      // Fixed assigned port
+         Port := aPort;
+      IP := aIP;
    end;
+end;
+
+destructor TxPLUDPServer.Destroy;
+begin
+  fSettings.Free;
+  inherited Destroy;
 end;
 
 procedure TxPLUDPServer.UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
