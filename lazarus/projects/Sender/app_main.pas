@@ -12,7 +12,7 @@ var  xPLClient : TxPLSender;
      xPLMessageGUI : TxPLMessageGUI;
 
 const //======================================================================================
-     K_XPL_APP_VERSION_NUMBER = '1.6.3';
+     K_XPL_APP_VERSION_NUMBER = '1.7';
      K_DEFAULT_VENDOR = 'clinique';
      K_DEFAULT_DEVICE = 'sender';
 

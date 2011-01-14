@@ -160,6 +160,7 @@ begin
                if delay=-1 then Body.AddKeyValue('delay=');
                Body.SetValueByKey('delay', IntToStr(fTimer.Interval div 1000));
             end;
+            Header.Target.Assign(Header.Source);
             xPLClient.Send(axPLMsg);
          end;
       end else if (Schema.Classe = 'log') then begin // restriction to xpl-trig + log.basic is done by the filter

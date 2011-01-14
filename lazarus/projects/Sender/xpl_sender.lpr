@@ -12,7 +12,7 @@ uses
   {$ENDIF}
   Interfaces,
   Forms,
-  LResources, indylaz,
+  LResources, zcomponent, indylaz,
   frm_about,
   frm_logviewer,
   frm_xplappslauncher,
@@ -32,7 +32,8 @@ begin
   {$I xpl_sender.lrs}
   Application.Initialize;
   xPLClient     := TxPLSender.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
-  xPLMessageGUI := TxPLMessageGUI.Create;
+  xPLMessageGUI := TxPLMessageGUI.Create(xPLClient,'');
+
   if Application.HasOption('s') then begin
      xPLMessageGUI.LoadFromFile(Application.GetOptionValue('s'));
      xPLClient.Send(xPLMessageGUI);
