@@ -30,12 +30,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure Image1Click(Sender: TObject);
   private
     MessageQueue : TStringList;
     lockedby     : string;
     fTimer       : TfpTimer;
     fNotifier    : TxPLPopupNotifier;
+    procedure Display(const aTitle, aText, aLevel : string; const bTimed : boolean = true; const aDelay : integer = -1);
   public
     procedure OnConfigDone(const fConfig : TxPLConfig);
     procedure OnReceive(const axPLMsg : TxPLMessage);
@@ -60,19 +60,23 @@ const
 
 procedure TFrmMain.FormCreate(Sender: TObject);
 begin
+   MessageQueue := TStringList.Create;
+
+   fTimer       := TfpTimer.Create(self);
+   fTimer.OnTimer:=@OnTimer;
+
    fNotifier    := TxPLPopupNotifier.Create(self);
+
    xPLClient := TxPLListener.Create(K_DEFAULT_VENDOR,K_DEFAULT_DEVICE,K_XPL_APP_VERSION_NUMBER);
    with xPLClient do begin
        OnxPLConfigDone    := @OnConfigDone;
        OnxPLReceived      := @OnReceive;
        OnxPLJoinedNet     := @OnJoined;
-       Config.DefineItem(K_CONFIG_SHOWSEC, K_XPL_CT_CONFIG, 1, '3');
+       Config.DefineItem(K_CONFIG_SHOWSEC, K_XPL_CT_CONFIG, 1, '5');
+       Config.SetItemValue(K_CONF_FILTER,'xpl-trig.*.*.*.log.basic');
+       Config.SetItemValue(K_CONF_FILTER,'xpl-cmnd.*.*.*.osd.basic');
        Listen;
    end;
-   MessageQueue := TStringList.Create;
-   fTimer       := TfpTimer.Create(self);
-   fTimer.OnTimer:=@OnTimer;
-
 end;
 
 procedure TFrmMain.acAboutExecute(Sender: TObject);
@@ -99,11 +103,6 @@ begin
 //   WindowState := wsMinimized;
 end;
 
-procedure TFrmMain.Image1Click(Sender: TObject);
-begin
-
-end;
-
 procedure TFrmMain.OnTimer(Sender : TObject);
 begin
    fNotifier.Hide;
@@ -123,76 +122,51 @@ begin
    end;
 end;
 
-procedure TFrmMain.OnConfigDone(const fConfig: TxPLConfig);
-begin
-   fNotifier.Title       :='xPL Message';
-   fNotifier.Text        :='Configuration Loaded'#13'Listening...';
-   fNotifier.Visible     := true;
-end;
-
 procedure TFrmMain.OnReceive(const axPLMsg: TxPLMessage);
-var command, texte, type_, code, delay : string;
-    bHandled : boolean;
+var command, texte, type_, code : string;
+    delay : integer;
+    bHandled, bTimed : boolean;
 begin
-   if not (axPLMsg.MessageType = K_MSG_TYPE_CMND) then exit;
    bHandled := false;
    if not fTimer.Enabled then with axPLMsg do begin
       texte   := Body.GetValueByKey('text');
-      texte   := AnsiReplaceStr(texte,'\n',#13#10);
-      delay   := Body.GetValueByKey('delay');
-      if Schema.RawxPL='osd.basic' then begin
+      if (Schema.Classe='osd') then begin     // restriction to xpl-cmnd + osd.basic is done by the filter
          command := Body.GetValueByKey('command','write');
+         delay   := StrToIntDef(Body.GetValueByKey('delay'),-1);
          Case AnsiIndexStr(command,['exclusive','release','clear','write']) of
-           0 : begin
-             if lockedby = '' then begin
-                lockedby := axPLMsg.Source.RawxPL;
-                OnTimer(self);
-                bHandled := true;
-             end;
-           end;
-           1 : begin
-             if lockedby = axPLMsg.Source.RawxPL then begin
-                lockedby := '';
-                OnTimer(self);
-                bHandled := True;
-             end;
-           end;
-           2 : begin
-              if lockedby = axPLMsg.Source.RawxPL then begin
-                 OnTimer(self);
-                 bHandled := True;
-              end;
-           end;
-           3 : begin
-              if (lockedby = axPLMsg.Source.RawxPL) or (lockedby='') then begin
-                if lockedby<>'' then begin
-                   if (delay <> '') then begin
-                      fTimer.Interval := StrToInt(delay) * 1000;
-                      fTimer.StartTimer;
-                   end
-                end else begin
-                   if delay = '' then delay := xPLClient.Config.ItemValue(K_CONFIG_SHOWSEC);
-                   fTimer.Interval := StrToInt(delay) * 1000;
-                   fTimer.StartTimer;
-                end;
-                fNotifier.Text := texte;
-                fNotifier.Show;
-                bHandled := True;
-              end;
-           end;
-
+              0 : if lockedby = '' then begin // Exclusive ======================================
+                     lockedby := Source.RawxPL;
+                     OnTimer(self);
+                     bHandled := true;
+                  end;
+              1 : if lockedby = Source.RawxPL then begin // Release =============================
+                     lockedby := '';
+                     OnTimer(self);
+                     bHandled := True;
+                  end;
+              2 : if lockedby = Source.RawxPL then begin // Clear ===============================
+                     OnTimer(self);
+                     bHandled := True;
+                  end;
+              3 : if ((lockedby = Source.RawxPL) or (lockedby='')) then begin // Write ==========
+                     bTimed := ((lockedby<>'') and (delay<>-1)) or (lockedby='');
+                     Display('OSD message',texte,K_LOG_BASIC_INF,bTimed,delay);
+                     bHandled := True;
+                  end;
          end;
-      end else if Schema.RawxPL = 'log.basic' then begin
+         if bHandled then begin
+            Schema.Type_:='confirm';
+            if fTimer.Enabled then begin
+               if delay=-1 then Body.AddKeyValue('delay=');
+               Body.SetValueByKey('delay', IntToStr(fTimer.Interval div 1000));
+            end;
+            xPLClient.Send(axPLMsg);
+         end;
+      end else if (Schema.Classe = 'log') then begin // restriction to xpl-trig + log.basic is done by the filter
          if lockedby='' then begin
             type_   := Body.GetValueByKey('type',K_LOG_BASIC_INF);
-            code    := Body.GetValueByKey('code');
-            fNotifier.Title:='xPL Message';
-            fNotifier.Text := texte + IfThen(code<>'',#13 + code);
-            if (delay = '') then fTimer.Interval := StrToInt(xPLClient.Config.ItemValue(K_CONFIG_SHOWSEC)) * 1000
-                            else fTimer.Interval := StrToInt(delay) * 1000;
-            fNotifier.level := type_;
-            fNotifier.Show;
-            fTimer.StartTimer;
+            code    := '\n' + Body.GetValueByKey('code');
+            Display('Log Message',texte + code, type_);
             bHandled := True;
          end;
       end;
@@ -203,12 +177,27 @@ end;
 
 procedure TFrmMain.OnJoined(const aJoined: boolean);
 begin
-   fNotifier.Title:='Info';
-   fNotifier.Text :='Joined the xPL network';
-   fTimer.Interval:=StrToInt(xPLClient.Config.ItemValue(K_CONFIG_SHOWSEC)) * 1000;
-   fNotifier.Show;
-   fTimer.StartTimer;
+   Display('Info','Joined the xPL network',K_LOG_BASIC_INF);
 end;
+
+procedure TFrmMain.OnConfigDone(const fConfig: TxPLConfig);
+begin
+   Display('xPL Message','Configuration Loaded\nListening',K_LOG_BASIC_INF);
+end;
+
+procedure TFrmMain.Display(const aTitle, aText, aLevel : string; const bTimed : boolean = true; const aDelay: integer = -1);
+begin
+   fNotifier.Title := aTitle;
+   fNotifier.Text  := AnsiReplaceStr(aText,'\n',#13#10);;
+   fNotifier.level := aLevel;
+   if bTimed then begin
+      if aDelay = -1 then fTimer.Interval := StrToInt(xPLClient.Config.ItemValue(K_CONFIG_SHOWSEC)) * 1000
+                     else fTimer.Interval := aDelay * 1000;
+      fTimer.StartTimer;
+   end;
+   fNotifier.Show;
+end;
+
 
 initialization
   {$I frm_main.lrs}
