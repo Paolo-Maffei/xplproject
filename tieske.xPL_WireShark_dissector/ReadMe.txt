@@ -1,3 +1,5 @@
+WireShark dissector for xPL homeautomation protocol
+===================================================
 Copyright 2011 by Thijs Schreijer
 thijs@thijsschreijer.nl
 http://www.thijsschreijer.nl
@@ -20,6 +22,12 @@ License
     along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 
+Links
+=====
+WireShark       http://www.wireshark.org/
+xPL protocol    http://xplproject.org.uk/
+
+
 Changelog
 =========
 26-apr-2011   v1.0     Initial version
@@ -30,6 +38,7 @@ OS support
 ==========
 The dissector was created on Windows, but should work on all OS'es where
 WireShark support lua scripting.
+
 
 Filelist
 ========
@@ -42,11 +51,13 @@ xPL Faulty Message Generator.exe     - Windows app to generate invalid xPL messa
 xpllib.dll                           - Support dll for message generator
 TestApp source (folder)              - VS2008 VB project with source of generator
 
+
 Installation
 ============
 Copy the xpl_dissector.lua file to the WireShark plugin directory, at the
 time of writing that was; C:\Program Files\Wireshark\plugins\1.4.6\
 That's all (for non Windows OS, please consult the WireShark documentation)
+
 
 Using WireShark with xPL
 ========================
@@ -71,12 +82,13 @@ which indicates its a faulty message, browse through the tree to see what kind
 of feedback the dissector gives on faulty messages. For each of the messages
 the first key-value pair contains the error in the message.
 
+
 NOTES
 =====
 Because its coded in lua script, the dissector is not as fast as the built-in
 dissectors. Especially as it does validate every message quite extensively.
-As xPL is not very bandwith intense, this should not be an issue, but in 
+xPL is not very bandwith intense, so this should not be an issue, but in 
 sporadic cases it might be. Consider to capture the data first with the 
 dissector disabled and save the data. Then later reopen the saved file with the
-dissector enabled.
+dissector enabled to perform your analysis.
 
