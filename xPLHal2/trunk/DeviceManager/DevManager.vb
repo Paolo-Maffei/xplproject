@@ -295,14 +295,12 @@ Public Class DevManager
         If DevManager.Contains(msgSource) Then
             Dim configvals = newvalues.Split
             For Each entry As String In configvals
-                Dim tags() As String = Split(entry, "=")
+                ' 22-may-2011 Tieske, fixed bug 51; http://xplproject.org.uk/bugs/index.php?do=details&task_id=51&project=2
+                Dim key As String = Split(entry, "=")(0).ToLower
+                Dim val As String = Right(entry, Len(entry) - (Len(key) + 1))
                 Dim GOCPath As String = "config." & msgSource & ".current."
 
-                If tags.Length > 1 Then
-                    xPLCache.Add(GOCPath & tags(0).ToLower, tags(1).ToLower, False)
-                Else
-                    xPLCache.Add(GOCPath & tags(0).ToLower, "", False)
-                End If
+                xPLCache.Add(GOCPath & key, val, False)
             Next
 
             'Okay, now send it to the device... but one last check first...
