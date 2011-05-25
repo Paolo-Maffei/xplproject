@@ -1,0 +1,645 @@
+--[[
+
+
+    xPLGirder Component
+
+    (c) Copyright Richard A Fox Jr.
+    
+    Thanks to Tieske - He has provided additional information and code to further this project along.
+
+    Girder xPL plugin message schema;
+
+    No status messages have been defined
+
+    Trigger message when a grider event is forwarded to xPL
+    =======================================================
+    xpl-trig
+    {
+    source=vendor.device-instance
+    target=*
+    hop=1
+    }
+    girder.basic
+    {
+    device= ...  Girder device ID
+    event= ... Girder eventstring
+    [pld1= ... event payload 1]
+    [pld2= ... event payload 2]
+    [pld3= ... event payload 3]
+    [pld4= ... event payload 4]
+    }
+
+
+    Command message to raise a Girder event inside Girder
+    =====================================================
+    xpl-cmnd
+    {
+    source=vendor.device-instance
+    target=vendor.device-instance
+    hop=1
+    }
+    girder.basic
+    {
+    device= ...  Girder device ID
+    event= ... Girder eventstring
+    [pld1= ... event payload 1]
+    [pld2= ... event payload 2]
+    [pld3= ... event payload 3]
+    [pld4= ... event payload 4]
+    }
+
+    Change Log:
+    02-14-2011: Added version key/value to the hbeat messages
+                Prevent xpl-trig girder.basic messages from being sent to the Girder event queue
+                Changed eventstring to source\message_type:Schema=schema from source:Schema=schema
+    02-16-2011: Added reading ListenOnAddress, ListenToAddresses and BroadcastAddress from registry - Thanks to Tieske
+                Changed self.Receiver:receive() to self.Receiver:receivefrom() to accommodate checking for packets coming from ListenOnAddress - Thanks to Tieske
+                Corrected problem of no data received when broadcast is set to 255.255.255.255. Added self.Receiver:setoption("broadcast", true)
+                to StartReceiver method.
+
+
+--]]
+
+local function trim (s)
+  return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+end
+
+-- xPL parser. returns a table.
+local function xPLParser(msg)
+	local x = string.Split(msg, "\n")
+	local xPLMsg = {}
+	local Line
+	local State=1
+
+	xPLMsg.body = {}
+	xPLMsg.type = x[1]
+
+	for i in ipairs(x) do
+
+		Line = trim(x[i])
+
+		-- Reading the Body.
+		if ( State == 5) then
+			if ( Line=='}' ) then
+				State = 0
+			else
+-- tieske update: if the value contains an '=' the last part was lost in the split, entire key/value omitted
+				local t = string.Split( Line, "=")
+				if ( table.getn(t)==2 ) then
+					-- 2 elements found, so key and a value
+					table.insert(xPLMsg.body, { key = t[1], value = t[2] })
+				elseif ( table.getn(t)==1 ) then
+					-- 1 element found, so key consider it key only
+					table.insert(xPLMsg.body, { key = t[1], value = "" })
+				else
+					-- 3 or more elements found, so value contains '=' character
+					table.insert(xPLMsg.body, { key = t[1], value = string.sub(Line, string.len(t[1]) + 2) })
+				end
+-- Tieske update end
+			end
+		end
+
+		-- Waiting for Body
+		if ( State == 4 ) then
+			if ( Line=='{' ) then
+				State = 5
+			end
+		end
+
+		-- Waiting for Schema
+		if ( State == 3 ) then
+
+			--if ( Line ~= '' ) and ( Line~='\n') and ( Line~='\r\n' ) and ( Line~='\n\r' ) then
+			if ( Line ~= '' ) and ( string.len(Line)>1) then
+				xPLMsg.schema = Line
+				State = 4
+			end
+
+		end
+
+		-- Header.
+		if ( State == 2) then
+			if ( Line=='}' ) then
+				State = 3
+			else
+				local t = string.Split( Line, "=")
+				if ( table.getn(t)==2 ) then
+					xPLMsg[t[1]] = t[2]
+				end
+			end
+		end
+
+		-- Idle
+		if ( State == 1 ) then
+			if ( Line=='{' ) then
+				State = 2
+			end
+		end
+	end
+    if not xPLMsg.type then
+        return
+    end
+
+    if not xPLMsg.source then
+        return
+    end
+
+    return xPLMsg
+end
+
+local GetRegKey = function(name, default)
+	local key = "HKLM"
+	local path = [[Software\xPL\]]
+	local reg, err, val
+	local result = default
+
+	reg, err = win.CreateRegistry(key, path)
+	if (reg ~= nil) then
+		val = reg:Read(name)
+		if (val ~= nil) then
+			result = val
+		end
+		reg:CloseKey()
+	end
+	return result
+end
+
+local CleanupIP = function(ips)
+	local t = string.Split(ips, ",")
+	for k,v in ipairs(t) do
+		local i = string.Split(v, ".")
+		for k1,v1 in ipairs(i) do
+			i[k1] = v1 * 1
+		end
+		t[k] = table.concat(i, ".")
+	end
+	return table.concat(t, ",")
+end
+
+
+local PluginID = 11099
+local PluginName = 'xPLGirder'
+local Global = 'xPLGirder'
+local Description = 'xPLGirder'
+local Version = '0.0.6'
+local ConfigFile = 'xPLGirder.cfg'
+local ProviderName = 'xPLGirder'
+
+local DefaultSettings = {
+}
+
+local Events = table.makeset ( {
+    'Add',
+    'Remove',
+    'Update',
+    'xPLMessage',
+} )
+
+local socket = require('socket')
+
+local Address, HostName = win.GetIPInfo(0)
+
+local UDP_SOCKET = 50000
+local XPL_PORT = 3865
+local INTERVAL = 5
+
+local xPLListenOnAddress = GetRegKey("ListenOnAddress", "ANY_LOCAL")
+if xPLListenOnAddress ~= "ANY_LOCAL" then
+	xPLListenOnAddress = CleanupIP(xPLListenOnAddress)
+end
+
+local xPLListenToAddresses = GetRegKey("ListenToAddresses", "ANY_LOCAL")
+if xPLListenToAddresses ~= "ANY_LOCAL" then
+	if xPLListenToAddresses ~= "ANY" then
+		xPLListenToAddresses = CleanupIP(xPLListenOnAddress)
+		-- remove '.' characters becasue their magical patterns
+		xPLListenToAddresses = string.gsub(xPLListenToAddresses, "%.", "_")
+	end
+end
+
+local xPLBroadcastAddress = GetRegKey("BroadcastAddress", "255.255.255.255")
+
+if xPLListenOnAddress ~= "ANY_LOCAL" then
+	Address = xPLListenOnAddress
+end
+
+-- Tieske added begin
+local handlerdir = 'luascript\\xPLHandlers'
+local handlerfiles = '*.lua'
+-- Tieske added end
+
+require 'Components.Classes.Provider'
+
+require 'Classes.DelayedExecutionDispatcher'
+
+local Super = require 'Components.Classes.Provider'
+
+local xPLGirder = Super:New ( {
+
+    ID = PluginID,
+    Name = PluginName,
+    Description = Description,
+    Global = Global,
+    Version = Version,
+    ConfigFile = ConfigFile,
+    ProviderName = ProviderName,
+    Source = 'slyfox-girder.'..string.gsub (string.lower(HostName), "%p", ""),
+    Address = Address,
+	xPLListenOnAddress = xPLListenOnAddress,
+	xPLListenToAddresses = xPLListenToAddresses,
+	xPLBroadcastAddress = xPLBroadcastAddress,
+    Port = UDP_SOCKET,
+
+    xPLDevices = {},
+
+    Initialize = function (self)
+        self:AddEvents (Events)
+        self:AddToDefaultSettings (DefaultSettings)
+
+        return Super.Initialize (self)
+    end,
+
+
+    StartProvider = function (self)
+        --Super.StartProvider (self)
+    end,
+
+
+    Enable = function (self)
+        self.Mode = 'Startup'
+
+-- Tieske added begin
+	self:LoadHandlers()
+-- Tieske added end
+
+        self:StartReceiver()
+
+        self:StartHBTimer()
+
+        self:SendHeartbeat()
+
+        return Super.Enable (self)
+    end,
+
+
+    Disable = function (self)
+        self.Mode = 'Offline'
+
+        self:ShutdownReciever()
+
+-- Tieske added, start
+		self:RemoveAllHandlers()
+-- Tieske added, end
+
+        return Super.Disable (self)
+    end,
+
+
+    StartHBTimer = function (self)
+        self.HeartbeatTimer = gir.CreateTimer (nil,function () self:SendHeartbeat () end,nil,true)
+        self.HeartbeatTimer:Arm (3000)
+        return true
+    end,
+
+
+    SendHeartbeat = function (self)
+        local hb = "xpl-stat\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.app\n{\ninterval=%s\nport=%s\nremote-ip=%s\nversion=%s\n}\n"
+        local msg = string.format(hb, self.Source, INTERVAL, self.Port, self.Address, self.Version)
+        self:SendMessage(msg)
+    end,
+
+
+    SendDiscovery = function (self)
+        local hb = "xpl-cmnd\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.request\n{\ncommand=request\n}\n"
+        local msg = string.format(hb, self.Source)
+        self:SendMessage(msg)
+    end,
+
+
+    ShutdownReciever = function (self)
+        local hb = "xpl-stat\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.end\n{\ninterval=%s\nport=%s\nremote-ip=%s\n}\n"
+        local msg = string.format(hb, self.Source, INTERVAL, self.Port, self.Address)
+        self:SendMessage(msg)
+        self.Receiver:close()
+    end,
+
+
+    StartReceiver = function (self)
+        self.Receiver = socket.udp()
+    	if not self.Receiver then
+    		print("Could not create UDP socket.")
+    		return false
+    	end
+    	self.Receiver:settimeout(1)
+    	local status, err = self.Receiver:setsockname('*', self.Port)
+
+    	while not status do
+            self.Port = self.Port + 1
+            self.Receiver:close()
+            self.Receiver = socket.udp()
+            self.Receiver:settimeout(1)
+            self.Receiver:setoption("broadcast", true)
+    	    status, err = self.Receiver:setsockname('*', self.Port)
+    	    --print (status,err)
+    	end
+
+        local updaterunning = self.AsyncReceiverID and self.AsyncReceiverID:isthreadrunning ()
+        if updaterunning or gir.IsLuaExiting () then  -- leave if we are already running or lua is shutting down
+            return
+        end
+        self.AsyncReceiverID = thread.newthread (self.AsyncReceiver,{self,1,2})
+    end,
+
+
+    AsyncReceiver = function (self)
+    	while not gir.IsLuaExiting() do
+    		local data, err = self.Receiver:receivefrom()
+
+    		if not data and err ~= 'timeout' then
+    			-- if any error occurs end the thread, unless the error is 'timeout'
+    			return false
+    		end
+
+    		if data then
+				local fromip = string.gsub(err, "%.", "_") -- if data was returned, 2nd argument contains the Sender IP
+				if self.xPLListenToAddresses ~= "ANY" then
+					-- we need to check the from address
+					if self.xPLListenToAddresses == "ANY_LOCAL" then
+						-- the first three elements in our address must match
+						local a = string.Split(self.Address, ".")
+						a[4] = 255
+						a = table.concat(a, "_")
+						fromip = string.Split(fromip, "_")
+						fromip[4] = 255
+						fromip = table.concat(fromip, "_")
+						if a ~= fromip then
+							data = nil
+							print ("Message from " .. err .. " not approved.")
+						end
+					else
+						-- check if sender address is in our list, clear data if not
+						if not string.find(self.xPLListenToAddresses, fromip) then
+							data = nil
+							print ("Message from " .. err .. " not approved.")
+						end
+					end
+				end
+				local msg = nil
+				if data then msg = xPLParser(data) end
+    			if msg then
+                    if not self:ProcessHeartbeat(msg) then
+                        print ('Send to message processing queue!',msg.type,msg.source,msg.schema)
+                        self:ProcessReceivedMessage (msg)
+                    end
+                end
+    		end
+    	end
+    end,
+
+
+    ProcessReceivedMessage = function (self, data)
+        --local forus = data.Header.source == '*' or data.Header.source == self.Source
+        local forus = data.target == '*' or data.target == self.Source
+        if forus then
+			if data.type == 'xpl-trig' and data.schema == 'girder.basic' then
+                return
+            end
+			if data.type == 'xpl-cmnd' and data.schema == 'girder.basic' then
+				-- we received a command to raise a girder event
+				--table.print (data)
+				local deviceid, eventstring, pld1, pld2, pld3, pld4
+				for k,v in ipairs(data.body) do
+				    if v.key == 'device' then
+				        deviceid = v.value
+				    elseif v.key == 'event' then
+				        eventstring = v.value
+				    elseif v.key == 'pld1' then
+				        pld1 = v.value
+				    elseif v.key == 'pld2' then
+				        pld2 = v.value
+				    elseif v.key == 'pld3' then
+				        pld3 = v.value
+				    elseif v.key == 'pld4' then
+				        pld4 = v.value
+                    end
+				end
+				gir.TriggerEvent(eventstring, deviceid, pld1, pld2, pld3, pld4)
+				return
+			end
+-- Tieske added, start
+			if not self:ProcessMessageHandlers ( data ) then
+				-- returned false, so standard xPL event should not be supressed
+				local eventstring = string.format("%s.%s.%s", data.type, data.source, data.schema)
+-- Tieske added, end
+				local pld1 = pickle(data)
+				gir.TriggerEvent(eventstring, self.ID, pld1)
+-- Tieske added, start
+			end
+-- Tieske added, end
+        end
+    end,
+
+-- Tieske added, start
+	Handlers = {}, 		-- emtpy table with specific message handlers
+
+	FilterMatch = function (self, msg, filter)
+		-- filter = [msgtype].[vendor].[device].[instance].[class].[type]
+		-- wildcards can be used; '*'
+		-- return true if the message matches the filter
+
+		-- split filter elements
+		lst = string.Split( filter, '.' )
+		local fmsgtype = lst[1] or "*"
+		local fvendor = lst[2] or "*"
+		local fdevice = lst[3] or "*"
+		local finstance = lst[4] or "*"
+		local fclass = lst[5] or "*"
+		local ftype = lst[6] or "*"
+
+		-- split message elements
+		local mmsgtype = msg.type
+		local a = string.Split (msg.source, "-")
+		local mvendor = a[1]
+		a = string.Split(a[2], ".")
+		local mdevice = a[1]
+		local minstance = a[2]
+		a = string.Split( msg.schema, ".")
+		local mclass = a[1]
+		local mtype = a[2]
+
+		-- compare
+		if fmsgtype ~= mmsgtype and fmsgtype ~= "*" then
+			return false
+		end
+		if fvendor ~= mvendor and fvendor ~= "*" then
+			return false
+		end
+		if fdevice ~= mdevice and fdevice ~= "*" then
+			return false
+		end
+		if finstance ~= minstance and finstance ~= "*" then
+			return false
+		end
+		if fclass ~= mclass and fclass ~= "*" then
+			return false
+		end
+		if ftype ~= mtype and ftype ~= "*" then
+			return false
+		end
+		-- we've got a match
+		return true
+	end,
+
+	ProcessMessageHandlers = function (self, msg)
+		local result = false
+		-- loop through all handlers
+		for ID, handler in pairs(self.Handlers) do
+			-- loop through all filters
+			for k, v in pairs(handler.Filters) do
+				if self:FilterMatch ( msg, v ) then
+					-- filter matches, go call handler
+					if handler:MessageHandler( msg, v) then
+						result = true
+					end
+					-- call each handler max 1, so exit loop, continue with next handler
+					break
+				end
+			end
+		end
+		return result
+	end,
+
+	RegisterHandler = function (self, handler)
+		self:RemoveHandler(handler.ID)
+		-- setup defaults and ID
+		local newID = handler.ID
+		handler.Filters = handler.Filters or {}
+		if table.IsEmpty( handler.Filters ) then
+			handler.Filters = {'*.*.*.*.*.*'}	-- default filter; all messages
+		end
+		-- Go add to Handler list and initialize
+		self.Handlers[newID] = handler
+		handler:Initialize()
+		return
+	end,
+
+	RemoveHandler = function (self, ID)
+		if ID ~= nil then
+			local h = self.Handlers[ID]
+			if h ~= nil then
+				h:ShutDown()
+				self.Handlers[ID] = nil
+			end
+		end
+	end,
+
+	RemoveAllHandlers = function (self)
+		-- shutdown all handlers, and empty table
+		for ID, handler in pairs(self.Handlers) do
+			handler:ShutDown()
+		end
+		self.Handlers = {}
+	end,
+
+    LoadHandlers = function (self)
+        --self:Log (3,'Loading xPL handlers')
+        local dir = win.GetDirectory('GIRDERDIR').."\\"..handlerdir
+
+        for fa in win.Files (dir..'\\'..handlerfiles) do
+            if math.band (fa.FileAttributes, win.FILE_ATTRIBUTE_DIRECTORY) == 0 then
+				local handler = self:ReadHandlerFile (dir..'\\'..fa.FileName)
+				if handler then
+					self:RegisterHandler (handler)
+				end
+            end
+        end
+    end,
+
+    ReadHandlerFile = function (self, file)
+        --self:Log (3,'Reading handler ',file)
+
+        local f,err = loadfile (file)
+        if not f then
+            print('xPLGirder: Error reading handler file ',file)
+            return false
+        end
+
+        local res,handler = xpcall (f, debug.traceback)
+
+        if not res or type (handler) ~= 'table' then
+            print('xPLGirder: Error running handler file (1)',file)
+            return false
+        end
+
+        if not res then
+            print('xPLGirder: Error running handler file (2)',file)
+            return false
+        end
+
+        return handler
+    end,
+
+-- Tieske added, end
+
+
+    ProcessHeartbeat = function (self, data)
+        if data.type == 'xpl-stat' and data.schema == "hbeat.app" then
+            local source = data.source
+            if self.Mode == 'Startup' then
+                if source == self.Source then
+                    --print ('Hub is present')
+                    self.Mode = 'Online'
+                    self.HeartbeatTimer:Cancel()
+                    self.HeartbeatTimer:Arm (INTERVAL * 60000)
+                    self:SendDiscovery()
+                end
+            end
+            if self.Mode == 'Online' then
+                if not table.findvalue(self.xPLDevices, source) then
+                    --print ('Adding source',source)
+                    table.insert(self.xPLDevices, source)
+                else
+                    --print ('Source',source,'already exists')
+                end
+            end
+            return true     -- msg was a heartbeat
+        elseif data.type == 'xpl-cmnd' and data.schema == "hbeat.request" then
+            self:SendHeartbeat()
+            return true     -- msg was a heartbeat
+        end
+        return false        -- msg was not a heartbeat
+    end,
+
+
+    GetSourceDevices = function (self)
+        return table.copy(self.xPLDevices)
+    end,
+
+
+    GetSource = function (self)
+        return self.Source
+    end,
+
+
+    SendMessage = function (self, msg)
+        --if self.Mode == 'Online' then
+            self.Receiver:sendto(msg,self.xPLBroadcastAddress, XPL_PORT)
+        --else
+        --    print ('xPLGirder not Online')
+        --end
+    end,
+
+
+    Close = function (self)
+        self:ShutdownReciever()
+        _ = self.HeartbeatTimer and self.HeartbeatTimer:Destroy ()
+
+        Super.Close (self)
+    end,
+
+} )
+
+
+
+return xPLGirder
+
