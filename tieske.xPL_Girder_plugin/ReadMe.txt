@@ -10,7 +10,7 @@ Contents
 5 - Message handlers
 6 - Changelog
 
-Download: 
+Download: http://www.thijsschreijer.nl/blog/?page_id=507
 Support : Girder forums @ http://www.promixis.com/forums/showthread.php?21059
 Sources : xPL SVN @ http://code.google.com/p/xplproject/source/browse/ filed
           under 'tieske.xPL_Girder_plugin'
@@ -149,6 +149,11 @@ as comments in the sample file.
 ============================================================================
 6 - Changelog
 ============================================================================
+26-may-2011 version 0.0.8 by Thijs Schreijer
+         updated vendor from 'slyfox' to 'tieske' so it can be added to the
+         tieske 'xPL vendor plugin'.
+         Updated the component and action IDs which are now formally
+         approved
 25-may-2011 version 0.0.7 by Thijs Schreijer
          Bug fix that would truncate xpl-values containing a '=' character
          eventstring changed to match regular xPL filter format
