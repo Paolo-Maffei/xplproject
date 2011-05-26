@@ -1,64 +1,39 @@
 --[[
 
+(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
 
-    xPLGirder Component
+This file is part of xPLGirder.
 
-    (c) Copyright Richard A Fox Jr.
-    
-    Thanks to Tieske - He has provided additional information and code to further this project along.
+xPLGirder is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-    Girder xPL plugin message schema;
+xPLGirder is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
 
-    No status messages have been defined
+You should have received a copy of the GNU General Public License
+along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
 
-    Trigger message when a grider event is forwarded to xPL
-    =======================================================
-    xpl-trig
-    {
-    source=vendor.device-instance
-    target=*
-    hop=1
-    }
-    girder.basic
-    {
-    device= ...  Girder device ID
-    event= ... Girder eventstring
-    [pld1= ... event payload 1]
-    [pld2= ... event payload 2]
-    [pld3= ... event payload 3]
-    [pld4= ... event payload 4]
-    }
+See the accompanying ReadMe.txt file for additional information.
 
+]]--
 
-    Command message to raise a Girder event inside Girder
-    =====================================================
-    xpl-cmnd
-    {
-    source=vendor.device-instance
-    target=vendor.device-instance
-    hop=1
-    }
-    girder.basic
-    {
-    device= ...  Girder device ID
-    event= ... Girder eventstring
-    [pld1= ... event payload 1]
-    [pld2= ... event payload 2]
-    [pld3= ... event payload 3]
-    [pld4= ... event payload 4]
-    }
+local Version = '0.0.7'
+local PluginID = 11099
+local PluginName = 'xPLGirder'
+local Global = 'xPLGirder'
+local Description = 'xPLGirder'
+local ConfigFile = 'xPLGirder.cfg'
+local ProviderName = 'xPLGirder'
+local UDP_SOCKET = 50000
+local XPL_PORT = 3865
+local INTERVAL = 5
+local handlerdir = 'luascript\\xPLHandlers'
+local handlerfiles = '*.lua'
 
-    Change Log:
-    02-14-2011: Added version key/value to the hbeat messages
-                Prevent xpl-trig girder.basic messages from being sent to the Girder event queue
-                Changed eventstring to source\message_type:Schema=schema from source:Schema=schema
-    02-16-2011: Added reading ListenOnAddress, ListenToAddresses and BroadcastAddress from registry - Thanks to Tieske
-                Changed self.Receiver:receive() to self.Receiver:receivefrom() to accommodate checking for packets coming from ListenOnAddress - Thanks to Tieske
-                Corrected problem of no data received when broadcast is set to 255.255.255.255. Added self.Receiver:setoption("broadcast", true)
-                to StartReceiver method.
-
-
---]]
 
 local function trim (s)
   return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
@@ -83,7 +58,6 @@ local function xPLParser(msg)
 			if ( Line=='}' ) then
 				State = 0
 			else
--- tieske update: if the value contains an '=' the last part was lost in the split, entire key/value omitted
 				local t = string.Split( Line, "=")
 				if ( table.getn(t)==2 ) then
 					-- 2 elements found, so key and a value
@@ -95,7 +69,6 @@ local function xPLParser(msg)
 					-- 3 or more elements found, so value contains '=' character
 					table.insert(xPLMsg.body, { key = t[1], value = string.sub(Line, string.len(t[1]) + 2) })
 				end
--- Tieske update end
 			end
 		end
 
@@ -177,14 +150,6 @@ local CleanupIP = function(ips)
 end
 
 
-local PluginID = 11099
-local PluginName = 'xPLGirder'
-local Global = 'xPLGirder'
-local Description = 'xPLGirder'
-local Version = '0.0.6'
-local ConfigFile = 'xPLGirder.cfg'
-local ProviderName = 'xPLGirder'
-
 local DefaultSettings = {
 }
 
@@ -199,10 +164,6 @@ local socket = require('socket')
 
 local Address, HostName = win.GetIPInfo(0)
 
-local UDP_SOCKET = 50000
-local XPL_PORT = 3865
-local INTERVAL = 5
-
 local xPLListenOnAddress = GetRegKey("ListenOnAddress", "ANY_LOCAL")
 if xPLListenOnAddress ~= "ANY_LOCAL" then
 	xPLListenOnAddress = CleanupIP(xPLListenOnAddress)
@@ -212,7 +173,7 @@ local xPLListenToAddresses = GetRegKey("ListenToAddresses", "ANY_LOCAL")
 if xPLListenToAddresses ~= "ANY_LOCAL" then
 	if xPLListenToAddresses ~= "ANY" then
 		xPLListenToAddresses = CleanupIP(xPLListenOnAddress)
-		-- remove '.' characters becasue their magical patterns
+		-- remove '.' characters because they are magical lua patterns
 		xPLListenToAddresses = string.gsub(xPLListenToAddresses, "%.", "_")
 	end
 end
@@ -222,11 +183,6 @@ local xPLBroadcastAddress = GetRegKey("BroadcastAddress", "255.255.255.255")
 if xPLListenOnAddress ~= "ANY_LOCAL" then
 	Address = xPLListenOnAddress
 end
-
--- Tieske added begin
-local handlerdir = 'luascript\\xPLHandlers'
-local handlerfiles = '*.lua'
--- Tieske added end
 
 require 'Components.Classes.Provider'
 
@@ -268,9 +224,7 @@ local xPLGirder = Super:New ( {
     Enable = function (self)
         self.Mode = 'Startup'
 
--- Tieske added begin
-	self:LoadHandlers()
--- Tieske added end
+		self:LoadHandlers()
 
         self:StartReceiver()
 
@@ -287,9 +241,7 @@ local xPLGirder = Super:New ( {
 
         self:ShutdownReciever()
 
--- Tieske added, start
 		self:RemoveAllHandlers()
--- Tieske added, end
 
         return Super.Disable (self)
     end,
@@ -426,20 +378,16 @@ local xPLGirder = Super:New ( {
 				gir.TriggerEvent(eventstring, deviceid, pld1, pld2, pld3, pld4)
 				return
 			end
--- Tieske added, start
 			if not self:ProcessMessageHandlers ( data ) then
 				-- returned false, so standard xPL event should not be supressed
-				local eventstring = string.format("%s.%s.%s", data.type, data.source, data.schema)
--- Tieske added, end
+				local dotAddr = string.gsub(data.source, "%-", ".", 1)  -- replace address '-'  by '.'
+				local eventstring = string.format("%s.%s.%s", data.type, dotAddr, data.schema)
 				local pld1 = pickle(data)
 				gir.TriggerEvent(eventstring, self.ID, pld1)
--- Tieske added, start
 			end
--- Tieske added, end
         end
     end,
 
--- Tieske added, start
 	Handlers = {}, 		-- emtpy table with specific message handlers
 
 	FilterMatch = function (self, msg, filter)
@@ -447,7 +395,27 @@ local xPLGirder = Super:New ( {
 		-- wildcards can be used; '*'
 		-- return true if the message matches the filter
 
+		local addr = string.gsub(msg.source, "%-", ".", 1)	-- replace address '-' with '.'
+		local mflt = string.format("%s.%s.%s", msg.type, addr, msg.schema)
+
 		-- split filter elements
+		local flst = string.Split( filter, '.' )
+		local mlst = string.Split( mflt, '.' )
+
+		for i = 1,6 do
+			-- check wildcard first
+			if flst[i] ~= '*' then
+				-- isn't a wildcard, check equality
+				if flst[i] ~= mlst[i] then
+					-- not equal, so match failed
+					return false
+				end
+			end
+		end
+		-- we've got a match
+		return true
+
+--[[		-- split filter elements
 		lst = string.Split( filter, '.' )
 		local fmsgtype = lst[1] or "*"
 		local fvendor = lst[2] or "*"
@@ -455,6 +423,7 @@ local xPLGirder = Super:New ( {
 		local finstance = lst[4] or "*"
 		local fclass = lst[5] or "*"
 		local ftype = lst[6] or "*"
+
 
 		-- split message elements
 		local mmsgtype = msg.type
@@ -488,6 +457,7 @@ local xPLGirder = Super:New ( {
 		end
 		-- we've got a match
 		return true
+]]--
 	end,
 
 	ProcessMessageHandlers = function (self, msg)
@@ -520,7 +490,6 @@ local xPLGirder = Super:New ( {
 		-- Go add to Handler list and initialize
 		self.Handlers[newID] = handler
 		handler:Initialize()
-		return
 	end,
 
 	RemoveHandler = function (self, ID)
@@ -579,8 +548,6 @@ local xPLGirder = Super:New ( {
         return handler
     end,
 
--- Tieske added, end
-
 
     ProcessHeartbeat = function (self, data)
         if data.type == 'xpl-stat' and data.schema == "hbeat.app" then
@@ -638,7 +605,6 @@ local xPLGirder = Super:New ( {
     end,
 
 } )
-
 
 
 return xPLGirder
