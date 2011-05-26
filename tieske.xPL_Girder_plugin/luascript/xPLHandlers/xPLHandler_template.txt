@@ -1,12 +1,39 @@
 --[[
 
+(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
+
+This file is part of xPLGirder.
+
+xPLGirder is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+xPLGirder is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
+
+See the accompanying ReadMe.txt file for additional information.
+
+]]--
+
+
+
+
+--[[
+
 This file is an xPL message handler template to be used with the xPLGirder plugin.
 It allows for the easy handling of specific xPL message types.
 
 Use the items below to create the handler, instructions are in the comments.
 
 The file should be located inside the Girder program directory, in directory
-'luascript\xPLHandlers', it will be loaded when the xPLGirder component initializes.
+'luascript\xPLHandlers\' and must be renamed to a file extension '.lua', it
+will be loaded when the xPLGirder component initializes.
 
 ]]--
 
@@ -21,14 +48,14 @@ local myNewHandler = {
 	--[[
 	first define a list of filters to trigger the message handler. Any filter that has a positive
 	match will trigger the handler. Each Handler will be called once per message, so if this handler
-	has 2 filters that match only the first will call the handler.
+	has 2 filters that match, only the first will call the handler.
 
 	a filter is a dot ('.') separated string with xPL message elements, each element may be
 	wildcarded with an asterix ('*').
 
-		filter = [msgtype].[vendor].[device].[instance].[class].[type]
+		filter = [msgtype].[vendor].[device].[instance].[schemaclass].[schematype]
 
-	The default filter '*.*.*.*.*.*' will call the handler for each message received
+	The default filter '*.*.*.*.*.*' will call the handler for every message received
 
 	]]--
 
@@ -61,7 +88,7 @@ local myNewHandler = {
 			msg.schema		message schema
 			msg.body		contains sub-tables, each with a 'key' and a 'value' field, so to access;
 							first key value  :   msg.body[1].key
-							first value value:	 msg.body[1].value
+							first value value:   msg.body[1].value
 		]]--
 
 

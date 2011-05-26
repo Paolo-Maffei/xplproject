@@ -1,14 +1,37 @@
 --[[
 
+(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
+
+This file is part of xPLGirder.
+
+xPLGirder is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+xPLGirder is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
+
+See the accompanying ReadMe.txt file for additional information.
+
+]]--
+
+
+-- This file contains 2 actions;  specific message and the event message
+
+--[[
+
 
 xPLGirder UI File
 xPLGirder.lua
 
 
-Send Specific Message Actioin
-
-    Change Log:
-    02-14-2011: Set proper values for device and eventstring in Send Event Message action
+Send Specific Message Action
 
 
 --]]
@@ -186,7 +209,7 @@ xPLGirder UI File
 xPLGirder.lua
 
 
-Send Event Message Actioin
+Send Event Message Action
 
 --]]
 
