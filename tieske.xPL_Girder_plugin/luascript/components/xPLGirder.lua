@@ -21,8 +21,8 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.0.7'
-local PluginID = 11099
+local Version = '0.0.8'
+local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
 local Description = 'xPLGirder'
@@ -199,7 +199,7 @@ local xPLGirder = Super:New ( {
     Version = Version,
     ConfigFile = ConfigFile,
     ProviderName = ProviderName,
-    Source = 'slyfox-girder.'..string.gsub (string.lower(HostName), "%p", ""),
+    Source = 'tieske-girder.'..string.gsub (string.lower(HostName), "%p", ""),
     Address = Address,
 	xPLListenOnAddress = xPLListenOnAddress,
 	xPLListenToAddresses = xPLListenToAddresses,

@@ -23,6 +23,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 
 -- This file contains 2 actions;  specific message and the event message
+-- Version: 0.0.8
 
 --[[
 
@@ -52,7 +53,7 @@ local paramids = {
     [6] = { Key = 'key6edit', Value = 'value6edit' },
 }
 
-local ActionID = 1199		-- Specific message
+local ActionID = 10124		-- Specific message
 
 local Super = require 'Classes.DUI.ActionComponent'
 
@@ -214,7 +215,7 @@ Send Event Message Action
 --]]
 
 
-local ActionID = 1200		-- Generic event message, Tieske:  ID to be verified!!
+local ActionID = 10125		-- Generic event message, Tieske:  ID to be verified!!
 
 -- Added by Tieske, generic 'forward event' action
 local Config = Super:New ( {
