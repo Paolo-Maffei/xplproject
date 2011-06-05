@@ -21,7 +21,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.0.8'
+local Version = '0.0.9'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -201,6 +201,7 @@ local xPLGirder = Super:New ( {
     ProviderName = ProviderName,
     Source = 'tieske-girder.'..string.gsub (string.lower(HostName), "%p", ""),
     Address = Address,
+	HostName = HostName,
 	xPLListenOnAddress = xPLListenOnAddress,
 	xPLListenToAddresses = xPLListenToAddresses,
 	xPLBroadcastAddress = xPLBroadcastAddress,
@@ -222,7 +223,7 @@ local xPLGirder = Super:New ( {
 
 
     Enable = function (self)
-        self.Mode = 'Startup'
+        self:SetMode ('Startup')
 
 		self:LoadHandlers()
 
@@ -237,7 +238,7 @@ local xPLGirder = Super:New ( {
 
 
     Disable = function (self)
-        self.Mode = 'Offline'
+        self:SetMode ('Offline')
 
         self:ShutdownReciever()
 
@@ -272,6 +273,10 @@ local xPLGirder = Super:New ( {
         local hb = "xpl-stat\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.end\n{\ninterval=%s\nport=%s\nremote-ip=%s\n}\n"
         local msg = string.format(hb, self.Source, INTERVAL, self.Port, self.Address)
         self:SendMessage(msg)
+		if self.HeartbeatTimer ~= nil then
+			self.HeartbeatTimer:Cancel()
+			self.HeartbeatTimer = nil
+		end
         self.Receiver:close()
     end,
 
@@ -279,7 +284,7 @@ local xPLGirder = Super:New ( {
     StartReceiver = function (self)
         self.Receiver = socket.udp()
     	if not self.Receiver then
-    		print("Could not create UDP socket.")
+			gir.LogMessage(self.Name, 'Could not create UDP socket.', 2)
     		return false
     	end
     	self.Receiver:settimeout(1)
@@ -340,7 +345,7 @@ local xPLGirder = Super:New ( {
 				if data then msg = xPLParser(data) end
     			if msg then
                     if not self:ProcessHeartbeat(msg) then
-                        print ('Send to message processing queue!',msg.type,msg.source,msg.schema)
+                        --print ('Send to message processing queue!',msg.type,msg.source,msg.schema)
                         self:ProcessReceivedMessage (msg)
                     end
                 end
@@ -414,50 +419,6 @@ local xPLGirder = Super:New ( {
 		end
 		-- we've got a match
 		return true
-
---[[		-- split filter elements
-		lst = string.Split( filter, '.' )
-		local fmsgtype = lst[1] or "*"
-		local fvendor = lst[2] or "*"
-		local fdevice = lst[3] or "*"
-		local finstance = lst[4] or "*"
-		local fclass = lst[5] or "*"
-		local ftype = lst[6] or "*"
-
-
-		-- split message elements
-		local mmsgtype = msg.type
-		local a = string.Split (msg.source, "-")
-		local mvendor = a[1]
-		a = string.Split(a[2], ".")
-		local mdevice = a[1]
-		local minstance = a[2]
-		a = string.Split( msg.schema, ".")
-		local mclass = a[1]
-		local mtype = a[2]
-
-		-- compare
-		if fmsgtype ~= mmsgtype and fmsgtype ~= "*" then
-			return false
-		end
-		if fvendor ~= mvendor and fvendor ~= "*" then
-			return false
-		end
-		if fdevice ~= mdevice and fdevice ~= "*" then
-			return false
-		end
-		if finstance ~= minstance and finstance ~= "*" then
-			return false
-		end
-		if fclass ~= mclass and fclass ~= "*" then
-			return false
-		end
-		if ftype ~= mtype and ftype ~= "*" then
-			return false
-		end
-		-- we've got a match
-		return true
-]]--
 	end,
 
 	ProcessMessageHandlers = function (self, msg)
@@ -529,22 +490,23 @@ local xPLGirder = Super:New ( {
 
         local f,err = loadfile (file)
         if not f then
-            print('xPLGirder: Error reading handler file ',file)
+			gir.LogMessage(self.Name, 'Error reading handler file ' .. file, 2)
             return false
         end
 
         local res,handler = xpcall (f, debug.traceback)
 
         if not res or type (handler) ~= 'table' then
-            print('xPLGirder: Error running handler file (1)',file)
+			gir.LogMessage(self.Name, 'Error running handler file ' .. file, 2)
             return false
         end
 
         if not res then
-            print('xPLGirder: Error running handler file (2)',file)
+			gir.LogMessage(self.Name, 'Error running handler file ' .. file, 2)
             return false
         end
 
+		gir.LogMessage(self.Name, 'Loaded handler ' .. handler.ID, 3)
         return handler
     end,
 
@@ -555,7 +517,7 @@ local xPLGirder = Super:New ( {
             if self.Mode == 'Startup' then
                 if source == self.Source then
                     --print ('Hub is present')
-                    self.Mode = 'Online'
+					self:SetMode ('Online')
                     self.HeartbeatTimer:Cancel()
                     self.HeartbeatTimer:Arm (INTERVAL * 60000)
                     self:SendDiscovery()
@@ -577,6 +539,10 @@ local xPLGirder = Super:New ( {
         return false        -- msg was not a heartbeat
     end,
 
+	SetMode = function (self, m)
+		self.Mode = m
+		gir.TriggerEvent('Status changed to: ' .. self.Mode, self.ID, self.Mode)
+	end,
 
     GetSourceDevices = function (self)
         return table.copy(self.xPLDevices)
