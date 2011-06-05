@@ -8,7 +8,8 @@ Contents
 3 - Using xPLGirder
 4 - xPL message schemas
 5 - Message handlers
-6 - Changelog
+6 - Known issues
+7 - Changelog
 
 Download: http://www.thijsschreijer.nl/blog/?page_id=507
 Support : Girder forums @ http://www.promixis.com/forums/showthread.php?21059
@@ -94,7 +95,8 @@ action) to the xPL network.
 ============================================================================
 
 The schema used contains 1 trigger and 1 command message, no status messages
-have been defined.
+have been defined. For more information about the structure of xPL messages
+in general see http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document#The_xPL_Protocol:_.22Lite_on_the_wire.2C_by_design.22
 
 Trigger message when a grider event is forwarded to xPL
 =======================================================
@@ -147,8 +149,25 @@ can be copied and modified to suit your purpose, instructions are included
 as comments in the sample file.
 
 ============================================================================
-6 - Changelog
+6 - Known issues
 ============================================================================
+1) does not properly restore from standby/hibernate
+2) does not properly reconfigure network upon network adapter changes and/or
+   lost connections.
+
+============================================================================
+7 - Changelog
+============================================================================
+05-jun-2011 version 0.0.9 by Thijs Schreijer
+         events generated for devices arriving and leaving
+         events generated for status changes of xPL connection
+         bug; hbeat.basic was not recognized as device arriving
+         log messages for loading handlers
+         includes 3 generic handlers, for the following message schemas;
+            - log.basic
+            - sensor.basic
+            - hbeat.* and config.* (removes the events, to clean up log)
+         handler template was updated
 26-may-2011 version 0.0.8 by Thijs Schreijer
          updated vendor from 'slyfox' to 'tieske' so it can be added to the
          tieske 'xPL vendor plugin'.

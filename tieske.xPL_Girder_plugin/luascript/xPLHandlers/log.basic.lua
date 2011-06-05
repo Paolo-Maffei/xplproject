@@ -26,23 +26,19 @@ See the accompanying ReadMe.txt file for additional information.
 
 --[[
 
-This file is an xPL message handler template to be used with the xPLGirder plugin.
-It allows for the easy handling of specific xPL message types.
-
-Use the items below to create the handler, instructions are in the comments.
-
-The file should be located inside the Girder program directory, in directory
-'luascript\xPLHandlers\' and must be renamed to a file extension '.lua', it
-will be loaded when the xPLGirder component initializes.
+This file was created as an xPL message handler for all messages with schema 'log.basic'.
+It will log the message as received in the Girder log with the appropriate icon and suppress
+further events.
 
 ]]--
 
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
 
+
 local myNewHandler = {
 
-	ID = "UniqueHandlerID",		-- enter a unique string to identify this handler
+	ID = "LogBasic",		-- enter a unique string to identify this handler
 
 
 
@@ -61,17 +57,15 @@ local myNewHandler = {
 	]]--
 
 	Filters = {
-		"*.*.*.*.*.*"
+		"*.*.*.*.log.basic"
 	},
 
 	Initialize = function (self)
 		-- function called upon initialization of this handler
-		print ("Initializing the xPL handler ID: " .. self.ID)
 	end,
 
 	ShutDown = function (self)
 		-- function called upon shuttingdown this handler
-		print ("Shutting down the xPL handler ID: " .. self.ID)
 	end,
 
 	MessageHandler = function (self, msg, filter)
@@ -101,15 +95,31 @@ local myNewHandler = {
 			end
 		end
 
-
-
-
 		-- add your code here to handle the actual message
-		print ("Got one on filter: " .. filter .. " from source: " .. msg.source)
 
+		local mtext = GetValueByKey('text')
+		local icon = GetValueByKey('type')
+		if icon == 'inf' then
+			icon = 0
+		elseif icon == 'wrn' then
+			icon = 1
+		elseif icon == 'err' then
+			icon = 2
+		else
+			-- nothing provided, assume informational
+			icon = 0
+		end
 
+		local i
+		for i = 1,table.getn(msg.body) do
+			local k = msg.body[i].key
+			if k ~= 'text' and k ~= 'type' then
+				-- found an unknown key, append its value
+				mtext = mtext .. ', ' .. k .. '=' .. msg.body[i].value
+			end
+		end
 
-
+		gir.LogMessage('xPLGirder; ' .. msg.source, mtext, icon)
 
 		-- Determine the return value
 		-- false: The standard xPLGirder event will still be created (if all other handlers also
@@ -117,7 +127,7 @@ local myNewHandler = {
 		-- true:  The standard xPLGirder event is suppressed, this should be used when the handler
 		--        has created a more specific event from the xPL message than the regular xPLGirder
 		--        event.
-		return false
+		return true
 	end,
 }
 

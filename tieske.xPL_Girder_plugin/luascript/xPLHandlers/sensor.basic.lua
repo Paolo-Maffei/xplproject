@@ -26,23 +26,27 @@ See the accompanying ReadMe.txt file for additional information.
 
 --[[
 
-This file is an xPL message handler template to be used with the xPLGirder plugin.
-It allows for the easy handling of specific xPL message types.
+This file was created as an xPL message handler for all messages with schema 'sensor.basic'.
+It generates specific events for just the changed values of the sensors (so new messages
+with same values are not evented).
 
-Use the items below to create the handler, instructions are in the comments.
+The value will be in payload 1, any additional fields provided will be stored in payload 2-4.
 
-The file should be located inside the Girder program directory, in directory
-'luascript\xPLHandlers\' and must be renamed to a file extension '.lua', it
-will be loaded when the xPLGirder component initializes.
+Sensor values can be accessed in lua through table;
+	xPLGirder.Handlers.SensorBasic.sensors
+
+try typing the following in the interavctive lua console;
+	table.print (xPLGirder.Handlers.SensorBasic.sensors)
 
 ]]--
 
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
 
+
 local myNewHandler = {
 
-	ID = "UniqueHandlerID",		-- enter a unique string to identify this handler
+	ID = "SensorBasic",		-- enter a unique string to identify this handler
 
 
 
@@ -61,17 +65,16 @@ local myNewHandler = {
 	]]--
 
 	Filters = {
-		"*.*.*.*.*.*"
+		"*.*.*.*.sensor.basic"
 	},
 
 	Initialize = function (self)
 		-- function called upon initialization of this handler
-		print ("Initializing the xPL handler ID: " .. self.ID)
+		self.sensors = {}	-- reset table with sensor values
 	end,
 
 	ShutDown = function (self)
 		-- function called upon shuttingdown this handler
-		print ("Shutting down the xPL handler ID: " .. self.ID)
 	end,
 
 	MessageHandler = function (self, msg, filter)
@@ -101,13 +104,30 @@ local myNewHandler = {
 			end
 		end
 
-
-
-
 		-- add your code here to handle the actual message
-		print ("Got one on filter: " .. filter .. " from source: " .. msg.source)
+		-- create a unique sensor ID by using the address and sensor type together
+		local sensorID = msg.source .. ': ' .. GetValueByKey('device') .. ', ' .. GetValueByKey('type')
+		local newVal = GetValueByKey('current')
 
+		if (self.sensors[sensorID] == nil) or (self.sensors[sensorID] ~= newVal) then
+			-- first time we get this sensor, or value is different than before
+			self.sensors[sensorID] = newVal
+			local pld = {}
+			local p = 2
+			local i
+			pld[1] = newVal
 
+			for i = 1,table.getn(msg.body) do
+				local k = msg.body[i].key
+				if k ~= 'device' and k ~= 'type' and k~= 'current' and p <= 4 then
+					-- found an unknown key, append its value in the next payload
+					pld[p] = msg.body[i].value
+					p = p + 1
+				end
+			end
+
+			gir.TriggerEvent('Sensor update ' .. sensorID, xPLEventDevice, pld[1], pld[2], pld[3], pld[4] )
+		end
 
 
 
@@ -117,7 +137,7 @@ local myNewHandler = {
 		-- true:  The standard xPLGirder event is suppressed, this should be used when the handler
 		--        has created a more specific event from the xPL message than the regular xPLGirder
 		--        event.
-		return false
+		return true
 	end,
 }
 
