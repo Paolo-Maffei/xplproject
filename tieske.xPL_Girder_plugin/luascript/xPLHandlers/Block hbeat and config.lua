@@ -1,5 +1,14 @@
 --[[
 
+This file is an xPL message handler to remove events based on device heartbeat
+and configuration messages. These messages usually have little value in everyday use.
+
+All this handler does is stop the xPLGirder component from raising events for these
+messages. To change its behaviour, adjust the filter below.
+
+
+
+=================================================================================================
 (c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
 
 This file is part of xPLGirder.
@@ -18,19 +27,7 @@ You should have received a copy of the GNU General Public License
 along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
 
 See the accompanying ReadMe.txt file for additional information.
-
-]]--
-
-
-
-
---[[
-
-This file is an xPL message handler for to remove event based on device heartbeat
-and configuration messages. These messages usually have little value in everyday use.
-
-All this handler does is stop the xPLGirder component from raising events for these
-messages. To change its behaviour, adjust the filter below.
+=================================================================================================
 
 ]]--
 

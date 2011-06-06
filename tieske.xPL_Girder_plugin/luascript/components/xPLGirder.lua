@@ -21,7 +21,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.0.9'
+local Version = '0.1.0'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -358,31 +358,9 @@ local xPLGirder = Super:New ( {
         --local forus = data.Header.source == '*' or data.Header.source == self.Source
         local forus = data.target == '*' or data.target == self.Source
         if forus then
-			if data.type == 'xpl-trig' and data.schema == 'girder.basic' then
-                return
-            end
-			if data.type == 'xpl-cmnd' and data.schema == 'girder.basic' then
-				-- we received a command to raise a girder event
-				--table.print (data)
-				local deviceid, eventstring, pld1, pld2, pld3, pld4
-				for k,v in ipairs(data.body) do
-				    if v.key == 'device' then
-				        deviceid = v.value
-				    elseif v.key == 'event' then
-				        eventstring = v.value
-				    elseif v.key == 'pld1' then
-				        pld1 = v.value
-				    elseif v.key == 'pld2' then
-				        pld2 = v.value
-				    elseif v.key == 'pld3' then
-				        pld3 = v.value
-				    elseif v.key == 'pld4' then
-				        pld4 = v.value
-                    end
-				end
-				gir.TriggerEvent(eventstring, deviceid, pld1, pld2, pld3, pld4)
-				return
-			end
+--			if data.type == 'xpl-trig' and data.schema == 'girder.basic' then
+--                return
+--            end
 			if not self:ProcessMessageHandlers ( data ) then
 				-- returned false, so standard xPL event should not be supressed
 				local dotAddr = string.gsub(data.source, "%-", ".", 1)  -- replace address '-'  by '.'

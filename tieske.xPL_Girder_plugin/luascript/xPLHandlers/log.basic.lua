@@ -1,5 +1,12 @@
 --[[
 
+This file was created as an xPL message handler for all messages with schema 'log.basic'.
+It will log the message as received in the Girder log with the appropriate icon and suppress
+further events.
+
+
+
+=================================================================================================
 (c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
 
 This file is part of xPLGirder.
@@ -18,17 +25,7 @@ You should have received a copy of the GNU General Public License
 along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
 
 See the accompanying ReadMe.txt file for additional information.
-
-]]--
-
-
-
-
---[[
-
-This file was created as an xPL message handler for all messages with schema 'log.basic'.
-It will log the message as received in the Girder log with the appropriate icon and suppress
-further events.
+=================================================================================================
 
 ]]--
 

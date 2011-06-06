@@ -1,17 +1,7 @@
 --[[
 
-This file was created as an xPL message handler for all messages with schema 'sensor.basic'.
-It generates specific events for just the changed values of the sensors (so new messages
-with same values are not evented).
-
-The value will be in payload 1, any additional fields provided will be stored in payload 2-4.
-
-Sensor values can be accessed in lua through table;
-	xPLGirder.Handlers.SensorBasic.sensors
-
-try typing the following in the interavctive lua console;
-	table.print (xPLGirder.Handlers.SensorBasic.sensors)
-
+This file is an xPL message handler that raises a Girder event when a command message with
+schema 'girder.basic' is received.
 
 
 =================================================================================================
@@ -40,10 +30,9 @@ See the accompanying ReadMe.txt file for additional information.
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
 
-
 local myNewHandler = {
 
-	ID = "SensorBasic",		-- enter a unique string to identify this handler
+	ID = "CmndGirderBasic",		-- enter a unique string to identify this handler
 
 
 
@@ -62,12 +51,11 @@ local myNewHandler = {
 	]]--
 
 	Filters = {
-		"*.*.*.*.sensor.basic"
+		"xpl-cmnd.*.*.*.girder.basic"
 	},
 
 	Initialize = function (self)
 		-- function called upon initialization of this handler
-		self.sensors = {}	-- reset table with sensor values
 	end,
 
 	ShutDown = function (self)
@@ -101,30 +89,16 @@ local myNewHandler = {
 			end
 		end
 
+
 		-- add your code here to handle the actual message
-		-- create a unique sensor ID by using the address and sensor type together
-		local sensorID = msg.source .. ': ' .. GetValueByKey('device') .. ', ' .. GetValueByKey('type')
-		local newVal = GetValueByKey('current')
+		local deviceid = tonumber(GetValueByKey('device') or "some random string, bla bla bla") or xPLEventDevice
+		local eventstring = GetValueByKey('event') or ""
+		local pld1 = GetValueByKey('pld1')
+		local pld2 = GetValueByKey('pld2')
+		local pld3 = GetValueByKey('pld3')
+		local pld4 = GetValueByKey('pld4')
 
-		if (self.sensors[sensorID] == nil) or (self.sensors[sensorID] ~= newVal) then
-			-- first time we get this sensor, or value is different than before
-			self.sensors[sensorID] = newVal
-			local pld = {}
-			local p = 2
-			local i
-			pld[1] = newVal
-
-			for i = 1,table.getn(msg.body) do
-				local k = msg.body[i].key
-				if k ~= 'device' and k ~= 'type' and k~= 'current' and p <= 4 then
-					-- found an unknown key, append its value in the next payload
-					pld[p] = msg.body[i].value
-					p = p + 1
-				end
-			end
-
-			gir.TriggerEvent('Sensor update ' .. sensorID, xPLEventDevice, pld[1], pld[2], pld[3], pld[4] )
-		end
+		gir.TriggerEvent(eventstring, deviceid, pld1, pld2, pld3, pld4)
 
 
 
