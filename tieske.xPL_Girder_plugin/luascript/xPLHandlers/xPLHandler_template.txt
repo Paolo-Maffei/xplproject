@@ -1,5 +1,17 @@
 --[[
 
+This file is an xPL message handler template to be used with the xPLGirder plugin.
+It allows for the easy handling of specific xPL message types.
+
+Use the items below to create the handler, instructions are in the comments.
+
+The file should be located inside the Girder program directory, in directory
+'luascript\xPLHandlers\' and must be renamed to a file extension '.lua', it
+will be loaded when the xPLGirder component initializes.
+
+
+
+=================================================================================================
 (c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
 
 This file is part of xPLGirder.
@@ -18,22 +30,7 @@ You should have received a copy of the GNU General Public License
 along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
 
 See the accompanying ReadMe.txt file for additional information.
-
-]]--
-
-
-
-
---[[
-
-This file is an xPL message handler template to be used with the xPLGirder plugin.
-It allows for the easy handling of specific xPL message types.
-
-Use the items below to create the handler, instructions are in the comments.
-
-The file should be located inside the Girder program directory, in directory
-'luascript\xPLHandlers\' and must be renamed to a file extension '.lua', it
-will be loaded when the xPLGirder component initializes.
+=================================================================================================
 
 ]]--
 

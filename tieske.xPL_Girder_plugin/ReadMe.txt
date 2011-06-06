@@ -158,6 +158,9 @@ as comments in the sample file.
 ============================================================================
 7 - Changelog
 ============================================================================
+06-jun-2011 version 0.1.0 by Thijs Schreijer
+         Offloaded the handling of girder.basic messages to a message handler
+         Added a 'PC Remote' handler for RFXLAN devices
 05-jun-2011 version 0.0.9 by Thijs Schreijer
          events generated for devices arriving and leaving
          events generated for status changes of xPL connection
