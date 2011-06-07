@@ -158,9 +158,45 @@ as comments in the sample file.
 ============================================================================
 7 - Changelog
 ============================================================================
-06-jun-2011 version 0.1.0 by Thijs Schreijer
+07-jun-2011 version 0.1.0 by Thijs Schreijer
          Offloaded the handling of girder.basic messages to a message handler
-         Added a 'PC Remote' handler for RFXLAN devices
+         Added a 'PC Remote' rf remote handler for RFXLAN devices, also the
+         ATI remote wonder, ATI remote wonder plus and Medion RF remotes are
+         supported, yet their key-table is still empty
+         Added a 'x10.basic' handler, generic use but if used with RFXLAN it
+         provides support for the following brands of RF equipment (the ones
+         using address wheels);
+           · X10
+           · KlikAanKlikUit,
+           · Chacon,
+           · HomeEasy,
+           · DomiaLite,
+           · Domia,
+           · ByeByeStandBy,
+           · ELRO AB600,
+           · NEXA
+           · Proove
+           · Intertechno
+           · Duwi
+           · Flamingo
+           · Ikea Koppla
+           · Waveman
+           · HomeEasy HE105
+           · RTS10
+           · Harrison Gurtains
+         Added a 'ac.basic' handler, for use with RFXLAN. It provides support 
+         for the following brands of RF equipment (the ones using using a 
+         program/learn button);
+           · ANSLUT,
+           · Chacon,
+           · DI.O,
+           · KlikAanKlikUit,
+           · NEXA,
+           · Proove,
+           · Intertechno,
+           · Düwi,
+           · HomeEasy UK,
+           · HomeEasy EU.
 05-jun-2011 version 0.0.9 by Thijs Schreijer
          events generated for devices arriving and leaving
          events generated for status changes of xPL connection
