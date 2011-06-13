@@ -104,7 +104,7 @@ local myNewHandler = {
 
 		-- add your code here to handle the actual message
 		-- create a unique sensor ID by using the address and sensor type together
-		local sensorID = msg.source .. ': ' .. GetValueByKey('device') .. ', ' .. GetValueByKey('type')
+		local sensorID = msg.source .. ': ' .. (GetValueByKey('device') or 'unknown device') .. ', ' .. (GetValueByKey('type') or 'unknown type')
 		local newVal = GetValueByKey('current')
 
 		if (self.sensors[sensorID] == nil) or (self.sensors[sensorID] ~= newVal) then

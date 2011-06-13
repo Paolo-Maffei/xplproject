@@ -21,7 +21,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.1.0'
+local Version = '0.1.1'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -401,16 +401,26 @@ local xPLGirder = Super:New ( {
 
 	ProcessMessageHandlers = function (self, msg)
 		local result = false
+		local s, r
 		-- loop through all handlers
 		for ID, handler in pairs(self.Handlers) do
 			-- loop through all filters
 			for k, v in pairs(handler.Filters) do
 				if self:FilterMatch ( msg, v ) then
-					-- filter matches, go call handler
-					if handler:MessageHandler( msg, v) then
-						result = true
+					-- filter matches, go call handler, protected, s = success true/false, r = result
+					s,r = pcall(handler.MessageHandler, handler, msg, v)
+					if s then
+						if r then
+							result = true
+						end
+					else
+						-- error was returned from handler
+						print("xPLHandler " .. handler.ID .. " had a lua error;" .. r)
+						print("while handling the following xPL message;")
+						table.print(msg)
+						gir.LogMessage(self.Name, handler.ID .. ' failed while processing a message, see lua console', 2)
 					end
-					-- call each handler max 1, so exit loop, continue with next handler
+					-- call each handler max 1, so exit 'filter' loop, continue with next handler
 					break
 				end
 			end

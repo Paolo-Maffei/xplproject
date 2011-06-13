@@ -158,6 +158,10 @@ as comments in the sample file.
 ============================================================================
 7 - Changelog
 ============================================================================
+13-jun-2011 version 0.1.1 by Thijs Schreijer
+         Bugfix in Sensor.Basic handler
+         handlers are now called using pcall to prevent a faulty plugin from
+         crashing the component.
 07-jun-2011 version 0.1.0 by Thijs Schreijer
          Offloaded the handling of girder.basic messages to a message handler
          Added a 'PC Remote' rf remote handler for RFXLAN devices, also the
