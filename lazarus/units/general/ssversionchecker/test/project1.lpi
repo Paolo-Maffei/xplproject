@@ -155,8 +155,8 @@
         <ComponentName Value="frmDownloadFile"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_DownloadFile"/>
-        <CursorPos X="29" Y="66"/>
-        <TopLine Value="118"/>
+        <CursorPos X="1" Y="141"/>
+        <TopLine Value="50"/>
         <EditorIndex Value="1"/>
         <UsageCount Value="110"/>
         <Loaded Value="True"/>
@@ -180,7 +180,7 @@
         <CursorPos X="1" Y="174"/>
         <TopLine Value="162"/>
         <EditorIndex Value="14"/>
-        <UsageCount Value="54"/>
+        <UsageCount Value="55"/>
         <Loaded Value="True"/>
         <SyntaxHighlighter Value="Delphi"/>
       </Unit17>
@@ -327,7 +327,7 @@
         <CursorPos X="1" Y="1"/>
         <TopLine Value="1"/>
         <EditorIndex Value="3"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit35>
       <Unit36>
@@ -452,7 +452,7 @@
       </Position28>
       <Position29>
         <Filename Value="frm_downloadfile.pas"/>
-        <Caret Line="66" Column="22" TopLine="54"/>
+        <Caret Line="66" Column="29" TopLine="70"/>
       </Position29>
     </JumpHistory>
   </ProjectOptions>
@@ -475,12 +475,6 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Source Value="frm_downloadfile.pas"/>
-        <Line Value="141"/>
-      </Item1>
-    </BreakPoints>
     <Exceptions Count="4">
       <Item1>
         <Name Value="EAbort"/>

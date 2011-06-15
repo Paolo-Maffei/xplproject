@@ -51,7 +51,7 @@ interface
 
 uses
 	SysUtils, Classes, Graphics, Controls, Forms, Dialogs,
-	Grids, Menus, XMLCfg;
+	Grids, Menus;
 
 type
 	TMStringGridRowOptions = set of (roAllowAppend, roAllowDelete, roAllowInsert, roAllowKeys);
@@ -90,8 +90,7 @@ TMStringGrid = class(TStringGrid)
 		{ RowAppend, RowDelete and RowInsert are public to let me manipulate the
 			grid in response to menu and toolbar button actions.
 		}
-                procedure SaveContent(cfg: TXMLConfig); override;
-                procedure LoadContent(cfg: TXMLConfig);
+//                procedure LoadContent(cfg: TXMLConfig);
 	published
 		property RowOptions: TMStringGridRowOptions read FRowOptions write FRowOptions;
 		{ RowOptions allows me to control user append, insert and delete actions depending
@@ -183,22 +182,18 @@ begin
 	inherited;
 end;
 
-procedure TMStringGrid.SaveContent(cfg: TXMLConfig);
-begin
-  inherited SaveContent(cfg);
-end;
 
-procedure TMStringGrid.LoadContent(cfg: TXMLConfig);
-var version : integer;
-    k : integer;
-begin
-    Version:=cfg.GetValue('grid/version',-1);
-    k:=cfg.getValue('grid/content/cells/cellcount', 0);
-    if k>0 then RowCount := k div ColCount;
-    BeginUpdate;
-    inherited LoadContent(Cfg, Version);
-    EndUpdate;
-end;
+//procedure TMStringGrid.LoadContent(cfg: TXMLConfig);
+//var version : integer;
+//    k : integer;
+//begin
+//    Version:=cfg.GetValue('grid/version',-1);
+//    k:=cfg.getValue('grid/content/cells/cellcount', 0);
+//    if k>0 then RowCount := k div ColCount;
+//    BeginUpdate;
+//    inherited LoadContent(Cfg, Version);
+//    EndUpdate;
+//end;
 
 
 procedure TMStringGrid.RowAppend( Sender: TObject );

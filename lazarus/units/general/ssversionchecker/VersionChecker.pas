@@ -20,6 +20,8 @@ Please refer to the license.txt file for the license files.
 }
 unit VersionChecker;
 
+{$mode objfpc}{$H+}
+
 interface
 
 uses
@@ -36,7 +38,7 @@ type TVersionChecker = class(TComponent)
         fUpdateFound: TNotifyEvent;
         fUpdateNotFound: TNotifyEvent;
      public
-	procedure CheckVersion();
+	procedure CheckVersion; //(const ProxSrvr, ProxPort : string);
      published
         property ServerLocation  : string read fServerLocation write fServerLocation;       // Distant file holding last version information
         property CurrentVersion  : string read fCurrentVersion write fCurrentVersion;       // Version of the local application
@@ -64,7 +66,7 @@ begin
 end;
 
 // ============================================================================
-procedure TVersionChecker.CheckVersion;
+procedure TVersionChecker.CheckVersion; //(const ProxSrvr, ProxPort : string);
 var XMLStream : TStringStream;
     XML : TXMLDocument;
     HTTPClient : TIdHTTP;
@@ -72,6 +74,8 @@ begin
    if not (Assigned(fUpdateFound) and Assigned(fUpdateNotFound)) then exit;    // No event assigned : no reason to do anything ...
 
    HTTPClient := TIdHTTP.Create(Self);                                         // create the HTTPClient object
+   //HTTPClient.ProxyParams.ProxyPort:= StrToInt(ProxPort);
+   //HTTPClient.ProxyParams.ProxyServer:= ProxSrvr;
 
    XMLStream := TStringStream.Create(HTTPClient.Get(fServerLocation));
    XMLStream.Position := 0;
