@@ -1,0 +1,13 @@
+N=Nord 
+S=Sud 
+E=Est 
+W=Ouest 
+NE=Nord Est 
+NW=Nord Ouest 
+NNE=Nord/Nord Est 
+NNW=Nord/Nord Ouest 
+SE=Sud Est 
+SW=Sud Ouest 
+SSE=Sud/Sud Est 
+SSW=Sud/Sud ouest 
+CALM=Pas de vent

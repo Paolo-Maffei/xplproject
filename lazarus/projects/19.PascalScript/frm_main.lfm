@@ -1,0 +1,87 @@
+inherited frmMain: TfrmMain
+  Left = 1643
+  Height = 476
+  Top = 190
+  Width = 735
+  Caption = 'frmMain'
+  ClientHeight = 476
+  ClientWidth = 735
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnPaint = FormPaint
+  SessionProperties = 'Height;Left;lvGlobals.Columns;PageControl1.ActivePage;Top;Width;TreeListView1.Columns'
+  inherited StatusBar1: TStatusBar
+    Top = 453
+    Width = 735
+  end
+  inherited ToolBar: TToolBar
+    Width = 735
+    TabOrder = 2
+    inherited ToolButton10: TToolButton
+      Left = 105
+    end
+    inherited Panel4: TPanel
+      Left = 535
+    end
+    object ToolButton1: TToolButton[3]
+      Left = 75
+      Top = 0
+      Action = acRun
+    end
+    object ToolButton2: TToolButton[4]
+      Left = 43
+      Top = 0
+      Action = acStop
+    end
+    object ToolButton3: TToolButton[5]
+      Left = 113
+      Top = 0
+      Action = acCheck
+    end
+  end
+  object mmoMessages: TMemo[3]
+    Left = 0
+    Height = 428
+    Top = 25
+    Width = 735
+    Align = alClient
+    ReadOnly = True
+    ScrollBars = ssVertical
+    TabOrder = 0
+    WordWrap = False
+  end
+  inherited ActionList: TActionList[4]
+    left = 272
+    top = 72
+  end
+  inherited xPLMenu: TPopupMenu[5]
+    left = 192
+    top = 112
+  end
+  object ActionList1: TActionList[6]
+    left = 88
+    top = 120
+    object acStop: TAction
+      Caption = 'Stop'
+      ImageIndex = 9
+      OnExecute = acStopExecute
+    end
+    object acCheck: TAction
+      Caption = 'Syntax Check'
+      ImageIndex = 15
+      OnExecute = acCheckExecute
+    end
+    object acRun: TAction
+      Caption = 'Run'
+      ImageIndex = 5
+      OnExecute = acRunExecute
+    end
+    object acGLModify: TAction
+      Caption = 'Change value '
+    end
+    object acGLDelete: TAction
+      Caption = 'Delete value'
+    end
+  end
+end
