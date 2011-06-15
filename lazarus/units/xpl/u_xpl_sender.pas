@@ -6,132 +6,140 @@ unit u_xpl_sender;
  ===============================================================================
   0.8 : First version, spined off from uxPLMessage
 }
-{$mode objfpc}{$H+}
+{$mode objfpc}{$H+}{$M+}
 
 interface
 
 uses Classes,
-     uxPLConst,
-     uxPLClient,
-     uxPLMessage,
-     uxPLAddress,
+     u_xPL_Custom_Message,
+     u_xpl_common,
+     u_xpl_schema,
+     u_xpl_Address,
+     u_xpl_application,
      u_xpl_udp_socket;
 
 type
 
 { TxPLSender }
 
-     TxPLSender = class(TxPLClient)
-        fSocket : TxPLUDPClient;
+     TxPLSender = class(TxPLApplication)
+     private
+
+
      protected
+        fSocket : TxPLUDPClient;
         procedure Send(const aMessage : string);      overload;
+
      public
-        property Address             : TxPLAddress read fAdresse;
-        property Instance            : string read fAdresse.fInstance;
+//        constructor create(const aOwner : TComponent; const aDevice, aVendor, aVersion : string); overload;
+        constructor create(const aOwner : TComponent); overload;
 
-        constructor create(const aVendor : tsVendor; const aDevice : tsDevice; const aAppVersion : string);
-        destructor destroy; override;
-
-        procedure Send(const aMessage : TxPLMessage);
-        procedure SendMessage(const aMsgType : tsMsgType; const aDest, aSchema : string; const aRawBody : string; const bClean : boolean = false);
-        procedure SendMessage(const aMsgType : tsMsgType; const aDest, aSchema : string; const Keys, Values : Array of string);
+        procedure Send(const aMessage : TxPLCustomMessage; const bEnforceSender : boolean = true);
+        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema, aRawBody : string; const bClean : boolean = false);
+        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema : string; const Keys, Values : Array of string); overload;
+        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; aSchema : TxPLSchema; const Keys, Values : Array of string); overload;
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
         procedure SendLOGBasic(const aLevel : string; const aString : string);
-        function  PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*') : TxPLMessage;
-        procedure SendConfigRequestMsg(const aTarget : string);
+        function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLCustomMessage;
+        function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : TxPLSchema; const aTarget : TxPLTargetAddress = nil) : TxPLCustomMessage; overload;
         procedure SendHBeatRequestMsg;
      end;
 
 implementation { ==============================================================}
-uses Multilog;
+uses u_xpl_message
+     , SysUtils
+     , uxPLConst
+     ;
 
-constructor TxPLSender.create(const aVendor: tsVendor; const aDevice: tsDevice; const aAppVersion: string);
+constructor TxPLSender.create(const aOwner : TComponent);
 begin
-  inherited create(aVendor, aDevice, aAppVersion);
-  fSocket := TxPLUDPClient.Create(Settings.BroadCastAddress);
-end;
-
-destructor TxPLSender.destroy;
-begin
-  fSocket.Destroy;
-  inherited destroy;
+   inherited;
+   fSocket := TxPLUDPClient.Create(self, Settings.BroadCastAddress);
 end;
 
 procedure TxPLSender.Send(const aMessage: string);
 begin
-  fSocket.Send(aMessage);
+   fSocket.Send(aMessage)
 end;
 
-procedure TxPLSender.Send(const aMessage: TxPLMessage);
+procedure TxPLSender.Send(const aMessage: TxPLCustomMessage; const bEnforceSender : boolean = true);
 begin
-  aMessage.Source.Assign(Address);                                              // Let's be sure I'm identified as the sender
-  Send(aMessage.ProcessedxPL);
+   if bEnforceSender then aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
+   if aMessage.IsValid then
+      Send(TxPLMessage(aMessage).ProcessedxPL)
+   else
+      Log(etError,'Error sending message : %s',[aMessage.RawXPL]);
 end;
 
-procedure TxPLSender.SendMessage(const aMsgType : tsMsgType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
-var aMsg : TxPLMessage;
+procedure TxPLSender.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
+var aMsg : TxPLCustomMessage;
 begin
    aMsg := PrepareMessage(aMsgType,aSchema,aDest);
    with aMsg do begin
       Body.RawxPL := aRawBody;
       if bClean then Body.CleanEmptyValues;
       Send(aMsg);
-      Destroy;
+      Free;
    end;
 end;
 
 procedure TxPLSender.SendMessage(const aRawXPL : string);
-var aMsg :  TxPLMessage;
+var aMsg :  TxPLCustomMessage;
 begin
-   aMsg := TxPLMessage.Create(aRawxPL);
+   aMsg := TxPLCustomMessage.Create(self, aRawxPL);
    with aMsg do begin
       Source.Assign(Adresse);
-      if IsValid then Send(aMsg)
-                 else Log('Error sending message : %s',[RawXPL], ltError);
-      Destroy;
+      Send(aMsg);
+      Free;
    end;
 end;
 
-function TxPLSender.PrepareMessage(const aMsgType: tsMsgType; const aSchema : string; const aTarget : string = '*' ): TxPLMessage;
+function TxPLSender.PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*' ): TxPLCustomMessage;
 begin
-  result := TxPLMessage.Create;
-  with Result do begin
-     Source.Assign(Adresse);
-     MessageType := aMsgType;
-     Target.RawxPL  := aTarget;
-     Schema.RawxPL  := aSchema;
-  end;
+   result := TxPLCustomMessage.Create(self);
+   with Result do begin
+      Source.Assign(Adresse);
+      MessageType := aMsgType;
+      Target.RawxPL  := aTarget;
+      Schema.RawxPL  := aSchema;
+   end;
 end;
 
-procedure TxPLSender.SendOSDBasic(const aString: string);
+function TxPLSender.PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : TxPLSchema; const aTarget : TxPLTargetAddress = nil) : TxPLCustomMessage;
+var sTarget : string;
 begin
-   SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_OSD_BASIC,['command','text'],['write',aString]);
+   if aTarget = nil then sTarget := '*' else sTarget := aTarget.RawxPL;
+   result := PrepareMessage(aMsgType,aSchema.RawxPL,sTarget);
 end;
 
-procedure TxPLSender.SendLOGBasic(const aLevel : string; const aString: string);
-begin
-   SendMessage(K_MSG_TYPE_TRIG,K_MSG_TARGET_ANY,K_SCHEMA_LOG_BASIC,['type','text'],[aLevel,aString]);
-end;
-
-procedure TxPLSender.SendMessage(const aMsgType: tsMsgType; const aDest, aSchema: string; const Keys, Values: array of string);
-var aMsg : TxPLMessage;
+procedure TxPLSender.SendMessage(const aMsgType: TxPLMessageType; const aDest, aSchema: string; const Keys, Values: array of string);
+var aMsg : TxPLCustomMessage;
 begin
    aMsg := PrepareMessage(aMsgType, aSchema, aDest);
    aMsg.Body.AddKeyValuePairs(Keys,Values);
    Send(aMsg);
-   aMsg.Destroy;
+   aMsg.Free;
 end;
 
-procedure TxPLSender.SendConfigRequestMsg(const aTarget : string);
+procedure TxPLSender.SendMessage(const aMsgType: TxPLMessageType; const aDest : string; aSchema: TxPLSchema; const Keys, Values: array of string);
 begin
-   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_LIST,['command'],['request']);
-   SendMessage(K_MSG_TYPE_CMND,aTarget,K_SCHEMA_CONFIG_CURRENT,['command'],['request']);
+   SendMessage(aMsgType,aDest,aSchema.RawxPL,Keys,Values);
 end;
 
 procedure TxPLSender.SendHBeatRequestMsg;
 begin
-   SendMessage(K_MSG_TYPE_CMND,K_MSG_TARGET_ANY,K_SCHEMA_HBEAT_REQUEST,['command'],['request']);
+   SendMessage(cmnd,K_ADDR_ANY_TARGET,Schema_HBeatReq,['command'],['request']);
+end;
+
+procedure TxPLSender.SendOSDBasic(const aString: string);
+begin
+   SendMessage(cmnd,K_ADDR_ANY_TARGET,K_SCHEMA_OSD_BASIC,['command','text'],['write',aString]);
+end;
+
+procedure TxPLSender.SendLOGBasic(const aLevel : string; const aString: string);
+begin
+   SendMessage(trig,K_ADDR_ANY_TARGET,K_SCHEMA_LOG_BASIC,['type','text'],[aLevel,aString]);
 end;
 
 end.

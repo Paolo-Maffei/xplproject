@@ -1,5 +1,5 @@
-{ Ce fichier a été automatiquement créé par Lazarus. Ne pas l'éditer !
-  Cette source est seulement employée pour compiler et installer le paquet.
+{ This file was automatically created by Lazarus. Do not edit!
+  This source is only used to compile and install the package.
  }
 
 unit xpl_win; 
@@ -7,7 +7,7 @@ unit xpl_win;
 interface
 
 uses
-    v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, TreeListView, 
+  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, TreeListView, 
   MStringGrid, MEdit, MCheckListBox, MComboBox, v_msgbody_stringgrid, 
   uControls, LazarusPackageIntf;
 

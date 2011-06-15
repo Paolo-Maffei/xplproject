@@ -6,50 +6,64 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ComCtrls, ActnList, StdCtrls, Buttons;
+  Dialogs, ComCtrls, ActnList, Buttons, StdCtrls, ExtCtrls;
 
 type
 
   { TfrmLogViewer }
 
   TfrmLogViewer = class(TForm)
-    Empty: TAction;
-    Quit: TAction;
-    ActionList1: TActionList;
+    acDropAllLogs: TAction;
+    acReload: TAction;
     Memo1: TMemo;
+    acQuit: TAction;
+    ActionList1: TActionList;
     tbLaunch: TToolButton;
-    ToolBar3: TToolBar;
+    ToolBar: TToolBar;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    procedure EmptyExecute(Sender: TObject);
+    ToolButton5: TToolButton;
+    procedure acDropAllLogsExecute(Sender: TObject);
+    procedure acReloadExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure QuitExecute(Sender: TObject);
+    procedure acQuitExecute(Sender: TObject);
   private
   public
   end;
 
+  procedure ShowFrmLogViewer;
+
 var frmLogViewer: TfrmLogViewer;
 
 implementation
-uses app_main, frm_About;
+uses u_xpl_gui_resource,
+     u_xpl_application;
 
-procedure TfrmLogViewer.QuitExecute(Sender: TObject);
+procedure ShowFrmLogViewer;
+begin
+   if not Assigned(FrmLogViewer) then Application.CreateForm(TFrmLogViewer,FrmLogViewer);
+   FrmLogViewer.ShowModal;
+end;
+
+procedure TfrmLogViewer.acQuitExecute(Sender: TObject);
 begin
    Close;
 end;
 
 procedure TfrmLogViewer.FormShow(Sender: TObject);
 begin
-   Toolbar3.Images := frmAbout.ilStandardActions;
-   Memo1.Clear;
-   Caption := xPLClient.LogFileName;
-   Memo1.Lines.LoadFromFile(Caption);
+   ToolBar.Images := xPLGUIResource.Images;
+   acReloadExecute(self);
 end;
 
-procedure TfrmLogViewer.EmptyExecute(Sender: TObject);
+procedure TfrmLogViewer.acDropAllLogsExecute(Sender: TObject);
 begin
-   Memo1.Lines.Clear;
-   xPLClient.ResetLog;
+   xPLApplication.ResetLog;
+   acReloadExecute(self);
+end;
+
+procedure TfrmLogViewer.acReloadExecute(Sender: TObject);
+begin
+   Memo1.Lines.LoadFromFile(xPLApplication.LogFileName);
 end;
 
 initialization

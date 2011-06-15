@@ -1,0 +1,1 @@
+c:\lazarus\tools\lazres msgtype.lrs xpl-cmnd.png xpl-stat.png xpl-trig.png

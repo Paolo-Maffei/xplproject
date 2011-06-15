@@ -4,7 +4,7 @@ unit uControls;
 
 interface
 
-uses Classes, SysUtils, ExtCtrls, StdCtrls, ComCtrls, uxPLListener;
+uses Classes, SysUtils, ExtCtrls, StdCtrls, ComCtrls, u_xpl_sender;
 
 type { TxPLActionPanel }
 
@@ -19,7 +19,7 @@ type { TxPLActionPanel }
 
         procedure ActClick(aSender : TObject);
      public
-        Listener : TxPLListener;
+        xPLSender : TxPLSender;
         constructor create(aOwner : TComponent); override;
 
      published
@@ -56,7 +56,7 @@ procedure TxPLActionPanel.ActClick(aSender: TObject);
 var s : string;
 begin
      s := AnsiReplaceText(xPLMessage,'%action%',TButton(aSender).Caption);
-     Listener.SendMessage(s);
+     xPLSender.SendMessage(s);
 end;
 
 constructor TxPLActionPanel.create(aOwner: TComponent);

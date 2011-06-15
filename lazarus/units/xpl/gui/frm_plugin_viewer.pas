@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, StdCtrls, Grids, u_xml_xplplugin, v_class_combo,
-  v_msgbody_stringgrid, MStringGrid, MEdit, uxPLMsgBody;
+  ComCtrls, ExtCtrls, StdCtrls, u_xml_xplplugin, v_class_combo,
+  v_msgbody_stringgrid, MStringGrid, MEdit, u_xpl_body;
 
 type
 
@@ -100,7 +100,7 @@ type
     tbLaunch1: TToolButton;
     tbSave:    TToolButton;
     ToolBar1:  TToolBar;
-    ToolBar3:  TToolBar;
+    ToolBar:  TToolBar;
     ToolButton1: TToolButton;
     tvPlugin:  TTreeView;
     procedure btnNewDropDownClick(Sender: TObject);
@@ -128,22 +128,32 @@ type
     plugin:  TXMLxplpluginType;
     topNode: TTreeNode;
     aBody:   TxPLBody;
+    filePath: string;
   public
     { public declarations }
-    filePath: string;
   end;
+
+  procedure ShowFrmPluginViewer(const aFilePath : string);
 
 var
   frmPluginViewer: TfrmPluginViewer;
 
 implementation { TfrmPluginViewer }
 
-uses frm_About,
+uses
   frm_XMLView,
   u_xml_xplplugin_ex,
   u_xml,
-  uxPLSchema,
+  u_xpl_gui_resource,
+  u_xpl_schema,
   DOM;
+
+procedure ShowFrmPluginViewer(const aFilePath: string);
+begin
+  if not Assigned(FrmPluginViewer) then Application.CreateForm(TFrmPluginViewer, FrmPluginViewer);
+  FrmPluginViewer.FilePath := aFilePath;
+  FrmPluginViewer.ShowModal;
+end;
 
 procedure TfrmPluginViewer.tbLaunchClick(Sender: TObject);
 begin
@@ -152,8 +162,7 @@ end;
 
 procedure TfrmPluginViewer.ToolButton1Click(Sender: TObject);
 begin
-  frmXMLView.FilePath := FilePath;
-  frmXMLView.ShowModal;
+  ShowfrmXMLView(FilePath);
 end;
 
 
@@ -165,22 +174,24 @@ var
   Elements: TXMLElementsType;
 begin
   aNode := tvPlugin.Selected;
-  NoteBook.ActivePageComponent := pgEmpty;
-
+  //NoteBook.ActivePageComponent := pgEmpty;
+  NoteBook.PageIndex:=6;
   tbAdd.Enabled := True;
   tbDel.Enabled := (aNode <> nil) and (aNode.Data <> nil) and (aNode <> TopNode);
   if aNode = nil then
     exit;
   if TObject(aNode.Data) is TXMLxplpluginType then
   begin
-    NoteBook.ActivePageComponent := pgPlugin;
+//    NoteBook.ActivePageComponent := pgPlugin;
+    NoteBook.PageIndex:=0;
     edtPluginVersion.Text := TXMLxplpluginType(aNode.Data).Version;
     edtPluginURL.Text     := TXMLxplpluginType(aNode.Data).Plugin_URL;
     edtPluginInfoURL.Text := TXMLxplpluginType(aNode.Data).Info_URL;
   end;
   if aNode.Text = 'ConfigItems' then
   begin //(aNode.Data) is TXMLConfigItemsType then begin
-    NoteBook.ActivePageComponent := pgConfigItem;
+//    NoteBook.ActivePageComponent := pgConfigItem;
+    NoteBook.PageIndex:=3;
     sgConfigItems.RowCount := TXMLDeviceType(aNode.Parent.Data).ConfigItems.Count + 1;
     for i := 0 to TXMLDeviceType(aNode.Parent.Data).ConfigItems.Count - 1 do
     begin
@@ -198,7 +209,8 @@ begin
     if TDOMElement(aNode.Data).NodeName = K_XML_STR_Device then
     begin
       tbAdd.Enabled    := False;
-      NoteBook.ActivePageComponent := pgDevice;
+//      NoteBook.ActivePageComponent := pgDevice;
+      NoteBook.PageIndex :=1;
       edtDeviceBetaVersion.Text := TXMLDeviceType(aNode.Data).beta_version;
       edtDeviceDescription.Text := TXMLDeviceType(aNode.Data).Description;
       edtDeviceInfoURL.Text := TXMLDeviceType(aNode.Data).info_url;
@@ -212,7 +224,8 @@ begin
     if TDOMElement(aNode.Data).NodeName = K_XML_STR_MenuItem then
     begin
       tbAdd.Enabled := False;
-      NoteBook.ActivePageComponent := pgMenuItem;
+//      NoteBook.ActivePageComponent := pgMenuItem;
+      NoteBook.PageIndex:=2;
       edtMenuItemName.Text := TXMLMenuItemTypeEx(aNode.Data).Name;
       aSchema := TXMLMenuItemTypeEx(aNode.Data).Schema;
       cbMenuItemClasse.Text := aSchema.Classe;
@@ -224,7 +237,8 @@ begin
     if TDOMElement(aNode.Data).NodeName = K_XML_STR_Schema then
     begin
       tbAdd.Enabled := False;
-      NoteBook.ActivePageComponent := pgSchema;
+//      NoteBook.ActivePageComponent := pgSchema;
+      NoteBook.PageIndex := 4;
       aSchema := TXMLSchemaTypeEx(aNode.Data).Schema;
       cbSchemaClasse.Text := aSchema.Classe;
       cbSchemaType.Text := aSchema.Type_;
@@ -239,7 +253,8 @@ begin
       (TDOMElement(aNode.Data).NodeName = K_XML_STR_TRIGGER)) then
     begin
       tbAdd.Enabled := False;
-      NoteBook.ActivePageComponent := pgCommand;
+//      NoteBook.ActivePageComponent := pgCommand;
+        NoteBook.PageIndex :=5;
       edtCommandName.Text := TXMLCommandType(aNode.Data).Name;
       edtCommandName.SetFocus;
       cbType.Text := TXMLCommandType(aNode.Data).msg_type;
@@ -274,12 +289,12 @@ var
 begin
   tvPlugin.Items.Clear;
   Caption := FilePath;
-  Notebook.ShowTabs := False;
+//  Notebook.ShowTabs := False;
   pcCommand.ShowTabs := False;
   tbAdd.Enabled := False;
-  ToolBar3.Images := frmAbout.ilStandardActions;
-  ToolBar1.Images := frmAbout.ilStandardActions;
-  ToolBar2.Images := frmAbout.ilStandardActions;
+  ToolBar.Images := xPLGUIResource.Images;
+  ToolBar1.Images := ToolBar.Images;
+  ToolBar2.Images := ToolBar.Images;
 
   plugin := TXMLxplpluginType.Create(FilePath);
   if plugin.Valid then
@@ -405,7 +420,8 @@ begin
   if (aNode.Text = 'ConfigItems') then
   begin
     sgCOnfigItems.RowAppend(self);
-    NoteBook.ActivePageComponent := pgConfigItem;
+//    NoteBook.ActivePageComponent := pgConfigItem;
+      NoteBook.PageIndex:=3;
     sgConfigItems.RowCount := TXMLDeviceType(aNode.Parent.Data).ConfigItems.Count + 2;
     sgConfigItems.SetFocus;
     exit;
@@ -506,10 +522,10 @@ begin
   end;
   if NoteBook.ActivePageComponent = pgMenuItem then
   begin
-    abody.ResetAll;
+    abody.ResetValues;
     mgMenuItemBody.CopyTo(aBody);
     TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Body(aBody.RawxPL);
-    TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Schema(TxPLSchema.FormatRawxPL(cbMenuItemClasse.Text, edtMenuItemType.Text));
+    TXMLMenuItemTypeEx(tvPlugin.Selected.Data).Set_Schema(cbMenuItemClasse.Text+'.'+edtMenuItemType.Text);
     TXMLMenuItemType(tvPlugin.Selected.Data).Name := edtMenuItemName.Text;
     aBody.Destroy;
     tvPlugin.Selected.Text := TXMLMenuItemType(tvPlugin.Selected.Data).Name;
@@ -537,14 +553,14 @@ begin
     TXMLSchemaType(tvPlugin.Selected.Data).status := ckStatus.Checked;
     TXMLSchemaType(tvPlugin.Selected.Data).listen := ckListen.Checked;
     TXMLSchemaType(tvPlugin.Selected.Data).trigger := ckTrigger.Checked;
-    TXMLSchemaType(tvPlugin.Selected.Data).Name := TxPLSchema.FormatRawxPL(cbSchemaClasse.Text, cbSchemaType.Text);
+    TXMLSchemaType(tvPlugin.Selected.Data).Name := cbSchemaClasse.Text + '.' + cbSchemaType.Text;
     tvPlugin.Selected.Text := TXMLSchemaType(tvPlugin.Selected.Data).Name;
   end;
   if NoteBook.ActivePageComponent = pgCommand then
   begin
     TXMLCommandType(tvPlugin.Selected.Data).Name     := edtCommandName.Text;
     TXMLCommandType(tvPlugin.Selected.Data).description := edtCommandDescription.Text;
-    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatRawxPL(cbCommandClasse.Text, cbCommandType.Text);
+    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := cbCommandClasse.Text +'.'+ cbCommandType.Text;
     TXMLCommandType(tvPlugin.Selected.Data).msg_type := cbType.Text;
     for i := 1 to sgCommandElements.RowCount - 1 do
     begin
@@ -560,7 +576,7 @@ begin
   begin
     TXMLCommandType(tvPlugin.Selected.Data).Name     := edtCommandName.Text;
     TXMLCommandType(tvPlugin.Selected.Data).description := edtCommandDescription.Text;
-    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := TxPLSchema.FormatRawxPL(cbCommandClasse.Text, cbCommandType.Text);
+    TXMLCommandType(tvPlugin.Selected.Data).msg_schema := cbCommandClasse.Text + '.' + cbCommandType.Text;
     TXMLCommandType(tvPlugin.Selected.Data).msg_type := cbType.Text;
     for i := 1 to sgCommandElements.RowCount - 1 do
     begin

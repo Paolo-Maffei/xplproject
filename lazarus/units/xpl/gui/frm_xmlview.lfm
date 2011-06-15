@@ -4,6 +4,7 @@ object frmXMLView: TfrmXMLView
   Top = 219
   Width = 704
   ActiveControl = SynEdit1
+  BorderIcons = [biMinimize, biMaximize]
   Caption = 'frmXMLView'
   ClientHeight = 352
   ClientWidth = 704
@@ -705,7 +706,7 @@ object frmXMLView: TfrmXMLView
       end
     end
   end
-  object ToolBar3: TToolBar
+  object ToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
@@ -723,7 +724,7 @@ object frmXMLView: TfrmXMLView
       Left = 1
       Top = 0
       Caption = 'Close'
-      ImageIndex = 0
+      ImageIndex = 1
       OnClick = tbLaunchClick
     end
   end

@@ -32,11 +32,32 @@ type
 
   TXMLCacheManagerType = specialize TXMLElementList<TXMLCacheEntryType>;
 
-var CacheManagerFile : TXMLCacheManagerType;
+  Function InitCacheManager(const aDirectory : string) : TXMLCacheManagerType;
+
+//var CacheManagerFile : TXMLCacheManagerType;
 
 implementation //=========================================================================
 uses XMLRead;
+const StandardFN = 'CacheManager.standard.xml';
+      CustomFn   = 'CacheManager.custom.xml';
+
 var Document : TXMLDocument;
+
+function InitCacheManager(const aDirectory: string): TXMLCacheManagerType;
+var doc2 : TXMLDocument;
+    node : tdomnode;
+begin
+   Document := TXMLDocument.Create;
+   ReadXMLFile(document,aDirectory + StandardFN);                         // read standard cache manager
+   ReadXMLFile(doc2,aDirectory + CustomFn);                               // read custom cache manager
+
+   node := document.FirstChild.FirstChild;
+   document.firstchild.AppendChild(node);                                 // appends custom cm to standard cm
+
+   Result := TXMLCacheManagerType.Create(Document.FirstChild, K_XML_STR_Cacheentry);
+   doc2.Free;
+end;
+
 //========================================================================================
 
 // TXMLFieldmapType ======================================================================
@@ -55,16 +76,6 @@ begin Result := FindNode(K_XML_STR_Filter).FirstChild.NodeValue; end;
 
 function TXMLCacheEntryType.Get_Fields: TXMLFieldsType;
 begin Result := TXMLFieldsType.Create(self, K_XML_STR_Fieldmap); end;
-
-// Unit initialization ===================================================================
-initialization
-   Document := TXMLDocument.Create;
-   ReadXMLFile(document,'C:\ProgramData\xPL\Config\CacheManager.standard.xml');
-   CacheManagerFile := TXMLCacheManagerType.Create(Document.FirstChild, K_XML_STR_Cacheentry);
-
-finalization
-   CacheManagerFile.destroy;
-   Document.destroy;
 
 end.
 

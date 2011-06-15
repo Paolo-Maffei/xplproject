@@ -1,6 +1,6 @@
 unit u_xml_xplplugin;
 
-{$mode objfpc}{$H+}
+{$mode objfpc}{$H+}{$M+}
 
 interface
 
@@ -234,7 +234,7 @@ type
      end;
 
 implementation //=========================================================================
-uses uXMLRead,
+uses XMLRead,
      XMLWrite,
      SysUtils,
      StrUtils,

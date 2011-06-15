@@ -16,7 +16,7 @@ interface
 uses
   Classes,
   SysUtils,
-  uxPLMessage;
+  u_xPL_Message;
 
 type TButtonOption = (
                 boLoad,
@@ -31,6 +31,8 @@ type TButtonOption = (
      { TxPLMessageGUI }
 
      TxPLMessageGUI = class(TxPLMessage)
+        protected
+        procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         public
            function  Edit : boolean;     dynamic;
            procedure Show(options : TButtonOptions);
@@ -48,12 +50,18 @@ begin
    with TfrmxPLMessage.Create(nil) do try
         xPLMessage := self;
         buttonOptions := options;
-        mmoMessage.ReadOnly := false;
+        edtMsgName.ReadOnly := false;
         tsRaw.TabVisible := bAdvancedMode;
         tsPSScript.TabVisible := tsRaw.Visible;
         if bModal then ShowModal else Show;
    finally
    end;
+end;
+
+procedure TxPLMessageGUI.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+begin
+  if CompareText(AClassName, 'TxPLMessageGUI') = 0 then ComponentClass := TxPLMessageGUI
+  else inherited OnFindClass(Reader, AClassName, ComponentClass);
 end;
 
 function TxPLMessageGUI.Edit : boolean;

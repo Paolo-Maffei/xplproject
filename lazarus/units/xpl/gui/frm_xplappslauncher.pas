@@ -20,48 +20,59 @@ type
   { TfrmAppLauncher }
 
   TfrmAppLauncher = class(TForm)
+    acClose: TAction;
+    acLaunch: TAction;
+    ActionList: TActionList;
     lvApps: TListView;
-    tbLaunch: TToolButton;
-    ToolBar3: TToolBar;
-    procedure FormCreate(Sender: TObject);
+    tbClose: TToolButton;
+    ToolBar: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
+    procedure acCloseExecute(Sender: TObject);
+    procedure acLaunchExecute(Sender: TObject);
+    procedure FormShow(Sender: TObject);
     procedure lvAppsDblClick(Sender: TObject);
-    procedure QuitExecute(Sender: TObject);
-    procedure tbLaunchClick(Sender: TObject);
   end;
+
+  procedure ShowFrmAppLauncher;
 
 var frmAppLauncher: TfrmAppLauncher;
 
 implementation { =====================================================================}
-uses app_main, Process, uxPLAddress;
+uses Process
+     , u_xpl_address
+     , u_xpl_application
+     , u_xpl_gui_resource
+     , u_xpl_settings
+     ;
 
-procedure TfrmAppLauncher.FormCreate(Sender: TObject);
-var sl : TStringList;
-    vendor, device, path, version : string;
+procedure ShowFrmAppLauncher;
+begin
+   if not Assigned(frmAppLauncher) then
+      Application.CreateForm(TFrmAppLauncher, frmAppLauncher);
+   frmAppLauncher.ShowModal;
+end;
+
+// Form procedures ============================================================
+procedure TfrmAppLauncher.FormShow(Sender: TObject);
+var sl : TAppCollection;
+    path, version : string;
     i : integer;
 begin
-     sl := xPLClient.Settings.GetxPLAppList;
-     for i := 0 to sl.Count -1 do begin
-        TxPLAddress.SplitVD(sl[i],vendor,device);
-        if device<>xPLClient.Device then with lvApps.Items.Add do begin
-              xPLClient.Settings.GetAppDetail(vendor,device,path,version);
-              Caption := device;
-              SubItems.Add(vendor);
-              SubItems.Add(version);
-              SubItems.Add(path);
-        end;
-     end;
+   Toolbar.Images := xPLGUIResource.Images;
+   lvApps.Items.Clear;
+   sl  := xPLApplication.Settings.GetxPLAppList;
+   for i := 0 to sl.Count -1 do begin
+       xPLApplication.Settings.GetAppDetail(sl.Data[i].Vendor,sl.Keys[i],path,version);
+       if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
+            Caption := sl.Keys[i];
+            SubItems.DelimitedText:= Sl.Data[i].vendor + ',' + version + ',' + path;
+       end;
+   end;
+   sl.Free;
 end;
 
-procedure TfrmAppLauncher.lvAppsDblClick(Sender: TObject);
-begin
-   tbLaunchClick(self);
-   QuitExecute(sender);
-end;
-
-procedure TfrmAppLauncher.QuitExecute(Sender: TObject);
-begin Close; end;
-
-procedure TfrmAppLauncher.tbLaunchClick(Sender: TObject);
+procedure TfrmAppLauncher.acLaunchExecute(Sender: TObject);
 begin
    if lvApps.Selected = nil then exit;
 
@@ -72,6 +83,18 @@ begin
       Free;
    end;
 end;
+
+procedure TfrmAppLauncher.acCloseExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmAppLauncher.lvAppsDblClick(Sender: TObject);
+begin
+   acLaunchExecute(self);
+   acCloseExecute(sender);
+end;
+
 
 initialization
    {$I frm_xplappslauncher.lrs}

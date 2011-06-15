@@ -1,67 +1,70 @@
 object frmLogViewer: TfrmLogViewer
-  Left = 97
-  Height = 256
-  Top = 232
+  Left = 102
+  Height = 338
+  Top = 160
   Width = 589
-  ActiveControl = Memo1
-  Caption = 'Log view'
-  ClientHeight = 256
+  Caption = 'Log viewer'
+  ClientHeight = 338
   ClientWidth = 589
   OnShow = FormShow
-  LCLVersion = '0.9.28.2'
-  object Memo1: TMemo
-    Left = 0
-    Height = 230
-    Top = 26
-    Width = 589
-    Align = alClient
-    ScrollBars = ssVertical
-    TabOrder = 0
-  end
-  object ToolBar3: TToolBar
+  LCLVersion = '0.9.31'
+  object ToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
     Width = 589
     ButtonHeight = 24
-    ButtonWidth = 80
+    ButtonWidth = 30
     Caption = 'ToolBar2'
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
     List = True
     ShowCaptions = True
-    TabOrder = 1
+    TabOrder = 0
     object tbLaunch: TToolButton
       Left = 1
       Top = 0
-      Action = Quit
+      Action = acQuit
     end
     object ToolButton2: TToolButton
-      Left = 81
+      Left = 38
       Top = 0
-      Width = 12
+      Width = 8
       Caption = 'ToolButton2'
-      Style = tbsDivider
+      Style = tbsSeparator
     end
-    object ToolButton3: TToolButton
-      Left = 93
+    object ToolButton5: TToolButton
+      Left = 46
       Top = 0
-      Action = Empty
+      Action = acDropAllLogs
     end
   end
+  object Memo1: TMemo
+    Left = 0
+    Height = 312
+    Top = 26
+    Width = 589
+    Align = alClient
+    ScrollBars = ssVertical
+    TabOrder = 1
+  end
   object ActionList1: TActionList
-    left = 96
+    left = 344
     top = 72
-    object Quit: TAction
+    object acQuit: TAction
       Caption = 'Close'
-      ImageIndex = 0
-      OnExecute = QuitExecute
+      ImageIndex = 1
+      OnExecute = acQuitExecute
     end
-    object Empty: TAction
-      Caption = 'Empty log'
-      ImageIndex = 4
-      OnExecute = EmptyExecute
+    object acDropAllLogs: TAction
+      Caption = 'Empty Log'
+      ImageIndex = 39
+      OnExecute = acDropAllLogsExecute
+    end
+    object acReload: TAction
+      Caption = 'acReload'
+      OnExecute = acReloadExecute
     end
   end
 end

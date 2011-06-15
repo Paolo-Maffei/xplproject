@@ -57,17 +57,22 @@ LazarusResources.Add('TfrmAppLauncher','FORMDATA',[
   +#193#253#194#194#194#253#194#194#194#253#194#194#194#253#194#194#194#253#196
   +#196#196#253#202#202#202#254#138#138#138#245#14#14#14'e'#0#0#0#0#0#0#0#0#0#0
   +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
-  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#8'OnCreate'#7#10'FormCreate'#17'SessionProp'
-  +'erties'#6'$Height;Left;Top;Width;lvApps.Columns'#10'LCLVersion'#6#8'0.9.28.'
-  +'2'#0#9'TListView'#6'lvApps'#4'Left'#2#0#6'Height'#3#228#0#3'Top'#2#26#5'Wid'
-  +'th'#3#192#1#5'Align'#7#8'alClient'#7'Columns'#14#1#7'Caption'#6#4'Name'#5'W'
-  +'idth'#3#150#0#0#1#7'Caption'#6#6'Vendor'#0#1#7'Caption'#6#7'Version'#0#1#7
-  +'Caption'#6#4'Path'#5'Width'#3#19#1#0#0#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsR'
-  +'eport'#10'OnDblClick'#7#14'lvAppsDblClick'#0#0#8'TToolBar'#8'ToolBar3'#4'Le'
-  +'ft'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3#192#1#12'ButtonHeight'#2#24#11
-  ,'ButtonWidth'#2'P'#7'Caption'#6#8'ToolBar2'#11'EdgeBorders'#11#8'ebBottom'#0
-  +#9'EdgeOuter'#7#8'esRaised'#4'Flat'#8#6'Images'#7#26'frmAbout.ilStandardActi'
-  +'ons'#4'List'#9#12'ShowCaptions'#9#8'TabOrder'#2#1#0#11'TToolButton'#8'tbLau'
-  +'nch'#4'Left'#2#1#3'Top'#2#0#7'Caption'#6#9'Launch...'#10'ImageIndex'#2#5#7
-  +'OnClick'#7#13'tbLaunchClick'#0#0#0#0
+  +#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#6'OnShow'#7#8'FormShow'#17'SessionPropertie'
+  +'s'#6'$Height;Left;Top;Width;lvApps.Columns'#10'LCLVersion'#6#8'0.9.28.2'#0#9
+  +'TListView'#6'lvApps'#4'Left'#2#0#6'Height'#3#228#0#3'Top'#2#26#5'Width'#3
+  +#192#1#5'Align'#7#8'alClient'#7'Columns'#14#1#7'Caption'#6#4'Name'#5'Width'#3
+  +#150#0#0#1#7'Caption'#6#6'Vendor'#0#1#7'Caption'#6#7'Version'#0#1#7'Caption'
+  +#6#4'Path'#5'Width'#3#19#1#0#0#8'TabOrder'#2#0#9'ViewStyle'#7#8'vsReport'#10
+  +'OnDblClick'#7#14'lvAppsDblClick'#0#0#8'TToolBar'#7'ToolBar'#4'Left'#2#0#6'H'
+  +'eight'#2#26#3'Top'#2#0#5'Width'#3#192#1#12'ButtonHeight'#2#24#11'ButtonWidt'
+  ,'h'#2'P'#7'Caption'#6#8'ToolBar2'#11'EdgeBorders'#11#8'ebBottom'#0#9'EdgeOut'
+  +'er'#7#8'esRaised'#4'Flat'#8#4'List'#9#12'ShowCaptions'#9#8'TabOrder'#2#1#0
+  +#11'TToolButton'#7'tbClose'#4'Left'#2#1#3'Top'#2#0#6'Action'#7#7'acClose'#10
+  +'ImageIndex'#2#1#0#0#11'TToolButton'#11'ToolButton1'#4'Left'#2'\'#3'Top'#2#0
+  +#6'Action'#7#8'acLaunch'#10'ImageIndex'#2#6#0#0#11'TToolButton'#11'ToolButto'
+  +'n2'#4'Left'#2'Q'#3'Top'#2#0#5'Width'#2#11#7'Caption'#6#11'ToolButton2'#5'St'
+  +'yle'#7#10'tbsDivider'#0#0#0#11'TActionList'#10'ActionList'#4'left'#2'D'#3't'
+  +'op'#3#164#0#0#7'TAction'#7'acClose'#7'Caption'#6#5'Close'#10'ImageIndex'#2#0
+  +#9'OnExecute'#7#14'acCloseExecute'#0#0#7'TAction'#8'acLaunch'#7'Caption'#6#9
+  +'Launch...'#9'OnExecute'#7#15'acLaunchExecute'#0#0#0#0
 ]);
