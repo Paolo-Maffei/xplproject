@@ -1,0 +1,9 @@
+New moon=Nouvelle lune
+Waxing crescent=Premier Croissant
+First quarter=Premier Quartier
+Waxing gibbous=Lune gibbeuse croissante
+Full moon
+Waning gibbous=Lune gibbeuse décroissante
+Last quarter=Dernier quartier
+Waning crescent=Dernier croissant
+Dark moon=Pleine lune
