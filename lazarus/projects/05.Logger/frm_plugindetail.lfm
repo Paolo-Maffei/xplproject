@@ -1,0 +1,217 @@
+object frmPluginDetail: TfrmPluginDetail
+  Left = 51
+  Height = 274
+  Top = 271
+  Width = 418
+  BorderIcons = []
+  BorderStyle = bsToolWindow
+  Caption = 'Vendor Plugin details'
+  ClientHeight = 274
+  ClientWidth = 418
+  OnShow = FormShow
+  LCLVersion = '0.9.28.2'
+  object Label1: TLabel
+    Left = 6
+    Height = 16
+    Top = 32
+    Width = 39
+    Caption = 'Vendor'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 7
+    Height = 16
+    Top = 63
+    Width = 36
+    Caption = 'Device'
+    ParentColor = False
+  end
+  object Label3: TLabel
+    Left = 8
+    Height = 16
+    Top = 96
+    Width = 27
+    Caption = 'Type'
+    ParentColor = False
+  end
+  object Label4: TLabel
+    Left = 216
+    Height = 16
+    Top = 32
+    Width = 47
+    Caption = 'Platform'
+    ParentColor = False
+  end
+  object Label5: TLabel
+    Left = 216
+    Height = 16
+    Top = 64
+    Width = 74
+    Caption = 'Stable version'
+    ParentColor = False
+  end
+  object Label6: TLabel
+    Left = 216
+    Height = 16
+    Top = 96
+    Width = 65
+    Caption = 'Beta version'
+    ParentColor = False
+  end
+  object Label7: TLabel
+    Left = 7
+    Height = 16
+    Top = 136
+    Width = 61
+    Caption = 'Description'
+    ParentColor = False
+  end
+  object Label9: TLabel
+    Left = 6
+    Height = 16
+    Top = 208
+    Width = 60
+    Caption = 'Device Info'
+    ParentColor = False
+  end
+  object Label10: TLabel
+    Left = 6
+    Height = 16
+    Top = 240
+    Width = 55
+    Caption = 'Download'
+    ParentColor = False
+  end
+  object DBText1: TLabel
+    Left = 80
+    Height = 16
+    Top = 208
+    Width = 1
+    Font.Color = clHotLight
+    ParentColor = False
+    ParentFont = False
+  end
+  object DBText2: TLabel
+    Left = 80
+    Height = 16
+    Top = 240
+    Width = 1
+    Font.Color = clHotLight
+    ParentColor = False
+    ParentFont = False
+  end
+  object edtDeviceInfoURL: TLabel
+    Cursor = crHandPoint
+    Left = 80
+    Height = 16
+    Top = 208
+    Width = 10
+    Caption = '...'
+    Font.Color = clHotLight
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = edtDeviceInfoURLClick
+  end
+  object edtDeviceDownloadURL: TLabel
+    Cursor = crHandPoint
+    Left = 80
+    Height = 16
+    Top = 242
+    Width = 10
+    Caption = '...'
+    Font.Color = clHotLight
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    OnClick = edtDeviceDownloadURLClick
+  end
+  object ToolBar: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 418
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    List = True
+    ShowCaptions = True
+    TabOrder = 0
+    object tbOk2: TToolButton
+      Left = 1
+      Top = 0
+      Caption = 'Close'
+      ImageIndex = 1
+      OnClick = tbOk2Click
+    end
+  end
+  object edtVendor: TEdit
+    Left = 72
+    Height = 23
+    Top = 32
+    Width = 139
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 1
+  end
+  object edtDeviceId: TEdit
+    Left = 72
+    Height = 23
+    Top = 63
+    Width = 139
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 2
+  end
+  object edtDevicePlatform: TEdit
+    Left = 296
+    Height = 23
+    Top = 32
+    Width = 112
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 3
+  end
+  object edtDeviceStableVersion: TEdit
+    Left = 296
+    Height = 23
+    Top = 63
+    Width = 112
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 4
+  end
+  object edtDeviceBetaVersion: TEdit
+    Left = 296
+    Height = 23
+    Top = 96
+    Width = 112
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 5
+  end
+  object edtDeviceDescription: TMemo
+    Left = 72
+    Height = 72
+    Top = 128
+    Width = 334
+    Color = clBtnFace
+    Lines.Strings = (
+      'edtDeviceDescription'
+    )
+    ReadOnly = True
+    TabOrder = 6
+  end
+  object edtDeviceType_: TEdit
+    Left = 72
+    Height = 23
+    Top = 96
+    Width = 139
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 7
+  end
+end
