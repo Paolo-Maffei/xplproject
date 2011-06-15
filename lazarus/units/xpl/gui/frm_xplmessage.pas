@@ -5,138 +5,310 @@ unit frm_xPLMessage;
 interface
 
 uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  StdCtrls, ExtCtrls, EditBtn, Grids, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui, uxplmessage,
-  KHexEditor, SynEdit, SynHighlighterPas, v_xplmsg_opendialog;
+  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
+  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui,
+  u_xpl_message, frame_message, KHexEditor, SynEdit, SynHighlighterPas,
+  v_xplmsg_opendialog, RTTICtrls;
 
 type
 
   { TfrmxPLMessage }
   TfrmxPLMessage = class(TForm)
+    acAbout: TAction;
+    acInstalledApps: TAction;
     acLoad: TAction;
     acClose: TAction;
+    acQuit: TAction;
+    acPaste: TAction;
+    ActionList: TActionList;
+    ckLoop: TCheckBox;
     ckBody: TCheckBox;
     ckMsgType: TCheckBox;
     ckInstance: TCheckBox;
     ckDevice: TCheckBox;
-    ClasseImages: TImageList;
-    DoSend: TAction;
+    acSend: TAction;
     ActionList2: TActionList;
-    edtName: TEdit;
     HexEditor: TKHexEditor;
-    Image1: TImage;
     Label4: TLabel;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    MenuItem14: TMenuItem;
+    MenuItem15: TMenuItem;
+    MenuItem16: TMenuItem;
     mnuCopyMessage: TMenuItem;
     mnuCopyAddress: TMenuItem;
     mnuCopyFilter: TMenuItem;
-    mmoMessage: TMemo;
-    MsgCopy: TAction;
-    MsgSave: TAction;
+    acSave: TAction;
     PageControl1: TPageControl;
     mmoPSScript: TSynEdit;
     popCommands: TPopupMenu;
     popCopy: TPopupMenu;
     SynPasSyn1: TSynPasSyn;
     TabSheet1: TTabSheet;
-    tbPaste: TToolButton;
-    tbAbout: TToolButton;
+    edtMsgName: TTIEdit;
+    FrameMessage: TTMessageFrame;
     ToolButton10: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton6: TToolButton;
-    ToolButton8: TToolButton;
-    ToolButton9: TToolButton;
+    ToolButton4: TToolButton;
     tsRaw: TTabSheet;
     tsPSScript: TTabSheet;
-    ToolBar3: TToolBar;
-    ToolButton1: TToolButton;
+    ToolBar: TToolBar;
     tbOk: TToolButton;
     tbCancel: TToolButton;
-    tbCopy: TToolButton;
     ToolButton3: TToolButton;
-    ToolButton5: TToolButton;
     SaveMessage: TxPLMsgSaveDialog;
     OpenMessage: TxPLMsgOpenDialog;
-    ToolButton7: TToolButton;
     tbCommands: TToolButton;
+    xPLMenu: TPopupMenu;
 
-    procedure acCloseExecute(Sender: TObject);
+    procedure acAboutExecute(Sender: TObject);
+    procedure acInstalledAppsExecute(Sender: TObject);
     procedure acLoadExecute(Sender: TObject);
+    procedure acQuitExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
-    procedure DoSendExecute(Sender: TObject);
+    procedure acSendExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure mnuCopyMessageClick(Sender: TObject);
     procedure mnuCopyAddressClick(Sender: TObject);
     procedure mnuCopyFilterClick(Sender: TObject);
-
-    procedure mmoMessageExit(Sender: TObject);
-    procedure MsgCopyExecute(Sender: TObject);
-    procedure MsgSaveExecute(Sender: TObject);
-    procedure PageControl1Change(Sender: TObject);
-    procedure tbAboutClick(Sender: TObject);
+    procedure acSaveExecute(Sender: TObject);
+    procedure tbCommandsClick(Sender: TObject);
+    procedure tbCopyClick(Sender: TObject);
     procedure tbOkClick(Sender: TObject);
     procedure tbPasteClick(Sender: TObject);
+    procedure ToolButton2Click(Sender: TObject);
 
   private
     Stream     : TStringStream;
-    xPLMessage : TxPLMessage;
     arrCommandes : TList;
     procedure InitPluginsMenu;
     procedure PluginCommandExecute ( Sender: TObject );
     procedure DisplayMessage;
   public
     buttonOptions : TButtonOptions;
+    xPLMessage : TxPLMessage;
   end;
 
 implementation // TFrmxPLMessage ===============================================================
-uses frm_About,
-     app_main,
+uses frm_about,
+     frm_Downloadfile,
+     frm_xplappslauncher,
+     u_xpl_custom_message,
      clipbrd,
      LCLType,
      cStrings,
      StrUtils,
-     uxPLConst,
-     u_xml_xplplugin;
+     typInfo,
+     u_xpl_schema,
+     u_xpl_common,
+     u_xpl_gui_resource,
+     u_xpl_application,
+     u_xpl_sender,
+     u_xml_xplplugin,
+     u_xpl_address,
+     u_xpl_header;
+
+// =============================================================================================
+function AppendMenu(const aParent : TMenuItem; const aCaption : string) : TMenuItem;
+begin
+   Result := TMenuItem.Create(aParent);
+   Result.Caption := aCaption;
+   aParent.Add(result);
+end;
 
 // =============================================================================================
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);
+var aMenu : TMenuItem;
 begin
    Stream       := TStringStream.Create('');
    arrCommandes := TList.Create;
    InitPluginsMenu;
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Caption := '-';
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acPaste;
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Caption := 'Copy...';
+   aMenu.OnClick := @tbCopyClick;
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Caption := '-';
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acSave;
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acLoad;
+   xPLMenu.Items.Insert(0,aMenu);
 end;
 
-procedure TfrmxPLMessage.FormShow(Sender: TObject);
+procedure TfrmxPLMessage.acAboutExecute(Sender: TObject);
 begin
-   xPLMessage := TxPLMessage(Owner);
-   PageControl1.ActivePage := TabSheet1;
-   ToolBar3.Images := frmAbout.ilStandardActions;
-   acLoad.Visible  := (boLoad in buttonOptions);
-   MsgSave.Visible := (boSave in buttonOptions);
-   MsgCopy.Visible := (boCopy in buttonOptions);
-   tbPaste.Visible := not mmoMessage.ReadOnly;
-   DoSend.Visible  := (boSend in buttonOptions);
-   tbCommands.Visible := not mmoMessage.ReadOnly;
-   tbOk.Visible       := (boOk in buttonOptions);
-   tbCancel.Visible   := tbOk.Visible;
-   acClose.Visible    := (boClose in buttonOptions);
-   tbAbout.Visible    := (boAbout in buttonOptions);
-   edtName.ReadOnly   := mmoMessage.ReadOnly;
-   DisplayMessage;
+   ShowFrmAbout;
+end;
+
+
+procedure TfrmxPLMessage.acInstalledAppsExecute(Sender: TObject);
+begin
+   ShowFrmAppLauncher;
 end;
 
 procedure TfrmxPLMessage.FormDestroy(Sender: TObject);
 begin
-   arrCommandes.Destroy;
-   Stream.Destroy;
+   arrCommandes.free;
+   Stream.free;
 end;
 
-procedure TfrmxPLMessage.DoSendExecute(Sender: TObject);
+procedure TfrmxPLMessage.InitPluginsMenu;
+var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
+    cptPlugs,i,j : integer;
+    VF : TXMLxplpluginType;
+    Commande: TXMLCommandType;
 begin
-   mmoMessageExit(sender);
-   xPLClient.Address.Assign(xPLMessage.Header.Source);
-   xPLClient.Send(xPLMessage);
+   if xPLApplication.VendorFile.Plugins <> nil then begin
+   for cptPlugs :=0 to xPLApplication.VendorFile.Plugins.Count-1 do with xPLApplication do begin
+       aMenu := TMenuItem.Create(self);
+       popCommands.Items.Insert(0,aMenu);
+       aMenu.Caption := xPLApplication.VendorFile.Plugins[cptPlugs].Vendor;                    // Get the vendor name as menu entry
+       VF := xPLApplication.VendorFile.VendorFile(aMenu.Caption);
+       if assigned(VF) then begin
+          for i:=0 to VF.Count-1 do begin
+            aSubMenu := AppendMenu(aMenu, VF[i].Id);
+            for j:=0 to VF[i].Commands.Count - 1 do begin
+                Commande := VF[i].Commands[j];
+                aSubSubMenu := AppendMenu(aSubMenu, Commande.Name);
+                aSubSubMenu.OnClick := @PluginCommandExecute;
+                aSubSubMenu.Tag := ArrCommandes.Add(Commande);
+            end;
+            if aSubMenu.Count=0 then aSubMenu.Free;                             // Eliminates empty sub menus
+          end;
+       end;
+       if aMenu.Count = 0 then aMenu.Free;
+     end;
+   end else tbCommands.Enabled:=false;
+end;
+
+procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
+var Commande : TXMLCommandType;
+begin
+   TabSheet1.SetFocus;                                                            // Ne pas rester dans un controle RTTI, ce qui pose un pb de rafraichissement
+   Commande := TXMLCommandType(ArrCommandes[TMenuItem(sender).Tag]);
+   xPLMessage.ReadFromXML(Commande);
+   DisplayMessage;
+end;
+
+procedure TFrmxPLMessage.DisplayMessage;
+begin
+   with xPLMessage do begin
+       if not Source.IsValid then Source.Assign(xPLApplication.Adresse);
+       if not Target.IsValid then Target.IsGeneric := true;
+       if not Schema.IsValid then Schema.Assign(Schema_ControlBasic);
+       if not IsValid        then MessageType := cmnd;
+   end;
+
+   if tsRaw.Visible then begin
+      Stream.Position := 0;
+      Stream.WriteString(xPLMessage.RawXPL);
+      Stream.Position := 0;
+      HexEditor.LoadFromStream(Stream);
+   end;
+
+   FrameMessage.TheMessage := xPLMessage;
+end;
+
+procedure TfrmxPLMessage.acQuitExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+procedure TfrmxPLMessage.tbCopyClick(Sender: TObject);
+begin
+   popCopy.PopUp;
+end;
+
+procedure TfrmxPLMessage.ToolButton2Click(Sender: TObject);
+begin
+   xPLMenu.PopUp;
+end;
+
+procedure TfrmxPLMessage.FormShow(Sender: TObject);
+begin
+   PageControl1.ActivePage := TabSheet1;
+   ToolBar.Images := xPLGUIResource.Images;
+   xPLMenu.Images := ToolBar.Images;
+   acLoad.Visible  := (boLoad in buttonOptions);
+   acSave.Visible := (boSave in buttonOptions);
+   acPaste.Visible := not edtMsgName.ReadOnly;
+   acSend.Visible  := (boSend in buttonOptions);
+   ckLoop.Visible  := acSend.Visible;
+   tbCommands.Visible := not edtMsgName.ReadOnly;
+   tbOk.Visible       := (boOk in buttonOptions);
+   tbCancel.Visible   := tbOk.Visible;
+   acClose.Visible    := (boClose in buttonOptions);
+   acAbout.Visible    := (boAbout in buttonOptions);
+   acQuit.Visible     := not tbOk.Visible;
+   acInstalledApps.Visible := acQuit.Visible;
+
+   edtMsgName.Link.TIObject := xPLMessage;
+   edtMsgName.Link.TIPropertyName := 'MsgName';
+
+   FrameMessage.ReadOnly   := edtMsgName.ReadOnly;
+
+   DisplayMessage;
+end;
+
+procedure TfrmxPLMessage.mnuCopyMessageClick(Sender: TObject);
+begin
+   Clipboard.AsText := xPLMessage.RawxPL;
+end;
+
+procedure TfrmxPLMessage.mnuCopyAddressClick(Sender: TObject);
+begin
+   Clipboard.AsText := xPLMessage.Source.RawxPL;
+end;
+
+procedure TfrmxPLMessage.mnuCopyFilterClick(Sender: TObject);
+begin
+   Clipboard.AsText := xPLMessage.SourceFilter;
+end;
+
+procedure TfrmxPLMessage.tbPasteClick(Sender: TObject);
+begin
+   xPLMessage.RawXPL := ClipBoard.AsText;
+   DisplayMessage;
+end;
+
+procedure TfrmxPLMessage.acSendExecute(Sender: TObject);
+var backAddress : TxPLAddress;
+begin
+   backAddress := TxPLAddress.Create(xPLApplication.Adresse);
+   xPLApplication.Adresse.Assign(xPLMessage.Source);
+   repeat
+      TxPLSender(xPLApplication).Send(xPLMessage);
+      Application.ProcessMessages;
+   until not ckLoop.Checked;
+   xPLApplication.Adresse.Assign(backAddress);
+   backAddress.Free;
+end;
+
+procedure TfrmxPLMessage.acSaveExecute(Sender: TObject);
+begin
+   if SaveMessage.Execute then xPLMessage.SaveToFile(SaveMessage.FileName);
+end;
+
+procedure TfrmxPLMessage.tbCommandsClick(Sender: TObject);
+begin
+   popCommands.PopUp;
 end;
 
 procedure TfrmxPLMessage.acLoadExecute(Sender: TObject);
@@ -145,11 +317,6 @@ begin
 
    xPLMessage.LoadFromFile(OpenMessage.FileName);
    DisplayMessage;
-end;
-
-procedure TfrmxPLMessage.acCloseExecute(Sender: TObject);
-begin
-   Close;
 end;
 
 procedure TfrmxPLMessage.ckDeviceChange(Sender: TObject);
@@ -163,10 +330,10 @@ begin
      mmoPSScript.Lines.Clear;
      mmoPSScript.Lines.Add('// Message handling preformatted procedure');
      mmoPSScript.Lines.Add( StrReplace('xpl-','',
-                            Format(K_PROC_NAME_TEMPLATE,[ xPLMessage.Header.Source.Vendor,
-                                                          IfThen(ckDevice.checked, xPLMessage.Header.Source.Device,''),
-                                                          IfThen(ckInstance.checked, xPLMessage.Header.Source.Instance,''),
-                                                          IfThen(ckMsgType.checked, xPLMessage.Header.MessageType,'')
+                            Format(K_PROC_NAME_TEMPLATE,[ xPLMessage.Source.Vendor,
+                                                          IfThen(ckDevice.checked, xPLMessage.Source.Device,''),
+                                                          IfThen(ckInstance.checked, xPLMessage.Source.Instance,''),
+                                                          IfThen(ckMsgType.checked, MsgTypeToStr(xPLMessage.MessageType),'')
                                                         ]), false));
      mmoPSScript.Lines.Add('begin');
      if ckBody.Checked then begin
@@ -182,152 +349,38 @@ begin
      mmoPSScript.Lines.Add('end;');
 
      mmoPSScript.Lines.Add('');
-     mmoPSScript.Lines.Add(Format(K_PROC_CONFIG_TEMPLATE,[ xPLMessage.Header.Source.Vendor,
-                                                           xPLMessage.Header.Source.Device,
-                                                           xPLMessage.Header.Source.Instance ]));
+     mmoPSScript.Lines.Add(Format(K_PROC_CONFIG_TEMPLATE,[ xPLMessage.Source.Vendor,
+                                                           xPLMessage.Source.Device,
+                                                           xPLMessage.Source.Instance ]));
      mmoPSScript.Lines.Add('begin');
      mmoPSScript.Lines.Add('   // Your code here');
      mmoPSScript.Lines.Add('end;');
 
      mmoPSScript.Lines.Add('');
-     mmoPSScript.Lines.Add(Format(K_PROC_EXPIRED_TEMPLATE,[ xPLMessage.Header.Source.Vendor,
-                                                           xPLMessage.Header.Source.Device,
-                                                           xPLMessage.Header.Source.Instance ]));
+     mmoPSScript.Lines.Add(Format(K_PROC_EXPIRED_TEMPLATE,[ xPLMessage.Source.Vendor,
+                                                           xPLMessage.Source.Device,
+                                                           xPLMessage.Source.Instance ]));
      mmoPSScript.Lines.Add('begin');
      mmoPSScript.Lines.Add('   // Your code here');
      mmoPSScript.Lines.Add('end;');
 
      mmoPSScript.Lines.Add('');
-     mmoPSScript.Lines.Add(Format(K_PROC_HBEAT_TEMPLATE,[ xPLMessage.Header.Source.Vendor,
-                                                           xPLMessage.Header.Source.Device,
-                                                           xPLMessage.Header.Source.Instance ]));
+     mmoPSScript.Lines.Add(Format(K_PROC_HBEAT_TEMPLATE,[ xPLMessage.Source.Vendor,
+                                                           xPLMessage.Source.Device,
+                                                           xPLMessage.Source.Instance ]));
      mmoPSScript.Lines.Add('begin');
      mmoPSScript.Lines.Add('   // Your code here');
      mmoPSScript.Lines.Add('end;');
 
-end;
-
-procedure TFrmxPLMessage.DisplayMessage;
-begin
-   mmoMessage.Lines.Clear;
-   mmoMessage.Lines.AddStrings(xPLMessage.Strings);
-
-   Stream.Position := 0;
-   Stream.WriteString(xPLMessage.RawXPL);
-   Stream.Position := 0;
-   HexEditor.LoadFromStream(Stream);
-
-   edtName.Text := xPLMessage.Name;
-
-   ClasseImages.GetBitmap( AnsiIndexStr(xPLMessage.Header.Schema.Classe,K_XPL_CLASS_DESCRIPTORS),
-                           Image1.Picture.Bitmap);
-end;
-
-procedure TfrmxPLMessage.InitPluginsMenu;
-function AppendMenu(const aParent : TMenuItem; const aCaption : string) : TMenuItem;
-begin
-     Result := TMenuItem.Create(aParent);
-     Result.Caption := aCaption;
-     aParent.Add(result);
-end;
-
-var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
-    cptPlugs,i,j : integer;
-    VendorFile : TXMLxplpluginType;
-    Commande: TXMLCommandType;
-begin
-   for cptPlugs :=0 to xPLClient.PluginList.Plugins.Count-1 do with xPLClient do begin
-       aMenu := TMenuItem.Create(self);
-       popCommands.Items.Insert(0,aMenu);
-       aMenu.Caption := PluginList.Plugins[cptPlugs].Vendor;                    // Get the vendor name as menu entry
-       VendorFile := PluginList.VendorFile(aMenu.Caption);
-       if assigned(VendorFile) then begin
-          for i:=0 to VendorFile.Count-1 do begin
-            aSubMenu := AppendMenu(aMenu, VendorFile[i].Id);
-            for j:=0 to VendorFile[i].Commands.Count - 1 do begin
-                Commande := VendorFile[i].Commands[j];
-                aSubSubMenu := AppendMenu(aSubMenu, Commande.Name);
-                aSubSubMenu.OnClick := @PluginCommandExecute;
-                aSubSubMenu.Tag := ArrCommandes.Add(Commande);
-            end;
-            if aSubMenu.Count=0 then aSubMenu.Free;                             // Eliminates empty sub menus
-          end;
-       end;
-       if aMenu.Count = 0 then aMenu.Free;
-     end;
-end;
-
-procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
-var Commande : TXMLCommandType;
-begin
-   Commande := TXMLCommandType(ArrCommandes[TMenuItem(sender).Tag]);
-   xPLMessage.ReadFromXML(Commande);
-   DisplayMessage;
-end;
-
-procedure TfrmxPLMessage.mnuCopyMessageClick(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-   Clipboard.AsText := xPLMessage.RawxPL;
-end;
-
-procedure TfrmxPLMessage.mnuCopyAddressClick(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-   Clipboard.AsText := xPLMessage.Source.RawxPL;
-end;
-
-procedure TfrmxPLMessage.mnuCopyFilterClick(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-   Clipboard.AsText := xPLMessage.SourceFilterTag;
-end;
-
-procedure TfrmxPLMessage.mmoMessageExit(Sender: TObject);
-begin
-   if not mmoMessage.Modified then exit;
-   xPLMessage.Strings := TStringList(mmoMessage.Lines);
-   DisplayMessage;
-end;
-
-procedure TfrmxPLMessage.MsgCopyExecute(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-   Clipboard.AsText := TxPLMessage(Owner).RawxPL;
-end;
-
-procedure TfrmxPLMessage.MsgSaveExecute(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-   if SaveMessage.Execute then xPLMessage.SaveToFile(SaveMessage.FileName);
-end;
-
-procedure TfrmxPLMessage.PageControl1Change(Sender: TObject);
-begin
-   mmoMessageExit(sender);
-end;
-
-procedure TfrmxPLMessage.tbAboutClick(Sender: TObject);
-begin
-   frmAbout.ShowModal;
 end;
 
 procedure TfrmxPLMessage.tbOkClick(Sender: TObject);
 begin
-   xPLMessage.Strings := TStringList(mmoMessage.Lines);
-   xPLMessage.Name:=edtName.Text;
    Close;
-end;
-
-procedure TfrmxPLMessage.tbPasteClick(Sender: TObject);
-begin
-   xPLMessage.RawXPL := ClipBoard.AsText;
-   DisplayMessage;
 end;
 
 initialization
   {$I frm_xplmessage.lrs}
-
 end.
 
 

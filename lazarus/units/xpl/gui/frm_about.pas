@@ -7,7 +7,9 @@ unit frm_about;
  1.1 : switched from xPLClient belonging to frm_main to app_main
  1.2 : Added License and Readme buttons
  1.3 : Added Credits button, url label, build date version
+ 1.4 : Added DEBUG info label
 }
+
 {$mode objfpc}{$H+}
 
 interface
@@ -22,107 +24,114 @@ uses Forms,
      ComCtrls,
      ActnList;
 
-type TfrmAbout = class(TForm)
+type
+
+{ TfrmAbout }
+
+TfrmAbout = class(TForm)
         acCredits: TAction;
         acLicense: TAction;
         acReadme: TAction;
+        acCheckUpdate: TAction;
         ActionList: TActionList;
-        imLazarusLogo: TImage;
-        ilStandardActions: TImageList;
+        Image1: TImage;
+        Image2: TImage;
+        imgAppLogo: TImage;
+        lblVendor: TLabel;
         lblBuildDate: TLabel;
         lblAppName: TLabel;
-        lblVersion: TLabel;
         mmoCredits: TMemo;
-        OfficialURLLabel: TLabel;
+        mmoReadme: TMemo;
         acClose: TAction;
+        mmoLicense: TMemo;
+        PageControl1: TPageControl;
+        ScrollBox1: TScrollBox;
+        tsReadme: TTabSheet;
+        tsLicense: TTabSheet;
+        tsCredits: TTabSheet;
         tbLaunch: TToolButton;
-        ToolBar3: TToolBar;
-        ToolButton1: TToolButton;
+        ToolBar: TToolBar;
         ToolButton2: TToolButton;
-        ToolButton3: TToolButton;
-        ToolButton4: TToolButton;
-        ToolButton5: TToolButton;
-        ToolButton6: TToolButton;
+        ToolButton8: TToolButton;
+        procedure acCheckUpdateExecute(Sender: TObject);
         procedure acCloseExecute(Sender: TObject);
-        procedure acCreditsExecute(Sender: TObject);
-        procedure acLicenseExecute(Sender: TObject);
-        procedure acReadmeExecute(Sender: TObject);
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
-        procedure OfficialURLLabelMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
-        procedure OfficialURLLabelMouseEnter(Sender: TObject);
-        procedure OfficialURLLabelMouseLeave(Sender: TObject);
+
+        procedure UpdateAvailable(Sender : TObject);
+        procedure NoUpdateAvailable(Sender : TObject);
      end;
 
-var  frmAbout: TfrmAbout;
+     procedure ShowFrmAbout;
 
 implementation // ==============================================================
-uses app_main,
-     SysUtils,
-     FPCAdds,
-     OpenURLUtil,
-     Graphics,
-     lclversion;
+uses SysUtils
+     , Graphics
+     , lclversion
+     , Windows
+     , frm_DownloadFile
+     , u_xpl_application
+     , u_xpl_gui_resource
+     , Dialogs
+     ;
 
+var  frmAbout: TfrmAbout;
 // =============================================================================
 const
      K_FILE_LICENSE = 'license.txt';
      K_FILE_README  = 'readme.txt';
      K_FILE_CREDITS = 'credits.txt';
-     K_VERSION_STR  = 'Version %s';
-     K_BUILDAT_STR  = 'Date : %s';
      K_CREDITS_STR  = 'Compiled with Lazarus version %s';
+     K_UPDATE_AVAIL = 'A new version is available : %s'#10' at %s'#10' Do you want to download it ?';
+     K_UPDATE_STATUS = 'Update info';
+     K_NO_UPDATE = 'Your application is up to date';
 
 // =============================================================================
-function GetLocalizedBuildDate(): string;                                       // This code piece comes from Lazarus AboutFrm source
-  var                                                                           // The compiler generated date string is always of the form y/m/d.
-    BuildDate: string;                                                          // This function gives it a string respresentation according to the
-    SlashPos1, SlashPos2: integer;                                              // shortdateformat
-    Date: TDateTime;
-  begin
-    BuildDate := {$I %date%};
-    SlashPos1 := Pos('/',BuildDate);
-    SlashPos2 := SlashPos1 +
-      Pos('/', Copy(BuildDate, SlashPos1+1, Length(BuildDate)-SlashPos1));
-    Date := EncodeDate(StrToWord(Copy(BuildDate,1,SlashPos1-1)),
-      StrToWord(Copy(BuildDate,SlashPos1+1,SlashPos2-SlashPos1-1)),
-      StrToWord(Copy(BuildDate,SlashPos2+1,Length(BuildDate)-SlashPos2)));
-    Result := FormatDateTime('yyyy-mm-dd', Date);
-  end;
+procedure ShowFrmAbout;
+begin
+   if not Assigned(frmAbout) then
+      Application.CreateForm(TfrmAbout, frmAbout);
+   frmAbout.ShowModal;
+end;
 
 // =============================================================================
 procedure TfrmAbout.FormCreate(Sender: TObject);
 begin
-   acReadme.Enabled  := FileExists(K_FILE_README);
-   acLicense.Enabled := FileExists(K_FILE_LICENSE);
-   acCredits.Enabled := FileExists(K_FILE_CREDITS);
-   lblBuildDate.Caption := Format(K_BUILDAT_STR,[GetLocalizedBuildDate]);
+   tsReadme.Visible   := FileExists(K_FILE_README);
+   tsLicense.Visible  := FileExists(K_FILE_LICENSE);
+   tsCredits.Visible  := FileExists(K_FILE_CREDITS);
+   Toolbar.Images     := xPLGUIResource.Images;
+   lblAppName.Caption := xPLApplication.FullTitle;
+   imgAppLogo.Picture.Assign(Application.Icon);
+   image1.Picture.LoadFromLazarusResource('Indy');
+   image2.Picture.LoadFromLazarusResource('splash_logo');
 end;
+
 
 procedure TfrmAbout.FormShow(Sender: TObject);
 begin
-   lblAppName.Caption := xPLClient.AppName;
-   lblVersion.Caption := Format(K_VERSION_STR,[xPLClient.AppVersion]);
-   if acCredits.Enabled then acCreditsExecute(self);
+   if tsCredits.Visible then mmoCredits.Lines.LoadFromFile(K_FILE_CREDITS);
+   if tsReadme.Visible  then mmoReadme.Lines.LoadFromFile(K_FILE_README);
+                             mmoReadme.Lines.Add(Format(K_CREDITS_STR,[lcl_version]));
+   if tsLicense.Visible then mmoLicense.Lines.LoadFromFile(K_FILE_LICENSE);
+
+   if not Assigned(xPLApplication.VChecker.OnUpdateFound) then begin
+     xPLApplication.VChecker.OnUpdateFound   := @UpdateAvailable;
+     xPLApplication.VChecker.OnNoUpdateFound := @NoUpdateAvailable;
+   end;
 end;
 
-procedure TfrmAbout. OfficialURLLabelMouseDown(Sender: TObject; Button: TMouseButton; Shift: TShiftState; X, Y: Integer);
+procedure TfrmAbout.UpdateAvailable(Sender: TObject);
+var s : string;
 begin
-   OpenURL(TLabel(Sender).Caption);
+   s := Format(K_UPDATE_AVAIL,[xPLApplication.vChecker.ServerVersion,xPLApplication.VChecker.DownloadURL]);
+   if Application.MessageBox(PChar(s),K_UPDATE_STATUS, MB_YESNO + MB_ICONQUESTION) = IDYES then
+      ShowFrmDownloadFile( xPLApplication.vChecker.DownloadURL, '', false, false, true);
 end;
 
-procedure TfrmAbout. OfficialURLLabelMouseEnter(Sender: TObject);
+procedure TfrmAbout.NoUpdateAvailable(Sender: TObject);
 begin
-   TLabel(Sender).Font.Style := [fsUnderLine];
-   TLabel(Sender).Font.Color := clRed;
-   TLabel(Sender).Cursor := crHandPoint;
-end;
-
-procedure TfrmAbout. OfficialURLLabelMouseLeave(Sender: TObject);
-begin
-   TLabel(Sender).Font.Style := [];
-   TLabel(Sender).Font.Color := clBlue;
-   TLabel(Sender).Cursor := crDefault;
+   Application.MessageBox(K_NO_UPDATE,K_UPDATE_STATUS,0);
 end;
 
 procedure TfrmAbout.acCloseExecute(Sender: TObject);
@@ -130,20 +139,9 @@ begin
    Close;
 end;
 
-procedure TfrmAbout.acCreditsExecute(Sender: TObject);
+procedure TfrmAbout.acCheckUpdateExecute(Sender: TObject);
 begin
-   mmoCredits.Lines.LoadFromFile(K_FILE_CREDITS);
-   mmoCredits.Lines.Add(Format(K_CREDITS_STR,[lcl_version]));
-end;
-
-procedure TfrmAbout.acLicenseExecute(Sender: TObject);
-begin
-   mmoCredits.Lines.LoadFromFile(K_FILE_LICENSE);
-end;
-
-procedure TfrmAbout.acReadmeExecute(Sender: TObject);
-begin
-   mmoCredits.Lines.LoadFromFile(K_FILE_README);
+   xPLApplication.CheckVersion;
 end;
 
 initialization // ==============================================================

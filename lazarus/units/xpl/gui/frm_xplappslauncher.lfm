@@ -47,7 +47,7 @@ object frmAppLauncher: TfrmAppLauncher
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
-  OnCreate = FormCreate
+  OnShow = FormShow
   SessionProperties = 'Height;Left;Top;Width;lvApps.Columns'
   LCLVersion = '0.9.28.2'
   object lvApps: TListView
@@ -75,7 +75,7 @@ object frmAppLauncher: TfrmAppLauncher
     ViewStyle = vsReport
     OnDblClick = lvAppsDblClick
   end
-  object ToolBar3: TToolBar
+  object ToolBar: TToolBar
     Left = 0
     Height = 26
     Top = 0
@@ -86,16 +86,40 @@ object frmAppLauncher: TfrmAppLauncher
     EdgeBorders = [ebBottom]
     EdgeOuter = esRaised
     Flat = False
-    Images = frmAbout.ilStandardActions
     List = True
     ShowCaptions = True
     TabOrder = 1
-    object tbLaunch: TToolButton
+    object tbClose: TToolButton
       Left = 1
       Top = 0
+      Action = acClose
+      ImageIndex = 1
+    end
+    object ToolButton1: TToolButton
+      Left = 92
+      Top = 0
+      Action = acLaunch
+      ImageIndex = 6
+    end
+    object ToolButton2: TToolButton
+      Left = 81
+      Top = 0
+      Width = 11
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
+  end
+  object ActionList: TActionList
+    left = 68
+    top = 164
+    object acClose: TAction
+      Caption = 'Close'
+      ImageIndex = 0
+      OnExecute = acCloseExecute
+    end
+    object acLaunch: TAction
       Caption = 'Launch...'
-      ImageIndex = 5
-      OnClick = tbLaunchClick
+      OnExecute = acLaunchExecute
     end
   end
 end

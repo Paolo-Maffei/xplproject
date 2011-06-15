@@ -17,8 +17,8 @@ interface
 uses
   Classes,
   u_xml_xplplugin,
-  uxplmsgbody,
-  uxplschema;
+  u_xpl_body,
+  u_xpl_schema;
 
 type
 
@@ -51,7 +51,9 @@ type
   end;
 
 implementation
-uses uxPLMessage,
+uses u_xPL_Message,
+     u_xpl_header,
+     u_xpl_address,
      uxPLConst,
      SysUtils;
 
@@ -60,9 +62,9 @@ uses uxPLMessage,
 function TXMLMenuItemTypeEx.Get_Body: TxPLBody;
 var aMsg : TxPLMessage;
 begin
-     aMsg := TxPLMessage.Create;
-     aMsg.RawXPL:= Format(K_MSG_HEADER_FORMAT,[K_MSG_TYPE_CMND,0,K_MSG_HEADER_DUMMY,K_MSG_TARGET_ANY,xPLMsg]);
-     result := TxPLBody.Create;
+     aMsg := TxPLMessage.Create(nil);
+     aMsg.RawXPL:= Format(K_MSG_HEADER_FORMAT,[K_MSG_TYPE_CMND,0,'' (*K_MSG_HEADER_DUMMY*),K_ADDR_ANY_TARGET,xPLMsg]);
+     result := TxPLBody.Create(nil);
      result.Assign(aMsg.Body);
      aMsg.Destroy;
 end;
@@ -70,8 +72,8 @@ end;
 function TXMLMenuItemTypeEx.Get_Schema: TxPLSchema;
 var aMsg : TxPLMessage;
 begin
-     aMsg := TxPLMessage.Create;
-     aMsg.RawXPL:= Format(K_MSG_HEADER_FORMAT,[K_MSG_TYPE_CMND,0,K_MSG_HEADER_DUMMY,K_MSG_TARGET_ANY,xPLMsg]);
+     aMsg := TxPLMessage.Create(nil);
+     aMsg.RawXPL:= Format(K_MSG_HEADER_FORMAT,[K_MSG_TYPE_CMND,0,'' (*K_MSG_HEADER_DUMMY*),K_ADDR_ANY_TARGET,xPLMsg]);
      result := TxPLSchema.Create;
      result.Assign(aMsg.Schema);
      aMsg.Destroy;

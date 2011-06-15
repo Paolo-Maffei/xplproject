@@ -1,0 +1,127 @@
+object frmDownloadFile: TfrmDownloadFile
+  Left = 110
+  Height = 161
+  Top = 228
+  Width = 475
+  BorderIcons = []
+  BorderStyle = bsDialog
+  Caption = 'Download a File'
+  ClientHeight = 161
+  ClientWidth = 475
+  OnCreate = FormCreate
+  OnDestroy = FormDestroy
+  OnShow = FormShow
+  LCLVersion = '0.9.31'
+  object Label1: TLabel
+    Left = 16
+    Height = 16
+    Top = 40
+    Width = 35
+    Caption = 'From :'
+    ParentColor = False
+  end
+  object Label2: TLabel
+    Left = 30
+    Height = 16
+    Top = 72
+    Width = 21
+    Caption = 'To :'
+    ParentColor = False
+  end
+  object lblFrom: TLabel
+    Left = 56
+    Height = 16
+    Top = 40
+    Width = 408
+    AutoSize = False
+    Caption = 'lblFrom'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblTo: TLabel
+    Left = 56
+    Height = 16
+    Top = 72
+    Width = 376
+    AutoSize = False
+    Caption = 'lblTo'
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object lblError: TLabel
+    Left = 56
+    Height = 16
+    Top = 104
+    Width = 42
+    Caption = 'lblError'
+    Font.Color = clRed
+    Font.Style = [fsBold]
+    ParentColor = False
+    ParentFont = False
+  end
+  object ProgressBar: TProgressBar
+    Left = 56
+    Height = 20
+    Top = 128
+    Width = 408
+    TabOrder = 0
+  end
+  object ckAutoClose: TCheckBox
+    Left = 336
+    Height = 19
+    Top = 104
+    Width = 126
+    Caption = 'Close when finished'
+    TabOrder = 1
+  end
+  object ToolBar: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 475
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar2'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    List = True
+    ShowCaptions = True
+    TabOrder = 2
+    object btnClose: TToolButton
+      Left = 1
+      Top = 0
+      Caption = 'Close'
+      ImageIndex = 1
+      OnClick = btnCloseClick
+    end
+    object ToolButton2: TToolButton
+      Left = 81
+      Top = 0
+      Width = 4
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
+    object btnStart: TToolButton
+      Left = 85
+      Top = 0
+      Caption = 'Start'
+      ImageIndex = 6
+      OnClick = btnStartClick
+    end
+  end
+  object btnSelectDir: TButton
+    Left = 440
+    Height = 24
+    Top = 64
+    Width = 24
+    Caption = '...'
+    OnClick = btnSelectDirClick
+    TabOrder = 3
+  end
+  object SelectDirDialog: TSelectDirectoryDialog
+    left = 240
+  end
+end

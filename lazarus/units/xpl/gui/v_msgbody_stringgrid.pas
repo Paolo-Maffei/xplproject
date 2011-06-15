@@ -13,7 +13,7 @@ interface
 
 uses   Classes, SysUtils, LCLProc, LCLType, LCLIntf,
   FPCanvas, Controls, GraphType, Graphics, Forms, MStringGrid,
-  StdCtrls, LResources, Buttons, Grids, Menus, uxPLMsgBody;
+  StdCtrls, LResources, Buttons, Grids, Menus, u_xpl_body;
 
 type
 

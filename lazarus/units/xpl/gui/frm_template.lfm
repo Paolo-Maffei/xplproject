@@ -1,0 +1,146 @@
+object FrmTemplate: TFrmTemplate
+  Left = 1449
+  Height = 472
+  Top = 426
+  Width = 708
+  Caption = 'FrmTemplate'
+  ClientHeight = 472
+  ClientWidth = 708
+  OnCloseQuery = FormCloseQuery
+  OnCreate = FormCreate
+  LCLVersion = '0.9.31'
+  object StatusBar1: TStatusBar
+    Left = 0
+    Height = 23
+    Top = 449
+    Width = 708
+    Panels = <    
+      item
+        Bevel = pbNone
+        Width = 20
+      end    
+      item
+        Width = 500
+      end>
+    SimplePanel = False
+  end
+  object imgBullet: TImage
+    Left = 8
+    Height = 24
+    Top = 416
+    Width = 24
+    BorderSpacing.InnerBorder = 4
+    Center = True
+  end
+  object ToolBar: TToolBar
+    Left = 0
+    Height = 25
+    Top = 0
+    Width = 708
+    AutoSize = True
+    ButtonHeight = 24
+    ButtonWidth = 30
+    Caption = 'ToolBar'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esNone
+    Flat = False
+    List = True
+    ShowCaptions = True
+    TabOrder = 1
+    object ToolButton9: TToolButton
+      Left = 1
+      Top = 0
+      ImageIndex = 0
+      OnClick = ToolButton9Click
+      Style = tbsDropDown
+    end
+    object ToolButton10: TToolButton
+      Left = 43
+      Top = 0
+      Width = 8
+      AutoSize = True
+      Caption = 'ToolButton3'
+      Style = tbsSeparator
+    end
+    object Panel4: TPanel
+      Left = 508
+      Height = 24
+      Top = 0
+      Width = 200
+      Align = alRight
+      BevelOuter = bvNone
+      BorderWidth = 3
+      ClientHeight = 24
+      ClientWidth = 200
+      TabOrder = 0
+      object lblModuleName: TTILabel
+        Left = 3
+        Height = 18
+        Top = 3
+        Width = 194
+        Align = alClient
+        Alignment = taRightJustify
+        Font.Style = [fsBold]
+        ParentFont = False
+      end
+    end
+  end
+  object ActionList: TActionList
+    left = 64
+    object acQuit: TAction
+      Category = 'xPL'
+      Caption = 'Quit'
+      Hint = 'Quit the application'
+      ImageIndex = 1
+      OnExecute = acQuitExecute
+    end
+    object acAbout: TAction
+      Category = 'xPL'
+      Caption = 'About...'
+      ImageIndex = 2
+      OnExecute = acAboutExecute
+    end
+    object acInstalledApps: TAction
+      Category = 'xPL'
+      Caption = 'Installed xPL apps'
+      ImageIndex = 5
+      OnExecute = acInstalledAppsExecute
+    end
+    object acLogViewer: TAction
+      Category = 'xPL'
+      Caption = 'Application Log'
+      ImageIndex = 42
+      OnExecute = acLogViewerExecute
+    end
+    object acBasicSet: TAction
+      Caption = 'Basic xPL Settings'
+      ImageIndex = 44
+      OnExecute = acBasicSetExecute
+    end
+  end
+  object xPLMenu: TPopupMenu
+    left = 128
+    object MenuItem7: TMenuItem
+      Action = acLogViewer
+    end
+    object MenuItem14: TMenuItem
+      Action = acInstalledApps
+    end
+    object MenuItem16: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem13: TMenuItem
+      Action = acAbout
+    end
+    object MenuItem15: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem17: TMenuItem
+      Action = acQuit
+    end
+  end
+  object XMLPropStorage: TXMLPropStorage
+    StoredValues = <>
+    left = 200
+  end
+end

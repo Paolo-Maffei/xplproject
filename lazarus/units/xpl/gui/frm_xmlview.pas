@@ -16,23 +16,30 @@ type
     SynEdit1: TSynEdit;
     SynXMLSyn1: TSynXMLSyn;
     tbLaunch: TToolButton;
-    ToolBar3: TToolBar;
+    ToolBar: TToolBar;
     procedure FormShow(Sender: TObject);
     procedure tbLaunchClick(Sender: TObject);
   private
     { private declarations }
+    filePath : string;
   public
     { public declarations }
-    filePath : string;
-  end; 
 
-var
-  frmXMLView: TfrmXMLView;
+  end;
+
+  procedure ShowFrmXMLView(const aFileName : string);
+
+var frmXMLView: TfrmXMLView;
 
 implementation
-uses frm_about;
+uses u_xpl_gui_resource;
 
-{ TfrmXMLView }
+procedure ShowFrmXMLView(const aFileName: string);
+begin
+  if not Assigned(FrmXMLView) then Application.CreateForm(TFrmXMLView,FrmXMLView);
+  FrmXMLView.FilePath := aFileName;
+  FrmXMLView.ShowModal;
+end;
 
 procedure TfrmXMLView.tbLaunchClick(Sender: TObject);
 begin
@@ -41,7 +48,7 @@ end;
 
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
-   ToolBar3.Images := frmabout.ilStandardActions;
+   ToolBar.Images := xPLGUIResource.Images;
    Caption := FilePath;
    SynEdit1.Lines.LoadFromFile(filepath);
 end;
