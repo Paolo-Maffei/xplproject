@@ -94,7 +94,7 @@ protected
   procedure moveComponents;
   {$ifdef lcl}procedure DoOnResize; override;{$endif}
   procedure DoSearch(incremental, backwards: boolean);
-  {$ifdef lcl}procedure ResizeDelayedAutoSizeChildren; override;{$endif}
+//  {$ifdef lcl}procedure ResizeDelayedAutoSizeChildren; override;{$endif}
 public
   property SearchText: string read GetSearchText; //**<This is the text to search, entered by the user
   property SearchLocation: longint read GetSearchLocation write SetSearchLocation;  //**< Currently selected combobox item
@@ -347,14 +347,14 @@ begin
   if assigned(OnSearch) then OnSearch(self, incremental, backwards);
 end;
 
-{$ifdef lcl}
-procedure TSearchBar.ResizeDelayedAutoSizeChildren;
-begin
-  inherited ResizeDelayedAutoSizeChildren;
-  //this is the first time the size of the caption label is known!
-  updateComponents;
-end;
-{$endif}
+//{$ifdef lcl}
+//procedure TSearchBar.ResizeDelayedAutoSizeChildren;
+//begin
+//  inherited ResizeDelayedAutoSizeChildren;
+//  //this is the first time the size of the caption label is known!
+//  updateComponents;
+//end;
+//{$endif}
 
 procedure TSearchBar.setFocus;
 begin
