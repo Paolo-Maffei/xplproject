@@ -82,7 +82,6 @@ begin
    if fListen then begin
       fooMessage := TxPLMessage.Create(self);
       fooMessage.Assign(aMessage);
-//      fooMessage.MsgName := TimeToStr(Now);
       MessageList.Add(fooMessage);
       if MessageList.Count>fMessageLimit then MessageList.Delete(0);
       if Assigned(OnMessage) then OnMessage(fooMessage);
