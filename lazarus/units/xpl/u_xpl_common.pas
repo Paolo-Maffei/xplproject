@@ -81,8 +81,7 @@ uses cStrings
      , StrUtils
      , cUtils
      , TypInfo
-     , synamisc
-     , synaip
+     , IdStack
      , DateUtils
      ;
 
@@ -280,13 +279,22 @@ end;
 var i : integer;
 initialization // =============================================================
    LocalAddresses := TStringList.Create;
-   LocalAddresses.Delimiter := ',';
-   LocalAddresses.DelimitedText := GetLocalIPs;                                 // This procedure also retrieves IPv6
-   i := LocalAddresses.Count-1;                                                 // Addresses, then I have to clean
-   while (i>=0) do begin                                                        // the list to present only IPv4 addresses
-      if not IsIP(LocalAddresses[i]) then LocalAddresses.Delete(i);
-      dec(i);
-   end;
+   // Cette version utilise la librairie Synapse mais pose un problème pour les
+   // Versions console des applications car les unités synamisc et synaip appellent
+   // Windows
+   //LocalAddresses.Delimiter := ',';
+   //LocalAddresses.DelimitedText := GetLocalIPs;                                // This procedure also retrieves IPv6
+   //i := LocalAddresses.Count-1;                                                // Addresses, then I have to clean
+   //while (i>=0) do begin                                                       // the list to present only IPv4 addresses
+   //   if not IsIP(LocalAddresses[i]) then LocalAddresses.Delete(i);
+   //   dec(i);
+   //end;
+
+   // Cette version utilise la librairie Indy, à tester pour bon fonctionnement
+   // entre version console et gui...
+   TIdStack.IncUsage;
+   for i:=0 to Pred(GStack.LocalAddresses.Count) do
+      LocalAddresses.Add(GStack.LocalAddresses[i]);
 
 finalization // ===============================================================
    LocalAddresses.Free;

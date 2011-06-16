@@ -1,9 +1,13 @@
 unit u_xpl_heart_beater;
 
-{ Il y a un bug dans la version fpc 2.5.1 de fpTimer, il faut employer une version
-  antérieure pour fonctionner correctement pour contourner le problème -
+{ Il y a un bug dans la version fpc 2.5.1 de fpTimer. Ce bug génère un 'hang' général
+  de l'application dès que l'on active ou désactive un fptimer. il faut employer une
+  version antérieure pour fonctionner correctement pour contourner le problème -
   Récupérer celle qui se trouve ici :
-  http://svn.freepascal.org/cgi-bin/viewvc.cgi/trunk/packages/fcl-base/src/fptimer.pp?revision=13012 }
+  http://svn.freepascal.org/cgi-bin/viewvc.cgi/trunk/packages/fcl-base/src/fptimer.pp?revision=13012
+  et forcer son utilisation en ajoutant le chemin de recherche :
+  C:\pp\packages\fcl-base\src\fptimer.pp dans les paths du projet
+  }
 
 {$mode objfpc}{$H+}
 
@@ -16,7 +20,7 @@ uses Classes
 
 type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfNone);
 
-     { TxPLHeartBeater =======================================================}
+     // TxPLHeartBeater =======================================================
      TxPLHeartBeater = class(TfpTimer)
      private
         fRate : TxPLRateFrequency;

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, XMLConf, RTTICtrls;
+  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls;
 
 type { TFrmTemplate ==========================================================}
   TFrmTemplate = class(TForm)
