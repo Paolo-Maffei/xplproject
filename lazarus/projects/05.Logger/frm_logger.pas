@@ -425,8 +425,6 @@ begin
    dgMessages.Row:=NewCell.Y;
 end;
 
-
-
 procedure TfrmLogger.tvMessagesChange(Sender: TObject; Node: TTreeNode);
 var ConfElmts: TConfigurationRecord;
     i:     integer;

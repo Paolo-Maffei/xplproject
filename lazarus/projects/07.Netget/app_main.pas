@@ -51,7 +51,7 @@ end;
 constructor TMyNetGetApp.Create(TheOwner: TComponent);
 begin
    inherited Create(TheOwner);
-   xPLClient := TxPLCustomListener.Create(nil,'netget','clinique','4.0.9');
+   xPLClient := TxPLCustomListener.Create(nil);
    xPLClient.OnxPLReceived := @OnCmndReceived;
    Title := xPLClient.AppName;
    xPLClient.Listen;

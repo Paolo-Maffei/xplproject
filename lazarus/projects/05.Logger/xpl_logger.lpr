@@ -12,7 +12,6 @@ uses
   Forms,
   frm_logger,
   frm_appsettings,
-  xpl_win,
   frm_plugindetail,
   u_xpl_application,
   u_xpl_common,
@@ -22,8 +21,6 @@ uses
   u_Configuration_Record, frame_message;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
-
-{ $ R *.res}
 
 begin
    Application.Initialize;
