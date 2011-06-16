@@ -145,8 +145,6 @@ end;
 
 function TxPLHeader.MatchesFilter(aFilterSet: TxPLConfigItem): boolean;
 var i : integer;
-  a,b : integer;
-  s : string;
 begin
    result := (aFilterSet.ValueCount=0);                                         // If no filter present then always pass
    if not result then                                                           // if filters are present

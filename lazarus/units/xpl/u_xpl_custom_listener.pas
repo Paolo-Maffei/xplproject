@@ -39,9 +39,7 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
       TxPLHBeatPrepare  = procedure(const aBody   : TxPLBody) of object;
       TxPLJoinedNed     = procedure of object;
 
-      { TxPLListener }
-
-      { TxPLCustomListener }
+      // TxPLCustomListener ===================================================
 
       TxPLCustomListener = class(TxPLSender)
       private
@@ -133,20 +131,15 @@ begin
 end;
 
 procedure TxPLCustomListener.SaveConfig;
-var aStream, bStream : TMemoryStream;
+var aStream : TMemoryStream;
 begin
    aStream:=TMemoryStream.Create;
-//   bStream:=TMemoryStream.Create;
    try
-//      if FileExists(fCfgFName) then bStream.LoadFromFile(fCfgFName);
-//      if not CompareContents(aStream,bStream) then begin                           // Limit config rewriting just if really needed
          WriteComponentAsTextToStream(aStream, self);
          aStream.SaveToFile(fCfgFName);
          Log(etInfo,K_MSG_CONFIG_WRITEN,[fCfgFName]);
-//      end;
    finally
       AStream.Free;
-//      BStream.Free;
    end;
 end;
 
