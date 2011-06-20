@@ -1,6 +1,9 @@
 unit u_xpl_collection;
 
-{$mode objfpc}{$H+}
+{$ifdef fpc}
+   { $ mode objfpc}{$H+}
+   {$mode delphi}
+{$endif}
 
 interface
 
@@ -34,7 +37,8 @@ type
        property Comment     : string    read fComment       write fComment;
    end;
 
-   generic TxPLCollection<T> = class(TCollection)
+//   generic
+     TxPLCollection<T {$ifndef fpc}: TxPLCollectionItem{$endif}> = class(TCollection)
       private
           fOwner : TPersistent;
           procedure Set_Items(Index : integer; const aValue : T);
@@ -50,7 +54,8 @@ type
           property    Items[Index : integer] : T read Get_Items write Set_Items; default;
       end;
 
-   TxPLCustomCollection = specialize TxPLCollection<TxPLCollectionItem>;
+   TxPLCustomCollection = //specialize
+     TxPLCollection<TxPLCollectionItem>;
 
 implementation // =============================================================
 uses StrUtils
@@ -116,28 +121,28 @@ begin
    end;
 end;
 
-constructor TxPLCollection.Create(aOwner : TPersistent);
+constructor TxPLCollection<T>.Create(aOwner : TPersistent);
 begin
    inherited Create(T);
    fOwner := aOwner;
 end;
 
-function TxPLCollection.GetOwner : TPersistent;
+function TxPLCollection<T>.GetOwner : TPersistent;
 begin
    Result := fOwner;
 end;
 
-function TxPLCollection.Get_Items(index : integer) : T;
+function TxPLCollection<T>.Get_Items(index : integer) : T;
 begin
    Result := T(inherited Items[index]);
 end;
 
-Procedure TxPLCollection.Set_Items(Index : integer; const aValue : T);
+Procedure TxPLCollection<T>.Set_Items(Index : integer; const aValue : T);
 begin
    Items[index] := aValue;
 end;
 
-Function TxPLCollection.Add(const aName : string) : T;
+Function TxPLCollection<T>.Add(const aName : string) : T;
 var i : integer;
     s : string;
 begin
@@ -155,17 +160,17 @@ begin
       Result := Get_Items(i);
 end;
 
-Function TxPLCollection.FindItemName(const aName : string) : T;
+Function TxPLCollection<T>.FindItemName(const aName : string) : T;
 var i : longint;
 begin
    for i:=0 to Count-1 do begin
        Result := T(items[i]);
        if AnsiCompareText(Result.DisplayName,aName)=0 then exit;
    end;
-   Result := nil;
+   Result := {$ifdef fpc}nil{$else}Default(T){$endif};
 end;
 
-function TxPLCollection.GetItemId(const aName: string): integer;
+function TxPLCollection<T>.GetItemId(const aName: string): integer;
 begin
    for Result := 0 to Count - 1 do
        if T(items[Result]).DisplayName = aName then exit;

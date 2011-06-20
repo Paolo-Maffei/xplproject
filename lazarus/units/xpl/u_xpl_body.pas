@@ -12,7 +12,10 @@ unit u_xpl_body;
  1.03 : Added AddKeyValuePairs
  1.04 : Class renamed TxPLBody
 }
-{$mode objfpc}{$H+}
+
+{$ifdef fpc}
+   {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
@@ -49,8 +52,8 @@ type // TxPLBody ==============================================================
 
            procedure CleanEmptyValues;
 
-           procedure AddKeyValuePairs(const aKeys, aValues : TStringList);
-           procedure AddKeyValuePairs(const aKeys, aValues : Array of string);
+           procedure AddKeyValuePairs(const aKeys, aValues : TStringList); overload;
+           procedure AddKeyValuePairs(const aKeys, aValues : Array of string); overload;
            procedure AddKeyValue(const aKeyValuePair : string);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
            procedure SetValueByKey(const aKeyValue, aDefVal : string);
