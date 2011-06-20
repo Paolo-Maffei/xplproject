@@ -13,7 +13,10 @@ uses Classes
 
 const K_MSG_TYPE_HEAD = 'xpl-';
 
-type TStrParamEvent = procedure(const aString : string) of object;
+Type
+     TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
+
+     TStrParamEvent = procedure(const aString : string) of object;
 
      TxPLMessageType = (cmnd, stat, trig);
 
