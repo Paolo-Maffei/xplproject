@@ -20,13 +20,12 @@ type
        fComment     : string;
 
        procedure Set_Value(const AValue: string); virtual;
-   private
-       function GetDisplayName: string; override;
-       procedure SetDisplayName(const Value: string); override;
-
    public
        constructor Create(aOwner: TCollection); override;
        procedure Assign(Source: TPersistent);   dynamic;
+
+       function GetDisplayName: string; override;
+       procedure SetDisplayName(const Value: string); override;
    published
        property DisplayName : string    read GetDisplayName write SetDisplayName;
        property CreateTS    : TDateTime read fCreateTS      write fCreateTS;
