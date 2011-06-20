@@ -1,6 +1,8 @@
 unit u_xpl_common;
 
-{$mode objfpc}{$H+}
+{$ifdef fpc}
+   {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
@@ -24,7 +26,7 @@ type TStrParamEvent = procedure(const aString : string) of object;
      IxPLRaw = Interface(IInterface)
         procedure Set_RawxPL (const aValue : string);
         function  Get_RawxPL : string;
-        property RawxPL : string read Get_RawxPL write Set_RawxPL stored false;
+        property RawxPL : string read Get_RawxPL write Set_RawxPL; // stored false; (*suppressed to validate delphi compatibility*)
      end;
 
      TxPLRawSet = class(TInterfacedPersistent, IxPLCommon, IxPLRaw)
@@ -77,9 +79,7 @@ const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';  
 var   LocalAddresses : TStringList;
 
 implementation  //=============================================================
-uses cStrings
-     , StrUtils
-     , cUtils
+uses StrUtils
      , TypInfo
      , IdStack
      , DateUtils
@@ -93,8 +93,6 @@ const    K_LOG_INF = 'inf';
 // ============================================================================
 const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
-
-
 // ============================================================================
 function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
 begin
@@ -158,24 +156,38 @@ end ;
 // ============================================================================
 function xPLMatches(const aFilter: string; const aMessageElt: string): boolean;
 var iFltElement : integer;
-    sFlt, sMsg : stringArray;
-    HeaderElementDelimiter : Set of Char = ['.'];
+    sFlt, sMsg  : TStringList;
+    //sFlt, sMsg : stringArray;                                                // Old method requires cStrings and cUtils
+    //HeaderElementDelimiter : Set of Char = ['.'];
+
 begin
    result := true;
+//   sFlt := StrSplitChar(aFilter ,HeaderElementDelimiter);
+//   sMsg := StrSplitChar(aMessageElt,HeaderElementDelimiter);
 
-   sFlt := StrSplitChar(aFilter ,HeaderElementDelimiter);                      // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-   sMsg := StrSplitChar(aMessageElt,HeaderElementDelimiter);
+   sFlt := TStringList.Create;
+   sFlt.Delimiter     :='.';
+   sFlt.DelimitedText := aFilter;
 
-   For iFltElement := 0 to High(sFlt) do
-       if (sFlt[iFltElement]<>'*') then result := result and (sFlt[iFltElement]=sMsg[iFltElement])
+   sMsg := TStringList.Create;
+   sMsg.Delimiter     := sFlt.Delimiter;
+   sMsg.DelimitedText := aMessageElt;                                          // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+
+   Assert(sMsg.Count = sFlt.Count);
+   //For iFltElement := 0 to High(sFlt) do
+   For iFltElement := 0 to Pred(sFlt.Count) do
+       if (sFlt[iFltElement]<>'*') then result := result and (sFlt[iFltElement]=sMsg[iFltElement]);
+
+   sFlt.Free;
+   sMsg.Free;
 end;
 
 function xPLLevelToEventType(const aLevel: string): TEventType;
 begin
    Case AnsiIndexStr(aLevel,[K_LOG_INF,K_LOG_WRN,K_LOG_ERR]) of
-        0 : result := etInfo;
-        1 : result := etWarning;
-        2 : result := etError;
+        0 : result  := etInfo;
+        1 : result  := etWarning;
+        2 : result  := etError;
         else result := etInfo;
    end;
 end;

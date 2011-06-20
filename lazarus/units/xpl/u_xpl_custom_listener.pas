@@ -63,8 +63,8 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         Destructor  Destroy; override;
 
         Procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); dynamic;
-        procedure SaveConfig;
-        procedure LoadConfig;
+        procedure SaveConfig; dynamic;
+        procedure LoadConfig; dynamic;
 
         procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;

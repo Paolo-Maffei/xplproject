@@ -9,7 +9,10 @@ unit u_xPL_Schema;
  3.00 : Descendent from TPersistent
 }
 
-{$mode objfpc}{$H+}{$M+}
+{$ifdef fpc}
+   {$mode objfpc}{$H+}{$M+}
+{$endif}
+
 interface
 
 uses Classes,
@@ -61,7 +64,9 @@ uses SysUtils
      , StrUtils
      ;
 
-const K_FMT_FILTER      = '%s.%s';
+const // ======================================================================
+     K_FMT_FILTER = '%s.%s';
+
 // ============================================================================
 operator:=(t1: string)t2: TxPLSchema;
 begin

@@ -28,7 +28,8 @@ const K_IMG_RECONNECT  = 'reconnect';
       K_IMG_CANCEL     = 'button_cancel';
 
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD, K_IMG_MESSAGE,
-    K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND : integer;
+    K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_LOUPE, K_IMG_CE_PROCEDURE,
+    K_IMG_SYNCHRONIZE : integer;
 
 implementation // =============================================================
 uses Forms,
@@ -44,7 +45,7 @@ begin
    fImages.AddLazarusResource('menu_information');  // 2
    fImages.AddLazarusResource('laz_save');          // 3
    fImages.AddLazarusResource('laz_refresh');       // 4
-   fImages.AddLazarusResource('ce_procedure');      // 5
+   K_IMG_CE_PROCEDURE := fImages.AddLazarusResource('ce_procedure');      // 5
    fImages.AddLazarusResource('menu_run');          // 6
    K_IMG_pkg_installed := fImages.AddLazarusResource('pkg_installed');     // 7
    fImages.AddLazarusResource('txt');               // 8
@@ -79,7 +80,7 @@ begin
    fImages.AddLazarusResource('check');             // 37
    fImages.AddLazarusResource('notchecked');        // 38
    fImages.AddLazarusResource('logview');           // 39
-   fImages.AddLazarusResource('synchronize');       // 40
+   K_IMG_SYNCHRONIZE := fImages.AddLazarusResource('synchronize');       // 40
    fImages.AddLazarusResource('preferences');       // 41
    fImages.AddLazarusResource('greenbadge');        // 42
    fImages.AddLazarusResource('redbadge');          // 43
@@ -94,6 +95,7 @@ begin
    K_IMG_CMND := fImages.AddLazarusResource('xpl-cmnd');
    K_IMG_STAT := fImages.AddLazarusResource('xpl-stat');
    K_IMG_TRIG := fImages.AddLazarusResource('xpl-trig');
+   K_IMG_LOUPE := fImages.AddLazarusResource('loupe');
 end;
 
 destructor TxPLGUIResource.Destroy;
