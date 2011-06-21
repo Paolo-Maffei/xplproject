@@ -90,7 +90,6 @@ uses LResources
      , u_xpl_header
      , u_xpl_schema
      , u_xpl_common
-     , DateUtils
      , typinfo
      ;
 

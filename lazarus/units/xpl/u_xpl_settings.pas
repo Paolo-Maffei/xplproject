@@ -41,7 +41,7 @@ type TAppCollection = specialize TFPGMap<string,TxPLAddress>;
         function  Get_ListenOnAll     : boolean;
         function  Get_ListenToAny     : boolean;
         function  Get_ListenToLocal   : boolean;
-        function Get_ProxyEnable: boolean;
+        function  Get_ProxyEnable: boolean;
         procedure Set_ListenOnAll      (const bValue : boolean); inline;
         procedure Set_ListenToLocal    (const bValue : boolean); inline;
         procedure Set_ListenToAny      (const bValue : boolean); inline;
@@ -79,6 +79,7 @@ uses SysUtils
      , StrUtils
      , u_xpl_application
      , uxPLConst
+     , u_xpl_common
      ;
 
 const // Registry Key and values constants =============================================

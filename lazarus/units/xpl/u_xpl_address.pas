@@ -12,7 +12,9 @@ unit u_xpl_address;
  3.00 : Inherits from TPersistent
 }
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 
@@ -25,12 +27,12 @@ type // TxPLAddress ===========================================================
      TxPLAddress = class(TxPLRawSet)
      private
         function Get_VD: string;
-        procedure Set_RawxPL(const aValue: string); dynamic;
-        function  Get_RawxPL : string; dynamic;
+        procedure Set_RawxPL(const aValue: string); virtual;
+        function  Get_RawxPL : string; virtual;
         procedure Set_VD(const AValue: string);
      public
-        constructor Create(const axPLAddress : TxPLAddress);
-        constructor Create(const aVendor : string = ''; const aDevice : string = ''; aInstance : string = '' );
+        constructor Create(const axPLAddress : TxPLAddress); overload;
+        constructor Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' ); overload;
         procedure   ResetValues;  override;
 
         function    AsFilter : string; dynamic;
@@ -44,8 +46,8 @@ type // TxPLAddress ===========================================================
         property Vendor   : string index 0 read Get_Element write Set_Element;
         property Device   : string index 1 read Get_Element write Set_Element;
         property Instance : string index 2 read Get_Element write Set_Element;
-        property VD       : string         read Get_VD write Set_VD stored false;
-        property RawxPL   : string         read Get_RawxPL write Set_RawxPL stored false;
+        property VD       : string         read Get_VD      write Set_VD     stored false;
+        property RawxPL   : string         read Get_RawxPL  write Set_RawxPL stored false;
      end;
 
     // TxPLTargetAddress ======================================================
@@ -72,8 +74,8 @@ type // TxPLAddress ===========================================================
 const K_ADDR_ANY_TARGET = '*';
 
 implementation // =============================================================
-uses cRandom
-     , pwHostName
+uses IdStack
+     , JCLStrings
      , SysUtils
      , StrUtils
      ;
@@ -86,12 +88,18 @@ const K_LEN : Array [0..2] of integer = (8,8,16);                              /
 // General Helper function ====================================================
 class function TxPLAddress.RandomInstance : string;
 begin
-   result := AnsiLowerCase(RandomAlphaStr(K_LEN[1]));                          // Longueur volontairement limitée à 8 chars
+   result := AnsiLowerCase(RandString(K_LEN[1]));                          // Longueur volontairement limitée à 8 chars
 end;
 
 class function TxPLAddress.HostNmInstance : string;
 begin
-   result := AnsiLowerCase(InetSelfName);
+   TIdStack.IncUsage;
+   try
+       Result := AnsiLowerCase(GStack.HostName);
+   finally
+       TIdStack.DecUsage;
+   end;                                                                        // Old method using pwhostname, replaced by Indy
+   //result := AnsiLowerCase(InetSelfName);
 end;
 
 // ============================================================================
@@ -102,7 +110,7 @@ begin
 end;
 
 // TxPLAddress Object =========================================================
-constructor TxPLAddress.Create(const aVendor : string; const aDevice : string; aInstance : string = '' );
+constructor TxPLAddress.Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' );
 begin
    inherited Create;
    Vendor   := aVendor;

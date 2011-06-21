@@ -69,7 +69,7 @@ type // TxPLBody ==============================================================
 implementation {===============================================================}
 uses sysutils,
      strutils,
-     uRegExpr,
+     //uRegExpr,
      uxPLConst;
 
 type StringArray = Array of string;
@@ -189,9 +189,9 @@ begin
    result := '';
 
    for i:= 0 to ItemCount-1 do begin
-       result += Keys[i] + '=';
-       if i<Values.Count then result += Values[i];
-       result += #10;
+       result := Result + Keys[i] + '=';
+       if i<Values.Count then result := Result + Values[i];
+       result := Result + #10;
    end;
    result := Format(K_MSG_BODY_FORMAT,[result]);
 end;
@@ -214,8 +214,8 @@ begin
    i := Keys.IndexOf(aKeyValue);
    if i>=0 then begin
                 result := Values[i];
-                for c:=i+1 to Keys.Count-1 do                                   // 1.02 : iterate through other parameters
-                    if Keys[c]=aKeyValue then result += Values[c]               // to find other lines with the same key
+                for c:=i+1 to Keys.Count-1 do                                  // 1.02 : iterate through other parameters
+                    if Keys[c]=aKeyValue then result := Result + Values[c]     // to find other lines with the same key
            end
            else result := aDefVal;
 end;
@@ -263,19 +263,28 @@ begin
 end;
 
 procedure TxPLBody.Set_RawxPL(const AValue: string);
+var sl : tstringlist;
+    ch : string;
 begin
    ResetValues;
-   with TRegExpr.Create do try
-        Expression := K_RE_BODY_FORMAT;
-        if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
-           Expression := K_RE_BODY_LINE;
-           Exec(Match[1]);
-           repeat
-                 AddKeyValue(Match[1]);
-           until not ExecNext;
-        end;
-        finally free;
-     end;
+   sl := TStringList.Create;
+   sl.Delimiter:=#10;                                                          // use LF as delimiter
+   sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
+   sl.Delete(0);                                                               // Drop leading {
+   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
+   for ch in sl do if ch<>'' then AddKeyValue(ch);
+   sl.free;
+   //with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
+   //     Expression := K_RE_BODY_FORMAT;
+   //     if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
+   //        Expression := K_RE_BODY_LINE;
+   //        Exec(Match[1]);
+   //        repeat
+   //              AddKeyValue(Match[1]);
+   //        until not ExecNext;
+   //     end;
+   //     finally free;
+   //  end;
 end;
 
 initialization
