@@ -145,7 +145,7 @@ begin
    InitKeyboard;
    bAlreadySetup := false;
 
-   xPLClient := TxPLCustomListener.Create(nil,'alice','clinique','4.0.0');
+   xPLClient := TxPLCustomListener.Create(nil);
 
    xPLClient.OnxPLConfigDone := @OnConfigDone;
    xPLClient.OnxPLReceived   := @OnCmndReceived;

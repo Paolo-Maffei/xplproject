@@ -10,6 +10,8 @@ uses
   app_main;
 
 
+{$R *.res}
+
 begin
   MyAliceApp.Run;
   MyAliceApp.Free;

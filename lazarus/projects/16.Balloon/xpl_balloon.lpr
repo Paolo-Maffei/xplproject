@@ -27,7 +27,7 @@ begin
   Application.Initialize;
   Application.ShowMainForm:=false;
 
-  xPLApplication :=   TxPLCustomListener.Create(nil,'balloon','clinique','4.0.0');
+  xPLApplication := TxPLCustomListener.Create(nil);
   xPLGUIResource := TxPLGUIResource.Create;
 
   Application.CreateForm(TFrmBalloon, FrmBalloon);

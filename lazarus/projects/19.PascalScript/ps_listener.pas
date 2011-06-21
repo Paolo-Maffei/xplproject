@@ -88,7 +88,6 @@ uses u_xpl_common
      ;
 
 const //=======================================================================
-     rsPSScript = 'psscript';
      rsScriptFile = 'scriptfile';
 
 // ============================================================================
@@ -100,7 +99,7 @@ end;
 // TxPLPSListener =============================================================
 constructor TxPLPSListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(aOwner,rsPSScript,'clinique','4.0.0');
+   inherited Create(aOwner);
    OnxPLJoinedNet := @Joined;
 
    fGlobalList := TxPLGlobals.Create(self);

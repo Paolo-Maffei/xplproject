@@ -126,7 +126,7 @@ end;
 
 constructor TxPLfreeListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(aOwner,'free','clinique','4.0.0');
+   inherited Create(aOwner);
 
    fConnString := '';
    Stream := TMemoryStream.Create;

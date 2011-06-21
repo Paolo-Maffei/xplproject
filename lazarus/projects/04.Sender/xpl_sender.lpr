@@ -12,7 +12,6 @@ uses
   {$ENDIF}
   Interfaces,
   Forms,
-  xpl_win,
   u_xPL_Message,
   uxPLConst,
   u_xml_plugins,
@@ -31,7 +30,7 @@ begin
   Application.Title:='xPL Sender';
   Application.Initialize;
 
-  xPLApplication := TxPLSender.Create(nil,'sender','clinique','4.0.0');
+  xPLApplication := TxPLSender.Create(nil);
   xPLGUIResource := TxPLGUIResource.Create;
   xPLMessageGUI  := TxPLMessageGUI.Create(xPLApplication,'');
 

@@ -14,6 +14,8 @@ uses
 var MyPSScriptApp : TxPLConsoleApp;
     Listener : TxPLPSListener;
 
+{$R *.res}
+
 begin
    MyPSScriptApp := TxPLConsoleApp.Create(nil);
    Listener := TxPLPSListener.Create(MyPSScriptApp);

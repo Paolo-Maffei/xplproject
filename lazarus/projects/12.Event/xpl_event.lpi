@@ -30,7 +30,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="9">
+    <RequiredPackages Count="8">
       <Item1>
         <PackageName Value="ZVDateTimeCtrls"/>
         <MinVersion Major="1" Minor="2" Valid="True"/>
@@ -54,21 +54,19 @@
         <MinVersion Minor="1" Valid="True"/>
       </Item6>
       <Item7>
-        <PackageName Value="xpl_win"/>
-      </Item7>
-      <Item8>
         <PackageName Value="IDEIntf"/>
         <MinVersion Major="1" Valid="True"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <PackageName Value="LCL"/>
-      </Item9>
+      </Item8>
     </RequiredPackages>
-    <Units Count="277">
+    <Units Count="281">
       <Unit0>
         <Filename Value="xpl_event.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_event"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -82,7 +80,7 @@
         <ComponentName Value="frmevent"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_event"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="64" Y="100"/>
@@ -1263,12 +1261,10 @@
       <Unit154>
         <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="193"/>
         <CursorPos X="69" Y="209"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit154>
       <Unit155>
         <Filename Value="C:\lazarus\fpc\2.4.2\source\packages\fcl-base\src\fpevent.pp"/>
@@ -1369,11 +1365,10 @@
         <Filename Value="event_listener.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="event_listener"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="81"/>
-        <CursorPos X="77" Y="91"/>
+        <TopLine Value="1"/>
+        <CursorPos X="19" Y="12"/>
         <UsageCount Value="134"/>
         <Loaded Value="True"/>
       </Unit167>
@@ -2036,12 +2031,10 @@
       <Unit249>
         <Filename Value="..\..\..\..\components\jvcllaz\run\JvScheduledEvents.pas"/>
         <UnitName Value="JvScheduledEvents"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="244"/>
         <CursorPos X="29" Y="260"/>
         <UsageCount Value="47"/>
-        <Loaded Value="True"/>
       </Unit249>
       <Unit250>
         <Filename Value="..\..\..\..\components\jvcllaz\packages\jvclinport.pas"/>
@@ -2074,12 +2067,10 @@
       <Unit253>
         <Filename Value="..\..\..\..\components\jvcllaz\run\JclSchedule.pas"/>
         <UnitName Value="JclSchedule"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="33"/>
         <CursorPos X="3" Y="49"/>
         <UsageCount Value="47"/>
-        <Loaded Value="True"/>
       </Unit253>
       <Unit254>
         <Filename Value="C:\pp\packages\fcl-base\src\contnrs.pp"/>
@@ -2266,8 +2257,47 @@
         <CursorPos X="1" Y="150"/>
         <UsageCount Value="10"/>
       </Unit276>
+      <Unit277>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="8" Y="10"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit277>
+      <Unit278>
+        <Filename Value="..\..\..\components\jvcllaz\run\JvScheduledEvents.pas"/>
+        <UnitName Value="JvScheduledEvents"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="2" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit278>
+      <Unit279>
+        <Filename Value="..\..\..\components\jvcllaz\run\JvPluginManager.pas"/>
+        <UnitName Value="JvPluginManager"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="58"/>
+        <CursorPos X="8" Y="74"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit279>
+      <Unit280>
+        <Filename Value="..\..\..\components\jvcllaz\common\jvcl.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit280>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="xpl_event.lpr"/>
         <Caret Line="24" Column="1" TopLine="5"/>
@@ -2309,89 +2339,85 @@
         <Caret Line="85" Column="29" TopLine="57"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="63" Column="69" TopLine="55"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="85" Column="48" TopLine="64"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="76" Column="17" TopLine="60"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="14" Column="20" TopLine="1"/>
       </Position12>
       <Position13>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="85" Column="48" TopLine="64"/>
+        <Caret Line="49" Column="16" TopLine="24"/>
       </Position13>
       <Position14>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="14" Column="20" TopLine="1"/>
+        <Caret Line="81" Column="19" TopLine="64"/>
       </Position14>
       <Position15>
-        <Filename Value="event_listener.pas"/>
-        <Caret Line="49" Column="16" TopLine="24"/>
+        <Filename Value="xpl_event.lpr"/>
+        <Caret Line="16" Column="12" TopLine="1"/>
       </Position15>
       <Position16>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="81" Column="19" TopLine="64"/>
+        <Caret Line="94" Column="8" TopLine="64"/>
       </Position16>
       <Position17>
-        <Filename Value="xpl_event.lpr"/>
-        <Caret Line="16" Column="12" TopLine="1"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="88" Column="28" TopLine="70"/>
       </Position17>
       <Position18>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="94" Column="8" TopLine="64"/>
+        <Caret Line="12" Column="19" TopLine="1"/>
       </Position18>
       <Position19>
-        <Filename Value="event_listener.pas"/>
-        <Caret Line="88" Column="28" TopLine="70"/>
+        <Filename Value="frm_event.pas"/>
+        <Caret Line="97" Column="45" TopLine="80"/>
       </Position19>
       <Position20>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="12" Column="19" TopLine="1"/>
+        <Caret Line="90" Column="57" TopLine="73"/>
       </Position20>
       <Position21>
-        <Filename Value="frm_event.pas"/>
-        <Caret Line="97" Column="45" TopLine="80"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="89" Column="54" TopLine="73"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JvScheduledEvents.pas"/>
-        <Caret Line="260" Column="32" TopLine="244"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="49" Column="19" TopLine="34"/>
       </Position22>
       <Position23>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JclSchedule.pas"/>
-        <Caret Line="100" Column="46" TopLine="74"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position23>
       <Position24>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JvScheduledEvents.pas"/>
-        <Caret Line="260" Column="30" TopLine="244"/>
+        <Filename Value="event_listener.pas"/>
+        <Caret Line="91" Column="77" TopLine="81"/>
       </Position24>
       <Position25>
         <Filename Value="event_listener.pas"/>
-        <Caret Line="90" Column="57" TopLine="73"/>
+        <Caret Line="12" Column="19" TopLine="1"/>
       </Position25>
       <Position26>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JvScheduledEvents.pas"/>
-        <Caret Line="260" Column="29" TopLine="244"/>
+        <Filename Value="..\..\..\components\jvcllaz\run\JvPluginManager.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="event_listener.pas"/>
-        <Caret Line="89" Column="54" TopLine="73"/>
+        <Filename Value="..\..\..\components\jvcllaz\run\JvPluginManager.pas"/>
+        <Caret Line="74" Column="8" TopLine="58"/>
       </Position27>
       <Position28>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JclSchedule.pas"/>
-        <Caret Line="100" Column="40" TopLine="74"/>
+        <Filename Value="xpl_event.lpr"/>
+        <Caret Line="18" Column="1" TopLine="1"/>
       </Position28>
-      <Position29>
-        <Filename Value="event_listener.pas"/>
-        <Caret Line="49" Column="19" TopLine="34"/>
-      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="10"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;C:\lazarus\components\pl_Indy\source\;..\..\..\..\components\jcl-2.2.1.3886\source\include;..\..\..\..\components\jvcl\common"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\..\components\jvcllaz\run;..\..\..\..\components\powtils;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;..\..\..\units\general\ssversionchecker;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\pp\packages\fcl-base\src\;C:\lazarus\components\pl_Indy\source\base\;..\..\..\..\components\jvcllaz\packages"/>
+      <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\pp\packages\fcl-base\src\;C:\lazarus\components\pl_Indy\source\base\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\"/>
       <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>

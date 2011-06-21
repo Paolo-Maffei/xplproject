@@ -9,7 +9,10 @@
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
-      <StringTable ProductVersion=""/>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="4"/>
+      <StringTable CompanyName="clinique" FileDescription="sql" InternalName="sql" ProductName="sql" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -850,12 +853,10 @@
       <Unit102>
         <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
         <UnitName Value="u_xpl_config"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="264"/>
         <CursorPos X="4" Y="48"/>
         <UsageCount Value="33"/>
-        <Loaded Value="True"/>
       </Unit102>
       <Unit103>
         <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
@@ -868,12 +869,10 @@
       <Unit104>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <UnitName Value="u_xpl_custom_listener"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="115"/>
         <CursorPos X="28" Y="134"/>
         <UsageCount Value="64"/>
-        <Loaded Value="True"/>
       </Unit104>
       <Unit105>
         <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
@@ -1039,8 +1038,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="19" Y="26"/>
+        <TopLine Value="126"/>
+        <CursorPos X="47" Y="82"/>
         <UsageCount Value="169"/>
         <Loaded Value="True"/>
       </Unit125>
@@ -1375,12 +1374,10 @@
       <Unit166>
         <Filename Value="..\..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit166>
       <Unit167>
         <Filename Value="C:\lazarus\components\pl_Moon\pl_mooncomp.pas"/>
@@ -2109,7 +2106,7 @@
         <UsageCount Value="10"/>
       </Unit255>
     </Units>
-    <JumpHistory Count="25" HistoryIndex="24">
+    <JumpHistory Count="23" HistoryIndex="22">
       <Position1>
         <Filename Value="sql_listener.pas"/>
         <Caret Line="154" Column="1" TopLine="140"/>
@@ -2171,45 +2168,37 @@
         <Caret Line="20" Column="38" TopLine="4"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="49" Column="34" TopLine="43"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="104" Column="26" TopLine="97"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="105" Column="26" TopLine="95"/>
-      </Position18>
-      <Position19>
         <Filename Value="xpl_sql.lpr"/>
         <Caret Line="23" Column="2" TopLine="5"/>
-      </Position19>
-      <Position20>
+      </Position16>
+      <Position17>
         <Filename Value="xpl_sql.lpr"/>
         <Caret Line="10" Column="23" TopLine="2"/>
+      </Position17>
+      <Position18>
+        <Filename Value="sql_listener.pas"/>
+        <Caret Line="39" Column="12" TopLine="22"/>
+      </Position18>
+      <Position19>
+        <Filename Value="sql_listener.pas"/>
+        <Caret Line="189" Column="1" TopLine="177"/>
+      </Position19>
+      <Position20>
+        <Filename Value="sql_listener.pas"/>
+        <Caret Line="95" Column="23" TopLine="87"/>
       </Position20>
       <Position21>
         <Filename Value="sql_listener.pas"/>
-        <Caret Line="39" Column="12" TopLine="22"/>
+        <Caret Line="145" Column="224" TopLine="125"/>
       </Position21>
       <Position22>
         <Filename Value="sql_listener.pas"/>
-        <Caret Line="189" Column="1" TopLine="177"/>
+        <Caret Line="162" Column="53" TopLine="133"/>
       </Position22>
       <Position23>
         <Filename Value="sql_listener.pas"/>
-        <Caret Line="95" Column="23" TopLine="87"/>
+        <Caret Line="26" Column="19" TopLine="9"/>
       </Position23>
-      <Position24>
-        <Filename Value="sql_listener.pas"/>
-        <Caret Line="145" Column="224" TopLine="125"/>
-      </Position24>
-      <Position25>
-        <Filename Value="sql_listener.pas"/>
-        <Caret Line="162" Column="53" TopLine="133"/>
-      </Position25>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

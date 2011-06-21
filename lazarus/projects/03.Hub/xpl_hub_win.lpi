@@ -36,16 +36,15 @@
         <PackageName Value="pl_indycomp"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="174">
+    <Units Count="175">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_hub"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="31"/>
+        <CursorPos X="27" Y="18"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -655,8 +654,8 @@
         <UnitName Value="u_xpl_hub"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="85"/>
-        <CursorPos X="21" Y="13"/>
+        <TopLine Value="1"/>
+        <CursorPos X="24" Y="11"/>
         <UsageCount Value="25"/>
         <Loaded Value="True"/>
       </Unit81>
@@ -1297,6 +1296,7 @@
       <Unit164>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="207"/>
@@ -1378,8 +1378,16 @@
         <CursorPos X="10" Y="99"/>
         <UsageCount Value="10"/>
       </Unit173>
+      <Unit174>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_message.pas"/>
+        <UnitName Value="u_xpl_custom_message"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit174>
     </Units>
-    <JumpHistory Count="27" HistoryIndex="26">
+    <JumpHistory Count="29" HistoryIndex="28">
       <Position1>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <Caret Line="183" Column="3" TopLine="177"/>
@@ -1488,6 +1496,14 @@
         <Filename Value="xpl_hub.lpr"/>
         <Caret Line="21" Column="1" TopLine="1"/>
       </Position27>
+      <Position28>
+        <Filename Value="xpl_hub.lpr"/>
+        <Caret Line="18" Column="27" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\..\units\xpl\u_xpl_hub.pas"/>
+        <Caret Line="11" Column="24" TopLine="1"/>
+      </Position29>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

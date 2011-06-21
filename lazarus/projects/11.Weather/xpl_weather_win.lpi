@@ -405,52 +405,42 @@
       <Unit45>
         <Filename Value="..\..\..\units\xpl\u_xpl_web_listener.pas"/>
         <UnitName Value="u_xPL_Web_Listener"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="61"/>
         <CursorPos X="16" Y="78"/>
         <UsageCount Value="105"/>
-        <Loaded Value="True"/>
       </Unit45>
       <Unit46>
         <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
         <UnitName Value="u_xpl_listener"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="98"/>
         <CursorPos X="1" Y="114"/>
         <UsageCount Value="106"/>
-        <Loaded Value="True"/>
       </Unit46>
       <Unit47>
         <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
         <UnitName Value="u_xpl_config"/>
-        <EditorIndex Value="14"/>
         <WindowIndex Value="0"/>
         <TopLine Value="81"/>
         <CursorPos X="1" Y="106"/>
         <UsageCount Value="103"/>
-        <Loaded Value="True"/>
       </Unit47>
       <Unit48>
         <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
         <UnitName Value="u_xpl_address"/>
-        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="110"/>
         <CursorPos X="1" Y="135"/>
         <UsageCount Value="100"/>
-        <Loaded Value="True"/>
       </Unit48>
       <Unit49>
         <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="241"/>
         <CursorPos X="1" Y="195"/>
         <UsageCount Value="100"/>
-        <Loaded Value="True"/>
       </Unit49>
       <Unit50>
         <Filename Value="..\..\..\units\general\udownloader.pas"/>
@@ -495,12 +485,10 @@
       <Unit55>
         <Filename Value="..\..\..\units\xpl\u_configuration_record.pas"/>
         <UnitName Value="u_Configuration_Record"/>
-        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="69"/>
         <CursorPos X="1" Y="96"/>
         <UsageCount Value="101"/>
-        <Loaded Value="True"/>
       </Unit55>
       <Unit56>
         <Filename Value="..\..\..\units\xpl\u_xpl_application.pas"/>
@@ -532,17 +520,15 @@
         <Filename Value="..\..\..\..\components\superobjectv1.2.4\superobject.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="superobject"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="547"/>
         <CursorPos X="15" Y="503"/>
         <UsageCount Value="200"/>
-        <Loaded Value="True"/>
       </Unit59>
       <Unit60>
         <Filename Value="C:\pp\packages\fcl-json\src\fpjsonrtti.pp"/>
         <UnitName Value="fpjsonrtti"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
         <CursorPos X="3" Y="35"/>
@@ -552,7 +538,7 @@
       <Unit61>
         <Filename Value="C:\pp\packages\fcl-json\src\fpjson.pp"/>
         <UnitName Value="fpjson"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="62"/>
         <CursorPos X="14" Y="78"/>
@@ -561,7 +547,7 @@
       </Unit61>
       <Unit62>
         <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="364"/>
         <CursorPos X="27" Y="380"/>
@@ -570,7 +556,7 @@
       </Unit62>
       <Unit63>
         <Filename Value="C:\pp\rtl\inc\objpash.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="180"/>
         <CursorPos X="8" Y="187"/>
@@ -580,12 +566,10 @@
       <Unit64>
         <Filename Value="..\..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="34"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit64>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
