@@ -72,8 +72,7 @@ var
   frmConfigurator: TfrmConfigurator;
 
 implementation // =============================================================
-uses DateUtils
-     , frm_about
+uses frm_about
      , uxPLConst
      , uRegExpr
      , frm_xplappslauncher

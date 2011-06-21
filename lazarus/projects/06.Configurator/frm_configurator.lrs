@@ -61,22 +61,23 @@ LazarusResources.Add('TfrmConfigurator','FORMDATA',[
   +'Expand'#17'tvoAutoItemHeight'#16'tvoHideSelection'#21'tvoKeepCollapsedNodes'
   +#14'tvoShowButtons'#12'tvoShowLines'#11'tvoShowRoot'#11'tvoToolTips'#13'tvoT'
   +'hemedDraw'#0#0#0#243#2#6#11'TActionList'#10'ActionList'#4'left'#2#16#3'top'
-  +#2' '#0#0#243#2#7#10'TPopupMenu'#7'xPLMenu'#4'left'#2#16#3'top'#2'X'#0#0#242
-  +#2#8#17'TxPLMsgSaveDialog'#13'xPLMsgSaveDlg'#10'DefaultExt'#6#4'.xpl'#6'Filt'
-  +'er'#6'0xPL Message File|*.xpl|xPL Config File|xpl_*.xml'#11'FilterIndex'#2#2
-  +#4'left'#2'p'#3'top'#2' '#0#0#242#2#9#17'TxPLMsgOpenDialog'#11'OpenMessage'
-  ,#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.xpl|xPL Config Fil'
-  +'e|xpl_*.xml'#4'left'#2'p'#3'top'#2'X'#0#0#242#2#10#11'TActionList'#13'AppAc'
-  +'tionList'#4'left'#2#16#3'top'#3#160#0#0#7'TAction'#17'acDiscoverNetwork'#7
-  +'Caption'#6#16'Discover Network'#10'ImageIndex'#2#4#9'OnExecute'#7#24'acDisc'
-  +'overNetworkExecute'#0#0#7'TAction'#15'acRequestConfig'#8'Category'#6#3'xPL'
-  +#7'Caption'#6#21'Request Configuration'#9'OnExecute'#7#22'acRequestConfigExe'
-  +'cute'#0#0#7'TAction'#12'acSaveConfig'#7'Caption'#6#4'Save'#10'ImageIndex'#2
-  +#3#9'OnExecute'#7#19'acSaveConfigExecute'#0#0#7'TAction'#12'acLoadConfig'#7
-  +'Caption'#6#4'Load'#10'ImageIndex'#2#17#9'OnExecute'#7#19'acLoadConfigExecut'
-  +'e'#0#0#7'TAction'#12'acSendConfig'#7'Caption'#6#4'Send'#10'ImageIndex'#2#6#9
-  +'OnExecute'#7#19'acSendConfigExecute'#0#0#7'TAction'#7'acClear'#8'Category'#6
-  +#3'xPL'#7'Caption'#6#10'Clear list'#10'ImageIndex'#2#25#9'OnExecute'#7#14'ac'
-  +'ClearExecute'#0#0#0#242#2#11#12'TJvAppEvents'#12'JvAppEvents1'#6'OnIdle'#7
-  +#16'JvAppEvents1Idle'#4'left'#3#148#1#3'top'#2'E'#0#0#0
+  +#2' '#0#0#243#2#7#10'TPopupMenu'#7'xPLMenu'#4'left'#2#16#3'top'#2'X'#0#0#243
+  +#2#8#15'TXMLPropStorage'#14'XMLPropStorage'#0#0#242#2#9#17'TxPLMsgSaveDialog'
+  +#13'xPLMsgSaveDlg'#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.'
+  +'xpl|xPL Config File|xpl_*.xml'#11'FilterIndex'#2#2#4'left'#2'p'#3'top'#2' '
+  ,#0#0#242#2#10#17'TxPLMsgOpenDialog'#11'OpenMessage'#10'DefaultExt'#6#4'.xpl'
+  +#6'Filter'#6'0xPL Message File|*.xpl|xPL Config File|xpl_*.xml'#4'left'#2'p'
+  +#3'top'#2'X'#0#0#242#2#11#11'TActionList'#13'AppActionList'#4'left'#2#16#3't'
+  +'op'#3#160#0#0#7'TAction'#17'acDiscoverNetwork'#7'Caption'#6#16'Discover Net'
+  +'work'#10'ImageIndex'#2#4#9'OnExecute'#7#24'acDiscoverNetworkExecute'#0#0#7
+  +'TAction'#15'acRequestConfig'#8'Category'#6#3'xPL'#7'Caption'#6#21'Request C'
+  +'onfiguration'#9'OnExecute'#7#22'acRequestConfigExecute'#0#0#7'TAction'#12'a'
+  +'cSaveConfig'#7'Caption'#6#4'Save'#10'ImageIndex'#2#3#9'OnExecute'#7#19'acSa'
+  +'veConfigExecute'#0#0#7'TAction'#12'acLoadConfig'#7'Caption'#6#4'Load'#10'Im'
+  +'ageIndex'#2#17#9'OnExecute'#7#19'acLoadConfigExecute'#0#0#7'TAction'#12'acS'
+  +'endConfig'#7'Caption'#6#4'Send'#10'ImageIndex'#2#6#9'OnExecute'#7#19'acSend'
+  +'ConfigExecute'#0#0#7'TAction'#7'acClear'#8'Category'#6#3'xPL'#7'Caption'#6
+  +#10'Clear list'#10'ImageIndex'#2#25#9'OnExecute'#7#14'acClearExecute'#0#0#0
+  +#242#2#12#12'TJvAppEvents'#12'JvAppEvents1'#6'OnIdle'#7#16'JvAppEvents1Idle'
+  +#4'left'#3#148#1#3'top'#2'E'#0#0#0
 ]);

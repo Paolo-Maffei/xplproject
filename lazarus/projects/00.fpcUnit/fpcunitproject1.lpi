@@ -40,7 +40,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="17">
+    <Units Count="35">
       <Unit0>
         <Filename Value="fpcunitproject1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -48,18 +48,17 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="72" Y="6"/>
-        <UsageCount Value="163"/>
+        <UsageCount Value="172"/>
       </Unit0>
       <Unit1>
         <Filename Value="testcase1.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="TestCase1"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="51"/>
-        <CursorPos X="37" Y="74"/>
-        <UsageCount Value="163"/>
+        <TopLine Value="137"/>
+        <CursorPos X="32" Y="112"/>
+        <UsageCount Value="172"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -67,25 +66,23 @@
         <UnitName Value="uxPLSchema"/>
         <TopLine Value="71"/>
         <CursorPos X="25" Y="11"/>
-        <UsageCount Value="9"/>
+        <UsageCount Value="8"/>
       </Unit2>
       <Unit3>
         <Filename Value="..\..\units\xpl\u_xpl_body.pas"/>
         <UnitName Value="u_xpl_body"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="37"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="215"/>
+        <CursorPos X="1" Y="277"/>
+        <UsageCount Value="10"/>
       </Unit3>
       <Unit4>
         <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="79" Y="46"/>
-        <UsageCount Value="81"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="80"/>
       </Unit4>
       <Unit5>
         <Filename Value="..\..\..\units\xpl\u_xpl_collection.pas"/>
@@ -93,24 +90,22 @@
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="20" Y="8"/>
-        <UsageCount Value="80"/>
+        <UsageCount Value="79"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
         <UnitName Value="u_xpl_address"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="139"/>
         <CursorPos X="69" Y="120"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="10"/>
       </Unit6>
       <Unit7>
         <Filename Value="C:\pp\rtl\objpas\strutils.pp"/>
         <UnitName Value="strutils"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="32"/>
-        <CursorPos X="10" Y="44"/>
+        <TopLine Value="41"/>
+        <CursorPos X="10" Y="57"/>
         <UsageCount Value="80"/>
       </Unit7>
       <Unit8>
@@ -119,7 +114,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="3"/>
         <CursorPos X="41" Y="24"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit8>
       <Unit9>
         <Filename Value="C:\pp\rtl\win\sysutils.pp"/>
@@ -127,7 +122,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="77"/>
       </Unit9>
       <Unit10>
         <Filename Value="..\..\..\..\components\jvcllaz\run\JclStrings.pas"/>
@@ -135,7 +130,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="38"/>
         <CursorPos X="7" Y="60"/>
-        <UsageCount Value="78"/>
+        <UsageCount Value="77"/>
       </Unit10>
       <Unit11>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_message.pas"/>
@@ -143,7 +138,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="64"/>
         <CursorPos X="32" Y="27"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="74"/>
       </Unit11>
       <Unit12>
         <Filename Value="C:\lazarus\components\fpcunit\guitestrunner.pas"/>
@@ -153,7 +148,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="42" Y="34"/>
-        <UsageCount Value="152"/>
+        <UsageCount Value="161"/>
       </Unit12>
       <Unit13>
         <Filename Value="C:\lazarus\components\synedit\synhighlighterxml.pas"/>
@@ -162,7 +157,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="152"/>
+        <UsageCount Value="161"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
@@ -170,14 +165,14 @@
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="6" Y="69"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit14>
       <Unit15>
         <Filename Value="..\..\..\..\components\jvcllaz\common\jcl.inc"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit15>
       <Unit16>
         <Filename Value="..\..\..\units\xpl\u_xpl_globals.pas"/>
@@ -185,129 +180,290 @@
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="9"/>
       </Unit16>
+      <Unit17>
+        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
+        <UnitName Value="u_xPL_Schema"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="4" Y="13"/>
+        <UsageCount Value="13"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <UnitName Value="u_xpl_common"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="303"/>
+        <CursorPos X="25" Y="327"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="C:\pp\rtl\objpas\sysutils\osutilsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="33"/>
+        <CursorPos X="1" Y="55"/>
+        <UsageCount Value="12"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="..\..\units\general\fndUtl328\Utils\cUtils.pas"/>
+        <UnitName Value="cUtils"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="743"/>
+        <CursorPos X="3" Y="759"/>
+        <UsageCount Value="9"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="C:\pp\rtl\win32\classes.pp"/>
+        <UnitName Value="Classes"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="..\..\units\xpl\u_xpl_datetime.pas"/>
+        <UnitName Value="u_xpl_datetime"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="41"/>
+        <CursorPos X="1" Y="54"/>
+        <UsageCount Value="22"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdDateTimeStamp.pas"/>
+        <UnitName Value="IdDateTimeStamp"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="391"/>
+        <CursorPos X="62" Y="400"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdException.pas"/>
+        <UnitName Value="IdException"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="147"/>
+        <CursorPos X="70" Y="170"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
+        <UnitName Value="u_xpl_collection"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="151"/>
+        <CursorPos X="54" Y="170"/>
+        <UsageCount Value="10"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="..\..\units\general\RegExpr\uRegExpr.pas"/>
+        <UnitName Value="uRegExpr"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="415"/>
+        <CursorPos X="37" Y="95"/>
+        <UsageCount Value="10"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
+        <UnitName Value="uxPLConst"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="91"/>
+        <CursorPos X="4" Y="107"/>
+        <UsageCount Value="10"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <UnitName Value="u_xpl_address"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="91"/>
+        <CursorPos X="123" Y="113"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="..\..\..\components\jvcllaz\run\JclStrings.pas"/>
+        <UnitName Value="JclStrings"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="121"/>
+        <CursorPos X="12" Y="121"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit29>
+      <Unit30>
+        <Filename Value="..\..\units\general\fndUtl328\Utils\cRandom.pas"/>
+        <UnitName Value="cRandom"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="42" Y="16"/>
+        <UsageCount Value="10"/>
+      </Unit30>
+      <Unit31>
+        <Filename Value="C:\pp\rtl\win\wininc\redef.inc"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit31>
+      <Unit32>
+        <Filename Value="..\..\..\components\powtils\pwhostname.pas"/>
+        <UnitName Value="pwhostname"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="14"/>
+        <CursorPos X="15" Y="30"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit32>
+      <Unit33>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <UnitName Value="IdGlobal"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit33>
+      <Unit34>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdStack.pas"/>
+        <UnitName Value="IdStack"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="322"/>
+        <CursorPos X="3" Y="338"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit34>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="135" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="77" Column="9" TopLine="54"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="136" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="92" Column="38" TopLine="72"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="137" Column="1" TopLine="116"/>
+        <Filename Value="C:\pp\rtl\win\wininc\redef.inc"/>
+        <Caret Line="759" Column="10" TopLine="743"/>
       </Position3>
       <Position4>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="138" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="92" Column="35" TopLine="72"/>
       </Position4>
       <Position5>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="139" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="77" Column="6" TopLine="66"/>
       </Position5>
       <Position6>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="138" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="91" Column="38" TopLine="75"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="139" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="78" Column="20" TopLine="75"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="138" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="77" Column="16" TopLine="63"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="139" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="96" Column="36" TopLine="75"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="142" Column="1" TopLine="116"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="78" Column="10" TopLine="75"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="254" Column="1" TopLine="238"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="85" Column="47" TopLine="73"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="255" Column="1" TopLine="238"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="573" Column="27" TopLine="553"/>
       </Position12>
       <Position13>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="96" Column="1" TopLine="85"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="574" Column="14" TopLine="553"/>
       </Position13>
       <Position14>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="97" Column="1" TopLine="85"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="575" Column="14" TopLine="553"/>
       </Position14>
       <Position15>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="146" Column="4" TopLine="121"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="576" Column="14" TopLine="553"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <Caret Line="136" Column="49" TopLine="120"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="578" Column="28" TopLine="553"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <Caret Line="60" Column="62" TopLine="37"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="579" Column="28" TopLine="553"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <Caret Line="152" Column="35" TopLine="126"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="580" Column="28" TopLine="554"/>
       </Position18>
       <Position19>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="95" Column="1" TopLine="76"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="758" Column="37" TopLine="732"/>
       </Position19>
       <Position20>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="258" Column="1" TopLine="233"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="764" Column="14" TopLine="738"/>
       </Position20>
       <Position21>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <Caret Line="42" Column="23" TopLine="22"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="780" Column="14" TopLine="754"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <Caret Line="159" Column="45" TopLine="137"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <Caret Line="796" Column="14" TopLine="770"/>
       </Position22>
       <Position23>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="46" Column="79" TopLine="24"/>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="98" Column="43" TopLine="84"/>
       </Position23>
       <Position24>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="95" Column="1" TopLine="76"/>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="84" Column="48" TopLine="69"/>
       </Position24>
       <Position25>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="96" Column="1" TopLine="76"/>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="327" Column="24" TopLine="303"/>
       </Position25>
       <Position26>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="97" Column="1" TopLine="76"/>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdStack.pas"/>
+        <Caret Line="338" Column="14" TopLine="322"/>
       </Position26>
       <Position27>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="98" Column="1" TopLine="76"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="101" Column="128" TopLine="81"/>
       </Position27>
       <Position28>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="95" Column="1" TopLine="76"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="98" Column="32" TopLine="82"/>
       </Position28>
       <Position29>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="111" Column="34" TopLine="95"/>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="327" Column="25" TopLine="303"/>
       </Position29>
       <Position30>
-        <Filename Value="testcase1.pas"/>
-        <Caret Line="97" Column="50" TopLine="85"/>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <Caret Line="98" Column="37" TopLine="58"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

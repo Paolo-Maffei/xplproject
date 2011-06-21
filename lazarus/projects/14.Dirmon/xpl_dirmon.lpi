@@ -9,7 +9,10 @@
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
-      <StringTable ProductVersion=""/>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="4"/>
+      <StringTable CompanyName="clinique" FileDescription="dirmon" InternalName="dirmon" ProductName="dirmon" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -50,7 +53,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="4" Y="25"/>
+        <CursorPos X="1" Y="13"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -791,12 +794,10 @@
       <Unit96>
         <Filename Value="..\..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="44"/>
         <CursorPos X="1" Y="21"/>
         <UsageCount Value="36"/>
-        <Loaded Value="True"/>
       </Unit96>
       <Unit97>
         <Filename Value="..\..\..\units\xpl\gui\frm_xplrecurdirmon.pas"/>
@@ -845,32 +846,26 @@
       <Unit102>
         <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
         <UnitName Value="u_xpl_config"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="195"/>
         <CursorPos X="1" Y="213"/>
         <UsageCount Value="34"/>
-        <Loaded Value="True"/>
       </Unit102>
       <Unit103>
         <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
         <UnitName Value="u_xpl_listener"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="33" Y="45"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit103>
       <Unit104>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <UnitName Value="u_xpl_custom_listener"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="274"/>
         <CursorPos X="31" Y="290"/>
         <UsageCount Value="65"/>
-        <Loaded Value="True"/>
       </Unit104>
       <Unit105>
         <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
@@ -930,12 +925,10 @@
       <Unit112>
         <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
         <UnitName Value="u_xPL_Header"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="134"/>
         <CursorPos X="1" Y="155"/>
         <UsageCount Value="35"/>
-        <Loaded Value="True"/>
       </Unit112>
       <Unit113>
         <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\objpas\classes\classesh.inc"/>
@@ -947,12 +940,10 @@
       <Unit114>
         <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="173"/>
         <CursorPos X="1" Y="195"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit114>
       <Unit115>
         <Filename Value="C:\lazarus\fpc\2.4.2\source\packages\fcl-base\src\fpdirmon.pp"/>
@@ -989,12 +980,10 @@
       <Unit119>
         <Filename Value="..\..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="15"/>
         <CursorPos X="36" Y="25"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit119>
       <Unit120>
         <Filename Value="..\..\..\units\xpl\gui\u_xpl_dirmon_gui.pas"/>
@@ -1042,8 +1031,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="104"/>
-        <CursorPos X="50" Y="111"/>
+        <TopLine Value="105"/>
+        <CursorPos X="27" Y="64"/>
         <UsageCount Value="170"/>
         <Loaded Value="True"/>
       </Unit125>
@@ -1378,12 +1367,10 @@
       <Unit166>
         <Filename Value="..\..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit166>
       <Unit167>
         <Filename Value="C:\lazarus\components\pl_Moon\pl_mooncomp.pas"/>
@@ -2002,7 +1989,6 @@
         <TopLine Value="58"/>
         <CursorPos X="42" Y="73"/>
         <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit242>
       <Unit243>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\parsedirmon\ZGenericdirmonAnalyser.pas"/>
@@ -2011,7 +1997,6 @@
         <TopLine Value="317"/>
         <CursorPos X="3" Y="320"/>
         <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit243>
       <Unit244>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\parsedirmon\ZMydirmonToken.pas"/>
@@ -2020,7 +2005,6 @@
         <TopLine Value="49"/>
         <CursorPos X="44" Y="61"/>
         <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit244>
       <Unit245>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\core\ZTokenizer.pas"/>
@@ -2038,7 +2022,6 @@
         <TopLine Value="223"/>
         <CursorPos X="40" Y="61"/>
         <UsageCount Value="9"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit246>
       <Unit247>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\core\ZCompatibility.pas"/>
@@ -2120,127 +2103,39 @@
         <UsageCount Value="10"/>
       </Unit256>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="8" HistoryIndex="7">
       <Position1>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="150" Column="1" TopLine="134"/>
-      </Position1>
-      <Position2>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="151" Column="1" TopLine="134"/>
-      </Position2>
-      <Position3>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="152" Column="1" TopLine="134"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="153" Column="1" TopLine="134"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="154" Column="1" TopLine="134"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="155" Column="1" TopLine="134"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="290" Column="44" TopLine="274"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="283" Column="51" TopLine="274"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="150" Column="1" TopLine="134"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="151" Column="1" TopLine="134"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="152" Column="1" TopLine="134"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="153" Column="1" TopLine="134"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="154" Column="1" TopLine="134"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="155" Column="1" TopLine="134"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
-        <Caret Line="211" Column="1" TopLine="195"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
-        <Caret Line="212" Column="1" TopLine="195"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
-        <Caret Line="213" Column="1" TopLine="195"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="284" Column="1" TopLine="274"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="107" Column="1" TopLine="91"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="108" Column="1" TopLine="91"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="110" Column="1" TopLine="91"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="112" Column="1" TopLine="91"/>
-      </Position22>
-      <Position23>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="124" Column="1" TopLine="108"/>
-      </Position23>
-      <Position24>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="72" Column="25" TopLine="45"/>
-      </Position24>
-      <Position25>
+      </Position1>
+      <Position2>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="30" Column="27" TopLine="13"/>
-      </Position25>
-      <Position26>
+      </Position2>
+      <Position3>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="151" Column="1" TopLine="143"/>
-      </Position26>
-      <Position27>
+      </Position3>
+      <Position4>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="140" Column="27" TopLine="134"/>
-      </Position27>
-      <Position28>
+      </Position4>
+      <Position5>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="142" Column="1" TopLine="126"/>
-      </Position28>
-      <Position29>
+      </Position5>
+      <Position6>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="148" Column="25" TopLine="132"/>
-      </Position29>
-      <Position30>
+      </Position6>
+      <Position7>
         <Filename Value="dirmon_listener.pas"/>
         <Caret Line="149" Column="113" TopLine="133"/>
-      </Position30>
+      </Position7>
+      <Position8>
+        <Filename Value="dirmon_listener.pas"/>
+        <Caret Line="111" Column="50" TopLine="104"/>
+      </Position8>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

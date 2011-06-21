@@ -11,7 +11,10 @@
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
-      <StringTable ProductVersion=""/>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="4"/>
+      <StringTable CompanyName="clinique" FileDescription="vendfile" InternalName="vendfile" ProductName="vendfile" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -46,15 +49,16 @@
         <PackageName Value="LCL"/>
       </Item5>
     </RequiredPackages>
-    <Units Count="117">
+    <Units Count="119">
       <Unit0>
         <Filename Value="app_vendor_files.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_vendor_files"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="13" Y="21"/>
+        <CursorPos X="1" Y="16"/>
         <UsageCount Value="120"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -65,8 +69,7 @@
         <ComponentName Value="frmvendorfiles"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_vendor_files"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="72"/>
         <CursorPos X="5" Y="72"/>
@@ -193,17 +196,15 @@
       <Unit17>
         <Filename Value="..\..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="27"/>
         <CursorPos X="41" Y="53"/>
         <UsageCount Value="87"/>
-        <Loaded Value="True"/>
       </Unit17>
       <Unit18>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
         <UnitName Value="Forms"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1627"/>
         <CursorPos X="3" Y="1639"/>
@@ -302,12 +303,10 @@
       <Unit32>
         <Filename Value="..\..\..\units\xpl\xml\u_xml_plugins.pas"/>
         <UnitName Value="u_xml_plugins"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="6" Y="37"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit32>
       <Unit33>
         <Filename Value="..\..\..\units\general\ssversionchecker\VersionChecker.pas"/>
@@ -319,12 +318,10 @@
       <Unit34>
         <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
         <UnitName Value="u_xpl_vendor_file"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="37"/>
         <CursorPos X="1" Y="39"/>
         <UsageCount Value="37"/>
-        <Loaded Value="True"/>
       </Unit34>
       <Unit35>
         <Filename Value="..\..\..\units\xpl\gui\frm_downloadfile.pas"/>
@@ -940,23 +937,39 @@
         <Filename Value="..\..\..\..\components\superobjectv1.2.4\superxmlparser.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="superxmlparser"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="33" Y="19"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
       </Unit115>
       <Unit116>
         <Filename Value="..\..\..\..\components\superobjectv1.2.4\superobject.pas"/>
         <UnitName Value="superobject"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="523"/>
         <CursorPos X="3" Y="493"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit116>
+      <Unit117>
+        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
+        <UnitName Value="u_xPL_Header"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="38" Y="17"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit117>
+      <Unit118>
+        <Filename Value="..\..\..\components\powtils\pwhostname.pas"/>
+        <UnitName Value="pwhostname"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="107"/>
+        <CursorPos X="36" Y="123"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit118>
     </Units>
     <JumpHistory Count="13" HistoryIndex="12">
       <Position1>
@@ -988,28 +1001,28 @@
         <Caret Line="21" Column="13" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="53" Column="41" TopLine="27"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="72" Column="6" TopLine="60"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="97" Column="30" TopLine="79"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="40" Column="34" TopLine="22"/>
-      </Position11>
-      <Position12>
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="158" Column="1" TopLine="146"/>
-      </Position12>
-      <Position13>
+      </Position8>
+      <Position9>
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="72" Column="5" TopLine="72"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\..\..\components\powtils\pwhostname.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position12>
+      <Position13>
+        <Filename Value="app_vendor_files.lpr"/>
+        <Caret Line="21" Column="13" TopLine="1"/>
       </Position13>
     </JumpHistory>
   </ProjectOptions>
@@ -1018,7 +1031,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);..\..\..\..\components\jvcllaz\common;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\..\components\jvcllaz\run;..\..\..\units\general\RegExpr;..\..\..\units\general\fndUtl328\Utils;..\..\..\units\general\ssversionchecker;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;..\..\..\..\components\superobjectv1.2.4"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\..\components\jvcllaz\run;..\..\..\units\general\RegExpr;..\..\..\units\general\fndUtl328\Utils;..\..\..\units\general\ssversionchecker;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;..\..\..\components\superobjectv1.2.4"/>
       <UnitOutputDirectory Value="C:\LazOut"/>
     </SearchPaths>
     <Parsing>
