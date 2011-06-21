@@ -16,12 +16,13 @@ begin
    Application.Title:='xPL Basic Settings';
    Application.Initialize;
 
-   xPLApplication := TxPLApplication.Create(Application);
+   xPLApplication := TxPLApplication.Create(nil);
    xPLGUIResource := TxPLGUIResource.Create;
 
    Application.CreateForm(TfrmBasicSettings, frmBasicSettings);
    Application.Run;
 
    xPLGUIResource.Free;
+//   xPLApplication.Free;
 end.
 

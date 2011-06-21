@@ -40,12 +40,11 @@
         <PackageName Value="LCL"/>
       </Item2>
     </RequiredPackages>
-    <Units Count="254">
+    <Units Count="263">
       <Unit0>
         <Filename Value="xpl_netget.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_netget"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
@@ -895,9 +894,10 @@
       <Unit116>
         <Filename Value="..\..\units\general\fndUtl328\Utils\cStrings.pas"/>
         <UnitName Value="cStrings"/>
-        <TopLine Value="489"/>
-        <CursorPos X="8" Y="495"/>
-        <UsageCount Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2242"/>
+        <CursorPos X="3" Y="2235"/>
+        <UsageCount Value="10"/>
       </Unit116>
       <Unit117>
         <Filename Value="..\..\units\xpl\uxplconfig.pas"/>
@@ -953,10 +953,12 @@
       <Unit124>
         <Filename Value="..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="169"/>
-        <CursorPos X="56" Y="184"/>
+        <TopLine Value="1"/>
+        <CursorPos X="20" Y="20"/>
         <UsageCount Value="46"/>
+        <Loaded Value="True"/>
       </Unit124>
       <Unit125>
         <Filename Value="..\..\units\general\RegExpr\RegExpr.pas"/>
@@ -1247,11 +1249,11 @@
         <Filename Value="app_main.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_main"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="145"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="66"/>
+        <TopLine Value="1"/>
+        <CursorPos X="21" Y="13"/>
+        <UsageCount Value="68"/>
         <Loaded Value="True"/>
       </Unit164>
       <Unit165>
@@ -1344,7 +1346,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="5"/>
-        <UsageCount Value="96"/>
+        <UsageCount Value="98"/>
       </Unit177>
       <Unit178>
         <Filename Value="..\..\..\fpc\2.2.4\source\rtl\win\sysutils.pp"/>
@@ -1908,91 +1910,212 @@
       <Unit253>
         <Filename Value="..\..\units\general\vinfo.pas"/>
         <UnitName Value="vinfo"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="45"/>
         <CursorPos X="1" Y="64"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit253>
+      <Unit254>
+        <Filename Value="C:\pp\packages\fcl-base\src\custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="4"/>
+        <CursorPos X="3" Y="26"/>
+        <UsageCount Value="10"/>
+      </Unit254>
+      <Unit255>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <UnitName Value="u_xpl_custom_listener"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="16" Y="27"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit255>
+      <Unit256>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <UnitName Value="u_xpl_config"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="109"/>
+        <CursorPos X="35" Y="124"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit256>
+      <Unit257>
+        <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
+        <UnitName Value="u_xpl_collection"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="77" Y="56"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit257>
+      <Unit258>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="8" Y="10"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit258>
+      <Unit259>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <UnitName Value="u_xpl_common"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="31"/>
+        <CursorPos X="65" Y="52"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit259>
+      <Unit260>
+        <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
+        <UnitName Value="u_xpl_message"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="13"/>
+        <CursorPos X="18" Y="23"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit260>
+      <Unit261>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <UnitName Value="u_xpl_address"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="19"/>
+        <CursorPos X="71" Y="34"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit261>
+      <Unit262>
+        <Filename Value="..\..\..\components\jvcllaz\run\JclStrings.pas"/>
+        <UnitName Value="JclStrings"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2573"/>
+        <CursorPos X="3" Y="2596"/>
+        <UsageCount Value="10"/>
+      </Unit262>
     </Units>
-    <JumpHistory Count="19" HistoryIndex="18">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="3" Column="2" TopLine="1"/>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="20" Column="40" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="13" Column="15" TopLine="1"/>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="11" Column="12" TopLine="1"/>
       </Position2>
       <Position3>
         <Filename Value="app_main.pas"/>
-        <Caret Line="48" Column="19" TopLine="31"/>
+        <Caret Line="13" Column="22" TopLine="1"/>
       </Position3>
       <Position4>
         <Filename Value="app_main.pas"/>
-        <Caret Line="63" Column="21" TopLine="38"/>
+        <Caret Line="13" Column="22" TopLine="1"/>
       </Position4>
       <Position5>
         <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="3" Column="1" TopLine="1"/>
+        <Caret Line="11" Column="12" TopLine="1"/>
       </Position5>
       <Position6>
         <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="5" Column="85" TopLine="1"/>
+        <Caret Line="16" Column="1" TopLine="1"/>
       </Position6>
       <Position7>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="52" Column="31" TopLine="34"/>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="13" Column="5" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="33" Column="40" TopLine="30"/>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="11" Column="10" TopLine="1"/>
       </Position8>
       <Position9>
-        <Filename Value="app_main.pas"/>
-        <Caret Line="84" Column="14" TopLine="67"/>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="4" Column="28" TopLine="1"/>
       </Position9>
       <Position10>
         <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="20" Column="40" TopLine="1"/>
+        <Caret Line="13" Column="3" TopLine="1"/>
       </Position10>
       <Position11>
         <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="11" Column="12" TopLine="1"/>
+        <Caret Line="11" Column="11" TopLine="1"/>
       </Position11>
       <Position12>
         <Filename Value="app_main.pas"/>
-        <Caret Line="13" Column="22" TopLine="1"/>
+        <Caret Line="19" Column="32" TopLine="1"/>
       </Position12>
       <Position13>
         <Filename Value="app_main.pas"/>
         <Caret Line="13" Column="22" TopLine="1"/>
       </Position13>
       <Position14>
-        <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="11" Column="12" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="28" Column="18" TopLine="13"/>
       </Position14>
       <Position15>
-        <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="16" Column="1" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="18" Column="40" TopLine="16"/>
       </Position15>
       <Position16>
-        <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="13" Column="5" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position16>
       <Position17>
         <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="11" Column="10" TopLine="1"/>
+        <Caret Line="20" Column="34" TopLine="1"/>
       </Position17>
       <Position18>
-        <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="4" Column="28" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="9" Column="15" TopLine="1"/>
       </Position18>
       <Position19>
-        <Filename Value="xpl_netget.lpr"/>
-        <Caret Line="13" Column="3" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="60" Column="44" TopLine="52"/>
       </Position19>
+      <Position20>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="52" Column="56" TopLine="39"/>
+      </Position20>
+      <Position21>
+        <Filename Value="app_main.pas"/>
+        <Caret Line="13" Column="21" TopLine="1"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="27" Column="16" TopLine="13"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
+        <Caret Line="23" Column="18" TopLine="13"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="81" Column="11" TopLine="70"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="84" Column="8" TopLine="70"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="122" Column="45" TopLine="107"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="84" Column="18" TopLine="62"/>
+      </Position27>
+      <Position28>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="124" Column="35" TopLine="109"/>
+      </Position28>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2000,7 +2123,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);C:\lazarus\components\pl_Indy\source\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\lazarus\components\pl_Indy\source\base\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\components\synapse39\source\lib\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\components\uniqueinstance-1.0\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\ssversionchecker\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\indy\"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\lazarus\components\pl_Indy\source\base\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\components\synapse39\source\lib\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\components\uniqueinstance\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\ssversionchecker\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\indy\"/>
       <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>

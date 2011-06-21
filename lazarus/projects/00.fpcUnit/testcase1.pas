@@ -21,6 +21,7 @@ type
     procedure TestBody;
     procedure TestConfigItem;
     procedure TestMessage;
+    procedure Test_u_xpl_common;
   end; 
 
 implementation
@@ -31,7 +32,7 @@ uses u_xPL_Schema,
      u_xPL_Body,
      u_xpl_Common,
      u_xpl_custom_message,
-     u_xpl_message,
+     u_xpl_collection,
      u_xPL_Config;
 
 procedure ClinxPLfpcUnit.TestMsgType;
@@ -77,6 +78,7 @@ end;
 
 procedure ClinxPLfpcUnit.TestAddress;
 var adr1,adr2, adr3 : TxPLAddress;
+    s : string;
 begin
    adr1 := TxPLAddress.Create;
    AssertEquals(adr1.isvalid,false);               // invalide par défaut à la création
@@ -100,6 +102,14 @@ begin
    AssertEquals(adr1.Instance = 'hy-phen',false);
    adr1.Free;
    adr2.free;
+   adr1 := TxPLAddress.Create('vendor','device','instance');
+   adr2 := TxPLAddress.Create(adr1);
+   AssertEquals(adr1.RawxPL,'vendor-device.instance');
+   AssertEquals(adr1.RawxPL,adr2.rawxpl);
+   adr1.Free;
+   adr2.free;
+   s := adr1.HostNmInstance;
+   AssertEquals(s,'lapfr0005');
 end;
 
 procedure ClinxPLfpcUnit.TestTarget;
@@ -166,7 +176,16 @@ begin
    AssertEquals(body1.Itemcount=4,true);
    body1.CleanEmptyValues;
    AssertEquals(body1.Itemcount=3,true);
+   body1.ResetValues;
+   body1.AddKeyValue('bidule=chose');
+   body1.AddKeyValue('trucmuche=');
+   body1.AddKeyValue('essai=12');
+   body1.AddKeyValue('xml=c:\lechemin\a\la\con');
+   body2 := txPLBody.Create(nil);
+   body2.RawxPL:=body1.RawxPL;
+   AssertEquals(body1.Rawxpl,body2.RawxPL);
    body1.Free;
+   body2.Free;
 end;
 
 procedure ClinxPLfpcUnit.TestConfigItem;
@@ -205,6 +224,12 @@ begin
    message2.Assign(message);
    AssertEquals(message.RawxPL,message2.Rawxpl);
    message.free;
+end;
+
+procedure ClinxPLfpcUnit.Test_u_xpl_common;
+begin
+  AssertEquals(xPLMatches('*.*.*.*.*.*','aMsgType.aVendor.aDevice.aInstance.aClass.aType'),true);
+
 end;
 
 

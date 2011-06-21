@@ -61,7 +61,7 @@ end;
 
 constructor TxPLdirmonListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(aOwner,'dirmon','clinique','4.0.0');
+   inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
    FilterSet.AddValues(['xpl-cmnd.*.*.*.control.basic']);
    FilterSet.AddValues(['xpl-stat.*.*.*.timer.basic']);

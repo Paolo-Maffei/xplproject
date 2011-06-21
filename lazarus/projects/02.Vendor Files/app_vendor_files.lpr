@@ -7,18 +7,17 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, frm_vendor_files, LResources, superxmlparser,
+  Forms, frm_vendor_files, superxmlparser,
   u_xpl_application,
   u_xpl_gui_resource;
 
 {$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
 
 begin
-  {$I app_vendor_files.lrs}
   Application.Title:='xPL Vendor Files';
   Application.Initialize;
 
-  xPLApplication := TxPLApplication.Create(nil,'vendfile','clinique','4.0.0');
+  xPLApplication := TxPLApplication.Create(nil);
   xPLGUIResource := TxPLGUIResource.Create;
 
   Application.CreateForm(Tfrmvendorfiles, frmvendorfiles);

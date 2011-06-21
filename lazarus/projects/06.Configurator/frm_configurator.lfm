@@ -253,20 +253,22 @@ inherited frmConfigurator: TfrmConfigurator
     left = 16
     top = 88
   end
-  object xPLMsgSaveDlg: TxPLMsgSaveDialog[8]
+  inherited XMLPropStorage: TXMLPropStorage[8]
+  end
+  object xPLMsgSaveDlg: TxPLMsgSaveDialog[9]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     FilterIndex = 2
     left = 112
     top = 32
   end
-  object OpenMessage: TxPLMsgOpenDialog[9]
+  object OpenMessage: TxPLMsgOpenDialog[10]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 112
     top = 88
   end
-  object AppActionList: TActionList[10]
+  object AppActionList: TActionList[11]
     left = 16
     top = 160
     object acDiscoverNetwork: TAction
@@ -301,7 +303,7 @@ inherited frmConfigurator: TfrmConfigurator
       OnExecute = acClearExecute
     end
   end
-  object JvAppEvents1: TJvAppEvents[11]
+  object JvAppEvents1: TJvAppEvents[12]
     OnIdle = JvAppEvents1Idle
     left = 404
     top = 69
