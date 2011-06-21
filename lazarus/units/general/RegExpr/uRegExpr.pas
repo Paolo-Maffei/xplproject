@@ -6,6 +6,9 @@ unit uRegExpr;
 
  Copyright (c) 1999-2004 Andrey V. Sorokin, St.Petersburg, Russia
 
+MODIFICATION:
+Adapted to Tiburon Sebastian Zierer
+
  You may use this software in any kind of development,
  including comercial, redistribute, and modify it freely,
  under the following restrictions :
@@ -49,6 +52,9 @@ interface
 {$IFDEF VER130} {$DEFINE D5} {$DEFINE D4} {$DEFINE D3} {$DEFINE D2} {$ENDIF} // D5
 {$IFDEF VER140} {$DEFINE D6} {$DEFINE D5} {$DEFINE D4} {$DEFINE D3} {$DEFINE D2} {$ENDIF} // D6
 {$IFDEF VER150} {$DEFINE D7} {$DEFINE D6} {$DEFINE D5} {$DEFINE D4} {$DEFINE D3} {$DEFINE D2} {$ENDIF} // D7
+{$IFNDEF FPC}
+{$IF compilerversion > 15} {$DEFINE D7} {$DEFINE D6} {$DEFINE D5} {$DEFINE D4} {$DEFINE D3} {$DEFINE D2} {$IFEND} // D7
+{$ENDIF}
 
 // ======== Define base compiler options
 {$BOOLEVAL OFF}
@@ -81,6 +87,12 @@ interface
  {$DEFINE UseFirstCharSet} // Fast skip between matches for r.e. that starts with determined set of chars
 {$ENDIF}
 
+{$IFNDEF FPC}
+   {$IF compilerversion >= 20}
+        {$DEFINE UNICODE}
+   {$IFEND}
+{$ENDIF}
+
 // ======== Define Pascal-language options
 // Define 'UseAsserts' option (do not edit this definitions).
 // Asserts used to catch 'strange bugs' in TRegExpr implementation (when something goes
@@ -102,7 +114,7 @@ uses
 type
  {$IFDEF UniCode}
  PRegExprChar = PWideChar;
- RegExprString = WideString;
+ RegExprString = UnicodeString;
  REChar = WideChar;
  {$ELSE}
  PRegExprChar = PChar;
@@ -630,8 +642,8 @@ function RegExprSubExpressions (const ARegExpr : string;
 
 implementation
 
-//uses
-// Windows; // CharUpper/Lower
+uses
+ Windows; // CharUpper/Lower
 
 const
  TRegExprVersionMajor : integer = 0;
@@ -1164,11 +1176,11 @@ destructor TRegExpr.Destroy;
 
 class function TRegExpr.InvertCaseFunction (const Ch : REChar) : REChar;
  begin
-  {$IFDEF UniCode}
+  {$IF defined(UniCode) and (compilerversion <= 18)}
   if Ch >= #128
    then Result := Ch
   else
-  {$ENDIF}
+  {$IFEND}
    begin
     Result := {$IFDEF FPC}AnsiUpperCase (Ch) [1]{$ELSE} REChar (CharUpper (PChar (Ch))){$ENDIF};
     if Result = Ch
