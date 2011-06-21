@@ -62,6 +62,7 @@ uses cStrings
      , uRegExpr
      , u_downloader_Indy
      , u_xpl_application
+     , u_xpl_common
      ;
 
 { TxPLVendorSeedFile ====================================================================}

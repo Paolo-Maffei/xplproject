@@ -13,8 +13,9 @@ uses Classes
 
 const K_MSG_TYPE_HEAD = 'xpl-';
 
-Type
-     TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
+Type {$ifndef fpc}                                                             // This is declared only for delphi versions
+        TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
+     {$endif}
 
      TStrParamEvent = procedure(const aString : string) of object;
 
@@ -48,8 +49,8 @@ Type
         function    Equals(const aRawSet : TxPLRawSet) : boolean;
         function    IsValid : boolean;
 
-        function  Get_Element(AIndex: integer): string;
-        procedure Set_Element(AIndex: integer; const AValue: string); dynamic;
+        function  Get_Element(AIndex: integer): string; virtual;
+        procedure Set_Element(AIndex: integer; const AValue: string); virtual;
      published
         property RawxPL : string read Get_RawxPL write Set_RawxPL stored false;
      end;
@@ -77,6 +78,8 @@ Type
      function XPLDt2DateTime(const aDateTime : string) : TDateTime;
      function DateTime2XPLDt(const aDateTime : TDateTime) : string;
 
+     function RandString(const stringsize: integer): string;
+
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
 var   LocalAddresses : TStringList;
@@ -97,6 +100,19 @@ const    K_LOG_INF = 'inf';
 const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
 // ============================================================================
+function RandString(const stringsize: integer): string;
+var n: integer;
+    s: string;
+    const ss: string = 'abcdefghjkmnpqrstuvwxyz'; {list all the charcaters you want to use}
+begin
+   Randomize;
+    s:='';
+    for n:=1 to stringsize do
+        s:=s+ss[random(length(ss))+1];
+    RandString:=s;
+end;
+// ============================================================================
+
 function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
 begin
    result := K_MSG_TYPE_HEAD + GetEnumName(TypeInfo(TxPLMessageType),Ord(aMsgType));

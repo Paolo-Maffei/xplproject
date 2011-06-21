@@ -1,6 +1,8 @@
 unit u_xpl_config;
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 
@@ -34,16 +36,13 @@ type TxPLCustomConfig = class;
         procedure   AddValue(const aValue : string);
         procedure   AddValues(const aValArray : Array of String);
      published
-        property ModifyTS    : TDateTime stored false;                         // hide ancestor properties
-        property CreateTS    : TDateTime stored false;                         // name to avoid saving them
-        property Value       : string    stored false;                         // in file
         property ItemDefault : string             read fValue   write fValue;
         property ItemMax     : integer            read fItmMax  write fItmMax;
         property ItemType    : TxPLConfigItemType read fItmType write fItmType;
         property Values      : TStringList        read fValues  write fValues;
      end;
 
-   TxPLConfigItems = specialize TxPLCollection<TxPLConfigItem>;
+   TxPLConfigItems = {$ifdef fpc}specialize{$endif} TxPLCollection<TxPLConfigItem>;
 
    TxPLCustomConfig = class(TComponent, IxPLCommon)
    private
@@ -82,7 +81,8 @@ implementation {===============================================================}
 uses uxPLconst
      , StrUtils
      , Math
-     , cStrings
+     //, cStrings
+     , JclStrings
      , typinfo
      , u_xpl_address
      ;
@@ -120,7 +120,8 @@ begin
        s := aValue.Values[i];
        if AnsiRightStr(s,1) =']' then begin
           nom    := Copy(s,1, Pos('[',s)-1);
-          maxval := StrToInt( StrBetweenChar(s,'[',']'))
+          //maxval := StrToInt( StrBetweenChar(s,'[',']'))                      // Replaced cstrings proc by JVCL proc
+          maxval := StrToInt(StrBetween(s,'[',']'));                            // Replaced cstrings proc by JVCL proc
        end else begin
           nom    := s;
           maxval := 1;

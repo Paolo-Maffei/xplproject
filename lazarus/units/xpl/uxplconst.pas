@@ -16,8 +16,9 @@ unit uxPLConst;
  0.95 : Added 'my' (=clinique) key configuration strings
  }
 
-
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 

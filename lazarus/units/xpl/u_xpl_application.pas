@@ -6,7 +6,9 @@ interface
 
 uses SysUtils
      , Classes
+     {$ifdef fpc}
      , UniqueInstanceRaw
+     {$endif}
      , VersionChecker
      , u_xpl_address
      , u_xpl_folders
@@ -102,7 +104,9 @@ begin
    OnGetApplicationName := @OnGetAppName;
    fAdresse := TxPLAddress.Create(aVendor,aDevice);
 
+   {$ifdef fpc}
    if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
+   {$endif}
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
@@ -117,7 +121,7 @@ begin
    Log(etInfo,FullTitle);
    Log(etInfo,K_MSG_LOGGING,[LogFileName]);
 
-   fSettings  := TxPLCustomSettings.Create(self);
+   fSettings   := TxPLCustomSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
 
    fLocaleDomains := TStringList.Create;
@@ -129,7 +133,6 @@ begin
    fLocaleDomains.Free;
    fFolders.Free;
    fAdresse.Free;
-   fPluginList.Free;
    Info.Free;
    inherited;
 end;
