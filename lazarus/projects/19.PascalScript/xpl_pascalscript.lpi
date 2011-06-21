@@ -10,7 +10,10 @@
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
-      <StringTable ProductVersion=""/>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="4"/>
+      <StringTable CompanyName="clinique" FileDescription="psscript" InternalName="psscript" OriginalFilename="psscript" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -56,15 +59,15 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="220">
+    <Units Count="221">
       <Unit0>
         <Filename Value="xpl_pascalscript.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_pascalscript"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="23" Y="24"/>
+        <CursorPos X="23" Y="26"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -795,7 +798,7 @@
       <Unit98>
         <Filename Value="upsi_ps_listener.pas"/>
         <UnitName Value="uPSI_PS_listener"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="25"/>
         <CursorPos X="46" Y="46"/>
@@ -1426,12 +1429,10 @@
       <Unit183>
         <Filename Value="..\..\..\units\xpl\u_xpl_globals.pas"/>
         <UnitName Value="u_xpl_globals"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="97"/>
         <CursorPos X="39" Y="115"/>
         <UsageCount Value="35"/>
-        <Loaded Value="True"/>
       </Unit183>
       <Unit184>
         <Filename Value="ps_listener.pas"/>
@@ -1439,8 +1440,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="346"/>
+        <TopLine Value="87"/>
+        <CursorPos X="1" Y="91"/>
         <UsageCount Value="40"/>
         <Loaded Value="True"/>
       </Unit184>
@@ -1448,32 +1449,26 @@
         <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="u_xpl_listener"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="24"/>
         <CursorPos X="35" Y="28"/>
         <UsageCount Value="74"/>
-        <Loaded Value="True"/>
       </Unit185>
       <Unit186>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <UnitName Value="u_xpl_custom_listener"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="111"/>
         <CursorPos X="7" Y="46"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit186>
       <Unit187>
         <Filename Value="..\..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="90"/>
         <CursorPos X="37" Y="128"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit187>
       <Unit188>
         <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
@@ -1572,7 +1567,6 @@
         <TopLine Value="10"/>
         <CursorPos X="3" Y="26"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit199>
       <Unit200>
         <Filename Value="..\..\..\units\xpl\gui\frm_downloadfile.pas"/>
@@ -1612,7 +1606,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit204>
       <Unit205>
         <Filename Value="..\..\..\units\xpl\u_xpl_console_app.pas"/>
@@ -1665,12 +1658,10 @@
         <Filename Value="..\..\..\units\xpl\u_xpl_cache_manager.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="u_xpl_cache_manager"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="83"/>
         <CursorPos X="1" Y="109"/>
         <UsageCount Value="70"/>
-        <Loaded Value="True"/>
       </Unit211>
       <Unit212>
         <Filename Value="C:\pp\rtl\inc\objpash.inc"/>
@@ -1682,12 +1673,10 @@
       <Unit213>
         <Filename Value="..\..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="42" Y="14"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit213>
       <Unit214>
         <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdUDPServer.pas"/>
@@ -1732,134 +1721,144 @@
         <Filename Value="ps_scripter.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="ps_scripter"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="13"/>
         <CursorPos X="16" Y="30"/>
         <UsageCount Value="23"/>
         <Loaded Value="True"/>
       </Unit219>
+      <Unit220>
+        <Filename Value="..\..\units\xpl\u_xpl_cache_manager.pas"/>
+        <UnitName Value="u_xpl_cache_manager"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="8" Y="11"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit220>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="ps_scripter.pas"/>
-        <Caret Line="16" Column="34" TopLine="1"/>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="15" Column="20" TopLine="1"/>
       </Position1>
       <Position2>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="15" Column="20" TopLine="1"/>
+        <Caret Line="16" Column="19" TopLine="3"/>
       </Position2>
       <Position3>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="16" Column="19" TopLine="3"/>
+        <Caret Line="17" Column="16" TopLine="9"/>
       </Position3>
       <Position4>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="17" Column="16" TopLine="9"/>
+        <Caret Line="117" Column="28" TopLine="83"/>
       </Position4>
       <Position5>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="117" Column="28" TopLine="83"/>
+        <Caret Line="153" Column="1" TopLine="137"/>
       </Position5>
       <Position6>
-        <Filename Value="ps_listener.pas"/>
-        <Caret Line="153" Column="1" TopLine="137"/>
+        <Filename Value="ps_scripter.pas"/>
+        <Caret Line="16" Column="34" TopLine="1"/>
       </Position6>
       <Position7>
         <Filename Value="ps_scripter.pas"/>
-        <Caret Line="16" Column="34" TopLine="1"/>
+        <Caret Line="31" Column="7" TopLine="17"/>
       </Position7>
       <Position8>
         <Filename Value="ps_scripter.pas"/>
-        <Caret Line="31" Column="7" TopLine="17"/>
+        <Caret Line="64" Column="28" TopLine="48"/>
       </Position8>
       <Position9>
         <Filename Value="ps_scripter.pas"/>
-        <Caret Line="64" Column="28" TopLine="48"/>
+        <Caret Line="68" Column="3" TopLine="51"/>
       </Position9>
       <Position10>
-        <Filename Value="ps_scripter.pas"/>
-        <Caret Line="68" Column="3" TopLine="51"/>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="198" Column="1" TopLine="174"/>
       </Position10>
       <Position11>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="198" Column="1" TopLine="174"/>
+        <Caret Line="81" Column="16" TopLine="73"/>
       </Position11>
       <Position12>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="81" Column="16" TopLine="73"/>
+        <Caret Line="26" Column="36" TopLine="1"/>
       </Position12>
       <Position13>
-        <Filename Value="ps_listener.pas"/>
-        <Caret Line="26" Column="36" TopLine="1"/>
-      </Position13>
-      <Position14>
-        <Filename Value="ps_listener.pas"/>
-        <Caret Line="26" Column="36" TopLine="49"/>
-      </Position14>
-      <Position15>
         <Filename Value="ps_scripter.pas"/>
         <Caret Line="30" Column="16" TopLine="13"/>
-      </Position15>
-      <Position16>
+      </Position13>
+      <Position14>
         <Filename Value="upsi_ps_listener.pas"/>
         <Caret Line="142" Column="43" TopLine="50"/>
-      </Position16>
-      <Position17>
+      </Position14>
+      <Position15>
         <Filename Value="ps_listener.pas"/>
         <Caret Line="26" Column="34" TopLine="21"/>
+      </Position15>
+      <Position16>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="131" Column="22" TopLine="111"/>
+      </Position16>
+      <Position17>
+        <Filename Value="xpl_pascalscript.lpr"/>
+        <Caret Line="11" Column="16" TopLine="1"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\..\units\xpl\u_xpl_listener.pas"/>
-        <Caret Line="28" Column="35" TopLine="24"/>
+        <Filename Value="xpl_pascalscript.lpr"/>
+        <Caret Line="26" Column="1" TopLine="1"/>
       </Position18>
       <Position19>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="131" Column="22" TopLine="111"/>
+        <Caret Line="377" Column="27" TopLine="346"/>
       </Position19>
       <Position20>
-        <Filename Value="xpl_pascalscript.lpr"/>
-        <Caret Line="11" Column="16" TopLine="1"/>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="69" Column="3" TopLine="49"/>
       </Position20>
       <Position21>
-        <Filename Value="xpl_pascalscript.lpr"/>
-        <Caret Line="26" Column="1" TopLine="1"/>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="115" Column="3" TopLine="99"/>
       </Position21>
       <Position22>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="377" Column="27" TopLine="346"/>
+        <Caret Line="381" Column="11" TopLine="354"/>
       </Position22>
       <Position23>
-        <Filename Value="ps_listener.pas"/>
-        <Caret Line="69" Column="3" TopLine="49"/>
+        <Filename Value="upsi_ps_listener.pas"/>
+        <Caret Line="142" Column="43" TopLine="50"/>
       </Position23>
       <Position24>
-        <Filename Value="ps_listener.pas"/>
-        <Caret Line="115" Column="3" TopLine="99"/>
+        <Filename Value="upsi_ps_listener.pas"/>
+        <Caret Line="42" Column="1" TopLine="27"/>
       </Position24>
       <Position25>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="381" Column="11" TopLine="354"/>
+        <Caret Line="382" Column="6" TopLine="356"/>
       </Position25>
       <Position26>
         <Filename Value="upsi_ps_listener.pas"/>
-        <Caret Line="142" Column="43" TopLine="50"/>
+        <Caret Line="44" Column="6" TopLine="26"/>
       </Position26>
       <Position27>
-        <Filename Value="upsi_ps_listener.pas"/>
-        <Caret Line="42" Column="1" TopLine="27"/>
+        <Filename Value="ps_listener.pas"/>
+        <Caret Line="113" Column="53" TopLine="97"/>
       </Position27>
       <Position28>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="382" Column="6" TopLine="356"/>
+        <Caret Line="346" Column="1" TopLine="1"/>
       </Position28>
       <Position29>
-        <Filename Value="upsi_ps_listener.pas"/>
-        <Caret Line="44" Column="6" TopLine="26"/>
+        <Filename Value="..\..\units\xpl\u_xpl_cache_manager.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position29>
       <Position30>
         <Filename Value="ps_listener.pas"/>
-        <Caret Line="113" Column="53" TopLine="97"/>
+        <Caret Line="16" Column="71" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1868,7 +1867,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="$(LazarusDir)\components\log4delphi-0.7\src\delphi;$(LazarusDir)\components\log4delphi-0.7\src\delphi\util;$(LazarusDir)\components\indy-10.2.0.3\lazarus;$(LazarusDir)\svn\units\general\fndUtl328\Utils;$(LazarusDir)\svn\units\general\RegExpr;$(LazarusDir)\svn\units\general\indy;$(LazarusDir)\svn\units\general\fndUtl328\Datastructs;$(LazarusDir)\svn\units\xpl;$(LazarusDir)\svn\units\general;..\..\..\units\xpl;..\..\..\units\xpl\gui"/>
+      <OtherUnitFiles Value="..\..\units\xpl\xml;..\..\units\xpl"/>
       <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>
@@ -1888,6 +1887,9 @@
       <Verbosity>
         <ShowHintsForUnusedUnitsInMainSrc Value="True"/>
       </Verbosity>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

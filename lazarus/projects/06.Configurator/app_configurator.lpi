@@ -882,7 +882,7 @@
         <Loaded Value="True"/>
       </Unit103>
     </Units>
-    <JumpHistory Count="27" HistoryIndex="26">
+    <JumpHistory Count="26" HistoryIndex="25">
       <Position1>
         <Filename Value="frm_configurator.pas"/>
         <Caret Line="298" Column="1" TopLine="272"/>
@@ -948,49 +948,45 @@
         <Caret Line="1" Column="1" TopLine="1"/>
       </Position16>
       <Position17>
-        <Filename Value="frm_configurator.pas"/>
-        <Caret Line="69" Column="35" TopLine="81"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="10" Column="8" TopLine="1"/>
       </Position17>
       <Position18>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="10" Column="8" TopLine="1"/>
+        <Caret Line="14" Column="29" TopLine="1"/>
       </Position18>
       <Position19>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="14" Column="29" TopLine="1"/>
+        <Caret Line="10" Column="8" TopLine="1"/>
       </Position19>
       <Position20>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="10" Column="8" TopLine="1"/>
+        <Caret Line="7" Column="39" TopLine="1"/>
       </Position20>
       <Position21>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="7" Column="39" TopLine="1"/>
+        <Caret Line="10" Column="20" TopLine="1"/>
       </Position21>
       <Position22>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="10" Column="20" TopLine="1"/>
+        <Filename Value="app_configurator.lpr"/>
+        <Caret Line="15" Column="18" TopLine="1"/>
       </Position22>
       <Position23>
-        <Filename Value="app_configurator.lpr"/>
-        <Caret Line="15" Column="18" TopLine="1"/>
-      </Position23>
-      <Position24>
         <Filename Value="configurator_listener.pas"/>
         <Caret Line="11" Column="21" TopLine="1"/>
-      </Position24>
-      <Position25>
+      </Position23>
+      <Position24>
         <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <Caret Line="29" Column="21" TopLine="7"/>
-      </Position25>
-      <Position26>
+      </Position24>
+      <Position25>
         <Filename Value="app_configurator.lpr"/>
         <Caret Line="15" Column="18" TopLine="1"/>
-      </Position26>
-      <Position27>
+      </Position25>
+      <Position26>
         <Filename Value="frm_configurator.pas"/>
         <Caret Line="82" Column="14" TopLine="64"/>
-      </Position27>
+      </Position26>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

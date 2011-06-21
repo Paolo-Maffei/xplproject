@@ -110,7 +110,7 @@ end;
 
 constructor TxPLexecListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(aOwner,'exec','clinique','4.0.0');
+   inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
    FilterSet.AddValues(['xpl-cmnd.*.*.*.exec.basic']);
    Config.DefineItem(rsProgram, TxPLConfigItemType.option, 16);

@@ -12,9 +12,9 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MajorVersionNr Value="1"/>
-      <BuildNr Value="3159"/>
-      <StringTable ProductVersion="1.0.0.1"/>
+      <MajorVersionNr Value="4"/>
+      <BuildNr Value="26"/>
+      <StringTable CompanyName="clinique" FileDescription="sender" InternalName="sender" OriginalFilename="sender" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -31,7 +31,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="4">
       <Item1>
         <PackageName Value="RunTimeTypeInfoControls"/>
       </Item1>
@@ -42,21 +42,19 @@
         <PackageName Value="SynEdit"/>
       </Item3>
       <Item4>
-        <PackageName Value="xpl_win"/>
-      </Item4>
-      <Item5>
         <PackageName Value="LCL"/>
-      </Item5>
+      </Item4>
     </RequiredPackages>
-    <Units Count="218">
+    <Units Count="220">
       <Unit0>
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_sender"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="20"/>
-        <CursorPos X="44" Y="29"/>
+        <TopLine Value="19"/>
+        <CursorPos X="33" Y="24"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -1111,9 +1109,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xPLMessage"/>
-        <TopLine Value="316"/>
-        <CursorPos X="93" Y="209"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="11" Y="10"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit146>
       <Unit147>
         <Filename Value="..\..\units\general\keditcommon.pas"/>
@@ -1286,12 +1287,10 @@
       <Unit172>
         <Filename Value="..\..\..\units\xpl\gui\u_xpl_message_gui.pas"/>
         <UnitName Value="u_xpl_message_GUI"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="32"/>
         <CursorPos X="34" Y="44"/>
         <UsageCount Value="17"/>
-        <Loaded Value="True"/>
       </Unit172>
       <Unit173>
         <Filename Value="..\..\..\units\xpl\gui\v_msgtype_radio.pas"/>
@@ -1303,12 +1302,10 @@
       <Unit174>
         <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
         <UnitName Value="u_xPL_Header"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="35"/>
         <CursorPos X="37" Y="58"/>
         <UsageCount Value="16"/>
-        <Loaded Value="True"/>
       </Unit174>
       <Unit175>
         <Filename Value="..\..\..\units\xpl\uxplconst.pas"/>
@@ -1341,12 +1338,10 @@
       <Unit179>
         <Filename Value="..\..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="91"/>
         <CursorPos X="7" Y="108"/>
         <UsageCount Value="16"/>
-        <Loaded Value="True"/>
       </Unit179>
       <Unit180>
         <Filename Value="..\..\..\units\xpl\u_xpl_body.pas"/>
@@ -1366,32 +1361,26 @@
       <Unit182>
         <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
         <UnitName Value="u_xpl_message"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="38" Y="33"/>
         <UsageCount Value="20"/>
-        <Loaded Value="True"/>
       </Unit182>
       <Unit183>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_message.pas"/>
         <UnitName Value="u_xpl_custom_message"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="20"/>
         <CursorPos X="32" Y="27"/>
         <UsageCount Value="18"/>
-        <Loaded Value="True"/>
       </Unit183>
       <Unit184>
         <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
         <UnitName Value="u_xpl_address"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
         <CursorPos X="64" Y="40"/>
         <UsageCount Value="12"/>
-        <Loaded Value="True"/>
       </Unit184>
       <Unit185>
         <Filename Value="..\..\..\units\xpl\gui\frm_xplmessage.pas"/>
@@ -1399,13 +1388,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xPLMessage"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="317"/>
         <CursorPos X="34" Y="329"/>
         <UsageCount Value="23"/>
-        <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit185>
       <Unit186>
@@ -1663,60 +1649,56 @@
         <CursorPos X="57" Y="104"/>
         <UsageCount Value="27"/>
       </Unit217>
+      <Unit218>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="23" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit218>
+      <Unit219>
+        <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
+        <UnitName Value="u_xpl_message"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="2" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit219>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="7" HistoryIndex="6">
       <Position1>
         <Filename Value="xpl_sender.lpr"/>
         <Caret Line="23" Column="10" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\..\units\xpl\gui\u_xpl_message_gui.pas"/>
-        <Caret Line="44" Column="16" TopLine="37"/>
-      </Position2>
-      <Position3>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_message.pas"/>
-        <Caret Line="28" Column="27" TopLine="21"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="33" Column="36" TopLine="19"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="71" Column="53" TopLine="54"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="129" Column="4" TopLine="111"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\..\..\units\xpl\u_xpl_sender.pas"/>
-        <Caret Line="25" Column="6" TopLine="18"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="356" Column="64" TopLine="346"/>
-      </Position8>
-      <Position9>
         <Filename Value="xpl_sender.lpr"/>
         <Caret Line="30" Column="33" TopLine="21"/>
-      </Position9>
-      <Position10>
+      </Position2>
+      <Position3>
         <Filename Value="xpl_sender.lpr"/>
         <Caret Line="36" Column="44" TopLine="20"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="33" Column="38" TopLine="9"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_message.pas"/>
-        <Caret Line="27" Column="32" TopLine="20"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="58" Column="37" TopLine="35"/>
-      </Position13>
+      </Position3>
+      <Position4>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="209" Column="93" TopLine="316"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="10" Column="11" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="xpl_sender.lpr"/>
+        <Caret Line="28" Column="44" TopLine="19"/>
+      </Position7>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1724,7 +1706,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\class\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;C:\lazarus\components\synedit\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\indy\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;..\..\..\units\xpl\editors"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;C:\lazarus\components\synedit\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\indy\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;..\..\units\xpl\editors;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\"/>
       <UnitOutputDirectory Value="C:\LazOut"/>
     </SearchPaths>
     <Parsing>
@@ -1741,6 +1723,9 @@
       </Options>
     </Linking>
     <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
       <CompilerPath Value="$(CompPath)"/>
     </Other>
   </CompilerOptions>

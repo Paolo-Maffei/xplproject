@@ -73,7 +73,7 @@ end;
 
 constructor TxPLSqlListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(aOwner,'sql','clinique','4.0.0');
+   inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
    FilterSet.AddValues(['xpl-cmnd.*.*.*.db.basic']);
    Config.DefineItem(rsHostname, TxPLConfigItemType.config, 1, 'localhost');

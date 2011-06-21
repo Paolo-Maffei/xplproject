@@ -23,6 +23,6 @@ begin
    Application.Run;
 
    xPLGUIResource.Free;
-//   xPLApplication.Free;
+//   xPLApplication.Free;   This causes a crash at application leave, no time to find why
 end.
 

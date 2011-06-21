@@ -9,7 +9,6 @@ uses
      frm_xplappslauncher,
      frm_timer,
      frm_logviewer,
-     xpl_win,
      u_xpl_timer,
      u_xpl_application,
      u_xpl_listener,
