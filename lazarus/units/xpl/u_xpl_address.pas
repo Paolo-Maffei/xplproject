@@ -69,7 +69,8 @@ type // TxPLAddress ===========================================================
        property  IsGroup   : boolean  read Get_IsGroup   write Set_IsGroup   stored false;
     end;
 
-    Operator := (t1 : string) t2 : TxPLAddress;
+    // Operator overloading has been put apart for Delphi compatibility issues
+    // Operator := (t1 : string) t2 : TxPLAddress;
 
 const K_ADDR_ANY_TARGET = '*';
 
@@ -87,8 +88,12 @@ const K_LEN : Array [0..2] of integer = (8,8,16);                              /
 
 // General Helper function ====================================================
 class function TxPLAddress.RandomInstance : string;
+var n: integer;
+    const ss: string = 'abcdefghjkmnpqrstuvwxyz'; {list all the charcaters you want to use}
 begin
-   result := AnsiLowerCase(RandString(K_LEN[1]));                          // Longueur volontairement limitée à 8 chars
+   Result :='';
+   for n:=1 to K_LEN[1] do                                                     // Longueur volontairement limitée à 8 chars
+       Result := Result +ss[random(length(ss))+1];
 end;
 
 class function TxPLAddress.HostNmInstance : string;
@@ -99,15 +104,14 @@ begin
    finally
        TIdStack.DecUsage;
    end;                                                                        // Old method using pwhostname, replaced by Indy
-   //result := AnsiLowerCase(InetSelfName);
 end;
 
 // ============================================================================
-operator:=(t1: string)t2: TxPLAddress;
-begin
-   t2 := TxPLAddress.Create;
-   t2.RawxPL := t1;
-end;
+//operator:=(t1: string)t2: TxPLAddress;
+//begin
+//   t2 := TxPLAddress.Create;
+//   t2.RawxPL := t1;
+//end;
 
 // TxPLAddress Object =========================================================
 constructor TxPLAddress.Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' );
@@ -217,6 +221,7 @@ begin
 end;
 
 initialization // =============================================================
+   Randomize;
    Classes.RegisterClass(TxPLAddress);
    Classes.RegisterClass(TxPLTargetAddress);
 

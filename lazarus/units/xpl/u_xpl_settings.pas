@@ -15,19 +15,20 @@ unit u_xpl_settings;
  1.10  : Added elements to limitate needed access rights and detect errors
         if we don't have enough rights
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
 uses Registry
      , Classes
      , u_xpl_address
-     , fgl
+     , u_xpl_collection
      ;
 
-type TAppCollection = specialize TFPGMap<string,TxPLAddress>;
-
-     // TxPLCustomSettings ====================================================
+type // TxPLCustomSettings ====================================================
      TxPLCustomSettings = class(TComponent)
      private
         fRegistry : TRegistry;
@@ -57,7 +58,7 @@ type TAppCollection = specialize TFPGMap<string,TxPLAddress>;
 
         function    IsValid : boolean;
 
-        function GetxPLAppList : TAppCollection;
+        function GetxPLAppList : TxPLCustomCollection;
 
         procedure GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion : string);
         procedure SetAppDetail(const aVendor, aDevice, aVersion: string);
@@ -211,14 +212,15 @@ begin                                                                           
               length(ListenToAddresses)) <>0;
 end;
 
-function TxPLCustomSettings.GetxPLAppList : TAppCollection;
+function TxPLCustomSettings.GetxPLAppList : TxPLCustomCollection;
 var aVendorListe, aAppListe : TStringList;
     j : integer;
     vendor : string;
+    item : TxPLCollectionItem;
 begin
    aVendorListe := TStringList.Create;
    aAppListe    := TStringList.Create;
-   result := TAppCollection.Create;
+   result := TxPLCustomCollection.Create(nil);
    fRegistry.RootKey := HKEY_LOCAL_MACHINE;
    fRegistry.OpenKey(K_XPL_ROOT_KEY ,True);
    fRegistry.GetKeyNames(aVendorListe);
@@ -227,7 +229,8 @@ begin
        fRegistry.OpenKey(vendor,False);
        fRegistry.GetKeyNames(aAppListe);
        for j:=0 to aAppListe.Count -1 do begin
-          Result.Add(aAppListe[j],TxPLAddress.Create(vendor,aAppListe[j]));
+          item := Result.Add(aAppListe[j]);
+          item.Value := vendor;
        end;
    end;
    aVendorListe.Free;

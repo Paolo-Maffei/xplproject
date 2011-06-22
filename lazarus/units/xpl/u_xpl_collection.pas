@@ -37,8 +37,7 @@ type
        property Comment     : string    read fComment       write fComment;
    end;
 
-//   generic
-     TxPLCollection<T {$ifndef fpc}: TxPLCollectionItem{$endif}> = class(TCollection)
+   TxPLCollection<T {$ifndef fpc}: TxPLCollectionItem{$endif}> = class(TCollection)
       private
           fOwner : TPersistent;
           procedure Set_Items(Index : integer; const aValue : T);
@@ -54,8 +53,7 @@ type
           property    Items[Index : integer] : T read Get_Items write Set_Items; default;
       end;
 
-   TxPLCustomCollection = //specialize
-     TxPLCollection<TxPLCollectionItem>;
+   TxPLCustomCollection = TxPLCollection<TxPLCollectionItem>;
 
 implementation // =============================================================
 uses StrUtils

@@ -17,7 +17,9 @@ unit u_xpl_custom_listener;
  1.03 : Added detection of lost xPL network connectivity
 }
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 

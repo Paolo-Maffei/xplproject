@@ -78,8 +78,6 @@ Type {$ifndef fpc}                                                             /
      function XPLDt2DateTime(const aDateTime : string) : TDateTime;
      function DateTime2XPLDt(const aDateTime : TDateTime) : string;
 
-     function RandString(const stringsize: integer): string;
-
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
 var   LocalAddresses : TStringList;
@@ -99,18 +97,6 @@ const    K_LOG_INF = 'inf';
 // ============================================================================
 const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
-// ============================================================================
-function RandString(const stringsize: integer): string;
-var n: integer;
-    s: string;
-    const ss: string = 'abcdefghjkmnpqrstuvwxyz'; {list all the charcaters you want to use}
-begin
-   Randomize;
-    s:='';
-    for n:=1 to stringsize do
-        s:=s+ss[random(length(ss))+1];
-    RandString:=s;
-end;
 // ============================================================================
 
 function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
