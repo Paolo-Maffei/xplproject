@@ -53,11 +53,11 @@ uses frm_logviewer
      , frm_about
      , frm_xplappslauncher
      , lcltype
-     , u_xpl_settings
      , u_xpl_listener
      , u_xpl_application
      , u_xpl_gui_resource
      , u_xpl_custom_listener
+     , u_xpl_collection
      , StrUtils
      , Process
      ;
@@ -104,8 +104,8 @@ begin
 end;
 
 procedure TFrmTemplate.FormCreate(Sender: TObject);
-var sl : TAppCollection;
-    i  : integer;
+var sl : TxPLCustomCollection;
+    item : TxPLCollectionItem;
     aMenu : TMenuItem;
     path,version : string;
 begin
@@ -128,8 +128,9 @@ begin
    Caption := xPLApplication.AppName;
 
    sl := xPLApplication.Settings.GetxPLAppList;
-   if sl.Find('basicset',i) then begin
-      xPLApplication.Settings.GetAppDetail(sl.Data[i].Vendor,sl.Keys[i],path,version);
+   item := sl.FindItemName('basicset');
+   if assigned(item) then begin
+      xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version);
       aMenu := TMenuItem.Create(self);
       aMenu.Action := acBasicSet;
       acBasicSet.Hint:=path;

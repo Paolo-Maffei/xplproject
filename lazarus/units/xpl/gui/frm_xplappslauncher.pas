@@ -43,7 +43,7 @@ uses Process
      , u_xpl_address
      , u_xpl_application
      , u_xpl_gui_resource
-     , u_xpl_settings
+     , u_xpl_collection
      ;
 
 procedure ShowFrmAppLauncher;
@@ -55,7 +55,7 @@ end;
 
 // Form procedures ============================================================
 procedure TfrmAppLauncher.FormShow(Sender: TObject);
-var sl : TAppCollection;
+var sl : TxPLCustomCollection;
     path, version : string;
     i : integer;
 begin
@@ -63,10 +63,10 @@ begin
    lvApps.Items.Clear;
    sl  := xPLApplication.Settings.GetxPLAppList;
    for i := 0 to sl.Count -1 do begin
-       xPLApplication.Settings.GetAppDetail(sl.Data[i].Vendor,sl.Keys[i],path,version);
+       xPLApplication.Settings.GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version);
        if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
-            Caption := sl.Keys[i];
-            SubItems.DelimitedText:= Sl.Data[i].vendor + ',' + version + ',' + path;
+            Caption := sl[i].DisplayName;
+            SubItems.DelimitedText:= Sl[i].Value + ',' + version + ',' + path;
        end;
    end;
    sl.Free;

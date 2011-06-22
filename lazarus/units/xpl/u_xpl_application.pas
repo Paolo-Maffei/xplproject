@@ -1,6 +1,8 @@
 unit u_xpl_application;
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 
@@ -76,10 +78,19 @@ const K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
       K_XPATH = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
 
 // ============================================================================
-function OnGetAppName : string; inline;                                        // This is used to fake the system when
-begin                                                                          // requesting common xPL AppFrameworks shared
-   result := 'xPL';                                                            // directory - works in conjunction with
-end;                                                                           // OnGetAppFrameworkName
+//var G_VENDOR_NAME : string;
+//    G_APPLICATION_NAME : string;
+
+// ============================================================================
+//function GetApplicationName : string; inline;                                  // This is used to fake the system when
+//begin                                                                          // requesting common xPL AppFrameworks shared
+//   result := G_VENDOR_NAME;                                                    // directory - works in conjunction with
+//end;                                                                           // OnGetAppFrameworkName
+//
+//function GetVendorName: string;
+//begin
+//   result := 'xPL';
+//end;
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
@@ -96,12 +107,11 @@ begin
    for i:=0 to Info.StringFileInfo.Count-1 do begin
        s := Info.StringFileInfo.Items[i];
        for j:=0 to s.Count-1 do
-           if s.Keys[j] = 'CompanyName' then aVendor := s.Values[j] else
+           if s.Keys[j] = 'CompanyName' then aVendor  := s.Values[j] else
            if s.Keys[j] = 'InternalName' then aDevice := s.Values[j] else
            if s.Keys[j] = 'FileVersion' then aVersion := s.Values[j];
    end;
 
-   OnGetApplicationName := @OnGetAppName;
    fAdresse := TxPLAddress.Create(aVendor,aDevice);
 
    {$ifdef fpc}
@@ -235,7 +245,9 @@ begin
             else result := aString;
 end;
 
-
+//initialization
+//   OnGetApplicationName := @GetApplicationName;
+//   OnGetVendorName      := @GetVendorName;
 
 end.
 

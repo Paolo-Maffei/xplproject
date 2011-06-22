@@ -8,7 +8,10 @@ unit u_xpl_folders;
  0.95 : added configuration store directory
  Rev 256 : Transfer of strictly confined string constant from uxPLConst here
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
@@ -20,23 +23,21 @@ type // TxPLCustomFolders =====================================================
      TxPLCustomFolders  = class
      private
         fAdresse : TxPLAddress;
+        procedure EnsureDirectoryExists(const aDirectoryName: string);
      public
         constructor Create(const axPLAddress : TxPLAddress);
         function SharedDir : string;                                           // Something like c:\programdata\xPL\
         function PluginDir : string;                                           // In the xPL root, directory where plugin are stored
-        function DeviceDir(aVendor : string = ''; aDevice : string = '') : string; inline; // something like c:\programdata\xPL\vendor\appli\
+        function DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;  // something like c:\programdata\xPL\vendor\appli\
      end;
 
 implementation // ==============================================================
 
-const K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
+uses {$ifdef fpc}Windirs{$else}SHFolder{$endif}
+     , StrUtils
+     ;
 
-  // ===========================================================================
-procedure EnsureDirectoryExists(const aDirectoryName: string);
-begin
-   if not DirectoryExists(aDirectoryName) then
-      CreateDir(aDirectoryName);
-end;
+const K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
 
 // TxPLCustomFolders ===========================================================
 constructor TxPLCustomFolders.Create(const axPLAddress: TxPLAddress);
@@ -45,26 +46,38 @@ begin
    fAdresse  := axPLAddress;
 end;
 
+procedure TxPLCustomFolders.EnsureDirectoryExists(const aDirectoryName: string);
+begin
+   if not DirectoryExists(aDirectoryName) then CreateDir(aDirectoryName);
+end;
 
 function TxPLCustomFolders.SharedDir: string;
+{$ifndef fpc}
+var path : array[0..255] of Char;
+{$endif}
 begin
-   result := GetAppConfigDir(true);                                             // returns something like c:\program files\xPL\
-   EnsureDirectoryExists( SharedDir );                                          // 1.1.1 Correction
+   {$ifdef fpc}
+      result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
+   {$else}
+      SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);
+      result := path;
+   {$endif}
+   result := IncludeTrailingPathDelimiter(result + 'xPL');
+   EnsureDirectoryExists( result );                                            // 1.1.1 Correction
 end;
 
-function TxPLCustomFolders.PluginDir: string;
+function TxPLCustomFolders.PluginDir: string;                                  // returns something like c:\program data\xPL\Plugins\
 begin
-   result := SharedDir + K_XPL_SETTINGS_SUBDIR_PLUG + DirectorySeparator;       // returns something like c:\program files\xPL\Plugins\
-   EnsureDirectoryExists( PluginDir );                                          // 1.1.1 Correction
+   result := IncludeTrailingPathDelimiter(SharedDir + K_XPL_SETTINGS_SUBDIR_PLUG);
+   EnsureDirectoryExists( result );                                            // 1.1.1 Correction
 end;
 
-function TxPLCustomFolders.DeviceDir(aVendor : string = ''; aDevice : string = '') : string;
+function TxPLCustomFolders.DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;
 begin
-   if aVendor = '' then aVendor := fAdresse.Vendor;
-   if aDevice = '' then aDevice := fAdresse.Device;
-   result := SharedDir + aVendor + DirectorySeparator;
+   result := IncludeTrailingPathDelimiter(SharedDir + IfThen(aVendor<>'',aVendor,fAdresse.Vendor));
    EnsureDirectoryExists(result);
-   result := result + aDevice + DirectorySeparator;
+
+   result := IncludeTrailingPathDelimiter(result + IfThen(aDevice<>'',aDevice,fAdresse.Device));
    EnsureDirectoryExists( result );
 end;
 
