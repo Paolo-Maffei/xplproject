@@ -4,80 +4,113 @@ unit u_xml_plugins;
 
 interface
 
-uses Classes,
-     SysUtils,
-     DOM,
-     u_xml;
+uses Classes
+     , SysUtils
+     , superobject
+     ;
 
-type TXMLPluginType = class(TDOMElement)
-     private
-        function Get_Vendor: AnsiString;
-     protected
-        function Get_Name: AnsiString;
-        function Get_Type_: AnsiString;
-        function Get_Description: AnsiString;
-        function Get_Url: AnsiString;
-     public
-        property Name: AnsiString read Get_Name;
-        property Vendor : AnsiString read Get_Vendor;
-        property Type_: AnsiString read Get_Type_;
-        property Description: AnsiString read Get_Description;
-        property Url: AnsiString read Get_Url;
+type  TPluginType = class(TCollectionItem)
+      public
+         Name : string;
+         Vendor : string;
+         Type_ : string;
+         Description : string;
+         URL : string;
+      end;
+
+      TLocationType = class(TCollectionItem)
+      public
+         Url : string;
+      end;
+
+      TLocationsType = class(TCollection)
+      public
+        Constructor Create(const so : ISuperObject);
+        function  Get_Items(Index : integer) : TLocationType;
+
+        property Items[Index : integer] : TLocationType read Get_Items; default;
      end;
 
-     TXMLLocationType = class(TDOMElement)
-     protected
-        function Get_Url: AnsiString;
-     published
-        property Url: AnsiString read Get_Url;
-     end;
+      TPluginsType = class(TCollection)
+      public
+         Constructor Create(const so : ISuperObject);
+         function  Get_Items(Index : integer) : TPluginType;
 
-     TXMLLocationsType = specialize TXMLElementList<TXMLLocationType>;
-     TXMLPluginsType = specialize TXMLElementList<TXMLPluginType>;
-     TXMLPluginsFile = class(TXMLPluginsType)
-     private
-        fLocations : TXMLLocationsType;
-        function Get_Version: AnsiString;
-     public
-        constructor Create(ANode: TDOMNode); overload;
-     published
-        property Version: AnsiString read Get_Version;
-        property Locations: TXMLLocationsType read fLocations;
-     end;
+         property Items[Index : integer] : TPluginType read Get_Items; default;
+      end;
 
 implementation //=========================================================================
-uses XMLRead,
-     StrUtils;
+uses StrUtils
+     ;
+
+constructor TLocationsType.Create(const so : ISuperObject);
+var i : integer;
+    arr : TSuperArray;
+begin
+  inherited Create(TLocationType);
+
+  arr := SO['locations']['location'].AsArray;
+  for i:=0 to arr.Length-1 do
+     with TLocationType(Add) do
+         Url := arr[i]['url'].AsString;
+
+end;
+
+function TLocationsType.Get_Items(Index : integer) : TLocationType;
+begin
+   Result := TLocationType(inherited Items[index]);
+end;
+
+constructor TPluginsType.Create(const so : ISuperObject);
+var i : integer;
+    arr : TSuperArray;
+begin
+  inherited Create(TPluginType);
+  arr := so['plugin'].AsArray;
+  for i := 0 to arr.Length-1 do
+      with TPluginType(Add) do begin
+          name := arr[i]['name'].AsString;
+          type_ := arr[i]['type'].AsString;
+          description := arr[i]['description'].AsString;
+          url := arr[i]['url'].AsString;
+          vendor := AnsiLowerCase(ExtractWord(1,Name,[' ']));
+      end;
+end;
+
+function TPluginsType.Get_Items(Index : integer) : TPluginType;
+begin
+   Result := TPluginType(inherited Items[index]);
+end;
 
 // TXMLLocationType ======================================================================
-function TXMLLocationType.Get_Url: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Url);            end;
+//function TXMLLocationType.Get_Url: AnsiString;
+//begin Result := GetAttribute(K_XML_STR_Url);            end;
 
 // TXMLPluginType ========================================================================
-function TXMLPluginType.Get_Vendor: AnsiString;
-begin Result := AnsiLowerCase(ExtractWord(1,Name,[' '])); end;
-
-function TXMLPluginType.Get_Description: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Description);    end;
-
-function TXMLPluginType.Get_Url: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Url);            end;
-
-function TXMLPluginType.Get_Type_: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Type);           end;
-
-function TXMLPluginType.Get_Name: AnsiString;
-begin Result := GetAttribute(K_XML_STR_Name);           end;
+//function TXMLPluginType.Get_Vendor: AnsiString;
+//begin Result := AnsiLowerCase(ExtractWord(1,Name,[' '])); end;
+//
+//function TXMLPluginType.Get_Description: AnsiString;
+//begin Result := GetAttribute(K_XML_STR_Description);    end;
+//
+//function TXMLPluginType.Get_Url: AnsiString;
+//begin Result := GetAttribute(K_XML_STR_Url);            end;
+//
+//function TXMLPluginType.Get_Type_: AnsiString;
+//begin Result := GetAttribute(K_XML_STR_Type);           end;
+//
+//function TXMLPluginType.Get_Name: AnsiString;
+//begin Result := GetAttribute(K_XML_STR_Name);           end;
 
 // TXMLPluginsFile =======================================================================
-function TXMLPluginsFile.Get_Version: AnsiString;
-begin result := FNode.Attributes.GetNamedItem(K_XML_STR_Version).NodeValue; end;
-
-constructor TXMLPluginsFile.Create(ANode: TDOMNode);
-begin
-   inherited Create(aNode, K_XML_STR_Plugin);
-   fLocations := TXMLLocationsType.Create(aNode, K_XML_STR_Location);
-end;
+//function TXMLPluginsFile.Get_Version: AnsiString;
+//begin result := FNode.Attributes.GetNamedItem(K_XML_STR_Version).NodeValue; end;
+//
+//constructor TXMLPluginsFile.Create(ANode: TDOMNode);
+//begin
+//   inherited Create(aNode, K_XML_STR_Plugin);
+//   fLocations := TXMLLocationsType.Create(aNode, K_XML_STR_Location);
+//end;
 
 end.
 

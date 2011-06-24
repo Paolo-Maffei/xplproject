@@ -11,32 +11,32 @@ unit u_xpl_vendor_file;
                 Added error handling when loading the vendor seed file
                 Added proxy awareness capability
          0.94 : Modifications to use u_xml_plugins
+         1.00 : Dropped usage of DOM and XMLRead, replaced by superobject
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
 uses Classes,
      SysUtils,
-     DOM,
-     XMLRead,
      uxPLConst,
      u_xpl_address,
      u_xml_plugins,
      u_xml_xplplugin,
-     u_xpl_folders;
+     u_xpl_folders,
+     superobject,
+     superxmlparser;
 
-type
-
-{ TxPLVendorSeedFile }
-
-TxPLVendorSeedFile = class(TComponent)
+type { TxPLVendorSeedFile ====================================================}
+     TxPLVendorSeedFile = class(TComponent)
      private
-        fDoc         : TXMLDocument;
-        fPluginsFile : TXMLPluginsFile;
-        fFolders  : TxPLCustomFolders;
-        fStatus   : boolean;
-
+        fFolders     : TxPLCustomFolders;
+        fStatus      : boolean;
+        fLocations   : TLocationsType;
+        fPlugins     : TPluginsType;
      public
         constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders);
         destructor  destroy; override;
@@ -47,13 +47,14 @@ TxPLVendorSeedFile = class(TComponent)
         function Update(const sLocation : string = K_XPL_VENDOR_SEED_LOCATION) : boolean; // Reloads the seed file from website
         function UpdatePlugin(const aPluginName : string) : boolean;
 
-        function  VendorFile(const aVendor : tsVendor) : TXMLxplpluginType;
+        function VendorFile(const aVendor : tsVendor) : TXMLxplpluginType;
         function GetDevice(const aAddress : TxPLAddress) : TXMLDeviceType;
         function GetPluginFilePath(const aPluginName : string) : string;
 
         property IsValid   : boolean           read fStatus;
-        function Plugins   : TXMLPluginsType   ; inline;
-        function Locations : TXMLLocationsType ; inline;                      // Places where Seed file can be downloaded
+     published
+        property Locations : TLocationsType read fLocations;
+        property Plugins   : TPluginsType   read fPlugins;
      end;
 
 implementation //========================================================================
@@ -69,15 +70,15 @@ uses cStrings
 constructor TxPLVendorSeedFile.create(const aOwner : TComponent; const aFolders: TxPLCustomFolders);
 begin
    inherited Create(aOwner);
-   fStatus := false;
+   fStatus  := false;
    fFolders := aFolders;
-   fDoc := TXMLDocument.Create;
    Load;
 end;
 
 destructor TxPLVendorSeedFile.destroy;
 begin
-   fDoc.destroy;
+   if assigned(fLocations) then fLocations.Free;
+   if assigned(fPlugins)   then fPlugins.Free;
    inherited;
 end;
 
@@ -87,29 +88,20 @@ begin
 end;
 
 procedure TxPLVendorSeedFile.Load;
-var aNode : TDomNode;
+var SO : ISuperObject;
 begin
    if not FileExists(FileName) then
       TxPLApplication(Owner).Log(etWarning,'Vendor file absent, please consider updating it')
    else
    try
-      ReadXMLFile(fDoc,FileName);
-      aNode := fDoc.FirstChild;
-      fPluginsFile := TXMLPluginsFile.Create(aNode);
       fStatus := True;                                                                    // Settings correctly initialised and loaded
+
+      SO := XMLParseFile(FileName,true);
+
+      fPlugins := TPluginsType.Create(so);
+      fLocations := TLocationsType.Create(so);
    except
-      on E : EXMLReadError do fStatus := false;
    end;
-end;
-
-function TxPLVendorSeedFile.Locations : TXMLLocationsType;
-begin
-   result := fPluginsFile.Locations
-end;
-
-function TxPLVendorSeedFile.Plugins    : TXMLPluginsType;
-begin
-   result := fPluginsFile;
 end;
 
 function TxPLVendorSeedFile.Updated: TDateTime;
@@ -125,13 +117,13 @@ begin
    result := '';
    i := 0;
    repeat
-      if fPluginsFile[i].Name = aPluginName then begin
+        if Plugins[i].Name = aPluginName then begin
          result := fFolders.PluginDir +
-                   copyright(fPluginsFile[i].URL, length(fPluginsFile[i].URL)-LastDelimiter('/',fPluginsFile[i].URL))+ K_FEXT_XML;
+                   copyright(Plugins[i].URL, length(Plugins[i].URL)-LastDelimiter('/',Plugins[i].URL))+ K_FEXT_XML;
          break;
       end;
       inc(i);
-   until (i > fPluginsFile.Count);
+   until (i > Plugins.Count);
 end;
 
 function TxPLVendorSeedFile.Update(const sLocation : string) : boolean;
@@ -144,9 +136,9 @@ var i : LongWord;
     url : string;
 begin
    i := 0;
-   while (i<fPluginsFile.Count) do begin
-      if fPluginsFile[i].Name = aPluginName then begin
-         url := fPluginsFile[i].URL;
+   while (i<Plugins.Count) do begin
+      if Plugins[i].Name = aPluginName then begin
+         url := Plugins[i].URL;
          if not AnsiEndsStr(K_FEXT_XML, url) then url += K_FEXT_XML;
             Result := HTTPDownload(url,GetPluginFilePath(aPluginName));
             break;
@@ -160,10 +152,10 @@ var i : LongWord;
     fn : string;
 begin
    result := nil;
-   if fPluginsFile<>nil then begin
+   if Plugins<>nil then begin
       i := 0;
-      while (i< fPluginsFile.Count) and (result=nil) do begin
-         if fPluginsFile[i].Vendor = aVendor then begin
+   while (i< Plugins.Count) and (result=nil) do begin
+         if Plugins[i].Vendor = aVendor then begin
             fn := fFolders.PluginDir + AnsilowerCase(aVendor) + K_FEXT_XML;
             if fileexists(fn) then begin
                result := TXMLxplpluginType.Create(fn);
