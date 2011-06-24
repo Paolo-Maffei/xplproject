@@ -36,11 +36,10 @@ type { TxPLApplication =======================================================}
         constructor Create(const aOwner : TComponent); overload;
         destructor  Destroy; override;
 
-        function BuildDate : string; inline;
-        function AppName   : string; inline;
-        function FullTitle : string; inline;
+        function BuildDate   : string;    inline;
+        function AppName     : string;    inline;
+        function FullTitle   : string;    inline;
         function LogFileName : TFilename; inline;
-
         function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
@@ -71,26 +70,12 @@ uses FPCAdds
      ;
 
 // ============================================================================
-const K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
-      K_MSG_LOGGING         = 'Logging in %s';
-      K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
-      K_FULL_TITLE          = '%s version %s by %s (build %s)';
-      K_XPATH = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
-
-// ============================================================================
-//var G_VENDOR_NAME : string;
-//    G_APPLICATION_NAME : string;
-
-// ============================================================================
-//function GetApplicationName : string; inline;                                  // This is used to fake the system when
-//begin                                                                          // requesting common xPL AppFrameworks shared
-//   result := G_VENDOR_NAME;                                                    // directory - works in conjunction with
-//end;                                                                           // OnGetAppFrameworkName
-//
-//function GetVendorName: string;
-//begin
-//   result := 'xPL';
-//end;
+const
+     K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
+     K_MSG_LOGGING         = 'Logging in %s';
+     K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
+     K_FULL_TITLE          = '%s version %s by %s (build %s)';
+     K_XPATH               = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
@@ -107,15 +92,15 @@ begin
    for i:=0 to Info.StringFileInfo.Count-1 do begin
        s := Info.StringFileInfo.Items[i];
        for j:=0 to s.Count-1 do
-           if s.Keys[j] = 'CompanyName' then aVendor  := s.Values[j] else
-           if s.Keys[j] = 'InternalName' then aDevice := s.Values[j] else
-           if s.Keys[j] = 'FileVersion' then aVersion := s.Values[j];
+           if s.Keys[j] = 'CompanyName'  then aVendor  := s.Values[j] else
+           if s.Keys[j] = 'InternalName' then aDevice  := s.Values[j] else
+           if s.Keys[j] = 'FileVersion'  then aVersion := s.Values[j];
    end;
 
    fAdresse := TxPLAddress.Create(aVendor,aDevice);
 
    {$ifdef fpc}
-   if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
+      if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
    {$endif}
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
@@ -149,7 +134,7 @@ end;
 
 function TxPLApplication.LogFileName: string;
 begin
-   result := fFolders.DeviceDir + AppName + '.log';
+   result := Format('%s%s.log',[fFolders.DeviceDir, AppName]);
 end;
 
 procedure TxPLApplication.CheckVersion;
@@ -244,10 +229,6 @@ begin
    if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString]
             else result := aString;
 end;
-
-//initialization
-//   OnGetApplicationName := @GetApplicationName;
-//   OnGetVendorName      := @GetVendorName;
 
 end.
 

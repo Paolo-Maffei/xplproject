@@ -1,7 +1,7 @@
 object FrmTemplate: TFrmTemplate
-  Left = 1449
+  Left = 78
   Height = 472
-  Top = 426
+  Top = 697
   Width = 708
   Caption = 'FrmTemplate'
   ClientHeight = 472
@@ -117,14 +117,27 @@ object FrmTemplate: TFrmTemplate
       ImageIndex = 44
       OnExecute = acBasicSetExecute
     end
+    object acVendFile: TAction
+      Caption = 'Vendor Files'
+      OnExecute = acVendFileExecute
+    end
   end
   object xPLMenu: TPopupMenu
     left = 128
     object MenuItem7: TMenuItem
       Action = acLogViewer
     end
-    object MenuItem14: TMenuItem
-      Action = acInstalledApps
+    object mnuNull1: TMenuItem
+      Caption = '-'
+    end
+    object mnuLaunch: TMenuItem
+      Caption = 'Launch...'
+      object mnuAllApps: TMenuItem
+        Action = acInstalledApps
+      end
+      object mnuNull2: TMenuItem
+        Caption = '-'
+      end
     end
     object MenuItem16: TMenuItem
       Caption = '-'

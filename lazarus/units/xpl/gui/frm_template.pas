@@ -15,14 +15,18 @@ type { TFrmTemplate ==========================================================}
     acLogViewer: TAction;
     acQuit: TAction;
     acBasicSet: TAction;
+    acVendFile: TAction;
     ActionList: TActionList;
     imgBullet: TImage;
     lblModuleName: TTILabel;
+    mnuNull1: TMenuItem;
     MenuItem13: TMenuItem;
-    MenuItem14: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem16: TMenuItem;
     MenuItem17: TMenuItem;
+    mnuLaunch: TMenuItem;
+    mnuAllApps: TMenuItem;
+    mnuNull2: TMenuItem;
     MenuItem7: TMenuItem;
     Panel4: TPanel;
     StatusBar1: TStatusBar;
@@ -36,6 +40,7 @@ type { TFrmTemplate ==========================================================}
     procedure acInstalledAppsExecute(Sender: TObject);
     procedure acLogViewerExecute(Sender: TObject);
     procedure acQuitExecute(Sender: TObject);
+    procedure acVendFileExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure ToolButton9Click(Sender: TObject);
@@ -72,6 +77,16 @@ procedure TFrmTemplate.acBasicSetExecute(Sender: TObject);                     /
 begin                                                                          // from the xPL menu
    with TProcess.Create(nil) do try
       CommandLine := acBasicSet.Hint;
+      Execute;
+   finally
+      Free;
+   end;
+end;
+
+procedure TFrmTemplate.acVendFileExecute(Sender: TObject);
+begin
+   with TProcess.Create(nil) do try
+      CommandLine := acVendFile.Hint;
       Execute;
    finally
       Free;
@@ -122,20 +137,32 @@ begin
    lblModuleName.Link.TIObject := xPLApplication.Adresse;
    lblModuleName.Link.TIPropertyName:= 'RawxPL';
 
-   TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
+   if xPLApplication is TxPLCustomListener then
+      TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
+
    xPLApplication.OnLogEvent := @OnLogEvent;
 
    Caption := xPLApplication.AppName;
 
    sl := xPLApplication.Settings.GetxPLAppList;
    item := sl.FindItemName('basicset');
-   if assigned(item) then begin
+   if assigned(item) and (xPLApplication.Adresse.Device<>'basicset') then begin
       xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version);
       aMenu := TMenuItem.Create(self);
       aMenu.Action := acBasicSet;
       acBasicSet.Hint:=path;
-      xPLMenu.Items.Insert(0,aMenu);
+      mnuLaunch.Add(aMenu);
    end;
+
+   item := sl.FindItemName('vendfile');
+   if assigned(item) and (xPLApplication.Adresse.Device<>'vendfile') then begin
+      xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version);
+      aMenu := TMenuItem.Create(self);
+      aMenu.Action := acVendFile;
+      acVendFile.Hint:=path;
+      mnuLaunch.Add(aMenu);
+   end;
+
    sl.Free;
 end;
 
