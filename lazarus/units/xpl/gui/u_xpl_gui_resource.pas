@@ -29,7 +29,7 @@ const K_IMG_RECONNECT  = 'reconnect';
 
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD, K_IMG_MESSAGE,
     K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_LOUPE, K_IMG_CE_PROCEDURE,
-    K_IMG_SYNCHRONIZE : integer;
+    K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE : integer;
 
 implementation // =============================================================
 uses Forms,
@@ -50,8 +50,8 @@ begin
    K_IMG_pkg_installed := fImages.AddLazarusResource('pkg_installed');     // 7
    fImages.AddLazarusResource('txt');               // 8
    fImages.AddLazarusResource('2downarrow');        // 9
-   fImages.AddLazarusResource('edit_add');          // 10
-   fImages.AddLazarusResource('edit_remove');       // 11
+   K_IMG_EDIT_ADD := fImages.AddLazarusResource('edit_add');          // 10
+   K_IMG_EDIT_REMOVE := fImages.AddLazarusResource('edit_remove');       // 11
    fImages.AddLazarusResource('ledgreen');          // 12
    fImages.AddLazarusResource('ledorange');         // 13
    fImages.AddLazarusResource('ledred');            // 14
@@ -96,6 +96,7 @@ begin
    K_IMG_STAT := fImages.AddLazarusResource('xpl-stat');
    K_IMG_TRIG := fImages.AddLazarusResource('xpl-trig');
    K_IMG_LOUPE := fImages.AddLazarusResource('loupe');
+   K_IMG_DOCUMENT_SAVE := fImages.AddLazarusResource('document-save');
 end;
 
 destructor TxPLGUIResource.Destroy;
