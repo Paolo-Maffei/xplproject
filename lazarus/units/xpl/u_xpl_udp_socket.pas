@@ -10,7 +10,9 @@ unit u_xpl_udp_socket;
         localaddresses - replaced by synamisc
  }
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 

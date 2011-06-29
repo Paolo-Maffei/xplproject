@@ -11,7 +11,7 @@ uses SysUtils
      {$ifdef fpc}
      , UniqueInstanceRaw
      {$endif}
-     , VersionChecker
+     //, VersionChecker
      , u_xpl_address
      , u_xpl_folders
      , u_xpl_settings
@@ -30,7 +30,8 @@ type { TxPLApplication =======================================================}
         fOnLogEvent : TStrParamEvent;
         fPluginList : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
-        fVChecker   : TVersionChecker;
+        fVersion    : string;
+        //fVChecker   : TVersionChecker;
         Info        : TVersionInfo;
      public
         constructor Create(const aOwner : TComponent); overload;
@@ -43,7 +44,7 @@ type { TxPLApplication =======================================================}
         function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
-        procedure CheckVersion;
+        //procedure CheckVersion;
         Procedure Log (EventType : TEventType; Msg : String);
         Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const);
         Procedure ResetLog;
@@ -53,10 +54,10 @@ type { TxPLApplication =======================================================}
         property Settings  : TxPLCustomSettings read fSettings;
         property Adresse   : TxPLAddress        read fAdresse;
         property Folders   : TxPLCustomFolders  read fFolders;
-        property Version   : string             read fvChecker.fCurrentVersion;
+        property Version   : string             read fVersion;
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
-        property VChecker  : TVersionChecker    read fVChecker;
+        //property VChecker  : TVersionChecker    read fVChecker;
      end;
 
 var xPLApplication : TxPLApplication;
@@ -75,13 +76,12 @@ const
      K_MSG_LOGGING         = 'Logging in %s';
      K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
      K_FULL_TITLE          = '%s version %s by %s (build %s)';
-     K_XPATH               = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
+     //K_XPATH               = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
 var s : TVersionStringTable;
     i,j : integer;
-    aDevice, aVendor, aVersion : string;
 begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
@@ -89,15 +89,14 @@ begin
    Info := TVersionInfo.Create;
    Info.Load(HINSTANCE);
 
+   fAdresse := TxPLAddress.Create;
    for i:=0 to Info.StringFileInfo.Count-1 do begin
        s := Info.StringFileInfo.Items[i];
        for j:=0 to s.Count-1 do
-           if s.Keys[j] = 'CompanyName'  then aVendor  := s.Values[j] else
-           if s.Keys[j] = 'InternalName' then aDevice  := s.Values[j] else
-           if s.Keys[j] = 'FileVersion'  then aVersion := s.Values[j];
+           if s.Keys[j] = 'CompanyName'  then fAdresse.Vendor := s.Values[j] else
+           if s.Keys[j] = 'InternalName' then fAdresse.Device := s.Values[j] else
+           if s.Keys[j] = 'FileVersion'  then fVersion := s.Values[j];
    end;
-
-   fAdresse := TxPLAddress.Create(aVendor,aDevice);
 
    {$ifdef fpc}
       if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
@@ -105,11 +104,11 @@ begin
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
-   fVChecker := TVersionChecker.Create(self);
+   {fVChecker := TVersionChecker.Create(self);
    fvChecker.ServerLocation := K_DEFAULT_ONLINESTORE;
    fvChecker.CurrentVersion := aVersion;
    fvChecker.VersionNode    := Format(K_XPATH,[Adresse.Vendor, Adresse.Vendor, Adresse.Device, 'version']);
-   fvChecker.DownloadNode   := Format(K_XPATH,[Adresse.Vendor, Adresse.Vendor, Adresse.Device, 'download']);
+   fvChecker.DownloadNode   := Format(K_XPATH,[Adresse.Vendor, Adresse.Vendor, Adresse.Device, 'download']);}
 
    if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
    Logger.Channels.Add(TFileChannel.Create(LogFileName));
@@ -137,10 +136,10 @@ begin
    result := Format('%s%s.log',[fFolders.DeviceDir, AppName]);
 end;
 
-procedure TxPLApplication.CheckVersion;
+{procedure TxPLApplication.CheckVersion;
 begin
    fvChecker.CheckVersion;
-end;
+end;}
 
 procedure TxPLApplication.RegisterMe;
 var aPath, aVersion : string;
@@ -169,7 +168,7 @@ end;
 
 function TxPLApplication.FullTitle : string;
 begin
-   Result := Format(K_FULL_TITLE,[AppName,fvChecker.CurrentVersion,Adresse.Vendor,BuildDate]);
+   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
 end;
 
 function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;

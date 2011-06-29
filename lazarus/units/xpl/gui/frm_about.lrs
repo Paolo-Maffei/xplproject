@@ -5465,32 +5465,27 @@ LazarusResources.Add('TfrmAbout','FORMDATA',[
   +#2#24#11'ButtonWidth'#2'P'#7'Caption'#6#8'ToolBar2'#11'EdgeBorders'#11#8'ebB'
   +'ottom'#0#9'EdgeOuter'#7#8'esRaised'#4'Flat'#8#4'List'#9#12'ShowCaptions'#9#8
   +'TabOrder'#2#0#0#11'TToolButton'#8'tbLaunch'#4'Left'#2#1#3'Top'#2#0#6'Action'
-  +#7#7'acClose'#10'ImageIndex'#2#1#0#0#11'TToolButton'#11'ToolButton2'#4'Left'
-  +#2'Q'#3'Top'#2#0#5'Width'#2#4#7'Caption'#6#11'ToolButton2'#5'Style'#7#10'tbs'
-  +'Divider'#0#0#11'TToolButton'#11'ToolButton8'#4'Left'#2'U'#3'Top'#2#0#6'Acti'
-  +'on'#7#13'acCheckUpdate'#0#0#0#12'TPageControl'#12'PageControl1'#4'Left'#2'P'
-  +#6'Height'#3#240#0#3'Top'#2':'#5'Width'#3#200#1#10'ActivePage'#7#9'tsCredits'
-  +#8'TabIndex'#2#2#8'TabOrder'#2#1#0#9'TTabSheet'#8'tsReadme'#7'Caption'#6#6'R'
-  +'eadme'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#5'TMemo'#9'mmoRea'
-  +'dme'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3#192#1#5'Align'#7#8
-  +'alClient'#5'Color'#7#8'clInfoBk'#8'ReadOnly'#9#10'ScrollBars'#7#14'ssAutoVe'
-  +'rtical'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'#9'tsLicense'#7'Caption'#6#7'Lice'
-  +'nse'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#5'TMemo'#10'mmoLice'
-  +'nse'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3#192#1#5'Align'#7#8
-  +'alClient'#5'Color'#7#8'clInfoBk'#8'ReadOnly'#9#10'ScrollBars'#7#14'ssAutoVe'
-  +'rtical'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'#9'tsCredits'#7'Caption'#6#7'Cred'
-  +'its'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#10'TScrollBox'#10'S'
-  +'crollBox1'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3#192#1#5'Alig'
-  +'n'#7#8'alClient'#12'ClientHeight'#3#208#0#11'ClientWidth'#3#171#1#8'TabOrde'
-  +'r'#2#0#0#6'TImage'#6'Image1'#4'Left'#2#8#6'Height'#2'Z'#3'Top'#2#10#5'Width'
-  +#2'Z'#8'AutoSize'#9#0#0#6'TImage'#6'Image2'#4'Left'#2#6#6'Height'#2'Z'#3'Top'
-  +#2'r'#5'Width'#2'Z'#8'AutoSize'#9#0#0#5'TMemo'#10'mmoCredits'#4'Left'#2'j'#6
-  +'Height'#3#210#0#3'Top'#2#10#5'Width'#3'8'#1#13'Lines.Strings'#1#6#10'mmoCre'
-  +'dits'#0#8'TabOrder'#2#0#0#0#0#0#0#11'TActionList'#10'ActionList'#4'left'#2#8
-  +#3'top'#2'p'#0#7'TAction'#7'acClose'#7'Caption'#6#5'Close'#10'ImageIndex'#2#0
-  +#9'OnExecute'#7#14'acCloseExecute'#0#0#7'TAction'#9'acCredits'#7'Caption'#6#7
-  +'Credits'#0#0#7'TAction'#9'acLicense'#7'Caption'#6#7'License'#0#0#7'TAction'
-  +#8'acReadme'#7'Caption'#6#6'Readme'#0#0#7'TAction'#13'acCheckUpdate'#7'Capti'
-  +'on'#6#16'Check for update'#10'ImageIndex'#2#4#9'OnExecute'#7#20'acCheckUpda'
-  +'teExecute'#0#0#0#0
+  +#7#7'acClose'#10'ImageIndex'#2#1#0#0#0#12'TPageControl'#12'PageControl1'#4'L'
+  +'eft'#2'P'#6'Height'#3#240#0#3'Top'#2':'#5'Width'#3#200#1#10'ActivePage'#7#9
+  +'tsCredits'#8'TabIndex'#2#2#8'TabOrder'#2#1#0#9'TTabSheet'#8'tsReadme'#7'Cap'
+  +'tion'#6#6'Readme'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#5'TMem'
+  +'o'#9'mmoReadme'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3#192#1#5
+  +'Align'#7#8'alClient'#5'Color'#7#8'clInfoBk'#8'ReadOnly'#9#10'ScrollBars'#7
+  +#14'ssAutoVertical'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'#9'tsLicense'#7'Captio'
+  +'n'#6#7'License'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#5'TMemo'
+  +#10'mmoLicense'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3#192#1#5
+  +'Align'#7#8'alClient'#5'Color'#7#8'clInfoBk'#8'ReadOnly'#9#10'ScrollBars'#7
+  +#14'ssAutoVertical'#8'TabOrder'#2#0#0#0#0#9'TTabSheet'#9'tsCredits'#7'Captio'
+  +'n'#6#7'Credits'#12'ClientHeight'#3#212#0#11'ClientWidth'#3#192#1#0#10'TScro'
+  +'llBox'#10'ScrollBox1'#4'Left'#2#0#6'Height'#3#212#0#3'Top'#2#0#5'Width'#3
+  +#192#1#5'Align'#7#8'alClient'#12'ClientHeight'#3#208#0#11'ClientWidth'#3#171
+  +#1#8'TabOrder'#2#0#0#6'TImage'#6'Image1'#4'Left'#2#8#6'Height'#2'Z'#3'Top'#2
+  +#10#5'Width'#2'Z'#8'AutoSize'#9#0#0#6'TImage'#6'Image2'#4'Left'#2#6#6'Height'
+  +#2'Z'#3'Top'#2'r'#5'Width'#2'Z'#8'AutoSize'#9#0#0#5'TMemo'#10'mmoCredits'#4
+  +'Left'#2'j'#6'Height'#3#210#0#3'Top'#2#10#5'Width'#3'8'#1#13'Lines.Strings'#1
+  +#6#10'mmoCredits'#0#8'TabOrder'#2#0#0#0#0#0#0#11'TActionList'#10'ActionList'
+  +#4'left'#2#8#3'top'#2'p'#0#7'TAction'#7'acClose'#7'Caption'#6#5'Close'#10'Im'
+  +'ageIndex'#2#0#9'OnExecute'#7#14'acCloseExecute'#0#0#7'TAction'#9'acCredits'
+  +#7'Caption'#6#7'Credits'#0#0#7'TAction'#9'acLicense'#7'Caption'#6#7'License'
+  +#0#0#7'TAction'#8'acReadme'#7'Caption'#6#6'Readme'#0#0#0#0
 ]);
