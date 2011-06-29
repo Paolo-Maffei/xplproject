@@ -32,7 +32,6 @@ TfrmAbout = class(TForm)
         acCredits: TAction;
         acLicense: TAction;
         acReadme: TAction;
-        acCheckUpdate: TAction;
         ActionList: TActionList;
         Image1: TImage;
         Image2: TImage;
@@ -51,15 +50,13 @@ TfrmAbout = class(TForm)
         tsCredits: TTabSheet;
         tbLaunch: TToolButton;
         ToolBar: TToolBar;
-        ToolButton2: TToolButton;
-        ToolButton8: TToolButton;
-        procedure acCheckUpdateExecute(Sender: TObject);
+        //procedure acCheckUpdateExecute(Sender: TObject);
         procedure acCloseExecute(Sender: TObject);
         procedure FormCreate(Sender: TObject);
         procedure FormShow(Sender: TObject);
 
-        procedure UpdateAvailable(Sender : TObject);
-        procedure NoUpdateAvailable(Sender : TObject);
+        //procedure UpdateAvailable(Sender : TObject);
+        //procedure NoUpdateAvailable(Sender : TObject);
      end;
 
      procedure ShowFrmAbout;
@@ -115,34 +112,34 @@ begin
                              mmoReadme.Lines.Add(Format(K_CREDITS_STR,[lcl_version]));
    if tsLicense.Visible then mmoLicense.Lines.LoadFromFile(K_FILE_LICENSE);
 
-   if not Assigned(xPLApplication.VChecker.OnUpdateFound) then begin
+(*   if not Assigned(xPLApplication.VChecker.OnUpdateFound) then begin
      xPLApplication.VChecker.OnUpdateFound   := @UpdateAvailable;
      xPLApplication.VChecker.OnNoUpdateFound := @NoUpdateAvailable;
-   end;
+   end;*)
 end;
 
-procedure TfrmAbout.UpdateAvailable(Sender: TObject);
+(*procedure TfrmAbout.UpdateAvailable(Sender: TObject);
 var s : string;
 begin
    s := Format(K_UPDATE_AVAIL,[xPLApplication.vChecker.ServerVersion,xPLApplication.VChecker.DownloadURL]);
    if Application.MessageBox(PChar(s),K_UPDATE_STATUS, MB_YESNO + MB_ICONQUESTION) = IDYES then
       ShowFrmDownloadFile( xPLApplication.vChecker.DownloadURL, '', false, false, true);
-end;
+end;*)
 
-procedure TfrmAbout.NoUpdateAvailable(Sender: TObject);
+(*procedure TfrmAbout.NoUpdateAvailable(Sender: TObject);
 begin
    Application.MessageBox(K_NO_UPDATE,K_UPDATE_STATUS,0);
-end;
+end;*)
 
 procedure TfrmAbout.acCloseExecute(Sender: TObject);
 begin
    Close;
 end;
 
-procedure TfrmAbout.acCheckUpdateExecute(Sender: TObject);
+(*procedure TfrmAbout.acCheckUpdateExecute(Sender: TObject);
 begin
    xPLApplication.CheckVersion;
-end;
+end;*)
 
 initialization // ==============================================================
 {$I frm_about.lrs}

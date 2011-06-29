@@ -4089,18 +4089,6 @@ object frmAbout: TfrmAbout
       Action = acClose
       ImageIndex = 1
     end
-    object ToolButton2: TToolButton
-      Left = 81
-      Top = 0
-      Width = 4
-      Caption = 'ToolButton2'
-      Style = tbsDivider
-    end
-    object ToolButton8: TToolButton
-      Left = 85
-      Top = 0
-      Action = acCheckUpdate
-    end
   end
   object PageControl1: TPageControl
     Left = 80
@@ -4198,11 +4186,6 @@ object frmAbout: TfrmAbout
     end
     object acReadme: TAction
       Caption = 'Readme'
-    end
-    object acCheckUpdate: TAction
-      Caption = 'Check for update'
-      ImageIndex = 4
-      OnExecute = acCheckUpdateExecute
     end
   end
 end

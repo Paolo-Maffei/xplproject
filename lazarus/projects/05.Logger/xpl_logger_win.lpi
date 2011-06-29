@@ -55,7 +55,7 @@
         <PackageName Value="LCL"/>
       </Item6>
     </RequiredPackages>
-    <Units Count="191">
+    <Units Count="192">
       <Unit0>
         <Filename Value="xpl_logger.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -63,7 +63,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="8"/>
-        <CursorPos X="9" Y="13"/>
+        <CursorPos X="8" Y="16"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -72,7 +72,7 @@
         <ComponentName Value="frmLogger"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_logger"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="401"/>
         <CursorPos X="9" Y="406"/>
@@ -575,13 +575,10 @@
       <Unit66>
         <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
         <UnitName Value="u_xml_xplplugin"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="205"/>
-        <CursorPos X="1" Y="238"/>
+        <TopLine Value="1"/>
+        <CursorPos X="6" Y="16"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit66>
       <Unit67>
         <Filename Value="..\..\units\xpl\xml\u_xml.pas"/>
@@ -1512,10 +1509,12 @@
       <Unit183>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="52"/>
-        <CursorPos X="11" Y="47"/>
+        <TopLine Value="73"/>
+        <CursorPos X="1" Y="85"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit183>
       <Unit184>
         <Filename Value="..\..\units\general\ssversionchecker\VersionChecker.pas"/>
@@ -1539,35 +1538,36 @@
       <Unit186>
         <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
         <UnitName Value="u_xml_plugins"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="23"/>
-        <CursorPos X="1" Y="86"/>
+        <TopLine Value="1"/>
+        <CursorPos X="35" Y="78"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
       </Unit186>
       <Unit187>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
         <UnitName Value="u_xpl_vendor_file"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="43"/>
-        <CursorPos X="59" Y="166"/>
+        <TopLine Value="15"/>
+        <CursorPos X="12" Y="28"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit187>
       <Unit188>
         <Filename Value="..\..\..\components\superobjectv1.2.4\superobject.pas"/>
         <UnitName Value="superobject"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3537"/>
-        <CursorPos X="1" Y="3555"/>
+        <TopLine Value="462"/>
+        <CursorPos X="3" Y="493"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit188>
       <Unit189>
         <Filename Value="..\..\..\components\superobjectv1.2.4\superxmlparser.pas"/>
         <UnitName Value="superxmlparser"/>
-        <EditorIndex Value="5"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="10" Y="16"/>
@@ -1582,8 +1582,18 @@
         <CursorPos X="40" Y="50"/>
         <UsageCount Value="10"/>
       </Unit190>
+      <Unit191>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <UnitName Value="u_xpl_address"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit191>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="20" HistoryIndex="19">
       <Position1>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
         <Caret Line="158" Column="1" TopLine="148"/>
@@ -1642,68 +1652,28 @@
       </Position14>
       <Position15>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="158" Column="1" TopLine="148"/>
+        <Caret Line="161" Column="32" TopLine="148"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="165" Column="1" TopLine="148"/>
+        <Filename Value="xpl_logger.lpr"/>
+        <Caret Line="16" Column="8" TopLine="8"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="158" Column="1" TopLine="148"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="98" Column="48" TopLine="76"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="165" Column="1" TopLine="148"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="15" Column="15" TopLine="10"/>
       </Position18>
       <Position19>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="158" Column="1" TopLine="148"/>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="85" Column="1" TopLine="73"/>
       </Position19>
       <Position20>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="165" Column="1" TopLine="148"/>
+        <Caret Line="28" Column="12" TopLine="15"/>
       </Position20>
-      <Position21>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="158" Column="1" TopLine="148"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="165" Column="1" TopLine="148"/>
-      </Position22>
-      <Position23>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <Caret Line="161" Column="32" TopLine="148"/>
-      </Position23>
-      <Position24>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="356" Column="66" TopLine="337"/>
-      </Position24>
-      <Position25>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
-      </Position25>
-      <Position26>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="214" Column="18" TopLine="188"/>
-      </Position26>
-      <Position27>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="346" Column="13" TopLine="320"/>
-      </Position27>
-      <Position28>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="350" Column="33" TopLine="324"/>
-      </Position28>
-      <Position29>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="377" Column="16" TopLine="351"/>
-      </Position29>
-      <Position30>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <Caret Line="397" Column="24" TopLine="373"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
