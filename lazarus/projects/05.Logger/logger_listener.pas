@@ -6,9 +6,9 @@ interface
 
 uses Classes
      , SysUtils
-     , u_xpl_custom_listener
      , u_xpl_message
      , u_xpl_actionlist
+     , u_xpl_custom_listener
      ;
 
 type TMessageList = TList;

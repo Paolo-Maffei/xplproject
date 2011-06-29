@@ -30,7 +30,7 @@ begin
   Application.Title:='xPL Sender';
   Application.Initialize;
 
-  xPLApplication := TxPLSender.Create(nil);
+  xPLApplication := TxPLSender.Create(Application);
   xPLGUIResource := TxPLGUIResource.Create;
   xPLMessageGUI  := TxPLMessageGUI.Create(xPLApplication,'');
 
@@ -45,6 +45,5 @@ begin
   xPLMessageGUI.Destroy ;
 
   xPLGUIResource.Free;
-  xPLApplication.Free;
 end.
 

@@ -101,7 +101,7 @@ begin
    with xPLApplication.Settings do begin
         BroadCastAddress := e_BroadCast.text;
         if RightsError then begin
-              Application.MessageBox(ERROR_LINE,'Error',0);
+              xPLApplication.Log(etWarning,ERROR_LINE);
               acReloadExecute(self);
            end else begin
                 ListenOnAll := (e_ListenOn.Text = K_ALL_IPS_JOCKER);

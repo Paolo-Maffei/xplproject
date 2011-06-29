@@ -6,14 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, IdComponent;
+  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, IdComponent, frm_template;
 
 type
 
   { Tfrmvendorfiles }
 
-  Tfrmvendorfiles = class(TForm)
-    acAbout: TAction;
+  Tfrmvendorfiles = class(TFrmTemplate)
     acSelectAll: TAction;
     acDeselect: TAction;
     acInvert: TAction;
@@ -21,19 +20,12 @@ type
     acDownload: TAction;
     acViewXML: TAction;
     acViewPlugin: TAction;
-    ActionList: TActionList;
-    acInstalledApps: TAction;
+    ActionList2: TActionList;
     cbLocations: TComboBox;
     lblUpdated: TLabel;
     Label12: TLabel;
     lvPlugins: TListView;
     MenuItem1: TMenuItem;
-    MenuItem11: TMenuItem;
-    MenuItem12: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
-    acQuit: TAction;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
@@ -42,27 +34,18 @@ type
     Panel2: TPanel;
     popPluginList: TPopupMenu;
     ProgressBar1: TProgressBar;
-    ToolBar: TToolBar;
-    ToolButton1: TToolButton;
     ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
     ToolButton4: TToolButton;
-    xPLMenu: TPopupMenu;
-    procedure acAboutExecute(Sender: TObject);
     procedure acDeselectExecute(Sender: TObject);
     procedure acDownloadExecute(Sender: TObject);
-    procedure acInstalledAppsExecute(Sender: TObject);
     procedure acInvertExecute(Sender: TObject);
-    procedure acQuitExecute(Sender: TObject);
     procedure acReloadExecute(Sender: TObject);
     procedure acSelectAllExecute(Sender: TObject);
     procedure acUpdateListExecute(Sender: TObject);
     procedure acViewPluginExecute(Sender: TObject);
     procedure acViewXMLExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure lvPluginsSelectItem(Sender: TObject; Item: TListItem;
-      Selected: Boolean);
-    procedure ToolButton1Click(Sender: TObject);
+    procedure lvPluginsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
   private
     { private declarations }
   public
@@ -72,7 +55,7 @@ type
 var
   frmvendorfiles: Tfrmvendorfiles;
 
-implementation //===============================================================
+implementation //==============================================================
 uses StrUtils,
      frm_about,
      frm_xplappslauncher,
@@ -81,40 +64,23 @@ uses StrUtils,
      u_xpl_gui_resource,
      u_xpl_application;
 
+// ============================================================================
 const K_UPDATE_STR = 'Updated on %s';
       K_XPL_VENDOR_SEED_LOCATION = 'http://www.xplmonkey.com/downloads/plugins';
       IMG_OK = 45;
       IMG_ERROR = 46;
 
-{ TFrmMain Object =============================================================}
-procedure Tfrmvendorfiles.acAboutExecute(Sender: TObject);
-begin
-   ShowFrmAbout;
-end;
-
-procedure Tfrmvendorfiles.acInstalledAppsExecute(Sender: TObject);
-begin
-   ShowFrmAppLauncher;
-end;
-
-procedure Tfrmvendorfiles.acQuitExecute(Sender: TObject);
-begin
-   Close;
-end;
-
-procedure Tfrmvendorfiles.ToolButton1Click(Sender: TObject);
-begin
-  xPLMenu.PopUp();
-end;
-
+// TFrmMain Object ============================================================
 procedure Tfrmvendorfiles.FormCreate(Sender: TObject);
 begin
-   acReloadExecute(self);
-   ToolBar.Images := xPLGUIResource.Images;
-   xPLMenu.Images := ToolBar.Images;
+   inherited;
+
    lvPlugins.SmallImages := ToolBar.Images;
    lvPlugins.StateImages := ToolBar.Images;
-   PopPluginList.Images := ToolBar.Images;
+   PopPluginList.Images  := ToolBar.Images;
+   lblModuleName.Visible := False;
+
+   acReloadExecute(self);
 end;
 
 procedure Tfrmvendorfiles.lvPluginsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
@@ -196,7 +162,7 @@ end;
 procedure Tfrmvendorfiles.acUpdateListExecute(Sender: TObject);
 begin
    if xPLApplication.VendorFile.Update(cbLocations.Text) then acReloadExecute(self)
-             else Application.MessageBox('Error downloading file','Error',0);
+             else xPLApplication.Log(etWarning,'Error downloading file');
 end;
 
 procedure Tfrmvendorfiles.acViewPluginExecute(Sender: TObject);
