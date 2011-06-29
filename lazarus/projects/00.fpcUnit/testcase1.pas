@@ -5,7 +5,7 @@ unit TestCase1;
 interface
 
 uses
-  Classes, SysUtils, fpcunit, testutils, testregistry; 
+  Classes, SysUtils, fpcunit, testregistry;
 
 type
 
@@ -22,6 +22,7 @@ type
     procedure TestConfigItem;
     procedure TestMessage;
     procedure Test_u_xpl_common;
+    procedure test_folders;
   end; 
 
 implementation
@@ -32,7 +33,10 @@ uses u_xPL_Schema,
      u_xPL_Body,
      u_xpl_Common,
      u_xpl_custom_message,
-     u_xpl_collection,
+     u_xpl_application,
+     u_xpl_settings,
+     u_xpl_vendor_file,
+     u_xpl_folders,
      u_xPL_Config;
 
 procedure ClinxPLfpcUnit.TestMsgType;
@@ -77,7 +81,7 @@ begin
 end;
 
 procedure ClinxPLfpcUnit.TestAddress;
-var adr1,adr2, adr3 : TxPLAddress;
+var adr1,adr2 : TxPLAddress;
     s : string;
 begin
    adr1 := TxPLAddress.Create;
@@ -110,6 +114,7 @@ begin
    adr2.free;
    s := adr1.HostNmInstance;
    AssertEquals(s,'lapfr0005');
+   AssertFalse(adr1.RandomInstance=adr1.RandomInstance);
 end;
 
 procedure ClinxPLfpcUnit.TestTarget;
@@ -143,13 +148,14 @@ begin
    AssertEquals(tar1.IsValid,true);
    AssertEquals(tar1.IsGeneric,false);
    adr1.Free;
-   adr1 := tar1.RawxPL;
+   adr1 := TxPLaddress.Create(tar1);
+   // adr1 := tar1.RawxPL;                      // Operator overloading suppressed for delphi compatiblity issue
    AssertEquals(tar1.Equals(adr1),true);
 end;
 
 procedure ClinxPLfpcUnit.TestHeader;
 var compo : TComponent;
-    head1,head2 : TxPLHeader;
+    head1 : TxPLHeader;
 begin
    compo := TComponent.Create(nil);
      head1 := TxPLHeader.Create(compo);
@@ -232,10 +238,26 @@ begin
 
 end;
 
+procedure ClinxPLfpcUnit.test_folders;
+var folder : TxPLCustomFolders;
+    adr1 : TxPLAddress;
+    s1,s2,s3 : string;
+    app : TxPLApplication;
+begin
+   app  := TxPLApplication.Create(nil);
+   adr1 := TxPLAddress.Create('vendor','device','instance');
+   folder := TxPLCustomFolders.Create(adr1);
+   s1 := folder.shareddir;
+   s2 := folder.plugindir;
+   s3 := folder.devicedir;
+   folder.free;
+   adr1.free;
+   app.free;
+end;
+
 
 
 initialization
-
   RegisterTest(ClinxPLfpcUnit); 
 end.
 

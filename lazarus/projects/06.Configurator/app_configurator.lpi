@@ -45,7 +45,7 @@
         <PackageName Value="LCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="104">
+    <Units Count="105">
       <Unit0>
         <Filename Value="app_configurator.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -629,7 +629,7 @@
       <Unit74>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <UnitName Value="fpTimer"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="185"/>
         <CursorPos X="33" Y="198"/>
@@ -829,7 +829,7 @@
         <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="20" Y="10"/>
+        <CursorPos X="15" Y="19"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit98>
@@ -844,7 +844,7 @@
       <Unit100>
         <Filename Value="..\..\..\components\uniqueinstance\uniqueinstanceraw.pas"/>
         <UnitName Value="UniqueInstanceRaw"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -876,13 +876,23 @@
         <UnitName Value="u_xpl_common"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
+        <TopLine Value="67"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit103>
+      <Unit104>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <UnitName Value="u_xpl_vendor_file"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit104>
     </Units>
-    <JumpHistory Count="26" HistoryIndex="25">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="frm_configurator.pas"/>
         <Caret Line="298" Column="1" TopLine="272"/>
@@ -987,6 +997,10 @@
         <Filename Value="frm_configurator.pas"/>
         <Caret Line="82" Column="14" TopLine="64"/>
       </Position26>
+      <Position27>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="19" Column="15" TopLine="1"/>
+      </Position27>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

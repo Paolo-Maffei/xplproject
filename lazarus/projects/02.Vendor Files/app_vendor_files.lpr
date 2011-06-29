@@ -14,17 +14,14 @@ uses
 {$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
 
 begin
-  Application.Title:='xPL Vendor Files';
   Application.Initialize;
 
-  xPLApplication := TxPLApplication.Create(nil);
+  xPLApplication := TxPLApplication.Create(Application);
   xPLGUIResource := TxPLGUIResource.Create;
 
   Application.CreateForm(Tfrmvendorfiles, frmvendorfiles);
-
   Application.Run;
 
   xPLGUIResource.Free;
-  xPLApplication.Free;
 end.
 

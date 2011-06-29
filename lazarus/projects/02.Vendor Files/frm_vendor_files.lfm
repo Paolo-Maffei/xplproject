@@ -1,7 +1,7 @@
-object frmvendorfiles: Tfrmvendorfiles
-  Left = 1537
+inherited frmvendorfiles: Tfrmvendorfiles
+  Left = 56
   Height = 374
-  Top = 198
+  Top = 40
   Width = 665
   Caption = 'xPL Vendor Files'
   ClientHeight = 374
@@ -4314,51 +4314,30 @@ object frmvendorfiles: Tfrmvendorfiles
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   }
   OnCreate = FormCreate
-  LCLVersion = '0.9.31'
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 25
-    Top = 0
+  inherited StatusBar1: TStatusBar
+    Top = 351
     Width = 665
-    AutoSize = True
-    ButtonHeight = 24
-    ButtonWidth = 30
-    Caption = 'ToolBar'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esNone
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 0
-    object ToolButton1: TToolButton
-      Left = 1
-      Top = 0
-      DropdownMenu = xPLMenu
-      ImageIndex = 0
-      OnClick = ToolButton1Click
-      Style = tbsDropDown
+  end
+  inherited ToolBar: TToolBar
+    Width = 665
+    TabOrder = 3
+    inherited Panel4: TPanel
+      Left = 465
     end
-    object ToolButton3: TToolButton
-      Left = 43
-      Top = 0
-      Width = 4
-      Caption = 'ToolButton3'
-      Style = tbsDivider
-    end
-    object ToolButton2: TToolButton
-      Left = 47
+    object ToolButton2: TToolButton[3]
+      Left = 160
       Top = 0
       Action = acUpdateList
     end
-    object ToolButton4: TToolButton
-      Left = 151
+    object ToolButton4: TToolButton[4]
+      Left = 51
       Top = 0
       Action = acDownload
     end
   end
-  object lvPlugins: TListView
+  object lvPlugins: TListView[3]
     Left = 0
-    Height = 277
+    Height = 254
     Top = 97
     Width = 665
     Align = alClient
@@ -4382,11 +4361,11 @@ object frmvendorfiles: Tfrmvendorfiles
         Width = 150
       end>
     PopupMenu = popPluginList
-    TabOrder = 1
+    TabOrder = 0
     ViewStyle = vsReport
     OnSelectItem = lvPluginsSelectItem
   end
-  object Panel2: TPanel
+  object Panel2: TPanel[4]
     Left = 0
     Height = 72
     Top = 25
@@ -4395,7 +4374,7 @@ object frmvendorfiles: Tfrmvendorfiles
     BevelOuter = bvNone
     ClientHeight = 72
     ClientWidth = 665
-    TabOrder = 2
+    TabOrder = 1
     object lblUpdated: TLabel
       Left = 8
       Height = 1
@@ -4430,28 +4409,21 @@ object frmvendorfiles: Tfrmvendorfiles
       TabOrder = 1
     end
   end
-  object ActionList: TActionList
-    left = 152
-    top = 32
-    object acQuit: TAction
-      Category = 'xPL'
-      Caption = 'Quit'
-      Hint = 'Quit the application'
-      ImageIndex = 1
-      OnExecute = acQuitExecute
-    end
-    object acAbout: TAction
-      Category = 'xPL'
-      Caption = 'About...'
-      ImageIndex = 2
-      OnExecute = acAboutExecute
-    end
-    object acInstalledApps: TAction
-      Category = 'xPL'
-      Caption = 'Installed xPL apps'
-      ImageIndex = 5
-      OnExecute = acInstalledAppsExecute
-    end
+  inherited ActionList: TActionList[5]
+    left = 16
+    top = 128
+  end
+  inherited xPLMenu: TPopupMenu[6]
+    left = 112
+    top = 248
+  end
+  inherited XMLPropStorage: TXMLPropStorage[7]
+    left = 240
+    top = 264
+  end
+  object ActionList2: TActionList[8]
+    left = 184
+    top = 176
     object acSelectAll: TAction
       Category = 'grid'
       Caption = 'Select All'
@@ -4492,31 +4464,9 @@ object frmvendorfiles: Tfrmvendorfiles
       OnExecute = acDownloadExecute
     end
   end
-  object xPLMenu: TPopupMenu
-    left = 216
-    top = 32
-    object MenuItem14: TMenuItem
-      Action = acInstalledApps
-      OnClick = acInstalledAppsExecute
-    end
-    object MenuItem16: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem11: TMenuItem
-      Action = acAbout
-      OnClick = acAboutExecute
-    end
-    object MenuItem15: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem12: TMenuItem
-      Action = acQuit
-      OnClick = acQuitExecute
-    end
-  end
-  object popPluginList: TPopupMenu
-    left = 280
-    top = 32
+  object popPluginList: TPopupMenu[9]
+    left = 336
+    top = 192
     object MenuItem3: TMenuItem
       Action = acSelectAll
       OnClick = acSelectAllExecute
