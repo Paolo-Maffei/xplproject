@@ -7,28 +7,25 @@ unit frm_about;
  1.1 : switched from xPLClient belonging to frm_main to app_main
  1.2 : Added License and Readme buttons
  1.3 : Added Credits button, url label, build date version
- 1.4 : Added DEBUG info label
 }
 
 {$mode objfpc}{$H+}
 
 interface
 
-uses Forms,
-     Classes,
-     Buttons,
-     Controls,
-     ExtCtrls,
-     StdCtrls,
-     LResources,
-     ComCtrls,
-     ActnList;
+uses Forms
+     , Classes
+     , Buttons
+     , Controls
+     , ExtCtrls
+     , StdCtrls
+     , LResources
+     , ComCtrls
+     , ActnList
+     ;
 
-type
-
-{ TfrmAbout }
-
-TfrmAbout = class(TForm)
+type { TfrmAbout =============================================================}
+     TfrmAbout = class(TForm)
         acCredits: TAction;
         acLicense: TAction;
         acReadme: TAction;
@@ -65,7 +62,6 @@ implementation // ==============================================================
 uses SysUtils
      , Graphics
      , lclversion
-     , Windows
      , frm_DownloadFile
      , u_xpl_application
      , u_xpl_gui_resource
@@ -79,9 +75,9 @@ const
      K_FILE_README  = 'readme.txt';
      K_FILE_CREDITS = 'credits.txt';
      K_CREDITS_STR  = 'Compiled with Lazarus version %s';
-     K_UPDATE_AVAIL = 'A new version is available : %s'#10' at %s'#10' Do you want to download it ?';
-     K_UPDATE_STATUS = 'Update info';
-     K_NO_UPDATE = 'Your application is up to date';
+     //K_UPDATE_AVAIL = 'A new version is available : %s'#10' at %s'#10' Do you want to download it ?';
+     //K_UPDATE_STATUS = 'Update info';
+     //K_NO_UPDATE = 'Your application is up to date';
 
 // =============================================================================
 procedure ShowFrmAbout;
@@ -118,6 +114,16 @@ begin
    end;*)
 end;
 
+procedure TfrmAbout.acCloseExecute(Sender: TObject);
+begin
+   Close;
+end;
+
+initialization // ==============================================================
+{$I frm_about.lrs}
+
+end.
+
 (*procedure TfrmAbout.UpdateAvailable(Sender: TObject);
 var s : string;
 begin
@@ -131,17 +137,7 @@ begin
    Application.MessageBox(K_NO_UPDATE,K_UPDATE_STATUS,0);
 end;*)
 
-procedure TfrmAbout.acCloseExecute(Sender: TObject);
-begin
-   Close;
-end;
-
 (*procedure TfrmAbout.acCheckUpdateExecute(Sender: TObject);
 begin
    xPLApplication.CheckVersion;
 end;*)
-
-initialization // ==============================================================
-{$I frm_about.lrs}
-
-end.

@@ -34,10 +34,10 @@ type { TxPLApplication =======================================================}
         //fVChecker   : TVersionChecker;
         Info        : TVersionInfo;
      public
-        constructor Create(const aOwner : TComponent); overload;
+        constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
 
-        function BuildDate   : string;    inline;
+        //function BuildDate   : string;
         function AppName     : string;    inline;
         function FullTitle   : string;    inline;
         function LogFileName : TFilename; inline;
@@ -45,8 +45,8 @@ type { TxPLApplication =======================================================}
 
         procedure RegisterMe;
         //procedure CheckVersion;
-        Procedure Log (EventType : TEventType; Msg : String);
-        Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const);
+        Procedure Log (EventType : TEventType; Msg : String); overload;
+        Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const); overload;
         Procedure ResetLog;
         function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function  Translate(Const aDomain : string; Const aString : string) : string;
@@ -63,8 +63,7 @@ type { TxPLApplication =======================================================}
 var xPLApplication : TxPLApplication;
 
 implementation // =============================================================
-uses FPCAdds
-     , filechannel
+uses filechannel
      , sharedlogger
      , consolechannel
      , versiontypes
@@ -148,18 +147,18 @@ begin
    if aVersion < Version then Settings.SetAppDetail(Adresse.Vendor,Adresse.Device,Version)
 end;
 
-function TxPLApplication.BuildDate: string;                                    // This code piece comes from Lazarus AboutFrm source
-var SlashPos1, SlashPos2: integer;                                             // The compiler generated date string is always of the form y/m/d.
-    Date: TDateTime;
-begin                                                                          // This function gives it a string respresentation according to the
-   result := {$I %date%};                                                      // shortdateformat
-   SlashPos1 := Pos('/',result);
-   SlashPos2 := SlashPos1 + Pos('/', Copy(result, SlashPos1+1, Length(result)-SlashPos1));
-   Date := EncodeDate(StrToWord(Copy(result,1,SlashPos1-1)),
-   StrToWord(Copy(result,SlashPos1+1,SlashPos2-SlashPos1-1)),
-   StrToWord(Copy(result,SlashPos2+1,Length(BuildDate)-SlashPos2)));
-   Result := FormatDateTime('yyyy-mm-dd', Date);
-end;
+//function TxPLApplication.BuildDate: string;                                    // This code piece comes from Lazarus AboutFrm source
+////var SlashPos1, SlashPos2: integer;                                           // The compiler generated date string is always of the form y/m/d.
+////    Date: TDateTime;
+//begin                                                                          // This function gives it a string respresentation according to the
+//   result := {$I %date%};                                                      // shortdateformat
+////   SlashPos1 := Pos('/',result);
+////   SlashPos2 := SlashPos1 + Pos('/', Copy(result, SlashPos1+1, Length(result)-SlashPos1));
+////   Date := EncodeDate(StrToWord(Copy(result,1,SlashPos1-1)),
+////   StrToWord(Copy(result,SlashPos1+1,SlashPos2-SlashPos1-1)),
+////   StrToWord(Copy(result,SlashPos2+1,Length(BuildDate)-SlashPos2)));
+////   Result := FormatDateTime('yyyy-mm-dd', Date);
+//end;
 
 function TxPLApplication.AppName : string;
 begin
@@ -168,7 +167,7 @@ end;
 
 function TxPLApplication.FullTitle : string;
 begin
-   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
+   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,{$I %date%}]);
 end;
 
 function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;

@@ -125,7 +125,7 @@ type
     procedure tvPluginSelectionChanged(Sender: TObject);
   private
     { private declarations }
-    plugin:  TXMLxplpluginType;
+    plugin:  TXMLPluginType;
     topNode: TTreeNode;
     aBody:   TxPLBody;
     filePath: string;
@@ -180,13 +180,13 @@ begin
   tbDel.Enabled := (aNode <> nil) and (aNode.Data <> nil) and (aNode <> TopNode);
   if aNode = nil then
     exit;
-  if TObject(aNode.Data) is TXMLxplpluginType then
+  if TObject(aNode.Data) is TXMLPluginType then
   begin
 //    NoteBook.ActivePageComponent := pgPlugin;
     NoteBook.PageIndex:=0;
-    edtPluginVersion.Text := TXMLxplpluginType(aNode.Data).Version;
-    edtPluginURL.Text     := TXMLxplpluginType(aNode.Data).Plugin_URL;
-    edtPluginInfoURL.Text := TXMLxplpluginType(aNode.Data).Info_URL;
+    edtPluginVersion.Text := TXMLPluginType(aNode.Data).Version;
+    edtPluginURL.Text     := TXMLPluginType(aNode.Data).Plugin_URL;
+    edtPluginInfoURL.Text := TXMLPluginType(aNode.Data).Info_URL;
   end;
   if aNode.Text = 'ConfigItems' then
   begin //(aNode.Data) is TXMLConfigItemsType then begin
@@ -296,7 +296,7 @@ begin
   ToolBar1.Images := ToolBar.Images;
   ToolBar2.Images := ToolBar.Images;
 
-  plugin := TXMLxplpluginType.Create(FilePath);
+  plugin := TXMLPluginType.Create(FilePath);
   if plugin.Valid then
   begin
     topNode      := tvPlugin.Items.AddChild(nil, plugin.vendor);
@@ -396,16 +396,16 @@ begin
   aNode := tvPlugin.Selected;
   if aNode = topNode then
   begin
-    i := TXMLxplPluginType(aNode.Data).Count;
+    i := TXMLPluginType(aNode.Data).Count;
     NewNode := tvPlugin.Items.AddChild(aNode, '');
-    NewNode.Data := TXMLxplPluginType(aNode.Data).AddElement(IntToStr(i));
-    NewNode.Text := TXMLxplPluginType(aNode.Data)[i].Id;
+    NewNode.Data := TXMLPluginType(aNode.Data).AddElement(IntToStr(i));
+    NewNode.Text := TXMLPluginType(aNode.Data)[i].Id;
     tvPlugin.Items.AddChild(NewNode, 'Commands');
     tvPlugin.Items.AddChild(NewNode, 'ConfigItems');
     tvPlugin.Items.AddChild(NewNode, 'Schemas');
     tvPlugin.Items.AddChild(NewNode, 'Triggers');
     ConfigNode      := tvPlugin.Items.AddChild(NewNode, 'MenuItems');
-    ConfigNode.Data := TXMLxplPluginType(aNode.Data)[i].ConfigItems;
+    ConfigNode.Data := TXMLPluginType(aNode.Data)[i].ConfigItems;
     exit;
   end;
   if aNode.Parent.Parent <> topNode then
@@ -473,7 +473,7 @@ begin
   if TObject(aNode.Data) is TDOmElement then
   begin
     if TDOMElement(aNode.Data).NodeName = K_XML_STR_Device then
-      TXMLxplPluginType(aNode.Parent.Data).RootNode.RemoveChild(TXMLDeviceType(aNode.Data))
+      TXMLPluginType(aNode.Parent.Data).RootNode.RemoveChild(TXMLDeviceType(aNode.Data))
     else
     if TDOMElement(aNode.Data).NodeName = K_XML_STR_MenuItem then
       TXMLDeviceType(aNode.Parent.Parent.Data).MenuItems.RootNode.RemoveChild(TXMLMenuItemType(aNode.Data))
@@ -532,9 +532,9 @@ begin
   end;
   if NoteBook.ActivePageComponent = pgPlugin then
   begin
-    TXMLxplpluginType(tvPlugin.Selected.Data).Version    := edtPluginVersion.Text;
-    TXMLxplpluginType(tvPlugin.Selected.Data).Plugin_URL := edtPluginURL.Text;
-    TXMLxplpluginType(tvPlugin.Selected.Data).Info_URL   := edtPluginInfoURL.Text;
+    TXMLPluginType(tvPlugin.Selected.Data).Version    := edtPluginVersion.Text;
+    TXMLPluginType(tvPlugin.Selected.Data).Plugin_URL := edtPluginURL.Text;
+    TXMLPluginType(tvPlugin.Selected.Data).Info_URL   := edtPluginInfoURL.Text;
   end;
   if NoteBook.ActivePageComponent = pgConfigItem then
   begin
