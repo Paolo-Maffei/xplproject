@@ -1,6 +1,8 @@
 unit u_xml_plugins;
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 

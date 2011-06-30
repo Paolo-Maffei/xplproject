@@ -172,7 +172,7 @@ end;
 procedure TfrmxPLMessage.InitPluginsMenu;
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
     cptPlugs,i,j : integer;
-    VF : TXMLxplpluginType;
+    VF : TXMLpluginType;
     Commande: TXMLCommandType;
 begin
    if xPLApplication.VendorFile.Plugins <> nil then begin

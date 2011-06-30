@@ -1,6 +1,8 @@
 unit u_Downloader_Indy;
 
-{$mode objfpc}
+{$ifdef fpc}
+{$mode delphi}
+{$endif}
 
 interface
 
@@ -41,9 +43,10 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
 
      function HTTPDownload(const aSource, aDestination : string) : boolean;
 
-implementation
-uses uRegExpr,
-     SysUtils;
+implementation // =============================================================
+uses uRegExpr
+     , SysUtils
+     ;
 
 function HTTPDownload(const aSource, aDestination : string) : boolean;
 begin
@@ -63,10 +66,10 @@ constructor TDownloader.Create;
 begin
    IdHTTP := TIdHTTP.Create(nil);
    IdHTTP.HandleRedirects := true;
-   IdHTTP.OnHeadersAvailable := @HeadersAvailable;
-   IdHTTP.OnWorkBegin        := @WorkBegin;
-   IdHTTP.OnWorkEnd          := @WorkEnd;
-   IdHTTP.OnWork             := @Work;
+   IdHTTP.OnHeadersAvailable := HeadersAvailable;
+   IdHTTP.OnWorkBegin        := WorkBegin;
+   IdHTTP.OnWorkEnd          := WorkEnd;
+   IdHTTP.OnWork             := Work;
    XMLStream                 := TMemoryStream.Create;
 end;
 

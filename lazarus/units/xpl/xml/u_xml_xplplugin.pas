@@ -204,9 +204,9 @@ type
 
      TXMLDevicesType = specialize TXMLElementList<TXMLDeviceType>;
 
-     { TXMLxplpluginType }
+     { TXMLPluginType }
 
-     TXMLxplpluginType = class(TXMLDevicesType)
+     TXMLPluginType = class(TXMLDevicesType)
      protected
         fFileName : AnsiString;
         fDoc      : TXMLDocument;
@@ -309,32 +309,32 @@ begin SetAttribute(K_XML_STR_Download_url,aValue); end;
 procedure TXMLDeviceType.Set_Info_URL(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Info_url, aValue); end;
 
-{ TXMLxplpluginType }
-function TXMLxplpluginType.Get_Info_Url: AnsiString;
+{ TXMLPluginType }
+function TXMLPluginType.Get_Info_Url: AnsiString;
 begin result := SafeReadNode(K_XML_STR_Info_url); end;
 
-function TXMLxplpluginType.Get_Plugin_Url: AnsiString;
+function TXMLPluginType.Get_Plugin_Url: AnsiString;
 begin result := SafeReadNode(K_XML_STR_Plugin_url); end;
 
-function TXMLxplpluginType.Get_Version: AnsiString;
+function TXMLPluginType.Get_Version: AnsiString;
 begin result := SafeReadNode(K_XML_STR_Version); end;
 
-function TXMLxplpluginType.Get_Vendor: AnsiString;
+function TXMLPluginType.Get_Vendor: AnsiString;
 begin result := SafeReadNode(K_XML_STR_Vendor); end;
 
-procedure TXMLxplpluginType.Set_Info_URL(const AValue: AnsiString);
+procedure TXMLPluginType.Set_Info_URL(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_Info_url,aValue); end;
 
-procedure TXMLxplpluginType.Set_Plugin_URL(const AValue: AnsiString);
+procedure TXMLPluginType.Set_Plugin_URL(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_Plugin_url,aValue); end;
 
-procedure TXMLxplpluginType.Set_Version(const AValue: AnsiString);
+procedure TXMLPluginType.Set_Version(const AValue: AnsiString);
 begin SafeChangeNode(K_XML_STR_Version,aValue); end;
 
-constructor TXMLxplpluginType.Create(const ANode: TDOMNode);
+constructor TXMLPluginType.Create(const ANode: TDOMNode);
 begin inherited Create(aNode, K_XML_STR_Device, K_XML_STR_Id); end;
 
-constructor TXMLxplpluginType.Create(const aFileName: string);
+constructor TXMLPluginType.Create(const aFileName: string);
 var aNode : TDOMNode;
     back  : TDOMNode;
 begin
@@ -361,19 +361,19 @@ begin
    end;
 end;
 
-destructor TXMLxplpluginType.Destroy;
+destructor TXMLPluginType.Destroy;
 begin
    if Assigned(fDoc) then fDoc.Destroy;
    inherited;
 end;
 
-procedure TXMLxplpluginType.Save;
+procedure TXMLPluginType.Save;
 begin
    if fFileName = '' then exit;
    WriteXML(RootNode,fFileName);
 end;
 
-function TXMLxplpluginType.AddElement(const aName: string): TXMLDeviceType;
+function TXMLPluginType.AddElement(const aName: string): TXMLDeviceType;
 begin
   Result:=inherited AddElement(Vendor + '-' + aName);
 end;
