@@ -11,7 +11,7 @@ uses
   SysUtils,
   fgl,
   fpTimer,
-  u_xml_xplplugin,
+  u_xml_plugins,
   u_xpl_address,
   u_xpl_config,
   u_xpl_common,
@@ -23,7 +23,7 @@ type { TConfigurationRecord ==================================================}
     protected
         fTimer      : TfpTimer;
     private
-        fPlug_Detail: TXMLDeviceType;
+        fPlug_Detail: TDeviceType;
         fAddress    : TxPLAddress;
         fLastHBeat  : TDateTime;
         fConfig     : TxPLCustomConfig;
@@ -47,7 +47,7 @@ type { TConfigurationRecord ==================================================}
         property DieAt        : TDateTime        read fDieAt        write fDieAt;
         property Address      : TxPLAddress      read fAddress;
         property Config       : TxPLCustomConfig read fConfig;
-        property Plug_Detail  : TXMLDeviceType   read fPlug_Detail;
+        property Plug_Detail  : TDeviceType      read fPlug_Detail;
         property WaitingConf  : boolean          read fWaitingConf  write fWaitingConf;
         property OnDied       : TNotifyEvent     read fOnDied       write fOnDied;
      end;
@@ -68,7 +68,7 @@ begin
    Address.Assign(aHBeatMsg.Source);
    fConfig      := TxPLCustomConfig.Create(nil);
 
-   fPlug_Detail := aOwner.VendorFile.GetDevice(aHBeatMsg.Source);
+   fPlug_Detail := aOwner.VendorFile.FindDevice(aHBeatMsg.source);
 
    HBeatReceived(aHBeatMsg);
    fOnDied      := aDieProc;

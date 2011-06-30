@@ -24,6 +24,7 @@ uses classes,
      u_xpl_schema,
      u_xPL_Body,
      uxPLConst,
+     u_xml_plugins,
      u_xml_xplplugin;
 
 type { TxPLMessage ===========================================================}
@@ -40,7 +41,8 @@ type { TxPLMessage ===========================================================}
         procedure LoadFromFile(aFileName : string);
         procedure SaveToFile(aFileName : string);
 
-        procedure ReadFromXML(const aCom : TXMLCommandType); overload;         // Reads a message from vendor plugin file
+        //procedure ReadFromXML(const aCom : TXMLCommandType); overload;         // Reads a message from vendor plugin file
+        procedure ReadFromJSON(const aCom : TCommandType);
 
         procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
         procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
@@ -115,16 +117,30 @@ begin
    end;
 end;
 
-procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);                 // Reads a message from a vendor file
-var i : integer;
+//procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);                 // Reads a message from a vendor file
+//var i : integer;
+//begin
+//   ResetValues;
+//   MsgName := aCom.name;
+//   MessageType := StrToMsgType(K_MSG_TYPE_HEAD + aCom.msg_type);
+//   Target.IsGeneric := true;
+//   Schema.RawxPL := aCom.msg_schema;
+//   for i := 0 to aCom.elements.Count-1 do
+//       Body.AddKeyValuePairs([aCom.Elements[i].Name],[aCom.Elements[i].default_]);
+//end;
+
+procedure TxPLMessage.ReadFromJSON(const aCom: TCommandType);
+//var i : integer;
+var item : TCollectionItem;
 begin
    ResetValues;
    MsgName := aCom.name;
    MessageType := StrToMsgType(K_MSG_TYPE_HEAD + aCom.msg_type);
    Target.IsGeneric := true;
    Schema.RawxPL := aCom.msg_schema;
-   for i := 0 to aCom.elements.Count-1 do
-       Body.AddKeyValuePairs([aCom.Elements[i].Name],[aCom.Elements[i].default_]);
+
+   for item in aCom.Elements do
+       Body.AddKeyValuePairs([TElementType(item).Name],[TElementType(item).default_]);
 end;
 
 procedure TxPLMessage.Format_HbeatApp(const aInterval: integer; const aPort: string; const aIP: string);

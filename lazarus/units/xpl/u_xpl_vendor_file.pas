@@ -25,11 +25,11 @@ uses Classes,
      uxPLConst,
      u_xpl_address,
      u_xml_plugins,
-     {$ifdef fpc}
-     u_xml_xplplugin,
-     {$else}
-     u_xml_xplplugin_delphi,
-     {$endif}
+     { $ ifdef fpc}
+     //u_xml_xplplugin,
+     { $ else}
+     //u_xml_xplplugin_delphi,
+     { $ endif}
      u_xpl_folders,
      superobject,
      superxmlparser;
@@ -37,10 +37,10 @@ uses Classes,
 type { TxPLVendorSeedFile ====================================================}
      TxPLVendorSeedFile = class(TComponent)
      private
-        fFolders     : TxPLCustomFolders;
-        fStatus      : boolean;
-        fLocations   : TLocationsType;
-        fPlugins     : TPluginsType;
+        fFolders    : TxPLCustomFolders;
+        fStatus     : boolean;
+        fLocations  : TLocationsType;
+        fPlugins    : TPluginsType;
      public
         constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders);
         destructor  destroy; override;
@@ -49,11 +49,12 @@ type { TxPLVendorSeedFile ====================================================}
 
         function Updated  : TDateTime;
         function Update(const sLocation : string = K_XPL_VENDOR_SEED_LOCATION) : boolean; // Reloads the seed file from website
-        function UpdatePlugin(const aPluginName : string) : boolean;
+//        function UpdatePlugin(const aPluginName : string) : boolean;
 
-        function VendorFile(const aVendor : tsVendor) : TXMLpluginType;
-        function GetDevice(const aAddress : TxPLAddress) : TXMLDeviceType;
-        function GetPluginFilePath(const aPluginName : string) : string;
+//        function VendorFile(const aVendor : tsVendor) : TXMLpluginType;
+//        function GetDevice(const aAddress : TxPLAddress) : TXMLDeviceType;
+        function FindDevice(const aAddress : TxPLAddress) : TDeviceType;
+        //function GetPluginFilePath(const aPluginName : string) : string;
 
         property IsValid   : boolean           read fStatus;
      published
@@ -62,8 +63,7 @@ type { TxPLVendorSeedFile ====================================================}
      end;
 
 implementation //========================================================================
-uses StrUtils
-     , uRegExpr
+uses uRegExpr
      , u_downloader_Indy
      , u_xpl_application
      , u_xpl_common
@@ -101,7 +101,7 @@ begin
 
       SO := XMLParseFile(FileName,true);
 
-      fPlugins := TPluginsType.Create(so);
+      fPlugins := TPluginsType.Create(so, TxPLApplication(Owner).Folders.PluginDir);
       fLocations := TLocationsType.Create(so);
    except
    end;
@@ -114,72 +114,88 @@ begin
    if fileDate > -1 then Result := FileDateToDateTime(fileDate);
 end;
 
-function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
-var item : TCollectionItem;
-begin
-   result := '';
-   for item in Plugins do begin
-       if TPluginType(item).Name = aPluginName then begin
-          result := fFolders.PluginDir +
-                    AnsiRightStr( TPluginType(item).URL,
-                                  length(TPluginType(item).Url)-LastDelimiter('/',TPluginType(item).URL)
-                    ) + K_FEXT_XML;
-          break;
-       end;
-   end;
-end;
+//function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
+//var item : TCollectionItem;
+//begin
+//   result := '';
+//   for item in Plugins do begin
+//       if TPluginType(item).Name = aPluginName then begin
+//          result := fFolders.PluginDir +
+//                    AnsiRightStr( TPluginType(item).URL,
+//                                  length(TPluginType(item).Url)-LastDelimiter('/',TPluginType(item).URL)
+//                    ) + K_FEXT_XML;
+//          break;
+//       end;
+//   end;
+//end;
 
 function TxPLVendorSeedFile.Update(const sLocation : string) : boolean;
 begin
    Result := HTTPDownload(sLocation + '.xml', FileName);
 end;
 
-function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
-var i : LongWord;
-    url : string;
-begin
-   i := 0;
-   while (i<Plugins.Count) do begin
-      if Plugins[i].Name = aPluginName then begin
-         url := Plugins[i].URL;
-         if not AnsiEndsStr(K_FEXT_XML, url) then url += K_FEXT_XML;
-            Result := HTTPDownload(url,GetPluginFilePath(aPluginName));
-            break;
-      end;
-      inc(i);
-   end;
-end;
+//function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
+//var i : LongWord;
+//    url : string;
+//begin
+//   i := 0;
+//   while (i<Plugins.Count) do begin
+//      if Plugins[i].Name = aPluginName then begin
+//         url := Plugins[i].URL;
+//         if not AnsiEndsStr(K_FEXT_XML, url) then url += K_FEXT_XML;
+////            Result := HTTPDownload(url,GetPluginFilePath(aPluginName));
+//            Result := HTTPDownload(url, Plugins[i].FileName);
+//            break;
+//      end;
+//      inc(i);
+//   end;
+//end;
 
-function TxPLVendorSeedFile.VendorFile(const aVendor: tsVendor): TXMLpluginType;
-var i : LongWord;
-    fn : string;
+//function TxPLVendorSeedFile.VendorFile(const aVendor: tsVendor): TXMLpluginType;
+//var i : LongWord;
+//    fn : string;
+//begin
+//   result := nil;
+//   if Plugins<>nil then begin
+//      i := 0;
+//   while (i< Plugins.Count) and (result=nil) do begin
+//         if Plugins[i].Vendor = aVendor then begin
+//            fn := fFolders.PluginDir + AnsilowerCase(aVendor) + K_FEXT_XML;
+//            if fileexists(fn) then begin
+//               result := TXMLPluginType.Create(fn);
+//               if not result.valid then FreeAndNil(result);
+//            end;
+//         end;
+//         inc(i);
+//      end;
+//   end;
+//end;
+
+//function TxPLVendorSeedFile.GetDevice(const aAddress : TxPLAddress): TXMLDeviceType;
+//var vf : TXMLPluginType;
+//    i : integer;
+//begin
+//   result := nil;
+//   vf := VendorFile(aAddress.Vendor);
+//   if not assigned(vf) then exit;
+//
+//   for i:=0 to vf.Count-1 do
+//       if vf[i].Id = (aAddress.VD) then result := vf[i];
+//end;
+
+function TxPLVendorSeedFile.FindDevice(const aAddress: TxPLAddress): TDeviceType;
+var plug, dev : TCollectionItem;
 begin
    result := nil;
-   if Plugins<>nil then begin
-      i := 0;
-   while (i< Plugins.Count) and (result=nil) do begin
-         if Plugins[i].Vendor = aVendor then begin
-            fn := fFolders.PluginDir + AnsilowerCase(aVendor) + K_FEXT_XML;
-            if fileexists(fn) then begin
-               result := TXMLPluginType.Create(fn);
-               if not result.valid then FreeAndNil(result);
+   for plug in Plugins do begin
+         if TPluginType(plug).Vendor = aAddress.Vendor then begin
+            for dev in TPluginType(plug).Devices do begin
+                if TDeviceType(dev).Device = aAddress.Device then begin
+                   result := TDeviceType(dev);
+                end;
             end;
          end;
-         inc(i);
-      end;
    end;
-end;
-
-function TxPLVendorSeedFile.GetDevice(const aAddress : TxPLAddress): TXMLDeviceType;
-var vf : TXMLPluginType;
-    i : integer;
-begin
-   result := nil;
-   vf := VendorFile(aAddress.Vendor);
-   if not assigned(vf) then exit;
-
-   for i:=0 to vf.Count-1 do
-       if vf[i].Id = (aAddress.VD) then result := vf[i];
 end;
 
 end.

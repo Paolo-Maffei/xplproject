@@ -212,24 +212,24 @@ type
         fDoc      : TXMLDocument;
         fValid    : Boolean;
      private
-        function Get_Info_Url: AnsiString;
-        function Get_Plugin_Url: AnsiString;
-        function Get_Version: AnsiString;
-	function Get_Vendor : AnsiString;
-        procedure Set_Info_URL(const AValue: AnsiString);
-        procedure Set_Plugin_URL(const AValue: AnsiString);
-        procedure Set_Version(const AValue: AnsiString);
+        //function Get_Info_Url: AnsiString;
+        //function Get_Plugin_Url: AnsiString;
+        //function Get_Version: AnsiString;
+	//function Get_Vendor : AnsiString;
+        //procedure Set_Info_URL(const AValue: AnsiString);
+        //procedure Set_Plugin_URL(const AValue: AnsiString);
+        //procedure Set_Version(const AValue: AnsiString);
      public
         constructor Create(const ANode: TDOMNode); overload;
         constructor Create(const aFileName : string); overload;
         destructor  Destroy; override;
         procedure   Save;
-        function    AddElement(const aName : string) : TXMLDeviceType;
+        //function    AddElement(const aName : string) : TXMLDeviceType;
      published
-        property Version: AnsiString read Get_Version write Set_Version;
-	property Vendor : AnsiString read Get_Vendor;
-        property Plugin_URL : AnsiString read Get_Plugin_Url write Set_Plugin_URL;
-        property Info_URL : AnsiString read Get_Info_Url write Set_Info_URL;
+        //property Version: AnsiString read Get_Version write Set_Version;
+	//property Vendor : AnsiString read Get_Vendor;
+        //property Plugin_URL : AnsiString read Get_Plugin_Url write Set_Plugin_URL;
+        //property Info_URL : AnsiString read Get_Info_Url write Set_Info_URL;
         property Valid : boolean read FValid;
      end;
 
@@ -310,26 +310,26 @@ procedure TXMLDeviceType.Set_Info_URL(const AValue: AnsiString);
 begin SetAttribute(K_XML_STR_Info_url, aValue); end;
 
 { TXMLPluginType }
-function TXMLPluginType.Get_Info_Url: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Info_url); end;
-
-function TXMLPluginType.Get_Plugin_Url: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Plugin_url); end;
-
-function TXMLPluginType.Get_Version: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Version); end;
-
-function TXMLPluginType.Get_Vendor: AnsiString;
-begin result := SafeReadNode(K_XML_STR_Vendor); end;
-
-procedure TXMLPluginType.Set_Info_URL(const AValue: AnsiString);
-begin SafeChangeNode(K_XML_STR_Info_url,aValue); end;
-
-procedure TXMLPluginType.Set_Plugin_URL(const AValue: AnsiString);
-begin SafeChangeNode(K_XML_STR_Plugin_url,aValue); end;
-
-procedure TXMLPluginType.Set_Version(const AValue: AnsiString);
-begin SafeChangeNode(K_XML_STR_Version,aValue); end;
+//function TXMLPluginType.Get_Info_Url: AnsiString;
+//begin result := SafeReadNode(K_XML_STR_Info_url); end;
+//
+//function TXMLPluginType.Get_Plugin_Url: AnsiString;
+//begin result := SafeReadNode(K_XML_STR_Plugin_url); end;
+//
+//function TXMLPluginType.Get_Version: AnsiString;
+//begin result := SafeReadNode(K_XML_STR_Version); end;
+//
+//function TXMLPluginType.Get_Vendor: AnsiString;
+//begin result := SafeReadNode(K_XML_STR_Vendor); end;
+//
+//procedure TXMLPluginType.Set_Info_URL(const AValue: AnsiString);
+//begin SafeChangeNode(K_XML_STR_Info_url,aValue); end;
+//
+//procedure TXMLPluginType.Set_Plugin_URL(const AValue: AnsiString);
+//begin SafeChangeNode(K_XML_STR_Plugin_url,aValue); end;
+//
+//procedure TXMLPluginType.Set_Version(const AValue: AnsiString);
+//begin SafeChangeNode(K_XML_STR_Version,aValue); end;
 
 constructor TXMLPluginType.Create(const ANode: TDOMNode);
 begin inherited Create(aNode, K_XML_STR_Device, K_XML_STR_Id); end;
@@ -373,10 +373,10 @@ begin
    WriteXML(RootNode,fFileName);
 end;
 
-function TXMLPluginType.AddElement(const aName: string): TXMLDeviceType;
-begin
-  Result:=inherited AddElement(Vendor + '-' + aName);
-end;
+//function TXMLPluginType.AddElement(const aName: string): TXMLDeviceType;
+//begin
+//  Result:=inherited AddElement(Vendor + '-' + aName);
+//end;
 
 { TXMLCommandType }
 

@@ -29,7 +29,8 @@ const K_IMG_RECONNECT  = 'reconnect';
 
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD, K_IMG_MESSAGE,
     K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_LOUPE, K_IMG_CE_PROCEDURE,
-    K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE : integer;
+    K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE,
+    K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE, K_IMG_RED_BADGE : integer;
 
 implementation // =============================================================
 uses Forms,
@@ -82,10 +83,10 @@ begin
    fImages.AddLazarusResource('logview');           // 39
    K_IMG_SYNCHRONIZE := fImages.AddLazarusResource('synchronize');       // 40
    fImages.AddLazarusResource('preferences');       // 41
-   fImages.AddLazarusResource('greenbadge');        // 42
-   fImages.AddLazarusResource('redbadge');          // 43
-   fImages.AddLazarusResource('bluebadge');         // 44
-   fImages.AddLazarusResource('orangebadge');       // 45
+   K_IMG_GREEN_BADGE := fImages.AddLazarusResource('greenbadge');        // 42
+   K_IMG_RED_BADGE := fImages.AddLazarusResource('redbadge');          // 43
+   K_IMG_BLUE_BADGE:= fImages.AddLazarusResource('bluebadge');         // 44
+   K_IMG_ORANGE_BADGE := fImages.AddLazarusResource('orangebadge');       // 45
    K_IMG_EDIT_FIND := fImages.AddLazarusResource('edit-find');         // 46
    fImages.AddLazarusResource('Indy');              // 47
    fImages.AddLazarusResource('splash_logo');       // 48

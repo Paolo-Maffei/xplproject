@@ -81,7 +81,6 @@ type
     procedure ToolButton2Click(Sender: TObject);
 
   private
-    Stream     : TStringStream;
     arrCommandes : TList;
     procedure InitPluginsMenu;
     procedure PluginCommandExecute ( Sender: TObject );
@@ -106,7 +105,7 @@ uses frm_about,
      u_xpl_gui_resource,
      u_xpl_application,
      u_xpl_sender,
-     u_xml_xplplugin,
+     u_xml_plugins,
      u_xpl_address,
      u_xpl_header;
 
@@ -122,7 +121,7 @@ end;
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);
 var aMenu : TMenuItem;
 begin
-   Stream       := TStringStream.Create('');
+
    arrCommandes := TList.Create;
    InitPluginsMenu;
 
@@ -166,32 +165,30 @@ end;
 procedure TfrmxPLMessage.FormDestroy(Sender: TObject);
 begin
    arrCommandes.free;
-   Stream.free;
 end;
 
 procedure TfrmxPLMessage.InitPluginsMenu;
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
-    cptPlugs,i,j : integer;
-    VF : TXMLpluginType;
-    Commande: TXMLCommandType;
+    Commande: TCommandType;
+    plug, item, item2 : TCollectionItem;
+    device : TDeviceType;
 begin
    if xPLApplication.VendorFile.Plugins <> nil then begin
-   for cptPlugs :=0 to xPLApplication.VendorFile.Plugins.Count-1 do with xPLApplication do begin
+   for plug in xPLApplication.VendorFile.Plugins do begin
        aMenu := TMenuItem.Create(self);
        popCommands.Items.Insert(0,aMenu);
-       aMenu.Caption := xPLApplication.VendorFile.Plugins[cptPlugs].Vendor;                    // Get the vendor name as menu entry
-       VF := xPLApplication.VendorFile.VendorFile(aMenu.Caption);
-       if assigned(VF) then begin
-          for i:=0 to VF.Count-1 do begin
-            aSubMenu := AppendMenu(aMenu, VF[i].Id);
-            for j:=0 to VF[i].Commands.Count - 1 do begin
-                Commande := VF[i].Commands[j];
-                aSubSubMenu := AppendMenu(aSubMenu, Commande.Name);
-                aSubSubMenu.OnClick := @PluginCommandExecute;
-                aSubSubMenu.Tag := ArrCommandes.Add(Commande);
-            end;
-            if aSubMenu.Count=0 then aSubMenu.Free;                             // Eliminates empty sub menus
-          end;
+       aMenu.Caption := TPluginType(plug).Vendor;                              // Get the vendor name as menu entry
+       if TPluginType(plug).Present then
+       for item in (TPluginType(plug).Devices) do begin
+           Device := TDeviceType(item);
+           aSubMenu := AppendMenu(aMenu, Device.Id_);
+           for item2 in Device.Commands do begin
+               commande := TCommandType(item2);
+               aSubSubMenu := AppendMenu(aSubMenu,Commande.Name);
+               aSubSubMenu.OnClick := @PluginCommandExecute;
+               aSubSubMenu.Tag := ArrCommandes.Add(Commande);
+           end;
+           if aSubMenu.Count = 0 then aSubMenu.Free;
        end;
        if aMenu.Count = 0 then aMenu.Free;
      end;
@@ -199,15 +196,16 @@ begin
 end;
 
 procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
-var Commande : TXMLCommandType;
+var Command : TCommandType;
 begin
    TabSheet1.SetFocus;                                                            // Ne pas rester dans un controle RTTI, ce qui pose un pb de rafraichissement
-   Commande := TXMLCommandType(ArrCommandes[TMenuItem(sender).Tag]);
-   xPLMessage.ReadFromXML(Commande);
+   Command := TCommandType(ArrCommandes[TMenuItem(sender).Tag]);
+   xPLMessage.ReadFromJSON(Command);
    DisplayMessage;
 end;
 
 procedure TFrmxPLMessage.DisplayMessage;
+var Stream : TStringStream;
 begin
    with xPLMessage do begin
        if not Source.IsValid then Source.Assign(xPLApplication.Adresse);
@@ -217,10 +215,12 @@ begin
    end;
 
    if tsRaw.Visible then begin
-      Stream.Position := 0;
+      Stream := TStringStream.Create('');
+//      Stream.Position := 0;
       Stream.WriteString(xPLMessage.RawXPL);
       Stream.Position := 0;
       HexEditor.LoadFromStream(Stream);
+      Stream.Free;
    end;
 
    FrameMessage.TheMessage := xPLMessage;
