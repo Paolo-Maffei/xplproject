@@ -17,7 +17,6 @@ uses SysUtils
      , u_xpl_settings
      , u_xpl_common
      , u_xpl_vendor_file
-     , u_xml_xplplugin
      , vinfo
      ;
 
@@ -41,7 +40,7 @@ type { TxPLApplication =======================================================}
         function AppName     : string;    inline;
         function FullTitle   : string;    inline;
         function LogFileName : TFilename; inline;
-        function DeviceInVendorFile : TXMLDeviceType;
+        //function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
         //procedure CheckVersion;
@@ -170,10 +169,10 @@ begin
    Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,{$I %date%}]);
 end;
 
-function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;
-begin
-   result := VendorFile.GetDevice(Adresse);
-end;
+//function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;
+//begin
+//   result := VendorFile.GetDevice(Adresse);
+//end;
 
 Procedure TxPLApplication.Log(EventType : TEventType; Msg : String);
 begin
