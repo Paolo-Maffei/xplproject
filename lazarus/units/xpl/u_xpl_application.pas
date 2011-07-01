@@ -17,7 +17,6 @@ uses SysUtils
      , u_xpl_settings
      , u_xpl_common
      , u_xpl_vendor_file
-     , vinfo
      ;
 
 type { TxPLApplication =======================================================}
@@ -31,15 +30,13 @@ type { TxPLApplication =======================================================}
         fLocaleDomains : TStringList;
         fVersion    : string;
         //fVChecker   : TVersionChecker;
-        Info        : TVersionInfo;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
 
-        //function BuildDate   : string;
-        function AppName     : string;    inline;
-        function FullTitle   : string;    inline;
-        function LogFileName : TFilename; inline;
+        function AppName     : string;
+        function FullTitle   : string;
+        function LogFileName : TFilename;
         //function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
@@ -65,7 +62,7 @@ implementation // =============================================================
 uses filechannel
      , sharedlogger
      , consolechannel
-     , versiontypes
+     , fpc_delphi_compat
      ;
 
 // ============================================================================
@@ -78,23 +75,14 @@ const
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
-var s : TVersionStringTable;
-    i,j : integer;
 begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
-   Info := TVersionInfo.Create;
-   Info.Load(HINSTANCE);
-
    fAdresse := TxPLAddress.Create;
-   for i:=0 to Info.StringFileInfo.Count-1 do begin
-       s := Info.StringFileInfo.Items[i];
-       for j:=0 to s.Count-1 do
-           if s.Keys[j] = 'CompanyName'  then fAdresse.Vendor := s.Values[j] else
-           if s.Keys[j] = 'InternalName' then fAdresse.Device := s.Values[j] else
-           if s.Keys[j] = 'FileVersion'  then fVersion := s.Values[j];
-   end;
+   fAdresse.Device := GetDevice;
+   fAdresse.Vendor := GetVendor;
+   fVersion        := GetVersion;
 
    {$ifdef fpc}
       if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
@@ -125,19 +113,13 @@ begin
    fLocaleDomains.Free;
    fFolders.Free;
    fAdresse.Free;
-   Info.Free;
    inherited;
 end;
 
-function TxPLApplication.LogFileName: string;
+function TxPLApplication.LogFileName: TFileName;
 begin
    result := Format('%s%s.log',[fFolders.DeviceDir, AppName]);
 end;
-
-{procedure TxPLApplication.CheckVersion;
-begin
-   fvChecker.CheckVersion;
-end;}
 
 procedure TxPLApplication.RegisterMe;
 var aPath, aVersion : string;
@@ -146,19 +128,6 @@ begin
    if aVersion < Version then Settings.SetAppDetail(Adresse.Vendor,Adresse.Device,Version)
 end;
 
-//function TxPLApplication.BuildDate: string;                                    // This code piece comes from Lazarus AboutFrm source
-////var SlashPos1, SlashPos2: integer;                                           // The compiler generated date string is always of the form y/m/d.
-////    Date: TDateTime;
-//begin                                                                          // This function gives it a string respresentation according to the
-//   result := {$I %date%};                                                      // shortdateformat
-////   SlashPos1 := Pos('/',result);
-////   SlashPos2 := SlashPos1 + Pos('/', Copy(result, SlashPos1+1, Length(result)-SlashPos1));
-////   Date := EncodeDate(StrToWord(Copy(result,1,SlashPos1-1)),
-////   StrToWord(Copy(result,SlashPos1+1,SlashPos2-SlashPos1-1)),
-////   StrToWord(Copy(result,SlashPos2+1,Length(BuildDate)-SlashPos2)));
-////   Result := FormatDateTime('yyyy-mm-dd', Date);
-//end;
-
 function TxPLApplication.AppName : string;
 begin
    Result := Format('xPL %s',[Adresse.Device]);
@@ -166,13 +135,8 @@ end;
 
 function TxPLApplication.FullTitle : string;
 begin
-   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,{$I %date%}]);
+   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
 end;
-
-//function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;
-//begin
-//   result := VendorFile.GetDevice(Adresse);
-//end;
 
 Procedure TxPLApplication.Log(EventType : TEventType; Msg : String);
 begin
@@ -228,4 +192,15 @@ begin
 end;
 
 end.
+
+{procedure TxPLApplication.CheckVersion;
+begin
+   fvChecker.CheckVersion;
+end;}
+
+//function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;
+//begin
+//   result := VendorFile.GetDevice(Adresse);
+//end;
+
 
