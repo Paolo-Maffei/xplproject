@@ -1,4 +1,4 @@
-program app_vendor_files;
+program app_plugin_editor;
 
 {$mode objfpc}{$H+}
 
@@ -7,19 +7,22 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, frm_vendor_files, superxmlparser,
+  Forms,
+  frm_plugin_viewer,
+  u_xml_xplplugin,
   u_xpl_application,
-  u_xpl_gui_resource, fpc_delphi_compat;
+  u_xpl_gui_resource;
 
-{$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
+{$IFDEF WINDOWS}{$R app_plugin_editor.rc}{$ENDIF}
 
 begin
   Application.Initialize;
 
   xPLApplication := TxPLApplication.Create(Application);
   xPLGUIResource := TxPLGUIResource.Create;
+  Application.CreateForm(TfrmPluginViewer, frmPluginViewer);
+  if Application.HasOption('l') then frmPluginViewer.FilePath := Application.GetOptionValue('l');
 
-  Application.CreateForm(Tfrmvendorfiles, frmvendorfiles);
   Application.Run;
 
   xPLGUIResource.Free;

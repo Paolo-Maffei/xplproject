@@ -14,7 +14,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="5"/>
       <StringTable CompanyName="clinique" InternalName="basicset" ProductName="xPL Basic settings" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -59,7 +59,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="20" Y="10"/>
+        <CursorPos X="1" Y="22"/>
         <UsageCount Value="116"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -74,9 +74,10 @@
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="80" Y="121"/>
+        <CursorPos X="67" Y="9"/>
         <UsageCount Value="116"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\..\..\units\xpl\gui\frm_about.pas"/>
@@ -751,9 +752,9 @@
       <Unit89>
         <Filename Value="frm_basic_settings.lfm"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2260"/>
-        <CursorPos X="45" Y="2276"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="1"/>
+        <CursorPos X="41" Y="1"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit89>
       <Unit90>
@@ -878,9 +879,9 @@
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <UnitName Value="u_xpl_settings"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="217"/>
-        <CursorPos X="32" Y="233"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="235"/>
+        <CursorPos X="49" Y="251"/>
+        <UsageCount Value="10"/>
       </Unit105>
       <Unit106>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
@@ -901,12 +902,10 @@
       <Unit108>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="37"/>
-        <CursorPos X="5" Y="62"/>
+        <TopLine Value="111"/>
+        <CursorPos X="82" Y="127"/>
         <UsageCount Value="14"/>
-        <Loaded Value="True"/>
       </Unit108>
       <Unit109>
         <Filename Value="C:\pp\rtl\objpas\sysutils\osutilsh.inc"/>
@@ -977,9 +976,9 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplappslauncher"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="72"/>
-        <CursorPos X="52" Y="49"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="50"/>
+        <CursorPos X="1" Y="66"/>
+        <UsageCount Value="10"/>
       </Unit117>
       <Unit118>
         <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
@@ -988,8 +987,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_template"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="134"/>
-        <CursorPos X="58" Y="162"/>
+        <TopLine Value="114"/>
+        <CursorPos X="1" Y="128"/>
         <UsageCount Value="14"/>
       </Unit118>
       <Unit119>
@@ -1032,7 +1031,7 @@
         <UsageCount Value="13"/>
       </Unit123>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="5" HistoryIndex="4">
       <Position1>
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="19" Column="31" TopLine="1"/>
@@ -1042,49 +1041,17 @@
         <Caret Line="16" Column="12" TopLine="1"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="67" Column="8" TopLine="48"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="66" Column="9" TopLine="60"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="137" Column="53" TopLine="121"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="19" Column="8" TopLine="7"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="31" Column="11" TopLine="15"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="58" Column="11" TopLine="42"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="120" Column="6" TopLine="104"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="175" Column="1" TopLine="161"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="19" Column="20" TopLine="1"/>
-      </Position11>
-      <Position12>
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="10" Column="20" TopLine="1"/>
-      </Position12>
-      <Position13>
+      </Position3>
+      <Position4>
         <Filename Value="frm_basic_settings.pas"/>
         <Caret Line="101" Column="15" TopLine="94"/>
-      </Position13>
+      </Position4>
+      <Position5>
+        <Filename Value="frm_basic_settings.pas"/>
+        <Caret Line="9" Column="67" TopLine="1"/>
+      </Position5>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

@@ -42,7 +42,7 @@
         <PackageName Value="FCL"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="46">
+    <Units Count="48">
       <Unit0>
         <Filename Value="fpcunitproject1.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -50,7 +50,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="14" Y="13"/>
-        <UsageCount Value="176"/>
+        <UsageCount Value="177"/>
       </Unit0>
       <Unit1>
         <Filename Value="testcase1.pas"/>
@@ -58,9 +58,9 @@
         <UnitName Value="TestCase1"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="24"/>
-        <CursorPos X="14" Y="38"/>
-        <UsageCount Value="176"/>
+        <TopLine Value="229"/>
+        <CursorPos X="24" Y="256"/>
+        <UsageCount Value="177"/>
         <Loaded Value="True"/>
       </Unit1>
       <Unit2>
@@ -105,10 +105,12 @@
       <Unit7>
         <Filename Value="C:\pp\rtl\objpas\strutils.pp"/>
         <UnitName Value="strutils"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="41"/>
-        <CursorPos X="10" Y="57"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="80"/>
+        <Loaded Value="True"/>
       </Unit7>
       <Unit8>
         <Filename Value="..\..\..\units\xpl\u_xpl_schema.pas"/>
@@ -150,7 +152,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="42" Y="34"/>
-        <UsageCount Value="165"/>
+        <UsageCount Value="166"/>
       </Unit12>
       <Unit13>
         <Filename Value="C:\lazarus\components\synedit\synhighlighterxml.pas"/>
@@ -159,7 +161,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="165"/>
+        <UsageCount Value="166"/>
       </Unit13>
       <Unit14>
         <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
@@ -252,7 +254,7 @@
       <Unit25>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
         <CursorPos X="1" Y="1"/>
@@ -389,10 +391,13 @@
       <Unit42>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="103"/>
-        <CursorPos X="42" Y="115"/>
+        <TopLine Value="34"/>
+        <CursorPos X="95" Y="49"/>
         <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit42>
       <Unit43>
         <Filename Value="..\..\..\components\multilog-0.5\filechannel.pas"/>
@@ -405,7 +410,7 @@
       <Unit44>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <UnitName Value="u_xpl_settings"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="22"/>
         <CursorPos X="8" Y="29"/>
@@ -415,16 +420,35 @@
       <Unit45>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
         <UnitName Value="u_xpl_vendor_file"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
-        <CursorPos X="18" Y="50"/>
+        <TopLine Value="56"/>
+        <CursorPos X="16" Y="67"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit45>
+      <Unit46>
+        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
+        <UnitName Value="u_xml_xplplugin"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="148"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit46>
+      <Unit47>
+        <Filename Value="..\..\units\general\u_downloader_indy.pas"/>
+        <UnitName Value="u_Downloader_Indy"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="10"/>
+        <CursorPos X="53" Y="76"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit47>
     </Units>
-    <JumpHistory Count="7" HistoryIndex="6">
+    <JumpHistory Count="17" HistoryIndex="16">
       <Position1>
         <Filename Value="testcase1.pas"/>
         <Caret Line="249" Column="1" TopLine="238"/>
@@ -453,6 +477,46 @@
         <Filename Value="testcase1.pas"/>
         <Caret Line="38" Column="14" TopLine="24"/>
       </Position7>
+      <Position8>
+        <Filename Value="testcase1.pas"/>
+        <Caret Line="247" Column="21" TopLine="229"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="19" Column="20" TopLine="1"/>
+      </Position9>
+      <Position10>
+        <Filename Value="testcase1.pas"/>
+        <Caret Line="253" Column="34" TopLine="229"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="125" Column="28" TopLine="118"/>
+      </Position11>
+      <Position12>
+        <Filename Value="testcase1.pas"/>
+        <Caret Line="253" Column="60" TopLine="229"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="66" Column="10" TopLine="64"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="29" Column="14" TopLine="22"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="124" Column="10" TopLine="117"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="126" Column="11" TopLine="108"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="67" Column="16" TopLine="56"/>
+      </Position17>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -476,12 +540,6 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="1">
-      <Item1>
-        <Source Value="testcase1.pas"/>
-        <Line Value="253"/>
-      </Item1>
-    </BreakPoints>
     <Exceptions Count="3">
       <Item1>
         <Name Value="EAbort"/>
