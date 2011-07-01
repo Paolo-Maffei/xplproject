@@ -27,7 +27,6 @@ uses
 var  xPLMessageGUI : TxPLMessageGUI;
 
 begin
-  Application.Title:='xPL Sender';
   Application.Initialize;
 
   xPLApplication := TxPLSender.Create(Application);

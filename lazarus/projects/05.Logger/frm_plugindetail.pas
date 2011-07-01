@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, StdCtrls, u_xml_xplplugin;
+  ComCtrls, Buttons, StdCtrls, u_xml_plugins;
 
 type
 
@@ -42,10 +42,10 @@ type
   private
     { private declarations }
   public
-    Configuration : TXMLDeviceType;
+    Configuration : TDeviceType;
   end; 
 
-Procedure ShowFrmPluginDetail(aConfiguration : TXMLDeviceType);
+Procedure ShowFrmPluginDetail(aConfiguration : TDeviceType);
 
 implementation // ==============================================================
 uses OpenURLUtil,
@@ -55,7 +55,7 @@ var  frmPluginDetail: TfrmPluginDetail;
 
 // =============================================================================
 
-procedure ShowFrmPluginDetail(aConfiguration: TXMLDeviceType);
+procedure ShowFrmPluginDetail(aConfiguration: TDeviceType);
 begin
    if not Assigned(frmPluginDetail) then
       Application.CreateForm(TfrmPluginDetail, frmPluginDetail);
@@ -68,9 +68,9 @@ end;
 procedure TfrmPluginDetail.FormShow(Sender: TObject);
 begin
    Toolbar.Images := xPLGUIResource.Images;
-   edtDeviceBetaVersion.Text := Configuration.beta_version;
-   edtDeviceDescription.Text := Configuration.Description;
-   edtDeviceInfoURL.Caption  := Configuration.info_url;
+   edtDeviceBetaVersion.Text    := Configuration.beta_version;
+   edtDeviceDescription.Text    := Configuration.Description;
+   edtDeviceInfoURL.Caption     := Configuration.info_url;
    edtDeviceDownloadURL.Caption := Configuration.download_url;
    edtDevicePlatform.Text       := Configuration.platform_;
    edtDeviceStableVersion.Text  := Configuration.Version;
@@ -91,7 +91,7 @@ end;
 
 procedure TfrmPluginDetail.edtDeviceDownloadURLClick(Sender: TObject);
 begin
- OpenURL(edtDeviceDownloadURL.Caption);
+   OpenURL(edtDeviceDownloadURL.Caption);
 end;
 
 initialization

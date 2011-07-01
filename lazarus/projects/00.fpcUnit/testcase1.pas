@@ -250,6 +250,10 @@ begin
    s1 := folder.shareddir;
    s2 := folder.plugindir;
    s3 := folder.devicedir;
+   s1 := app.VendorFile.GetPluginFilePath('clinique Plug-in');
+   AssertEquals(s1,'C:\ProgramData\xPL\Plugins\clinique.xml');
+   s1 := app.VendorFile.GetPluginFilePath('beurk');
+   AssertEquals(s1,'');
    folder.free;
    adr1.free;
    app.free;

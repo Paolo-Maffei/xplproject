@@ -469,7 +469,7 @@ begin
     Body.ResetValues;
     for i := 0 to ConfElmts.plug_detail.Commands.Count - 1 do
       if ConfElmts.plug_detail.Commands[i].Name = sCommand then
-        ReadFromXML(ConfElmts.plug_detail.Commands[i]);
+        ReadFromJSON(ConfElmts.plug_detail.Commands[i]);
     Target.RawxPL := UpdateFilter;
     Source.Assign(xPLApplication.Adresse);
     TxPLMessageGUI(aMsg).ShowForEdit([boSave, boSend]);

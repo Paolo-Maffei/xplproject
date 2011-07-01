@@ -4445,12 +4445,6 @@ inherited frmvendorfiles: Tfrmvendorfiles
       ImageIndex = 8
       OnExecute = acViewXMLExecute
     end
-    object acViewPlugin: TAction
-      Category = 'grid'
-      Caption = 'View Plugin'
-      ImageIndex = 7
-      OnExecute = acViewPluginExecute
-    end
     object acUpdateList: TAction
       Category = 'toolbar'
       Caption = 'Update Plugin List'
@@ -4462,6 +4456,10 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Caption = 'Download Selected'
       ImageIndex = 9
       OnExecute = acDownloadExecute
+    end
+    object acPlugInfo: TAction
+      Caption = 'Plugin informations'
+      OnExecute = acPlugInfoExecute
     end
   end
   object popPluginList: TPopupMenu[9]
@@ -4482,13 +4480,12 @@ inherited frmvendorfiles: Tfrmvendorfiles
     object MenuItem1: TMenuItem
       Caption = '-'
     end
+    object MenuItem8: TMenuItem
+      Action = acPlugInfo
+    end
     object MenuItem5: TMenuItem
       Action = acViewXML
       OnClick = acViewXMLExecute
-    end
-    object MenuItem6: TMenuItem
-      Action = acViewPlugin
-      OnClick = acViewPluginExecute
     end
   end
 end

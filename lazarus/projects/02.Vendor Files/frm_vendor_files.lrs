@@ -1,5 +1,3 @@
-{ This is an automatically generated lazarus resource file }
-
 LazarusResources.Add('Tfrmvendorfiles','FORMDATA',[
   'TPF0'#241#15'Tfrmvendorfiles'#14'frmvendorfiles'#4'Left'#2'8'#6'Height'#3'v'
   +#1#3'Top'#2'('#5'Width'#3#153#2#7'Caption'#6#16'xPL Vendor Files'#12'ClientH'
@@ -5787,18 +5785,17 @@ LazarusResources.Add('Tfrmvendorfiles','FORMDATA',[
   +'ction'#8'acInvert'#8'Category'#6#4'grid'#7'Caption'#6#16'Invert Selection'#9
   +'OnExecute'#7#15'acInvertExecute'#0#0#7'TAction'#9'acViewXML'#8'Category'#6#4
   +'grid'#7'Caption'#6#13'View XML file'#10'ImageIndex'#2#8#9'OnExecute'#7#16'a'
-  +'cViewXMLExecute'#0#0#7'TAction'#12'acViewPlugin'#8'Category'#6#4'grid'#7'Ca'
-  +'ption'#6#11'View Plugin'#10'ImageIndex'#2#7#9'OnExecute'#7#19'acViewPluginE'
-  +'xecute'#0#0#7'TAction'#12'acUpdateList'#8'Category'#6#7'toolbar'#7'Caption'
-  +#6#18'Update Plugin List'#10'ImageIndex'#2#4#9'OnExecute'#7#19'acUpdateListE'
-  +'xecute'#0#0#7'TAction'#10'acDownload'#8'Category'#6#7'toolbar'#7'Caption'#6
-  +#17'Download Selected'#10'ImageIndex'#2#9#9'OnExecute'#7#17'acDownloadExecut'
-  +'e'#0#0#0#242#2#9#10'TPopupMenu'#13'popPluginList'#4'left'#3'P'#1#3'top'#3
-  +#192#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#11'acSelectAll'#7'OnClick'#7
-  +#18'acSelectAllExecute'#0#0#9'TMenuItem'#9'MenuItem4'#6'Action'#7#10'acDesel'
-  +'ect'#7'OnClick'#7#17'acDeselectExecute'#0#0#9'TMenuItem'#9'MenuItem2'#6'Act'
-  +'ion'#7#8'acInvert'#7'OnClick'#7#15'acInvertExecute'#0#0#9'TMenuItem'#9'Menu'
-  +'Item1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem5'#6'Action'#7#9'acView'
-  +'XML'#7'OnClick'#7#16'acViewXMLExecute'#0#0#9'TMenuItem'#9'MenuItem6'#6'Acti'
-  +'on'#7#12'acViewPlugin'#7'OnClick'#7#19'acViewPluginExecute'#0#0#0#0
+  +'cViewXMLExecute'#0#0#7'TAction'#12'acUpdateList'#8'Category'#6#7'toolbar'#7
+  +'Caption'#6#18'Update Plugin List'#10'ImageIndex'#2#4#9'OnExecute'#7#19'acUp'
+  +'dateListExecute'#0#0#7'TAction'#10'acDownload'#8'Category'#6#7'toolbar'#7'C'
+  +'aption'#6#17'Download Selected'#10'ImageIndex'#2#9#9'OnExecute'#7#17'acDown'
+  +'loadExecute'#0#0#7'TAction'#10'acPlugInfo'#7'Caption'#6#19'Plugin informati'
+  +'ons'#9'OnExecute'#7#17'acPlugInfoExecute'#0#0#0#242#2#9#10'TPopupMenu'#13'p'
+  +'opPluginList'#4'left'#3'P'#1#3'top'#3#192#0#0#9'TMenuItem'#9'MenuItem3'#6'A'
+  +'ction'#7#11'acSelectAll'#7'OnClick'#7#18'acSelectAllExecute'#0#0#9'TMenuIte'
+  +'m'#9'MenuItem4'#6'Action'#7#10'acDeselect'#7'OnClick'#7#17'acDeselectExecut'
+  +'e'#0#0#9'TMenuItem'#9'MenuItem2'#6'Action'#7#8'acInvert'#7'OnClick'#7#15'ac'
+  +'InvertExecute'#0#0#9'TMenuItem'#9'MenuItem1'#7'Caption'#6#1'-'#0#0#9'TMenuI'
+  +'tem'#9'MenuItem8'#6'Action'#7#10'acPlugInfo'#0#0#9'TMenuItem'#9'MenuItem5'#6
+  +'Action'#7#9'acViewXML'#7'OnClick'#7#16'acViewXMLExecute'#0#0#0#0
 ]);

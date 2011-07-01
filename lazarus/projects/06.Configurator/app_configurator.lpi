@@ -65,8 +65,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="61"/>
-        <CursorPos X="14" Y="82"/>
+        <TopLine Value="122"/>
+        <CursorPos X="45" Y="219"/>
         <UsageCount Value="101"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -892,7 +892,7 @@
         <Loaded Value="True"/>
       </Unit104>
     </Units>
-    <JumpHistory Count="27" HistoryIndex="26">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="frm_configurator.pas"/>
         <Caret Line="298" Column="1" TopLine="272"/>
@@ -1001,6 +1001,10 @@
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <Caret Line="19" Column="15" TopLine="1"/>
       </Position27>
+      <Position28>
+        <Filename Value="frm_configurator.pas"/>
+        <Caret Line="82" Column="14" TopLine="61"/>
+      </Position28>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
