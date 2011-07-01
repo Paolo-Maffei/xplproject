@@ -30,6 +30,7 @@ const K_IMG_RECONNECT  = 'reconnect';
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD, K_IMG_MESSAGE,
     K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_LOUPE, K_IMG_CE_PROCEDURE,
     K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE,
+    K_IMG_DOCUMENT_OPEN,
     K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE, K_IMG_RED_BADGE : integer;
 
 implementation // =============================================================
@@ -44,7 +45,7 @@ begin
    fImages.AddLazarusResource('xpl');               // 0
    fImages.AddLazarusResource('menu_exit');         // 1
    fImages.AddLazarusResource('menu_information');  // 2
-   fImages.AddLazarusResource('laz_save');          // 3
+   K_IMG_DOCUMENT_SAVE := fImages.AddLazarusResource('laz_save');          // 3
    fImages.AddLazarusResource('laz_refresh');       // 4
    K_IMG_CE_PROCEDURE := fImages.AddLazarusResource('ce_procedure');      // 5
    fImages.AddLazarusResource('menu_run');          // 6
@@ -58,7 +59,7 @@ begin
    fImages.AddLazarusResource('ledred');            // 14
    fImages.AddLazarusResource(K_IMG_OK);            // 15
    fImages.AddLazarusResource(K_IMG_CANCEL);        // 16
-   fImages.AddLazarusResource('fileopen');          // 17
+   K_IMG_DOCUMENT_OPEN := fImages.AddLazarusResource('fileopen');          // 17
    fImages.AddLazarusResource('editcopy');          // 18
    fImages.AddLazarusResource('editpaste');         // 19
    K_IMG_MAIL_FORWARD := fImages.AddLazarusResource('mail_forward');      // 20
@@ -97,7 +98,6 @@ begin
    K_IMG_STAT := fImages.AddLazarusResource('xpl-stat');
    K_IMG_TRIG := fImages.AddLazarusResource('xpl-trig');
    K_IMG_LOUPE := fImages.AddLazarusResource('loupe');
-   K_IMG_DOCUMENT_SAVE := fImages.AddLazarusResource('document-save');
 end;
 
 destructor TxPLGUIResource.Destroy;

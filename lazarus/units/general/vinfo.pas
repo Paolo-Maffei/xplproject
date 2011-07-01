@@ -22,9 +22,10 @@ type
     constructor Create;
     destructor Destroy; override;
 
-    function CompanyName : string;
+    function CompanyName  : string;
     function InternalName : string;
-    function FileVersion : string;
+    function FileVersion  : string;
+    function ProductName  : string;
 
     procedure Load(Instance: THandle);
     property FixedInfo: TVersionFixedInfo read GetFixedInfo;
@@ -79,6 +80,11 @@ end;
 function TVersionInfo.FileVersion: string;
 begin
    Result := SearchValue('FileVersion');
+end;
+
+function TVersionInfo.ProductName: string;
+begin
+   Result := SearchValue('ProductName');
 end;
 
 constructor TVersionInfo.Create;

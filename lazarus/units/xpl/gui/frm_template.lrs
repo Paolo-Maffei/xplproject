@@ -1,8 +1,8 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TFrmTemplate','FORMDATA',[
-  'TPF0'#12'TFrmTemplate'#11'FrmTemplate'#4'Left'#2'N'#6'Height'#3#216#1#3'Top'
-  +#3#185#2#5'Width'#3#196#2#7'Caption'#6#11'FrmTemplate'#12'ClientHeight'#3#216
+  'TPF0'#12'TFrmTemplate'#11'FrmTemplate'#4'Left'#2','#6'Height'#3#216#1#3'Top'
+  +#3#182#0#5'Width'#3#196#2#7'Caption'#6#11'FrmTemplate'#12'ClientHeight'#3#216
   +#1#11'ClientWidth'#3#196#2#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'
   +#7#10'FormCreate'#10'LCLVersion'#6#6'0.9.31'#0#10'TStatusBar'#10'StatusBar1'
   +#4'Left'#2#0#6'Height'#2#23#3'Top'#3#193#1#5'Width'#3#196#2#6'Panels'#14#1#5
@@ -29,16 +29,13 @@ LazarusResources.Add('TFrmTemplate','FORMDATA',[
   +#15'acInstalledApps'#8'Category'#6#3'xPL'#7'Caption'#6#18'Installed xPL apps'
   +#10'ImageIndex'#2#5#9'OnExecute'#7#22'acInstalledAppsExecute'#0#0#7'TAction'
   +#11'acLogViewer'#8'Category'#6#3'xPL'#7'Caption'#6#15'Application Log'#10'Im'
-  +'ageIndex'#2'*'#9'OnExecute'#7#18'acLogViewerExecute'#0#0#7'TAction'#10'acBa'
-  +'sicSet'#7'Caption'#6#18'Basic xPL Settings'#10'ImageIndex'#2','#9'OnExecute'
-  +#7#17'acBasicSetExecute'#0#0#7'TAction'#10'acVendFile'#7'Caption'#6#12'Vendo'
-  +'r Files'#9'OnExecute'#7#17'acVendFileExecute'#0#0#0#10'TPopupMenu'#7'xPLMen'
-  +'u'#4'left'#3#128#0#0#9'TMenuItem'#9'MenuItem7'#6'Action'#7#11'acLogViewer'#0
-  +#0#9'TMenuItem'#8'mnuNull1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'mnuLaunch'#7
-  +'Caption'#6#9'Launch...'#0#9'TMenuItem'#10'mnuAllApps'#6'Action'#7#15'acInst'
-  +'alledApps'#0#0#9'TMenuItem'#8'mnuNull2'#7'Caption'#6#1'-'#0#0#0#9'TMenuItem'
-  +#10'MenuItem16'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#10'MenuItem13'#6'Action'#7
-  +#7'acAbout'#0#0#9'TMenuItem'#10'MenuItem15'#7'Caption'#6#1'-'#0#0#9'TMenuIte'
-  +'m'#10'MenuItem17'#6'Action'#7#6'acQuit'#0#0#0#15'TXMLPropStorage'#14'XMLPro'
-  +'pStorage'#12'StoredValues'#14#0#4'left'#3#200#0#0#0#0
+  +'ageIndex'#2'*'#9'OnExecute'#7#18'acLogViewerExecute'#0#0#0#10'TPopupMenu'#7
+  +'xPLMenu'#4'left'#3#128#0#0#9'TMenuItem'#9'MenuItem7'#6'Action'#7#11'acLogVi'
+  +'ewer'#0#0#9'TMenuItem'#8'mnuNull1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'mnu'
+  +'Launch'#7'Caption'#6#9'Launch...'#0#9'TMenuItem'#10'mnuAllApps'#6'Action'#7
+  +#15'acInstalledApps'#0#0#9'TMenuItem'#8'mnuNull2'#7'Caption'#6#1'-'#0#0#0#9
+  +'TMenuItem'#10'MenuItem16'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#10'MenuItem13'
+  +#6'Action'#7#7'acAbout'#0#0#9'TMenuItem'#10'MenuItem15'#7'Caption'#6#1'-'#0#0
+  +#9'TMenuItem'#10'MenuItem17'#6'Action'#7#6'acQuit'#0#0#0#15'TXMLPropStorage'
+  +#14'XMLPropStorage'#12'StoredValues'#14#0#4'left'#3#200#0#0#0#0
 ]);

@@ -6,7 +6,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls;
+  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls, u_xPL_Collection;
 
 type { TFrmTemplate ==========================================================}
   TFrmTemplate = class(TForm)
@@ -14,8 +14,6 @@ type { TFrmTemplate ==========================================================}
     acInstalledApps: TAction;
     acLogViewer: TAction;
     acQuit: TAction;
-    acBasicSet: TAction;
-    acVendFile: TAction;
     ActionList: TActionList;
     imgBullet: TImage;
     lblModuleName: TTILabel;
@@ -36,15 +34,15 @@ type { TFrmTemplate ==========================================================}
     XMLPropStorage: TXMLPropStorage;
     xPLMenu: TPopupMenu;
     procedure acAboutExecute(Sender: TObject);
-    procedure acBasicSetExecute(Sender: TObject);
     procedure acInstalledAppsExecute(Sender: TObject);
     procedure acLogViewerExecute(Sender: TObject);
     procedure acQuitExecute(Sender: TObject);
-    procedure acVendFileExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
     procedure ToolButton9Click(Sender: TObject);
   private
+    procedure acCommonToolsExecute(Sender : TObject);
+    procedure AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
   public
     procedure OnJoinedEvent; virtual;
     procedure OnLogEvent(const aString : string); virtual;
@@ -62,7 +60,6 @@ uses frm_logviewer
      , u_xpl_application
      , u_xpl_gui_resource
      , u_xpl_custom_listener
-     , u_xpl_collection
      , StrUtils
      , Process
      ;
@@ -73,24 +70,14 @@ begin
    ShowFrmAbout;
 end;
 
-procedure TFrmTemplate.acBasicSetExecute(Sender: TObject);                     // Launch the BasicSet app
-begin                                                                          // from the xPL menu
-   with TProcess.Create(nil) do try
-      CommandLine := acBasicSet.Hint;
-      Execute;
-   finally
-      Free;
-   end;
-end;
-
-procedure TFrmTemplate.acVendFileExecute(Sender: TObject);
+procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
 begin
-   with TProcess.Create(nil) do try
-      CommandLine := acVendFile.Hint;
-      Execute;
-   finally
-      Free;
-   end;
+     with TProcess.Create(nil) do try
+          CommandLine := TMenuItem(Sender).Hint;
+          Execute;
+     finally
+        Free;
+     end;
 end;
 
 procedure TFrmTemplate.acInstalledAppsExecute(Sender: TObject);
@@ -118,11 +105,24 @@ begin
    xPLMenu.PopUp;
 end;
 
+procedure TFrmTemplate.AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
+var item : TxPLCollectionItem;
+    path, version, nicename : string;
+    aMenu : TMenuItem;
+begin
+    item := aColl.FindItemName(aName);
+    if assigned(item) and (xPLApplication.Adresse.Device<>aName) then begin
+       xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version,nicename);
+       aMenu := TMenuItem.Create(self);
+       aMenu.Caption := nicename;
+       aMenu.OnClick := @acCommonToolsExecute;
+       aMenu.Hint    := path;
+       mnuLaunch.Add(aMenu);
+    end;
+end;
+
 procedure TFrmTemplate.FormCreate(Sender: TObject);
 var sl : TxPLCustomCollection;
-    item : TxPLCollectionItem;
-    aMenu : TMenuItem;
-    path,version : string;
 begin
    ToolBar.Images := xPLGUIResource.Images;
    xPLMenu.Images := ToolBar.Images;
@@ -145,24 +145,9 @@ begin
    Caption := xPLApplication.AppName;
 
    sl := xPLApplication.Settings.GetxPLAppList;
-   item := sl.FindItemName('basicset');
-   if assigned(item) and (xPLApplication.Adresse.Device<>'basicset') then begin
-      xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version);
-      aMenu := TMenuItem.Create(self);
-      aMenu.Action := acBasicSet;
-      acBasicSet.Hint:=path;
-      mnuLaunch.Add(aMenu);
-   end;
-
-   item := sl.FindItemName('vendfile');
-   if assigned(item) and (xPLApplication.Adresse.Device<>'vendfile') then begin
-      xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version);
-      aMenu := TMenuItem.Create(self);
-      aMenu.Action := acVendFile;
-      acVendFile.Hint:=path;
-      mnuLaunch.Add(aMenu);
-   end;
-
+   AddSubMenuElmt(sl,'basicset');
+   AddSubMenuElmt(sl,'vendfile');
+   AddSubMenuElmt(sl,'piedit');
    sl.Free;
 end;
 

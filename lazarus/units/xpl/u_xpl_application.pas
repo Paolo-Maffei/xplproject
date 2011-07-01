@@ -85,7 +85,7 @@ begin
    fVersion        := GetVersion;
 
    {$ifdef fpc}
-      if InstanceRunning(AppName) then Log(etError,K_MSG_ALREADY_STARTED);
+      if InstanceRunning(GetProductName) then Log(etError,K_MSG_ALREADY_STARTED);
    {$endif}
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
@@ -118,19 +118,20 @@ end;
 
 function TxPLApplication.LogFileName: TFileName;
 begin
-   result := Format('%s%s.log',[fFolders.DeviceDir, AppName]);
+   result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device]);
 end;
 
 procedure TxPLApplication.RegisterMe;
-var aPath, aVersion : string;
+var aPath, aVersion, aNiceName : string;
 begin
-   Settings.GetAppDetail(Adresse.Vendor, Adresse.Device,aPath,aVersion);
+   Settings.GetAppDetail(Adresse.Vendor, Adresse.Device,aPath,aVersion, aNiceName);
    if aVersion < Version then Settings.SetAppDetail(Adresse.Vendor,Adresse.Device,Version)
 end;
 
 function TxPLApplication.AppName : string;
 begin
-   Result := Format('xPL %s',[Adresse.Device]);
+   //Result := Format('xPL %s',[Adresse.Device]);
+   Result := GetProductName;
 end;
 
 function TxPLApplication.FullTitle : string;
