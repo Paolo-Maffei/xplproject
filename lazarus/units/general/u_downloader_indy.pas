@@ -13,6 +13,8 @@ uses Classes,
 
 type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of object;
 
+     { TDownloader }
+
      TDownloader = class
      private
         IdHTTP: TIdHTTP;
@@ -29,6 +31,7 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
         procedure WorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Int64);
         procedure Work(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
         procedure WorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+        procedure SetProxy(const aProxyInf : string);
      public
         constructor Create;
         destructor  Destroy; override;
@@ -41,18 +44,19 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
         property  Source : string read fSourceURL;
      end;
 
-     function HTTPDownload(const aSource, aDestination : string) : boolean;
+     function HTTPDownload(const aSource, aDestination, aProxyInf : string) : boolean;
 
 implementation // =============================================================
 uses uRegExpr
      , SysUtils
      ;
 
-function HTTPDownload(const aSource, aDestination : string) : boolean;
+function HTTPDownload(const aSource, aDestination, aProxyInf : string) : boolean;
 begin
    Result := True;
    with TDownloader.Create do try
       try
+        SetProxy(aProxyInf);
         Start(aSource,aDestination);
       except
         Result := False;
@@ -119,6 +123,19 @@ begin
    end else if Assigned(fOnAbort) then fOnAbort(self, 400);
    XMLStream.Clear;
    if Assigned(fOnWorkEnd) then fOnWorkEnd(self, aWorkMode);
+end;
+
+procedure TDownloader.SetProxy(const aProxyInf: string);
+var sl : TStringList;
+begin
+   if length(aProxyInf)<>0 then begin
+      sl := TStringList.Create;
+      sl.Delimiter := ':';
+      sl.DelimitedText:=aProxyInf;
+      IdHTTP.ProxyParams.ProxyServer :=sl[0];
+      IdHTTP.ProxyParams.ProxyPort   := StrToInt(sl[1]);
+	  sl.Free;
+   end;
 end;
 
 destructor TDownloader.Destroy;

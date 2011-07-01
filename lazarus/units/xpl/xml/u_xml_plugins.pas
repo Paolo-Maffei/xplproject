@@ -153,6 +153,7 @@ uses StrUtils
      , uxPLConst
      , u_downloader_Indy
      , superxmlparser
+     , u_xPL_Application
      ;
 
 { TElementsType }
@@ -308,7 +309,7 @@ var aUrl : string;
 begin
    aUrl := Url;
    if not AnsiEndsStr(K_FEXT_XML, aUrl) then aUrl := aUrl + K_FEXT_XML;
-   Result := HTTPDownload(aUrl, FileName);
+   Result := HTTPDownload(aUrl, FileName, xPLApplication.Settings.ProxyServer);
 end;
 
 constructor TLocationsType.Create(const so : ISuperObject);

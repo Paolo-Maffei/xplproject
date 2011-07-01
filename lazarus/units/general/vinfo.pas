@@ -16,9 +16,15 @@ type
     function GetFixedInfo: TVersionFixedInfo;
     function GetStringFileInfo: TVersionStringFileInfo;
     function GetVarFileInfo: TVersionVarFileInfo;
+
+    function SearchValue(const aString : string) : string;
   public
     constructor Create;
     destructor Destroy; override;
+
+    function CompanyName : string;
+    function InternalName : string;
+    function FileVersion : string;
 
     procedure Load(Instance: THandle);
     property FixedInfo: TVersionFixedInfo read GetFixedInfo;
@@ -45,10 +51,41 @@ begin
   Result := FVersResource.VarFileInfo;
 end;
 
+function TVersionInfo.SearchValue(const aString: string): string;
+var s : TVersionStringTable;
+    i,j : integer;
+begin
+  result := '';
+  for i:=0 to StringFileInfo.Count-1 do begin
+      s := StringFileInfo.Items[i];
+      for j:=0 to s.Count-1 do
+          if s.Keys[j] = aString then begin
+             result := s.Values[j];
+             break;
+          end;
+  end;
+end;
+
+function TVersionInfo.CompanyName: string;
+begin
+   Result := SearchValue('CompanyName');
+end;
+
+function TVersionInfo.InternalName: string;
+begin
+   Result := SearchValue('InternalName');
+end;
+
+function TVersionInfo.FileVersion: string;
+begin
+   Result := SearchValue('FileVersion');
+end;
+
 constructor TVersionInfo.Create;
 begin
   inherited Create;
   FVersResource := TVersionResource.Create;
+  Load(HInstance);
 end;
 
 destructor TVersionInfo.Destroy;

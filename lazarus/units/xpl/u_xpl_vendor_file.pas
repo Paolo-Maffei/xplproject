@@ -131,7 +131,7 @@ end;
 
 function TxPLVendorSeedFile.Update(const sLocation : string) : boolean;
 begin
-   Result := HTTPDownload(sLocation + '.xml', FileName);
+   Result := HTTPDownload(sLocation + '.xml', FileName, xPLApplication.Settings.ProxyServer);
 end;
 
 //function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;

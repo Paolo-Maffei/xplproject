@@ -43,9 +43,9 @@ type // TxPLCustomSettings ====================================================
         function  Get_ListenToAny     : boolean;
         function  Get_ListenToLocal   : boolean;
         function  Get_ProxyEnable: boolean;
-        procedure Set_ListenOnAll      (const bValue : boolean); inline;
-        procedure Set_ListenToLocal    (const bValue : boolean); inline;
-        procedure Set_ListenToAny      (const bValue : boolean); inline;
+        procedure Set_ListenOnAll      (const bValue : boolean);
+        procedure Set_ListenToLocal    (const bValue : boolean);
+        procedure Set_ListenToAny      (const bValue : boolean);
         procedure Set_ListenOnAddress  (const AValue: string);
         procedure Set_ListenToAddresses(const AValue: string);
         procedure Set_BroadCastAddress (const AValue: string);
@@ -81,6 +81,7 @@ uses SysUtils
      , u_xpl_application
      , uxPLConst
      , u_xpl_common
+     , fpc_delphi_compat
      ;
 
 const // Registry Key and values constants =============================================
