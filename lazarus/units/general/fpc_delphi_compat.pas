@@ -4,10 +4,11 @@ unit fpc_delphi_compat;
 
 interface
 
-function BuildDate : string;
-function GetDevice : string;
-function GetVendor : string;
+function BuildDate  : string;
+function GetDevice  : string;
+function GetVendor  : string;
 function GetVersion : string;
+function GetProductName : string;
 
 {$ifdef fpc}
 {$else}
@@ -52,6 +53,11 @@ end;
 function GetVersion: string;
 begin
    result := VersionInfo.FileVersion;
+end;
+
+function GetProductName : string;
+begin
+   result := VersionInfo.ProductName;
 end;
 
 initialization

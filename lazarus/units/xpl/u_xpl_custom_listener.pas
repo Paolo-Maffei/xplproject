@@ -208,7 +208,7 @@ end;
 procedure TxPLCustomListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
 begin
    aMessage.Format_HbeatApp(fConfig.Interval,aPort,aIP);
-   aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION], [AppName  , Version]);
+   aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION], [AppName, Version]);
    if not Config.IsValid then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG; // Change Schema class in this case
    if csDestroying in ComponentState then aMessage.Schema.Type_ := 'end';      // Change Schema type in this case
 end;

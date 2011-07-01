@@ -1,7 +1,7 @@
 object FrmTemplate: TFrmTemplate
-  Left = 78
+  Left = 44
   Height = 472
-  Top = 697
+  Top = 182
   Width = 708
   Caption = 'FrmTemplate'
   ClientHeight = 472
@@ -111,15 +111,6 @@ object FrmTemplate: TFrmTemplate
       Caption = 'Application Log'
       ImageIndex = 42
       OnExecute = acLogViewerExecute
-    end
-    object acBasicSet: TAction
-      Caption = 'Basic xPL Settings'
-      ImageIndex = 44
-      OnExecute = acBasicSetExecute
-    end
-    object acVendFile: TAction
-      Caption = 'Vendor Files'
-      OnExecute = acVendFileExecute
     end
   end
   object xPLMenu: TPopupMenu

@@ -24,8 +24,7 @@ uses classes,
      u_xpl_schema,
      u_xPL_Body,
      uxPLConst,
-     u_xml_plugins,
-     u_xml_xplplugin;
+     u_xml_plugins;
 
 type { TxPLMessage ===========================================================}
 

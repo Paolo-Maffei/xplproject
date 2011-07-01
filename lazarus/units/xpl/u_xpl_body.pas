@@ -69,7 +69,7 @@ type // TxPLBody ==============================================================
 implementation {===============================================================}
 uses sysutils,
      strutils,
-     //uRegExpr,
+     uRegExpr,
      uxPLConst;
 
 type StringArray = Array of string;
@@ -267,24 +267,24 @@ var sl : tstringlist;
     ch : string;
 begin
    ResetValues;
-   sl := TStringList.Create;
-   sl.Delimiter:=#10;                                                          // use LF as delimiter
-   sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
-   sl.Delete(0);                                                               // Drop leading {
-   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
-   for ch in sl do if ch<>'' then AddKeyValue(ch);
-   sl.free;
-   //with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
-   //     Expression := K_RE_BODY_FORMAT;
-   //     if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
-   //        Expression := K_RE_BODY_LINE;
-   //        Exec(Match[1]);
-   //        repeat
-   //              AddKeyValue(Match[1]);
-   //        until not ExecNext;
-   //     end;
-   //     finally free;
-   //  end;
+   //sl := TStringList.Create;
+   //sl.Delimiter:=#10;                                                          // use LF as delimiter
+   //sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
+   //sl.Delete(0);                                                               // Drop leading {
+   //sl.Delete(Pred(sl.count));                                                  // Drop trailing }
+   //for ch in sl do if ch<>'' then AddKeyValue(ch);
+   //sl.free;
+   with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
+        Expression := K_RE_BODY_FORMAT;
+        if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
+           Expression := K_RE_BODY_LINE;
+           Exec(Match[1]);
+           repeat
+                 AddKeyValue(Match[1]);
+           until not ExecNext;
+        end;
+        finally free;
+     end;
 end;
 
 initialization

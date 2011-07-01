@@ -56,16 +56,16 @@ end;
 // Form procedures ============================================================
 procedure TfrmAppLauncher.FormShow(Sender: TObject);
 var sl : TxPLCustomCollection;
-    path, version : string;
+    path, version, nicename : string;
     i : integer;
 begin
    Toolbar.Images := xPLGUIResource.Images;
    lvApps.Items.Clear;
    sl  := xPLApplication.Settings.GetxPLAppList;
    for i := 0 to sl.Count -1 do begin
-       xPLApplication.Settings.GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version);
+       xPLApplication.Settings.GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version, nicename);
        if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
-            Caption := sl[i].DisplayName;
+            Caption := NiceName; //sl[i].DisplayName;
             SubItems.DelimitedText:= Sl[i].Value + ',' + version + ',' + path;
        end;
    end;

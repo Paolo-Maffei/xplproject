@@ -60,7 +60,7 @@ type // TxPLCustomSettings ====================================================
 
         function GetxPLAppList : TxPLCustomCollection;
 
-        procedure GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion : string);
+        procedure GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion, aProdName : string);
         procedure SetAppDetail(const aVendor, aDevice, aVersion: string);
 
      published
@@ -89,6 +89,7 @@ const // Registry Key and values constants =====================================
    K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                            // \software\xpl\vendor\device\
    K_LOG_INFO                   = 'xPL settings loaded : %s,%s,%s';
    K_XPL_REG_VERSION_KEY        = 'version';
+   K_XPL_REG_PRODUCT_NAME       = 'productname';
    K_XPL_REG_PATH_KEY           = 'path';
    K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
    K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
@@ -108,7 +109,7 @@ begin
    fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON,K_XPL_SETTINGS_NETWORK_ANY);
    fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO,K_XPL_SETTINGS_NETWORK_ANY);
 
-   TxPLApplication(aOwner).Log(etInfo,K_LOG_INFO, [fBroadCastAddress,fListenOnAddress,fListenToAddresses]);
+   TxPLApplication(Owner).Log(etInfo,K_LOG_INFO, [fBroadCastAddress,fListenOnAddress,fListenToAddresses]);
 
    {$ifdef windows}
      fRegistry.RootKey := HKEY_CURRENT_USER;
@@ -238,7 +239,7 @@ begin
    aAppListe.Free;
 end;
 
-procedure TxPLCustomSettings.GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion: string);
+procedure TxPLCustomSettings.GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion, aProdName: string);
 begin
    with fRegistry do begin
       RootKey := HKEY_LOCAL_MACHINE;
@@ -247,6 +248,7 @@ begin
       OpenKey (aDevice, False);
       aVersion := ReadString(K_XPL_REG_VERSION_KEY);                             // if you don't have admin rights under Windows
       aPath    := ReadString(K_XPL_REG_PATH_KEY);
+      aProdName:= ReadString(K_XPL_REG_PRODUCT_NAME);
    end;
 end;
 
@@ -258,7 +260,8 @@ begin
       fRegistry.OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);
       try
          fRegistry.WriteString(K_XPL_REG_VERSION_KEY,aVersion);
-         fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0))
+         fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0));
+         fRegistry.WriteString(K_XPL_REG_PRODUCT_NAME,GetProductName);
       except
          fRightsError := True;
       end;
