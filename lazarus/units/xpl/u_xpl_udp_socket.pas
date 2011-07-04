@@ -93,7 +93,7 @@ begin
    inherited Create(aOwner);
    Bindings.Clear;
    BufferSize   := XPL_MAX_MSG_SIZE;
-   OnUDPRead    := @UDPRead;
+   OnUDPRead    := {$ifdef fpc}@{$endif}UDPRead;
    fOnReceived  := aReceivedProc;
    if TxPLApplication(aOwner).Settings.IsValid then with TxPLApplication(aOwner).Settings do begin
       {$IFDEF WINDOWS}
@@ -104,7 +104,7 @@ begin
             dec(i);
       end;
       {$ELSE}
-      AddBinding(fSettings.ListenOnAddress);
+      AddBinding(ListenOnAddress, aPort);                                      // This code needs testing under linux
       {$ENDIF}
    end else xPLApplication.Log(etWarning,'xPL settings not set, using default');
    Active := (Bindings.Count > 0);

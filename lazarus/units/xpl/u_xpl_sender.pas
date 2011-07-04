@@ -6,7 +6,10 @@ unit u_xpl_sender;
  ===============================================================================
   0.8 : First version, spined off from uxPLMessage
 }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 
