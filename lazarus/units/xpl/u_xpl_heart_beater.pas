@@ -9,19 +9,26 @@ unit u_xpl_heart_beater;
   C:\pp\packages\fcl-base\src\fptimer.pp dans les paths du projet
   }
 
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
 uses Classes
      , SysUtils
+     {$ifdef fpc}
      , fpTimer
-     , u_xpl_config;
+     {$else}
+     , ExtCtrls
+     {$endif}
+     , u_xpl_config
+     ;
 
 type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfNone);
 
      // TxPLHeartBeater =======================================================
-     TxPLHeartBeater = class(TfpTimer)
+     TxPLHeartBeater = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif})
      private
         fRate : TxPLRateFrequency;
         FNoHubTimerCount : integer;

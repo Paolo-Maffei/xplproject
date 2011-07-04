@@ -26,6 +26,9 @@ uses Registry
      , Classes
      , u_xpl_address
      , u_xpl_collection
+     {$ifndef fpc}
+     , windows                                                                 // Needed on delphi to define KEY_READ
+     {$endif}
      ;
 
 type // TxPLCustomSettings ====================================================

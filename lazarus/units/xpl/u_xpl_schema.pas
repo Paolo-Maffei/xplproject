@@ -35,7 +35,7 @@ type TxPLSchema = class(TxPLRawSet)
         property RawxPL : string read Get_RawxPL write Set_RawxPL stored false;
      end;
 
-     Operator := (t1 : string) t2 : TxPLSchema;
+     //Operator := (t1 : string) t2 : TxPLSchema;
 
 var  Schema_ConfigApp,
      Schema_ConfigCurr,
@@ -68,11 +68,11 @@ const // ======================================================================
      K_FMT_FILTER = '%s.%s';
 
 // ============================================================================
-operator:=(t1: string)t2: TxPLSchema;
-begin
-   t2 := TxPLSchema.Create;
-   t2.RawxPL := t1;
-end;
+//operator:=(t1: string)t2: TxPLSchema;
+//begin
+//   t2 := TxPLSchema.Create;
+//   t2.RawxPL := t1;
+//end;
 
 // TxPLSchema Object ==========================================================
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
@@ -107,14 +107,14 @@ end;
 initialization
    Classes.RegisterClass(TxPLSchema);
 
-   Schema_ConfigApp    := 'config.app';
-   Schema_HBeatApp     := 'hbeat.app';
-   Schema_HBeatEnd     := 'hbeat.end';
-   Schema_HBeatReq     := 'hbeat.request';
-   Schema_ConfigCurr   := 'config.current';
-   Schema_ConfigList   := 'config.list';
-   Schema_ConfigResp   := 'config.response';
-   Schema_ControlBasic := 'control.basic';
-   Schema_TimerBasic   := 'timer.basic';
+   Schema_ConfigApp    := TxPLSchema.Create('config','app');
+   Schema_HBeatApp     := TxPLSchema.Create('hbeat','app');
+   Schema_HBeatEnd     := TxPLSchema.Create('hbeat','end');
+   Schema_HBeatReq     := TxPLSchema.Create('hbeat','request');
+   Schema_ConfigCurr   := TxPLSchema.Create('config','current');
+   Schema_ConfigList   := TxPLSchema.Create('config','list');
+   Schema_ConfigResp   := TxPLSchema.Create('config','response');
+   Schema_ControlBasic := TxPLSchema.Create('control','basic');
+   Schema_TimerBasic   := TxPLSchema.Create('timer','basic');
 end.
 

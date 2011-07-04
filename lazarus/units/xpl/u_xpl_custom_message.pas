@@ -8,7 +8,10 @@ unit u_xpl_custom_message;
  0.95 : First Release
  1.0  : Now descendant of TxPLHeader
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 

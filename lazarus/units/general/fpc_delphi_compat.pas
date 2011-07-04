@@ -10,12 +10,6 @@ function GetVendor  : string;
 function GetVersion : string;
 function GetProductName : string;
 
-{$ifdef fpc}
-{$else}
-const
-       KEY_READ               = $20019;                                        // This appears to be missing in delphi headers
-{$endif}
-
 implementation // =============================================================
 Uses Classes
      , SysUtils
@@ -36,7 +30,7 @@ begin
    {$ifdef fpc}
       {$I %date%};
    {$else}
-      PeReadLinkerTimeStamp(ParamStr(0));
+      DateToStr(PeReadLinkerTimeStamp(ParamStr(0)));
    {$endif}
 end;
 

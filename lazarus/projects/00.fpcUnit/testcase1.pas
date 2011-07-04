@@ -71,10 +71,10 @@ begin
    AssertEquals(schema2.type_,'reply');
    schema2.Free;
    schema1.free;
-   schema2 := 'control.reply';
+   schema2 := TxPLSchema.Create('control','reply');
    AssertEquals(schema2.classe,'control');         // vérifier sa décomposition
    AssertEquals(schema2.type_,'reply');
-   schema2 := 'ac.basic';
+   schema2 := TxPLSchema.Create('ac','basic');
    AssertEquals(schema2.classe,'ac');         // vérifier sa décomposition
    AssertEquals(schema2.type_,'basic');
    schema2.free;
@@ -166,6 +166,11 @@ begin
      AssertEquals(head1.hop,1);
      head1.free;
    compo.free;
+   head1 := TxPLHeader.Create(nil,'xpl-trig.clinique.device.instance.class.type');
+   AssertEquals(head1.Source.RawxPL,'clinique-device.instance');
+   AssertEquals(head1.Target.Equals(head1.source),true);
+   AssertEquals(head1.MessageType=trig, true);
+   AssertEquals(head1.schema.RawxPL,'class.type');
 end;
 
 procedure ClinxPLfpcUnit.TestBody;
@@ -245,15 +250,11 @@ var folder : TxPLCustomFolders;
     app : TxPLApplication;
 begin
    app  := TxPLApplication.Create(nil);
-   adr1 := TxPLAddress.Create('vendor','device','instance');
+   adr1 := TxPLAddress.Create('clinique','device','instance');
    folder := TxPLCustomFolders.Create(adr1);
-   s1 := folder.shareddir;
-   s2 := folder.plugindir;
-   s3 := folder.devicedir;
-   s1 := app.VendorFile.GetPluginFilePath('clinique Plug-in');
-   AssertEquals(s1,'C:\ProgramData\xPL\Plugins\clinique.xml');
-   s1 := app.VendorFile.GetPluginFilePath('beurk');
-   AssertEquals(s1,'');
+   s1 := app.VendorFile.FileName;
+   AssertEquals(s1,'C:\ProgramData\xPL\Plugins\plugins.xml');
+
    folder.free;
    adr1.free;
    app.free;

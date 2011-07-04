@@ -11,7 +11,10 @@ unit u_xPL_Header;
  1.1    Switched schema from Body to Header
         optimizations in SetRawxPL to avoid inutile loops
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}{$M+}
+{$endif}
 
 interface
 
@@ -37,7 +40,7 @@ type TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
        procedure Set_Source(const AValue: TxPLAddress);
        procedure Set_Target(const AValue: TxPLTargetAddress);
      public
-       constructor Create(aOwner : TComponent); override;
+       constructor Create(aOwner : TComponent); overload;
        constructor Create(aOwner : TComponent; const aFilter : string); overload; // Creates a header based on a filter string
        destructor  destroy; override;
 
@@ -66,8 +69,6 @@ implementation //==============================================================
 uses SysUtils
      , typinfo
      , uRegExpr
-     , cutils
-     , cstrings
      , StrUtils
      ;
 
@@ -92,16 +93,22 @@ begin
 end;
 
 constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string);
-var  sFlt : stringArray;
+var  sFlt : TStringList;
 begin
    inherited Create(aOwner);
 
-   sFlt := StrSplit(aFilter,'.');                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-
-   MessageType := StrToMsgType(sFlt[0]);
-   fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                    // Creates source and target with the same informations
-   fTarget := TxPLTargetAddress.Create(fSource);
-   fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
+   sFlt := TStringList.Create;
+   try
+      sFlt.Delimiter := '.';
+      sFlt.StrictDelimiter := True;
+      sFlt.DelimitedText := aFilter;                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+      fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                    // Creates source and target with the same informations
+      fTarget := TxPLTargetAddress.Create(fSource);
+      MessageType := StrToMsgType(sFlt[0]);
+      fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
+   finally
+     sFlt.Free;
+   end;
 end;
 
 destructor TxPLHeader.destroy;
@@ -215,7 +222,7 @@ begin
                    1 : Source.RawxPL := Match[i+1];
                    2 : Target.RawxPL := Match[i+1];
               end;
-              i += 2;
+              inc(i,2);
            end;
            Schema.RawxPL := Match[9];
         end;

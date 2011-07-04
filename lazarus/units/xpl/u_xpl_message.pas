@@ -13,7 +13,10 @@ unit u_xpl_message;
         to dedicated TxPLSender object
  1.01 : Added Strings property
  }
+
+{$ifdef fpc}
 {$mode objfpc}{$H+}
+{$endif}
 
 interface
 
@@ -52,7 +55,6 @@ type { TxPLMessage ===========================================================}
 implementation { ==============================================================}
 Uses SysUtils
      , uRegExpr
-     , cStrings
      , LResources
      , u_xpl_common
      ;
@@ -73,18 +75,18 @@ begin
    result := RawxPL;
    if AnsiPos('{SYS::', result) = 0 then exit;                                  // Avoid to search the needle if no one present
 
-   result := StrReplace('{SYS::TIMESTAMP}', FormatDateTime('yyyymmddhhnnss', now), result);
-   result := StrReplace('{SYS::DATE_YMD}' , FormatDateTime('yyyy/mm/dd'    , now), result);
-   result := StrReplace('{SYS::DATE_UK}'  , FormatDateTime('dd/mm/yyyy'    , now), result);
-   result := StrReplace('{SYS::DATE_US}'  , FormatDateTime('mm/dd/yyyy'    , now), result);
-   result := StrReplace('{SYS::DATE}'     , FormatDateTime('dd/mm/yyyy'    , now), result);
-   result := StrReplace('{SYS::DAY}'      , FormatDateTime('dd'            , now), result);
-   result := StrReplace('{SYS::MONTH}'    , FormatDateTime('m'             , now), result);
-   result := StrReplace('{SYS::YEAR}'     , FormatDateTime('yyyy'          , now), result);
-   result := StrReplace('{SYS::TIME}'     , FormatDateTime('hh:nn:ss'      , now), result);
-   result := StrReplace('{SYS::HOUR}'     , FormatDateTime('hh'            , now), result);
-   result := StrReplace('{SYS::MINUTE}'   , FormatDateTime('nn'            , now), result);
-   result := StrReplace('{SYS::SECOND}'   , FormatDateTime('ss'            , now), result);
+   result := StringReplace(result, '{SYS::TIMESTAMP}', FormatDateTime('yyyymmddhhnnss', now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::DATE_YMD}' , FormatDateTime('yyyy/mm/dd'    , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::DATE_UK}'  , FormatDateTime('dd/mm/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::DATE_US}'  , FormatDateTime('mm/dd/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::DATE}'     , FormatDateTime('dd/mm/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::DAY}'      , FormatDateTime('dd'            , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::MONTH}'    , FormatDateTime('m'             , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::YEAR}'     , FormatDateTime('yyyy'          , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::TIME}'     , FormatDateTime('hh:nn:ss'      , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::HOUR}'     , FormatDateTime('hh'            , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::MINUTE}'   , FormatDateTime('nn'            , now), [rfReplaceAll, rfIgnoreCase]);
+   result := StringReplace(result, '{SYS::SECOND}'   , FormatDateTime('ss'            , now), [rfReplaceAll, rfIgnoreCase]);
 end;
 
 procedure TxPLMessage.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
@@ -129,7 +131,6 @@ end;
 //end;
 
 procedure TxPLMessage.ReadFromJSON(const aCom: TCommandType);
-//var i : integer;
 var item : TCollectionItem;
 begin
    ResetValues;
