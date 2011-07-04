@@ -314,7 +314,7 @@ end;
 procedure TfrmxPLMessage.acLoadExecute(Sender: TObject);
 begin
    if not OpenMessage.Execute then exit;
-
+   edtMsgName.SetFocus;
    xPLMessage.LoadFromFile(OpenMessage.FileName);
    DisplayMessage;
 end;

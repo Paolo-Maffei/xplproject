@@ -35,7 +35,7 @@ type { TxPLMessage ===========================================================}
      private
         fMsgName      : string;
      protected
-        procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); virtual;
+        //procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); virtual;
      public
         function ElementByName(const anItem : string) : string;
         function ProcessedxPL : string;
@@ -55,7 +55,7 @@ type { TxPLMessage ===========================================================}
 implementation { ==============================================================}
 Uses SysUtils
      , uRegExpr
-     , LResources
+     //, LResources
      , u_xpl_common
      ;
 
@@ -89,33 +89,61 @@ begin
    result := StringReplace(result, '{SYS::SECOND}'   , FormatDateTime('ss'            , now), [rfReplaceAll, rfIgnoreCase]);
 end;
 
-procedure TxPLMessage.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-  if CompareText(AClassName, 'TxPLMessage') = 0 then ComponentClass := TxPLMessage
-end;
+//procedure TxPLMessage.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+//begin
+//  if CompareText(AClassName, 'TxPLMessage') = 0 then ComponentClass := TxPLMessage
+//end;
 
 procedure TxPLMessage.SaveToFile(aFileName: string);
-var AStream: TMemoryStream;
+//var AStream: TMemoryStream;
+//begin
+//  AStream:=TMemoryStream.Create;
+//  try
+//    WriteComponentAsTextToStream(AStream, self);
+//    aStream.SaveToFile(aFileName);
+//  finally
+//    AStream.Free;
+//  end;
+var
+  fStream: TFileStream;
+  mStream: TMemoryStream;
 begin
-  AStream:=TMemoryStream.Create;
+  mStream := TMemoryStream.Create;
+  fStream := TFileStream.Create(aFileName, fmCreate);
   try
-    WriteComponentAsTextToStream(AStream, self);
-    aStream.SaveToFile(aFileName);
+    mStream.WriteComponent(self);
+    mStream.position := 0;
+    ObjectBinaryToText(mStream, fStream);
   finally
-    AStream.Free;
+    mStream.Free;
+    fStream.Free;
   end;
 end;
 
 procedure TxPLMessage.LoadFromFile(aFileName: string);
-var aStream : TMemoryStream;
-begin
-   aStream := TMemoryStream.Create;
-   try
-      aStream.LoadFromFile(aFileName);
-      ReadComponentFromTextStream(aStream,TComponent(self),@OnFindClass, self);
-   finally
-      aStream.Free;
-   end;
+//var aStream : TMemoryStream;
+//begin
+//   aStream := TMemoryStream.Create;
+//   try
+//      aStream.LoadFromFile(aFileName);
+//      ReadComponentFromTextStream(aStream,TComponent(self),@OnFindClass, self);
+//   finally
+//      aStream.Free;
+//   end;
+var
+  fStream: TFileStream;
+  mStream: TMemoryStream;
+  begin
+    mStream := TMemoryStream.Create;
+    fStream := TFileStream.Create(aFileName, fmOpenRead);
+    try
+       ObjectTextToBinary(fStream,mStream);
+       mStream.Position := 0;
+       mStream.ReadComponent(self);
+    finally
+      mStream.Free;
+      fStream.Free;
+    end;
 end;
 
 //procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);                 // Reads a message from a vendor file
