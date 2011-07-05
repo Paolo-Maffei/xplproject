@@ -43,10 +43,12 @@ type
     mmoPSScript: TSynEdit;
     popCommands: TPopupMenu;
     popCopy: TPopupMenu;
+    popFunctions: TPopupMenu;
     SynPasSyn1: TSynPasSyn;
     TabSheet1: TTabSheet;
     edtMsgName: TTIEdit;
     FrameMessage: TTMessageFrame;
+    tbFunctions: TToolButton;
     ToolButton10: TToolButton;
     ToolButton2: TToolButton;
     ToolButton4: TToolButton;
@@ -76,6 +78,7 @@ type
     procedure acSaveExecute(Sender: TObject);
     procedure tbCommandsClick(Sender: TObject);
     procedure tbCopyClick(Sender: TObject);
+    procedure tbFunctionsClick(Sender: TObject);
     procedure tbOkClick(Sender: TObject);
     procedure tbPasteClick(Sender: TObject);
     procedure ToolButton2Click(Sender: TObject);
@@ -83,7 +86,9 @@ type
   private
     arrCommandes : TList;
     procedure InitPluginsMenu;
+    procedure InitFunctionsMenu;
     procedure PluginCommandExecute ( Sender: TObject );
+    procedure FunctionExecute( Sender : TObject);
     procedure DisplayMessage;
   public
     buttonOptions : TButtonOptions;
@@ -124,6 +129,7 @@ begin
 
    arrCommandes := TList.Create;
    InitPluginsMenu;
+   InitFunctionsMenu;
 
    aMenu := TMenuItem.Create(self);
    aMenu.Caption := '-';
@@ -195,6 +201,18 @@ begin
    end else tbCommands.Enabled:=false;
 end;
 
+procedure TfrmxPLMessage.InitFunctionsMenu;
+var ch : string;
+    aMenu : TMenuItem;
+begin
+   for ch in K_KEYWORDS do begin
+       aMenu := TMenuItem.Create(self);
+       popFunctions.Items.Insert(0,aMenu);
+       aMenu.Caption := '{SYS::' + ch + '}';
+       aMenu.OnClick := @FunctionExecute;
+   end;
+end;
+
 procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
 var Command : TCommandType;
 begin
@@ -202,6 +220,18 @@ begin
    Command := TCommandType(ArrCommandes[TMenuItem(sender).Tag]);
    xPLMessage.ReadFromJSON(Command);
    DisplayMessage;
+end;
+
+procedure TfrmxPLMessage.FunctionExecute(Sender: TObject);
+var p : integer;
+    str : string;
+begin
+   FrameMessage.edtBody.SetFocus;
+   p := FrameMessage.EdtBody.SelStart + FrameMessage.EdtBody.SelLength + 1;
+   str := FrameMessage.EdtBody.Text;
+   Insert(TMenuItem(sender).Caption, str, p);
+   FrameMessage.EdtBody.Text:= str;
+   FrameMessage.EdtBody.SelStart := p + Length(TMenuItem(sender).Caption) -1;
 end;
 
 procedure TFrmxPLMessage.DisplayMessage;
@@ -234,6 +264,11 @@ end;
 procedure TfrmxPLMessage.tbCopyClick(Sender: TObject);
 begin
    popCopy.PopUp;
+end;
+
+procedure TfrmxPLMessage.tbFunctionsClick(Sender: TObject);
+begin
+   popFunctions.PopUp;
 end;
 
 procedure TfrmxPLMessage.ToolButton2Click(Sender: TObject);

@@ -1,7 +1,7 @@
 object frmxPLMessage: TfrmxPLMessage
-  Left = 198
+  Left = 236
   Height = 388
-  Top = 102
+  Top = 131
   Width = 448
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -899,6 +899,15 @@ object frmxPLMessage: TfrmxPLMessage
       Caption = 'Loop Send'
       TabOrder = 0
     end
+    object tbFunctions: TToolButton
+      Left = 241
+      Top = 0
+      Caption = 'Functions'
+      DropdownMenu = popFunctions
+      OnClick = tbFunctionsClick
+      PopupMenu = popFunctions
+      Style = tbsDropDown
+    end
   end
   object ActionList2: TActionList
     left = 456
@@ -1027,5 +1036,9 @@ object frmxPLMessage: TfrmxPLMessage
       Action = acQuit
       OnClick = acQuitExecute
     end
+  end
+  object popFunctions: TPopupMenu
+    left = 288
+    top = 92
   end
 end

@@ -52,10 +52,14 @@ type { TxPLMessage ===========================================================}
         property MsgName      : string      read fMsgName      write fMsgName     ;
      end;
 
+const K_KEYWORDS : Array[0..11] of String = ( 'TIMESTAMP','DATE_YMD','DATE_UK','DATE_US','DATE','DAY',
+                                              'MONTH','YEAR','TIME','HOUR','MINUTE','SECOND');
+
 implementation { ==============================================================}
 Uses SysUtils
      , uRegExpr
-     //, LResources
+     , StrUtils
+     , JclStrings
      , u_xpl_common
      ;
 
@@ -71,22 +75,23 @@ begin
 end;
 
 function TxPLMessage.ProcessedxPL: string;
+const K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd','dd/mm/yyyy','mm/dd/yyyy','dd','dd/mm/yyyy',
+                                              'm','yyyy','hh:nn:ss','hh','nn','ss');
+      K_RE_VARIABLE    = '{[s|S][y|Y][s|S]::(.*?)}';
+var rep : string;
+    bLoop   : boolean;
 begin
    result := RawxPL;
-   if AnsiPos('{SYS::', result) = 0 then exit;                                  // Avoid to search the needle if no one present
-
-   result := StringReplace(result, '{SYS::TIMESTAMP}', FormatDateTime('yyyymmddhhnnss', now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::DATE_YMD}' , FormatDateTime('yyyy/mm/dd'    , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::DATE_UK}'  , FormatDateTime('dd/mm/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::DATE_US}'  , FormatDateTime('mm/dd/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::DATE}'     , FormatDateTime('dd/mm/yyyy'    , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::DAY}'      , FormatDateTime('dd'            , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::MONTH}'    , FormatDateTime('m'             , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::YEAR}'     , FormatDateTime('yyyy'          , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::TIME}'     , FormatDateTime('hh:nn:ss'      , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::HOUR}'     , FormatDateTime('hh'            , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::MINUTE}'   , FormatDateTime('nn'            , now), [rfReplaceAll, rfIgnoreCase]);
-   result := StringReplace(result, '{SYS::SECOND}'   , FormatDateTime('ss'            , now), [rfReplaceAll, rfIgnoreCase]);
+   with TRegExpr.Create do begin
+        Expression := K_RE_VARIABLE;
+        bLoop := Exec(Result);
+        while bLoop do begin
+              rep := K_FORMATS[AnsiIndexStr(AnsiUpperCase(Match[1]),K_KEYWORDS)];
+              result := StringReplace( result, Match[0], FormatDateTime(rep,now),[rfReplaceAll,rfIgnoreCase]);
+              bLoop := ExecNext;
+        end;
+        Free;
+   end;
 end;
 
 //procedure TxPLMessage.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
