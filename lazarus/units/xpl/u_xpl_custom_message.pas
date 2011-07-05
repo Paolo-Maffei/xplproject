@@ -102,8 +102,8 @@ var LeMessage : string;
     BodyStart : integer;
 begin
    LeMessage     := StrRemoveChars(aValue,[NativeCarriageReturn]);             // Supprime les CR
-   BodyStart     := StrLastPos('{',LeMessage) - 1;                             // Recherche la position du début du body
-   inherited RawxPL := AnsiLeftStr (LeMessage,BodyStart-1);                    // Transmets la partie gauche en supprimant le dernier #10
+   BodyStart     := Pred(StrSearch('{',aValue, AnsiPos('}',aValue)));          // Recherche la position du début du body
+   inherited RawxPL := AnsiLeftStr (LeMessage,Pred(BodyStart));                // Transmets la partie gauche en supprimant le dernier #10
    Body.RawxPL   := AnsiRightStr(LeMessage, Length(LeMessage) - BodyStart);    // Transmets la partie droite
 end;
 

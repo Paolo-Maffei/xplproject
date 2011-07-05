@@ -148,6 +148,7 @@ begin
    AddSubMenuElmt(sl,'basicset');
    AddSubMenuElmt(sl,'vendfile');
    AddSubMenuElmt(sl,'piedit');
+   AddSubMenuElmt(sl,'sender');
    sl.Free;
 end;
 

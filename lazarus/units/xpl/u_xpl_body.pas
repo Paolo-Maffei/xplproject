@@ -19,8 +19,9 @@ unit u_xpl_body;
 
 interface
 
-uses Classes,
-     u_xpl_common;
+uses Classes
+     , u_xpl_common
+     ;
 
 type // TxPLBody ==============================================================
      TxPLBody = class(TComponent, IxPLCommon, IxPLRaw)
@@ -62,15 +63,16 @@ type // TxPLBody ==============================================================
         published
            property Keys      : TStringList read fKeys       write Set_Keys;
            property Values    : TStringList read fValues     write Set_Values;
-           property RawxPL    : string      read Get_RawxPL  write Set_RawxPL stored false;
+           property RawxPL    : string      read Get_RawxPL  write Set_RawxPL  stored false;
            property Strings   : TStringList read Get_Strings write Set_Strings stored false;
         end;
 
-implementation {===============================================================}
-uses sysutils,
-     strutils,
-     uRegExpr,
-     uxPLConst;
+implementation // =============================================================
+uses sysutils
+     , strutils
+     , uxPLConst
+     //uRegExpr,
+     ;
 
 type StringArray = Array of string;
 
@@ -78,12 +80,12 @@ type StringArray = Array of string;
 const MAX_KEY_LEN   = 16;                                                       // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
       MAX_VALUE_LEN = 128;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
 
-//==============================================================================
+//=============================================================================
 function StrCutBySize(const aString : string; const size : integer) : StringArray;
 var c,i : integer;
     s   : string;
 begin
-   c := length(aString) div size + 1;
+   c := Succ(Pred(length(aString)) div size);
    SetLength(Result,c);
    i := 0;
    while ( i < c ) do begin
@@ -93,11 +95,10 @@ begin
    end;
 end;
 
-// TxPLBody ================================================================
+// TxPLBody ===================================================================
 constructor TxPLBody.Create(aOwner : TComponent);
 begin
    inherited;
-
    include(fComponentStyle,csSubComponent);
 
    fKeys   := TStringList.Create;
@@ -108,6 +109,8 @@ destructor TxPLBody.destroy;
 begin
    fValues.Free;
    fKeys.Free;
+   if Assigned(fStrings) then fStrings.Free;
+
    inherited;
 end;
 
@@ -123,7 +126,7 @@ end;
 
 function TxPLBody.CheckValue(const aValue: string): boolean;
 begin
-   result := length(aValue)<=MAX_VALUE_LEN;
+   result := length(aValue) <= MAX_VALUE_LEN;
 end;
 
 procedure TxPLBody.ResetValues;
@@ -180,7 +183,7 @@ var i : integer;
 begin
    i := 0;
    while i<ItemCount do
-      if Values[i]='' then DeleteItem(i) else inc(i);
+         if Values[i]='' then DeleteItem(i) else inc(i);
 end;
 
 function TxPLBody.Get_RawxPL: string;
@@ -267,24 +270,25 @@ var sl : tstringlist;
     ch : string;
 begin
    ResetValues;
-   //sl := TStringList.Create;
-   //sl.Delimiter:=#10;                                                          // use LF as delimiter
-   //sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
-   //sl.Delete(0);                                                               // Drop leading {
-   //sl.Delete(Pred(sl.count));                                                  // Drop trailing }
-   //for ch in sl do if ch<>'' then AddKeyValue(ch);
-   //sl.free;
-   with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
-        Expression := K_RE_BODY_FORMAT;
-        if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
-           Expression := K_RE_BODY_LINE;
-           Exec(Match[1]);
-           repeat
-                 AddKeyValue(Match[1]);
-           until not ExecNext;
-        end;
-        finally free;
-     end;
+   sl := TStringList.Create;
+   sl.Delimiter:=#10;                                                          // use LF as delimiter
+   sl.StrictDelimiter := true;
+   sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
+   sl.Delete(0);                                                               // Drop leading {
+   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
+   for ch in sl do if (length(ch)>0) then AddKeyValue(ch);
+   sl.free;
+   //with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
+   //     Expression := K_RE_BODY_FORMAT;
+   //     if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
+   //        Expression := K_RE_BODY_LINE;
+   //        Exec(Match[1]);
+   //        repeat
+   //              AddKeyValue(Match[1]);
+   //        until not ExecNext;
+   //     end;
+   //     finally free;
+   //  end;
 end;
 
 initialization
