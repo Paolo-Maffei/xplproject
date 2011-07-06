@@ -17,18 +17,14 @@ interface
 
 uses Classes
      , SysUtils
-     {$ifdef fpc}
-     , fpTimer
-     {$else}
-     , ExtCtrls
-     {$endif}
+     , fpc_delphi_compat
      , u_xpl_config
      ;
 
 type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfNone);
 
      // TxPLHeartBeater =======================================================
-     TxPLHeartBeater = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif})
+     TxPLHeartBeater = class( TxPLTimer )
      private
         fRate : TxPLRateFrequency;
         FNoHubTimerCount : integer;

@@ -4,11 +4,20 @@ unit fpc_delphi_compat;
 
 interface
 
+uses {$ifdef fpc}
+     fpTimer
+     {$else}
+     ExtCtrls
+     {$endif}
+    ;
+
 function BuildDate  : string;
 function GetDevice  : string;
 function GetVendor  : string;
 function GetVersion : string;
 function GetProductName : string;
+
+type TxPLTimer = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif});
 
 implementation // =============================================================
 Uses Classes

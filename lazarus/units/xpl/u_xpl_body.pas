@@ -71,7 +71,6 @@ implementation // =============================================================
 uses sysutils
      , strutils
      , uxPLConst
-     //uRegExpr,
      ;
 
 type StringArray = Array of string;
@@ -153,7 +152,7 @@ begin
    for i := 0 to aValue.Count-1 do
       if not CheckValue(aValue[i]) then exit;
 
-  Values.Assign(aValue);
+   Values.Assign(aValue);
 end;
 
 procedure TxPLBody.Set_Keys(const AValue: TStringList);
@@ -274,21 +273,10 @@ begin
    sl.Delimiter:=#10;                                                          // use LF as delimiter
    sl.StrictDelimiter := true;
    sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
-   sl.Delete(0);                                                               // Drop leading {
-   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
+//   sl.Delete(0);                                                               // Drop leading {
+//   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
    for ch in sl do if (length(ch)>0) then AddKeyValue(ch);
    sl.free;
-   //with TRegExpr.Create do try                                               // Trying to drop usage of regexpr
-   //     Expression := K_RE_BODY_FORMAT;
-   //     if Exec(AnsiReplaceStr(aValue,#13,'')) then begin
-   //        Expression := K_RE_BODY_LINE;
-   //        Exec(Match[1]);
-   //        repeat
-   //              AddKeyValue(Match[1]);
-   //        until not ExecNext;
-   //     end;
-   //     finally free;
-   //  end;
 end;
 
 initialization
