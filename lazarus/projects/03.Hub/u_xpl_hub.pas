@@ -5,23 +5,22 @@ unit u_xpl_hub;
 interface
 
 uses classes
-     , fpTimer
      , IdUDPClient
-     , fgl
-     , u_xPL_Custom_Message
+     , u_xpl_custom_message
      , u_xpl_udp_socket
      , u_xpl_application
+     , fpc_delphi_compat
      ;
 
 // =============================================================================
-type TPortList = specialize TFPGList<TIdUDPClient>;
+type TPortList = TStringList;
 
      { TxPLHub ================================================================}
      TxPLHub = class(TxPLApplication)
      private
         fInSocket   : TxPLUDPServer;                                              // Connexion used to listen incoming messages
         fSocketList : TPortList;
-        fTimer      : TfpTimer;
+        fTimer      : TxPLTimer;
         fMessage    : TxPLCustomMessage;
         fLocalIP    : string;
 
@@ -35,7 +34,6 @@ type TPortList = specialize TFPGList<TIdUDPClient>;
 
 implementation // =============================================================
 uses SysUtils
-     , DateUtils
      , uxPLConst
      , IdSocketHandle
      ;
@@ -45,8 +43,8 @@ const
      K_ERROR_SETTINGS = 'xPL Settings may not be set ';
      K_ERROR_PORT     = 'Unabled to bind port %d : a hub may already be present';
      K_STARTED        = 'Hub started and listening on %s:%d';
-     K_RELEASING      = 'No activity on port %d, released';
-     K_DISCOVERED     = 'Discovered %s on %d';
+     K_RELEASING      = 'No activity on port %s, released';
+     K_DISCOVERED     = 'Discovered %s on %s';
 
 // ============================================================================
 procedure TxPLHub.Start;                                                       // Two reason not to start :
@@ -62,8 +60,9 @@ begin                                                                          /
          fMessage  := TxPLCustomMessage.Create(self);
 
          fSocketList := TPortList.Create;
+         fSocketList.OwnsObjects := true;
 
-         fTimer := TfpTimer.Create(self);
+         fTimer := TxPLTimer.Create(self);
          fTimer.Interval:= 60 * 1000;                                          // By specification, check every minute
          fTimer.OnTimer := @OnTimer;
          fTimer.StartTimer;
@@ -82,57 +81,53 @@ begin
 end;
 
 procedure TxPLHub.UDPRead(const aString: string);
-var ci : TIdUDPClient;
+var i  : integer;
 begin
    fMessage.RawXPL := aString;                                                 // Check if it is a heart beat
    if fMessage.IsLifeSign then HandleDevice;                                   // if this is the case, see if I already recorded it
-   for ci in fSocketList do
-      ci.Send(aString);                                                        // relay the message
+
+   for i:=0 to Pred(fSocketList.Count) do
+       TIdUDPClient(fSocketList.Objects[i]).Send(aString);                     // relaying the message
 end;
 
 procedure TxPLHub.HandleDevice;
-var port, interval : integer;
-    remoteip : string;
+var interval : integer;
+    remoteip, port : string;
     Binding : TCollectionItem;
     aSocket : TIdUDPClient;
-    found   : boolean;
-    mDate   : PDateTime;
+    i       : integer;
 begin
    remoteip := fMessage.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP, fLocalIP);     // If no remote-ip param present, let's assume it's local
 
    for Binding in fInSocket.Bindings do
       if (TIdSocketHandle(Binding).IP = remoteip) then begin                   // The message is sent from a device located on one of my net cards
-         port := StrToInt(fMessage.Body.GetValueByKey(K_HBEAT_ME_PORT));
+         port := fMessage.Body.GetValueByKey(K_HBEAT_ME_PORT);
          interval := StrToIntDef(fMessage.Body.GetValueByKey(K_HBEAT_ME_INTERVAL),MIN_HBEAT) * 2 + 1; // Defined by specifications as dead-line limit
 
-         found := false;
-         for aSocket in fSocketList do begin
-             found := aSocket.Port = port;
-             if found then break;
-         end;
+         i := fSocketList.IndexOfName(port);                                   // Search for the current port
 
-         if not found then begin
+         if i=-1 then begin                                                    // If not found
             aSocket := TIdUDPClient.Create(self);
-            aSocket.Port:=port;
-            new(mDate);
-            aSocket.Tag:=LongInt(mDate);
-            fSocketList.Add(aSocket);
+            aSocket.Port:=StrToInt(port);
+            i := fSocketList.AddObject(port+'=',aSocket);
             Log(etInfo,K_DISCOVERED,[fMessage.Source.RawxPL,port]);
          end;
-         PDateTime(aSocket.Tag)^ := IncMinute(Now,interval);
+
+         fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + interval/(60*24));
       end;
 end;
 
 procedure TxPLHub.OnTimer(Sender: TObject);
-var ci : TIdUDPClient;
+var i  : integer;
 begin
-   for ci in fSocketList do
-       if PDateTime(ci.Tag)^ < now then begin
-          Dispose(PDateTime(ci.Tag));
-          Log(etInfo,K_RELEASING,[ ci.Port ]);
-          fSocketList.Remove(ci);
-          ci.free;
-       end;
+   i := Pred(fSocketList.Count);
+   while( i>=0) do begin
+      if StrToDateTime(fSocketList.ValueFromIndex[i]) < now then begin
+         Log(etInfo, K_RELEASING, [ fSocketList.Names[i] ]);
+         fSocketList.Delete(i);
+      end;
+      dec(i);
+   end;
 end;
 
 end.

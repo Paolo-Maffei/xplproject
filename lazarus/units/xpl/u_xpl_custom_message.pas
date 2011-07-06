@@ -48,7 +48,6 @@ type { TxPLCustomMessage =====================================================}
 implementation // =============================================================
 Uses SysUtils
      , StrUtils
-     , JclStrings
      ;
 
 // TxPLCustomMessage ==========================================================
@@ -99,12 +98,15 @@ end;
 
 procedure TxPLCustomMessage.Set_RawXPL(const AValue: string);
 var LeMessage : string;
-    BodyStart : integer;
+    HeadEnd,
+    BodyStart, BodyEnd : integer;
 begin
-   LeMessage     := StrRemoveChars(aValue,[NativeCarriageReturn]);             // Supprime les CR
-   BodyStart     := Pred(StrSearch('{',aValue, AnsiPos('}',aValue)));          // Recherche la position du début du body
-   inherited RawxPL := AnsiLeftStr (LeMessage,Pred(BodyStart));                // Transmets la partie gauche en supprimant le dernier #10
-   Body.RawxPL   := AnsiRightStr(LeMessage, Length(LeMessage) - BodyStart);    // Transmets la partie droite
+   LeMessage        := AnsiReplaceText(aValue,#13,'');                            // Delete all CR
+   HeadEnd          := AnsiPos('}',LeMessage);
+   BodyStart        := Succ(PosEx('{',LeMessage,HeadEnd));
+   BodyEnd          := LastDelimiter('}',LeMessage);
+   inherited RawxPL := AnsiLeftStr(LeMessage,BodyStart-2);
+   Body.RawxPL      := Copy(LeMessage,BodyStart,BodyEnd-BodyStart);
 end;
 
 initialization

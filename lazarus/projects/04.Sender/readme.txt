@@ -12,9 +12,6 @@ v 0.9.9
 		My monitor sees	  : command=
 			    			ddd=request
 
-v 0.9.9.1
-	* Added xPL app repository support
-
 v 1.0
 	* Centralized logging enabled
 	* App repository enabled (window allows launching of referenced apps).
@@ -40,5 +37,13 @@ v 1.6.1
 	
 v 1.6.2
 	* Corrected code when pasting message containing {SYS::VARIABLES}
+	
+v 4.0.0
+	* Revamped application based on the complete rewrite of xPL Lazarus library
+	* No need to have admin rights at startup
+	* Helper added for {SYS::VARIABLES} functions
+	* Loop mode added (sends messages continuously until 'Loop Send' unchecked)
+	* New GUI
+	
 
 	
