@@ -13,7 +13,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="5"/>
       <StringTable CompanyName="clinique" InternalName="hub" ProductName="xPL Hub" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -36,7 +36,7 @@
         <PackageName Value="pl_indycomp"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="176">
+    <Units Count="182">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -480,7 +480,7 @@
       <Unit57>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
         <UnitName Value="u_xpl_udp_socket"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="13"/>
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
         <CursorPos X="1" Y="1"/>
@@ -1260,7 +1260,7 @@
       <Unit160>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="176"/>
         <CursorPos X="39" Y="152"/>
@@ -1326,7 +1326,7 @@
       <Unit168>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="258"/>
         <CursorPos X="1" Y="275"/>
@@ -1352,7 +1352,7 @@
       <Unit171>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="70" Y="20"/>
@@ -1362,7 +1362,7 @@
       <Unit172>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <UnitName Value="u_xpl_settings"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="199"/>
         <CursorPos X="21" Y="111"/>
@@ -1380,7 +1380,6 @@
       <Unit174>
         <Filename Value="u_xpl_hub.pas"/>
         <UnitName Value="u_xpl_hub"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="49"/>
@@ -1391,15 +1390,76 @@
       <Unit175>
         <Filename Value="..\..\units\xpl\u_xpl_heart_beater.pas"/>
         <UnitName Value="u_xpl_heart_beater"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="62"/>
         <CursorPos X="41" Y="27"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit175>
+      <Unit176>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <UnitName Value="u_xml_plugins"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="157"/>
+        <CursorPos X="1" Y="164"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit176>
+      <Unit177>
+        <Filename Value="..\..\..\components\multilog-0.5\consolechannel.pas"/>
+        <UnitName Value="consolechannel"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="110"/>
+        <CursorPos X="37" Y="117"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit177>
+      <Unit178>
+        <Filename Value="..\..\..\components\multilog-0.5\filechannel.pas"/>
+        <UnitName Value="filechannel"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="112"/>
+        <CursorPos X="37" Y="119"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit178>
+      <Unit179>
+        <Filename Value="..\..\..\components\multilog-0.5\multilog.pas"/>
+        <UnitName Value="MultiLog"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="597"/>
+        <CursorPos X="43" Y="604"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit179>
+      <Unit180>
+        <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
+        <UnitName Value="u_xpl_collection"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="44"/>
+        <CursorPos X="42" Y="51"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit180>
+      <Unit181>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdDateTimeStamp.pas"/>
+        <UnitName Value="IdDateTimeStamp"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="477"/>
+        <CursorPos X="54" Y="489"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit181>
     </Units>
-    <JumpHistory Count="3" HistoryIndex="2">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="xpl_hub.lpr"/>
         <Caret Line="6" Column="11" TopLine="1"/>
@@ -1412,6 +1472,50 @@
         <Filename Value="u_xpl_hub.pas"/>
         <Caret Line="23" Column="32" TopLine="1"/>
       </Position3>
+      <Position4>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position4>
+      <Position5>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="258" Column="1" TopLine="254"/>
+      </Position5>
+      <Position6>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="259" Column="1" TopLine="252"/>
+      </Position6>
+      <Position7>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="208" Column="1" TopLine="201"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="206" Column="1" TopLine="199"/>
+      </Position8>
+      <Position9>
+        <Filename Value="..\..\..\components\multilog-0.5\consolechannel.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position9>
+      <Position10>
+        <Filename Value="..\..\..\components\multilog-0.5\filechannel.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position10>
+      <Position11>
+        <Filename Value="..\..\..\components\multilog-0.5\multilog.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="..\..\..\components\multilog-0.5\multilog.pas"/>
+        <Caret Line="222" Column="26" TopLine="215"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position13>
+      <Position14>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdDateTimeStamp.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position14>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

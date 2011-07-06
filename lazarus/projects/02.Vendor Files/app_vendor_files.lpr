@@ -6,10 +6,13 @@ uses
   {$IFDEF UNIX}{$IFDEF UseCThreads}
   cthreads,
   {$ENDIF}{$ENDIF}
-  Interfaces, // this includes the LCL widgetset
-  Forms, frm_vendor_files, superxmlparser,
-  u_xpl_application,
-  u_xpl_gui_resource, fpc_delphi_compat;
+  Interfaces
+  , Forms
+  , frm_vendor_files
+  , u_xpl_application
+  , u_xpl_gui_resource
+  , fpc_delphi_compat
+  ;
 
 {$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
 
