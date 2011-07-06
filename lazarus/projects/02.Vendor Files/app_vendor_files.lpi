@@ -55,10 +55,11 @@
         <Filename Value="app_vendor_files.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_vendor_files"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="10" Y="11"/>
+        <TopLine Value="2"/>
+        <CursorPos X="3" Y="15"/>
         <UsageCount Value="139"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -971,7 +972,6 @@
       <Unit119>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="40"/>
