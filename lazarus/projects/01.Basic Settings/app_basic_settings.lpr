@@ -18,7 +18,6 @@ uses {$IFDEF UNIX}
 {$ENDIF}
 
 begin
-  Application.Title:='xPL Basic Settings';
    Application.Initialize;
 
    xPLApplication := TxPLApplication.Create(Application);

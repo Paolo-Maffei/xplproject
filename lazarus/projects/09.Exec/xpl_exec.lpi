@@ -619,10 +619,11 @@
         <Filename Value="exec_listener.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="exec_listener"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="97"/>
-        <CursorPos X="32" Y="100"/>
+        <TopLine Value="130"/>
+        <CursorPos X="3" Y="123"/>
         <UsageCount Value="206"/>
         <Loaded Value="True"/>
       </Unit69>
@@ -1194,16 +1195,15 @@
       <Unit140>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="18"/>
+        <TopLine Value="1"/>
         <CursorPos X="21" Y="34"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit140>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="xpl_exec.lpr"/>
         <Caret Line="11" Column="14" TopLine="1"/>
@@ -1316,6 +1316,14 @@
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
       </Position28>
+      <Position29>
+        <Filename Value="exec_listener.pas"/>
+        <Caret Line="100" Column="32" TopLine="70"/>
+      </Position29>
+      <Position30>
+        <Filename Value="exec_listener.pas"/>
+        <Caret Line="26" Column="11" TopLine="10"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

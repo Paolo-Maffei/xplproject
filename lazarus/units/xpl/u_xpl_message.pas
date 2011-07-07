@@ -100,55 +100,13 @@ end;
 //end;
 
 procedure TxPLMessage.SaveToFile(aFileName: string);
-//var AStream: TMemoryStream;
-//begin
-//  AStream:=TMemoryStream.Create;
-//  try
-//    WriteComponentAsTextToStream(AStream, self);
-//    aStream.SaveToFile(aFileName);
-//  finally
-//    AStream.Free;
-//  end;
-var
-  fStream: TFileStream;
-  mStream: TMemoryStream;
 begin
-  mStream := TMemoryStream.Create;
-  fStream := TFileStream.Create(aFileName, fmCreate);
-  try
-    mStream.WriteComponent(self);
-    mStream.position := 0;
-    ObjectBinaryToText(mStream, fStream);
-  finally
-    mStream.Free;
-    fStream.Free;
-  end;
+   StreamObjectToFile(aFileName, self);
 end;
 
 procedure TxPLMessage.LoadFromFile(aFileName: string);
-//var aStream : TMemoryStream;
-//begin
-//   aStream := TMemoryStream.Create;
-//   try
-//      aStream.LoadFromFile(aFileName);
-//      ReadComponentFromTextStream(aStream,TComponent(self),@OnFindClass, self);
-//   finally
-//      aStream.Free;
-//   end;
-var
-  fStream: TFileStream;
-  mStream: TMemoryStream;
-  begin
-    mStream := TMemoryStream.Create;
-    fStream := TFileStream.Create(aFileName, fmOpenRead);
-    try
-       ObjectTextToBinary(fStream,mStream);
-       mStream.Position := 0;
-       mStream.ReadComponent(self);
-    finally
-      mStream.Free;
-      fStream.Free;
-    end;
+begin
+   ReadObjectFromFile(aFileName, self);
 end;
 
 //procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);                 // Reads a message from a vendor file

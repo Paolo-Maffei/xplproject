@@ -23,7 +23,7 @@ type
         program_list : TxPLConfigItem;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
+        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   UpdateConfig; override;
         procedure   Process(const aMessage : TxPLMessage);
      published
@@ -116,11 +116,11 @@ begin
    Config.DefineItem(rsProgram, TxPLConfigItemType.option, 16);
 end;
 
-procedure TxPLexecListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TxPLexecListener') = 0 then ComponentClass := TxplexecListener
-   else inherited;
-end;
+//procedure TxPLexecListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+//begin
+//   if CompareText(AClassName, 'TxPLexecListener') = 0 then ComponentClass := TxplexecListener
+//   else inherited;
+//end;
 
 procedure TxPLexecListener.UpdateConfig;
 begin

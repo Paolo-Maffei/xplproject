@@ -141,9 +141,9 @@ var LFilename: string;
     //RegExpr : TRegExpr;
     page : TMemoryStream;
     //st : TStringStream;
-    obj: ISuperObject;
+    //obj: ISuperObject;
     streamer : TJSonStreamer;
-    s : string;
+    //s : string;
     jso : TJsonObject;
 
 

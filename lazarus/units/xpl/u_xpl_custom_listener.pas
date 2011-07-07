@@ -31,7 +31,7 @@ uses Classes
      , u_xpl_heart_beater
      , u_xpl_body
      , u_xpl_sender
-     , fpTimer
+     , fpc_delphi_compat
      ;
 
 type TConnectionStatus = (discovering,connected, csNone);
@@ -47,7 +47,7 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
       private
         fConfig        : TxPLCustomConfig;
         fCfgFname      : string;
-        fProbingTimer  : TfpTimer;
+        fProbingTimer  : TxPLTimer;
         IncomingSocket : TxPLUDPServer;
         HBeat          : TxPLHeartBeater;
         fFilterSet     : TxPLConfigItem;
@@ -64,15 +64,15 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         Constructor Create(const aOwner : TComponent); reintroduce;
         Destructor  Destroy; override;
 
-        Procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); dynamic;
+        //Procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); dynamic;
         procedure SaveConfig; dynamic;
         procedure LoadConfig; dynamic;
 
         procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
         procedure SendHeartBeatMessage; dynamic;
-        function  ConnectionStatusAsStr : string; inline;
-        procedure Set_ConnectionStatus(const aValue : TConnectionStatus); dynamic;
+        function  ConnectionStatusAsStr : string;
+        procedure Set_ConnectionStatus(const aValue : TConnectionStatus); virtual;
         property  FilterSet  : TxPLConfigItem read fFilterSet;
 
         procedure UpdateConfig; dynamic;
@@ -88,8 +88,7 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
 const K_HBEAT_ME_APPNAME  = 'appname';
 
 implementation { ==============================================================}
-uses LResources
-     , u_xpl_header
+uses u_xpl_header
      , u_xpl_schema
      , u_xpl_common
      , typinfo
@@ -113,9 +112,9 @@ begin
    fFilterSet := fConfig.FilterSet;
    fCfgFname  := Folders.DeviceDir + Adresse.VD + '.cfg';
 
-   fProbingTimer := TfpTimer.Create(self);
+   fProbingTimer := TxPLTimer.Create(self);
    fProbingTimer.Interval := 10 * 1000;                                        // Let say 10 sec is needed to receive an answer
-   fProbingTimer.OnTimer  := @NoAnswerReceived;
+   fProbingTimer.OnTimer  := {$ifdef fpc}@{$endif}NoAnswerReceived;
 end;
 
 destructor TxPLCustomListener.destroy;
@@ -132,37 +131,23 @@ begin
 end;
 
 procedure TxPLCustomListener.SaveConfig;
-var aStream : TMemoryStream;
 begin
-   aStream:=TMemoryStream.Create;
-   try
-         WriteComponentAsTextToStream(aStream, self);
-         aStream.SaveToFile(fCfgFName);
-         Log(etInfo,K_MSG_CONFIG_WRITEN,[fCfgFName]);
-   finally
-      AStream.Free;
-   end;
+   StreamObjectToFile(fCfgFName,self);
+   Log(etInfo,K_MSG_CONFIG_WRITEN,[fCfgFName]);
 end;
 
 procedure TxPLCustomListener.LoadConfig;
-var aStream : TMemoryStream;
 begin
-   aStream:=TMemoryStream.Create;
-   try
-      aStream.LoadFromFile(fCfgFname);
-      ReadComponentFromTextStream(aStream,TComponent(self),@OnFindClass, self);
-      Log(etInfo,K_MSG_CONFIG_LOADED,[fCfgFName]);
-   finally
-      aStream.Free;
-   end;
+   ReadObjectFromFile(fCfgFName,self);
+   Log(etInfo,K_MSG_CONFIG_LOADED,[fCfgFName]);
    Adresse.Instance := Config.Instance;
 end;
 
-procedure TxPLCustomListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-  if CompareText(AClassName, 'TxPLCustomConfig') = 0 then ComponentClass := TxPLCustomConfig
-  else if CompareText(AClassName, 'TxPLCustomListener') = 0 then ComponentClass := TxPLCustomListener
-end;
+//procedure TxPLCustomListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+//begin
+//  if CompareText(AClassName, 'TxPLCustomConfig') = 0 then ComponentClass := TxPLCustomConfig
+//  else if CompareText(AClassName, 'TxPLCustomListener') = 0 then ComponentClass := TxPLCustomListener
+//end;
 
 procedure TxPLCustomListener.UpdateConfig;
 begin
@@ -176,7 +161,7 @@ end;
 procedure TxPLCustomListener.Listen;
 begin
    try
-     IncomingSocket:=TxPLUDPServer.create(self,@UDPRead);
+     IncomingSocket:=TxPLUDPServer.create(self,{$ifdef fpc}@{$endif}UDPRead);
      If IncomingSocket.Active then begin                                       // Lets be sure we found an address to bind to
         HBeat := TxPLHeartBeater.Create(self);
         Log(etInfo,K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);

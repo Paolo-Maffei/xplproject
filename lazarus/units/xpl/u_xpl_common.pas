@@ -78,6 +78,9 @@ Type {$ifndef fpc}                                                             /
      function XPLDt2DateTime(const aDateTime : string) : TDateTime;
      function DateTime2XPLDt(const aDateTime : TDateTime) : string;
 
+     procedure StreamObjectToFile(const aFileName : string; const aObject : TComponent);
+     procedure ReadObjectFromFile(const aFileName : string; const aObject : TComponent);
+
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
 var   LocalAddresses : TStringList;
@@ -224,6 +227,38 @@ end;
 function DateTime2XPLDt(const aDateTime : TDateTime) : string;                   // Takes a standard delphi datetime
 begin                                                                            //         and returns  20090729143000
    result := FormatDateTime('yyyymmddhhmmss',aDateTime);
+end;
+
+procedure StreamObjectToFile(const aFileName: string; const aObject: TComponent);
+var fStream: TFileStream;
+    mStream: TMemoryStream;
+begin
+   mStream := TMemoryStream.Create;
+   fStream := TFileStream.Create(aFileName, fmCreate);
+   try
+      mStream.WriteComponent(aObject);
+      mStream.position := 0;
+      ObjectBinaryToText(mStream, fStream);
+   finally
+     mStream.Free;
+     fStream.Free;
+   end;
+end;
+
+procedure ReadObjectFromFile(const aFileName: string; const aObject: TComponent);
+var fStream: TFileStream;
+    mStream: TMemoryStream;
+begin
+    mStream := TMemoryStream.Create;
+    fStream := TFileStream.Create(aFileName, fmOpenRead);
+    try
+       ObjectTextToBinary(fStream,mStream);
+       mStream.Position := 0;
+       mStream.ReadComponent(aObject);
+    finally
+      mStream.Free;
+      fStream.Free;
+    end;
 end;
 
 function XPLDt2DateTime(const aDateTime : string) : TDateTime;

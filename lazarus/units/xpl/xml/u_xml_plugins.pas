@@ -161,7 +161,6 @@ uses StrUtils
 constructor TElementsType.Create(const so: ISuperObject);
 var arr : TSuperArray;
     i : integer;
-    s : string;
     o : isuperobject;
 begin
   inherited Create(TElementType);
@@ -203,9 +202,7 @@ end;
 constructor TCommandsType.Create(const so: ISuperObject);
 var arr : TSuperArray;
     i : integer;
-    s : string;
     o : isuperobject;
-    sl : tstringlist;
 begin
   inherited Create(TCommandType);
   o := so['command'];
@@ -253,12 +250,9 @@ end;
 constructor TDevicesType.Create(const so: ISuperObject);
 var arr : TSuperArray;
     i : integer;
-    s : string;
     o : isuperobject;
-    sl : tstringlist;
 begin
   inherited Create(TDeviceType);
-  s := so.AsJSon();
   o := so['device'];
   if assigned(o) then
 
