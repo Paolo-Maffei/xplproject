@@ -17,7 +17,6 @@ uses Classes, SysUtils,
      u_configuration_record,
      u_xPL_Message,
      u_xPL_Config,
-     fpTimer,
      u_xPL_Body,
      u_xpl_custom_listener;
 

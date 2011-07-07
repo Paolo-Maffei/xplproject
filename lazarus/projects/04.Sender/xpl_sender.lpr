@@ -27,23 +27,23 @@ uses
 var  xPLMessageGUI : TxPLMessageGUI;
 
 begin
-  Application.Title:='xPL Sender';
-  Application.Initialize;
+   Application.Title:='xPL Sender';
+   Application.Initialize;
 
-  xPLApplication := TxPLSender.Create(Application);
-  xPLGUIResource := TxPLGUIResource.Create;
-  xPLMessageGUI  := TxPLMessageGUI.Create(xPLApplication,'');
+   xPLApplication := TxPLSender.Create(Application);
+   xPLGUIResource := TxPLGUIResource.Create;
+   xPLMessageGUI  := TxPLMessageGUI.Create(xPLApplication,'');
 
-  xPLApplication.Adresse.Instance := 'instance';       // give a default instance name to application and message created
+   xPLApplication.Adresse.Instance := 'instance';       // give a default instance name to application and message created
 
-  if Application.HasOption('s') then begin
-     xPLMessageGUI.LoadFromFile(Application.GetOptionValue('s'));
-     TxPLSender(xPLApplication).Send(xPLMessageGUI);
-  end else begin
-     xPLMessageGUI.ShowForEdit([ boLoad, boSave, boCopy, boSend, boClose, boAbout],true);
-  end;
-  xPLMessageGUI.Destroy ;
+   if Application.HasOption('s') then begin
+      xPLMessageGUI.LoadFromFile(Application.GetOptionValue('s'));
+      TxPLSender(xPLApplication).Send(xPLMessageGUI);
+   end else begin
+      xPLMessageGUI.ShowForEdit([ boLoad, boSave, boCopy, boSend, boClose, boAbout],true);
+   end;
+   xPLMessageGUI.Destroy ;
 
-  xPLGUIResource.Free;
+   xPLGUIResource.Free;
 end.
 

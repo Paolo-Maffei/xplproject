@@ -14,7 +14,6 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="5"/>
       <StringTable CompanyName="clinique" InternalName="basicset" ProductName="xPL Basic settings" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -56,10 +55,11 @@
         <Filename Value="app_basic_settings.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_basic_settings"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="22"/>
+        <CursorPos X="1" Y="21"/>
         <UsageCount Value="116"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -70,11 +70,10 @@
         <ComponentName Value="frmBasicSettings"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_basic_settings"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="67" Y="9"/>
+        <TopLine Value="16"/>
+        <CursorPos X="20" Y="40"/>
         <UsageCount Value="116"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -1031,7 +1030,7 @@
         <UsageCount Value="13"/>
       </Unit123>
     </Units>
-    <JumpHistory Count="5" HistoryIndex="4">
+    <JumpHistory Count="6" HistoryIndex="5">
       <Position1>
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="19" Column="31" TopLine="1"/>
@@ -1052,6 +1051,10 @@
         <Filename Value="frm_basic_settings.pas"/>
         <Caret Line="9" Column="67" TopLine="1"/>
       </Position5>
+      <Position6>
+        <Filename Value="app_basic_settings.lpr"/>
+        <Caret Line="10" Column="18" TopLine="1"/>
+      </Position6>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1059,7 +1062,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\components\uniqueinstance-1.0;..\..\..\..\components\jvcllaz\run;..\..\..\..\components\powtils;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\ssversionchecker\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;C:\lazarus\components\pl_Indy\source\;..\..\..\..\components\uniqueinstance-1.0"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\components\jvcllaz\run;..\..\..\components\uniqueinstance-1.0;..\..\..\..\components\jvcllaz\run;..\..\..\..\components\powtils;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\ssversionchecker\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;C:\lazarus\components\pl_Indy\source\;..\..\..\..\components\uniqueinstance-1.0"/>
       <UnitOutputDirectory Value="C:\LazOut"/>
     </SearchPaths>
     <Parsing>

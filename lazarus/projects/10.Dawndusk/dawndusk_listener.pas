@@ -30,7 +30,7 @@ type
 
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
+        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   UpdateConfig; override;
         procedure   Process(const aMessage : TxPLMessage);
         procedure   OnTimer(aSender : TObject);
@@ -77,11 +77,11 @@ begin
    OnxPLJoinedNet := @OnJoined;
 end;
 
-procedure TxPLDawnDuskListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TxPLDawnDuskListener') = 0 then ComponentClass := TxplDawnDuskListener
-   else inherited;
-end;
+//procedure TxPLDawnDuskListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+//begin
+//   if CompareText(AClassName, 'TxPLDawnDuskListener') = 0 then ComponentClass := TxplDawnDuskListener
+//   else inherited;
+//end;
 
 procedure TxPLDawnDuskListener.UpdateConfig;
 var found : boolean;
@@ -161,7 +161,7 @@ begin
 end;
 
 initialization
-   Schema_DDBasic := 'dawndusk.basic';
+   Schema_DDBasic := TxPLSchema.Create('dawndusk.basic');
 
 end.
 

@@ -2382,7 +2382,9 @@ inherited frmBasicSettings: TfrmBasicSettings
     left = 16
     top = 144
   end
-  object ActionList2: TActionList[14]
+  inherited XMLPropStorage: TXMLPropStorage[14]
+  end
+  object ActionList2: TActionList[15]
     left = 16
     top = 88
     object acSaveSettings: TAction

@@ -49,7 +49,7 @@ constructor TxPLHeartBeater.create(AOwner: TComponent);
 begin
    Assert(aOwner is TxPLCustomListener);
    inherited;
-   OnTimer          := @Tick;
+   OnTimer          := {$ifdef fpc}@{$endif}Tick;
    fNoHubTimerCount := 0;
    Rate := rfNone;
 end;

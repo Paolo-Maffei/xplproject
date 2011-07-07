@@ -37,7 +37,7 @@ type
 //        constructor create(const aOwner : TComponent; const aDevice, aVendor, aVersion : string); overload;
         constructor create(const aOwner : TComponent); overload;
 
-        procedure Send(const aMessage : TxPLCustomMessage; const bEnforceSender : boolean = true);
+        procedure Send(const aMessage : TxPLCustomMessage; const bEnforceSender : boolean = true); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema, aRawBody : string; const bClean : boolean = false);
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema : string; const Keys, Values : Array of string); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; aSchema : TxPLSchema; const Keys, Values : Array of string); overload;
