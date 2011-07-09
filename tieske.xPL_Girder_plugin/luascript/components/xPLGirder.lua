@@ -21,7 +21,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.1.1'
+local Version = '0.1.2'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
