@@ -65,7 +65,14 @@ See: http://www.promixis.com/
 ============================================================================
 2 - Installing xPLGirder
 ============================================================================
-Use the following steps;
+First make sure you get xPL running. It requires an application called an
+'xPL hub' on each PC you intent to use xPL on and you have to configure the
+firewall to allow traffic on UDP port 3865.
+An easy way to configure xPL is using the wizard like approach of the
+xPLCheckPackage (use the standalone executable). See: 
+http://www.thijsschreijer.nl/blog/?page_id=150 
+
+To install xPLGirder use the following steps;
    1 Copy both directories found in the ZIP file to the Girder installation 
      directory. This will merge their contents into the existing
      installation.
@@ -73,6 +80,7 @@ Use the following steps;
    3 Enter the Girder component manager and enable the xPLGirder component
      that is now shown in the list of available components
 Done!
+
 If specific message handlers are required (see Using xPLGirder below) then
 copy those files into the 'luascript\xPLHandlers\' directory and restart
 Girder (or press F11 to restart the script engine).
@@ -158,6 +166,8 @@ as comments in the sample file.
 ============================================================================
 7 - Changelog
 ============================================================================
+09-jul-2011 version 0.1.2 by Thijs Schreijer
+         Bugfix; the actions were not visible in the action tree
 13-jun-2011 version 0.1.1 by Thijs Schreijer
          Bugfix in Sensor.Basic handler
          handlers are now called using pcall to prevent a faulty plugin from
