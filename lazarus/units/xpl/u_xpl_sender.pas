@@ -13,21 +13,18 @@ unit u_xpl_sender;
 
 interface
 
-uses Classes,
-     u_xPL_Custom_Message,
-     u_xpl_common,
-     u_xpl_schema,
-     u_xpl_Address,
-     u_xpl_application,
-     u_xpl_udp_socket;
+uses Classes
+     , u_xpl_custom_message
+     , u_xpl_common
+     , u_xpl_schema
+     , u_xpl_address
+     , u_xpl_application
+     , u_xpl_udp_socket
+     ;
 
-type
-
-{ TxPLSender }
-
+type { TxPLSender =============================================================}
      TxPLSender = class(TxPLApplication)
      private
-
 
      protected
         fSocket : TxPLUDPClient;
@@ -38,13 +35,13 @@ type
         constructor create(const aOwner : TComponent); overload;
 
         procedure Send(const aMessage : TxPLCustomMessage; const bEnforceSender : boolean = true); overload;
-        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema, aRawBody : string; const bClean : boolean = false);
+        procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema, aRawBody : string; const bClean : boolean = false); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema : string; const Keys, Values : Array of string); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; aSchema : TxPLSchema; const Keys, Values : Array of string); overload;
         procedure SendMessage(const aRawXPL : string); overload;
         procedure SendOSDBasic(const aString : string);
         procedure SendLOGBasic(const aLevel : string; const aString : string);
-        function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLCustomMessage;
+        function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLCustomMessage; overload;
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : TxPLSchema; const aTarget : TxPLTargetAddress = nil) : TxPLCustomMessage; overload;
         procedure SendHBeatRequestMsg;
      end;
