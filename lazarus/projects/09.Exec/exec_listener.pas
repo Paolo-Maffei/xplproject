@@ -63,7 +63,7 @@ const // ======================================================================
       rsFinished = 'finished';
       rsFailed = 'failed';
       rsXplexecFaile = '%s: failed to start %s: %s';
-      rsIgnoredUnabl = '%s : unable to find security declaration of %s';
+      //rsIgnoredUnabl = '%s : unable to find security declaration of %s';
 
 { TExecThread ================================================================}
 constructor TExecThread.Create(const aOwner : TxPLCustomListener);
@@ -136,6 +136,7 @@ procedure TxPLexecListener.Process(const aMessage: TxPLMessage);
 var program_,declared : string;
     bfound : boolean;
     i : integer;
+    response : TxPLMessage;
 begin
    program_ := aMessage.Body.GetValueByKey(rsProgram);
 
@@ -154,7 +155,15 @@ begin
        end;
        bfound := false;
    end;
-   if not bfound then Log(etWarning, rsIgnoredUnabl,[AppName,program_]);       // The program hasn't been declared
+   if not bfound then with TxPLMessage.Create(self) do begin
+      Response := TxPLMessage.Create(self,aMessage.RawxPL);
+      Response.Body.AddKeyValuePairs(['status','return'],['failed','access denied']);
+      Response.Reply;
+      Send(Response);
+      SendLogBasic('inf',Format(rsXplexecFaile,[AppName,program_,'access denied']));
+      Log(etInfo,Format(rsXplexecFaile,[AppName,program_,'access denied']));
+      Response.Free;
+   end;
 end;
 
 end.

@@ -248,10 +248,13 @@ begin
    aMessage := TxPLMessage.Create(self, aString);
    with aMessage do try
       if Assigned(OnPreprocessMsg) then OnPreprocessMsg(aMessage);
-      if ((Adresse.Equals(Target)) or (Target.Isgeneric) or MatchesFilter(fFilterSet)) then begin  // It is directed to me
+      { TODO : There's a bug here : having these three or leads the program to accept messages that are not directed to him if it matches its filters }
+      if ((Adresse.Equals(Target)) or (Target.Isgeneric) (*or MatchesFilter(fFilterSet)*)) then begin  // It is directed to me
+      {EoTODO : check that this modification is ok}
+
          if Schema.Classe = K_SCHEMA_CLASS_HBEAT then begin
-            if Adresse.Equals(Source)  then ConnectionStatus := connected;
-            if Schema.Type_ = 'request' then HBeat.Rate := rfRandom;       // Choose a random value between 2 and 6 second
+            if Adresse.Equals(Source)   then ConnectionStatus := connected;
+            if Schema.Type_ = 'request' then HBeat.Rate := rfRandom;           // Choose a random value between 2 and 6 second
          end;
          if Schema.Classe = K_SCHEMA_CLASS_CONFIG then HandleConfigMessage(aMessage);
          if ( MatchesFilter(fFilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
