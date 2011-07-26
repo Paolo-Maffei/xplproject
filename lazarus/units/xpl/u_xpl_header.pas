@@ -145,7 +145,7 @@ begin
         Source.Assign(Target);
         Target.RawxPL:=RawxPL;
    finally
-      Free;
+        Free;
    end;
    MessageType := stat;
 end;

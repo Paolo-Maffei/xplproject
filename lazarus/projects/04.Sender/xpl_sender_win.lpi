@@ -50,11 +50,10 @@
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_sender"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="18"/>
-        <CursorPos X="32" Y="34"/>
+        <TopLine Value="1"/>
+        <CursorPos X="3" Y="23"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -1046,10 +1045,11 @@
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="u_xpl_sender"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="22"/>
-        <CursorPos X="39" Y="33"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="146"/>
         <UsageCount Value="75"/>
         <Loaded Value="True"/>
       </Unit137>
@@ -1800,7 +1800,7 @@
     <JumpHistory Count="1" HistoryIndex="0">
       <Position1>
         <Filename Value="xpl_sender.lpr"/>
-        <Caret Line="23" Column="10" TopLine="9"/>
+        <Caret Line="23" Column="8" TopLine="9"/>
       </Position1>
     </JumpHistory>
   </ProjectOptions>

@@ -20,7 +20,8 @@ uses
   u_xpl_gui_resource,
   u_xpl_common,
   u_xpl_message_GUI,
-  u_xpl_sender, frame_message;
+  u_xpl_sender,
+  frame_message;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 

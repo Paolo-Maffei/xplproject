@@ -1,7 +1,7 @@
 inherited frmLogger: TfrmLogger
-  Left = 298
+  Left = 1456
   Height = 509
-  Top = 210
+  Top = 387
   Width = 984
   Caption = 'frmLogger'
   ClientHeight = 509
@@ -2266,6 +2266,7 @@ inherited frmLogger: TfrmLogger
     FFFF
   }
   OnCreate = FormCreate
+  OnDestroy = FormDestroy
   SessionProperties = 'dgMessages.Columns;Left;Top'
   inherited StatusBar1: TStatusBar
     Top = 486
@@ -2370,6 +2371,7 @@ inherited frmLogger: TfrmLogger
     Align = alLeft
     AutoExpand = True
     DefaultItemHeight = 17
+    DragMode = dmAutomatic
     PopupMenu = mnuTreeView
     ReadOnly = True
     RightClickSelect = True
@@ -2377,6 +2379,7 @@ inherited frmLogger: TfrmLogger
     ShowRoot = False
     TabOrder = 4
     ToolTips = False
+    OnDragOver = tvMessagesDragOver
     OnSelectionChanged = tvMessagesSelectionChanged
     Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines]
   end
@@ -2392,8 +2395,8 @@ inherited frmLogger: TfrmLogger
     TabOrder = 6
     object dgMessages: TStringGrid
       Left = 1
-      Height = 459
-      Top = 1
+      Height = 434
+      Top = 26
       Width = 518
       Align = alClient
       AutoEdit = False
@@ -2426,6 +2429,7 @@ inherited frmLogger: TfrmLogger
         end>
       DefaultColWidth = 20
       DefaultRowHeight = 20
+      DragMode = dmAutomatic
       ExtendedSelect = False
       Options = [goColSizing, goColMoving, goRowSelect, goThumbTracking, goDblClickAutoSize, goSmoothScroll]
       PopupMenu = mnuListView
@@ -2433,7 +2437,72 @@ inherited frmLogger: TfrmLogger
       TitleStyle = tsNative
       OnDblClick = acShowMessageExecute
       OnDrawCell = dgMessagesDrawCell
+      OnEndDrag = dgMessagesEndDrag
       OnHeaderClick = dgMessagesHeaderClick
+    end
+    object tbMacro: TToolBar
+      Left = 1
+      Height = 25
+      Top = 1
+      Width = 518
+      AutoSize = True
+      ButtonHeight = 24
+      ButtonWidth = 30
+      Caption = 'ToolBar'
+      EdgeBorders = [ebBottom]
+      EdgeOuter = esNone
+      Flat = False
+      List = True
+      ShowCaptions = True
+      TabOrder = 1
+      object ToolButton1: TToolButton
+        Left = 1
+        Top = 0
+        Action = acPlay
+      end
+      object ToolButton4: TToolButton
+        Left = 31
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton4'
+        Style = tbsSeparator
+      end
+      object Panel5: TPanel
+        Left = 39
+        Height = 24
+        Top = 0
+        Width = 104
+        Alignment = taLeftJustify
+        BevelOuter = bvNone
+        Caption = 'Timing :'
+        ClientHeight = 24
+        ClientWidth = 104
+        TabOrder = 0
+        object seSleep: TSpinEdit
+          Left = 54
+          Height = 24
+          Top = 0
+          Width = 50
+          Align = alRight
+          TabOrder = 0
+        end
+      end
+      object ToolButton7: TToolButton
+        Left = 143
+        Top = 0
+        Width = 8
+        Caption = 'ToolButton7'
+        Style = tbsSeparator
+      end
+      object ckLoop: TCheckBox
+        Left = 471
+        Height = 24
+        Top = 0
+        Width = 47
+        Align = alRight
+        Caption = 'Loop'
+        TabOrder = 1
+      end
     end
   end
   inherited ActionList: TActionList[8]
@@ -2445,6 +2514,8 @@ inherited frmLogger: TfrmLogger
     top = 168
   end
   inherited XMLPropStorage: TXMLPropStorage[10]
+    left = 208
+    top = 272
   end
   object ActionList1: TActionList[11]
     left = 64
@@ -2496,6 +2567,10 @@ inherited frmLogger: TfrmLogger
     object acResend: TAction
       Caption = 'Resend this message'
       OnExecute = acResendExecute
+    end
+    object acPlay: TAction
+      Caption = 'Go !'
+      OnExecute = acPlayExecute
     end
   end
   object SaveDialog: TSaveDialog[12]

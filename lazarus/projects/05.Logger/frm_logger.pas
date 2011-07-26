@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, XMLPropStorage, Spin,
   JvAppEvent, RTTICtrls, RTTIGrids,  uxPLConst, frm_template,
   frame_message, logger_listener, u_xpl_header;
 
@@ -23,6 +23,8 @@ type
     acShowMessage: TAction;
     acConversation: TAction;
     acResend: TAction;
+    acPlay: TAction;
+    ckLoop: TCheckBox;
     dgMessages: TStringGrid;
     JvAppEvents1: TJvAppEvents;
     Label4: TLabel;
@@ -40,9 +42,15 @@ type
     MessageFrame: TTMessageFrame;
     mnuListView: TPopupMenu;
     Panel2: TPanel;
+    Panel5: TPanel;
+    seSleep: TSpinEdit;
+    tbMacro: TToolBar;
     ToolBar2: TToolBar;
+    ToolButton1: TToolButton;
     ToolButton102: TToolButton;
     tbListen: TToolButton;
+    ToolButton4: TToolButton;
+    ToolButton7: TToolButton;
     ToolButton92: TToolButton;
     ActionList1: TActionList;
     BtnRefresh: TBitBtn;
@@ -60,14 +68,17 @@ type
     procedure acConfigExecute(Sender: TObject);
     procedure acConversationExecute(Sender: TObject);
     procedure acDiscoverNetworkExecute(Sender: TObject);
+    procedure acPlayExecute(Sender: TObject);
     procedure acPluginDetailExecute(Sender: TObject);
     procedure acResendExecute(Sender: TObject);
     procedure acShowMessageExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
     procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; aState: TGridDrawState);
+    procedure dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure dgMessagesHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure FormCreate(Sender: TObject);
+    procedure FormDestroy(Sender: TObject);
     procedure JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure mnuListViewPopup(Sender: TObject);
     procedure mnuSendMessageClick(Sender: TObject);
@@ -75,9 +86,11 @@ type
     procedure PlayExecute(Sender: TObject);
     procedure mnuTreeViewPopup(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
+    procedure tvMessagesDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
     procedure tvMessagesSelectionChanged(Sender: TObject);
   private
-    NetNode,MsgNode,ConNode: TTreeNode;
+    NetNode,MsgNode,ConNode,MacNode : TTreeNode;
+    MacroList : TMessageList;
 
     procedure OnMessageReceived(const axPLMessage: TxPLMessage);
     function StatusString: string;
@@ -108,12 +121,14 @@ uses frm_xplappslauncher
      , u_xpl_common
      , frm_PluginDetail
      , LCLType
+     , LCLIntf
      , ClipBrd
      ;
 
 const K_ROOT_NODE_NAME = 'Network';
       K_MESSAGES_ROOT  = 'Messages';
       K_CONVERSATION_ROOT = 'Conversations';
+      K_MACRO_ROOT = 'Macro';
 
 // ======================================================================================
 procedure TfrmLogger.FormCreate(Sender: TObject);
@@ -123,6 +138,7 @@ begin
    inherited;
 
    TLoggerListener(xPLApplication).OnMessage := @OnMessageReceived;
+   MacroList := TMessageList.Create;
 
    ClearExecute(self);
 
@@ -144,20 +160,29 @@ begin
    acConversation.ImageIndex := K_IMG_THREAD;
    acResend.ImageIndex:=K_IMG_MAIL_FORWARD;
    acShowMessage.ImageIndex := K_IMG_EDIT_FIND;
+   ToolButton3.ImageIndex:=K_IMG_RECORD;
+   tbMacro.Images := xPLGUIResource.Images;
+   acPlay.ImageIndex:=K_IMG_MENU_RUN;
 
    tvMessages.Images := xPLGUIResource.Images;
    NetNode := tvMessages.Items.AddChild(nil, K_ROOT_NODE_NAME);
    NetNode.ImageIndex:=K_IMG_NETWORK;
-   msgNode := tvMessages.Items.AddChild(nil,K_MESSAGES_ROOT);
+   msgNode := tvMessages.Items.AddChild(nil, K_MESSAGES_ROOT);
    msgNode.ImageIndex:=K_IMG_MESSAGE;
-   ConNode := tvMessages.Items.AddChild(nil,K_CONVERSATION_ROOT);
+   ConNode := tvMessages.Items.AddChild(nil, K_CONVERSATION_ROOT);
    ConNode.ImageIndex:=K_IMG_THREAD;
+   MacNode := tvMessages.items.AddChild(nil, K_MACRO_ROOT);
    tvMessages.Selected := NetNode;
 
    for Column in dgMessages.Columns do
        TGridColumn(Column).Width:=TGridColumn(Column).MinSize;
 
    MessageFrame.ReadOnly:=true;
+end;
+
+procedure TfrmLogger.FormDestroy(Sender: TObject);
+begin
+   MacroList.Free;
 end;
 
 procedure TfrmLogger.acConfigExecute(Sender: TObject);
@@ -189,6 +214,24 @@ end;
 procedure TfrmLogger.acDiscoverNetworkExecute(Sender: TObject);
 begin
    TLoggerListener(xPLApplication).SendHBeatRequestMsg;
+end;
+
+procedure TfrmLogger.acPlayExecute(Sender: TObject);
+var i : integer;
+    iStop : cardinal;
+begin
+   repeat
+      for i := 0 to Pred(MacroList.Count) do begin
+          dgMessages.Row:= i + 1;
+          TLoggerListener(xPLApplication).Send(TxPLCustomMessage(MacroList.Items[i]), false);
+
+          iStop := GetTickCount + seSleep.Value * 1000;
+          while GetTickCount < iStop do begin
+             Application.ProcessMessages;
+             sleep(1);
+          end;
+      end;
+   until not ckLoop.Checked;
 end;
 
 procedure TfrmLogger.OnJoinedEvent;
@@ -234,8 +277,7 @@ var s : string;
 begin
    header := TxPLHeader.Create(self);
    sl := TStringList.Create;
-   if ((tvMessages.Selected = NetNode) or (tvMessages.Selected = ConNode) or   // We're on one of the roots
-       (tvMessages.Selected = MsgNode)) then
+     if tvMessages.Selected.Parent = nil then                                  // We're on one of the roots
          StatusBar1.Panels[2].Text := '*.*.*.*.*.*'
       else if (tvMessages.Selected.Parent = ConNode) then begin                // We're on a conversation node
         sl.DelimitedText:=tvMessages.Selected.Text;
@@ -269,7 +311,8 @@ procedure TfrmLogger.ClearExecute(Sender: TObject);
 begin
    dgMessages.RowCount:=1;
    PlayExecute(self);
-   TLoggerListener(xPLApplication).MessageList.Clear;
+   if tvMessages.Selected = MacNode then MacroList.Clear
+      else TLoggerListener(xPLApplication).MessageList.Clear;
 end;
 
 procedure TfrmLogger.ApplySettings(Sender: TObject);                           // Correction bug FS#39 , This method is also called by frmAppSettings
@@ -322,7 +365,8 @@ begin
   end;
 
   StatusBar1.Panels[3].Text := StatusString;
-  DisplayFilteredMessage(axPLMessage);
+
+  if tvMessages.Selected <> MacNode then DisplayFilteredMessage(axPLMessage);  // The macro node doesn't need to be updated
 end;
 
 procedure TFrmLogger.DisplayFilteredMessage(const aMsg : TxPLCustomMessage);
@@ -351,11 +395,18 @@ end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
 var i: integer;
+    max : integer;
+    liste : TMessageList;
 begin
    UpdateFilter;
    dgMessages.RowCount:=1;
-   for i:=0 to TLoggerListener(xPLApplication).MessageCount-1 do
-      DisplayFilteredMessage(TLoggerListener(xPLApplication).Message(i));
+   if tvMessages.Selected = MacNode then
+        liste := MacroList
+   else
+        liste := TLoggerListener(xPLApplication).MessageList;
+
+   for i:=0 to Pred(liste.Count) do
+      DisplayFilteredMessage(TxPLMessage(liste.Items[i]));
    if dgMessages.RowCount>1 then dgMessages.Row:=1;
 end;
 
@@ -415,6 +466,8 @@ begin
       acConversation.Enabled := not ((aMsg.target.IsGeneric) or (aMsg.source.Equals(aMsg.Target)));
       MessageFrame.TheMessage := aMsg;
    end;
+   tbMacro.Visible           := (tvMessages.Selected = MacNode);
+   MacNode.Text              := Format('Macro (%d elts)',[MacroList.Count]);
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
@@ -449,6 +502,19 @@ begin
          end;
       end;
   end;
+end;
+
+procedure TfrmLogger.tvMessagesDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
+begin
+   accept := (Source = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode);
+end;
+
+procedure TfrmLogger.dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
+begin
+   if ((Sender = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode)) then begin
+      if Assigned(dgMessages.Objects[0,dgMessages.Row]) then
+         MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
+   end;
 end;
 
 procedure TfrmLogger.mnuCommandClick(Sender: TObject);
