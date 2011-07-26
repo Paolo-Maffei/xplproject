@@ -17,8 +17,7 @@ uses
   u_xpl_common,
   logger_listener,
   u_xpl_gui_resource,
-  u_xml_config,
-  u_Configuration_Record, frame_message;
+  frame_message;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 

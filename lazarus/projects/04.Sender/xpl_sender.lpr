@@ -14,8 +14,6 @@ uses
   Forms,
   u_xPL_Message,
   uxPLConst,
-  u_xml_plugins,
-  u_xml_xplplugin,
   u_xpl_application,
   u_xpl_gui_resource,
   u_xpl_common,
