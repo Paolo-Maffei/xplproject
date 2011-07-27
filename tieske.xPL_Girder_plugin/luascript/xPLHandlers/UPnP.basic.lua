@@ -117,8 +117,18 @@ local myNewHandler = {
 		dev[service] = dev[service] or {}
 		service = dev[service]
 
-		-- Set the value of the reported variable in the table
-		service[GetValueByKey('name')] = GetValueByKey('value')
+		-- Set the values of the reported variables in the table
+		if GetValueByKey('name') then
+			-- there is only 1 value in the message
+			service[GetValueByKey('name')] = GetValueByKey('value')
+		else
+			-- multiple values, are numbered
+			local i = 1
+			while GetValueByKey('name'..i) do
+				service[GetValueByKey('name'..i)] = GetValueByKey('value'..i)
+				i=i+1
+			end
+		end
 
 		-- Determine the return value
 		-- false: The standard xPLGirder event will still be created (if all other handlers also
