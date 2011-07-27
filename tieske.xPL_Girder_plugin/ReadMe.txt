@@ -166,6 +166,8 @@ as comments in the sample file.
 ============================================================================
 7 - Changelog
 ============================================================================
+xx-xxx-2011 version 0.1.3 by Thijs Schreijer
+         Added UPnP.basic handler
 09-jul-2011 version 0.1.2 by Thijs Schreijer
          Bugfix; the actions were not visible in the action tree
 13-jun-2011 version 0.1.1 by Thijs Schreijer
