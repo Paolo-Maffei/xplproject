@@ -112,9 +112,17 @@ begin
    AssertEquals(adr1.RawxPL,adr2.rawxpl);
    adr1.Free;
    adr2.free;
-   s := adr1.HostNmInstance;
+
+   InstanceInitStyle := iisHostName;
+   s := adr1.InitInstanceByDefault;
    AssertEquals(s,'lapfr0005');
-   AssertFalse(adr1.RandomInstance=adr1.RandomInstance);
+
+   InstanceInitStyle := iisRandom;
+   AssertFalse(adr1.InitInstanceByDefault=adr1.InitInstanceByDefault);
+
+   InstanceInitStyle := iisMacAddress;
+   s := adr1.InitInstanceByDefault;
+   AssertEquals(s,'001c23b6193f');
 end;
 
 procedure ClinxPLfpcUnit.TestTarget;

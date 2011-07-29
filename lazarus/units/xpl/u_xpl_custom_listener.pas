@@ -141,7 +141,6 @@ begin
    ReadObjectFromFile(fCfgFName,self);
    Adresse.Instance := Config.Instance;
    Log(etInfo,K_MSG_CONFIG_LOADED,[Adresse.RawxPL]);
-
 end;
 
 //procedure TxPLCustomListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);

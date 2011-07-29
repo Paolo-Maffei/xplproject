@@ -33,7 +33,7 @@ type // TxPLCustomFolders =====================================================
 
 implementation // ==============================================================
 
-uses {$ifdef fpc}Windirs{$else}SHFolder{$endif}
+uses fpc_delphi_compat
      , StrUtils
      ;
 
@@ -52,17 +52,8 @@ begin
 end;
 
 function TxPLCustomFolders.SharedDir: string;
-{$ifndef fpc}
-var path : array[0..255] of Char;
-{$endif}
 begin
-   {$ifdef fpc}
-      result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
-   {$else}
-      SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);
-      result := path;
-   {$endif}
-   result := IncludeTrailingPathDelimiter(result + 'xPL');
+   result := IncludeTrailingPathDelimiter(GetCommonAppDataPath + 'xPL');
    EnsureDirectoryExists( result );                                            // 1.1.1 Correction
 end;
 

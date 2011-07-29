@@ -398,7 +398,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="9"/>
         <CursorPos X="1" Y="69"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit40>
       <Unit41>
@@ -841,7 +841,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="172"/>
         <CursorPos X="31" Y="183"/>
-        <UsageCount Value="87"/>
+        <UsageCount Value="88"/>
         <Loaded Value="True"/>
       </Unit96>
       <Unit97>
@@ -849,7 +849,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="139"/>
         <CursorPos X="37" Y="29"/>
-        <UsageCount Value="86"/>
+        <UsageCount Value="87"/>
         <Loaded Value="True"/>
       </Unit97>
       <Unit98>
@@ -1197,7 +1197,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="128"/>
         <CursorPos X="1" Y="149"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit140>
       <Unit141>
@@ -1207,7 +1207,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="231"/>
         <CursorPos X="1" Y="244"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit141>
       <Unit142>
@@ -1217,7 +1217,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="122"/>
         <CursorPos X="1" Y="144"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit142>
       <Unit143>
@@ -1227,7 +1227,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="80"/>
         <CursorPos X="1" Y="96"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit143>
       <Unit144>
@@ -1237,7 +1237,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="146"/>
         <CursorPos X="1" Y="164"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit144>
       <Unit145>
@@ -1246,9 +1246,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="122"/>
-        <CursorPos X="50" Y="143"/>
-        <UsageCount Value="12"/>
+        <TopLine Value="212"/>
+        <CursorPos X="53" Y="143"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit145>
       <Unit146>
@@ -1258,7 +1258,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="165"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit146>
       <Unit147>
@@ -1268,7 +1268,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="159"/>
         <CursorPos X="1" Y="175"/>
-        <UsageCount Value="12"/>
+        <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit147>
       <Unit148>
@@ -1278,7 +1278,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="26"/>
         <CursorPos X="22" Y="72"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit148>
       <Unit149>
@@ -1320,7 +1320,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="202"/>
         <CursorPos X="1" Y="220"/>
-        <UsageCount Value="11"/>
+        <UsageCount Value="12"/>
         <Loaded Value="True"/>
       </Unit153>
       <Unit154>
@@ -1337,8 +1337,8 @@
         <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="54"/>
-        <CursorPos X="1" Y="82"/>
-        <UsageCount Value="10"/>
+        <CursorPos X="1" Y="76"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit155>
       <Unit156>
@@ -1348,7 +1348,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="47"/>
         <CursorPos X="23" Y="67"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit156>
       <Unit157>
