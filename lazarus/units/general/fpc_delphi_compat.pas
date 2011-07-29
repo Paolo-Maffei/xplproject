@@ -11,12 +11,13 @@ uses {$ifdef fpc}
      {$endif}
     ;
 
-function BuildDate  : string;
-function GetDevice  : string;
-function GetVendor  : string;
-function GetVersion : string;
-function GetProductName : string;
-function GetMacAddress : string;
+    function BuildDate  : string;
+    function GetDevice  : string;
+    function GetVendor  : string;
+    function GetVersion : string;
+    function GetProductName : string;
+    function GetMacAddress : string;
+    function GetCommonAppDataPath : string;
 
 type TxPLTimer = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif});
 
@@ -27,9 +28,11 @@ Uses Classes
      {$ifdef fpc}
      , vInfo
      , LSUtils
+     , Windirs
      {$else}
      , JvVersionInfo
      , jclPEImage
+     , SHFolder
      {$endif}
      ;
 
@@ -75,19 +78,32 @@ begin
    result := {$ifdef fpc}
                 AnsiLowerCase(AnsiReplaceStr(LSGetMacAddress,'-',''));
              {$else}
-                Assert(false,'Code missing for Delphi');
+                '00abcdef';
                 // Missing code to define for delphi environment
              {$endif}
 end;
 
-initialization
+function GetCommonAppDataPath : string;
+{$ifndef fpc}
+var path : array[0..255] of Char;
+{$endif}
+begin
+   {$ifdef fpc}
+      result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
+   {$else}
+      SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);
+      result := IncludeTrailingPathDelimiter(path);
+   {$endif}
+end;
+
+initialization // =============================================================
    VersionInfo := {$ifdef fpc}
                      TVersionInfo.Create;
                   {$else}
-                     VersionInfo := TJvVersionInfo.Create(ParamStr(0));
+                     TJvVersionInfo.Create(ParamStr(0));
                   {$endif}
 
-finalization
+finalization // ===============================================================
    VersionInfo.Free;
 
 end.
