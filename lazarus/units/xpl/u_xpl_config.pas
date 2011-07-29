@@ -6,11 +6,12 @@ unit u_xpl_config;
 
 interface
 
-uses Classes,
-     SysUtils,
-     u_xpl_common,
-     u_xpl_collection,
-     u_xpl_body;
+uses Classes
+     , SysUtils
+     , u_xpl_common
+     , u_xpl_collection
+     , u_xpl_body
+     ;
 
 type TxPLCustomConfig = class;
      TxPLConfigItemType = (config, reconf, option);
@@ -81,7 +82,6 @@ implementation {===============================================================}
 uses uxPLconst
      , StrUtils
      , Math
-     //, cStrings
      , JclStrings
      , typinfo
      , u_xpl_address
@@ -95,11 +95,18 @@ begin
 
    fConfigItems := TxPLConfigItems.Create(self);
 
-   {$ifdef windows}
-   DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.HostNmInstance);          // Standard to all xPL apps configuration elements
-   {$else}
-   DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.RandomInstance);          // Standard to all xPL apps configuration elements
-   {$endif}
+   //case aInstInitStyle of
+   //     iisRandom     :
+   //     iisHostName   : DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.HostNmInstance);
+   //     iisMacAddress : DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.MacAddInstance);
+   //end;
+
+   { $ ifdef mswindows}
+   //DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.HostNmInstance);          // Standard to all xPL apps configuration elements
+   { $ else}
+   //DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.RandomInstance);          // Standard to all xPL apps configuration elements
+   { $ endif}
+   DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.InitInstanceByDefault);
    DefineItem(K_CONF_INTERVAL, option, 1, IntToStr(K_XPL_DEFAULT_HBEAT));       // Do not change the order of these elements
    DefineItem(K_CONF_FILTER  , option, K_XPL_CFG_MAX_FILTERS);
    DefineItem(K_CONF_GROUP   , option, K_XPL_CFG_MAX_GROUPS );
@@ -120,7 +127,6 @@ begin
        s := aValue.Values[i];
        if AnsiRightStr(s,1) =']' then begin
           nom    := Copy(s,1, Pos('[',s)-1);
-          //maxval := StrToInt( StrBetweenChar(s,'[',']'))                      // Replaced cstrings proc by JVCL proc
           maxval := StrToInt(StrBetween(s,'[',']'));                            // Replaced cstrings proc by JVCL proc
        end else begin
           nom    := s;

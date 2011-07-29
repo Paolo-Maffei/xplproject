@@ -95,7 +95,7 @@ uses u_xpl_header
      ;
 
 const K_MSG_BIND_OK       = 'Listening on port %u for address %s';
-      K_MSG_CONFIG_LOADED = 'Configuration loaded from %s';
+      K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
       K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
       K_MSG_IP_ERROR      = 'Socket unable to bind to IP Addresses';
       K_MSG_UDP_ERROR     = 'Unable to initialize incoming UDP server';
@@ -139,8 +139,9 @@ end;
 procedure TxPLCustomListener.LoadConfig;
 begin
    ReadObjectFromFile(fCfgFName,self);
-   Log(etInfo,K_MSG_CONFIG_LOADED,[fCfgFName]);
    Adresse.Instance := Config.Instance;
+   Log(etInfo,K_MSG_CONFIG_LOADED,[Adresse.RawxPL]);
+
 end;
 
 //procedure TxPLCustomListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);

@@ -30,6 +30,10 @@ type // TxPLAddress ===========================================================
         procedure Set_RawxPL(const aValue: string); virtual;
         function  Get_RawxPL : string; virtual;
         procedure Set_VD(const AValue: string);
+
+        class function RandomInstance : string;
+        class function HostNmInstance : string;
+        class function MacAddInstance : string;
      public
         constructor Create(const axPLAddress : TxPLAddress); overload;
         constructor Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' ); overload;
@@ -39,8 +43,7 @@ type // TxPLAddress ===========================================================
 
         procedure Set_Element(AIndex: integer; const AValue: string); override;
 
-        class function RandomInstance : string;
-        class function HostNmInstance : string;
+        class function InitInstanceByDefault : string;
 
      published
         property Vendor   : string index 0 read Get_Element write Set_Element;
@@ -69,9 +72,6 @@ type // TxPLAddress ===========================================================
        property  IsGroup   : boolean  read Get_IsGroup   write Set_IsGroup   stored false;
     end;
 
-    // Operator overloading has been put apart for Delphi compatibility issues
-    // Operator := (t1 : string) t2 : TxPLAddress;
-
 const K_ADDR_ANY_TARGET = '*';
 
 implementation // =============================================================
@@ -79,6 +79,7 @@ uses IdStack
      , JCLStrings
      , SysUtils
      , StrUtils
+     , fpc_delphi_compat
      ;
 
 // ============================================================================
@@ -106,12 +107,19 @@ begin
    end;                                                                        // Old method using pwhostname, replaced by Indy
 end;
 
-// ============================================================================
-//operator:=(t1: string)t2: TxPLAddress;
-//begin
-//   t2 := TxPLAddress.Create;
-//   t2.RawxPL := t1;
-//end;
+class function TxPLAddress.MacAddInstance : string;
+begin
+   result := GetMacAddress;                                                    // Another usefull method
+end;
+
+class function TxPLAddress.InitInstanceByDefault : string;
+begin
+   case InstanceInitStyle of
+        iisRandom     : result := RandomInstance;
+        iisHostName   : result := HostNmInstance;
+        iisMacAddress : result := MacAddInstance;
+   end;
+end;
 
 // TxPLAddress Object =========================================================
 constructor TxPLAddress.Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' );

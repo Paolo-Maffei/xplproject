@@ -1,6 +1,6 @@
 unit fpc_delphi_compat;
 
-{Unit with functions and classes not found in Delphi}
+{Unit older behaviour differences between fpc and delphi}
 
 interface
 
@@ -16,14 +16,17 @@ function GetDevice  : string;
 function GetVendor  : string;
 function GetVersion : string;
 function GetProductName : string;
+function GetMacAddress : string;
 
 type TxPLTimer = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif});
 
 implementation // =============================================================
 Uses Classes
      , SysUtils
+     , StrUtils
      {$ifdef fpc}
      , vInfo
+     , LSUtils
      {$else}
      , JvVersionInfo
      , jclPEImage
@@ -46,29 +49,43 @@ end;
 function GetDevice: string;
 begin
    result := VersionInfo.InternalName;
+   Assert(length(result)>0,'Version Info are missing');
 end;
 
 function GetVendor: string;
 begin
    result := VersionInfo.CompanyName;
+   Assert(length(result)>0,'Version Info are missing');
 end;
 
 function GetVersion: string;
 begin
    result := VersionInfo.FileVersion;
+   Assert(length(result)>0,'Version Info are missing');
 end;
 
 function GetProductName : string;
 begin
    result := VersionInfo.ProductName;
+   Assert(length(result)>0,'Version Info are missing');
+end;
+
+function GetMacAddress: string;
+begin
+   result := {$ifdef fpc}
+                AnsiLowerCase(AnsiReplaceStr(LSGetMacAddress,'-',''));
+             {$else}
+                Assert(false,'Code missing for Delphi');
+                // Missing code to define for delphi environment
+             {$endif}
 end;
 
 initialization
-   {$ifdef fpc}
-      VersionInfo := TVersionInfo.Create;
-   {$else}
-      VersionInfo := TJvVersionInfo.Create(ParamStr(0));
-   {$endif}
+   VersionInfo := {$ifdef fpc}
+                     TVersionInfo.Create;
+                  {$else}
+                     VersionInfo := TJvVersionInfo.Create(ParamStr(0));
+                  {$endif}
 
 finalization
    VersionInfo.Free;
