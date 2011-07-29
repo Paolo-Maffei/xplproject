@@ -17,6 +17,8 @@ Type {$ifndef fpc}                                                             /
         TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
      {$endif}
 
+     TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
+
      TStrParamEvent = procedure(const aString : string) of object;
 
      TxPLMessageType = (cmnd, stat, trig);
@@ -83,7 +85,8 @@ Type {$ifndef fpc}                                                             /
 
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
-var   LocalAddresses : TStringList;
+var  LocalAddresses : TStringList;
+     InstanceInitStyle : TInstanceInitStyle;
 
 implementation  //=============================================================
 uses StrUtils
@@ -330,7 +333,8 @@ end;
 
 var i : integer;
 initialization // =============================================================
-   LocalAddresses := TStringList.Create;
+   InstanceInitStyle := iisHostName;
+   LocalAddresses    := TStringList.Create;
    // Cette version utilise la librairie Synapse mais pose un problème pour les
    // Versions console des applications car les unités synamisc et synaip appellent
    // Windows

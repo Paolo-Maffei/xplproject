@@ -65,7 +65,10 @@ end;
 
 procedure TxPLSender.Send(const aMessage: TxPLCustomMessage; const bEnforceSender : boolean = true);
 begin
-   if bEnforceSender then aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
+   if bEnforceSender then begin
+      if not IsValidxPLIdent(Adresse.Instance) then Adresse.Instance := TxPLAddress.InitInstanceByDefault;
+      aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
+   end;
    if aMessage.IsValid then
       Send(TxPLMessage(aMessage).ProcessedxPL)
    else

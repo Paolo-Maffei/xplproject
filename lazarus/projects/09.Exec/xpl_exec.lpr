@@ -8,6 +8,7 @@ uses
      cthreads,
   {$ENDIF}{$ENDIF}
      u_xpl_console_app,
+     u_xpl_common,
      exec_listener;
 
 {$R *.res}
@@ -16,6 +17,7 @@ var MyexecApp : TxPLConsoleApp;
     Listener : TxPLexecListener;
 
 begin
+   InstanceInitStyle := iisMacAddress;
    MyexecApp := TxPLConsoleApp.Create(nil);
    Listener := TxPLexecListener.Create(MyexecApp);
 
