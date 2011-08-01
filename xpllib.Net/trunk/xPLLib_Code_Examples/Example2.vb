@@ -6,6 +6,8 @@ Module Example2
 
     Friend Sub Example2()
         dev1 = New xPLDevice
+        dev1.VendorID = "tieske"
+        dev1.DeviceID = "example2"
 
         MsgBox("We'll be creating some simple xPL devices, and make them configurable with some extra items. Also the event for configuration is used in this sample.")
 

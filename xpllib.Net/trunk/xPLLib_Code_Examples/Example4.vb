@@ -9,13 +9,13 @@ Module Example4
         dev1 = New xPLDevice
         dev1.Configurable = False
         dev1.VendorID = "tieske"
-        dev1.DeviceID = "testapp"
+        dev1.DeviceID = "example4"
         dev1.InstanceID = "dev1"
 
         dev2 = New xPLDevice
         dev2.Configurable = False
         dev2.VendorID = "tieske"
-        dev2.DeviceID = "testapp"
+        dev2.DeviceID = "example4"
         dev2.InstanceID = "dev2"
 
         MsgBox("Core stuff: how to send an xPL message, but with xPLLib, its a piece of cake :-)" & vbCrLf & vbCrLf & _
@@ -81,7 +81,7 @@ Module Example4
         dev2 = Nothing
     End Sub
 
-    ' callback method that will add the specific hearbeat items
+    ' callback method that will add the specific heartbeat items
     Private Function hbeatitems(ByVal xpldev As xPLDevice) As xPLKeyValuePairs
         Dim items As New xPLKeyValuePairs
         items.Add("time", Now.ToString)     ' just add current time

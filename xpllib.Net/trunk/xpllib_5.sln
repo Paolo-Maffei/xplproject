@@ -7,7 +7,18 @@ Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PluginTestApp", "PluginTest
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLLib_Code_Examples", "xPLLib_Code_Examples\xPLLib_Code_Examples.vbproj", "{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}"
 EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLLib_Test", "xPLLib_Test\xPLLib_Test.vbproj", "{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEECB23-AF4D-4D26-B339-ECDD2760EC4A}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		xpllib_5.vsmdi = xpllib_5.vsmdi
+	EndProjectSection
+EndProject
 Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = xpllib_5.vsmdi
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -25,6 +36,10 @@ Global
 		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

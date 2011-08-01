@@ -18,13 +18,13 @@ Module Example1
                "xPL address: " & dev1.Address & vbCrLf & vbCrLf & "The following device will get a specifically set Vendor and Device ID, and a Instance ID based on the host computers name.")
         ' the second one, set the ID's and make it hostname based
         dev2.VendorID = "tieske"
-        dev2.DeviceID = "testapp"
+        dev2.DeviceID = "example1"
         dev2.InstanceIDType = InstanceCreation.HostNameBased
         dev2.Enable()
         MsgBox("Check your logger, you now have added: " & dev2.Address & vbCrLf & vbCrLf & "The next one will show how to create a device with a specifically set InstanceID")
         ' this time also set the instance id
         dev3.VendorID = "tieske"
-        dev3.DeviceID = "testapp"
+        dev3.DeviceID = "example1"
         dev3.InstanceID = "totallymine"
         dev3.Enable()
         MsgBox("The last one (" & dev3.Address & ") has been created. The example has finished, click OK to clean up.")

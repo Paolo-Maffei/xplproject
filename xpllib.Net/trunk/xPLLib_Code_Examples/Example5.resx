@@ -117,18 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="Label1.Text" xml:space="preserve">
-    <value>This application demonstrates how to use the xPLLib. Each of the buttons, opens a form with a different piece of coding
-behind it. Check the code for that specific form to see how you can accomplish this feature in your own application.
-
-It is probably best to have a xPL message logger available, to see what is being sent. Optionally use a debugger to step through
-the code and get a better understanding of how it is accomplished.</value>
-  </data>
-  <data name="lblListener.Text" xml:space="preserve">
-    <value>No samples provided, check the methods and properties through the Visual Studio object browser. The main 
-methods/properties are the 'collection' alike ones; xPLListener.Count, xPLListener.IndexOf() and 
-xPLListener.Device(), that allow you to access the individual devices created by the xPLLib.
-The xPLListener.GetState and xPLListener.RestoreFromState work identical to the states of the xPLDevice
-objects, except that in case of the listener, it works on the entire collection, not just on a single device</value>
-  </data>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="ToolTip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
 </root>

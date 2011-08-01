@@ -905,7 +905,7 @@ Public Class xPLDevice
 
             ' Should I pass heartbeat stuff, my own or someone elses
             If x.IsHeartbeat Then
-                If x.IsForMeGroup Or x.IsForMeSpecific Then
+                If x.IsForMeGroup Or x.IsForMeSpecific Or (x.IsMyEcho And ((Me.MessagePassing And MessagePassingEnum.PassMyOwnEcho) <> 0)) Then
                     ' my heartbeat stuff
                     If (Me.MessagePassing And MessagePassingEnum.PassMyHeartbeatStuff) = 0 Then
                         pass = False ' don't pass my own heartbeat stuff

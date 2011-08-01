@@ -97,10 +97,10 @@ Public Class xPLKeyValuePair
             Return mValue
         End Get
         Set(ByVal v As String)
-            If IsValidxPL(v, 0, 128, XPL_STRING_TYPES.Values) Then
+            If IsValidxPL(v, 0, 0, XPL_STRING_TYPES.Values) Then
                 mValue = v
             Else
-                Throw New IllegalFieldContentsException("Illegal field length (0 to 128) or unallowed characters: " & v)
+                Throw New IllegalFieldContentsException("Illegal field; unallowed characters: " & v)
             End If
         End Set
     End Property

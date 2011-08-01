@@ -58,7 +58,7 @@ Public Class xPLListener
     ' Networking stuff
     Private Shared sockIncoming As Socket = Nothing    ' Socket to handle incoming messages
     Private Shared epIncoming As IPEndPoint = Nothing  ' Endpoint for incoming messages
-    Private Shared XPL_Buff(XPL_MAX_MSG_SIZE) As Byte  ' Buffer to store incoming messages
+    Private Shared XPL_Buff(XPL_SOCKET_BUFFER_SIZE) As Byte  ' Buffer to store incoming messages
     Private Shared XPL_Portnum As Integer              ' Port used for listening
     Private Shared mLocalIPs As ArrayList              ' Local IPAddress(es)
     Private Shared mListenOnIP As IPAddress = Nothing  ' address we'll be listening on
@@ -662,7 +662,7 @@ Public Class xPLListener
 
         ' Add a listener for incoming data
         epIncoming = New IPEndPoint(System.Net.IPAddress.Any, 0)
-        sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_MAX_MSG_SIZE, SocketFlags.None, CType(epIncoming, EndPoint), AddressOf ReceiveData, Nothing)
+        sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_SOCKET_BUFFER_SIZE, SocketFlags.None, CType(epIncoming, EndPoint), AddressOf ReceiveData, Nothing)
 
         ' update devices; inform them of new IP and Port info
         NewAddress()
@@ -680,7 +680,7 @@ Public Class xPLListener
         Catch ex As Exception
             Exit Sub
         End Try
-        epIncoming = CType(ep, IPEndPoint)
+
         Dim myXPL As xPLMessage
         Dim rawXPL As String = ""
 
@@ -707,7 +707,7 @@ Public Class xPLListener
 
             Try
                 ' parse raw xpl into a message object
-                rawXPL = Encoding.ASCII.GetString(XPL_Buff, 0, bytes_read)
+                rawXPL = Encoding.UTF8.GetString(XPL_Buff, 0, bytes_read)
                 myXPL = New xPLMessage(rawXPL)
             Catch ex As Exception
                 LogError("xPLListener.ReceiveData", "Error: " & ex.ToString() & vbCrLf & rawXPL & vbCrLf & HexDump(rawXPL))
@@ -726,6 +726,7 @@ Public Class xPLListener
                 ' update what we know from the network by what we learn from this message
                 xPLNetwork.MessageReceived(myXPL)
                 ' Distribute to enlisted devices
+
                 For i = 0 To mDevices.Count - 1
                     ' create new message instance for each device to prevent interference
                     myXPL = New xPLMessage(rawXPL)
@@ -738,7 +739,7 @@ Public Class xPLListener
         End If
 
         Try
-            sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_MAX_MSG_SIZE, SocketFlags.None, ep, AddressOf ReceiveData, Nothing)
+            sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_SOCKET_BUFFER_SIZE, SocketFlags.None, ep, AddressOf ReceiveData, Nothing)
         Catch ex As Exception
             If mDevices.Count <> 0 Then
                 LogError("xPLListener.ReceiveData", ex.ToString)
@@ -763,18 +764,28 @@ Public Class xPLListener
             Try
                 SendData(RawxPL)
             Catch ex As Exception
+                LogError("xPLListener.SendRawxPL", "Error: " & ex.ToString() & vbCrLf & RawxPL & vbCrLf & HexDump(RawxPL))
                 Throw New Exception("Failed to send the xPL message: " & ex.Message, ex)
             End Try
         End If
     End Sub
 
     Private Shared Sub SendData(ByVal RawXPL As String)
+
         Dim s As Socket
         Dim ep As IPEndPoint
-        s = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
-        ep = New IPEndPoint(mBroadcastAddress, XPL_BASE_PORT)
+        Dim data As Byte() = Encoding.UTF8.GetBytes(RawXPL)
 
-        s.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.Broadcast, 1)
+        s = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+        If Not _ByPassHub Then
+            ' send to regular xPL port
+            ep = New IPEndPoint(mBroadcastAddress, XPL_BASE_PORT)
+        Else
+            ' send to port I'm listening on myself, so bypass the hub
+            ep = New IPEndPoint(mBroadcastAddress, XPL_Portnum)
+        End If
+        s.EnableBroadcast = True
+        s.SendBufferSize = data.Length
 
         'See if we need to specify a source IP for the broadcast
         Dim sIP As String = mListenOnIPstr
@@ -783,11 +794,27 @@ Public Class xPLListener
             Dim lep As New IPEndPoint(a, 0)
             s.Bind(lep)
         End If
-
-        s.SendTo(Encoding.ASCII.GetBytes(RawXPL), ep)
+        s.SendTo(Encoding.UTF8.GetBytes(RawXPL), ep)
         s.Close()
     End Sub
 
+    Private Shared _ByPassHub As Boolean = False
+    ''' <summary>
+    ''' If set to True, the xPL network connections will be configured to broadcast to the port the xPLLib is listening on. This
+    ''' will enable the bypassing of the hub and to test message characteristics not yet supported by the hub.
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    <Obsolete("Do not use this setting, its intended to be used only for test purposes!")> _
+        Public Shared Property ByPassHub() As Boolean
+        Get
+            Return _ByPassHub
+        End Get
+        Set(ByVal value As Boolean)
+            _ByPassHub = value
+        End Set
+    End Property
 #End Region
 
 End Class
