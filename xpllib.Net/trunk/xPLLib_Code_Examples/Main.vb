@@ -24,10 +24,18 @@
         Me.Show()
     End Sub
 
+    Private Sub Button5_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button5.Click
+        Dim f As New Example5
+        Me.Hide()
+        Call f.ShowDialog()
+        Me.Show()
+    End Sub
+
     Private Sub Button6_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button6.Click
         Dim f As New Example6
         Me.Hide()
         Call f.ShowDialog()
         Me.Show()
     End Sub
+
 End Class

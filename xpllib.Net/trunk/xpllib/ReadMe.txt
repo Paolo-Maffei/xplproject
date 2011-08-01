@@ -1,4 +1,4 @@
-﻿xPL Library for .NET, version 5.2
+﻿xPL Library for .NET, version 5.3
 
 Contents
 =========
@@ -208,6 +208,26 @@ A distribution of the xpllib should include the following files;
     
 5 - Changelog 
 ==============
+
+Changes in version 5.3 from 5.2
+NEW in 5.3
+  - max length of values is now no longer set to 128, but 'unlimited' within the overall
+    message size.
+  - values may now be encoded as UTF8, basically this means allowing all byte values from 
+    32 through 255 (used to be ASCII; 32 through 126), as a result;
+      * Signature of xPL_Base.IsValidIdentifier() function has changed (non-breaking)
+      * xPL_Base.XPL_ALLOWED_VALUE constant is now obsolete
+      * xPL_Base.XPL_UNALLOWED_VALUE has been added
+  - max message size is also unlimited, up from 1500. The receiving buffer has been set
+    to a size of 32kb. Which is more than most networks can handle.
+    Maximum message size is now limited by other network parameters, sticking to 1500
+    is still the safest bet.
+  - Internal test facility added; Setting xPLListener.ByPassHub to True will bypass the hub
+    for test purposes.
+    
+FIXED in 5.3
+  - Distribution of received messages will monitor the collection of devices for changes
+    (in case many devices at once are disposed or created) while distributing the message
 
 Changes in version 5.2 from 5.1
 NEW in 5.2

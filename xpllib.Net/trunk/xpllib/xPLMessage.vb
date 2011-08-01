@@ -260,15 +260,16 @@ Public Class xPLMessage
     ''' <returns>Empty string is all is OK, error message (the deficit) if not OK</returns>
     Private Function RequiredFieldsFilled() As String
         '
-        '  When updating the checks in this function; DO NOT  forget to update the xml comments of the RawxPL property !!!!
+        '  When updating the checks in this function; DO NOT  forget to update the xml intellisense 
+        '  comments of the RawxPL property !!!!
         '
         If mMsgType = xPLMessageTypeEnum.Any Then Return "Message type cannot be wildcard '*'"
         If mSource.Type <> xPLAddressType.Source Then Return "Source address has type 'Target'"
         If mTarget.Type <> xPLAddressType.Target Then Return "Target address has type 'Source'"
         If mSchema.IsWildCarded Then Return "Schema cannot be wildcarded"
         If mKeyValueList.Count = 0 Then Return "No key/value pairs have been set"
-        If mMsgType = xPLMessageTypeEnum.Status And mTarget.ToString <> "*" Then Return "Status messages must always be broadcasted (target='*'"
-        If mMsgType = xPLMessageTypeEnum.Trigger And mTarget.ToString <> "*" Then Return "Trigger messages must always be broadcasted (target='*'"
+        If mMsgType = xPLMessageTypeEnum.Status And mTarget.ToString <> "*" Then Return "Status messages must always be broadcasted (target='*')"
+        If mMsgType = xPLMessageTypeEnum.Trigger And mTarget.ToString <> "*" Then Return "Trigger messages must always be broadcasted (target='*')"
         Return ""
     End Function
 
@@ -313,7 +314,7 @@ Public Class xPLMessage
                                "\}\n" & _
                                "(?<class>[0-9a-z/-]{1,8})\.(?<type>[0-9a-z/-]{1,8})\n" & _
                                "\{\n" & _
-                               "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\x7E]{0,128})\n)*" & _
+                               "(?:(?<key>[0-9a-z/-]{1,16})=(?<val>[\x20-\xFF]{0,})\n)*" & _
                                "\}\n$" _
                                , RegexOptions.Compiled Or RegexOptions.Singleline Or RegexOptions.IgnoreCase)
 

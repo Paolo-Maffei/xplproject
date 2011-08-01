@@ -2,11 +2,13 @@
 Imports xPL.xPL_Base    ' import the base to, provides numerous constants and support functions
 
 Module Example3
-    Const APPVERSION = "1.2.3"      ' will be used to store in the state string
+    Const APPVERSION As String = "1.2.3"      ' will be used to store in the state string
     Dim dev1 As xPLDevice
 
     Friend Sub Example3()
         dev1 = New xPLDevice
+        dev1.VendorID = "tieske"
+        dev1.DeviceID = "example3"
 
         MsgBox("We'll be setting up a device add some stuff and then destroy it and restore it back to its previous state.")
 

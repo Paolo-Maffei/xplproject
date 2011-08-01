@@ -31,16 +31,19 @@ Partial Class frmMain
         Me.Label4 = New System.Windows.Forms.Label
         Me.Button3 = New System.Windows.Forms.Button
         Me.GroupBox1 = New System.Windows.Forms.GroupBox
+        Me.Button5 = New System.Windows.Forms.Button
+        Me.Label6 = New System.Windows.Forms.Label
         Me.Label5 = New System.Windows.Forms.Label
         Me.Button4 = New System.Windows.Forms.Button
         Me.GroupBox2 = New System.Windows.Forms.GroupBox
         Me.GroupBox3 = New System.Windows.Forms.GroupBox
         Me.GroupBox4 = New System.Windows.Forms.GroupBox
-        Me.Button5 = New System.Windows.Forms.Button
-        Me.Label6 = New System.Windows.Forms.Label
         Me.Button6 = New System.Windows.Forms.Button
         Me.Label7 = New System.Windows.Forms.Label
+        Me.GroupBox5 = New System.Windows.Forms.GroupBox
+        Me.lblListener = New System.Windows.Forms.Label
         Me.GroupBox1.SuspendLayout()
+        Me.GroupBox2.SuspendLayout()
         Me.GroupBox4.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -126,6 +129,24 @@ Partial Class frmMain
         Me.GroupBox1.TabStop = False
         Me.GroupBox1.Text = "Devices"
         '
+        'Button5
+        '
+        Me.Button5.Location = New System.Drawing.Point(271, 19)
+        Me.Button5.Name = "Button5"
+        Me.Button5.Size = New System.Drawing.Size(75, 23)
+        Me.Button5.TabIndex = 9
+        Me.Button5.Text = "Example 5"
+        Me.Button5.UseVisualStyleBackColor = True
+        '
+        'Label6
+        '
+        Me.Label6.AutoSize = True
+        Me.Label6.Location = New System.Drawing.Point(352, 24)
+        Me.Label6.Name = "Label6"
+        Me.Label6.Size = New System.Drawing.Size(189, 13)
+        Me.Label6.TabIndex = 10
+        Me.Label6.Text = "Receiving messages && status changes"
+        '
         'Label5
         '
         Me.Label5.AutoSize = True
@@ -146,16 +167,17 @@ Partial Class frmMain
         '
         'GroupBox2
         '
-        Me.GroupBox2.Location = New System.Drawing.Point(79, 324)
+        Me.GroupBox2.Controls.Add(Me.lblListener)
+        Me.GroupBox2.Location = New System.Drawing.Point(12, 242)
         Me.GroupBox2.Name = "GroupBox2"
-        Me.GroupBox2.Size = New System.Drawing.Size(200, 100)
+        Me.GroupBox2.Size = New System.Drawing.Size(560, 89)
         Me.GroupBox2.TabIndex = 8
         Me.GroupBox2.TabStop = False
         Me.GroupBox2.Text = "using the Listener"
         '
         'GroupBox3
         '
-        Me.GroupBox3.Location = New System.Drawing.Point(295, 263)
+        Me.GroupBox3.Location = New System.Drawing.Point(218, 337)
         Me.GroupBox3.Name = "GroupBox3"
         Me.GroupBox3.Size = New System.Drawing.Size(200, 100)
         Me.GroupBox3.TabIndex = 9
@@ -166,31 +188,12 @@ Partial Class frmMain
         '
         Me.GroupBox4.Controls.Add(Me.Button6)
         Me.GroupBox4.Controls.Add(Me.Label7)
-        Me.GroupBox4.Location = New System.Drawing.Point(12, 242)
+        Me.GroupBox4.Location = New System.Drawing.Point(12, 337)
         Me.GroupBox4.Name = "GroupBox4"
         Me.GroupBox4.Size = New System.Drawing.Size(200, 65)
         Me.GroupBox4.TabIndex = 10
         Me.GroupBox4.TabStop = False
         Me.GroupBox4.Text = "xPL_Base functions/utilities"
-        '
-        'Button5
-        '
-        Me.Button5.Enabled = False
-        Me.Button5.Location = New System.Drawing.Point(271, 19)
-        Me.Button5.Name = "Button5"
-        Me.Button5.Size = New System.Drawing.Size(75, 23)
-        Me.Button5.TabIndex = 9
-        Me.Button5.Text = "Example 5"
-        Me.Button5.UseVisualStyleBackColor = True
-        '
-        'Label6
-        '
-        Me.Label6.AutoSize = True
-        Me.Label6.Location = New System.Drawing.Point(352, 24)
-        Me.Label6.Name = "Label6"
-        Me.Label6.Size = New System.Drawing.Size(189, 13)
-        Me.Label6.TabIndex = 10
-        Me.Label6.Text = "Receiving messages && status changes"
         '
         'Button6
         '
@@ -210,13 +213,32 @@ Partial Class frmMain
         Me.Label7.TabIndex = 4
         Me.Label7.Text = "Base functions"
         '
+        'GroupBox5
+        '
+        Me.GroupBox5.Location = New System.Drawing.Point(424, 337)
+        Me.GroupBox5.Name = "GroupBox5"
+        Me.GroupBox5.Size = New System.Drawing.Size(148, 100)
+        Me.GroupBox5.TabIndex = 11
+        Me.GroupBox5.TabStop = False
+        Me.GroupBox5.Text = "the xPL plugins"
+        '
+        'lblListener
+        '
+        Me.lblListener.AutoSize = True
+        Me.lblListener.Location = New System.Drawing.Point(6, 16)
+        Me.lblListener.Name = "lblListener"
+        Me.lblListener.Size = New System.Drawing.Size(519, 65)
+        Me.lblListener.TabIndex = 0
+        Me.lblListener.Text = resources.GetString("lblListener.Text")
+        '
         'frmMain
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(692, 436)
-        Me.Controls.Add(Me.GroupBox4)
+        Me.ClientSize = New System.Drawing.Size(692, 463)
         Me.Controls.Add(Me.GroupBox3)
+        Me.Controls.Add(Me.GroupBox5)
+        Me.Controls.Add(Me.GroupBox4)
         Me.Controls.Add(Me.GroupBox2)
         Me.Controls.Add(Me.GroupBox1)
         Me.Controls.Add(Me.Label1)
@@ -225,6 +247,8 @@ Partial Class frmMain
         Me.Text = "xPLLib examples"
         Me.GroupBox1.ResumeLayout(False)
         Me.GroupBox1.PerformLayout()
+        Me.GroupBox2.ResumeLayout(False)
+        Me.GroupBox2.PerformLayout()
         Me.GroupBox4.ResumeLayout(False)
         Me.GroupBox4.PerformLayout()
         Me.ResumeLayout(False)
@@ -248,5 +272,7 @@ Partial Class frmMain
     Friend WithEvents Label6 As System.Windows.Forms.Label
     Friend WithEvents Button6 As System.Windows.Forms.Button
     Friend WithEvents Label7 As System.Windows.Forms.Label
+    Friend WithEvents lblListener As System.Windows.Forms.Label
+    Friend WithEvents GroupBox5 As System.Windows.Forms.GroupBox
 
 End Class

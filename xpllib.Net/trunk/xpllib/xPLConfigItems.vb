@@ -121,7 +121,7 @@ Public Class xPLConfigItem
         Set(ByVal value As String)
             Dim i As Integer
             ' verify characters and store if OK, exception otherwise
-            If Not IsValidxPL(value, 0, 128, XPL_STRING_TYPES.Values) Then
+            If Not IsValidxPL(value, 0, 0, XPL_STRING_TYPES.Values) Then
                 Throw New IllegalConfigItemValue("Value '" & value & "' is not a valid value for a config item")
             Else
                 ' Check for duplicates
@@ -132,7 +132,7 @@ Public Class xPLConfigItem
                     End If
                 End If
                 mItem(idx) = value
-                End If
+            End If
         End Set
     End Property
 

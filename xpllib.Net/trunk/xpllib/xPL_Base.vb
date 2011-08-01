@@ -488,12 +488,18 @@ Public Class xPL_Base
     ''' The maximum supported overall size (in bytes, or ASCII characters) of a raw-xPL message.
     ''' </summary>
     ''' <remarks></remarks>
+    <Obsolete("No longer used as of 5.3, message size is 'unlimted' within whatever the network hardware supports")> _
     Public Const XPL_MAX_MSG_SIZE As Integer = 1500
+    ''' <summary>
+    ''' Buffer size for the receiving socket
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_SOCKET_BUFFER_SIZE As Integer = (32 * 1024)
     ''' <summary>
     ''' Default heartbeat timeout for an xPL device seen on the network
     ''' </summary>
     ''' <remarks>Specified in seconds</remarks>
-    Public Const XPL_DEFAULT_HBEAT_TIMEOUT As Integer = XPL_DEFAULT_HBEAT * 2 + 60  ' in seconds; hbeat*2 + 1
+    Public Const XPL_DEFAULT_HBEAT_TIMEOUT As Integer = XPL_DEFAULT_HBEAT * 2 + 60  ' in seconds; hbeat*2 + 1 minute
 
     '
     ' maximum numbers of filters and groups that a configuration tool may configure
@@ -578,19 +584,34 @@ Public Class xPL_Base
     ''' <summary>
     ''' Constant containing the characters that are allowed in the 'VendorID' and 'DeviceID'. These are lowercase characters a-z and numbers 0-9. This is the same as for the other structural elements except in this case the hyphen/dash character (ASCII 45) is not allowed.
     ''' </summary>
-    ''' <remarks>This is the most restrictive set. See also <seealso cref="XPL_ALLOWED_ELEMENTS"/> and <seealso cref="XPL_ALLOWED_VALUE"/>.</remarks>
+    ''' <remarks>This is the most restrictive set. See also <seealso cref="XPL_ALLOWED_ELEMENTS"/> and <seealso cref="XPL_UNALLOWED_VALUE"/>.</remarks>
     Public Const XPL_ALLOWED_VENDOR_DEVICE As String = "abcdefghijklmnopqrstuvwxyz0123456789"
     ''' <summary>
     ''' Constant containing the characters that are allowed in the structural elements (keynames, schemas, etc) of an xPL message. Allowed are lowercase a-z, numbers 0-9 and the hyphen/dash character (ASCII 45).
     ''' </summary>
-    ''' <remarks>See also <seealso cref="XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="XPL_ALLOWED_VALUE"/>.</remarks>
+    ''' <remarks>See also <seealso cref="XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="XPL_UNALLOWED_VALUE"/>.</remarks>
     Public Const XPL_ALLOWED_ELEMENTS As String = "abcdefghijklmnopqrstuvwxyz0123456789-"
     ''' <summary>
     ''' Constant containing the characters that are allowed in data/values in an xPL message. Allowed are ASCII 32 to 126.
     ''' Developers are urged to consider platform portability when constructing messages, and should pay special attention that characters with structural meaning such as "{", "}", "-" and "." are not misinterpreted.
     ''' </summary>
     ''' <remarks>See also <seealso cref="XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="XPL_ALLOWED_ELEMENTS"/>.</remarks>
+    <Obsolete("UTF8 is now allowed, so use the opposite; XPL_UNALLOWED_VALUE")> _
     Public Const XPL_ALLOWED_VALUE As String = " !""#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\]^_`abcdefghijklmnopqrstuvwxyz{|}~"
+    Private Shared _arrUnallowed As Byte() = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31}
+    Private Shared _strUnallowed As String = String.Empty
+    ''' <summary>
+    ''' Constant containing the characters that are NOT allowed in data/values in an xPL message. Allowed are UTF8 characters.
+    ''' Which means byte values 32 to 255, unallowed values are control characters, bytes 0 to 31.
+    ''' Developers are urged to consider platform portability when constructing messages, and should pay special attention that characters with structural meaning such as "{", "}", "-" and "." are not misinterpreted.
+    ''' </summary>
+    ''' <remarks>See also <seealso cref="XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="XPL_ALLOWED_ELEMENTS"/>.</remarks>
+    Public Shared ReadOnly Property XPL_UNALLOWED_VALUE() As String
+        Get
+            If _strUnallowed = String.Empty Then _strUnallowed = Text.Encoding.GetEncoding(1252).GetString(_arrUnallowed)
+            Return _strUnallowed
+        End Get
+    End Property
 
     ''' <summary>
     ''' xPL message identifier for command messages
@@ -896,16 +917,16 @@ Public Class xPL_Base
     ''' <returns><c>True</c> if the string is valid, <c>False</c> otherwise</returns>
     ''' <remarks>This function will NOT automatically convert to lowercase</remarks>
     Public Shared Function IsValidxPL(ByVal CheckMe As String, ByVal min As Integer, ByVal max As Integer, ByVal sType As XPL_STRING_TYPES) As Boolean
-        Dim s As String = ""
+        Dim result As Boolean = False
         Select Case sType
             Case XPL_STRING_TYPES.VendorAndDevice
-                s = XPL_ALLOWED_VENDOR_DEVICE
+                result = IsValidIdentifier(CheckMe, min, max, XPL_ALLOWED_VENDOR_DEVICE, "")
             Case XPL_STRING_TYPES.OtherElements
-                s = XPL_ALLOWED_ELEMENTS
+                result = IsValidIdentifier(CheckMe, min, max, XPL_ALLOWED_ELEMENTS, "")
             Case XPL_STRING_TYPES.Values
-                s = XPL_ALLOWED_VALUE
+                result = IsValidIdentifier(CheckMe, min, max, "", XPL_UNALLOWED_VALUE)
         End Select
-        Return IsValidIdentifier(CheckMe, min, max, s)
+        Return result
     End Function
 
     ''' <summary>
@@ -925,22 +946,35 @@ Public Class xPL_Base
             Case XPL_STRING_TYPES.VendorAndDevice
                 valid = XPL_ALLOWED_VENDOR_DEVICE
                 s = s.ToLower
+                For n = 1 To s.Length
+                    c = s.Chars(n - 1)
+                    If valid.IndexOf(c) <> -1 Then  ' found it, so copy to result
+                        result += c
+                    End If
+                Next
             Case XPL_STRING_TYPES.OtherElements
                 valid = XPL_ALLOWED_ELEMENTS
                 s = s.ToLower
+                For n = 1 To s.Length
+                    c = s.Chars(n - 1)
+                    If valid.IndexOf(c) <> -1 Then  ' found it, so copy to result
+                        result += c
+                    End If
+                Next
             Case XPL_STRING_TYPES.Values
-                valid = XPL_ALLOWED_VALUE
+                valid = XPL_UNALLOWED_VALUE     ' <-- OPPOSITE!! UNallowed characters
+                For n = 1 To s.Length
+                    c = s.Chars(n - 1)
+                    If valid.IndexOf(c) = -1 Then  ' NOT found, so copy to result
+                        result += c
+                    End If
+                Next
         End Select
-        For n = 1 To s.Length
-            c = s.Chars(n - 1)
-            If valid.IndexOf(c) <> -1 Then  ' found it, so copy to result
-                result += c
-            End If
-        Next
         Return result
     End Function
 
-    Friend Shared Function IsValidIdentifier(ByVal CheckMe As String, ByVal min As Integer, ByVal max As Integer, ByVal AllowedChars As String) As Boolean
+    Friend Shared Function IsValidIdentifier(ByVal CheckMe As String, ByVal min As Integer, ByVal max As Integer, _
+                                            Optional ByVal AllowedChars As String = "", Optional ByVal UnallowedChars As String = "") As Boolean
         Dim myChar As Char
         Dim result As Boolean = True
         ' check length
@@ -949,7 +983,8 @@ Public Class xPL_Base
         End If
         ' check characters 
         For Each myChar In CheckMe
-            If AllowedChars.IndexOf(myChar) = -1 Then result = False ' not found in allowed set
+            If AllowedChars <> "" AndAlso AllowedChars.IndexOf(myChar) = -1 Then result = False ' not found in allowed set
+            If UnallowedChars <> "" AndAlso UnallowedChars.IndexOf(myChar) <> -1 Then result = False ' found in unallowed set
         Next
         Return result
     End Function
