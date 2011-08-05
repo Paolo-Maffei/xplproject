@@ -240,7 +240,7 @@ Public Class Form1
               "}" & XPL_LF & _
               "class.type" & XPL_LF & _
               "{" & XPL_LF & _
-              "key1=value2 is too long" & XPL_LF & _
+              "key1=value2 is too long, warning on this" & XPL_LF & _
               "key2=somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue-somevalue" & XPL_LF & _
               "}" & XPL_LF
         Send(msg)
@@ -252,9 +252,21 @@ Public Class Form1
               "}" & XPL_LF & _
               "class.type" & XPL_LF & _
               "{" & XPL_LF & _
-              "key1=illegal character in value2 and key3" & XPL_LF & _
-              "key" & Chr(245) & "2=somevalue" & XPL_LF & _
-              "key3=some" & Chr(14) & "value" & XPL_LF & _
+              "key1=illegal character in value2 and key3 (control characters; dec 20 and 30)" & XPL_LF & _
+              "key" & Chr(20) & "2=somevalue" & XPL_LF & _
+              "key3=some" & Chr(30) & "value" & XPL_LF & _
+              "}" & XPL_LF
+        Send(msg)
+        msg = "xpl-stat" & XPL_LF & _
+              "{" & XPL_LF & _
+              "hop=1" & XPL_LF & _
+              "source=part1-part2.part3" & XPL_LF & _
+              "target=*" & XPL_LF & _
+              "}" & XPL_LF & _
+              "class.type" & XPL_LF & _
+              "{" & XPL_LF & _
+              "key1=UTF-8 characters in key2" & XPL_LF & _
+              "key2=some UTF8 values: üéèö€" & Chr(240) & XPL_LF & _
               "}" & XPL_LF
         Send(msg)
         msg = "xpl-stat" & XPL_LF & _

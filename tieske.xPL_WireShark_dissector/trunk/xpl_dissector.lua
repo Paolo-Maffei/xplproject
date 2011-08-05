@@ -32,8 +32,11 @@ xPL protocol    http://xplproject.org.uk/
 Changelog
 =========
 26-apr-2011   v1.0     Initial version
+05-aug-2011   v1.1     Updated to allow longer length values; compatibility warning if more than 128
+                       Updated to allow UTF8 in values; compatibility warning will be shown
 
 ]]--
+
 
 -- declare our protocol
 local xpl_proto = Proto("xPL","xPL Protocol")
@@ -75,6 +78,11 @@ local n
 for n = 32, 126 do
 	value_valid = value_valid .. string.char(n)
 end
+local value_valid2 = value_valid							-- values in body, UTF8 encoded
+for n = 127, 255 do
+	value_valid2 = value_valid2 .. string.char(n)
+end
+
 
 -- Verifies if all characters in a string are valid according to a given set, additionally
 -- checks the minimum and maximum allowed length
@@ -204,6 +212,7 @@ function xpl_proto.dissector(buffer,pinfo,tree)
 	-- create header text and add it to the tree
 	local desc = "xPL Protocol, Src: " .. src .. ", Dst: " .. dst
     local mtree = tree:add(xpl_proto,buffer(), desc)
+	mtree:add(buffer(),"xPL data size: " .. buffer:len() .. " bytes")
 
 
 	-- Create the message sub tree and fill it with the message in plain text format
@@ -494,10 +503,20 @@ function xpl_proto.dissector(buffer,pinfo,tree)
 			--etree:add(buffer(cnt, string.len(k)),"Line " .. i .. "; key of key-value pair is invalid, max 16 characters, a-z, 0-9 and '-'")
 			ok = false
 		end
-		if not isvalid(v, value_valid, 0, 128) then
-			lines[i]:add_expert_info(PI_MALFORMED, PI_ERROR, "Value of key-value pair is invalid, max 128 characters, ASCII codes 32-126")
-			--etree:add(buffer(cnt + string.len(k) + 1, string.len(v)),"Line " .. i .. "; value of key-value pair is invalid, max 128 characters, ASCII codes 32-126")
-			ok = false
+		if string.len(v) > 128 then
+			lines[i]:add_expert_info(PI_MALFORMED, PI_WARN, "Value of key-value pair has more than 128bytes. Is allowed, but might be incompatible with older applications.")
+		end
+		if not isvalid(v, value_valid, 0, nil) then
+			-- not valid against ASCII, now validate against UTF8
+			if not isvalid(v, value_valid2, 0, nil) then
+				-- Neither valid on UTF8 nor ASCII
+				lines[i]:add_expert_info(PI_MALFORMED, PI_ERROR, "Value of key-value pair is invalid, only use; UTF8 or ASCII encoding, bytes values 32-255")
+				--etree:add(buffer(cnt + string.len(k) + 1, string.len(v)),"Line " .. i .. "; value of key-value pair is invalid, max 128 characters, ASCII codes 32-126")
+				ok = false
+			else
+				-- warn for UTF8 incompatibilities
+				lines[i]:add_expert_info(PI_MALFORMED, PI_WARN, "Value of key-value pair contains byte values 127-255, probably UTF8 encoding. Is allowed but might be incompatible with older applications")
+			end
 		end
 		if not ((k .. "=" .. v) == val) then
 			lines[i]:add_expert_info(PI_MALFORMED, PI_ERROR, "key-value pair is invalid, no '=' included. Line should be composed as 'key=value'")

@@ -31,13 +31,14 @@ xPL protocol    http://xplproject.org.uk/
 Changelog
 =========
 26-apr-2011   v1.0     Initial version
-
+05-aug-2011   v1.1     Updated to allow longer length values; compatibility warning if more than 128
+                       Updated to allow UTF8 in values; compatibility warning will be shown
 
 
 OS support
 ==========
 The dissector was created on Windows, but should work on all OS'es where
-WireShark supports lua scripting.
+WireShark supports the lua scripting.
 
 
 Filelist
