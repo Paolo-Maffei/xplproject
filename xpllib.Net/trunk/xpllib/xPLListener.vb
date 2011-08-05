@@ -1,8 +1,8 @@
 '* xPL Library for .NET
 '*
-'* Version 5.2
+'* Version 5.3
 '*
-'* Copyright (c) 2009-2010 Thijs Schreijer
+'* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
 '*
 '* Copyright (c) 2008-2009 Tom Van den Panhuyzen
@@ -381,7 +381,7 @@ Public Class xPLListener
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
-            Case "5.0", "5.1", "5.2"
+            Case "5.0", "5.1", "5.2", "5.3"
                 ' get settings for xPLNetwork object
                 xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
                 i += 1

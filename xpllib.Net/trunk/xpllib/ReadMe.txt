@@ -14,7 +14,7 @@ Contents
 1 - License
 ============
 
-Copyright (c) 2009-2010 Thijs Schreijer
+Copyright (c) 2009-2011 Thijs Schreijer
 http://www.thijsschreijer.nl
 
 Copyright (c) 2008-2009 Tom Van den Panhuyzen
@@ -221,13 +221,16 @@ NEW in 5.3
   - max message size is also unlimited, up from 1500. The receiving buffer has been set
     to a size of 32kb. Which is more than most networks can handle.
     Maximum message size is now limited by other network parameters, sticking to 1500
-    is still the safest bet.
+    is still the safest bet (currently the 'xPL Monkey' windows hub only supports upto
+    2000 bytes).
   - Internal test facility added; Setting xPLListener.ByPassHub to True will bypass the hub
     for test purposes.
     
 FIXED in 5.3
   - Distribution of received messages will monitor the collection of devices for changes
     (in case many devices at once are disposed or created) while distributing the message
+  - Optimized performance when building message strings (less concat ops and using a 
+    stringbuilder)
 
 Changes in version 5.2 from 5.1
 NEW in 5.2

@@ -1,8 +1,8 @@
 '* xPL Library for .NET
 '*
-'* Version 5.2
+'* Version 5.3
 '*
-'* Copyright (c) 2009-2010 Thijs Schreijer
+'* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
 '*
 '* Copyright (c) 2008-2009 Tom Van den Panhuyzen
@@ -227,11 +227,13 @@ Public Class xPLKeyValuePairs
     ''' <remarks>Returns an empty string, eg. "", if there are no items in the list.</remarks>
     Public Overrides Function ToString() As String
         Dim result As String = ""
+        Dim sb As New Text.StringBuilder("", 1500)
         If Me.Count <> 0 Then
             For Each x As xPLKeyValuePair In mList
-                result += x.ToString & XPL_LF
+                sb.Append(x.Key & "=" & x.Value & XPL_LF)
             Next
-            result = Left(result, result.Length - XPL_LF.Length) ' remove final LF
+            sb.Remove(sb.Length - Len(XPL_LF), Len(XPL_LF)) ' remove final LF
+            result = sb.ToString
         End If
         Return result
     End Function
