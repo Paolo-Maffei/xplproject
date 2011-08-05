@@ -1,8 +1,8 @@
 '* xPL Library for .NET
 '*
-'* Version 5.2
+'* Version 5.3
 '*
-'* Copyright (c) 2009-2010 Thijs Schreijer
+'* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
 '*
 '* Copyright (c) 2008-2009 Tom Van den Panhuyzen
@@ -438,7 +438,7 @@ Public Class xPL_Base
     ''' <remarks>Value is used in the <c>GetState</c> and the <c>NewFromState</c> methods of the <c>xPLListener</c>
     ''' object as well as the <c>GetState</c> and <c>New</c> methods of the <c>xPLDevice</c> object to determine
     ''' what version of xpllib created the SavedState settings string.</remarks>
-    Public Const XPL_LIB_VERSION As String = "5.2" 'when updating check all "State" related methods for updates!!
+    Public Const XPL_LIB_VERSION As String = "5.3" 'when updating check all "State" related methods for updates!!
     ' Specifically;
     '        - Case statement in xPLListener.RestoreFromState(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)
     '        - Case statement in xPLDevice.New(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)

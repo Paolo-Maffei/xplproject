@@ -1,8 +1,8 @@
 '* xPL Library for .NET
 '*
-'* Version 5.2
+'* Version 5.3
 '*
-'* Copyright (c) 2009-2010 Thijs Schreijer
+'* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
 '*
 '* Copyright (c) 2008-2009 Tom Van den Panhuyzen
@@ -279,17 +279,16 @@ Public Class xPLMessage
     ''' <returns>string containing the raw xPL</returns>
     Private Function BuildxPLMsg() As String
         Dim s As String = ""
-
-        s = MsgType2String(Me.mMsgType) & XPL_LF
-        s += "{" & XPL_LF
-        s += "hop=" & CStr(Me.mHop) & XPL_LF
-        s += "source=" & Me.mSource.ToString & XPL_LF
-        s += "target=" & Me.mTarget.ToString & XPL_LF
-        s += "}" & XPL_LF
-        s += Me.Schema.ToString & XPL_LF
-        s += "{" & XPL_LF
-        s += Me.mKeyValueList.ToString & XPL_LF
-        s += "}" & XPL_LF
+        s = MsgType2String(Me.mMsgType) & XPL_LF & _
+            "{" & XPL_LF & _
+            "hop=" & CStr(Me.mHop) & XPL_LF & _
+            "source=" & Me.mSource.ToString & XPL_LF & _
+            "target=" & Me.mTarget.ToString & XPL_LF & _
+            "}" & XPL_LF & _
+            Me.Schema.ToString & XPL_LF & _
+            "{" & XPL_LF & _
+            Me.mKeyValueList.ToString & XPL_LF & _
+            "}" & XPL_LF
 
         Return s
     End Function
