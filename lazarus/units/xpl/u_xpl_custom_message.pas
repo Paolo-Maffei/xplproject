@@ -26,28 +26,30 @@ uses classes
 type { TxPLCustomMessage =====================================================}
      TxPLCustomMessage = class(TxPLHeader, IxPLCommon, IxPLRaw)
      private
-        fBody     : TxPLBody;
-        fTimeStamp: TDateTime;
+        fBody      : TxPLBody;
+        fTimeStamp : TDateTime;
         function  Get_RawXPL: string;
+        function Get_Size: integer;
         procedure Set_RawXPL(const AValue: string);
 
      public
         constructor Create(aOwner : TComponent; const aRawxPL : string = ''); reintroduce;
 
         procedure   Assign(aMessage : TPersistent); override;
-        function    IsValid : boolean;
         procedure   ResetValues;
         function    IsLifeSign : boolean; inline;
-
+        function    IsValid : boolean;
      published
         property Body   : TxPLBody read fBody  ;
         property RawXPL : string   read Get_RawXPL  write Set_RawXPL stored false;
         property TimeStamp : TDateTime read fTimeStamp write fTimeStamp;
+        property Size   : integer  read Get_Size;
      end;
 
 implementation // =============================================================
 Uses SysUtils
      , StrUtils
+     , u_xpl_udp_socket
      ;
 
 // TxPLCustomMessage ==========================================================
@@ -91,15 +93,21 @@ begin
    result := inherited RawxPL + Body.RawxPL;
 end;
 
+function TxPLCustomMessage.Get_Size: integer;
+begin
+   result := length(RawxPL);
+end;
+
 function TxPLCustomMessage.IsValid: boolean;
 begin
-   result := (inherited IsValid) and (Body.IsValid)
+   result := //(inherited IsValid)
+             //and (Body.IsValid) and
+             not (Size > XPL_MAX_MSG_SIZE);
 end;
 
 procedure TxPLCustomMessage.Set_RawXPL(const AValue: string);
 var LeMessage : string;
-    HeadEnd,
-    BodyStart, BodyEnd : integer;
+    HeadEnd, BodyStart, BodyEnd : integer;
 begin
    LeMessage        := AnsiReplaceText(aValue,#13,'');                            // Delete all CR
    HeadEnd          := AnsiPos('}',LeMessage);
@@ -108,6 +116,7 @@ begin
    inherited RawxPL := AnsiLeftStr(LeMessage,BodyStart-2);
    Body.RawxPL      := Copy(LeMessage,BodyStart,BodyEnd-BodyStart);
 end;
+
 
 initialization
    Classes.RegisterClass(TxPLCustomMessage);

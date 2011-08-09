@@ -38,10 +38,8 @@ type // TxPLAddress ===========================================================
         constructor Create(const axPLAddress : TxPLAddress); overload;
         constructor Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' ); overload;
         procedure   ResetValues;  override;
-
         function    AsFilter : string; dynamic;
-
-        procedure Set_Element(AIndex: integer; const AValue: string); override;
+        procedure   Set_Element(AIndex: integer; const AValue: string); override;
 
         class function InitInstanceByDefault : string;
 
@@ -83,8 +81,7 @@ uses IdStack
      ;
 
 // ============================================================================
-const K_LEN : Array [0..2] of integer = (8,8,16);                              // Length of V D I components by xPL Rule
-      K_FMT_FILTER      = '%s.%s.%s';
+const K_FMT_FILTER      = '%s.%s.%s';
       K_DEF_GROUP       = 'xpl-group';
 
 // General Helper function ====================================================
@@ -93,7 +90,7 @@ var n: integer;
     const ss: string = 'abcdefghjkmnpqrstuvwxyz'; {list all the charcaters you want to use}
 begin
    Result :='';
-   for n:=1 to K_LEN[1] do                                                     // Longueur volontairement limitée à 8 chars
+   for n:=1 to 8 do                                                     // Longueur volontairement limitée à 8 chars
        Result := Result +ss[random(length(ss))+1];
 end;
 
@@ -125,6 +122,10 @@ end;
 constructor TxPLAddress.Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' );
 begin
    inherited Create;
+   SetLength(fMaxSizes,3);
+   fMaxSizes[0] := 8;
+   fMaxSizes[1] := 8;
+   fMaxSizes[2] := 16;
    Vendor   := aVendor;
    Device   := aDevice;
    Instance := aInstance;
@@ -133,6 +134,10 @@ end;
 constructor TxPLAddress.Create(const axPLAddress : TxPLAddress);
 begin
    inherited Create;
+   SetLength(fMaxSizes,3);
+   fMaxSizes[0] := 8;
+   fMaxSizes[1] := 8;
+   fMaxSizes[2] := 16;
    Assign(axPLAddress);
 end;
 
@@ -153,7 +158,8 @@ end;
 
 function TxPLAddress.Get_RawxPL: string;
 begin
-   result := StringReplace(fRawxPL.DelimitedText,'.','-',[]);                  // will replace only the first '.' - this is what I want
+   if IsValid then result := StringReplace(fRawxPL.DelimitedText,'.','-',[])   // will replace only the first '.' - this is what I want
+              //else Raise Exception.Create('Rawxpl error in ' + ClassName);
 end;
 
 function TxPLAddress.AsFilter : string;
@@ -172,7 +178,8 @@ end;
 // a Device ID.
 procedure TxPLAddress.Set_Element(AIndex: integer; const AValue: string);
 begin
-   if not AnsiContainsText('-',aValue) then inherited Set_Element(AIndex, AValue);
+   if not AnsiContainsText('-',aValue) then inherited Set_Element(AIndex, AValue)
+                                       else Raise Exception.Create('RawxPL error in ' + ClassName);
 end;
 
 procedure TxPLAddress.Set_VD(const AValue: string);

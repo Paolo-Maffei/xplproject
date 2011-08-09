@@ -29,9 +29,8 @@ type { TxPLSender =============================================================}
      protected
         fSocket : TxPLUDPClient;
         procedure Send(const aMessage : string);      overload;
-
+        //procedure OnRawError(const aError : string);
      public
-//        constructor create(const aOwner : TComponent; const aDevice, aVendor, aVersion : string); overload;
         constructor create(const aOwner : TComponent); overload;
 
         procedure Send(const aMessage : TxPLCustomMessage; const bEnforceSender : boolean = true); overload;
@@ -63,16 +62,25 @@ begin
    fSocket.Send(aMessage)
 end;
 
+//procedure TxPLSender.OnRawError(const aError: string);
+//begin
+//   Log(etError,'Error sending message : %s',[aError]);
+//end;
+
 procedure TxPLSender.Send(const aMessage: TxPLCustomMessage; const bEnforceSender : boolean = true);
 begin
-   if bEnforceSender then begin
-      if not IsValidxPLIdent(Adresse.Instance) then Adresse.Instance := TxPLAddress.InitInstanceByDefault;
+   //aMessage.OnRawError := @OnRawError;
+   if bEnforceSender then
+      //if not IsValidxPLIdent(Adresse.Instance) then Adresse.Instance := TxPLAddress.InitInstanceByDefault;
       aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
+
+    //if aMessage.IsValid then
+   try
+      Send(TxPLMessage(aMessage).ProcessedxPL);
+   except
    end;
-   if aMessage.IsValid then
-      Send(TxPLMessage(aMessage).ProcessedxPL)
-   else
-      Log(etError,'Error sending message : %s',[aMessage.RawXPL]);
+//   else
+//      Log(etError,'Error sending message : %s',[aMessage.RawXPL]);
 end;
 
 procedure TxPLSender.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);

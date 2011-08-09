@@ -1,11 +1,11 @@
 inherited frmLogger: TfrmLogger
   Left = 1456
-  Height = 509
+  Height = 440
   Top = 387
-  Width = 984
+  Width = 869
   Caption = 'frmLogger'
-  ClientHeight = 509
-  ClientWidth = 984
+  ClientHeight = 440
+  ClientWidth = 869
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
     200010080000CE0400002020000001002000A8100000DE0C0000303000000100
@@ -2269,8 +2269,8 @@ inherited frmLogger: TfrmLogger
   OnDestroy = FormDestroy
   SessionProperties = 'dgMessages.Columns;Left;Top'
   inherited StatusBar1: TStatusBar
-    Top = 486
-    Width = 984
+    Top = 417
+    Width = 869
     Panels = <    
       item
         Bevel = pbNone
@@ -2290,10 +2290,10 @@ inherited frmLogger: TfrmLogger
       end>
   end
   inherited ToolBar: TToolBar
-    Width = 984
+    Width = 869
     TabOrder = 0
     inherited Panel4: TPanel
-      Left = 784
+      Left = 669
     end
     object ToolButton3: TToolButton[3]
       Left = 51
@@ -2313,25 +2313,25 @@ inherited frmLogger: TfrmLogger
   end
   object Splitter1: TSplitter[3]
     Left = 143
-    Height = 461
+    Height = 392
     Top = 25
     Width = 5
   end
   object Splitter2: TSplitter[4]
-    Left = 668
-    Height = 461
+    Left = 553
+    Height = 392
     Top = 25
     Width = 5
     Align = alRight
     ResizeAnchor = akRight
   end
   object Panel1: TPanel[5]
-    Left = 673
-    Height = 461
+    Left = 558
+    Height = 392
     Top = 25
     Width = 311
     Align = alRight
-    ClientHeight = 461
+    ClientHeight = 392
     ClientWidth = 311
     TabOrder = 3
     object Label4: TLabel
@@ -2346,18 +2346,18 @@ inherited frmLogger: TfrmLogger
     end
     inline MessageFrame: TTMessageFrame
       Left = 1
-      Height = 443
+      Height = 374
       Top = 17
       Width = 309
       Align = alClient
-      ClientHeight = 443
+      ClientHeight = 374
       ClientWidth = 309
       DesignLeft = 499
       DesignTop = 81
       inherited edtBody: TTIMemo
         Width = 251
       end
-      inherited lblTS: TTILabel
+      inherited lblSize: TTILabel
         Height = 1
         Width = 1
       end
@@ -2365,7 +2365,7 @@ inherited frmLogger: TfrmLogger
   end
   object tvMessages: TTreeView[6]
     Left = 0
-    Height = 461
+    Height = 392
     Top = 25
     Width = 143
     Align = alLeft
@@ -2385,19 +2385,19 @@ inherited frmLogger: TfrmLogger
   end
   object Panel2: TPanel[7]
     Left = 148
-    Height = 461
+    Height = 392
     Top = 25
-    Width = 520
+    Width = 405
     Align = alClient
     Caption = 'Panel2'
-    ClientHeight = 461
-    ClientWidth = 520
+    ClientHeight = 392
+    ClientWidth = 405
     TabOrder = 6
     object dgMessages: TStringGrid
       Left = 1
-      Height = 434
+      Height = 365
       Top = 26
-      Width = 518
+      Width = 403
       Align = alClient
       AutoEdit = False
       BorderStyle = bsNone
@@ -2429,7 +2429,6 @@ inherited frmLogger: TfrmLogger
         end>
       DefaultColWidth = 20
       DefaultRowHeight = 20
-      DragMode = dmAutomatic
       ExtendedSelect = False
       Options = [goColSizing, goColMoving, goRowSelect, goThumbTracking, goDblClickAutoSize, goSmoothScroll]
       PopupMenu = mnuListView
@@ -2437,14 +2436,13 @@ inherited frmLogger: TfrmLogger
       TitleStyle = tsNative
       OnDblClick = acShowMessageExecute
       OnDrawCell = dgMessagesDrawCell
-      OnEndDrag = dgMessagesEndDrag
       OnHeaderClick = dgMessagesHeaderClick
     end
     object tbMacro: TToolBar
       Left = 1
       Height = 25
       Top = 1
-      Width = 518
+      Width = 403
       AutoSize = True
       ButtonHeight = 24
       ButtonWidth = 30
@@ -2495,7 +2493,7 @@ inherited frmLogger: TfrmLogger
         Style = tbsSeparator
       end
       object ckLoop: TCheckBox
-        Left = 471
+        Left = 356
         Height = 24
         Top = 0
         Width = 47
@@ -2506,8 +2504,8 @@ inherited frmLogger: TfrmLogger
     end
   end
   inherited ActionList: TActionList[8]
-    left = 304
-    top = 144
+    left = 232
+    top = 104
   end
   inherited xPLMenu: TPopupMenu[9]
     left = 200
@@ -2571,6 +2569,11 @@ inherited frmLogger: TfrmLogger
     object acPlay: TAction
       Caption = 'Go !'
       OnExecute = acPlayExecute
+    end
+    object acAddToMacro: TAction
+      Category = 'xPL'
+      Caption = 'Add to Macro List'
+      OnExecute = acAddToMacroExecute
     end
   end
   object SaveDialog: TSaveDialog[12]
@@ -2682,8 +2685,8 @@ inherited frmLogger: TfrmLogger
   end
   object JvAppEvents1: TJvAppEvents[15]
     OnIdle = JvAppEvents1Idle
-    left = 189
-    top = 86
+    left = 352
+    top = 80
   end
   object mnuListView: TPopupMenu[16]
     OnPopup = mnuListViewPopup
@@ -2697,6 +2700,9 @@ inherited frmLogger: TfrmLogger
     end
     object MenuItem3: TMenuItem
       Action = acConversation
+    end
+    object MenuItem5: TMenuItem
+      Action = acAddToMacro
     end
   end
 end

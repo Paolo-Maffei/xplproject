@@ -211,7 +211,7 @@ begin
    end;
 
    fProbingTimer.Enabled := True;
-   aMessage.Destroy;
+   aMessage.Free;
 end;
 
 procedure TxPLCustomListener.HandleConfigMessage(aMessage: TxPLMessage);

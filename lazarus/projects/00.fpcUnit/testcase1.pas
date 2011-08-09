@@ -89,8 +89,11 @@ begin
    adr1.vendor := 'moi';
    adr1.Device :='device';
    adr1.instance:='instance';
+   AssertEquals(adr1.RawxPL,'moi-device.instance');
    AssertEquals(adr1.isvalid,true);               // invalide par défaut à la création
    adr2 := TxPLAddress.Create(adr1);
+   s := adr1.rawxpl;
+   s := adr2.rawxpl;
    AssertEquals(adr1.rawxpl, adr2.rawxpl);         // teste assignation
    adr2.resetvalues;
    AssertEquals(adr2.isvalid,false);               // invalide par défaut à la création
@@ -192,9 +195,9 @@ begin
    body1.AddKeyValue('bidule=chose');
    body1.AddKeyValue('trucmuche=');
    body1.AddKeyValue('essai=trucmlksdfjfdsjfsd fdkkldsf jdsfmljf dsflksfdj fdmslkjdsf mlksfdj fdsmlkjfds sdflmkjfds lmsdfjk sdlmfkjfsd mlfjkd dsfmljk fdslmk fjsd');
-   AssertEquals(body1.Itemcount=4,true);
-   body1.CleanEmptyValues;
    AssertEquals(body1.Itemcount=3,true);
+   body1.CleanEmptyValues;
+   AssertEquals(body1.Itemcount=2,true);
    body1.ResetValues;
    body1.AddKeyValue('bidule=chose');
    body1.AddKeyValue('trucmuche=');

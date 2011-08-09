@@ -32,15 +32,20 @@ Type {$ifndef fpc}                                                             /
      IxPLRaw = Interface(IInterface)
         procedure Set_RawxPL (const aValue : string);
         function  Get_RawxPL : string;
-        property RawxPL : string read Get_RawxPL write Set_RawxPL; // stored false; (*suppressed to validate delphi compatibility*)
+        property RawxPL : string read Get_RawxPL write Set_RawxPL;
      end;
+
+     { TxPLRawSet }
 
      TxPLRawSet = class(TInterfacedPersistent, IxPLCommon, IxPLRaw)
      private
-        function Get_RawxPL: string;  virtual; abstract;
-        procedure Set_RawxPL(const AValue: string); virtual; abstract;
+        function  Get_RawxPL: string;  //virtual; abstract;
+        procedure Set_RawxPL(const AValue: string); //virtual; abstract;
      protected
-        fRawxPL : TStringList;
+        fRawxPL   : TStringList;
+        fMaxSizes : Array of integer;
+        fOnRawError : TStrParamEvent;
+
      public
         constructor Create;
         destructor  Destroy; override;
@@ -91,6 +96,7 @@ var  LocalAddresses : TStringList;
 implementation  //=============================================================
 uses StrUtils
      , TypInfo
+     , JclStrings
      , IdStack
      , DateUtils
      ;
@@ -101,7 +107,7 @@ const    K_LOG_INF = 'inf';
          K_LOG_ERR = 'err';
 
 // ============================================================================
-const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+//const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
 // ============================================================================
 
@@ -168,13 +174,8 @@ end ;
 function xPLMatches(const aFilter: string; const aMessageElt: string): boolean;
 var iFltElement : integer;
     sFlt, sMsg  : TStringList;
-    //sFlt, sMsg : stringArray;                                                // Old method requires cStrings and cUtils
-    //HeaderElementDelimiter : Set of Char = ['.'];
-
 begin
    result := true;
-//   sFlt := StrSplitChar(aFilter ,HeaderElementDelimiter);
-//   sMsg := StrSplitChar(aMessageElt,HeaderElementDelimiter);
 
    sFlt := TStringList.Create;
    sFlt.Delimiter     :='.';
@@ -185,7 +186,6 @@ begin
    sMsg.DelimitedText := aMessageElt;                                          // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
    Assert(sMsg.Count = sFlt.Count);
-   //For iFltElement := 0 to High(sFlt) do
    For iFltElement := 0 to Pred(sFlt.Count) do
        if (sFlt[iFltElement]<>'*') then result := result and (sFlt[iFltElement]=sMsg[iFltElement]);
 
@@ -312,12 +312,25 @@ begin
    result := fRawxPL.Equals(aRawSet.fRawxPL);
 end;
 
-function TxPLRawSet.IsValid: boolean;
-var s : string;
+function TxPLRawSet.Get_RawxPL: string;
 begin
-   Result := True;
-   for s in fRawxPL do
-       Result := Result and IsValidxPLIdent(s);
+  if IsValid then result := fRawxPL.DelimitedText
+             else Raise Exception.Create('RawxPL error in ' + ClassName);
+end;
+
+procedure TxPLRawSet.Set_RawxPL(const AValue: string);
+begin
+   if StrCharCount(aValue,fRawxPL.Delimiter) = High(fMaxSizes) then
+      fRawxPL.DelimitedText:=aValue;
+end;
+
+function TxPLRawSet.IsValid: boolean;
+var i : integer;
+begin
+   Result := fRawxPL.Count <>0;                                                // At this level, check we have elements
+   for i := 0 to Pred(fRawxPL.Count) do
+       Result := Result and IsValidxPLIdent(fRawxPL[i])                        // they are valid xPL syntax elements
+                        and (length(fRawxPL[i])<=fMaxSizes[i]);                // and conform to max element size
 end;
 
 function TxPLRawSet.Get_Element(AIndex: integer): string;
@@ -327,7 +340,7 @@ end;
 
 procedure TxPLRawSet.Set_Element(AIndex: integer; const AValue: string);
 begin
-  if ((length(aValue) <= K_LEN[aIndex]) and IsValidxPLIdent(aValue)) then
+  if ((length(aValue) <= fMaxSizes[aIndex]) and IsValidxPLIdent(aValue)) then
      fRawxPL[aIndex] := aValue;
 end;
 
@@ -335,22 +348,22 @@ var i : integer;
 initialization // =============================================================
    InstanceInitStyle := iisHostName;
    LocalAddresses    := TStringList.Create;
-   // Cette version utilise la librairie Synapse mais pose un problème pour les
-   // Versions console des applications car les unités synamisc et synaip appellent
-   // Windows
-   //LocalAddresses.Delimiter := ',';
-   //LocalAddresses.DelimitedText := GetLocalIPs;                                // This procedure also retrieves IPv6
-   //i := LocalAddresses.Count-1;                                                // Addresses, then I have to clean
-   //while (i>=0) do begin                                                       // the list to present only IPv4 addresses
-   //   if not IsIP(LocalAddresses[i]) then LocalAddresses.Delete(i);
-   //   dec(i);
-   //end;
+   (* Cette version utilise la librairie Synapse mais pose un problème pour les
+    Versions console des applications car les unités synamisc et synaip appellent
+    Windows
+   LocalAddresses.Delimiter := ',';
+   LocalAddresses.DelimitedText := GetLocalIPs;                                // This procedure also retrieves IPv6
+   i := LocalAddresses.Count-1;                                                // Addresses, then I have to clean
+   while (i>=0) do begin                                                       // the list to present only IPv4 addresses
+      if not IsIP(LocalAddresses[i]) then LocalAddresses.Delete(i);
+      dec(i);
+   end;*)
 
-   // Cette version utilise la librairie Indy, à tester pour bon fonctionnement
-   // entre version console et gui...
+   (*Cette version utilise la librairie Indy, à tester pour bon fonctionnement
+    entre version console et gui...*)
    TIdStack.IncUsage;
    for i:=0 to Pred(GStack.LocalAddresses.Count) do
-      LocalAddresses.Add(GStack.LocalAddresses[i]);
+       LocalAddresses.Add(GStack.LocalAddresses[i]);
 
 finalization // ===============================================================
    LocalAddresses.Free;

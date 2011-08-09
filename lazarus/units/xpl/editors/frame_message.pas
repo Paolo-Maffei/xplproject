@@ -30,6 +30,7 @@ type
     Label9: TLabel;
     cbMsgType: TTIComboBox;
     lblTS: TTILabel;
+    lblSize: TTILabel;
     procedure cbMsgTypeEditingDone(Sender: TObject);
     procedure edtBodyEditingDone(Sender: TObject);
     procedure edtSchemaEditingDone(Sender: TObject);
@@ -85,6 +86,7 @@ begin
    ckGeneric.Link.TIObject := AValue.Target;
    edtHop.Link.TIObject    := AValue;
    lblTS.Link.TIObject     := AValue;
+   lblSize.Link.TIObject   := AValue;
 
    cbMsgTypeEditingDone(self);
    edtSchemaEditingDone(self);
@@ -118,6 +120,7 @@ begin
    ckGeneric.Link.TIPropertyName := 'isgeneric';
    edtHop.Link.TIPropertyName    := 'hop';
    lblTS.Link.TIPropertyName     := 'timestamp';
+   lblSize.Link.TIPropertyName   := 'size';
 end;
 
 initialization //==============================================================

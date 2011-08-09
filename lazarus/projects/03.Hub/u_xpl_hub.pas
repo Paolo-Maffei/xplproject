@@ -35,6 +35,7 @@ type TPortList = TStringList;
 implementation // =============================================================
 uses SysUtils
      , uxPLConst
+     , IdUDPBase
      , IdSocketHandle
      ;
 
@@ -52,6 +53,7 @@ var Binding : TCollectionItem;
 begin                                                                          //   First  : xPLSettings not set
    try                                                                         //   Second : XPL_UDP_BASE_PORT not free
       fInSocket := TxPLUDPServer.Create(self,@UDPRead, XPL_UDP_BASE_PORT);
+      fInSocket.BufferSize := ID_UDP_BUFFERSIZE;                               // Remove xPL limit at hub level : the hub should relay without limiting to 1500 bytes
       if fInSocket.Active then begin
          fLocalIP  := fInSocket.Bindings[0].IP;
          for Binding in fInSocket.Bindings do
