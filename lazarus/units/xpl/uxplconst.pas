@@ -22,22 +22,22 @@ unit uxPLConst;
 
 interface
 
-const
-   K_BODY_ELMT_VALUE_MAX_LEN = 128;
+//const
+//   K_BODY_ELMT_VALUE_MAX_LEN = 128;
 
-type
-   tsVendor   = string[8];
-   tsDevice   = string[8];
-   tsInstance = string[16];
-   tsAddress  = string[8 + 1 + 8 + 1 + 16];
-   tsClass    = string[8];
-   tsType     = string[8];
-   tsSchema   = string[8 + 1 + 8];
-   tsMsgType  = string;                       //string[8];
-   tsBodyElmtName  = string[16];
-   tsBodyElmtValue = string[K_BODY_ELMT_VALUE_MAX_LEN];
+//type
+   //tsVendor   = string[8];
+   //tsDevice   = string[8];
+   //tsInstance = string[16];
+   //tsAddress  = string[8 + 1 + 8 + 1 + 16];
+   //tsClass    = string[8];
+   //tsType     = string[8];
+   //tsSchema   = string[8 + 1 + 8];
+   //tsMsgType  = string;                       //string[8];
+//   tsBodyElmtName  = string[16];
+//   tsBodyElmtValue = string[K_BODY_ELMT_VALUE_MAX_LEN];
 
-   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];             //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
+//   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];             //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
 
 
 const
@@ -87,8 +87,6 @@ const
    K_REGEXPR_DEVICE_ID= K_REGEXPR_VENDOR + '\-' + K_REGEXPR_DEVICE;             // Also used in vendor xml file
    K_REGEXPR_ADDRESS  = K_REGEXPR_DEVICE_ID + '\.' + K_REGEXPR_INSTANCE;
    K_REGEXPR_TARGET   = K_REGEXPR_ADDRESS + '|(\*)' ;                           //   /!\ alternative must be place after fixed part !!!
-   //K_FMT_ADDRESS      = '%s-%s.%s';
-   //K_FMT_FILTER       = '%s.%s.%s';
    K_ADDR_ANY_TARGET  = '*';
 
    // Message type elements ====================================================
@@ -96,12 +94,6 @@ const
    K_MSG_TYPE_TRIG = K_MSG_TYPE_HEAD + 'trig';
    K_MSG_TYPE_STAT = K_MSG_TYPE_HEAD + 'stat';
    K_MSG_TYPE_CMND = K_MSG_TYPE_HEAD + 'cmnd';
-   //K_MSG_TYPE_ANY  = '*';
-   //K_RE_MSG_TYPE   = K_MSG_TYPE_HEAD + '(trig|stat|cmnd)';
-//   K_MSG_TYPE_DESCRIPTORS : Array[0..3] of tsMsgType = ( K_MSG_TYPE_TRIG,K_MSG_TYPE_STAT,K_MSG_TYPE_CMND,K_MSG_TYPE_ANY);
-
-   //K_MSG_TARGET_ANY    = '*';
-   //K_MSG_HEADER_DUMMY  = 'clinique-mydev.myinst';
 
    // Message body elements ====================================================
    K_BODY_ELMT_DELIMITER = '=';
@@ -153,25 +145,15 @@ const
    K_WEB_RE_INCLUDE     = '<!--\s*\#\s*include\s+(file|virtual)\s*=\s*(["])([^"<>\|\~]+/)*([^"<>/\|\~]+)\2\s*-->';
    K_WEB_RE_VARIABLE    = '{%(.*?)_(.*?)%}';
    K_WEB_MSG_SRV_STOP   = 'Stopping web server';
-   //K_WEB_MSG_ROOT_DIR   = 'Webroot located in %s';
    K_WEB_MSG_PORT       = 'Web server started on port %u';
    K_WEB_ERR_404        = 'The requested URL %s was not found on this server.';
    K_ERR_MSG_FNF        = 'File not found : %s';
 
    // Configuration items ======================================================
-   //K_FMT_CONFIG_FILE     = 'xpl_%s-%s.xml';                                     // Typically xpl_vendor-device.xml
    K_CONF_NEWCONF        = 'newconf';
-   //K_RE_NEWCONF          = '^' + K_REGEXPR_INSTANCE + '$';
-   //K_DESC_NEWCONF        = 'Specifies the instance name of the device';
    K_CONF_INTERVAL       = 'interval';
-   //K_RE_INTERVAL         = '^[56789]{1}$';
-   //K_DESC_INTERVAL       = 'Delay (in minutes), between heartbeats';
    K_CONF_FILTER         = 'filter';
-   //K_RE_FILTER           = '';
-   //K_DESC_FILTER         = 'Filter applied to broadcast message before beeing handled by the instance';
    K_CONF_GROUP          = 'group';
-   //K_RE_GROUP            = '^xpl-group\.[a-z0-9]{1,16}$';
-   //K_DESC_GROUP          = 'Identifies the groups the instance belongs to';
    K_XPL_CFG_MAX_FILTERS = 16;
    K_XPL_CFG_MAX_GROUPS  = 16;
    MIN_HBEAT             = 5;

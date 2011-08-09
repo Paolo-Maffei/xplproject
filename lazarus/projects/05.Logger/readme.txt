@@ -77,5 +77,17 @@ Changes History :
 		* Column ordering is now done via drag and drop of columns in the main screen, no more by the app settings dialog
 		* Columns order and sizes saved between sessions
 		* Right clic on a message allows to directly resend the message
+	4.2.0.0
+		* Fixed bugs 
+			#FS69 : removed auto split of long values
+			#FS70 : crash when opening two message windows in specific case
+		* Removed limit of 128 char in body value elements
+		* Checked UTF8 compatibility for values
+		* Added 'Macro' mode. This mode enables you to send a list of pre-defined messages.
+		Right clic on the messages you want to add to the macro list
+		Select 'Add to Macro List'
+		Clic on 'Macro (x elmts)' to display the message list that will be played
+		You can specify a timing (in seconds) and enable loop sending.
+		
 		
 		

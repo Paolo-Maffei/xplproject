@@ -33,7 +33,7 @@ type // TxPLBody ==============================================================
            procedure AddKeyValuePair(const aKey, aValue : string);              // This one moved to private because of creation of AddKeyValuePairs
            procedure DeleteItem(const aIndex : integer);
            function  AppendItem(const aName : string) : integer;
-           function GetCount: integer; inline;
+           function  GetCount: integer; inline;
            function  CheckKey(const aKey : string) : boolean;
            function  CheckValue(const aValue : string) : boolean;
 
@@ -49,6 +49,7 @@ type // TxPLBody ==============================================================
 
            procedure Assign(Source : TPersistent); override;
            function  IsValid : boolean;
+
            procedure ResetValues;
 
            procedure CleanEmptyValues;
@@ -73,26 +74,24 @@ uses sysutils
      , uxPLConst
      ;
 
-type StringArray = Array of string;
-
 // ============================================================================
-const MAX_KEY_LEN   = 16;                                                       // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
-      MAX_VALUE_LEN = 128;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+const MAX_KEY_LEN   = 16;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+      MAX_VALUE_LEN = 128;                                                     // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
 
 //=============================================================================
-function StrCutBySize(const aString : string; const size : integer) : StringArray;
-var c,i : integer;
-    s   : string;
-begin
-   c := Succ(Pred(length(aString)) div size);
-   SetLength(Result,c);
-   i := 0;
-   while ( i < c ) do begin
-      s := AnsiMidStr(aString, i*size+1, size);
-      Result[i] := s;
-      inc(i);
-   end;
-end;
+//function StrCutBySize(const aString : string; const size : integer) : StringArray;
+//var c,i : integer;
+//    s   : string;
+//begin
+//   c := Succ(Pred(length(aString)) div size);
+//   SetLength(Result,c);
+//   i := 0;
+//   while ( i < c ) do begin
+//      s := AnsiMidStr(aString, i*size+1, size);
+//      Result[i] := s;
+//      inc(i);
+//   end;
+//end;
 
 // TxPLBody ===================================================================
 constructor TxPLBody.Create(aOwner : TComponent);
@@ -173,8 +172,11 @@ begin
 end;
 
 function TxPLBody.IsValid: boolean;
+var s : string;
 begin
    result := Values.Count > 0;
+   for s in Keys do
+          result := result and CheckKey(s);
 end;
 
 procedure TxPLBody.CleanEmptyValues;
@@ -188,14 +190,14 @@ end;
 function TxPLBody.Get_RawxPL: string;
 var i : integer;
 begin
-   result := '';
-
-   for i:= 0 to ItemCount-1 do begin
-       result := Result + Keys[i] + '=';
-       if i<Values.Count then result := Result + Values[i];
-       result := Result + #10;
-   end;
-   result := Format(K_MSG_BODY_FORMAT,[result]);
+   if IsValid then begin
+      for i:= 0 to ItemCount-1 do begin
+          result := Result + Keys[i] + '=';
+          if i<Values.Count then result := Result + Values[i];
+          result := Result + #10;
+      end;
+      result := Format(K_MSG_BODY_FORMAT,[result]);
+   end else Raise Exception.Create('Rawxpl error in ' + ClassName);
 end;
 
 function TxPLBody.Get_Strings: TStringList;
@@ -244,16 +246,18 @@ begin
 end;
 
 procedure TxPLBody.AddKeyValuePair(const aKey, aValue: string);
-var i,c : integer;
-    s : StringArray;
+//var i,c : integer;
+//    s : StringArray;
 begin
    if not CheckKey(aKey) then exit;
+   Values[AppendItem(aKey)] := aValue;
 
-   s := StrCutBySize(aValue,MAX_VALUE_LEN);
-   for c:=low(s) to high(s) do begin                                            // 1.02 : iterate till we reach the end
-      i := AppendItem(aKey);                                                    // of a string potentially longueur than 128 char
-      Values[i] := s[c];
-   end;
+//   s := StrCutBySize(aValue,MAX_VALUE_LEN);
+//   for c:=low(s) to high(s) do begin                                           // 1.02 : iterate till we reach the end
+//      i := AppendItem(aKey);                                                   // of a string potentially longueur than 128 char
+//      Values[i] := aValue;
+//      Values[i] := s[c];
+//   end;
 end;
 
 procedure TxPLBody.AddKeyValue(const aKeyValuePair: string);
@@ -273,12 +277,11 @@ begin
    sl.Delimiter:=#10;                                                          // use LF as delimiter
    sl.StrictDelimiter := true;
    sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
-//   sl.Delete(0);                                                               // Drop leading {
-//   sl.Delete(Pred(sl.count));                                                  // Drop trailing }
    for ch in sl do if (length(ch)>0) then AddKeyValue(ch);
    sl.free;
 end;
 
+// ============================================================================
 initialization
    Classes.RegisterClass(TxPLBody);
 

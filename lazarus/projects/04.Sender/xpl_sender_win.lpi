@@ -53,8 +53,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="17"/>
+        <TopLine Value="17"/>
+        <CursorPos X="1" Y="47"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -1797,11 +1797,15 @@
         <UsageCount Value="11"/>
       </Unit235>
     </Units>
-    <JumpHistory Count="1" HistoryIndex="0">
+    <JumpHistory Count="2" HistoryIndex="1">
       <Position1>
         <Filename Value="xpl_sender.lpr"/>
         <Caret Line="23" Column="8" TopLine="9"/>
       </Position1>
+      <Position2>
+        <Filename Value="xpl_sender.lpr"/>
+        <Caret Line="17" Column="1" TopLine="1"/>
+      </Position2>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

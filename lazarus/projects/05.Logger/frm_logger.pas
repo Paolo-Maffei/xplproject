@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls, XMLPropStorage, Spin,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin,
   JvAppEvent, RTTICtrls, RTTIGrids,  uxPLConst, frm_template,
   frame_message, logger_listener, u_xpl_header;
 
@@ -24,6 +24,7 @@ type
     acConversation: TAction;
     acResend: TAction;
     acPlay: TAction;
+    acAddToMacro: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
     JvAppEvents1: TJvAppEvents;
@@ -35,6 +36,7 @@ type
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
     mnuCommands: TMenuItem;
     mnuSendMessage: TMenuItem;
     Panel1:    TPanel;
@@ -65,6 +67,7 @@ type
     ToolButton6: TToolButton;
     tvMessages: TTreeView;
     xPLMenu2: TPopupMenu;
+    procedure acAddToMacroExecute(Sender: TObject);
     procedure acConfigExecute(Sender: TObject);
     procedure acConversationExecute(Sender: TObject);
     procedure acDiscoverNetworkExecute(Sender: TObject);
@@ -75,11 +78,11 @@ type
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
     procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; aState: TGridDrawState);
-    procedure dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
     procedure dgMessagesHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
+    procedure MenuItem5Click(Sender: TObject);
     procedure mnuListViewPopup(Sender: TObject);
     procedure mnuSendMessageClick(Sender: TObject);
     procedure mnuCommandClick(Sender: TObject);
@@ -189,6 +192,11 @@ procedure TfrmLogger.acConfigExecute(Sender: TObject);
 begin
    frmAppSettings.ShowModal;
    ApplySettings(Sender);
+end;
+
+procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
+begin
+           MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
 end;
 
 procedure TfrmLogger.acConversationExecute(Sender: TObject);
@@ -395,7 +403,7 @@ end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
 var i: integer;
-    max : integer;
+    //max : integer;
     liste : TMessageList;
 begin
    UpdateFilter;
@@ -470,6 +478,11 @@ begin
    MacNode.Text              := Format('Macro (%d elts)',[MacroList.Count]);
 end;
 
+procedure TfrmLogger.MenuItem5Click(Sender: TObject);
+begin
+
+end;
+
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
 var ControlCoord, NewCell: TPoint;
 begin
@@ -509,13 +522,13 @@ begin
    accept := (Source = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode);
 end;
 
-procedure TfrmLogger.dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
-begin
-   if ((Sender = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode)) then begin
-      if Assigned(dgMessages.Objects[0,dgMessages.Row]) then
-         MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
-   end;
-end;
+//procedure TfrmLogger.dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
+//begin
+//   if ((Sender = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode)) then begin
+//      if Assigned(dgMessages.Objects[0,dgMessages.Row]) then
+//         MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
+//   end;
+//end;
 
 procedure TfrmLogger.mnuCommandClick(Sender: TObject);
 var

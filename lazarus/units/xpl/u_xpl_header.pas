@@ -24,7 +24,11 @@ uses Classes,
      u_xpl_common,
      u_xpl_config;
 
-type TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
+type
+
+{ TxPLHeader }
+
+TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
      private
        fSource  : TxPLAddress;
        fTarget  : TxPLTargetAddress;
@@ -34,6 +38,7 @@ type TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
 
        function  Get_RawxPL : string;
        procedure Set_Hop(const AValue: integer);
+
        procedure Set_RawxPL(const aRawXPL : string);
        procedure Set_MessageType(const AValue: TxPLMessageType);
        procedure Set_Schema(const AValue: TxPLSchema);
@@ -45,8 +50,9 @@ type TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
        destructor  destroy; override;
 
        procedure   Assign(aHeader : TPersistent); override;
-       function    IsValid : boolean;
+
        procedure   ResetValues;
+       function    IsValid : boolean;
 
        procedure   Reply;
        function    MatchesFilter(aFilterSet : TxPLConfigItem) : boolean;
@@ -161,9 +167,9 @@ end;
 
 function TxPLHeader.IsValid: boolean;
 begin
-   result := Source.IsValid and
-             Target.IsValid and
-             Schema.IsValid and
+   result := //Source.IsValid and
+             //Target.IsValid and
+             //Schema.IsValid and
              (ord(MessageType)>=0);
 end;
 
@@ -176,7 +182,8 @@ begin
                                Source.RawxPL,
                                Target.RawxPL,
                                Schema.RawxPL ]
-                     );
+                     )
+     else Raise Exception.Create('RawxPL Error in ' + ClassName);
 end;
 
 procedure TxPLHeader.Set_Hop(const AValue: integer);
