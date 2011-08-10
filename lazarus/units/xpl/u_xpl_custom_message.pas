@@ -29,7 +29,7 @@ type { TxPLCustomMessage =====================================================}
         fBody      : TxPLBody;
         fTimeStamp : TDateTime;
         function  Get_RawXPL: string;
-        function Get_Size: integer;
+        function  Get_Size: integer;
         procedure Set_RawXPL(const AValue: string);
 
      public
@@ -37,8 +37,10 @@ type { TxPLCustomMessage =====================================================}
 
         procedure   Assign(aMessage : TPersistent); override;
         procedure   ResetValues;
-        function    IsLifeSign : boolean; inline;
-        function    IsValid : boolean;
+        function    IsLifeSign   : boolean; inline;
+        function    IsValid      : boolean; override;
+        function    MustFragment : boolean;
+
      published
         property Body   : TxPLBody read fBody  ;
         property RawXPL : string   read Get_RawXPL  write Set_RawXPL stored false;
@@ -72,11 +74,8 @@ end;
 
 function TxPLCustomMessage.IsLifeSign: boolean;
 begin
-   result := (MessageType = stat) and (
-               Schema.Equals(Schema_ConfigApp) or
-               Schema.Equals(Schema_HBeatApp)  or
-               Schema.Equals(Schema_HBeatEnd)
-             )
+   result := ( MessageType = stat) and
+             ( Schema.IsConfig or Schema.IsHBeat )
 end;
 
 procedure TxPLCustomMessage.Assign(aMessage: TPersistent);
@@ -100,9 +99,12 @@ end;
 
 function TxPLCustomMessage.IsValid: boolean;
 begin
-   result := //(inherited IsValid)
-             //and (Body.IsValid) and
-             not (Size > XPL_MAX_MSG_SIZE);
+   result := (inherited IsValid) and (Body.IsValid);
+end;
+
+function TxPLCustomMessage.MustFragment: boolean;
+begin
+   result := (Size > XPL_MAX_MSG_SIZE);
 end;
 
 procedure TxPLCustomMessage.Set_RawXPL(const AValue: string);
@@ -118,7 +120,7 @@ begin
 end;
 
 
-initialization
+initialization // =============================================================
    Classes.RegisterClass(TxPLCustomMessage);
 
 end.

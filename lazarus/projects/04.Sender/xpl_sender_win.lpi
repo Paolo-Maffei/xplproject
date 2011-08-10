@@ -13,6 +13,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
+      <MinorVersionNr Value="1"/>
       <BuildNr Value="1"/>
       <StringTable CompanyName="clinique" InternalName="sender" ProductName="xPL Sender" ProductVersion=""/>
     </VersionInfo>
@@ -50,11 +51,10 @@
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_sender"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="17"/>
-        <CursorPos X="1" Y="47"/>
+        <TopLine Value="16"/>
+        <CursorPos X="1" Y="28"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -1046,10 +1046,11 @@
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="u_xpl_sender"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="146"/>
+        <TopLine Value="64"/>
+        <CursorPos X="3" Y="99"/>
         <UsageCount Value="75"/>
         <Loaded Value="True"/>
       </Unit137>

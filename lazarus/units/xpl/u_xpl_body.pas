@@ -31,11 +31,10 @@ type // TxPLBody ==============================================================
            fStrings : TStringList;
 
            procedure AddKeyValuePair(const aKey, aValue : string);              // This one moved to private because of creation of AddKeyValuePairs
-           procedure DeleteItem(const aIndex : integer);
            function  AppendItem(const aName : string) : integer;
            function  GetCount: integer; inline;
-           function  CheckKey(const aKey : string) : boolean;
-           function  CheckValue(const aValue : string) : boolean;
+           function  IsValidKey(const aKey : string) : boolean;
+           function  IsValidValue(const aValue : string) : boolean;
 
            function  Get_RawxPL : string;
            function Get_Strings: TStringList;
@@ -57,6 +56,8 @@ type // TxPLBody ==============================================================
            procedure AddKeyValuePairs(const aKeys, aValues : TStringList); overload;
            procedure AddKeyValuePairs(const aKeys, aValues : Array of string); overload;
            procedure AddKeyValue(const aKeyValuePair : string);
+           procedure InsertKeyValuePair(const aIndex : integer; const aKey, aValue : string);
+           procedure DeleteItem(const aIndex : integer);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
            procedure SetValueByKey(const aKeyValue, aDefVal : string);
 
@@ -71,27 +72,13 @@ type // TxPLBody ==============================================================
 implementation // =============================================================
 uses sysutils
      , strutils
-     , uxPLConst
      ;
 
 // ============================================================================
 const MAX_KEY_LEN   = 16;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
-      MAX_VALUE_LEN = 128;                                                     // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
-
-//=============================================================================
-//function StrCutBySize(const aString : string; const size : integer) : StringArray;
-//var c,i : integer;
-//    s   : string;
-//begin
-//   c := Succ(Pred(length(aString)) div size);
-//   SetLength(Result,c);
-//   i := 0;
-//   while ( i < c ) do begin
-//      s := AnsiMidStr(aString, i*size+1, size);
-//      Result[i] := s;
-//      inc(i);
-//   end;
-//end;
+      MAX_VALUE_LEN = 1400;                                                    // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+      K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
+      K_BODY_ELMT_DELIMITER = '=';
 
 // TxPLBody ===================================================================
 constructor TxPLBody.Create(aOwner : TComponent);
@@ -117,12 +104,12 @@ begin
    result := fKeys.Count;
 end;
 
-function TxPLBody.CheckKey(const aKey: string): boolean;
+function TxPLBody.IsValidKey(const aKey: string): boolean;
 begin
    result := IsValidxPLIdent(aKey) and (length(aKey)<=MAX_KEY_LEN);
 end;
 
-function TxPLBody.CheckValue(const aValue: string): boolean;
+function TxPLBody.IsValidValue(const aValue: string): boolean;
 begin
    result := length(aValue) <= MAX_VALUE_LEN;
 end;
@@ -146,37 +133,30 @@ begin
 end;
 
 procedure TxPLBody.Set_Values(const AValue: TStringList);
-var i : integer;
 begin
-   for i := 0 to aValue.Count-1 do
-      if not CheckValue(aValue[i]) then exit;
-
    Values.Assign(aValue);
 end;
 
 procedure TxPLBody.Set_Keys(const AValue: TStringList);
-var i : integer;
 begin
-   for i := 0 to aValue.Count-1 do
-       if not CheckKey(aValue[i]) then exit;
-
    Keys.Assign(aValue);
 end;
 
 procedure TxPLBody.Assign(Source : TPersistent);
 begin
    if Source is TxPLBody then begin
-      Keys.Assign(TxPLBody(Source).Keys);
-      Values.Assign(TxPLBody(Source).Values);
+      Set_Keys(TxPLBody(Source).Keys);
+      Set_Values(TxPLBody(Source).Values);
    end else inherited;
 end;
 
 function TxPLBody.IsValid: boolean;
 var s : string;
 begin
-   result := Values.Count > 0;
-   for s in Keys do
-          result := result and CheckKey(s);
+//   result := Values.Count > 0;
+   result := true;
+   for s in Keys do result := result and IsValidKey(s);
+   for s in Values do result := result and IsValidValue(s);
 end;
 
 procedure TxPLBody.CleanEmptyValues;
@@ -190,14 +170,12 @@ end;
 function TxPLBody.Get_RawxPL: string;
 var i : integer;
 begin
-   if IsValid then begin
-      for i:= 0 to ItemCount-1 do begin
+   for i:= 0 to ItemCount-1 do begin
           result := Result + Keys[i] + '=';
           if i<Values.Count then result := Result + Values[i];
           result := Result + #10;
-      end;
-      result := Format(K_MSG_BODY_FORMAT,[result]);
-   end else Raise Exception.Create('Rawxpl error in ' + ClassName);
+   end;
+   result := Format(K_MSG_BODY_FORMAT,[result]);
 end;
 
 function TxPLBody.Get_Strings: TStringList;
@@ -213,22 +191,20 @@ begin
 end;
 
 function TxPLBody.GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
-var c,i : integer;
+var i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
-   if i>=0 then begin
-                result := Values[i];
-                for c:=i+1 to Keys.Count-1 do                                  // 1.02 : iterate through other parameters
-                    if Keys[c]=aKeyValue then result := Result + Values[c]     // to find other lines with the same key
-           end
+   if i>=0 then //begin
+                result := Values[i]//;
+//                for c:=i+1 to Keys.Count-1 do                                  // 1.02 : iterate through other parameters
+//                    if Keys[c]=aKeyValue then result := Result + Values[c]     // to find other lines with the same key
+//           end
            else result := aDefVal;
 end;
 
 procedure TxPLBody.SetValueByKey(const aKeyValue, aDefVal : string);
 var i : integer;
 begin
-   if not CheckValue(aDefVal) then exit;
-
    i := Keys.IndexOf(aKeyValue);
    if i>=0 then Values[i] := aDefVal;
 end;
@@ -236,7 +212,7 @@ end;
 procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues : TStringList);
 var i : integer;
 begin
-   for i := 0 to aKeys.Count-1 do AddKeyValuePair(aKeys[i],aValues[i]);
+   for i := 0 to Pred(aKeys.Count) do AddKeyValuePair(aKeys[i],aValues[i]);
 end;
 
 procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues: array of string);
@@ -245,11 +221,17 @@ begin
    for i := Low(aKeys) to High(aKeys) do AddKeyValuePair(aKeys[i],aValues[i]);
 end;
 
+procedure TxPLBody.InsertKeyValuePair(const aIndex : integer; const aKey, aValue : string);
+begin
+   Keys.Insert(aIndex, aKey);
+   Values.Insert(aIndex, aValue);
+end;
+
 procedure TxPLBody.AddKeyValuePair(const aKey, aValue: string);
 //var i,c : integer;
 //    s : StringArray;
 begin
-   if not CheckKey(aKey) then exit;
+//   if not CheckKey(aKey) then exit;
    Values[AppendItem(aKey)] := aValue;
 
 //   s := StrCutBySize(aValue,MAX_VALUE_LEN);

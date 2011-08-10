@@ -1,7 +1,7 @@
 inherited frmLogger: TfrmLogger
-  Left = 1456
+  Left = 20
   Height = 440
-  Top = 387
+  Top = 34
   Width = 869
   Caption = 'frmLogger'
   ClientHeight = 440

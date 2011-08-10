@@ -15,22 +15,25 @@ unit u_xPL_Schema;
 
 interface
 
-uses Classes,
-     u_xpl_common;
+uses Classes
+     , u_xpl_common
+     , u_xpl_rawset
+     ;
 
 type // TxPLSchema ============================================================
      TxPLSchema = class(TxPLRawSet)
      public
         Constructor Create(const aClasse : string = ''; const aType : string = ''); reintroduce;
-        procedure   ResetValues; override;
 
-        function    AsFilter : string; dynamic;
+        function IsHBeat  : boolean;
+        function IsConfig : boolean;
      published
         property Classe : string index 0 read Get_Element write Set_Element;
         property Type_  : string index 1 read Get_Element write Set_Element;
      end;
 
-var  Schema_ConfigApp,
+var  // Some widely used schema ===============================================
+     Schema_ConfigApp,
      Schema_ConfigCurr,
      Schema_ConfigList,
      Schema_ConfigResp,
@@ -38,27 +41,16 @@ var  Schema_ConfigApp,
      Schema_HBeatEnd,
      Schema_ControlBasic,
      Schema_TimerBasic,
-     Schema_HBeatReq : TxPLSchema;
-
-const K_SCHEMA_CLASS_HBEAT    = 'hbeat';
-      K_SCHEMA_CLASS_CONFIG   = 'config';
-      K_SCHEMA_SENSOR_BASIC   = 'sensor.basic';
-      K_SCHEMA_SENSOR_REQUEST = 'sensor.request';
-      K_SCHEMA_OSD_BASIC      = 'osd.basic';
-      K_SCHEMA_LOG_BASIC      = 'log.basic';
-      K_SCHEMA_TTS_BASIC      = 'tts.basic';
-      K_SCHEMA_MEDIA_BASIC    = 'media.basic';
-      K_SCHEMA_NETGET_BASIC   = 'netget.basic';
-      K_SCHEMA_X10_BASIC      = 'x10.basic';
+     Schema_LogBasic,
+     Schema_OsdBasic,
+     Schema_HBeatReq,
+     Schema_FragBasic,
+     Schema_FragReq : TxPLSchema;
 
 implementation // =============================================================
 uses SysUtils
      , u_xpl_address
-     , StrUtils
      ;
-
-const // ======================================================================
-     K_FMT_FILTER = '%s.%s';
 
 // TxPLSchema Object ==========================================================
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
@@ -67,19 +59,19 @@ begin
    SetLength(fMaxSizes,2);
    fMaxSizes[0] := 8;
    fMaxSizes[1] := 8;
-   Classe := aClasse;
-   Type_  := aType;
+   ResetValues;
+   if aClasse<>'' then Classe := aClasse;
+   if aType<>''   then Type_  := aType;
 end;
 
-procedure TxPLSchema.ResetValues;
+function TxPLSchema.IsHBeat: boolean;
 begin
-   fRawxPL.DelimitedText:='.';
+   Result := (Classe = 'config');
 end;
 
-function TxPLSchema.AsFilter : string;
+function TxPLSchema.IsConfig: boolean;
 begin
-   Result := Format(K_FMT_FILTER,[ IfThen( Classe <>'', Classe , K_ADDR_ANY_TARGET),
-                                   IfThen( Type_  <>'', Type_  , K_ADDR_ANY_TARGET)]);
+   Result := (Classe = 'hbeat');
 end;
 
 // ============================================================================
@@ -95,5 +87,10 @@ initialization
    Schema_ConfigResp   := TxPLSchema.Create('config','response');
    Schema_ControlBasic := TxPLSchema.Create('control','basic');
    Schema_TimerBasic   := TxPLSchema.Create('timer','basic');
+   Schema_OsdBasic     := TxPLSchema.Create('osd','basic');
+   Schema_LogBasic     := TxPLSchema.Create('log','basic');
+   Schema_FragBasic    := TxPLSchema.Create('fragment','basic');
+   Schema_FragReq      := TxPLSchema.Create('fragment','request');
+
 end.
 
