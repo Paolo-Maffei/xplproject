@@ -47,6 +47,8 @@
     <Import Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="fragment.basic.vb" />
+    <Compile Include="GenericTestSetup.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="UpdateVersion5v3.vb" />
   </ItemGroup>

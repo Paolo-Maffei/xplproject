@@ -487,9 +487,8 @@ Public Class xPL_Base
     ''' <summary>
     ''' The maximum supported overall size (in bytes, or ASCII characters) of a raw-xPL message.
     ''' </summary>
-    ''' <remarks></remarks>
-    <Obsolete("No longer used as of 5.3, message size is 'unlimted' within whatever the network hardware supports")> _
-    Public Const XPL_MAX_MSG_SIZE As Integer = 1500
+    ''' <remarks>Though the xPL specs said 1500, actual max size is 1472 to prevent fragmenting.</remarks>
+    Public Const XPL_MAX_MSG_SIZE As Integer = 1472
     ''' <summary>
     ''' Buffer size for the receiving socket
     ''' </summary>

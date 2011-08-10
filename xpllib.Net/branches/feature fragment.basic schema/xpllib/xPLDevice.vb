@@ -189,6 +189,13 @@ Public Class xPLDevice
     ''' recreated from a <c>SavedState</c> value. 
     ''' </summary>
     Public CustomSettings As String = ""
+    ''' <summary>
+    ''' If set to <c>True</c>, large messages will automatically be fragmented using the fragment.basic schema. In that case the device 
+    ''' will not receive any fragment related data, only the reconstructed messages (incoming messages). The fragmenting/defragmenting
+    ''' is done transparantly for the host application.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public AutoFragment As Boolean = False
 
     ' other properties
     Private Disposing As Boolean = False
@@ -960,6 +967,8 @@ Public Class xPLDevice
     ''' <param name="myxPL">The xPL message object that needs to be sent</param>
     ''' <exception cref="MissingFieldsException">Condition: if the message fails the checks for creating a raw xPL string <see cref="xPLMessage.RawxPL"/>.</exception>
     ''' <exception cref="Exception">Condition: if the <c>Enabled</c> property is set to <c>False</c>.</exception>
+    ''' <exception cref="ArgumentException">Condition: if the message size is too large to be send, or a single value is too large, so 
+    ''' fragmentation doesn't work, see <seealso cref="AutoFragment">AutoFragment</seealso> and <seealso cref="xPL_Base.XPL_MAX_MSG_SIZE">XPL_MAX_MSG_SIZE</seealso></exception>
     ''' <remarks>Other exceptions may occur from the network. Before sending the <c>Source</c> address will 
     ''' be set to the address of the device through which it will be sent.</remarks>
     Public Sub Send(ByVal myxPL As xPLMessage)
@@ -970,9 +979,15 @@ Public Class xPLDevice
                 Throw New Exception("Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.")
             Else
                 myxPL.Source = Me.Address
-                xPLListener.SendRawxPL(myxPL.RawxPL)
-            End If
-            If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
+                Dim m As String = myxPL.RawxPL
+                If Not Me.AutoFragment Then
+                    If Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
+                        Throw New ArgumentException("xPLDevice.Send; Message size exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
+                    End If
+                End If
+                xPLListener.SendRawxPL(m)
+                End If
+                If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
         Catch
             If Debug Then LogError("xPLDevice.Send", "Failed", EventLogEntryType.Information)
         End Try
