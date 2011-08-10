@@ -13,7 +13,7 @@ unit u_xpl_address;
 }
 
 {$ifdef fpc}
-{$mode objfpc}{$H+}{$M+}
+   {$mode objfpc}{$H+}{$M+}
 {$endif}
 
 interface
@@ -21,6 +21,7 @@ interface
 uses Classes
      , u_xpl_common
      , u_xpl_config
+     , u_xpl_rawset
      ;
 
 type // TxPLAddress ===========================================================
@@ -34,11 +35,11 @@ type // TxPLAddress ===========================================================
         class function RandomInstance : string;
         class function HostNmInstance : string;
         class function MacAddInstance : string;
+
      public
         constructor Create(const axPLAddress : TxPLAddress); overload;
         constructor Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' ); overload;
-        procedure   ResetValues;  override;
-        function    AsFilter : string; dynamic;
+
         procedure   Set_Element(AIndex: integer; const AValue: string); override;
 
         class function InitInstanceByDefault : string;
@@ -81,8 +82,7 @@ uses IdStack
      ;
 
 // ============================================================================
-const K_FMT_FILTER      = '%s.%s.%s';
-      K_DEF_GROUP       = 'xpl-group';
+const   K_DEF_GROUP       = 'xpl-group';
 
 // General Helper function ====================================================
 class function TxPLAddress.RandomInstance : string;
@@ -126,47 +126,26 @@ begin
    fMaxSizes[0] := 8;
    fMaxSizes[1] := 8;
    fMaxSizes[2] := 16;
-   Vendor   := aVendor;
-   Device   := aDevice;
-   Instance := aInstance;
+   ResetValues;
+   if aVendor<>''   then Vendor   := aVendor;
+   if aDevice<>''   then Device   := aDevice;
+   if aInstance<>'' then Instance := aInstance;
 end;
 
 constructor TxPLAddress.Create(const axPLAddress : TxPLAddress);
 begin
-   inherited Create;
-   SetLength(fMaxSizes,3);
-   fMaxSizes[0] := 8;
-   fMaxSizes[1] := 8;
-   fMaxSizes[2] := 16;
+   Create('','','');
    Assign(axPLAddress);
-end;
-
-procedure TxPLAddress.ResetValues;
-begin
-   fRawxPL.DelimitedText := '..';
-end;
-
-function TxPLAddress.Get_VD: string;
-begin
-   result := Format('%s-%s',[Vendor,Device]);
 end;
 
 procedure TxPLAddress.Set_RawxPL(const aValue: string);
 begin
-   fRawxPL.DelimitedText := StringReplace(aValue,'-','.',[]);
+   inherited Set_RawxPL(StringReplace(aValue,'-','.',[]));
 end;
 
 function TxPLAddress.Get_RawxPL: string;
 begin
-   if IsValid then result := StringReplace(fRawxPL.DelimitedText,'.','-',[])   // will replace only the first '.' - this is what I want
-              //else Raise Exception.Create('Rawxpl error in ' + ClassName);
-end;
-
-function TxPLAddress.AsFilter : string;
-begin
-   Result := Format(K_FMT_FILTER,[ IfThen( Vendor  <>'', Vendor  , K_ADDR_ANY_TARGET),
-                                   IfThen( Device  <>'', Device  , K_ADDR_ANY_TARGET),
-                                   IfThen( Instance<>'', Instance, K_ADDR_ANY_TARGET)]);
+   Result := StringReplace(inherited Get_RawxPL,'.','-',[])   // will replace only the first '.' - this is what I want
 end;
 
 // ============================================================================
@@ -178,8 +157,12 @@ end;
 // a Device ID.
 procedure TxPLAddress.Set_Element(AIndex: integer; const AValue: string);
 begin
-   if not AnsiContainsText('-',aValue) then inherited Set_Element(AIndex, AValue)
-                                       else Raise Exception.Create('RawxPL error in ' + ClassName);
+   if not AnsiContainsText('-',aValue) then inherited Set_Element(AIndex, AValue);
+end;
+
+function TxPLAddress.Get_VD: string;
+begin
+   result := Format('%s-%s',[Vendor,Device]);
 end;
 
 procedure TxPLAddress.Set_VD(const AValue: string);

@@ -35,33 +35,6 @@ Type {$ifndef fpc}                                                             /
         property RawxPL : string read Get_RawxPL write Set_RawxPL;
      end;
 
-     { TxPLRawSet }
-
-     TxPLRawSet = class(TInterfacedPersistent, IxPLCommon, IxPLRaw)
-     private
-        function  Get_RawxPL: string;  //virtual; abstract;
-        procedure Set_RawxPL(const AValue: string); //virtual; abstract;
-     protected
-        fRawxPL   : TStringList;
-        fMaxSizes : Array of integer;
-        fOnRawError : TStrParamEvent;
-
-     public
-        constructor Create;
-        destructor  Destroy; override;
-
-        procedure   ResetValues; virtual; abstract;
-
-        procedure   Assign(aRawSet : TPersistent); override;
-        function    Equals(const aRawSet : TxPLRawSet) : boolean;
-        function    IsValid : boolean;
-
-        function  Get_Element(AIndex: integer): string; virtual;
-        procedure Set_Element(AIndex: integer; const AValue: string); virtual;
-     published
-        property RawxPL : string read Get_RawxPL write Set_RawxPL stored false;
-     end;
-
      { TxPLDateTimeStamp }
 
      TxPLDateTimeStamp = class(TIdDateTimeStamp)
@@ -283,65 +256,6 @@ function TxPLDateTimeStamp.GetAsRawxPL: string;
 begin
     Result := Format('%.4d%.2d%.2d%.2d%.2d%.2d',
            [year,monthofYear,dayofmonth,HourOf24Day,MinuteOfHour,SecondOfMinute]);
-end;
-
-// TxPLRawSet =================================================================
-constructor TxPLRawSet.Create;
-begin
-   inherited Create;
-   fRawxPL := TStringList.Create;
-   fRawxPL.Delimiter:='.';
-   ResetValues;
-end;
-
-destructor TxPLRawSet.Destroy;
-begin
-   fRawxPL.Free;
-   inherited Destroy;
-end;
-
-procedure TxPLRawSet.Assign(aRawSet: TPersistent);
-begin
-  if aRawSet is TxPLRawSet
-     then fRawxPL.Assign(TxPLRawSet(aRawSet).fRawxPL)
-     else inherited;
-end;
-
-function TxPLRawSet.Equals(const aRawSet: TxPLRawSet): boolean;
-begin
-   result := fRawxPL.Equals(aRawSet.fRawxPL);
-end;
-
-function TxPLRawSet.Get_RawxPL: string;
-begin
-  if IsValid then result := fRawxPL.DelimitedText
-             else Raise Exception.Create('RawxPL error in ' + ClassName);
-end;
-
-procedure TxPLRawSet.Set_RawxPL(const AValue: string);
-begin
-   if StrCharCount(aValue,fRawxPL.Delimiter) = High(fMaxSizes) then
-      fRawxPL.DelimitedText:=aValue;
-end;
-
-function TxPLRawSet.IsValid: boolean;
-var i : integer;
-begin
-   Result := fRawxPL.Count <>0;                                                // At this level, check we have elements
-   for i := 0 to Pred(fRawxPL.Count) do
-       Result := Result and IsValidxPLIdent(fRawxPL[i])                        // they are valid xPL syntax elements
-                        and (length(fRawxPL[i])<=fMaxSizes[i]);                // and conform to max element size
-end;
-
-function TxPLRawSet.Get_Element(AIndex: integer): string;
-begin
-   result := fRawxPL[aIndex];
-end;
-
-procedure TxPLRawSet.Set_Element(AIndex: integer; const AValue: string);
-begin
-  if ((length(aValue) <= fMaxSizes[aIndex]) and IsValidxPLIdent(aValue)) then
-     fRawxPL[aIndex] := aValue;
 end;
 
 var i : integer;

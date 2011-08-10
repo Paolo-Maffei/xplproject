@@ -8,7 +8,7 @@ unit u_xpl_sender;
 }
 
 {$ifdef fpc}
-{$mode objfpc}{$H+}{$M+}
+   {$mode objfpc}{$H+}{$M+}
 {$endif}
 
 interface
@@ -22,14 +22,13 @@ uses Classes
      , u_xpl_udp_socket
      ;
 
-type { TxPLSender =============================================================}
+type // TxPLSender ============================================================
      TxPLSender = class(TxPLApplication)
-     private
-
      protected
         fSocket : TxPLUDPClient;
+        fFragCounter : integer;
         procedure Send(const aMessage : string);      overload;
-        //procedure OnRawError(const aError : string);
+
      public
         constructor create(const aOwner : TComponent); overload;
 
@@ -37,24 +36,27 @@ type { TxPLSender =============================================================}
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema, aRawBody : string; const bClean : boolean = false); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest, aSchema : string; const Keys, Values : Array of string); overload;
         procedure SendMessage(const aMsgType : TxPLMessageType; const aDest : string; aSchema : TxPLSchema; const Keys, Values : Array of string); overload;
-        procedure SendMessage(const aRawXPL : string); overload;
-        procedure SendOSDBasic(const aString : string);
-        procedure SendLOGBasic(const aLevel : string; const aString : string);
+        procedure SendMessage(const aRawXPL  : string); overload;
+
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : string; const aTarget : string = '*') : TxPLCustomMessage; overload;
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : TxPLSchema; const aTarget : TxPLTargetAddress = nil) : TxPLCustomMessage; overload;
+
         procedure SendHBeatRequestMsg;
+        procedure SendOSDBasic(const aString : string);
+        procedure SendLOGBasic(const aLevel : string; const aString : string);
      end;
 
-implementation { ==============================================================}
+implementation // =============================================================
 uses u_xpl_message
+     , u_xpl_header
      , SysUtils
-     , uxPLConst
      ;
 
 constructor TxPLSender.create(const aOwner : TComponent);
 begin
    inherited;
    fSocket := TxPLUDPClient.Create(self, Settings.BroadCastAddress);
+   fFragCounter := 0;
 end;
 
 procedure TxPLSender.Send(const aMessage: string);
@@ -62,25 +64,54 @@ begin
    fSocket.Send(aMessage)
 end;
 
-//procedure TxPLSender.OnRawError(const aError: string);
-//begin
-//   Log(etError,'Error sending message : %s',[aError]);
-//end;
-
 procedure TxPLSender.Send(const aMessage: TxPLCustomMessage; const bEnforceSender : boolean = true);
+var messagelist : TList;
+    newfrag,dupmsg : TxPLMessage;
+    i,j,runner,overhead  : integer;
 begin
-   //aMessage.OnRawError := @OnRawError;
    if bEnforceSender then
-      //if not IsValidxPLIdent(Adresse.Instance) then Adresse.Instance := TxPLAddress.InitInstanceByDefault;
       aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
 
-    //if aMessage.IsValid then
-   try
-      Send(TxPLMessage(aMessage).ProcessedxPL);
-   except
-   end;
-//   else
-//      Log(etError,'Error sending message : %s',[aMessage.RawXPL]);
+   if not aMessage.IsValid then Log(etWarning,'Error sending message %s',[aMessage.RawxPL])
+      else begin
+     if not aMessage.MustFragment then Send(TxPLMessage(aMessage).ProcessedxPL)
+                                  else begin
+        messagelist := TList.Create;
+
+        i := 0;
+        while (i< aMessage.Body.ItemCount) do begin
+            newfrag := TxPLMessage.Create(self);
+            newfrag.Assign(aMessage);
+            newfrag.schema.assign(Schema_FragBasic);
+            newfrag.body.resetvalues;
+            newfrag.body.addkeyvaluepairs(['partid'],['%d/%d:%d']);
+            if messagelist.count = 0 then
+               newfrag.body.addkeyvaluepairs(['schema'],[aMessage.Schema.RawxPL]);
+
+            while (i<aMessage.Body.ItemCount) and (not newfrag.mustfragment) do begin
+                  newfrag.Body.AddKeyValuePairs([aMessage.Body.Keys[i]],[aMessage.Body.Values[i]]);
+                  inc(i);
+            end;
+
+            if newfrag.mustfragment then begin
+               newfrag.Body.DeleteItem(newfrag.body.itemcount-1);
+               dec(i);
+            end;
+
+            messagelist.Add(newfrag);
+        end;
+
+        for i:=0 to messagelist.count-1 do begin
+            newfrag := TxPLMessage(messagelist[i]);
+            newfrag.body.Values[0] := Format(newfrag.body.Values[0],[i+1,messagelist.count,fFragCounter]);
+            Send(newfrag);
+        end;
+
+        messagelist.free;
+        inc(fFragCounter);
+     end;
+   end
+
 end;
 
 procedure TxPLSender.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
@@ -145,12 +176,12 @@ end;
 
 procedure TxPLSender.SendOSDBasic(const aString: string);
 begin
-   SendMessage(cmnd,K_ADDR_ANY_TARGET,K_SCHEMA_OSD_BASIC,['command','text'],['write',aString]);
+   SendMessage(cmnd,K_ADDR_ANY_TARGET,'osd.basic',['command','text'],['write',aString]);
 end;
 
 procedure TxPLSender.SendLOGBasic(const aLevel : string; const aString: string);
 begin
-   SendMessage(trig,K_ADDR_ANY_TARGET,K_SCHEMA_LOG_BASIC,['type','text'],[aLevel,aString]);
+   SendMessage(trig,K_ADDR_ANY_TARGET,'log.basic',['type','text'],[aLevel,aString]);
 end;
 
 end.

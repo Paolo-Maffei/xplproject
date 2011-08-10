@@ -194,7 +194,7 @@ procedure TxPLCustomListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; con
 begin
    aMessage.Format_HbeatApp(fConfig.Interval,aPort,aIP);
    aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION], [AppName, Version]);
-   if not Config.IsValid then aMessage.Schema.Classe := K_SCHEMA_CLASS_CONFIG; // Change Schema class in this case
+   if not Config.IsValid then aMessage.Schema.Classe := 'config'; // Change Schema class in this case
    if csDestroying in ComponentState then aMessage.Schema.Type_ := 'end';      // Change Schema type in this case
 end;
 
@@ -252,11 +252,11 @@ begin
       if ((Adresse.Equals(Target)) or (Target.Isgeneric) (*or MatchesFilter(fFilterSet)*)) then begin  // It is directed to me
       {EoTODO : check that this modification is ok}
 
-         if Schema.Classe = K_SCHEMA_CLASS_HBEAT then begin
+         if Schema.IsHBeat then begin
             if Adresse.Equals(Source)   then ConnectionStatus := connected;
             if Schema.Type_ = 'request' then HBeat.Rate := rfRandom;           // Choose a random value between 2 and 6 second
          end;
-         if Schema.Classe = K_SCHEMA_CLASS_CONFIG then HandleConfigMessage(aMessage);
+         if Schema.IsConfig then HandleConfigMessage(aMessage);
          if ( MatchesFilter(fFilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
             if not  DoHBeatApp(aMessage)
                then DoxPLReceived(aMessage);

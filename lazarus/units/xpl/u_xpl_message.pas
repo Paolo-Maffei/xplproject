@@ -26,7 +26,7 @@ uses classes,
      u_xPL_Address,
      u_xpl_schema,
      u_xPL_Body,
-     uxPLConst,
+//     uxPLConst,
      u_xml_plugins;
 
 type { TxPLMessage ===========================================================}
@@ -34,8 +34,6 @@ type { TxPLMessage ===========================================================}
      TxPLMessage = class(TxPLCustomMessage)
      private
         fMsgName      : string;
-     protected
-        //procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); virtual;
      public
         function ElementByName(const anItem : string) : string;
         function ProcessedxPL : string;
@@ -43,7 +41,6 @@ type { TxPLMessage ===========================================================}
         procedure LoadFromFile(aFileName : string);
         procedure SaveToFile(aFileName : string);
 
-        //procedure ReadFromXML(const aCom : TXMLCommandType); overload;         // Reads a message from vendor plugin file
         procedure ReadFromJSON(const aCom : TCommandType);
 
         procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
@@ -61,6 +58,7 @@ Uses SysUtils
      , StrUtils
      , JclStrings
      , u_xpl_common
+     , uxPLConst
      ;
 
 // TxPLMessage =================================================================
@@ -94,11 +92,6 @@ begin
    end;
 end;
 
-//procedure TxPLMessage.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//  if CompareText(AClassName, 'TxPLMessage') = 0 then ComponentClass := TxPLMessage
-//end;
-
 procedure TxPLMessage.SaveToFile(aFileName: string);
 begin
    StreamObjectToFile(aFileName, self);
@@ -108,18 +101,6 @@ procedure TxPLMessage.LoadFromFile(aFileName: string);
 begin
    ReadObjectFromFile(aFileName, self);
 end;
-
-//procedure TxPLMessage.ReadFromXML(const aCom: TXMLCommandType);                 // Reads a message from a vendor file
-//var i : integer;
-//begin
-//   ResetValues;
-//   MsgName := aCom.name;
-//   MessageType := StrToMsgType(K_MSG_TYPE_HEAD + aCom.msg_type);
-//   Target.IsGeneric := true;
-//   Schema.RawxPL := aCom.msg_schema;
-//   for i := 0 to aCom.elements.Count-1 do
-//       Body.AddKeyValuePairs([aCom.Elements[i].Name],[aCom.Elements[i].default_]);
-//end;
 
 procedure TxPLMessage.ReadFromJSON(const aCom: TCommandType);
 var item : TCollectionItem;
@@ -146,7 +127,7 @@ end;
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin
    Body.ResetValues;
-   Schema.RawxPL := K_SCHEMA_SENSOR_BASIC;
+   Schema.RawxPL := 'sensor.basic';
    Body.AddKeyValuePairs(['device','type','current'],[aDevice,aType,aCurrent]);
 end;
 

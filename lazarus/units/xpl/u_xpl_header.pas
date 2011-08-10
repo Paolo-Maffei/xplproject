@@ -13,7 +13,7 @@ unit u_xPL_Header;
  }
 
 {$ifdef fpc}
-{$mode objfpc}{$H+}{$M+}
+   {$mode objfpc}{$H+}{$M+}
 {$endif}
 
 interface
@@ -24,11 +24,8 @@ uses Classes,
      u_xpl_common,
      u_xpl_config;
 
-type
-
-{ TxPLHeader }
-
-TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
+type // TxPLHeader ============================================================
+     TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
      private
        fSource  : TxPLAddress;
        fTarget  : TxPLTargetAddress;
@@ -45,14 +42,14 @@ TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
        procedure Set_Source(const AValue: TxPLAddress);
        procedure Set_Target(const AValue: TxPLTargetAddress);
      public
-       constructor Create(aOwner : TComponent); overload;
+       constructor Create(aOwner : TComponent); override;
        constructor Create(aOwner : TComponent; const aFilter : string); overload; // Creates a header based on a filter string
-       destructor  destroy; override;
+       destructor  Destroy; override;
 
        procedure   Assign(aHeader : TPersistent); override;
 
        procedure   ResetValues;
-       function    IsValid : boolean;
+       function    IsValid : boolean; dynamic;
 
        procedure   Reply;
        function    MatchesFilter(aFilterSet : TxPLConfigItem) : boolean;
@@ -79,7 +76,7 @@ uses SysUtils
      ;
 
 // ============================================================================
-const K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n][}][\n](.+)';
+const K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n][}][\n](.+)[\n]';
       K_MSG_HEADER_HOP    = 'hop';
       K_MSG_HEADER_SOURCE = 'source';
       K_MSG_HEADER_TARGET = 'target';
@@ -101,7 +98,7 @@ end;
 constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string);
 var  sFlt : TStringList;
 begin
-   inherited Create(aOwner);
+   Create(aOwner);
 
    sFlt := TStringList.Create;
    try
@@ -167,23 +164,16 @@ end;
 
 function TxPLHeader.IsValid: boolean;
 begin
-   result := //Source.IsValid and
-             //Target.IsValid and
-             //Schema.IsValid and
+   result := Source.IsValid and
+             Target.IsValid and
+             Schema.IsValid and
              (ord(MessageType)>=0);
 end;
 
 function TxPLHeader.Get_RawxPL: string;
 begin
-   if IsValid
-      then Result := Format( K_MSG_HEADER_FORMAT,
-                             [ MsgTypeToStr(MessageType),
-                               Hop,
-                               Source.RawxPL,
-                               Target.RawxPL,
-                               Schema.RawxPL ]
-                     )
-     else Raise Exception.Create('RawxPL Error in ' + ClassName);
+   Result := Format( K_MSG_HEADER_FORMAT,
+                     [ MsgTypeToStr(MessageType), Hop, Source.RawxPL, Target.RawxPL, Schema.RawxPL ]);
 end;
 
 procedure TxPLHeader.Set_Hop(const AValue: integer);
@@ -233,7 +223,8 @@ begin
            end;
            Schema.RawxPL := Match[9];
         end;
-   finally Destroy;
+   finally
+        Destroy;
    end;
 end;
 
@@ -247,7 +238,7 @@ begin
    result := Format(K_FMT_FILTER,[MsgTypeToStr(MessageType),Target.AsFilter,Schema.AsFilter]);
 end;
 
-initialization
+initialization // =============================================================
    Classes.RegisterClass(TxPLHeader);
 
 end.

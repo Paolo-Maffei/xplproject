@@ -96,10 +96,10 @@ const
    K_MSG_TYPE_CMND = K_MSG_TYPE_HEAD + 'cmnd';
 
    // Message body elements ====================================================
-   K_BODY_ELMT_DELIMITER = '=';
+//   K_BODY_ELMT_DELIMITER = '=';
    K_RE_BODY_FORMAT      = '[{](.+)[}]';
    K_RE_BODY_LINE        = '(([0-9a-z-]{1,16})=([^\n]{0,128}))*';
-   K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
+//   K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
 
    // Message elements =========================================================
    K_RE_MESSAGE        = '\A(.+\n([0-9a-z/-]{1,8}\.[0-9a-z/-]{1,8}))(.+)';       // Renforcé la RE du message pour tenir compte de l'existance de variables {SYS::} dans le corps du message
