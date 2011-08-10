@@ -247,7 +247,7 @@ Public Class xPLMessage
     ''' <exception cref="NullReferenceException">Condition: <c>xdev</c> parameter <c>Is Nothing</c> and <c>Source</c>
     ''' address is not found in the local device list of <c>xPLListener</c>.</exception>
     Public Sub Send(Optional ByVal xdev As xPLDevice = Nothing)
-        If (xdev Is Nothing) And (xPLListener.IndexOf(mSource) = -1) Then Throw New NullReferenceException
+        If (xdev Is Nothing) And (xPLListener.IndexOf(mSource) = -1) Then Throw New NullReferenceException("xPL device not provided, or the source address is unknown")
         If xdev Is Nothing Then
             xdev = xPLListener.Device(mSource)
         End If
