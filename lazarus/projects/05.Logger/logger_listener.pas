@@ -35,8 +35,6 @@ type TMessageList = TList;
         constructor Create; reintroduce;
         destructor  Destroy; override;
 
-        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
-
         procedure   Set_ConnectionStatus(const aValue : TConnectionStatus); override;
         function    Message(const i : integer) : TxPLMessage;
 
@@ -70,12 +68,6 @@ function TLoggerListener.Get_MessageCount: integer;
 begin
    result := MessageList.Count;
 end;
-
-//procedure TLoggerListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//   if CompareText(AClassName, ClassName) = 0 then ComponentClass := TLoggerListener
-//   else inherited;
-//end;
 
 procedure TLoggerListener.OnPreprocessMessage(const aMessage: TxPLMessage);
 begin

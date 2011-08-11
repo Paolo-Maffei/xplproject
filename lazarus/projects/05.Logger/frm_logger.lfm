@@ -1,7 +1,7 @@
 inherited frmLogger: TfrmLogger
-  Left = 20
+  Left = 172
   Height = 440
-  Top = 34
+  Top = 46
   Width = 869
   Caption = 'frmLogger'
   ClientHeight = 440
@@ -2379,7 +2379,6 @@ inherited frmLogger: TfrmLogger
     ShowRoot = False
     TabOrder = 4
     ToolTips = False
-    OnDragOver = tvMessagesDragOver
     OnSelectionChanged = tvMessagesSelectionChanged
     Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines]
   end
@@ -2430,7 +2429,7 @@ inherited frmLogger: TfrmLogger
       DefaultColWidth = 20
       DefaultRowHeight = 20
       ExtendedSelect = False
-      Options = [goColSizing, goColMoving, goRowSelect, goThumbTracking, goDblClickAutoSize, goSmoothScroll]
+      Options = [goRangeSelect, goColSizing, goColMoving, goRowSelect, goThumbTracking, goDblClickAutoSize, goSmoothScroll]
       PopupMenu = mnuListView
       TabOrder = 0
       TitleStyle = tsNative
@@ -2575,6 +2574,10 @@ inherited frmLogger: TfrmLogger
       Caption = 'Add to Macro List'
       OnExecute = acAddToMacroExecute
     end
+    object acAssembleFragments: TAction
+      Caption = 'Assembre Fragments'
+      OnExecute = acAssembleFragmentsExecute
+    end
   end
   object SaveDialog: TSaveDialog[12]
     left = 48
@@ -2703,6 +2706,12 @@ inherited frmLogger: TfrmLogger
     end
     object MenuItem5: TMenuItem
       Action = acAddToMacro
+    end
+    object MenuItem6: TMenuItem
+      Caption = '-'
+    end
+    object MenuItem8: TMenuItem
+      Action = acAssembleFragments
     end
   end
 end
