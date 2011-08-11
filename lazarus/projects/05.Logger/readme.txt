@@ -89,5 +89,9 @@ Changes History :
 		Clic on 'Macro (x elmts)' to display the message list that will be played
 		You can specify a timing (in seconds) and enable loop sending.
 		
+	v 4.3.0.1
+		Added new functionalities to logger to allow usage of fragment messages (cf http://www.xplproject.org.uk/forums/viewtopic.php?f=2&t=1099)	
+		Select the first fragment element of a message, extend the selection to the last element. Right click and use 'Assemble fragments'.
+		
 		
 		

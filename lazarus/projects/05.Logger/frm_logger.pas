@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
   JvAppEvent, RTTICtrls, RTTIGrids,  uxPLConst, frm_template,
   frame_message, logger_listener, u_xpl_header;
 
@@ -25,6 +25,7 @@ type
     acResend: TAction;
     acPlay: TAction;
     acAddToMacro: TAction;
+    acAssembleFragments: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
     JvAppEvents1: TJvAppEvents;
@@ -37,6 +38,8 @@ type
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem8: TMenuItem;
     mnuCommands: TMenuItem;
     mnuSendMessage: TMenuItem;
     Panel1:    TPanel;
@@ -74,6 +77,7 @@ type
     procedure acPlayExecute(Sender: TObject);
     procedure acPluginDetailExecute(Sender: TObject);
     procedure acResendExecute(Sender: TObject);
+    procedure acAssembleFragmentsExecute(Sender : TObject);
     procedure acShowMessageExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
@@ -82,14 +86,12 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
-    procedure MenuItem5Click(Sender: TObject);
     procedure mnuListViewPopup(Sender: TObject);
     procedure mnuSendMessageClick(Sender: TObject);
     procedure mnuCommandClick(Sender: TObject);
     procedure PlayExecute(Sender: TObject);
     procedure mnuTreeViewPopup(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
-    procedure tvMessagesDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
     procedure tvMessagesSelectionChanged(Sender: TObject);
   private
     NetNode,MsgNode,ConNode,MacNode : TTreeNode;
@@ -111,7 +113,6 @@ implementation { TFrmLogger ====================================================
 uses frm_xplappslauncher
      , u_configuration_record
      , frm_AppSettings
-     , frm_logviewer
      , frm_about
      , StrUtils
      , JclStrings
@@ -122,6 +123,7 @@ uses frm_xplappslauncher
      , u_xpl_application
      , u_xpl_schema
      , u_xpl_common
+     , u_xpl_fragment_mgr
      , frm_PluginDetail
      , LCLType
      , LCLIntf
@@ -196,7 +198,7 @@ end;
 
 procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
 begin
-           MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
+   MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
 end;
 
 procedure TfrmLogger.acConversationExecute(Sender: TObject);
@@ -453,6 +455,18 @@ begin
    TxPLListener(xPLApplication).Send(TxPLMessage(dgMessages.Objects[0,dgMessages.Row]));
 end;
 
+procedure TfrmLogger.acAssembleFragmentsExecute(Sender: TObject);
+var aMsg : TxPLMessageGUI;
+    fFragFactory : TFragmentFactory;
+begin
+   aMsg := TxPLMessageGUI(dgMessages.Objects[0,dgMessages.Selection.Top]);
+   fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.Combine(aMsg);
+   if fFragFactory.IsCompleted then begin
+      aMsg := TxPLMessageGUI(fFragFactory.Assembled);
+      if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
+   end;
+end;
+
 procedure TfrmLogger.acShowMessageExecute(Sender: TObject);
 var aMsg : TxPLMessageGUI;
 begin
@@ -460,9 +474,10 @@ begin
    if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
 end;
 
-
 procedure TfrmLogger.JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
 var aMsg : TxPLMessage;
+    i : integer;
+    fFragFactory : TFragmentFactory;
 begin
    acDiscoverNetwork.Visible := (tvMessages.Selected = NetNode);
    acPluginDetail.Visible    := (tvMessages.Selected.Data <> nil);
@@ -476,10 +491,20 @@ begin
    end;
    tbMacro.Visible           := (tvMessages.Selected = MacNode);
    MacNode.Text              := Format('Macro (%d elts)',[MacroList.Count]);
-end;
 
-procedure TfrmLogger.MenuItem5Click(Sender: TObject);
-begin
+   acAssembleFragments.Enabled := false;
+   fFragFactory := nil;
+   for i:=dgMessages.selection.top to dgMessages.selection.bottom do begin
+       aMsg := TxPLMessage(dgMessages.Objects[0,i]);
+       if Assigned(aMsg) then begin
+          if aMsg.schema.IsFragment then fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.Combine(aMsg)
+                                    else begin
+                                      fFragFactory := nil;
+                                      break;
+                                    end;
+       end;
+   end;
+   if Assigned(fFragFactory) then acAssembleFragments.Enabled := fFragFactory.IsCompleted;
 
 end;
 
@@ -516,19 +541,6 @@ begin
       end;
   end;
 end;
-
-procedure TfrmLogger.tvMessagesDragOver(Sender, Source: TObject; X, Y: Integer; State: TDragState; var Accept: Boolean);
-begin
-   accept := (Source = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode);
-end;
-
-//procedure TfrmLogger.dgMessagesEndDrag(Sender, Target: TObject; X, Y: Integer);
-//begin
-//   if ((Sender = dgMessages) and (tvMessages.GetNodeAt(X,Y) = MacNode)) then begin
-//      if Assigned(dgMessages.Objects[0,dgMessages.Row]) then
-//         MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
-//   end;
-//end;
 
 procedure TfrmLogger.mnuCommandClick(Sender: TObject);
 var
