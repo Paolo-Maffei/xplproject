@@ -20,13 +20,14 @@ uses Classes
      , u_xpl_address
      , u_xpl_application
      , u_xpl_udp_socket
+     , u_xpl_fragment_mgr
      ;
 
 type // TxPLSender ============================================================
      TxPLSender = class(TxPLApplication)
      protected
-        fSocket : TxPLUDPClient;
-        fFragCounter : integer;
+        fSocket  : TxPLUDPClient;
+        fFragMgr : TFragmentManager;
         procedure Send(const aMessage : string);      overload;
 
      public
@@ -44,6 +45,8 @@ type // TxPLSender ============================================================
         procedure SendHBeatRequestMsg;
         procedure SendOSDBasic(const aString : string);
         procedure SendLOGBasic(const aLevel : string; const aString : string);
+     published
+        property FragmentMgr : TFragmentManager read fFragMgr;
      end;
 
 implementation // =============================================================
@@ -55,8 +58,8 @@ uses u_xpl_message
 constructor TxPLSender.create(const aOwner : TComponent);
 begin
    inherited;
-   fSocket := TxPLUDPClient.Create(self, Settings.BroadCastAddress);
-   fFragCounter := 0;
+   fSocket  := TxPLUDPClient.Create(self, Settings.BroadCastAddress);
+   fFragMgr := TFragmentManager.Create(self);
 end;
 
 procedure TxPLSender.Send(const aMessage: string);
@@ -65,51 +68,21 @@ begin
 end;
 
 procedure TxPLSender.Send(const aMessage: TxPLCustomMessage; const bEnforceSender : boolean = true);
-var messagelist : TList;
-    newfrag,dupmsg : TxPLMessage;
-    i,j,runner,overhead  : integer;
+var i  : integer;
+    FragFactory : TFragmentFactory;
 begin
    if bEnforceSender then
       aMessage.Source.Assign(Adresse);                     // Let's be sure I'm identified as the sender
 
    if not aMessage.IsValid then Log(etWarning,'Error sending message %s',[aMessage.RawxPL])
       else begin
-     if not aMessage.MustFragment then Send(TxPLMessage(aMessage).ProcessedxPL)
-                                  else begin
-        messagelist := TList.Create;
-
-        i := 0;
-        while (i< aMessage.Body.ItemCount) do begin
-            newfrag := TxPLMessage.Create(self);
-            newfrag.Assign(aMessage);
-            newfrag.schema.assign(Schema_FragBasic);
-            newfrag.body.resetvalues;
-            newfrag.body.addkeyvaluepairs(['partid'],['%d/%d:%d']);
-            if messagelist.count = 0 then
-               newfrag.body.addkeyvaluepairs(['schema'],[aMessage.Schema.RawxPL]);
-
-            while (i<aMessage.Body.ItemCount) and (not newfrag.mustfragment) do begin
-                  newfrag.Body.AddKeyValuePairs([aMessage.Body.Keys[i]],[aMessage.Body.Values[i]]);
-                  inc(i);
-            end;
-
-            if newfrag.mustfragment then begin
-               newfrag.Body.DeleteItem(newfrag.body.itemcount-1);
-               dec(i);
-            end;
-
-            messagelist.Add(newfrag);
+     if not aMessage.MustFragment
+        then Send(TxPLMessage(aMessage).ProcessedxPL)
+        else begin
+             FragFactory := fFragMgr.Fragment(aMessage);
+             for i:=0 to Pred(FragFactory.FragmentList.Count) do
+                 Send(TxPLMessage(FragFactory.FragmentList[i]).ProcessedxPL);
         end;
-
-        for i:=0 to messagelist.count-1 do begin
-            newfrag := TxPLMessage(messagelist[i]);
-            newfrag.body.Values[0] := Format(newfrag.body.Values[0],[i+1,messagelist.count,fFragCounter]);
-            Send(newfrag);
-        end;
-
-        messagelist.free;
-        inc(fFragCounter);
-     end;
    end
 
 end;

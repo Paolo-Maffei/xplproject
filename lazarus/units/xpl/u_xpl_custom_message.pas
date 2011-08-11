@@ -36,6 +36,7 @@ type { TxPLCustomMessage =====================================================}
         constructor Create(aOwner : TComponent; const aRawxPL : string = ''); reintroduce;
 
         procedure   Assign(aMessage : TPersistent); override;
+        procedure   AssignHeader(aMessage : TxPLCustomMessage);
         procedure   ResetValues;
         function    IsLifeSign   : boolean; inline;
         function    IsValid      : boolean; override;
@@ -82,9 +83,14 @@ procedure TxPLCustomMessage.Assign(aMessage: TPersistent);
 begin
    if aMessage is TxPLCustomMessage then begin
       fBody.Assign(TxPLCustomMessage(aMessage).Body);                          // Let me do specific part
-      fTimeStamp := TxPLCustomMessage(aMessage).TimeStamp;
+      AssignHeader(TxPLCustomMessage(aMessage));
    end;
-   inherited;                                                                  // and ancestor do the rest
+end;
+
+procedure TxPLCustomMessage.AssignHeader(aMessage: TxPLCustomMessage);
+begin
+   fTimeStamp := aMessage.TimeStamp;
+   inherited Assign(aMessage);
 end;
 
 function TxPLCustomMessage.Get_RawXPL: string;
