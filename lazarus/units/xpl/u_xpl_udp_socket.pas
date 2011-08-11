@@ -33,6 +33,8 @@ const XPL_UDP_BASE_PORT     : Integer = 3865;                                   
 
 type { TxPLUDPClient ==========================================================}
      TxPLUDPClient = class(TIdUDPClient)                                        // Connexion used to send xPL messages
+        private
+           fLastSentTime : TDateTime;
         public
            constructor Create(const aOwner : TComponent; const aBroadCastAddress : string);
            procedure   Send(const AData: string); overload;
@@ -73,12 +75,14 @@ uses  IdStack
       , SysUtils
       , StrUtils
       , uxPLConst
+      , DateUtils
       , u_xpl_application
       ;
 
 // =============================================================================
 const XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                  // First port used to try to open the listening port
       XPL_BASE_PORT_RANGE   : Integer = 512;                                    //       Range of port to scan for trying to bind socket
+      K_SENDING_TEMPO       : Integer = 50;                                     // Temporisation to avoid message flooding
       K_SIZE_ERROR          = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
       K_USING_DEFAULT       = 'xPL settings not set, using default';
 
@@ -89,13 +93,20 @@ begin
    BroadcastEnabled := True;
    Port := XPL_UDP_BASE_PORT;
    Host := aBroadCastAddress;
+   fLastSentTime := now;
 end;
 
 procedure TxPLUDPClient.Send(const AData: string);
+var Tempo : integer;
 begin
-   if length(aData) <= XPL_MAX_MSG_SIZE
-      then inherited
-      else xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE]);
+   if length(aData) > XPL_MAX_MSG_SIZE
+      then xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
+      else begin
+         Tempo := MillisecondsBetween(fLastSentTime, now);
+         if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
+         inherited;
+         fLastSentTime := now;
+      end;
 end;
 
 // TxPLUDPServer ===============================================================

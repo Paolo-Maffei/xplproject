@@ -56,6 +56,7 @@ type // TxPLBody ==============================================================
            procedure AddKeyValuePairs(const aKeys, aValues : TStringList); overload;
            procedure AddKeyValuePairs(const aKeys, aValues : Array of string); overload;
            procedure AddKeyValue(const aKeyValuePair : string);
+           procedure Append(const aBody : TxPLBody);
            procedure InsertKeyValuePair(const aIndex : integer; const aKey, aValue : string);
            procedure DeleteItem(const aIndex : integer);
            function  GetValueByKey(const aKeyValue: string; const aDefVal : string = '') : string;
@@ -248,6 +249,12 @@ begin
    i := AnsiPos(K_BODY_ELMT_DELIMITER,aKeyValuePair);
    if i <> 0 then AddKeyValuePair( AnsiLowerCase(Copy(aKeyValuePair,0,i-1)) ,
                                    Copy(aKeyValuePair,i+1,length(aKeyValuePair)-i + 1));
+end;
+
+procedure TxPLBody.Append(const aBody: TxPLBody);
+var i : integer;
+begin
+   for i:= 0 to pred(aBody.ItemCount) do AddKeyValuePair(aBody.Keys[i],aBody.Values[i]);
 end;
 
 procedure TxPLBody.Set_RawxPL(const AValue: string);

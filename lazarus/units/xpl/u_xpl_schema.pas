@@ -25,8 +25,9 @@ type // TxPLSchema ============================================================
      public
         Constructor Create(const aClasse : string = ''; const aType : string = ''); reintroduce;
 
-        function IsHBeat  : boolean;
-        function IsConfig : boolean;
+        function IsHBeat    : boolean;
+        function IsConfig   : boolean;
+        function IsFragment : boolean;
      published
         property Classe : string index 0 read Get_Element write Set_Element;
         property Type_  : string index 1 read Get_Element write Set_Element;
@@ -72,6 +73,11 @@ end;
 function TxPLSchema.IsConfig: boolean;
 begin
    Result := (Classe = 'hbeat');
+end;
+
+function TxPLSchema.IsFragment: boolean;
+begin
+   Result := Equals(Schema_FragBasic);
 end;
 
 // ============================================================================

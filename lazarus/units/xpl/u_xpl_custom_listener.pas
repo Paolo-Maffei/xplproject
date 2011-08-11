@@ -248,7 +248,7 @@ begin
    aMessage := TxPLMessage.Create(self, aString);
    with aMessage do try
       if Assigned(OnPreprocessMsg) then OnPreprocessMsg(aMessage);
-      { TODO : There's a bug here : having these three or leads the program to accept messages that are not directed to him if it matches its filters }
+      { TODO : There's a bug here : having these three 'or' leads the program to accept messages that are not directed to him if it matches its filters }
       if ((Adresse.Equals(Target)) or (Target.Isgeneric) (*or MatchesFilter(fFilterSet)*)) then begin  // It is directed to me
       {EoTODO : check that this modification is ok}
 
