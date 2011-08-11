@@ -52,25 +52,25 @@ end;
 function GetDevice: string;
 begin
    result := VersionInfo.InternalName;
-   Assert(length(result)>0,'Version Info are missing');
+   Assert(length(result)>0,'InternalName in Version Info is missing');
 end;
 
 function GetVendor: string;
 begin
    result := VersionInfo.CompanyName;
-   Assert(length(result)>0,'Version Info are missing');
+   Assert(length(result)>0,'CompanyName in Version Info is missing');
 end;
 
 function GetVersion: string;
 begin
    result := VersionInfo.FileVersion;
-   Assert(length(result)>0,'Version Info are missing');
+   Assert(length(result)>0,'FileVersion in Version Info is missing');
 end;
 
 function GetProductName : string;
 begin
    result := VersionInfo.ProductName;
-   Assert(length(result)>0,'Version Info are missing');
+   Assert(length(result)>0,'ProductName in Version Info is missing');
 end;
 
 function GetMacAddress: string;
