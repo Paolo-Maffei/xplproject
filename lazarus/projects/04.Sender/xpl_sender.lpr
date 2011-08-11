@@ -19,7 +19,7 @@ uses
   u_xpl_common,
   u_xpl_message_GUI,
   u_xpl_sender,
-  frame_message;
+  frame_message, u_xpl_fragment_mgr;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 
