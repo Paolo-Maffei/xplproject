@@ -31,8 +31,6 @@ type TButtonOption = (
      { TxPLMessageGUI }
 
      TxPLMessageGUI = class(TxPLMessage)
-        protected
-           //procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         public
            function  Edit : boolean;     dynamic;
            procedure Show(options : TButtonOptions);
@@ -57,12 +55,6 @@ begin
    finally
    end;
 end;
-
-//procedure TxPLMessageGUI.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//  if CompareText(AClassName, 'TxPLMessageGUI') = 0 then ComponentClass := TxPLMessageGUI
-//  else inherited OnFindClass(Reader, AClassName, ComponentClass);
-//end;
 
 function TxPLMessageGUI.Edit : boolean;
 begin
