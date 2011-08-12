@@ -55,6 +55,9 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
     '  - fragments should be passed
     '  - defragmented messages should not be passed
 
+    ' schema in message body is invalid or missing
+    ' fragment key has incorrect format or missing
+
     <TestMethod()> Public Sub TestMethod1()
         ' TODO: Add test logic here
     End Sub

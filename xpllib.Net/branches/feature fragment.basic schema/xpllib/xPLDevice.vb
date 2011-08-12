@@ -982,7 +982,8 @@ Public Class xPLDevice
                 Dim m As String = myxPL.RawxPL
                 If Not Me.AutoFragment Then
                     If Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
-                        Throw New ArgumentException("xPLDevice.Send; Message size exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
+                        If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
+                        Throw New ArgumentException("xPLDevice.Send; Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
                     End If
                 End If
                 xPLListener.SendRawxPL(m)
