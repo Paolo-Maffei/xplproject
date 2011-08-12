@@ -181,11 +181,24 @@ Public Class xPLListener
         End Get
     End Property
 
+    Private Shared _FragmentedIDCount As Integer = 0
+    ''' <summary>
+    ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Function GetNewFragmentedID() As Integer
+        _FragmentedIDCount += 1
+        If _FragmentedIDCount > 999 Then _FragmentedIDCount = 0
+        Return _FragmentedIDCount
+    End Function
 #End Region
 
 #Region "Collection management"
 
-    ''' <returns>The number of <c>Enabled</c> xplDevices</returns>
+    ''' <summary>
+    ''' The number of <c>Enabled</c> xplDevices
+    ''' </summary>
     ''' <remarks>If the listener isn't active, 0 is returned, no exception will be thrown</remarks>
     Public Shared ReadOnly Property Count() As Integer
         Get
@@ -381,6 +394,24 @@ Public Class xPLListener
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
+            Case "5.4"
+                ' get fragmented count
+                _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
+                i += 1
+                ' get settings for xPLNetwork object
+                xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
+                i += 1
+                ' for each device recreate it
+                While i <= lst.Length - 1
+                    Try
+                        xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
+                    Catch ex As Exception
+                        Dim e As String = "Device " & i & " could not be recreated from State value!"
+                        LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
+                        Throw New Exception(e, ex)
+                    End Try
+                    i += 1
+                End While
             Case "5.0", "5.1", "5.2", "5.3"
                 ' get settings for xPLNetwork object
                 xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
@@ -421,6 +452,8 @@ Public Class xPLListener
             ' get version of the application that created it
             s += XPL_STATESEP & StateEncode(AppVersion)
 
+            ' add fragmented count
+            s += XPL_STATESEP & StateEncode(_FragmentedIDCount.ToString)
             ' add xPLNetwork settings
             s += XPL_STATESEP & StateEncode(xPLNetwork.NetworkKeepEnded.ToString)
             ' now add all devices

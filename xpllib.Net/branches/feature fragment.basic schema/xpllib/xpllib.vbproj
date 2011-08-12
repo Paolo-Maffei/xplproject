@@ -52,6 +52,7 @@
     <Import Include="System.Diagnostics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="xPLFragmentedMsg.vb" />
     <Compile Include="xPLPluginUpdateDlgSmall.Designer.vb">
       <DependentUpon>xPLPluginUpdateDlgSmall.vb</DependentUpon>
     </Compile>
