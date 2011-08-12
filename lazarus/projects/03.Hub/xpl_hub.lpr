@@ -1,7 +1,9 @@
 program xpl_hub;
 
 {$APPTYPE CONSOLE}
-{$mode objfpc}{$H+}
+{$ifdef fpc}
+   {$mode objfpc}{$H+}
+{$endif}
 
 uses u_xpl_hub
      {$IFDEF UNIX}
@@ -12,7 +14,7 @@ uses u_xpl_hub
      , u_xpl_console_app
      ;
 
-{$R *.res}
+{$r *.res}
 
 var HubApplication : TxPLConsoleApp;
     xPLHub         : TxPLHub;

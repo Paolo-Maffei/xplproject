@@ -7,6 +7,7 @@ interface
 uses classes
      , IdUDPClient
      , u_xpl_custom_message
+     , u_xpl_messages
      , u_xpl_udp_socket
      , u_xpl_application
      , fpc_delphi_compat
@@ -24,28 +25,29 @@ type TPortList = TStringList;
         fMessage    : TxPLCustomMessage;
         fLocalIP    : string;
 
-        procedure UDPRead(const aString : string);
-        procedure OnTimer(Sender : TObject);
-        procedure HandleDevice;
+        procedure HandleDevice (const aHBeatMsg : THeartBeatMsg);
+        procedure UDPRead      (const aString : string);
+        procedure OnTimer      (Sender : TObject);
+
      public
         destructor  Destroy; override;
-        procedure    Start;
+        procedure   Start;
      end;
 
 implementation // =============================================================
 uses SysUtils
-     , uxPLConst
      , IdUDPBase
      , IdSocketHandle
+     , CustApp
      ;
 
 // ============================================================================
-const
-     K_ERROR_SETTINGS = 'xPL Settings may not be set ';
-     K_ERROR_PORT     = 'Unabled to bind port %d : a hub may already be present';
-     K_STARTED        = 'Hub started and listening on %s:%d';
-     K_RELEASING      = 'No activity on port %s, released';
-     K_DISCOVERED     = 'Discovered %s on %s';
+const K_ERROR_SETTINGS = 'xPL Settings may not be set ';
+      K_ERROR_PORT     = 'Unabled to bind port %d : a hub may already be present';
+      K_STARTED        = 'Hub started and listening on %s:%d';
+      K_RELEASING      = 'No activity on port %s, released';
+      K_DISCOVERED     = 'Discovered %s %s on %s';
+      K_VERBOSE        = '%s => %s, %s';
 
 // ============================================================================
 procedure TxPLHub.Start;                                                       // Two reason not to start :
@@ -57,7 +59,7 @@ begin                                                                          /
       if fInSocket.Active then begin
          fLocalIP  := fInSocket.Bindings[0].IP;
          for Binding in fInSocket.Bindings do
-            with TIdSocketHandle(Binding) do Log(etInfo,K_STARTED,[IP,Port]);
+             with TIdSocketHandle(Binding) do Log(etInfo,K_STARTED,[IP,Port]);
 
          fMessage  := TxPLCustomMessage.Create(self);
 
@@ -86,36 +88,37 @@ procedure TxPLHub.UDPRead(const aString: string);
 var i  : integer;
 begin
    fMessage.RawXPL := aString;                                                 // Check if it is a heart beat
-   if fMessage.IsLifeSign then HandleDevice;                                   // if this is the case, see if I already recorded it
+   if fMessage.IsLifeSign then HandleDevice(THeartBeatMsg(fMessage));          // if this is the case, see if I already recorded it
+
+   if TCustomApplication(Owner).HasOption('v') then
+      writeln( Format(K_VERBOSE,[fMessage.source.RawxPL,fMessage.target.RawxPL,fMessage.schema.RawxPL]));
 
    for i:=0 to Pred(fSocketList.Count) do
        TIdUDPClient(fSocketList.Objects[i]).Send(aString);                     // relaying the message
 end;
 
-procedure TxPLHub.HandleDevice;
-var interval : integer;
-    remoteip, port : string;
+procedure TxPLHub.HandleDevice(const aHBeatMsg : THeartBeatMsg);
+var remoteip, port : string;
     Binding : TCollectionItem;
     aSocket : TIdUDPClient;
     i       : integer;
 begin
-   remoteip := fMessage.Body.GetValueByKey(K_HBEAT_ME_REMOTEIP, fLocalIP);     // If no remote-ip param present, let's assume it's local
+   remoteip := aHBeatMsg.Remote_Ip;
+   if remoteip='' then remoteip := fLocalIp;
 
    for Binding in fInSocket.Bindings do
       if (TIdSocketHandle(Binding).IP = remoteip) then begin                   // The message is sent from a device located on one of my net cards
-         port := fMessage.Body.GetValueByKey(K_HBEAT_ME_PORT);
-         interval := StrToIntDef(fMessage.Body.GetValueByKey(K_HBEAT_ME_INTERVAL),MIN_HBEAT) * 2 + 1; // Defined by specifications as dead-line limit
-
+         port := IntToStr(aHBeatMsg.Port);
          i := fSocketList.IndexOfName(port);                                   // Search for the current port
 
          if i=-1 then begin                                                    // If not found
             aSocket := TIdUDPClient.Create(self);
             aSocket.Port:=StrToInt(port);
             i := fSocketList.AddObject(port+'=',aSocket);
-            Log(etInfo,K_DISCOVERED,[fMessage.Source.RawxPL,port]);
+            Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
          end;
 
-         fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + interval/(60*24));
+         fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
       end;
 end;
 
