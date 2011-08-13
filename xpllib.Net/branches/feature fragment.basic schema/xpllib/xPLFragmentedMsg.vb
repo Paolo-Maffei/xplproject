@@ -50,6 +50,7 @@ Imports System.Text
 ''' </summary>
 ''' <remarks></remarks>
 Public Class xPLFragmentedMsg
+    Implements IDisposable
 
     ''' <summary>
     ''' Simple class to dissect a fragment key into its components; fragment nr, total number of fragments and message ID
@@ -195,35 +196,35 @@ Public Class xPLFragmentedMsg
         End Get
     End Property
 
-    ''' <summary>
-    ''' Returns true is the message can be fragmented; eg. message (and fragmentation) overhead 
-    ''' combined with the longest value do not exceed the maximum message size.
-    ''' </summary>
-    ''' <param name="msg"></param>
-    ''' <remarks></remarks>
-    Public Shared Function CanFragment(ByVal msg As xPLMessage) As Boolean
-        If msg Is Nothing Then Throw New NullReferenceException("Must provide an xPLMessage object.")
+    '''' <summary>
+    '''' Returns true is the message can be fragmented; eg. message (and fragmentation) overhead 
+    '''' combined with the longest value do not exceed the maximum message size.
+    '''' </summary>
+    '''' <param name="msg"></param>
+    '''' <remarks></remarks>
+    'Public Shared Function CanFragment(ByVal msg As xPLMessage) As Boolean
+    '    If msg Is Nothing Then Throw New NullReferenceException("Must provide an xPLMessage object.")
 
-        Dim raw As String = msg.RawxPL
-        ' extract header and add the fragment overhead
-        Dim d As String = msg.Schema & XPL_LF & "{" & XPL_LF
-        Dim header As String = Left(raw, raw.IndexOf(d)) & "fragment.basic" & XPL_LF & "{" & XPL_LF & "partid=000/000:000" & XPL_LF
-        ' define footer
-        Dim footer As String = "}" & XPL_LF
-        ' calculate maximum size for a single key/value pair available
-        Dim max As Integer = XPL_MAX_MSG_SIZE - (header.Length + footer.Length)
-        Dim result As Boolean = True    ' start of assuming we're ok
-        For n As Integer = 0 To msg.KeyValueList.Count - 1
-            With msg.KeyValueList(n)
-                If .Key.Length + Encoding.UTF8.GetByteCount(.Value) + XPL_LF.Length + 1 > max Then
-                    ' Too large, so it fails
-                    result = False
-                    Exit For
-                End If
-            End With
-        Next
-        Return result
-    End Function
+    '    Dim raw As String = msg.RawxPL
+    '    ' extract header and add the fragment overhead
+    '    Dim d As String = msg.Schema & XPL_LF & "{" & XPL_LF
+    '    Dim header As String = Left(raw, raw.IndexOf(d)) & "fragment.basic" & XPL_LF & "{" & XPL_LF & "partid=" & XPL_FRAGMENT_MAX.ToString & "/" & XPL_FRAGMENT_MAX.ToString & ":" & XPL_FRAGMENT_COUNTER_MAX & XPL_LF
+    '    ' define footer
+    '    Dim footer As String = "}" & XPL_LF
+    '    ' calculate maximum size for a single key/value pair available
+    '    Dim max As Integer = XPL_MAX_MSG_SIZE - (header.Length + footer.Length)
+    '    Dim result As Boolean = True    ' start of assuming we're ok
+    '    For n As Integer = 0 To msg.KeyValueList.Count - 1
+    '        With msg.KeyValueList(n)
+    '            If .Key.Length + Encoding.UTF8.GetByteCount(.Value) + XPL_LF.Length + 1 > max Then
+    '                ' Too large, so it fails
+    '                result = False
+    '                Exit For
+    '            End If
+    '        End With
+    '    Next
+    '    Return result
+    'End Function
 
     ''' <summary>
     ''' Creates a new fragmented message, if the provided message has a 'fragment.basic' schema then it becomes a
@@ -234,12 +235,13 @@ Public Class xPLFragmentedMsg
     Public Sub New(ByVal msg As xPLMessage, ByVal Parent As xPLDevice)
         If msg Is Nothing Then Throw New ArgumentException("Must provide an xPLMessage object.", "msg")
         If Parent Is Nothing Then Throw New ArgumentException("Must provide an xPLDevice object as Parent.", "Parent")
-        _parent = Parent
+        _Parent = Parent
         If msg.Schema = "fragment.basic" Then
             CreateFromReceived(msg)
         Else
             CreateFromMessage(msg)
         End If
+        Parent._FragmentedMessageList.Add(Me)
     End Sub
 
     Private Sub CreateFromReceived(ByVal msg As xPLMessage)
@@ -274,13 +276,16 @@ Public Class xPLFragmentedMsg
         Dim bytesleft As Integer = 0
         While Not done1
             count = count + 1
+            If count > XPL_FRAGMENT_MAX Then
+                Throw New Exception("Message too large, results in more than the maximum number of allowed fragments (" & XPL_FRAGMENT_MAX.ToString & ").")
+            End If
             frag = New xPLMessage
             frag.MsgType = msg.MsgType
             frag.Source = msg.Source
             frag.Target = msg.Target
             frag.Hop = msg.Hop
             frag.Schema = "fragment.basic"
-            frag.KeyValueList.Add("partid", "000/000:000")
+            frag.KeyValueList.Add("partid", XPL_FRAGMENT_MAX & "/" & XPL_FRAGMENT_MAX & ":" & XPL_FRAGMENT_COUNTER_MAX)
             If count = 1 Then
                 frag.KeyValueList.Add("schema", msg.Schema)
             End If
@@ -325,6 +330,7 @@ Public Class xPLFragmentedMsg
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
     Public Sub AddFragment(ByVal msg As xPLMessage)
+        If _disposed Then Exit Sub
         Dim FragKey As New FragmentKey(msg)
         If Me.Created Then Throw New Exception("Cannot add fragments to a created message, only to received messages.")
         If msg.Source & ":" & FragKey.MessageID <> Me.MessageID Then Exit Sub
@@ -349,11 +355,18 @@ Public Class xPLFragmentedMsg
             _Fragments.Add(FragKey.FragmentNumber, msg) ' add to our list of fragments
             If _Checklist.Count = 0 Then
                 ' we've got all fragments, so go reconstruct the message
+                _ResendTimer.Stop()
                 Me.Reconstruct()
+                If IsComplete Then
+                    ' Inform parent of received message, and dismiss myself
+                    Parent.IncomingMessage(_Message)
+                    Me.Dispose()
+                End If
             End If
         End If
-        ResetResendTimer()
+        If Not IsComplete Then ResetResendTimer()
     End Sub
+
     ''' <summary>
     ''' Once the last fragment has been received, this will reconstruct the original message. Header is already done, now restore key-valuepairs in correct order
     ''' </summary>
@@ -468,24 +481,75 @@ Public Class xPLFragmentedMsg
 
     Private WithEvents _DismissTimer As New Timers.Timer
     Private WithEvents _ResendTimer As New Timers.Timer
+    Private _ReceivedFragmentSinceLastResendRequest As Boolean = True
     ''' <summary>
     ''' Timer that will expire when the message can be dismissed, when no new resend requests will be handled
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ResetDismissTimer()
-
+        _DismissTimer.Stop()
+        _DismissTimer.AutoReset = False
+        _DismissTimer.Interval = XPL_FRAGMENT_SEND_RETAIN
+        _DismissTimer.Start()
     End Sub
     Private Sub DismissTimerExpired() Handles _DismissTimer.Elapsed
-
+        If _disposed Then Exit Sub
+        ' Retainment period has expired, cleanup and remove this message
+        Me.Dispose()
     End Sub
     ''' <summary>
     ''' Timer that will be set when a fragment is received, if not timely all fragments are in, this timer requests a resend
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub ResetResendTimer()
-
+        _ReceivedFragmentSinceLastResendRequest = True
+        _ResendTimer.Stop()
+        _ResendTimer.AutoReset = False
+        _ResendTimer.Interval = XPL_FRAGMENT_REQUEST_AFTER
+        _ResendTimer.Start()
     End Sub
     Private Sub ResendTimerElapsed() Handles _ResendTimer.Elapsed
-        Me.RequestMissingParts()
+        If _disposed Then Exit Sub
+        If _ReceivedFragmentSinceLastResendRequest Then
+            ' first time timer expires, so request a resend
+            _ReceivedFragmentSinceLastResendRequest = False
+            _ResendTimer.Stop()
+            _ResendTimer.Interval = XPL_FRAGMENT_REQUEST_TIMEOUT
+            _ResendTimer.Start()
+            Me.RequestMissingParts()
+        Else
+            ' second time it expires without fragments having been received, dismiss the message
+            Me.Dispose()
+        End If
     End Sub
+
+    Private _disposed As Boolean = False        ' To detect redundant calls
+
+    ' IDisposable
+    Protected Overridable Sub Dispose(ByVal disposing As Boolean)
+        If Not Me._disposed Then
+            If disposing Then
+                ' TODO: free other state (managed objects).
+                _ResendTimer.Stop()
+                _DismissTimer.Stop()
+                If Parent._FragmentedMessageList.Contains(Me) Then
+                    Parent._FragmentedMessageList.Remove(Me)
+                End If
+            End If
+
+            ' TODO: free your own state (unmanaged objects).
+            ' TODO: set large fields to null.
+        End If
+        Me._disposed = True
+    End Sub
+
+#Region " IDisposable Support "
+    ' This code added by Visual Basic to correctly implement the disposable pattern.
+    Public Sub Dispose() Implements IDisposable.Dispose
+        ' Do not change this code.  Put cleanup code in Dispose(ByVal disposing As Boolean) above.
+        Dispose(True)
+        GC.SuppressFinalize(Me)
+    End Sub
+#End Region
+
 End Class
