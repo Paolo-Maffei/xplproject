@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -369,12 +369,11 @@ Public Class xPLListener
     ''' and can not be handled</exception>
     Public Shared Sub RestoreFromState(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)
         Dim lst() As String
-        Dim xdev As xPLDevice
         Dim xversion As String
         Dim aversion As String
         Dim i As Integer = 0
         If IsActive Then
-            LogError("xPLListener.RestoreFromState", "Listener is still active, start shutdown to dispose existing devices")
+            LogError("xPLListener.RestoreFromState", "Listener is still active, starting shutdown to dispose existing devices")
             ' dispose listener, will also shutdown all devices
             xPLListener.Shutdown()
         End If
@@ -395,43 +394,37 @@ Public Class xPLListener
 
         Select Case xversion
             Case "5.4"
-                ' get fragmented count
-                _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
-                i += 1
-                ' get settings for xPLNetwork object
-                xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
-                i += 1
-                ' for each device recreate it
-                While i <= lst.Length - 1
-                    Try
-                        xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
-                    Catch ex As Exception
-                        Dim e As String = "Device " & i & " could not be recreated from State value!"
-                        LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
-                        Throw New Exception(e, ex)
-                    End Try
-                    i += 1
-                End While
+                RestoreFromState54(lst, i, RestoreEnabled)
             Case "5.0", "5.1", "5.2", "5.3"
-                ' get settings for xPLNetwork object
-                xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
-                i += 1
-                ' for each device recreate it
-                While i <= lst.Length - 1
-                    Try
-                        xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
-                    Catch ex As Exception
-                        Dim e As String = "Device " & i & " could not be recreated from State value!"
-                        LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
-                        Throw New Exception(e, ex)
-                    End Try
-                    i += 1
-                End While
+                RestoreFromState50(lst, i, RestoreEnabled)
             Case Else
                 ' SavedState created by an unknown version of xpllib
                 LogError("xPLListener.RestoreFromState", "State created by unknown version of xPLLib: " & xversion & ".")
                 Throw New ArgumentException("SavedState value was created by an unknown version of xpllib: " & xversion, "SavedState")
         End Select
+    End Sub
+    Private Shared Sub RestoreFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean)
+        ' get fragmented count
+        _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
+        i += 1
+        RestoreFromState50(lst, i, RestoreEnabled)
+    End Sub
+    Private Shared Sub RestoreFromState50(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean)
+        Dim xdev As xPLDevice
+        ' get settings for xPLNetwork object
+        xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
+        i += 1
+        ' for each device recreate it
+        While i <= lst.Length - 1
+            Try
+                xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
+            Catch ex As Exception
+                Dim e As String = "Device " & i & " could not be recreated from State value!"
+                LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
+                Throw New Exception(e, ex)
+            End Try
+            i += 1
+        End While
     End Sub
 
     ''' <summary>

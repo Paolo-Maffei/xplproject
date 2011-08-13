@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -685,7 +685,7 @@ Public Class xPLDevice
                     ' Go online if required
                     If Debug Then LogError("xPLDevice.New from State", db, EventLogEntryType.Information)
                     Me.Enabled = RestoreEnabled
-                    If RestoreEnabled Then LogError("xPLDevice.New from State", "Went Enabled", EventLogEntryType.Information)
+                    If RestoreEnabled Then LogError("xPLDevice.New from State", "Went enabled", EventLogEntryType.Information)
 
                 Case Else
                     ' SavedState created by an unknown version of xpllib

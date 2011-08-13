@@ -3,7 +3,7 @@ Imports System.Text
 Imports System.Collections.Generic
 Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
-<TestClass()> Public Class fragment
+<TestClass()> Public Class UpdateVersion5v4
 
     Private testContextInstance As TestContext
 
@@ -16,7 +16,7 @@ Imports Microsoft.VisualStudio.TestTools.UnitTesting
             Return testContextInstance
         End Get
         Set(ByVal value As TestContext)
-            testContextInstance = Value
+            testContextInstance = value
         End Set
     End Property
 
