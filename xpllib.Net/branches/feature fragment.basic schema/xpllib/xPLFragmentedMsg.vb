@@ -419,4 +419,21 @@ Public Class xPLFragmentedMsg
 
         End Get
     End Property
+
+    ''' <summary>
+    ''' Send the fragmented message through the provided device. Will send all fragments.
+    ''' </summary>
+    ''' <param name="xdev">The xPL Device through which to send the message.</param>
+    ''' <remarks></remarks>
+    Public Sub Send(ByVal xdev As xPLDevice)
+        If Received Then Throw New Exception("Cannot send a message that was received, only created ones.")
+        If xdev Is Nothing Then Throw New NullReferenceException("xPL device not provided")
+
+        For n As Integer = 1 To NoOfFragments
+            If xdev.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & NoOfFragments.ToString, EventLogEntryType.Information)
+            xdev.Send(_Fragments(n))
+        Next
+        If xdev.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragmented message complete.", EventLogEntryType.Information)
+
+    End Sub
 End Class
