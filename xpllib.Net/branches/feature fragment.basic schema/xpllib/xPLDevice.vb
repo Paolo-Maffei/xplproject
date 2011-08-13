@@ -610,6 +610,10 @@ Public Class xPLDevice
 
     End Sub
     Private Sub NewFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
+        ' get fragmented count
+        db = db & vbCrLf & "Fragmented ID count: " & lst(i)
+        _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
+        i += 1
         ' Restore AutoFragmentation setting
         db = db & vbCrLf & "Auto fragment messages: " & lst(i)
         AutoFragment = Boolean.Parse(lst(i))
@@ -734,6 +738,8 @@ Public Class xPLDevice
         ' Add version numbers
         lst.Add(XPL_LIB_VERSION)
         lst.Add(AppVersion)
+        ' Store fragmented ID counter
+        lst.Add(_FragmentedIDCount.ToString)
         ' Store autofragment seetting
         lst.Add(AutoFragment.ToString)
         ' Store device address
@@ -1003,9 +1009,10 @@ Public Class xPLDevice
                     xPLListener.SendRawxPL(m)
                 Else
                     ' send as fragments
-                    Dim frag As New xPLFragmentedMsg(myxPL)
+                    If Debug Then LogError("xPLDevice.Send", "Fragmenting message...", EventLogEntryType.Information)
+                    Dim frag As New xPLFragmentedMsg(myxPL, Me)
                     If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.NoOfFragments & " fragments.", EventLogEntryType.Information)
-                    frag.Send(Me)
+                    frag.Send()
                 End If
             End If
             If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
@@ -1330,5 +1337,18 @@ Public Class xPLDevice
     Public Sub Disable()
         If Me.Enabled = True Then Me.Enabled = False
     End Sub
+
+    Private _FragmentedIDCount As Integer = 0
+    ''' <summary>
+    ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Friend Function GetNewFragmentedID() As Integer
+        _FragmentedIDCount += 1
+        If _FragmentedIDCount > 999 Then _FragmentedIDCount = 0
+        Return _FragmentedIDCount
+    End Function
+
 End Class
 

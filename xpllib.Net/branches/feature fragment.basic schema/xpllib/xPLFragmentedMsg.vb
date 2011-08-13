@@ -126,7 +126,20 @@ Public Class xPLFragmentedMsg
     ''' <remarks></remarks>
     Public ReadOnly Property Source() As String
         Get
+            If Created Then Return Parent.Address
             Return _Source
+        End Get
+    End Property
+    Private _Parent As xPLDevice
+    ''' <summary>
+    ''' The parent device the message belongs to
+    ''' </summary>
+    ''' <value></value>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public ReadOnly Property Parent() As xPLDevice
+        Get
+            Return _Parent
         End Get
     End Property
     Private _MessageID As String    ' senderaddress & ":" & (ID in partid key)
@@ -218,8 +231,10 @@ Public Class xPLFragmentedMsg
     ''' </summary>
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
-    Public Sub New(ByVal msg As xPLMessage)
-        If msg Is Nothing Then Throw New NullReferenceException("Must provide an xPLMessage object.")
+    Public Sub New(ByVal msg As xPLMessage, ByVal Parent As xPLDevice)
+        If msg Is Nothing Then Throw New ArgumentException("Must provide an xPLMessage object.", "msg")
+        If Parent Is Nothing Then Throw New ArgumentException("Must provide an xPLDevice object as Parent.", "Parent")
+        _parent = Parent
         If msg.Schema = "fragment.basic" Then
             CreateFromReceived(msg)
         Else
@@ -293,14 +308,13 @@ Public Class xPLFragmentedMsg
             done1 = (index = msg.KeyValueList.Count)
         End While
         ' set all the proper IDs
-        Dim msgid As Integer = xPLListener.GetNewFragmentedID
+        Dim msgid As Integer = Parent.GetNewFragmentedID
         For n As Integer = 1 To _Fragments.Count
             _Fragments(n).KeyValueList.Item("partid") = n.ToString & "/" & count.ToString & ":" & msgid.ToString
         Next
         ' set other properties
         _Message = msg
-        _Source = msg.Source
-        _MessageID = _Source & ":" & msgid.ToString
+        _MessageID = Me.Source & ":" & msgid.ToString
         _NoOfFragments = count
     End Sub
 
@@ -338,6 +352,7 @@ Public Class xPLFragmentedMsg
                 Me.Reconstruct()
             End If
         End If
+        ResetResendTimer()
     End Sub
     ''' <summary>
     ''' Once the last fragment has been received, this will reconstruct the original message. Header is already done, now restore key-valuepairs in correct order
@@ -409,31 +424,68 @@ Public Class xPLFragmentedMsg
     End Sub
 
     ''' <summary>
-    ''' Returns <c>True</c> if the message is incomplete, the last message was received to long ago, missing parts have been requested
+    ''' Will resend requested parts, as requested in the provided message. If the partid doesn't match, nothing will be send and 
+    ''' no exception will be thrown. <c>True</c> is returned when the parts have been succesfully resend.
     ''' </summary>
-    ''' <value></value>
-    ''' <returns></returns>
+    ''' <param name="msg">Message containing the resend request</param>
     ''' <remarks></remarks>
-    Public ReadOnly Property Expiring() As Boolean
-        Get
+    Public Function ResendFailedParts(ByVal msg As xPLMessage) As Boolean
+        If msg Is Nothing Then Return False
+        If msg.Schema <> "fragment.request" Then Return False
+        If msg.KeyValueList("command") <> "resend" Then Return False
+        Dim mid As String = msg.KeyValueList("message")
+        If mid Is Nothing OrElse mid <> MessageID Then Return False
+        Dim xdev As xPLDevice = xPLListener.Device(msg.Target)
+        If xdev Is Nothing Then Return False
+        If xdev.Status = xPLDeviceStatus.Offline Then Return False
 
-        End Get
-    End Property
+        For n As Integer = 0 To msg.KeyValueList.Count - 1
+            If msg.KeyValueList(n).Key = "part" Then
+                Dim part As Integer = Integer.Parse(msg.KeyValueList(n).Value)
+                If _Fragments.ContainsKey(part) Then
+                    xdev.Send(_Fragments(part))
+                End If
+            End If
+        Next
+        ResetDismissTimer()
+        Return True
+    End Function
 
     ''' <summary>
     ''' Send the fragmented message through the provided device. Will send all fragments.
     ''' </summary>
-    ''' <param name="xdev">The xPL Device through which to send the message.</param>
     ''' <remarks></remarks>
-    Public Sub Send(ByVal xdev As xPLDevice)
+    Public Sub Send()
         If Received Then Throw New Exception("Cannot send a message that was received, only created ones.")
-        If xdev Is Nothing Then Throw New NullReferenceException("xPL device not provided")
 
         For n As Integer = 1 To NoOfFragments
-            If xdev.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & NoOfFragments.ToString, EventLogEntryType.Information)
-            xdev.Send(_Fragments(n))
+            If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & NoOfFragments.ToString, EventLogEntryType.Information)
+            Parent.Send(_Fragments(n))
         Next
-        If xdev.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragmented message complete.", EventLogEntryType.Information)
+        If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragmented message complete.", EventLogEntryType.Information)
+        ResetDismissTimer()
+    End Sub
 
+    Private WithEvents _DismissTimer As New Timers.Timer
+    Private WithEvents _ResendTimer As New Timers.Timer
+    ''' <summary>
+    ''' Timer that will expire when the message can be dismissed, when no new resend requests will be handled
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ResetDismissTimer()
+
+    End Sub
+    Private Sub DismissTimerExpired() Handles _DismissTimer.Elapsed
+
+    End Sub
+    ''' <summary>
+    ''' Timer that will be set when a fragment is received, if not timely all fragments are in, this timer requests a resend
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub ResetResendTimer()
+
+    End Sub
+    Private Sub ResendTimerElapsed() Handles _ResendTimer.Elapsed
+        Me.RequestMissingParts()
     End Sub
 End Class
