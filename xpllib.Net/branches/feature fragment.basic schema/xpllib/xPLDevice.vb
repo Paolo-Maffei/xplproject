@@ -560,14 +560,6 @@ Public Class xPLDevice
         Dim xVersion As String
         Dim aVersion As String
         Dim i As Integer
-        Dim n As Integer
-        Dim c As Integer
-        Dim addr As xPLAddress
-        Dim ciName As String
-        Dim ciType As xPLConfigTypes
-        Dim ciMaxValues As Integer
-        Dim ciHidden As Boolean
-        Dim ci As xPLConfigItem
         Dim db As String = ""
 
         If SavedState Is Nothing Then SavedState = ""
@@ -596,97 +588,10 @@ Public Class xPLDevice
         Try
 
             Select Case xVersion
+                Case "5.4"
+                    NewFromState54(lst, i, RestoreEnabled, db)
                 Case "5.0", "5.1", "5.2", "5.3"
-                    ' Restore device address
-                    db = db & vbCrLf & "Address: " & lst(i)
-                    addr = New xPLAddress(xPLAddressType.Source, lst(i))
-                    mConfigItems.Address.Vendor = addr.Vendor
-                    mConfigItems.Address.Device = addr.Device
-                    mConfigItems.Address.Instance = addr.Instance
-                    i += 1
-                    db = db & vbCrLf & "Instance type: " & lst(i)
-                    mInstanceType = CType([Enum].Parse(GetType(InstanceCreation), lst(i)), InstanceCreation)
-                    i += 1
-                    ' Restore settings 
-                    db = db & vbCrLf & "Configurable: " & lst(i)
-                    mConfigurable = Boolean.Parse(lst(i))
-                    i += 1
-                    db = db & vbCrLf & "Configured: " & lst(i)
-                    mConfigured = Boolean.Parse(lst(i))
-                    i += 1
-                    ' do not restore the Enabled property, only at the end!
-                    db = db & vbCrLf & "Enabled: " & lst(i) & ", RestoreEnabled: " & RestoreEnabled.ToString
-                    If RestoreEnabled Then RestoreEnabled = Boolean.Parse(lst(i))
-                    i += 1
-                    db = db & vbCrLf & "MessagePassing: " & lst(i)
-                    MessagePassing = CType([Enum].Parse(GetType(MessagePassingEnum), lst(i)), MessagePassingEnum)
-                    i += 1
-                    db = db & vbCrLf & "CustomID: " & lst(i)
-                    CustomID = lst(i)
-                    i += 1
-                    db = db & vbCrLf & "CustomSettings: " & lst(i)
-                    CustomSettings = lst(i)
-                    i += 1
-                    db = db & vbCrLf & "Debug: " & lst(i)
-                    mDebug = Boolean.Parse(lst(i))
-                    i += 1
-                    ' config items
-                    db = db & vbCrLf & "Conf_interval in seconds: " & lst(i)
-                    mConfigItems.conf_IntervalInSec = Integer.Parse(lst(i))
-                    i += 1
-                    ' config items: groups
-                    db = db & vbCrLf & "Groups: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    For n = 1 To c
-                        db = db & vbCrLf & "    " & lst(i)
-                        mConfigItems.conf_Group.Add(lst(i))
-                        i += 1
-                    Next
-                    ' config items: filters
-                    db = db & vbCrLf & "Filters: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    For n = 1 To c
-                        db = db & vbCrLf & "    " & lst(i)
-                        mConfigItems.conf_Filter.Add(lst(i))
-                        i += 1
-                    Next
-                    ' config items: custom config items
-                    db = db & vbCrLf & "Custom ConfigItems: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    While i < lst.Length
-                        ' Get values
-                        db = db & vbCrLf & "    Name: " & lst(i)
-                        ciName = lst(i)
-                        db = db & vbCrLf & "        Type      : " & lst(i)
-                        ciType = CType([Enum].Parse(GetType(xPLConfigTypes), lst(i + 1)), xPLConfigTypes)
-                        db = db & vbCrLf & "        Max values: " & lst(i)
-                        ciMaxValues = Integer.Parse(lst(i + 2))
-                        db = db & vbCrLf & "        Hidden    : " & lst(i)
-                        ciHidden = Boolean.Parse(lst(i + 3))
-                        ' create configitem
-                        ci = New xPLConfigItem(ciName, ciType, ciMaxValues)
-                        ci.Hidden = ciHidden
-                        i += 4
-                        db = db & vbCrLf & "        Values    : " & lst(i)
-                        c = Integer.Parse(lst(i))
-                        i += 1
-                        ' Get configitem values
-                        For n = 1 To c
-                            db = db & vbCrLf & "            " & lst(i)
-                            ci.Add(lst(i))
-                            i += 1
-                        Next
-                        ' add configitem to device CI list
-                        ConfigItems.Add(ci)
-                    End While
-                    ' Go online if required
-                    If Debug Then LogError("xPLDevice.New from State", db, EventLogEntryType.Information)
-                    Me.Enabled = RestoreEnabled
-                    If RestoreEnabled Then LogError("xPLDevice.New from State", "Went enabled", EventLogEntryType.Information)
-
+                    NewFromState50(lst, i, RestoreEnabled, db)
                 Case Else
                     ' SavedState created by an unknown version of xpllib
                     LogError("xPLDevice.New from SavedState", "SavedState value was created by an unknown version of xpllib")
@@ -703,6 +608,112 @@ Public Class xPLDevice
             Throw New Exception("Device could not be recreated from SavedState value", ex)
         End Try
 
+    End Sub
+    Private Sub NewFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
+        ' Restore AutoFragmentation setting
+        db = db & vbCrLf & "Auto fragment messages: " & lst(i)
+        AutoFragment = Boolean.Parse(lst(i))
+        i += 1
+        NewFromState50(lst, i, RestoreEnabled, db)
+    End Sub
+    Private Sub NewFromState50(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
+        Dim n As Integer
+        Dim c As Integer
+        Dim ciName As String
+        Dim ciType As xPLConfigTypes
+        Dim ciMaxValues As Integer
+        Dim ciHidden As Boolean
+        Dim ci As xPLConfigItem
+        Dim addr As xPLAddress
+        ' Restore device address
+        db = db & vbCrLf & "Address: " & lst(i)
+        addr = New xPLAddress(xPLAddressType.Source, lst(i))
+        mConfigItems.Address.Vendor = addr.Vendor
+        mConfigItems.Address.Device = addr.Device
+        mConfigItems.Address.Instance = addr.Instance
+        i += 1
+        db = db & vbCrLf & "Instance type: " & lst(i)
+        mInstanceType = CType([Enum].Parse(GetType(InstanceCreation), lst(i)), InstanceCreation)
+        i += 1
+        ' Restore settings 
+        db = db & vbCrLf & "Configurable: " & lst(i)
+        mConfigurable = Boolean.Parse(lst(i))
+        i += 1
+        db = db & vbCrLf & "Configured: " & lst(i)
+        mConfigured = Boolean.Parse(lst(i))
+        i += 1
+        ' do not restore the Enabled property, only at the end!
+        db = db & vbCrLf & "Enabled: " & lst(i) & ", RestoreEnabled: " & RestoreEnabled.ToString
+        If RestoreEnabled Then RestoreEnabled = Boolean.Parse(lst(i))
+        i += 1
+        db = db & vbCrLf & "MessagePassing: " & lst(i)
+        MessagePassing = CType([Enum].Parse(GetType(MessagePassingEnum), lst(i)), MessagePassingEnum)
+        i += 1
+        db = db & vbCrLf & "CustomID: " & lst(i)
+        CustomID = lst(i)
+        i += 1
+        db = db & vbCrLf & "CustomSettings: " & lst(i)
+        CustomSettings = lst(i)
+        i += 1
+        db = db & vbCrLf & "Debug: " & lst(i)
+        mDebug = Boolean.Parse(lst(i))
+        i += 1
+        ' config items
+        db = db & vbCrLf & "Conf_interval in seconds: " & lst(i)
+        mConfigItems.conf_IntervalInSec = Integer.Parse(lst(i))
+        i += 1
+        ' config items: groups
+        db = db & vbCrLf & "Groups: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        For n = 1 To c
+            db = db & vbCrLf & "    " & lst(i)
+            mConfigItems.conf_Group.Add(lst(i))
+            i += 1
+        Next
+        ' config items: filters
+        db = db & vbCrLf & "Filters: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        For n = 1 To c
+            db = db & vbCrLf & "    " & lst(i)
+            mConfigItems.conf_Filter.Add(lst(i))
+            i += 1
+        Next
+        ' config items: custom config items
+        db = db & vbCrLf & "Custom ConfigItems: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        While i < lst.Length
+            ' Get values
+            db = db & vbCrLf & "    Name: " & lst(i)
+            ciName = lst(i)
+            db = db & vbCrLf & "        Type      : " & lst(i)
+            ciType = CType([Enum].Parse(GetType(xPLConfigTypes), lst(i + 1)), xPLConfigTypes)
+            db = db & vbCrLf & "        Max values: " & lst(i)
+            ciMaxValues = Integer.Parse(lst(i + 2))
+            db = db & vbCrLf & "        Hidden    : " & lst(i)
+            ciHidden = Boolean.Parse(lst(i + 3))
+            ' create configitem
+            ci = New xPLConfigItem(ciName, ciType, ciMaxValues)
+            ci.Hidden = ciHidden
+            i += 4
+            db = db & vbCrLf & "        Values    : " & lst(i)
+            c = Integer.Parse(lst(i))
+            i += 1
+            ' Get configitem values
+            For n = 1 To c
+                db = db & vbCrLf & "            " & lst(i)
+                ci.Add(lst(i))
+                i += 1
+            Next
+            ' add configitem to device CI list
+            ConfigItems.Add(ci)
+        End While
+        ' Go online if required
+        If Debug Then LogError("xPLDevice.New from State", db, EventLogEntryType.Information)
+        Me.Enabled = RestoreEnabled
+        If RestoreEnabled Then LogError("xPLDevice.New from State", "Went enabled", EventLogEntryType.Information)
     End Sub
 
     ''' <summary>
@@ -723,6 +734,8 @@ Public Class xPLDevice
         ' Add version numbers
         lst.Add(XPL_LIB_VERSION)
         lst.Add(AppVersion)
+        ' Store autofragment seetting
+        lst.Add(AutoFragment.ToString)
         ' Store device address
         lst.Add(mConfigItems.Address.ToString)
         lst.Add(mInstanceType.ToString)
