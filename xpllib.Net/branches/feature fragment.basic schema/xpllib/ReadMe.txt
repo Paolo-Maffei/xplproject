@@ -1,4 +1,4 @@
-﻿xPL Library for .NET, version 5.3
+﻿xPL Library for .NET, version 5.4
 
 Contents
 =========
@@ -209,6 +209,14 @@ A distribution of the xpllib should include the following files;
 5 - Changelog 
 ==============
 
+Changes in version 5.4 from 5.3
+NEW in 5.4
+  - max message size is back, at 1472. The receiving buffer remains at 32kb so larger
+    messages will still be received.
+    
+FIXED in 5.4
+  - Nothing yet
+  
 Changes in version 5.3 from 5.2
 NEW in 5.3
   - max length of values is now no longer set to 128, but 'unlimited' within the overall

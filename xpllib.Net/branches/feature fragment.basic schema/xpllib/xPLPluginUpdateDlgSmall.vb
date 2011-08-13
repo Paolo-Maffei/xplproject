@@ -1,6 +1,6 @@
 ﻿'* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
