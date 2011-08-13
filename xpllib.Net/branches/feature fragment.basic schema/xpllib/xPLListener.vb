@@ -181,17 +181,6 @@ Public Class xPLListener
         End Get
     End Property
 
-    Private Shared _FragmentedIDCount As Integer = 0
-    ''' <summary>
-    ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
-    ''' </summary>
-    ''' <returns></returns>
-    ''' <remarks></remarks>
-    Public Shared Function GetNewFragmentedID() As Integer
-        _FragmentedIDCount += 1
-        If _FragmentedIDCount > 999 Then _FragmentedIDCount = 0
-        Return _FragmentedIDCount
-    End Function
 #End Region
 
 #Region "Collection management"
@@ -393,21 +382,13 @@ Public Class xPLListener
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
-            Case "5.4"
-                RestoreFromState54(lst, i, RestoreEnabled)
-            Case "5.0", "5.1", "5.2", "5.3"
+            Case "5.0", "5.1", "5.2", "5.3", "5.4"
                 RestoreFromState50(lst, i, RestoreEnabled)
             Case Else
                 ' SavedState created by an unknown version of xpllib
                 LogError("xPLListener.RestoreFromState", "State created by unknown version of xPLLib: " & xversion & ".")
                 Throw New ArgumentException("SavedState value was created by an unknown version of xpllib: " & xversion, "SavedState")
         End Select
-    End Sub
-    Private Shared Sub RestoreFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean)
-        ' get fragmented count
-        _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
-        i += 1
-        RestoreFromState50(lst, i, RestoreEnabled)
     End Sub
     Private Shared Sub RestoreFromState50(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean)
         Dim xdev As xPLDevice
@@ -445,8 +426,6 @@ Public Class xPLListener
             ' get version of the application that created it
             s += XPL_STATESEP & StateEncode(AppVersion)
 
-            ' add fragmented count
-            s += XPL_STATESEP & StateEncode(_FragmentedIDCount.ToString)
             ' add xPLNetwork settings
             s += XPL_STATESEP & StateEncode(xPLNetwork.NetworkKeepEnded.ToString)
             ' now add all devices
