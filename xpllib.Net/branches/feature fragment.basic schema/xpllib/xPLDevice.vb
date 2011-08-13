@@ -993,15 +993,22 @@ Public Class xPLDevice
             Else
                 myxPL.Source = Me.Address
                 Dim m As String = myxPL.RawxPL
-                If Not Me.AutoFragment Then
-                    If Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
-                        If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
-                        Throw New ArgumentException("xPLDevice.Send; Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
-                    End If
+                If ((Not Me.AutoFragment) Or myxPL.Schema = "fragment.basic") And Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
+                    If Debug Then LogError("xPLDevice.Send", "Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes.", EventLogEntryType.Error)
+                    Throw New ArgumentException("xPLDevice.Send; Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
                 End If
-                xPLListener.SendRawxPL(m)
+                If Encoding.UTF8.GetByteCount(m) <= XPL_MAX_MSG_SIZE Then
+                    ' just send it as single message
+                    If Debug Then LogError("xPLDevice.Send", "Sending message", EventLogEntryType.Information)
+                    xPLListener.SendRawxPL(m)
+                Else
+                    ' send as fragments
+                    Dim frag As New xPLFragmentedMsg(myxPL)
+                    If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.NoOfFragments & " fragments.", EventLogEntryType.Information)
+                    frag.Send(Me)
                 End If
-                If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
+            End If
+            If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
         Catch
             If Debug Then LogError("xPLDevice.Send", "Failed", EventLogEntryType.Information)
         End Try
