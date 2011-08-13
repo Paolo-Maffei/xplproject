@@ -682,6 +682,41 @@ Public Class xPL_Base
     ''' <remarks></remarks>
     Public Const XPL_PLUGINSTORE_VERSION As String = "1.0"
 
+
+    '
+    ' Fragmentation constants
+    '
+
+    ''' <summary>
+    ''' The maximum counter size for the fragmented message ID's. ID's in fragmented messages are generated as a 
+    ''' rotating counter, this value is the maximum after which the value resets to 0.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_COUNTER_MAX As Integer = 99
+    ''' <summary>
+    ''' The maximum number of fragments for a single message supported.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_MAX As Integer = 99
+    ''' <summary>
+    ''' How long should a fragmented message be retained for retransmission if requested by other 
+    ''' devices. Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_SEND_RETAIN As Integer = 20000
+    ''' <summary>
+    ''' Timeout value, after receiving the last fragment-message, after which a request for the 
+    ''' remaining fragments will be send (if the overall message remains incomplete). Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_REQUEST_AFTER As Integer = 3000
+    ''' <summary>
+    ''' If a resend of fragments was requested, this value is the timeout after which the resend request is 
+    ''' considered failed (if no new fragments arrived) and the message will be disposed of.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_REQUEST_TIMEOUT As Integer = 5000
+
 #End Region
 
 #Region "Graphics"

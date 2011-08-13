@@ -191,8 +191,9 @@ Public Class xPLDevice
     Public CustomSettings As String = ""
     ''' <summary>
     ''' If set to <c>True</c>, large messages will automatically be fragmented using the fragment.basic schema. In that case the device 
-    ''' will not receive any fragment related data, only the reconstructed messages (incoming messages). The fragmenting/defragmenting
-    ''' is done transparantly for the host application.
+    ''' will not receive any fragment related data, only the reconstructed messages (incoming messages). If set to <c>False</c> then no 
+    ''' reconstruction takes place and the individual received fragments will be passed to the host. The fragmenting/defragmenting
+    ''' is done transparantly for the host application if set to <c>True</c>.
     ''' </summary>
     ''' <remarks></remarks>
     Public AutoFragment As Boolean = False
@@ -804,7 +805,16 @@ Public Class xPLDevice
                 If Debug Then LogError("xPLDevice.Dispose", "Disableing success")
             End If
         Catch
-            If Debug Then LogError("xPLDevice.Dispose", "Disableing failure")
+            If Debug Then LogError("xPLDevice.Dispose", "Disabling failure")
+        End Try
+        Try
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing of fragmented message list; " & _FragmentedMessageList.Count.ToString & " messages.")
+            While _FragmentedMessageList.Count > 0
+                CType(_FragmentedMessageList(0), xPLFragmentedMsg).Dispose()
+            End While
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing fragmented messages success")
+        Catch ex As Exception
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing fragmented messages failure")
         End Try
         Try
             ' remove myself from the listener (will deactivate listener if I'm the last one)
@@ -960,6 +970,15 @@ Public Class xPLDevice
                         pass = False ' don't pass others config stuff
                         db += vbCrLf & "    Pass = False, don't pass someone elses config stuff"
                     End If
+                End If
+            End If
+
+            ' Should I pass fragmented messages
+            If AutoFragment Then
+                If New xPLSchema(myXPL.Schema).SchemaClass = "fragment" Then
+                    Call HandleFragmentMessage(myXPL)
+                    pass = False
+                    db += vbCrLf & "   Pass = False, set to automatically handle fragmentation"
                 End If
             End If
 
@@ -1338,6 +1357,12 @@ Public Class xPLDevice
         If Me.Enabled = True Then Me.Enabled = False
     End Sub
 
+    ''' <summary>
+    ''' List contains the fragmented messages send by this device (in case a resend is requested)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend _FragmentedMessageList As New ArrayList
+
     Private _FragmentedIDCount As Integer = 0
     ''' <summary>
     ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
@@ -1346,9 +1371,58 @@ Public Class xPLDevice
     ''' <remarks></remarks>
     Friend Function GetNewFragmentedID() As Integer
         _FragmentedIDCount += 1
-        If _FragmentedIDCount > 999 Then _FragmentedIDCount = 0
+        If _FragmentedIDCount > XPL_FRAGMENT_COUNTER_MAX Then _FragmentedIDCount = 0
         Return _FragmentedIDCount
     End Function
+
+    ''' <summary>
+    ''' Handle an incoming fragment class message, recerating the fragmented message
+    ''' of resending fragments requested.
+    ''' </summary>
+    ''' <param name="msg"></param>
+    ''' <remarks></remarks>
+    Private Sub HandleFragmentMessage(ByVal msg As xPLMessage)
+        Select Case msg.Schema
+            Case "fragment.basic"
+                Dim l As New ArrayList  ' verification list
+                Dim done As Boolean = False
+                While Not done
+                    Try
+                        For Each fm As xPLFragmentedMsg In _FragmentedMessageList
+                            If Not l.Contains(fm) Then
+                                ' its not in the verification list, so go add it
+                                If fm.Received Then fm.AddFragment(msg)
+                                l.Add(fm)   ' add it to not handle this one again
+                            End If
+                        Next
+                        done = True ' went through without exception
+                    Catch ex As InvalidOperationException
+                        ' probably collection changed while iterating it, so try again
+                        done = False
+                    End Try
+                End While
+            Case "fragment.request"
+                Dim l As New ArrayList  ' verification list
+                Dim done As Boolean = False
+                While Not done
+                    Try
+                        For Each fm As xPLFragmentedMsg In _FragmentedMessageList
+                            If Not l.Contains(fm) Then
+                                ' its not in the verification list, so go resend parts
+                                If fm.Created Then fm.ResendFailedParts(msg)
+                                l.Add(fm)   ' add it to not handle this one again
+                            End If
+                        Next
+                        done = True ' went through without exception
+                    Catch ex As InvalidOperationException
+                        ' probably collection changed while iterating it, so try again
+                        done = False
+                    End Try
+                End While
+            Case Else
+                ' unknown, do nothing
+        End Select
+    End Sub
 
 End Class
 
