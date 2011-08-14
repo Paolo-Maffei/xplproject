@@ -153,6 +153,10 @@ xPLFilter
 xPLFilters
     Maintains a list of message filters for a device
     
+xPLFragmentedMsg (new in 5.4)
+    Represents a fragmented message in case message size is larger than
+    the xPL supported maximum.
+    
 xPLGroup
     Represents a single xPL group a device belongs to
     
@@ -213,6 +217,8 @@ Changes in version 5.4 from 5.3
 NEW in 5.4
   - max message size is back, at 1472. The receiving buffer remains at 32kb so larger
     messages will still be received.
+  - implemented the 'fragmented.basic' schema to send/receive larger messages. The new
+    property 'xPLDevice.AutoFragment' (default True) controls the fragmentation behaviour
     
 FIXED in 5.4
   - Nothing yet

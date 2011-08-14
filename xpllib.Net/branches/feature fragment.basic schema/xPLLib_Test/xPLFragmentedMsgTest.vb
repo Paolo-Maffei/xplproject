@@ -1,7 +1,8 @@
 ﻿Imports Microsoft.VisualStudio.TestTools.UnitTesting
 
 Imports xPL
-
+Imports xPL.xPL_Base
+Imports System.Diagnostics
 
 
 '''<summary>
@@ -51,72 +52,6 @@ Public Class xPLFragmentedMsgTest
 
 #End Region
 
-
-    '''<summary>
-    '''A test for Source
-    '''</summary>
-    <TestMethod()> _
-    Public Sub SourceTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As String
-        actual = target.Source
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for Received
-    '''</summary>
-    <TestMethod()> _
-    Public Sub ReceivedTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As Boolean
-        actual = target.Received
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for Parent
-    '''</summary>
-    <TestMethod()> _
-    Public Sub ParentTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As xPLDevice
-        actual = target.Parent
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for NoOfFragments
-    '''</summary>
-    <TestMethod()> _
-    Public Sub NoOfFragmentsTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As Integer
-        actual = target.NoOfFragments
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for MessageID
-    '''</summary>
-    <TestMethod()> _
-    Public Sub MessageIDTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As String
-        actual = target.MessageID
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
     '''<summary>
     '''A test for IsComplete
     '''</summary>
@@ -127,19 +62,6 @@ Public Class xPLFragmentedMsgTest
         Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
         Dim actual As Boolean
         actual = target.IsComplete
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for Created
-    '''</summary>
-    <TestMethod()> _
-    Public Sub CreatedTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As Boolean
-        actual = target.Created
         Assert.Inconclusive("Verify the correctness of this test method.")
     End Sub
 
@@ -189,9 +111,58 @@ Public Class xPLFragmentedMsgTest
     '''</summary>
     <TestMethod()> _
     Public Sub xPLFragmentedMsgConstructorTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent)
-        Assert.Inconclusive("TODO: Implement code to verify target")
+        Dim msg As New xPLMessage
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Target = yDev.Address
+
+        ' first test a message to be sent
+        Debug.Print("1/2 Testing a message to be sent...")
+        msg.KeyValueList.Add("somekey", "some value")
+        For n = 0 To 9
+            msg.KeyValueList.Add("testkey" & n.ToString, New String("A"c, 1000))
+        Next
+        msg.Source = xDev.Address
+        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, xDev) ' TODO: Initialize to an appropriate value
+        Dim actual As String
+        actual = target.Source
+        Assert.IsTrue(xDev.Address = actual, "Fragmented source (" & actual & ") should have been equal to xdev.address (" & xDev.Address & ").")
+        Debug.Print("Success: 'Source' property set as expected.")
+        Assert.IsTrue(target.Created, "Fragmented message should have been created as a 'Created' message (to be sent).")
+        Debug.Print("Success: 'Created' property set as expected.")
+        Assert.IsTrue(target.Parent Is xDev, "Parent should have been the xDev instance, but isn't.")
+        Debug.Print("Success: 'Parent' property set as expected.")
+        Assert.IsTrue(target.MessageID = xDev.Address & ":1", "MessageID = '" & target.MessageID & "', while '" & xDev.Address & ":1" & "' was expected.")
+        Debug.Print("Success: 'MessageID' property set as expected.")
+        Assert.IsTrue(target.Count = 10, "Count = " & target.Count.ToString & ", while 10 was expected.")
+        Debug.Print("Success: 'Count' property (# of fragments) set as expected.")
+        Debug.Print("")
+
+        ' second test a message received
+        Debug.Print("2/2 Testing a message received...")
+        msg.Source = yDev.Address
+        msg.KeyValueList.Clear()
+        msg.KeyValueList.Add("schema", msg.Schema)
+        msg.Schema = "fragment.basic"
+        msg.KeyValueList.Add("partid", "1/7:34")
+        msg.KeyValueList.Add("somekey", "some value")
+
+        target = New xPLFragmentedMsg(msg, xDev) ' TODO: Initialize to an appropriate value
+        actual = target.Source
+        Assert.IsTrue(yDev.Address = actual, "Fragmented source (" & actual & ") should have been equal to ydev.address (" & yDev.Address & ").")
+        Debug.Print("Success: 'Source' property set as expected.")
+        Assert.IsTrue(target.Received, "Fragmented message should have been created as a 'Received' message.")
+        Debug.Print("Success: 'Received' property set as expected.")
+        Assert.IsTrue(target.Parent Is xDev, "Parent should have been the xDev instance, but isn't.")
+        Debug.Print("Success: 'Parent' property set as expected.")
+        Assert.IsTrue(target.MessageID = msg.Source & ":34", "MessageID = '" & target.MessageID & "', while '" & msg.Source & ":34" & "' was expected.")
+        Debug.Print("Success: 'MessageID' property set as expected.")
+        Assert.IsTrue(target.Count = 7, "Count = " & target.Count.ToString & ", while 7 was expected.")
+        Debug.Print("Success: 'Count' property (# of fragments) set as expected.")
+
     End Sub
+
+    'to be added;
+    ' - no KV pairs in original message, both creating and receiving
+    ' - bad structure; no schema, erroneous schema, no partid, or bad partid
 End Class
