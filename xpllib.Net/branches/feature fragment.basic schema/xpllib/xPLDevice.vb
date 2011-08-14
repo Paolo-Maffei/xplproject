@@ -190,13 +190,23 @@ Public Class xPLDevice
     ''' </summary>
     Public CustomSettings As String = ""
     ''' <summary>
-    ''' If set to <c>True</c>, large messages will automatically be fragmented using the fragment.basic schema. In that case the device 
+    ''' If set to <c>True</c> (default), large messages send will automatically be fragmented using the fragment.basic schema. In that case the device 
     ''' will not receive any fragment related data, only the reconstructed messages (incoming messages). If set to <c>False</c> then no 
     ''' reconstruction takes place and the individual received fragments will be passed to the host. The fragmenting/defragmenting
     ''' is done transparantly for the host application if set to <c>True</c>.
     ''' </summary>
     ''' <remarks></remarks>
-    Public AutoFragment As Boolean = False
+    Public AutoFragment As Boolean = True
+    ''' <summary>
+    ''' List contains the fragmented messages send by this device (in case a resend is requested)
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend _FragmentedMessageList As New ArrayList
+    ''' <summary>
+    ''' Rotating fragmented message ID generator.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private _FragmentedIDCount As Integer = 0
 
     ' other properties
     Private Disposing As Boolean = False
@@ -1030,7 +1040,7 @@ Public Class xPLDevice
                     ' send as fragments
                     If Debug Then LogError("xPLDevice.Send", "Fragmenting message...", EventLogEntryType.Information)
                     Dim frag As New xPLFragmentedMsg(myxPL, Me)
-                    If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.NoOfFragments & " fragments.", EventLogEntryType.Information)
+                    If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.Count & " fragments.", EventLogEntryType.Information)
                     frag.Send()
                 End If
             End If
@@ -1357,13 +1367,8 @@ Public Class xPLDevice
         If Me.Enabled = True Then Me.Enabled = False
     End Sub
 
-    ''' <summary>
-    ''' List contains the fragmented messages send by this device (in case a resend is requested)
-    ''' </summary>
-    ''' <remarks></remarks>
-    Friend _FragmentedMessageList As New ArrayList
+#Region "Message fragmentation"
 
-    Private _FragmentedIDCount As Integer = 0
     ''' <summary>
     ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
     ''' </summary>
@@ -1423,6 +1428,8 @@ Public Class xPLDevice
                 ' unknown, do nothing
         End Select
     End Sub
+
+#End Region
 
 End Class
 

@@ -73,8 +73,8 @@ Public Class xPLFragmentedMsg
                 Dim n1 As Integer = FragKey.IndexOf("/")
                 Dim n2 As Integer = FragKey.IndexOf(":")
                 FragmentNumber = CInt(Left(FragKey, n1))
-                FragmentTotal = CInt(Mid(FragKey, n1 + 1, n2 - n1 - 1))
-                MessageID = Mid(FragKey, n2 + 1)
+                FragmentTotal = CInt(Mid(FragKey, n1 + 2, n2 - n1 - 1))
+                MessageID = Mid(FragKey, n2 + 2)
             Catch ex As Exception
                 Throw New Exception("Cannot extract fragmentnr, number of fragments and/or message ID from the 'fragment' key in the message. Key provided : 'fragment=" & FragKey & "'.", ex)
             End Try
@@ -155,16 +155,16 @@ Public Class xPLFragmentedMsg
             Return _MessageID
         End Get
     End Property
-    Private _NoOfFragments As Integer
+    Private _Count As Integer
     ''' <summary>
     ''' Total number of fragments for the message
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public ReadOnly Property NoOfFragments() As Integer
+    Public ReadOnly Property Count() As Integer
         Get
-            Return _NoOfFragments
+            Return _Count
         End Get
     End Property
 
@@ -250,7 +250,7 @@ Public Class xPLFragmentedMsg
         _Checklist.Clear()
         Dim FragKey As New FragmentKey(msg)
         Me._MessageID = msg.Source & ":" & FragKey.MessageID
-        Me._NoOfFragments = FragKey.FragmentTotal
+        Me._Count = FragKey.FragmentTotal
         Me._Message = New xPLMessage
         Me._Source = msg.Source
         With Me._Message
@@ -271,12 +271,12 @@ Public Class xPLFragmentedMsg
         Dim frag As xPLMessage = Nothing
         Dim done1 As Boolean = False
         Dim done2 As Boolean = False
-        Dim count As Integer = 0
+        Dim cnt As Integer = 0
         Dim index As Integer = 0
         Dim bytesleft As Integer = 0
         While Not done1
-            count = count + 1
-            If count > XPL_FRAGMENT_MAX Then
+            cnt = cnt + 1
+            If cnt > XPL_FRAGMENT_MAX Then
                 Throw New Exception("Message too large, results in more than the maximum number of allowed fragments (" & XPL_FRAGMENT_MAX.ToString & ").")
             End If
             frag = New xPLMessage
@@ -286,21 +286,23 @@ Public Class xPLFragmentedMsg
             frag.Hop = msg.Hop
             frag.Schema = "fragment.basic"
             frag.KeyValueList.Add("partid", XPL_FRAGMENT_MAX & "/" & XPL_FRAGMENT_MAX & ":" & XPL_FRAGMENT_COUNTER_MAX)
-            If count = 1 Then
+            If cnt = 1 Then
                 frag.KeyValueList.Add("schema", msg.Schema)
             End If
             bytesleft = XPL_MAX_MSG_SIZE - frag.RawxPL.Length
             done2 = False
-            While Not done2
+            While Not done2 And msg.KeyValueList.Count > 0
                 ' get size of next key/value pair
                 Dim b As Integer = Encoding.UTF8.GetByteCount(msg.KeyValueList(index).ToString) + 1
                 If b <= bytesleft Then
                     ' still fits in this fragment, so add it
                     frag.KeyValueList.Add(msg.KeyValueList(index).Key, msg.KeyValueList(index).Value)
                     index = index + 1
+                    bytesleft = bytesleft - b
+                    done2 = (index >= msg.KeyValueList.Count)
                 Else
                     ' won't fit anymore
-                    If (count = 1 And frag.KeyValueList.Count = 2) Or (count > 1 And frag.KeyValueList.Count = 1) Then
+                    If (cnt = 1 And frag.KeyValueList.Count = 2) Or (cnt > 1 And frag.KeyValueList.Count = 1) Then
                         ' nothing was added, so key/value at position 'index' is too large to fit
                         Throw New Exception("Cannot fragment; key/value pair at position " & index & " is too large for a single message.")
                     End If
@@ -309,18 +311,18 @@ Public Class xPLFragmentedMsg
                 End If
             End While
             ' fragment construction done
-            _Fragments.Add(count, frag)
+            _Fragments.Add(cnt, frag)
             done1 = (index = msg.KeyValueList.Count)
         End While
         ' set all the proper IDs
         Dim msgid As Integer = Parent.GetNewFragmentedID
         For n As Integer = 1 To _Fragments.Count
-            _Fragments(n).KeyValueList.Item("partid") = n.ToString & "/" & count.ToString & ":" & msgid.ToString
+            _Fragments(n).KeyValueList.Item("partid") = n.ToString & "/" & cnt.ToString & ":" & msgid.ToString
         Next
         ' set other properties
         _Message = msg
         _MessageID = Me.Source & ":" & msgid.ToString
-        _NoOfFragments = count
+        _Count = cnt
     End Sub
 
     ''' <summary>
@@ -471,8 +473,8 @@ Public Class xPLFragmentedMsg
     Public Sub Send()
         If Received Then Throw New Exception("Cannot send a message that was received, only created ones.")
 
-        For n As Integer = 1 To NoOfFragments
-            If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & NoOfFragments.ToString, EventLogEntryType.Information)
+        For n As Integer = 1 To Count
+            If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & Count.ToString, EventLogEntryType.Information)
             Parent.Send(_Fragments(n))
         Next
         If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragmented message complete.", EventLogEntryType.Information)
@@ -530,15 +532,27 @@ Public Class xPLFragmentedMsg
         If Not Me._disposed Then
             If disposing Then
                 ' TODO: free other state (managed objects).
-                _ResendTimer.Stop()
-                _DismissTimer.Stop()
-                If Parent._FragmentedMessageList.Contains(Me) Then
-                    Parent._FragmentedMessageList.Remove(Me)
-                End If
+
             End If
 
             ' TODO: free your own state (unmanaged objects).
             ' TODO: set large fields to null.
+            Try
+                _ResendTimer.Stop()
+            Catch ex As Exception
+            End Try
+
+            Try
+                _DismissTimer.Stop()
+            Catch ex As Exception
+            End Try
+
+            Try
+                If Parent._FragmentedMessageList.Contains(Me) Then
+                    Parent._FragmentedMessageList.Remove(Me)
+                End If
+            Catch ex As Exception
+            End Try
         End If
         Me._disposed = True
     End Sub
