@@ -53,6 +53,19 @@ Public Class xPLFragmentedMsg
     Implements IDisposable
 
     ''' <summary>
+    ''' Exception thrown incase of fragmentation related errors
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Class FragmentationException
+        Inherits Exception
+        Private Sub New()   ' private, not accessible
+        End Sub
+        Public Sub New(ByVal Message As String, Optional ByVal InnerException As Exception = Nothing)
+            MyBase.New(Message, InnerException)
+        End Sub
+    End Class
+
+    ''' <summary>
     ''' Simple class to dissect a fragment key into its components; fragment nr, total number of fragments and message ID
     ''' </summary>
     ''' <remarks></remarks>
@@ -73,10 +86,13 @@ Public Class xPLFragmentedMsg
                 Dim n1 As Integer = FragKey.IndexOf("/")
                 Dim n2 As Integer = FragKey.IndexOf(":")
                 FragmentNumber = CInt(Left(FragKey, n1))
+                If FragmentNumber < 1 Then Throw New IndexOutOfRangeException("Fragment number must be 1 or greater")
                 FragmentTotal = CInt(Mid(FragKey, n1 + 2, n2 - n1 - 1))
+                If FragmentTotal < 1 Then Throw New IndexOutOfRangeException("Number of fragments must be 1 or greater")
                 MessageID = Mid(FragKey, n2 + 2)
+                If Trim(MessageID) = "" Then Throw New ArgumentException("The provided message ID cannot be an empty (or all space) string")
             Catch ex As Exception
-                Throw New Exception("Cannot extract fragmentnr, number of fragments and/or message ID from the 'fragment' key in the message. Key provided : 'fragment=" & FragKey & "'.", ex)
+                Throw New FragmentationException("Cannot extract fragmentnr, number of fragments and/or message ID from the 'fragment' key in the message. Key provided : 'fragment=" & FragKey & "'.", ex)
             End Try
 
         End Sub
@@ -98,7 +114,7 @@ Public Class xPLFragmentedMsg
             Try
                 FragKey = msg.KeyValueList("partid")
             Catch ex As Exception
-                Throw New Exception("Cannot find 'partid' key in provided message", ex)
+                Throw New FragmentationException("Cannot find 'partid' key in provided message", ex)
             End Try
             Me.DissectKey(FragKey)
         End Sub
@@ -109,15 +125,31 @@ Public Class xPLFragmentedMsg
     ''' <remarks></remarks>
     Private _Message As xPLMessage
     ''' <summary>
+    ''' A checklist containing the numbers of the parts still missing/expected, if the list is empty, the message is complete.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private _Checklist As New ArrayList
+    ''' <summary>
     ''' Holds all the individual message fragments (xPLMessage objects), by their fragment number
     ''' </summary>
     ''' <remarks></remarks>
     Private _Fragments As New SortedList(Of Integer, xPLMessage)
     ''' <summary>
-    ''' A checklist containing the numbers of the parts still missing/expected, if the list is empty, the message is complete.
+    ''' Returns the individual message fragments (xPLMessage objects), by their fragment number, ranging from 1 to <see cref="Count">Count</see>.
+    ''' If the fragment is unavailable <c>Nothing</c> is returned. If the index is out of range, an exception is thrown.
     ''' </summary>
+    ''' <exception cref="IndexOutOfRangeException">Thrown when <paramref name="index"/> is less then 1 or greater than <see cref="Count">Count</see></exception>
     ''' <remarks></remarks>
-    Private _Checklist As New ArrayList
+    Public ReadOnly Property Fragment(ByVal index As Integer) As xPLMessage
+        Get
+            If index < 1 Or index > Me.Count Then Throw New IndexOutOfRangeException(index.ToString & " is not supported, values from 1 to Count (" & Me.Count.ToString & ") only")
+            If _Fragments.ContainsKey(index) Then
+                Return _Fragments(index)
+            Else
+                Return Nothing
+            End If
+        End Get
+    End Property
     Private _Source As String
     ''' <summary>
     ''' The source address the message originates from
@@ -277,7 +309,7 @@ Public Class xPLFragmentedMsg
         While Not done1
             cnt = cnt + 1
             If cnt > XPL_FRAGMENT_MAX Then
-                Throw New Exception("Message too large, results in more than the maximum number of allowed fragments (" & XPL_FRAGMENT_MAX.ToString & ").")
+                Throw New FragmentationException("Message too large, results in more than the maximum number of allowed fragments (" & XPL_FRAGMENT_MAX.ToString & ").")
             End If
             frag = New xPLMessage
             frag.MsgType = msg.MsgType
@@ -304,7 +336,7 @@ Public Class xPLFragmentedMsg
                     ' won't fit anymore
                     If (cnt = 1 And frag.KeyValueList.Count = 2) Or (cnt > 1 And frag.KeyValueList.Count = 1) Then
                         ' nothing was added, so key/value at position 'index' is too large to fit
-                        Throw New Exception("Cannot fragment; key/value pair at position " & index & " is too large for a single message.")
+                        Throw New FragmentationException("Cannot fragment; key/value pair at position " & index & " is too large for a single message.")
                     End If
                     ' move to next fragment
                     done2 = True
@@ -327,25 +359,26 @@ Public Class xPLFragmentedMsg
 
     ''' <summary>
     ''' If the object is set as received from the network, this methods allows for the addition of new fragments received. Only if the
-    ''' partid matches the existing parts it will be added. No exceptions will be thrown if it doesn't match
+    ''' partid matches the existing parts it will be added. No exceptions will be thrown if it doesn't match.
+    ''' Returns either te reconstructed message, if its the last fragment, or <c>Nothing</c>.
     ''' </summary>
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
-    Public Sub AddFragment(ByVal msg As xPLMessage)
-        If _disposed Then Exit Sub
+    Public Function AddFragment(ByVal msg As xPLMessage) As xPLMessage
+        If _disposed Then Return Nothing
         Dim FragKey As New FragmentKey(msg)
-        If Me.Created Then Throw New Exception("Cannot add fragments to a created message, only to received messages.")
-        If msg.Source & ":" & FragKey.MessageID <> Me.MessageID Then Exit Sub
+        If Me.Created Then Throw New FragmentationException("Cannot add fragments to a created message, only to received messages.")
+        If msg.Source & ":" & FragKey.MessageID <> Me.MessageID Then Return Nothing
         If FragKey.FragmentNumber = 1 Then
             If (msg.KeyValueList.IndexOf("schema") <> -1) Then
                 ' got the schema, go set it
                 Try
                     _Message.Schema = msg.KeyValueList("schema")
                 Catch ex As Exception
-                    Throw New Exception("Fragmented message contained an illegal schema value; 'schema=" & msg.KeyValueList("schema") & "'.")
+                    Throw New FragmentationException("Fragmented message contained an illegal schema value; 'schema=" & msg.KeyValueList("schema") & "'.")
                 End Try
             Else
-                Throw New Exception("1st fragment does not contain the 'schema' key")
+                Throw New FragmentationException("1st fragment does not contain the 'schema' key")
             End If
         End If
 
@@ -361,23 +394,31 @@ Public Class xPLFragmentedMsg
                 Me.Reconstruct()
                 If IsComplete Then
                     ' Inform parent of received message, and dismiss myself
-                    Parent.IncomingMessage(_Message)
-                    Me.Dispose()
+                    Dim m As xPLMessage = _Message  ' create local copy, can be called while 'me' is disposed
+                    Dim p As xPLDevice = _Parent    ' create local copy, can be called while 'me' is disposed
+                    Me.Dispose()                    ' releases/stops timers
+                    p.IncomingMessage(m)   ' reference the local copies.
+                    Return m
                 End If
             End If
         End If
         If Not IsComplete Then ResetResendTimer()
-    End Sub
+        Return Nothing
+    End Function
 
     ''' <summary>
     ''' Once the last fragment has been received, this will reconstruct the original message. Header is already done, now restore key-valuepairs in correct order
     ''' </summary>
     ''' <remarks></remarks>
     Private Sub Reconstruct()
-        ' loop through all fragments
         Dim msgfrag As xPLMessage
+
+        ' clear current list, will be rebuild.
+        _Message.KeyValueList.Clear()
+
+        ' loop through all fragments
         For i As Integer = 1 To _Fragments.Count
-            msgfrag = _Fragments(i - 1)
+            msgfrag = _Fragments(i)
 
             Dim SkipPartID As Boolean = True     ' first key named 'partid' must be skipped, is fragment.basic overhead
             Dim SkipSchema As Boolean = (i = 1)    ' only if its the 1st fragment, also the first key 'schema' must be handled separately
@@ -391,7 +432,7 @@ Public Class xPLFragmentedMsg
                         ' must skip this schema key
                         SkipSchema = False    ' only the first, so now disable
                     Else
-                        ' add this key to the reconstrud message
+                        ' add this key to the reconstructed message
                         _Message.KeyValueList.Add(kv)
                     End If
                 End If
@@ -418,7 +459,7 @@ Public Class xPLFragmentedMsg
     ''' <param name="dev"></param>
     ''' <remarks></remarks>
     Private Sub RequestMissingParts(Optional ByVal dev As xPLDevice = Nothing)
-        If Me.Created Then Throw New Exception("Can only request missing parts for received fragmented messages, not for created ones")
+        If Me.Created Then Throw New FragmentationException("Can only request missing parts for received fragmented messages, not for created ones")
         Dim msg As New xPLMessage
         msg.Target = Me.Source
         msg.MsgType = xPLMessageTypeEnum.Command
@@ -432,7 +473,7 @@ Public Class xPLFragmentedMsg
             dev = xPLListener.Device(0) ' no device provided, just pick first one in the list
         End If
         If dev Is Nothing Then
-            Throw New Exception("Cannot request missing parts of fragmented message, no device available through which to send the request.")
+            Throw New FragmentationException("Cannot request missing parts of fragmented message, no device available through which to send the request.")
         Else
             dev.Send(msg)
         End If
@@ -471,7 +512,7 @@ Public Class xPLFragmentedMsg
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Send()
-        If Received Then Throw New Exception("Cannot send a message that was received, only created ones.")
+        If Received Then Throw New FragmentationException("Cannot send a message that was received, only created ones.")
 
         For n As Integer = 1 To Count
             If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & Count.ToString, EventLogEntryType.Information)
