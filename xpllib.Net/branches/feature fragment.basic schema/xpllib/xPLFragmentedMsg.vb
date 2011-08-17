@@ -102,6 +102,7 @@ Public Class xPLFragmentedMsg
                 FragmentTotal = CInt(Mid(FragKey, n1 + 2, n2 - n1 - 1))
                 If FragmentTotal < 1 Then Throw New IndexOutOfRangeException("Number of fragments must be 1 or greater")
                 MessageID = Mid(FragKey, n2 + 2)
+                '                Debug.Print("Key dissected; 'ID=" & MessageID & "'")
                 If Trim(MessageID) = "" Then Throw New ArgumentException("The provided message ID cannot be an empty (or all space) string")
             Catch ex As Exception
                 Throw New FragmentationException("Cannot extract fragmentnr, number of fragments and/or message ID from the 'fragment' key in the message. Key provided : 'fragment=" & FragKey & "'.", ex)
@@ -450,7 +451,7 @@ Public Class xPLFragmentedMsg
         msg.MsgType = xPLMessageTypeEnum.Command
         msg.Schema = "fragment.request"
         msg.KeyValueList.Add("command", "resend")
-        msg.KeyValueList.Add("message", Mid(MessageID, MessageID.IndexOf(":") + 1))
+        msg.KeyValueList.Add("message", Mid(MessageID, MessageID.IndexOf(":") + 2))
         For Each nr As Integer In _Checklist
             msg.KeyValueList.Add("part", nr.ToString)
         Next

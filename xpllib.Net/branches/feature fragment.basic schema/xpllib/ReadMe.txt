@@ -222,7 +222,7 @@ NEW in 5.4
   - xPLDevice.LogMessage method added. This method will send a log.basic message on the 
     network. See log.basic schema documentation for details.
   - Receiving queue has been added, instead of completely handling a message it is now
-    posted in a receiving queue, where a separate thread will colect and handle them.
+    posted in a receiving queue, where a separate thread will collect and handle them.
     This to speed up socket operations and prevent loss of messages. 
     
 FIXED in 5.4
