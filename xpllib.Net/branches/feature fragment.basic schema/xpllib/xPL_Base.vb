@@ -495,6 +495,12 @@ Public Class xPL_Base
     ''' <remarks></remarks>
     Public Const XPL_SOCKET_BUFFER_SIZE As Integer = (32 * 1024)
     ''' <summary>
+    ''' Minimum delay required between 2 messages being send. To prevent flooding the network and lost messages.
+    ''' Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_MINIMUM_SEND_DELAY As Integer = 50
+    ''' <summary>
     ''' Default heartbeat timeout for an xPL device seen on the network
     ''' </summary>
     ''' <remarks>Specified in seconds</remarks>

@@ -219,9 +219,15 @@ NEW in 5.4
     messages will still be received.
   - implemented the 'fragmented.basic' schema to send/receive larger messages. The new
     property 'xPLDevice.AutoFragment' (default True) controls the fragmentation behaviour
+  - xPLDevice.LogMessage method added. This method will send a log.basic message on the 
+    network. See log.basic schema documentation for details.
+  - Receiving queue has been added, instead of completely handling a message it is now
+    posted in a receiving queue, where a separate thread will colect and handle them.
+    This to speed up socket operations and prevent loss of messages. 
     
 FIXED in 5.4
-  - Nothing yet
+  - Messages quickly send after each other could get lost. A minimum send delay has been 
+    added to prevent this. See XPL_MINIMUM_SEND_DELAY constant.
   
 Changes in version 5.3 from 5.2
 NEW in 5.3

@@ -294,6 +294,16 @@ Public Class xPLMessage
     End Function
 
     ''' <summary>
+    ''' Returns the message as a printable string. WARNING: the result will have CR + LF line ends, and hence 
+    ''' is not equal to, nor valid as, RawxPL which uses <see cref="XPL_LF">XPL_LF</see> as line feeds.
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Overrides Function ToString() As String
+        Return Me.BuildxPLMsg.Replace(XPL_LF, vbCrLf)
+    End Function
+
+    ''' <summary>
     ''' Extracts the contents of a raw xPL message into the xPL message object.
     ''' </summary>
     ''' <param name="themsg">The raw xPL string containing the message.</param>

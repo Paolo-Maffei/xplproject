@@ -53,60 +53,6 @@ Public Class xPLFragmentedMsgTest
 #End Region
 
     '''<summary>
-    '''A test for IsComplete
-    '''</summary>
-    <TestMethod()> _
-    Public Sub IsCompleteTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim actual As Boolean
-        actual = target.IsComplete
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for Send
-    '''</summary>
-    <TestMethod()> _
-    Public Sub SendTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        target.Send()
-        Assert.Inconclusive("A method that does not return a value cannot be verified.")
-    End Sub
-
-    '''<summary>
-    '''A test for ResendFailedParts
-    '''</summary>
-    <TestMethod()> _
-    Public Sub ResendFailedPartsTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim msg1 As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim expected As Boolean = False ' TODO: Initialize to an appropriate value
-        Dim actual As Boolean
-        actual = target.ResendFailedParts(msg1)
-        Assert.AreEqual(expected, actual)
-        Assert.Inconclusive("Verify the correctness of this test method.")
-    End Sub
-
-    '''<summary>
-    '''A test for AddFragment
-    '''</summary>
-    <TestMethod()> _
-    Public Sub AddFragmentTest()
-        Dim msg As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        Dim Parent As xPLDevice = Nothing ' TODO: Initialize to an appropriate value
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, Parent) ' TODO: Initialize to an appropriate value
-        Dim msg1 As xPLMessage = Nothing ' TODO: Initialize to an appropriate value
-        target.AddFragment(msg1)
-        Assert.Inconclusive("A method that does not return a value cannot be verified.")
-    End Sub
-
-    '''<summary>
     '''A test for xPLFragmentedMsg Constructor
     '''</summary>
     <TestMethod()> _
@@ -248,7 +194,7 @@ Public Class xPLFragmentedMsgTest
     End Sub
 
     <TestMethod()> _
-    Public Sub TestConstructorErrorneousSchema1()
+    Public Sub TestConstructorErroneousSchema1()
         ' - bad structure; no schema, erroneous schema, no partid, or bad partid
 
         Debug.Print("")
@@ -282,7 +228,7 @@ Public Class xPLFragmentedMsgTest
     End Sub
 
     <TestMethod()> _
-    Public Sub TestConstructorErrorneousSchema2()
+    Public Sub TestConstructorErroneousSchema2()
         ' - bad structure; no schema, erroneous schema, no partid, or bad partid
 
         Debug.Print("")
@@ -317,7 +263,7 @@ Public Class xPLFragmentedMsgTest
     End Sub
 
     <TestMethod()> _
-    Public Sub TestConstructorErrorneousPartid1()
+    Public Sub TestConstructorErroneousPartid1()
         ' - bad structure; no schema, erroneous schema, no partid, or bad partid
 
         Debug.Print("")
@@ -351,7 +297,7 @@ Public Class xPLFragmentedMsgTest
     End Sub
 
     <TestMethod()> _
-    Public Sub TestConstructorErrorneousPartid2()
+    Public Sub TestConstructorErroneousPartid2()
         ' - bad structure; no schema, erroneous schema, no partid, or bad partid
 
         Debug.Print("")
@@ -411,4 +357,55 @@ Public Class xPLFragmentedMsgTest
             Assert.Fail("Wrong exception, expected a FragmentationException for a bad partid.")
         End Try
     End Sub
+
+    <TestMethod()> _
+    Public Sub AutoFragmentTest()
+        Dim msg As New xPLMessage
+        Dim MSGID As String = "AutoFragmentTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        For n = 0 To 29
+            msg.KeyValueList.Add("testky" & n.ToString, New String("A"c, 1000))
+        Next
+        xDev.AutoFragment = True
+        yDev.AutoFragment = True
+        Debug.Print("Sending a message that must be fragmented...")
+        Debug.Print(msg.ToString())
+        Debug.Print("")
+
+        xDev.Send(msg)
+        Dim expected As String = msg.RawxPL
+
+        msg = WaitForTestKey(yDev, MSGID, 10000)
+        Assert.IsNotNull(msg, "Message expected, got Null/Nothing, receiving the requested ID timed-out")
+        Debug.Print("Received the test message...")
+        Debug.Print(msg.ToString())
+        Debug.Print("")
+
+        Dim actual As String = msg.RawxPL
+        Assert.AreEqual(expected, actual, "Received RawxPL does not match the send xPL, message malformed during transmission.")
+        Debug.Print("Success; message received and reassembled succesfully, RawxPL string of send and received message are equal.")
+    End Sub
+
+    ' when AutoFragment is set then
+    '  - messages need to be automatically fragmented
+    '  - exception if not possible due to a value being too large
+    '  - device should not receive fragments, only defragmented messages
+    '  - timeouts for incomplete messages should work
+    '  - requesting missing parts should work
+    ' when not set then
+    '  - to large messages will throw an exception, docs must be up-to-date!
+    '  - fragments should be passed
+    '  - defragmented messages should not be passed
+
+    ' schema in message body is invalid or missing
+    ' fragment key has incorrect format or missing
+
+
+
+
 End Class
