@@ -756,8 +756,8 @@ Public Class xPLListener
 
         Dim myXPL As xPLMessage
 
-        Debug.Print("")
-        Debug.Print("Now dealing with incoming data; " & data.RawxPL.Replace(XPL_LF, vbCrLf))
+        'Debug.Print("")
+        'Debug.Print("Now dealing with incoming data; " & data.RawxPL.Replace(XPL_LF, vbCrLf))
 
         'check origin
         Dim accept As Boolean = False

@@ -53,7 +53,7 @@ Public Class xPLSchema
 
     Dim mClass As String = "hbeat"
     ''' <summary>
-    ''' Returns or sets the CLASS part of a schema name, defined as 'schema.type'. 
+    ''' Returns or sets the CLASS part of a schema name, defined as 'class.type'. 
     ''' </summary>
     ''' <value>Class name to be set.</value>
     ''' <returns>Class name currently set.</returns>

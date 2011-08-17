@@ -1024,12 +1024,12 @@ Public Class xPLDevice
     ''' <remarks>Other exceptions may occur from the network. Before sending the <c>Source</c> address will 
     ''' be set to the address of the device through which it will be sent.</remarks>
     Public Sub Send(ByVal myxPL As xPLMessage)
-        Try
-            If Debug Then LogError("xPLDevice.Send", "Sending message...", EventLogEntryType.Information)
-            If Not mEnabled Then
-                If Debug Then LogError("xPLDevice.Send", "Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.", EventLogEntryType.Error)
-                Throw New Exception("Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.")
-            Else
+        If Debug Then LogError("xPLDevice.Send", "Sending message...", EventLogEntryType.Information)
+        If Not mEnabled Then
+            If Debug Then LogError("xPLDevice.Send", "Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.", EventLogEntryType.Error)
+            Throw New Exception("Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.")
+        Else
+            Try
                 myxPL.Source = Me.Address
                 Dim m As String = myxPL.RawxPL
                 If ((Not Me.AutoFragment) Or myxPL.Schema = "fragment.basic") And Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
@@ -1047,11 +1047,15 @@ Public Class xPLDevice
                     If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.Count & " fragments.", EventLogEntryType.Information)
                     frag.Send()
                 End If
-            End If
-            If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
-        Catch
-            If Debug Then LogError("xPLDevice.Send", "Failed", EventLogEntryType.Information)
-        End Try
+                If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
+            Catch ex As xPLFragmentedMsg.FragmentationException
+                Throw
+            Catch ex As ArgumentException
+                Throw
+            Catch ex As Exception
+                If Debug Then LogError("xPLDevice.Send", "Failed sending message; " & ex.ToString & vbCrLf & "Message:" & vbCrLf & myxPL.ToString, EventLogEntryType.Warning)
+            End Try
+        End If
     End Sub
 
     Private Sub HandleConfigMessage(ByVal myxPL As xPLMessage)
@@ -1391,7 +1395,7 @@ Public Class xPLDevice
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
     Private Sub HandleFragmentMessage(ByVal msg As xPLMessage)
-        Diagnostics.Debug.Print("Handling a fragmented message; schema=" & msg.Schema & " partid=" & CStr(IIf(msg.KeyValueList.IndexOf("partid") = -1, "none", msg.KeyValueList("partid"))))
+        'Diagnostics.Debug.Print("Handling a fragmented message; schema=" & msg.Schema & " partid=" & CStr(IIf(msg.KeyValueList.IndexOf("partid") = -1, "none", msg.KeyValueList("partid"))))
         Select Case msg.Schema
             Case "fragment.basic"
                 ' construct unique ID
@@ -1417,7 +1421,7 @@ Public Class xPLDevice
                     ' Not found
                     Dim txt As String = "Received request from " & msg.Source & " to resend fragments with ID " & msg.KeyValueList("message") & ". This is an unknown message, request ignored."
                     LogMessage(txt, xPLLogLevels.Warning)
-                    LogError("xPLDevice.HandleFragmentMessage", txt, EventLogEntryType.Warning)
+                    LogError("xPLDevice.HandleFragmentMessage", txt & vbCrLf & msg.ToString, EventLogEntryType.Warning)
                 End If
             Case Else
                 ' unknown, do nothing

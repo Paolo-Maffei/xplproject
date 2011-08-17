@@ -389,12 +389,76 @@ Public Class xPLFragmentedMsgTest
         Dim actual As String = msg.RawxPL
         Assert.AreEqual(expected, actual, "Received RawxPL does not match the send xPL, message malformed during transmission.")
         Debug.Print("Success; message received and reassembled succesfully, RawxPL string of send and received message are equal.")
+
+        Assert.IsNull(CheckForFragmentSchema, "devices x/y received a message with schema 'fragment.xyz', which shouldn't be the case as the devices have been set to AutoFragment")
+        Debug.Print("Success; no 'fragment.xyz' messages have been received by the x/y test devices.")
+        Debug.Print("Test complete.")
+    End Sub
+
+    ''' <summary>
+    ''' Checks the provided message list for messages with schema class 'Fragment' and returns the first message found.
+    ''' If no list is provided then both yMessageList and xMessageList will be traversed while searching.
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Private Function CheckForFragmentSchema(Optional ByVal ListToSearch As Collection = Nothing) As xPLMessage
+        Dim s As xPLSchema
+        If ListToSearch Is Nothing Then
+            For Each msg As xPLMessage In yMessageList
+                s = New xPLSchema(msg.Schema)
+                If s.SchemaClass = "fragment" Then
+                    Return msg
+                End If
+            Next
+            For Each msg As xPLMessage In xMessageList
+                s = New xPLSchema(msg.Schema)
+                If s.SchemaClass = "fragment" Then
+                    Return msg
+                End If
+            Next
+        Else
+            For Each msg As xPLMessage In ListToSearch
+                s = New xPLSchema(msg.Schema)
+                If s.SchemaClass = "fragment" Then
+                    Return msg
+                End If
+            Next
+        End If
+        Return Nothing
+    End Function
+
+    <TestMethod()> _
+    Public Sub AutoFragmentFailTest()
+        Dim msg As New xPLMessage
+        Dim MSGID As String = "AutoFragmentFailTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        ' add a key with max message size length, hence cannot be fragmented
+        msg.KeyValueList.Add("somekey", New String("A"c, XPL_MAX_MSG_SIZE))
+        xDev.AutoFragment = True
+        yDev.AutoFragment = True
+        Debug.Print("Sending a message that must be fragmented... but can't")
+        Debug.Print(msg.ToString())
+        Debug.Print("")
+
+        ' message is too large, so should throw exception
+        Try
+            xDev.Send(msg)
+            Assert.Fail("Fragmentation exception was expected as the value was too large, but wasn't thrown")
+        Catch ex As Exception
+            Assert.IsTrue(TypeOf ex Is xPLFragmentedMsg.FragmentationException, "Fragmentation exception was expected, but instead a different exception was thrown; " & ex.ToString)
+        End Try
+        Debug.Print("Success; correct fragmentation exception was thrown.")
     End Sub
 
     ' when AutoFragment is set then
-    '  - messages need to be automatically fragmented
-    '  - exception if not possible due to a value being too large
-    '  - device should not receive fragments, only defragmented messages
+    '  x messages need to be automatically fragmented
+    '  x exception if not possible due to a value being too large
+    '  x device should not receive fragments, only defragmented messages
     '  - timeouts for incomplete messages should work
     '  - requesting missing parts should work
     ' when not set then
