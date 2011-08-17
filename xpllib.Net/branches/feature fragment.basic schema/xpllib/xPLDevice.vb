@@ -198,10 +198,12 @@ Public Class xPLDevice
     ''' <remarks></remarks>
     Public AutoFragment As Boolean = True
     ''' <summary>
-    ''' List contains the fragmented messages send by this device (in case a resend is requested)
+    ''' Collection contains the fragmented messages send/received by this device (in case a 
+    ''' resend is requested or until all fragments are received)
+    ''' Key is 'sourceaddres:ID', where ID is the ID in the fragment id part; x/y:ID
     ''' </summary>
     ''' <remarks></remarks>
-    Friend _FragmentedMessageList As New ArrayList
+    Friend _FragmentedMessageList As New Collection
     ''' <summary>
     ''' Rotating fragmented message ID generator.
     ''' </summary>
@@ -985,10 +987,12 @@ Public Class xPLDevice
 
             ' Should I pass fragmented messages
             If AutoFragment Then
-                If New xPLSchema(myXPL.Schema).SchemaClass = "fragment" Then
-                    Call HandleFragmentMessage(myXPL)
-                    pass = False
-                    db += vbCrLf & "   Pass = False, set to automatically handle fragmentation"
+                If Not x.IsMyEcho Or (Me.MessagePassing And MessagePassingEnum.PassMyOwnEcho) <> 0 Then
+                    If New xPLSchema(myXPL.Schema).SchemaClass = "fragment" Then
+                        Call HandleFragmentMessage(myXPL)
+                        pass = False
+                        db += vbCrLf & "   Pass = False, set to automatically handle fragmentation"
+                    End If
                 End If
             End If
 
@@ -1387,49 +1391,88 @@ Public Class xPLDevice
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
     Private Sub HandleFragmentMessage(ByVal msg As xPLMessage)
+        Diagnostics.Debug.Print("Handling a fragmented message; schema=" & msg.Schema & " partid=" & CStr(IIf(msg.KeyValueList.IndexOf("partid") = -1, "none", msg.KeyValueList("partid"))))
         Select Case msg.Schema
             Case "fragment.basic"
-                Dim l As New ArrayList  ' verification list
-                Dim done As Boolean = False
-                While Not done
-                    Try
-                        For Each fm As xPLFragmentedMsg In _FragmentedMessageList
-                            If Not l.Contains(fm) Then
-                                ' its not in the verification list, so go add it
-                                If fm.Received Then fm.AddFragment(msg)
-                                l.Add(fm)   ' add it to not handle this one again
-                            End If
-                        Next
-                        done = True ' went through without exception
-                    Catch ex As InvalidOperationException
-                        ' probably collection changed while iterating it, so try again
-                        done = False
-                    End Try
-                End While
+                ' construct unique ID
+                Dim fk As New xPLFragmentedMsg.FragmentKey(msg)
+                Dim mid As String = msg.Source & ":" & fk.MessageID
+                ' Go and try to find earlier fragments in the list
+                If _FragmentedMessageList.Contains(Mid) Then
+                    ' add fragment to existing message
+                    CType(_FragmentedMessageList(Mid), xPLFragmentedMsg).AddFragment(msg)
+                Else
+                    ' create it, just creating will add it to the list, no need to store anywhere
+                    Dim fm As New xPLFragmentedMsg(msg, Me)
+                End If
+                ' wasn
             Case "fragment.request"
-                Dim l As New ArrayList  ' verification list
-                Dim done As Boolean = False
-                While Not done
-                    Try
-                        For Each fm As xPLFragmentedMsg In _FragmentedMessageList
-                            If Not l.Contains(fm) Then
-                                ' its not in the verification list, so go resend parts
-                                If fm.Created Then fm.ResendFailedParts(msg)
-                                l.Add(fm)   ' add it to not handle this one again
-                            End If
-                        Next
-                        done = True ' went through without exception
-                    Catch ex As InvalidOperationException
-                        ' probably collection changed while iterating it, so try again
-                        done = False
-                    End Try
-                End While
+                ' construct unique ID
+                Dim mid As String = Me.Address & ":" & msg.KeyValueList("message")
+                ' fetch message and return it
+                If _FragmentedMessageList.Contains(mid) Then
+                    ' found it, request resend
+                    CType(_FragmentedMessageList(mid), xPLFragmentedMsg).ResendFailedParts(msg)
+                Else
+                    ' Not found
+                    Dim txt As String = "Received request from " & msg.Source & " to resend fragments with ID " & msg.KeyValueList("message") & ". This is an unknown message, request ignored."
+                    LogMessage(txt, xPLLogLevels.Warning)
+                    LogError("xPLDevice.HandleFragmentMessage", txt, EventLogEntryType.Warning)
+                End If
             Case Else
                 ' unknown, do nothing
         End Select
     End Sub
 
 #End Region
+
+    ''' <summary>
+    ''' Enum that defines the loglevels that can be used with a log.basic message
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Enum xPLLogLevels
+        Information = System.Diagnostics.EventLogEntryType.Information
+        Warning = System.Diagnostics.EventLogEntryType.Warning
+        [Error] = System.Diagnostics.EventLogEntryType.Error
+    End Enum
+
+    ''' <summary>
+    ''' Attempts to send a log.basic message. Any exceptions will be caught and not rethrown. See log.basic schema for the schema use.
+    ''' </summary>
+    ''' <param name="Message"></param>
+    ''' <param name="Level"></param>
+    ''' <param name="ErrorCode"></param>
+    ''' <remarks></remarks>
+    Public Sub LogMessage(ByVal Message As String, Optional ByVal Level As xPLLogLevels = xPLLogLevels.Information, Optional ByVal ErrorCode As String = "")
+        If Message = "" Then Throw New ArgumentException("No message provided", "Message")
+        Dim msg As New xPLMessage
+        msg.Source = Me.Address
+        msg.Target = "*"
+        msg.MsgType = xPLMessageTypeEnum.Trigger
+        msg.Schema = "log.basic"
+        Select Case Level
+
+            Case xPLLogLevels.Information
+                msg.KeyValueList.Add("type", "inf")
+
+            Case xPLLogLevels.Warning
+                msg.KeyValueList.Add("type", "wrn")
+
+            Case xPLLogLevels.Error
+                msg.KeyValueList.Add("type", "err")
+
+        End Select
+        msg.KeyValueList.Add("text", xPL_Base.RemoveInvalidxPLchars(Message, XPL_STRING_TYPES.Values))
+        If ErrorCode <> "" Then
+            msg.KeyValueList.Add("code", xPL_Base.RemoveInvalidxPLchars(ErrorCode, XPL_STRING_TYPES.Values))
+        End If
+
+        ' Now send it
+        Try
+            Me.Send(msg)
+        Catch ex As Exception
+        End Try
+    End Sub
 
 End Class
 

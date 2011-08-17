@@ -69,9 +69,21 @@ Public Class xPLFragmentedMsg
     ''' Simple class to dissect a fragment key into its components; fragment nr, total number of fragments and message ID
     ''' </summary>
     ''' <remarks></remarks>
-    Private Class FragmentKey
+    Friend Class FragmentKey
+        ''' <summary>
+        ''' From the 'partid' key this is part x in 'partid=x/y:z'
+        ''' </summary>
+        ''' <remarks></remarks>
         Public FragmentNumber As Integer = 0
+        ''' <summary>
+        ''' From the 'partid' key this is part y in 'partid=x/y:z'
+        ''' </summary>
+        ''' <remarks></remarks>
         Public FragmentTotal As Integer = 0
+        ''' <summary>
+        ''' From the 'partid' key this is part z in 'partid=x/y:z'
+        ''' </summary>
+        ''' <remarks></remarks>
         Public MessageID As String = ""
         ''' <summary>
         ''' Returns the fragmentkey as a formatted fragment key;  'nr/max:id'
@@ -177,7 +189,8 @@ Public Class xPLFragmentedMsg
     End Property
     Private _MessageID As String    ' senderaddress & ":" & (ID in partid key)
     ''' <summary>
-    ''' The message ID of a fragmented message is the senders xPL addres with the message specific ID in the partid key, separated by a colon ':'
+    ''' The message ID of a fragmented message is the senders xPL address with the message specific ID 
+    ''' in the partid key, separated by a colon ':'. For example 'tieske-mydev.instance:124'.
     ''' </summary>
     ''' <value></value>
     ''' <returns></returns>
@@ -228,36 +241,6 @@ Public Class xPLFragmentedMsg
         End Get
     End Property
 
-    '''' <summary>
-    '''' Returns true is the message can be fragmented; eg. message (and fragmentation) overhead 
-    '''' combined with the longest value do not exceed the maximum message size.
-    '''' </summary>
-    '''' <param name="msg"></param>
-    '''' <remarks></remarks>
-    'Public Shared Function CanFragment(ByVal msg As xPLMessage) As Boolean
-    '    If msg Is Nothing Then Throw New NullReferenceException("Must provide an xPLMessage object.")
-
-    '    Dim raw As String = msg.RawxPL
-    '    ' extract header and add the fragment overhead
-    '    Dim d As String = msg.Schema & XPL_LF & "{" & XPL_LF
-    '    Dim header As String = Left(raw, raw.IndexOf(d)) & "fragment.basic" & XPL_LF & "{" & XPL_LF & "partid=" & XPL_FRAGMENT_MAX.ToString & "/" & XPL_FRAGMENT_MAX.ToString & ":" & XPL_FRAGMENT_COUNTER_MAX & XPL_LF
-    '    ' define footer
-    '    Dim footer As String = "}" & XPL_LF
-    '    ' calculate maximum size for a single key/value pair available
-    '    Dim max As Integer = XPL_MAX_MSG_SIZE - (header.Length + footer.Length)
-    '    Dim result As Boolean = True    ' start of assuming we're ok
-    '    For n As Integer = 0 To msg.KeyValueList.Count - 1
-    '        With msg.KeyValueList(n)
-    '            If .Key.Length + Encoding.UTF8.GetByteCount(.Value) + XPL_LF.Length + 1 > max Then
-    '                ' Too large, so it fails
-    '                result = False
-    '                Exit For
-    '            End If
-    '        End With
-    '    Next
-    '    Return result
-    'End Function
-
     ''' <summary>
     ''' Creates a new fragmented message, if the provided message has a 'fragment.basic' schema then it becomes a
     ''' 'received' message, otherwise it becomes a 'created' message.
@@ -273,7 +256,7 @@ Public Class xPLFragmentedMsg
         Else
             CreateFromMessage(msg)
         End If
-        Parent._FragmentedMessageList.Add(Me)
+        Parent._FragmentedMessageList.Add(Me, Me.MessageID)
     End Sub
 
     Private Sub CreateFromReceived(ByVal msg As xPLMessage)
@@ -353,7 +336,7 @@ Public Class xPLFragmentedMsg
         Next
         ' set other properties
         _Message = msg
-        _MessageID = Me.Source & ":" & msgid.ToString
+        _MessageID = Parent.Address & ":" & msgid.ToString
         _Count = cnt
     End Sub
 
@@ -367,6 +350,8 @@ Public Class xPLFragmentedMsg
     Public Function AddFragment(ByVal msg As xPLMessage) As xPLMessage
         If _disposed Then Return Nothing
         Dim FragKey As New FragmentKey(msg)
+        'Debug.Print("xPLFragmentedMsg.AddFragment: Received a fragment from " & msg.Source & " with id; " & FragKey.ToString)
+        If Parent.Debug Then LogError("xPLFragmentedMsg.AddFragment", "Received a fragment from " & msg.Source & " with id; " & FragKey.ToString)
         If Me.Created Then Throw New FragmentationException("Cannot add fragments to a created message, only to received messages.")
         If msg.Source & ":" & FragKey.MessageID <> Me.MessageID Then Return Nothing
         If FragKey.FragmentNumber = 1 Then
@@ -397,7 +382,7 @@ Public Class xPLFragmentedMsg
                     Dim m As xPLMessage = _Message  ' create local copy, can be called while 'me' is disposed
                     Dim p As xPLDevice = _Parent    ' create local copy, can be called while 'me' is disposed
                     Me.Dispose()                    ' releases/stops timers
-                    p.IncomingMessage(m)   ' reference the local copies.
+                    p.IncomingMessage(m)   ' reference the local copies, necessary? just to be sure!
                     Return m
                 End If
             End If
@@ -515,6 +500,7 @@ Public Class xPLFragmentedMsg
         If Received Then Throw New FragmentationException("Cannot send a message that was received, only created ones.")
 
         For n As Integer = 1 To Count
+            'Debug.Print("Sending fragment " & n & "/" & Count)
             If Parent.Debug Then LogError("xPLFragmentedMsg.Send", "Sending fragment " & n.ToString & "/" & Count.ToString, EventLogEntryType.Information)
             Parent.Send(_Fragments(n))
         Next
@@ -522,8 +508,23 @@ Public Class xPLFragmentedMsg
         ResetDismissTimer()
     End Sub
 
+    ''' <summary>
+    ''' Timer for dismissing a send message. Will expire when the message fragments can no longer be requested by other devices
+    ''' </summary>
+    ''' <remarks></remarks>
     Private WithEvents _DismissTimer As New Timers.Timer
+    ''' <summary>
+    ''' Timer that will be set after receiving a fragment, when it expires a resend request needs to be fired for the missing 
+    ''' fragments, and the timer will be reused for expiring the incomplete message (if no new fragments are received after
+    ''' the resend request).
+    ''' </summary>
+    ''' <remarks></remarks>
     Private WithEvents _ResendTimer As New Timers.Timer
+    ''' <summary>
+    ''' If this is <c>False</c> when the <see cref="_ResendTimer">_ResendTimer</see> expires, then it expired for the second 
+    ''' time, which means the incoming message should be dismissed.
+    ''' </summary>
+    ''' <remarks></remarks>
     Private _ReceivedFragmentSinceLastResendRequest As Boolean = True
     ''' <summary>
     ''' Timer that will expire when the message can be dismissed, when no new resend requests will be handled
@@ -589,8 +590,8 @@ Public Class xPLFragmentedMsg
             End Try
 
             Try
-                If Parent._FragmentedMessageList.Contains(Me) Then
-                    Parent._FragmentedMessageList.Remove(Me)
+                If Parent._FragmentedMessageList.Contains(Me.MessageID) Then
+                    Parent._FragmentedMessageList.Remove(Me.MessageID)
                 End If
             Catch ex As Exception
             End Try
