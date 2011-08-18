@@ -1399,17 +1399,32 @@ Public Class xPLDevice
         Select Case msg.Schema
             Case "fragment.basic"
                 ' construct unique ID
-                Dim fk As New xPLFragmentedMsg.FragmentKey(msg)
+                Dim fk As xPLFragmentedMsg.FragmentKey
+                Try
+                    fk = New xPLFragmentedMsg.FragmentKey(msg)
+                Catch ex As xPLFragmentedMsg.FragmentationException
+                    ' bad message, construct warning and ignore it
+                    Me.LogMessage("Received fragment from " & msg.Source & " with a bad or missing 'partid' key.")
+                    Exit Sub
+                End Try
                 Dim mid As String = msg.Source & ":" & fk.MessageID
                 ' Go and try to find earlier fragments in the list
-                If _FragmentedMessageList.Contains(Mid) Then
+                If _FragmentedMessageList.Contains(mid) Then
                     ' add fragment to existing message
-                    CType(_FragmentedMessageList(Mid), xPLFragmentedMsg).AddFragment(msg)
+                    Try
+
+                        CType(_FragmentedMessageList(mid), xPLFragmentedMsg).AddFragment(msg)
+                    Catch ex As xPLFragmentedMsg.FragmentationException
+                        ' bad message, do nothing, simply ignore
+                    End Try
                 Else
                     ' create it, just creating will add it to the list, no need to store anywhere
-                    Dim fm As New xPLFragmentedMsg(msg, Me)
+                    Try
+                        Dim fm As New xPLFragmentedMsg(msg, Me)
+                    Catch ex As xPLFragmentedMsg.FragmentationException
+                        ' bad message, do nothing, simply ignore
+                    End Try
                 End If
-                ' wasn
             Case "fragment.request"
                 If msg.MsgType = xPLMessageTypeEnum.Command Then
                     ' construct unique ID
