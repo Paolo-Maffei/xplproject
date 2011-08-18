@@ -1411,17 +1411,19 @@ Public Class xPLDevice
                 End If
                 ' wasn
             Case "fragment.request"
-                ' construct unique ID
-                Dim mid As String = Me.Address & ":" & msg.KeyValueList("message")
-                ' fetch message and return it
-                If _FragmentedMessageList.Contains(mid) Then
-                    ' found it, request resend
-                    CType(_FragmentedMessageList(mid), xPLFragmentedMsg).ResendFailedParts(msg)
-                Else
-                    ' Not found
-                    Dim txt As String = "Received request from " & msg.Source & " to resend fragments with ID " & msg.KeyValueList("message") & ". This is an unknown message, request ignored."
-                    LogMessage(txt, xPLLogLevels.Warning)
-                    LogError("xPLDevice.HandleFragmentMessage", txt & vbCrLf & msg.ToString, EventLogEntryType.Warning)
+                If msg.MsgType = xPLMessageTypeEnum.Command Then
+                    ' construct unique ID
+                    Dim mid As String = Me.Address & ":" & msg.KeyValueList("message")
+                    ' fetch message and return it
+                    If _FragmentedMessageList.Contains(mid) Then
+                        ' found it, request resend
+                        CType(_FragmentedMessageList(mid), xPLFragmentedMsg).ResendFailedParts(msg)
+                    Else
+                        ' Not found
+                        Dim txt As String = "Received request from " & msg.Source & " to resend fragments with ID " & msg.KeyValueList("message") & ". This is an unknown message, request ignored."
+                        LogMessage(txt, xPLLogLevels.Warning)
+                        LogError("xPLDevice.HandleFragmentMessage", txt & vbCrLf & msg.ToString, EventLogEntryType.Warning)
+                    End If
                 End If
             Case Else
                 ' unknown, do nothing

@@ -444,8 +444,9 @@ Public Class xPLFragmentedMsg
     ''' </summary>
     ''' <param name="dev"></param>
     ''' <remarks></remarks>
-    Private Sub RequestMissingParts(Optional ByVal dev As xPLDevice = Nothing)
+    Private Sub RequestMissingParts(ByVal dev As xPLDevice)
         If Me.Created Then Throw New FragmentationException("Can only request missing parts for received fragmented messages, not for created ones")
+        If dev Is Nothing Then Throw New NullReferenceException("No device provided")
         Dim msg As New xPLMessage
         msg.Target = Me.Source
         msg.MsgType = xPLMessageTypeEnum.Command
@@ -455,12 +456,7 @@ Public Class xPLFragmentedMsg
         For Each nr As Integer In _Checklist
             msg.KeyValueList.Add("part", nr.ToString)
         Next
-        If dev Is Nothing And xPLListener.Count <> 0 Then
-            dev = xPLListener.Device(0) ' no device provided, just pick first one in the list
-        End If
-        If dev Is Nothing Then
-            Throw New FragmentationException("Cannot request missing parts of fragmented message, no device available through which to send the request.")
-        Else
+        If dev.Status <> xPLDeviceStatus.Offline Then
             dev.Send(msg)
         End If
     End Sub
@@ -471,30 +467,38 @@ Public Class xPLFragmentedMsg
     ''' </summary>
     ''' <param name="msg">Message containing the resend request</param>
     ''' <remarks></remarks>
-    Public Function ResendFailedParts(ByVal msg As xPLMessage) As Boolean
-        If msg Is Nothing Then Return False
-        If msg.Schema <> "fragment.request" Then Return False
-        If msg.KeyValueList("command") <> "resend" Then Return False
-        Dim mid As String = msg.KeyValueList("message")
-        If mid Is Nothing OrElse mid <> MessageID Then Return False
-        Dim xdev As xPLDevice = xPLListener.Device(msg.Target)
-        If xdev Is Nothing Then Return False
-        If xdev.Status = xPLDeviceStatus.Offline Then Return False
-
-        For n As Integer = 0 To msg.KeyValueList.Count - 1
-            If msg.KeyValueList(n).Key = "part" Then
-                Dim part As Integer = Integer.Parse(msg.KeyValueList(n).Value)
-                If _Fragments.ContainsKey(part) Then
-                    xdev.Send(_Fragments(part))
-                End If
+    Public Sub ResendFailedParts(ByVal msg As xPLMessage)
+        If msg Is Nothing Then Throw New NullReferenceException("No message provided")
+        If msg.Schema <> "fragment.request" Then Throw New ArgumentException("Message schema type is not 'fragment.request'.", "msg")
+        If msg.KeyValueList.IndexOf("message") = -1 Then
+            Parent.LogMessage("Received 'fragment.request' message from " & msg.Source & " without a 'message' key containing the message id. Message will be ignored.", xPLDevice.xPLLogLevels.Warning)
+        End If
+        Dim mid As String = Parent.Address & ":" & msg.KeyValueList("message")
+        If mid = MessageID Then
+            If msg.KeyValueList("command") <> "resend" Then
+                Parent.LogMessage("Received 'fragment.request' message from " & msg.Source & " with an unknown command; 'command=" & msg.KeyValueList("command") & "' . Message will be ignored.", xPLDevice.xPLLogLevels.Warning)
             End If
-        Next
-        ResetDismissTimer()
-        Return True
-    End Function
+            If msg.KeyValueList.IndexOf("part") = -1 Then
+                Parent.LogMessage("Received 'fragment.request' message from " & msg.Source & " without a 'part' key containing the fragment number requested. Message will be ignored.", xPLDevice.xPLLogLevels.Warning)
+            End If
+            For n As Integer = 0 To msg.KeyValueList.Count - 1
+                If msg.KeyValueList(n).Key = "part" Then
+                    Dim part As Integer = Integer.Parse(msg.KeyValueList(n).Value)
+                    If _Fragments.ContainsKey(part) Then
+                        If Parent.Status <> xPLDeviceStatus.Offline Then Parent.Send(_Fragments(part))
+                    Else
+                        Parent.LogMessage("Received 'fragment.request' message from " & msg.Source & " for 'part=" & part & "'. Part (fragment) not found. Message will be ignored.", xPLDevice.xPLLogLevels.Warning)
+                    End If
+                End If
+            Next
+            ResetDismissTimer()
+        Else
+            ' its not me, so do nothing
+        End If
+    End Sub
 
     ''' <summary>
-    ''' Send the fragmented message through the provided device. Will send all fragments.
+    ''' Send the fragmented message through its parent device. Will send all fragments.
     ''' </summary>
     ''' <remarks></remarks>
     Public Sub Send()
@@ -561,9 +565,11 @@ Public Class xPLFragmentedMsg
             _ResendTimer.Stop()
             _ResendTimer.Interval = XPL_FRAGMENT_REQUEST_TIMEOUT
             _ResendTimer.Start()
-            Me.RequestMissingParts()
+            Me.RequestMissingParts(Parent)
         Else
             ' second time it expires without fragments having been received, dismiss the message
+            LogError("xPLFragmentedMsg.ResendTimerElapsed", "Fragment resend request for message " & Me.MessageID & " did not result in all fragments, message dismissed as incomplete.", EventLogEntryType.Warning)
+            Parent.LogMessage("Fragment resend request for message " & Me.MessageID & " did not result in all fragments, message dismissed as incomplete.", xPLDevice.xPLLogLevels.Warning)
             Me.Dispose()
         End If
     End Sub

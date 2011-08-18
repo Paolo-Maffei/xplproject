@@ -455,19 +455,279 @@ Public Class xPLFragmentedMsgTest
         Debug.Print("Success; correct fragmentation exception was thrown.")
     End Sub
 
+
+    <TestMethod()> _
+    Public Sub RequestMissingPartsTest()
+        Dim msg As New xPLMessage
+        Dim fmsg As xPLFragmentedMsg
+        Dim MSGID As String = "MissingPartsTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        For n = 0 To 2
+            msg.KeyValueList.Add("testky" & n.ToString, New String("A"c, 1000))
+        Next
+        xDev.AutoFragment = False
+        yDev.AutoFragment = True
+        Debug.Print("Creating fragmented message...")
+        Debug.Print(msg.ToString())
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        Debug.Print("")
+        Debug.Print("Message parts;")
+        For n As Integer = 1 To fmsg.Count
+            Debug.Print("Part " & n & "/" & fmsg.Count)
+            Debug.Print(fmsg.Fragment(n).ToString)
+            Debug.Print("")
+        Next
+        Debug.Print("")
+        Debug.Print("")
+        Debug.Print("Now sending message part 3, part 1 and 2 will not be sent.")
+        fmsg.Fragment(3).Send(xDev)
+        Debug.Print("Message send by xDev...  now waiting for the resend request from yDev")
+
+        Dim expire As Date = Now.AddSeconds(10)
+        Dim request As xPLMessage = Nothing
+        While expire > Now
+            Threading.Thread.Sleep(300)
+            ' check whats been received
+            Try
+                For Each x As xPLMessage In xMessageList
+                    If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                        request = x
+                        expire = Now.AddSeconds(-1)
+                    End If
+                Next
+            Catch ex As Exception
+            End Try
+        End While
+        Debug.Print("Messages received by xDev;")
+        For Each x As xPLMessage In xMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+        Debug.Print("Messages received by yDev;")
+        For Each x As xPLMessage In yMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+
+        Assert.IsNotNull(request, "No 'fragment.request' message was received by xDev from yDev. Should happen after 3 seconds, timedout after 10 seconds")
+        Debug.Print("Success: 'fragment.request' has been received. Message: " & vbCrLf & request.ToString & vbCrLf)
+
+        Assert.IsTrue(fmsg.MessageID = request.Target & ":" & request.KeyValueList("message"), "The proper ID was not found for the message")
+        Debug.Print("Success: correct message ID detected in request message")
+        _Assert(request.KeyValueList("command") = "resend", "Request must contain key/value; 'command=resend'.")
+        For n As Integer = 0 To request.KeyValueList.Count - 1
+            If request.KeyValueList(n).Key = "part" Then
+                Dim v As String = request.KeyValueList(n).Value
+                Assert.IsTrue(v <> "3", "Part 3 was requested, which was originally send, so its a bad request")
+                Assert.IsTrue(v = "1" Or v = "2", "Unknown part '" & v & "' was requested.")
+            End If
+        Next
+        Debug.Print("Now sending missing parts 2 and 1 (that order) through xDev, waiting for reassembled message to come in on yDev")
+        fmsg.Fragment(2).Send(xDev)
+        fmsg.Fragment(1).Send(xDev)
+        Dim rm As xPLMessage = WaitForTestKey(yDev, MSGID)
+        _Assert(rm IsNot Nothing, "The reassembled message was must be received by yDev and not timeout")
+        _Assert(rm.RawxPL = msg.RawxPL, "Reassembled message must be equal (RawxPL) to the original message send.")
+        'Debug.Print("Success: reassembled message equals the send message.")
+        Debug.Print("Test complete.")
+    End Sub
+
+    ''' <summary>
+    ''' When a message is sent, can missing parts be requested, and until how long...
+    ''' </summary>
+    ''' <remarks></remarks>
+    <TestMethod()> _
+    Public Sub PartRequestTest()
+        Dim msg As New xPLMessage
+        Dim fmsg As xPLFragmentedMsg
+        Dim MSGID As String = "PartRequestTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        For n = 0 To 2
+            msg.KeyValueList.Add("testky" & n.ToString, New String("A"c, 1000))
+        Next
+        xDev.AutoFragment = True
+        yDev.AutoFragment = False
+        Debug.Print("Creating fragmented message...")
+        Debug.Print(msg.ToString())
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        Debug.Print("")
+        Debug.Print("Message parts;")
+        For n As Integer = 1 To fmsg.Count
+            Debug.Print("Part " & n & "/" & fmsg.Count)
+            Debug.Print(fmsg.Fragment(n).ToString)
+            Debug.Print("")
+        Next
+
+        Debug.Print("")
+        Debug.Print("")
+        Debug.Print("Now sending message...")
+        fmsg.Send()
+        Debug.Print("Message send by xDev...  xDev should retain fragments for " & (XPL_FRAGMENT_SEND_RETAIN / 1000) & " seconds.")
+
+        Dim request As New xPLMessage
+        With request
+            .MsgType = xPLMessageTypeEnum.Command
+            .Source = yDev.Address
+            .Target = xDev.Address
+            .Schema = "fragment.request"
+            With .KeyValueList
+                .Add("command", "resend")
+                .Add("message", Mid(fmsg.MessageID, Len(xDev.Address) + 2))
+                .Add("part", "1")
+            End With
+        End With
+
+        Debug.Print("waiting until it almost expires...")
+        Threading.Thread.Sleep(XPL_FRAGMENT_SEND_RETAIN - 1000)
+        Debug.Print("Clearing queues and sending resend request ...")
+        xMessageList.Clear()
+        yMessageList.Clear()
+        request.Send(yDev)
+        Debug.Print("Waiting for resend request to be answered... (max 10 seconds)")
+        ' wait for resend request to be answered
+        Dim expire As Date = Now.AddSeconds(10)
+        Dim receivedfragment As xPLMessage = Nothing
+        Dim partid = "1/" & fmsg.Count & ":" & Mid(fmsg.MessageID, Len(xDev.Address) + 2)
+        While expire > Now
+            Threading.Thread.Sleep(300)
+            ' check whats been received
+            Try
+                For Each x As xPLMessage In yMessageList
+                    If x.Schema = "fragment.basic" And x.Source = xDev.Address AndAlso x.KeyValueList("partid") = partid Then
+                        receivedfragment = x
+                        expire = Now.AddSeconds(-1)
+                    End If
+                Next
+            Catch ex As Exception
+            End Try
+        End While
+        Debug.Print("Messages received by xDev;")
+        For Each x As xPLMessage In xMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+        Debug.Print("Messages received by yDev;")
+        For Each x As xPLMessage In yMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+
+        _Assert(receivedfragment IsNot Nothing, "The requested fragment, resended by xDev must be received by yDev")
+        Debug.Print("Now wait again, enough to make it expire, so the xDev will clean it up and the fragment will no longer be resend.")
+
+        Threading.Thread.Sleep(XPL_FRAGMENT_SEND_RETAIN + 1000)
+        Debug.Print("Clearing queues and sending resend request ...")
+        xMessageList.Clear()
+        yMessageList.Clear()
+        request.Send(yDev)
+        Debug.Print("Waiting for resend request to be answered... (max 10 seconds)")
+        ' wait for resend request to be answered
+        expire = Now.AddSeconds(10)
+        receivedfragment = Nothing
+        Dim log As xPLMessage = Nothing
+        partid = "1/" & fmsg.Count & ":" & Mid(fmsg.MessageID, Len(xDev.Address) + 2)
+        While expire > Now
+            Threading.Thread.Sleep(300)
+            ' check whats been received
+            Try
+                For Each x As xPLMessage In yMessageList
+                    If x.Schema = "fragment.basic" And x.Source = xDev.Address AndAlso x.KeyValueList("partid") = partid Then
+                        receivedfragment = x
+                        expire = Now.AddSeconds(-1)
+                    End If
+                    If x.Schema = "log.basic" And x.Source = xDev.Address Then
+                        log = x
+                        expire = Now.AddSeconds(-1)
+                    End If
+                Next
+            Catch ex As Exception
+            End Try
+        End While
+        Debug.Print("Messages received by xDev;")
+        For Each x As xPLMessage In xMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+        Debug.Print("Messages received by yDev;")
+        For Each x As xPLMessage In yMessageList
+            Debug.Print("from: " & x.Source & ", schema: " & x.Schema)
+            If x.Schema = "fragment.request" And x.Source = yDev.Address Then
+                request = x
+                expire = Now.AddSeconds(-1)
+            End If
+        Next
+        Debug.Print("")
+
+        _Assert(receivedfragment Is Nothing, "The requested fragment, must be expired and no longer be resended by xDev.")
+        _Assert(log IsNot Nothing, "A log.basic message must be send if a request for an unknown fragment/message is made.")
+
+        Debug.Print("Test complete.")
+    End Sub
+
+    ''' <summary>
+    ''' Test that fragments that are received, but remain incomplete are cleaned-up
+    ''' </summary>
+    ''' <remarks></remarks>
+    <TestMethod()> _
+        Public Sub DismissIncompleteTest()
+
+        ' create a 3 part message
+        ' send 2 parts
+        ' wait for timeouts to expire
+        ' send 3rd part
+        ' if message is completed, it wasn't cleaned up properly
+        Assert.Fail()
+
+    End Sub
+
     ' when AutoFragment is set then
     '  x messages need to be automatically fragmented
     '  x exception if not possible due to a value being too large
     '  x device should not receive fragments, only defragmented messages
-    '  - timeouts for incomplete messages should work
-    '  - requesting missing parts should work
+    '  x timeouts for incomplete messages should work
+    '  x requesting missing parts should work
     ' when not set then
-    '  - to large messages will throw an exception, docs must be up-to-date!
-    '  - fragments should be passed
-    '  - defragmented messages should not be passed
+    '  x to large messages will throw an exception, docs must be up-to-date!
+    '  x fragments should be passed
+    '  x defragmented messages should not be passed
 
-    ' schema in message body is invalid or missing
-    ' fragment key has incorrect format or missing
+    ' Fragmented message;
+    '  - schema in message body is invalid or missing
+    '  - fragment key has incorrect format or missing
+    ' Resend request;
+    '  - missing/bad command key
+    '  - missing/bad message key
+    '  - missing/bad part key
 
 
 
