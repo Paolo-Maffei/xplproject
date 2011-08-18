@@ -747,26 +747,80 @@ Public Class xPLFragmentedMsgTest
 
     End Sub
 
-    ' when AutoFragment is set then
-    '  x messages need to be automatically fragmented
-    '  x exception if not possible due to a value being too large
-    '  x device should not receive fragments, only defragmented messages
-    '  x timeouts for incomplete messages should work
-    '  x requesting missing parts should work
-    ' when not set then
-    '  x to large messages will throw an exception, docs must be up-to-date!
-    '  x fragments should be passed
-    '  x defragmented messages should not be passed
+    ''' <summary>
+    ''' Test that fragments that are received, but remain incomplete are cleaned-up
+    ''' </summary>
+    ''' <remarks></remarks>
+    <TestMethod()> _
+        Public Sub BadFragmentTest()
 
-    ' Fragmented message;
-    '  - schema in message body is invalid or missing
-    '  - fragment key has incorrect format or missing
-    ' Resend request;
-    '  - missing/bad command key
-    '  - missing/bad message key
-    '  - missing/bad part key
+        ' create a 3 part message
+        Dim msg As New xPLMessage
+        Dim fmsg As xPLFragmentedMsg
+        Dim MSGID As String = "DimissIncompleteTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        For n = 0 To 2
+            msg.KeyValueList.Add("testky" & n.ToString, New String("A"c, 1000))
+        Next
+        xDev.AutoFragment = False
+        yDev.AutoFragment = True
+
+        Debug.Print("Creating fragmented message... without schema key")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(1).KeyValueList.Remove(fmsg.Fragment(1).KeyValueList.IndexOf("schema"))   ' remove schema key
+        fmsg.Send()
 
 
+        Debug.Print("Creating fragmented message... with bad schema key: 'this is no valid schema'")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(1).KeyValueList("schema") = "this is no valid schema"   ' bad schema key
+        fmsg.Send()
 
+        Debug.Print("Creating fragmented message... without partid (fragment 1 and 2)")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(1).KeyValueList.Remove(fmsg.Fragment(1).KeyValueList.IndexOf("partid"))   ' remove schema key
+        fmsg.Fragment(2).KeyValueList.Remove(fmsg.Fragment(2).KeyValueList.IndexOf("partid"))   ' remove schema key
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: /2:35")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "/2:35"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: x/2:35")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "x/2:35"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: 1/:35")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "1/:35"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: 1/x:35")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "1/x:35"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: 1/2:")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "1/2:"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: 12:35")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "12:35"   ' bad part id
+        fmsg.Send()
+
+        Debug.Print("Creating fragmented message... with bad partid: 1/235")
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        fmsg.Fragment(2).KeyValueList("partid") = "1/235"   ' bad part id
+        fmsg.Send()
+    End Sub
 
 End Class

@@ -353,7 +353,7 @@ Public Class xPLFragmentedMsg
         Dim FragKey As New FragmentKey(msg)
         'Debug.Print("xPLFragmentedMsg.AddFragment: Received a fragment from " & msg.Source & " with id; " & FragKey.ToString)
         If Parent.Debug Then LogError("xPLFragmentedMsg.AddFragment", "Received a fragment from " & msg.Source & " with id; " & FragKey.ToString)
-        If Me.Created Then Throw New FragmentationException("Cannot add fragments to a created message, only to received messages.")
+        If Me.Created Then Throw New InvalidOperationException("Cannot add fragments to a created message, only to received messages.")
         If msg.Source & ":" & FragKey.MessageID <> Me.MessageID Then Return Nothing
         If FragKey.FragmentNumber = 1 Then
             If (msg.KeyValueList.IndexOf("schema") <> -1) Then
@@ -361,9 +361,11 @@ Public Class xPLFragmentedMsg
                 Try
                     _Message.Schema = msg.KeyValueList("schema")
                 Catch ex As Exception
+                    Parent.LogMessage("Received fragment from " & msg.Source & " with an invalid schema in the 1st message; 'schema=" & msg.KeyValueList("schema") & "'.", xPLDevice.xPLLogLevels.Warning)
                     Throw New FragmentationException("Fragmented message contained an illegal schema value; 'schema=" & msg.KeyValueList("schema") & "'.")
                 End Try
             Else
+                Parent.LogMessage("Received fragment from " & msg.Source & " without a 'schema' key in the 1st message.", xPLDevice.xPLLogLevels.Warning)
                 Throw New FragmentationException("1st fragment does not contain the 'schema' key")
             End If
         End If
@@ -579,7 +581,7 @@ Public Class xPLFragmentedMsg
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me._disposed Then
-            Debug.Print("Disposing of fragmented message for: " & Parent.Address)
+            'Debug.Print("Disposing of fragmented message for: " & Parent.Address)
             If disposing Then
                 ' TODO: free other state (managed objects).
 
