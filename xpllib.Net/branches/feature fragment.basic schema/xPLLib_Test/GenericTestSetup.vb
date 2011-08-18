@@ -42,6 +42,23 @@ Module GenericTestSetup
     Friend yMessageList As Collection   ' messages received will be stored here, key is the msg value TestKey
 
     ''' <summary>
+    ''' A simple assert function; prints debug text and fails an assertion if Success = False. The Statement should 
+    ''' be formatted as something that can either fail or succeed. Example; 'Message must have ID 123'
+    ''' </summary>
+    ''' <param name="Success"></param>
+    ''' <param name="Statement"></param>
+    ''' <remarks></remarks>
+    Friend Sub _Assert(ByVal Success As Boolean, ByVal Statement As String)
+        Dim txt As String = ""
+        If Success Then
+            txt = "Success: " & Statement
+        Else
+            txt = "FAILED : " & Statement
+        End If
+        Debug.Print(txt)
+        If Not Success Then Assert.Fail(txt)
+    End Sub
+    ''' <summary>
     ''' Test initializer, call this from your unittest initialization routine (a sub with property TestInitialize() set)
     ''' </summary>
     ''' <remarks></remarks>
@@ -75,6 +92,8 @@ Module GenericTestSetup
         End While
         Assert.IsTrue(x < 50, "Devices not online within 5 seconds, test aborted")
         Debug.Print("Both online, commencing test")
+        Debug.Print("============================")
+        Debug.Print("")
         Debug.Print("")
     End Sub
 
@@ -84,6 +103,8 @@ Module GenericTestSetup
     ''' <remarks></remarks>
     Public Sub xPLTestCleanup()
         Debug.Print("")
+        Debug.Print("")
+        Debug.Print("====================================================")
         Debug.Print("Test finished, now destroying xDev and yDev devices.")
         If Not xDev Is Nothing Then
             RemoveHandler xDev.xPLMessageReceived, AddressOf MessageReceived
@@ -108,20 +129,22 @@ Module GenericTestSetup
 
     ''' <summary>
     ''' Stores received messages in the xMessageList or yMessageList, where the <see cref="WaitForTestKey">WaitForTestKey function</see> 
-    ''' will look for the defined testkey.
+    ''' will look for the defined testkey. When storing the message, the key used is the value of the testkey, or if that wasn't present
+    ''' no key is used.
     ''' </summary>
     ''' <param name="sender"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
     Private Sub MessageReceived(ByVal sender As xPLDevice, ByVal e As xPLDevice.xPLEventArgs)
+        Dim v As String = Nothing
         If e.XplMsg.KeyValueList.IndexOf(TESTKEY) <> -1 Then
-            Dim v As String = e.XplMsg.KeyValueList(TESTKEY)
-            If sender Is xDev Then
-                xMessageList.Add(e.XplMsg, v)
-            End If
-            If sender Is yDev Then
-                yMessageList.Add(e.XplMsg, v)
-            End If
+            v = e.XplMsg.KeyValueList(TESTKEY)
+        End If
+        If sender Is xDev Then
+            xMessageList.Add(e.XplMsg, v)
+        End If
+        If sender Is yDev Then
+            yMessageList.Add(e.XplMsg, v)
         End If
     End Sub
     ''' <summary>
