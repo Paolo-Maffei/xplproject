@@ -579,6 +579,7 @@ Public Class xPLFragmentedMsg
     ' IDisposable
     Protected Overridable Sub Dispose(ByVal disposing As Boolean)
         If Not Me._disposed Then
+            Debug.Print("Disposing of fragmented message for: " & Parent.Address)
             If disposing Then
                 ' TODO: free other state (managed objects).
 
