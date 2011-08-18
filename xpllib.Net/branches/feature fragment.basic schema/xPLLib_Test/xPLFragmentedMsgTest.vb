@@ -702,11 +702,48 @@ Public Class xPLFragmentedMsgTest
         Public Sub DismissIncompleteTest()
 
         ' create a 3 part message
+        Dim msg As New xPLMessage
+        Dim fmsg As xPLFragmentedMsg
+        Dim MSGID As String = "DimissIncompleteTest"
+
+        msg.Schema = "my.schema"
+        msg.MsgType = xPL_Base.xPLMessageTypeEnum.Command
+        msg.Source = xDev.Address
+        msg.Target = yDev.Address
+        msg.KeyValueList.Add(TESTKEY, MSGID)
+        For n = 0 To 2
+            msg.KeyValueList.Add("testky" & n.ToString, New String("A"c, 1000))
+        Next
+        xDev.AutoFragment = False
+        yDev.AutoFragment = True
+        Debug.Print("Creating fragmented message...")
+        Debug.Print(msg.ToString())
+        fmsg = New xPLFragmentedMsg(msg, xDev)
+        Debug.Print("")
+        Debug.Print("Message parts;")
+        For n As Integer = 1 To fmsg.Count
+            Debug.Print("Part " & n & "/" & fmsg.Count)
+            Debug.Print(fmsg.Fragment(n).ToString)
+            Debug.Print("")
+        Next
+
+        Debug.Print("")
+        Debug.Print("")
+        Debug.Print("Now sending message... parts 1 and 2")
+
         ' send 2 parts
+        fmsg.Fragment(1).Send()
+        fmsg.Fragment(2).Send()
         ' wait for timeouts to expire
+        Threading.Thread.Sleep(XPL_FRAGMENT_REQUEST_AFTER + XPL_FRAGMENT_REQUEST_TIMEOUT + 1000)
+        Debug.Print("by now the 2 message fragments should have been deleted by yDev, sending last part...")
         ' send 3rd part
+        fmsg.Fragment(3).Send()
+        Debug.Print("No wait to see if yDev receives the defragmented message (which it shouldn't)")
+        msg = WaitForTestKey(xDev, MSGID, XPL_FRAGMENT_REQUEST_AFTER + XPL_FRAGMENT_REQUEST_TIMEOUT + 1000)
         ' if message is completed, it wasn't cleaned up properly
-        Assert.Fail()
+        Assert.IsNull(msg, "The fragmented message was received, instead of the first fragments having been deleted...")
+        Debug.Print("Success, no message received.")
 
     End Sub
 
