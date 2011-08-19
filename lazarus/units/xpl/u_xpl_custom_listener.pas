@@ -64,11 +64,9 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         Constructor Create(const aOwner : TComponent); reintroduce;
         Destructor  Destroy; override;
 
-        //Procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); dynamic;
         procedure SaveConfig; dynamic;
         procedure LoadConfig; dynamic;
 
-        procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); dynamic;
         procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
         procedure SendHeartBeatMessage; dynamic;
         function  ConnectionStatusAsStr : string;
@@ -85,12 +83,11 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         property ConnectionStatus : TConnectionStatus read Get_ConnectionStatus write Set_ConnectionStatus stored false;
      end;
 
-const K_HBEAT_ME_APPNAME  = 'appname';
-
 implementation { ==============================================================}
 uses u_xpl_header
      , u_xpl_schema
      , u_xpl_common
+     , u_xpl_messages
      , typinfo
      ;
 
@@ -99,7 +96,6 @@ const K_MSG_BIND_OK       = 'Listening on port %u for address %s';
       K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
       K_MSG_IP_ERROR      = 'Socket unable to bind to IP Addresses';
       K_MSG_UDP_ERROR     = 'Unable to initialize incoming UDP server';
-      K_HBEAT_ME_VERSION  = 'version';
       K_MSG_CONFIG_RECEIVED = 'Config received from %s and saved';
       K_MSG_CONF_ERROR      = 'Badly formed or incomplete config information received';
       K_NETWORK_STATUS      = 'xPL Network status : %s';
@@ -143,12 +139,6 @@ begin
    Log(etInfo,K_MSG_CONFIG_LOADED,[Adresse.RawxPL]);
 end;
 
-//procedure TxPLCustomListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//  if CompareText(AClassName, 'TxPLCustomConfig') = 0 then ComponentClass := TxPLCustomConfig
-//  else if CompareText(AClassName, 'TxPLCustomListener') = 0 then ComponentClass := TxPLCustomListener
-//end;
-
 procedure TxPLCustomListener.UpdateConfig;
 begin
    LoadConfig;
@@ -190,28 +180,20 @@ begin
    else if ((HBeat.Rate = rfRandom) or (HBeat.Rate = rfConfig)) then result := connected;
 end;
 
-procedure TxPLCustomListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
-begin
-   aMessage.Format_HbeatApp(fConfig.Interval,aPort,aIP);
-   aMessage.Body.AddKeyValuePairs( [K_HBEAT_ME_APPNAME , K_HBEAT_ME_VERSION], [AppName, Version]);
-   if not Config.IsValid then aMessage.Schema.Classe := 'config'; // Change Schema class in this case
-   if csDestroying in ComponentState then aMessage.Schema.Type_ := 'end';      // Change Schema type in this case
-end;
-
 procedure TxPLCustomListener.SendHeartBeatMessage;
 var i : integer;
-    aMessage : TxPLMessage;
 begin
-   aMessage := TxPLMessage.Create(self);
+   with THeartBeatMsg.Create(self) do begin
+        for i:=0 to IncomingSocket.Bindings.Count-1 do begin
+            Port := IncomingSocket.Bindings[i].Port;
+            Remote_Ip := IncomingSocket.Bindings[i].IP;
+            if   Assigned(OnxPLHBeatPrepare) and (Config.IsValid) then OnxPLHBeatPrepare(Body);
+            Send;
+        end;
 
-   for i:=0 to IncomingSocket.Bindings.Count-1 do begin
-       FinalizeHBeatMsg(aMessage,IntToStr(IncomingSocket.Bindings[i].Port),IncomingSocket.Bindings[i].IP);
-       if Assigned(OnxPLHBeatPrepare) and (Config.IsValid) then OnxPLHBeatPrepare(aMessage.Body);
-       Send(aMessage);
+        fProbingTimer.Enabled := True;
+        Free;
    end;
-
-   fProbingTimer.Enabled := True;
-   aMessage.Free;
 end;
 
 procedure TxPLCustomListener.HandleConfigMessage(aMessage: TxPLMessage);
@@ -253,15 +235,19 @@ begin
       {EoTODO : check that this modification is ok}
 
          if Schema.IsHBeat then begin
-            if Adresse.Equals(Source)   then ConnectionStatus := connected;
+            if Adresse.Equals(Source)   then ConnectionStatus := connected;    // I heard my heartbeat : I'm connected
             if Schema.Type_ = 'request' then HBeat.Rate := rfRandom;           // Choose a random value between 2 and 6 second
-         end;
-         if Schema.IsConfig then HandleConfigMessage(aMessage);
+         end else
+             if Schema.IsConfig then HandleConfigMessage(aMessage) else
+                if Schema.IsFragment then FragmentMgr.Handle(aMessage);
+
          if ( MatchesFilter(fFilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
-            if not  DoHBeatApp(aMessage)
+            if not DoHBeatApp(aMessage)
                then DoxPLReceived(aMessage);
+
       end;
-      finally Destroy;
+      finally
+          Free;
    end;
 end;
 
@@ -309,5 +295,5 @@ end;
 
 end.
 
-initialization
+initialization // =============================================================
    Classes.RegisterClass(TxPLCustomListener);

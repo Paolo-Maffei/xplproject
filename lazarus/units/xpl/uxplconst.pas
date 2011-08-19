@@ -104,13 +104,6 @@ const
    // Message elements =========================================================
    K_RE_MESSAGE        = '\A(.+\n([0-9a-z/-]{1,8}\.[0-9a-z/-]{1,8}))(.+)';       // Renforcé la RE du message pour tenir compte de l'existance de variables {SYS::} dans le corps du message
 
-   // Heart beat message elements ==============================================
-
-   K_HBEAT_ME_INTERVAL = 'interval';
-   K_HBEAT_ME_PORT     = 'port';
-   K_HBEAT_ME_REMOTEIP = 'remote-ip';
-   K_HBEAT_ME_WEB_PORT = 'webport';
-
    // Common schemas ===========================================================
    K_REGEXPR_SCHEMA_ELEMENT = '([0-9a-z/-]{1,8})';
    K_REGEXPR_SCHEMA = K_REGEXPR_SCHEMA_ELEMENT + '\.' + K_REGEXPR_SCHEMA_ELEMENT;

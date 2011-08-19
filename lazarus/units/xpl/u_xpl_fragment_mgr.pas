@@ -11,8 +11,9 @@ interface
 
 uses Classes
      , SysUtils
-     , u_xpl_custom_message
+     , u_xpl_message
      , u_xpl_address
+     , u_xpl_messages
      , fpc_delphi_compat
      , u_xpl_collection
      ;
@@ -23,21 +24,22 @@ type // TFragmentFactory ======================================================
         fFragList  : TList;
         fUniqueId  : integer;
         fSource    : TxPLAddress;
-        fAssembled : TxPLCustomMessage;
+        fAssembled : TxPLMessage;
 
-        procedure   Fragment(const aMessage : TxPLCustomMessage; const aCounter : integer);
-        procedure   Combine (const aMessage : TxPLCustomMessage);
-        function Get_Assembled: TxPLCustomMessage;
+        procedure   Fragment(const aMessage : TxPLMessage; const aCounter : integer);
+        procedure   AppendFragment(const aFragment : TFragBasicMsg);
+        function Get_Assembled: TxPLMessage;
      public
         constructor Create(aOwner: TCollection); override;
         Destructor  Destroy; override;
 
         function    IsCompleted  : boolean;
+        function    ClaimMissing : TFragmentReqMsg;
      published
         property    FragmentList : TList read fFragList;
         property    Source       : TxPLAddress read fSource;
         property    UniqueId     : integer read fUniqueId;
-        property    Assembled    : TxPLCustomMessage read Get_Assembled;
+        property    Assembled    : TxPLMessage read Get_Assembled;
      end;
 
      TFactoryCollection = specialize TxPLCollection<TFragmentFactory>;
@@ -53,8 +55,11 @@ type // TFragmentFactory ======================================================
         function  FragmentName(const aAddress : TxPLAddress; const aId : integer) : string;
      public
         Constructor Create(const aOwner : TComponent);
-        function    Fragment(const aMessage : TxPLCustomMessage) : TFragmentFactory;
-        function    Combine (const aMessage : TxPLCustomMessage) : TFragmentFactory;
+        function    Fragment(const aMessage : TxPLMessage) : TFragmentFactory;
+        function    AddFragment (const aMessage : TFragBasicMsg) : TFragmentFactory;
+        function    GetFactory(const aFragIdent : string) : TFragmentFactory;
+        function    Handle  (const aMessage : TxPLMessage) : boolean;
+        procedure   Reemit  (const aRequest : TFragmentReqMsg);
      end;
 
 // ============================================================================
@@ -62,6 +67,8 @@ implementation
 
 uses StrUtils
      , u_xpl_schema
+     , u_xpl_sender
+     , u_xpl_common
      , jclStrings
      , DateUtils
      ;
@@ -69,15 +76,17 @@ uses StrUtils
 // TFragmentManager ===========================================================
 constructor TFragmentManager.Create(const aOwner : TComponent);
 begin
+   Assert(aOwner is TxPLSender);
    inherited;
    fCounter := 0;
    fFactoryList := TFactoryCollection.Create(self);
-   fTimer   := TxPLTimer.Create(self);
+
+   fTimer          := TxPLTimer.Create(self);
    fTimer.Interval := 3 * 1000;
    fTimer.OnTimer  := {$ifdef fpc}@{$endif}TimerCheck;
 end;
 
-function TFragmentManager.Fragment(const aMessage: TxPLCustomMessage) : TFragmentFactory;
+function TFragmentManager.Fragment(const aMessage: TxPLMessage) : TFragmentFactory;
 begin
    result := fFactoryList.Add(FragmentName(aMessage.source,fCounter));
    result.Fragment(aMessage,fCounter);
@@ -85,33 +94,78 @@ begin
    fTimer.Enabled := true;
 end;
 
-function TFragmentManager.Combine(const aMessage: TxPLCustomMessage) : TFragmentFactory;
-var fragid : integer;
-    partid : string;
-    list   : TStringList;
+function TFragmentManager.AddFragment(const aMessage: TFragBasicMsg) : TFragmentFactory;
 begin
-   Result := nil;
-   if aMessage.Schema.IsFragment then begin
-      partid := AnsiReplaceStr(aMessage.Body.GetValueByKey('partid'),':','/');
-      list := TStringList.Create;
-      StrTokenToStrings(partid,'/',list);
-      fragid  := StrToInt(list[2]);
-      list.Free;
+//   Result := nil;
+//   Result := fFactoryList.FindItemName(aMessage.Identifier);
+   Result := GetFactory(aMessage.Identifier);
+   if Result = nil then
+      Result := fFactoryList.Add(aMessage.Identifier);
+   Result.AppendFragment(aMessage);
 
-      Result := fFactoryList.FindItemName(FragmentName(aMessage.Source,fragid));
-      if Result = nil then
-         Result := fFactoryList.Add(FragmentName(aMessage.Source,FragId));
-      result.Combine(aMessage);
+   fTimer.Enabled := true;
+end;
+
+function TFragmentManager.GetFactory(const aFragIdent: string ): TFragmentFactory;
+begin
+   Result := fFactorylist.FindItemName(aFragIdent);
+end;
+
+function TFragmentManager.Handle(const aMessage: TxPLMessage) : boolean;
+var Factory : TFragmentFactory;
+    Fragbas : TFragBasicMsg;
+begin
+   Result := false;
+   if not aMessage.schema.IsFragment then exit;
+   Case AnsiIndexStr(aMessage.schema.Type_,['basic','request']) of
+        0 : begin
+               FragBas := TFragBasicMsg.Create(self,aMessage);
+               if FragBas.IsValid then begin
+                  Factory := AddFragment(FragBas);
+                  if Factory.IsCompleted then aMessage.Assign(Factory.Assembled);
+                  result := true;
+               end;
+             end;
+        1 : Reemit (TFragmentReqMsg(aMessage));
+   end;
+end;
+
+procedure TFragmentManager.Reemit(const aRequest: TFragmentReqMsg);
+var i, partnum : integer;
+    aMsg : TxPLMessage;
+    factory : TFragmentFactory;
+    msgId : integer;
+    parts : Array of integer;
+begin
+   msgId := aRequest.Message;
+   if msgId = -1 then exit;
+
+   factory := fFactoryList.FindItemName(FragmentName(aRequest.target,msgId));
+   if not Assigned(factory) then exit;
+
+   Parts := aRequest.Parts;
+   for i:=Low(Parts) to High(Parts) do begin
+       PartNum := Parts[i]-1;
+       if partnum < factory.FragmentList.Count then begin
+          aMsg := TxPLMessage(factory.FragmentList[partnum]);
+          if Assigned(aMsg) then TxPLSender(Owner).Send(aMsg);
+       end;
    end;
 end;
 
 procedure TFragmentManager.TimerCheck(Sender: TObject);
 var aFragment : TCollectionItem;
+    ClaimMsg  : TxPLMessage;
 begin
    for aFragment in fFactoryList do begin
-       if SecondsBetween(now, TxPLCollectionItem(aFragment).CreateTS) > 10 then begin
-          aFragment.Free;
-       end;
+       if SecondsBetween(now, TxPLCollectionItem(aFragment).CreateTS) > 10 then
+                              aFragment.Free else
+       if (SecondsBetween(now, TxPLCollectionItem(aFragment).CreateTS) > 3) and
+          (not TFragmentFactory(aFragment).IsCompleted) then begin
+             ClaimMsg := TFragmentFactory(aFragment).ClaimMissing;
+             TxPLSender(Owner).Send(ClaimMsg);
+             ClaimMsg.Free;
+          end;
    end;
    fTimer.Enabled := (fFactoryList.Count > 0);
 end;
@@ -122,60 +176,48 @@ begin
 end;
 
 // TFragmentFactory ===========================================================
-procedure TFragmentFactory.Combine(const aMessage: TxPLCustomMessage);
-var i, maxfrag, fragnum : integer;
-    partid : string;
-    list   : TStringList;
+procedure TFragmentFactory.AppendFragment(const aFragment: TFragBasicMsg);
+var i : integer;
 begin
-   partid := AnsiReplaceStr(aMessage.Body.GetValueByKey('partid'),':','/');
-   list := TStringList.Create;
-   StrTokenToStrings(partid,'/',list);
-   fragnum := StrToInt(list[0]);
-   maxfrag := StrToInt(list[1]);
-   fUniqueId := StrToInt(list[2]);
-   list.Free;
+   fUniqueId := aFragment.UniqueId;
+   if not Assigned(fSource) then fSource := TxPLAddress.Create(aFragment.source);
 
    if fFragList.Count=0 then
-      for i:=0 to pred(maxfrag) do fFragList.Add(nil);                     // Reserve room for all fragments
-   if fFragList[pred(fragnum)]=nil then fFragList[pred(fragnum)] := TxPLCustomMessage.Create(nil,aMessage.RawXPL);
+      for i:=1 to aFragment.PartMax do fFragList.Add(nil);                     // Reserve room for all fragments
+   fFragList[Pred(aFragment.PartNum)] := aFragment;
 end;
 
-function TFragmentFactory.Get_Assembled: TxPLCustomMessage;
+function TFragmentFactory.Get_Assembled: TxPLMessage;
 var bodycount : integer;
     i : integer;
+    aFrag : TFragBasicMsg;
 begin
    if IsCompleted then begin
       if not Assigned(fAssembled) then begin
-         fAssembled := TxPLCustomMessage.Create(nil);
-         fAssembled.Assign(TxPLCustomMessage(fFragList[0]));
-         fAssembled.schema.RawxPL:=TxPLCustomMessage(fFragList[0]).Body.GetValueByKey('schema');
-         fAssembled.Body.DeleteItem(0);
-         fAssembled.Body.DeleteItem(0);
-         for i:=1 to Pred(fFragList.Count) do begin
-             bodycount := fAssembled.Body.ItemCount;
-             fAssembled.Body.Append(TxPLCustomMessage(fFragList[i]).Body);
-             fAssembled.Body.DeleteItem(bodycount);
-         end;
+         aFrag := TFragBasicMsg(fFragList[0]);
+         //if aFrag.IsValid then begin
+            fAssembled := aFrag.ToMessage;
+            for i:=1 to Pred(fFragList.Count) do begin
+                bodycount := fAssembled.Body.ItemCount;
+                fAssembled.Body.Append(TxPLMessage(fFragList[i]).Body);
+                fAssembled.Body.DeleteItem(bodycount);
+            end;
+         //end;
       end;
       result := fAssembled;
    end;
 end;
 
-procedure TFragmentFactory.Fragment(const aMessage : TxPLCustomMessage; const aCounter : integer);
+procedure TFragmentFactory.Fragment(const aMessage : TxPLMessage; const aCounter : integer);
 var i : integer;
-    newfrag : TxPLCustomMessage;
+    newfrag : TFragBasicMsg;
 begin
-   fAssembled := TxPLCustomMessage.Create(nil,aMessage.RawxPL);
-   fUniqueId := aCounter;
-   fSource   := TxPLAddress.Create(fAssembled.source);
+   fAssembled := TxPLMessage.Create(nil,aMessage.RawxPL);
+   fUniqueId  := aCounter;
+   fSource    := TxPLAddress.Create(fAssembled.source);
    i := 0;
    while (i< fAssembled.Body.ItemCount) do begin
-         newfrag := TxPLCustomMessage.Create(nil);
-         newfrag.AssignHeader(fAssembled);
-         newfrag.schema.assign(Schema_FragBasic);
-         newfrag.body.addkeyvaluepairs(['partid'],['%d/%d:%d']);
-         if fFragList.count = 0 then
-            newfrag.body.addkeyvaluepairs(['schema'],[fAssembled.Schema.RawxPL]);
+         NewFrag := TFragBasicMsg.Create(nil,fAssembled,fFragList.count = 0);
 
          while (i<fAssembled.Body.ItemCount) and (not newfrag.mustfragment) do begin
                newfrag.Body.AddKeyValuePairs([fAssembled.Body.Keys[i]],[fAssembled.Body.Values[i]]);
@@ -187,12 +229,14 @@ begin
             dec(i);
          end;
 
-            fFragList.Add(newfrag);
+         fFragList.Add(newfrag);
    end;
 
    for i:=0 to Pred(fFragList.count) do begin
-       newfrag := TxPLCustomMessage(fFragList[i]);
-       newfrag.body.Values[0] := Format(newfrag.body.Values[0],[i+1,fFragList.count,fUniqueId]);
+       newfrag := TFragBasicMsg(fFragList[i]);
+       newfrag.PartNum:=i+1;
+       newfrag.PartMax:=fFragList.Count;
+       newfrag.UniqueId:=fUniqueId;
    end;
 end;
 
@@ -202,6 +246,16 @@ begin
    result := true;
    for i:=0 to Pred(fFragList.Count) do
        result := result and (fFragList[i]<>nil);
+end;
+
+function TFragmentFactory.ClaimMissing : TFragmentReqMsg;
+var i : integer;
+begin
+   Result := TFragmentReqMsg.Create(nil);
+   Result.Target.Assign(fSource);
+   Result.Message:=fUniqueId;
+   for i:= 0 to Pred(fFragList.Count) do
+       if fFragList[i]=nil then Result.AddPart(i+1);
 end;
 
 constructor TFragmentFactory.Create(aOwner: TCollection);

@@ -63,8 +63,9 @@ Type {$ifndef fpc}                                                             /
 
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
-var  LocalAddresses : TStringList;
-     InstanceInitStyle : TInstanceInitStyle;
+var  LocalAddresses     : TStringList;
+     InstanceInitStyle  : TInstanceInitStyle;
+     AllowMultiInstance : boolean;
 
 implementation  //=============================================================
 uses StrUtils
@@ -260,8 +261,9 @@ end;
 
 var i : integer;
 initialization // =============================================================
-   InstanceInitStyle := iisHostName;
-   LocalAddresses    := TStringList.Create;
+   InstanceInitStyle  := iisHostName;
+   LocalAddresses     := TStringList.Create;
+   AllowMultiInstance := false;
    (* Cette version utilise la librairie Synapse mais pose un problème pour les
     Versions console des applications car les unités synamisc et synaip appellent
     Windows

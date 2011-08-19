@@ -34,7 +34,6 @@ type TxPLPrereqMet = procedure of object;
       public
         OnxPLPrereqMet     : TxPLPrereqMet    ;                                 // Called when needed modules has been seen on the xPL network
 
-//        constructor Create(const aOwner : TComponent; const aDevice, aVendor, aVersion : string); dynamic; overload;
         constructor Create(const aOwner : TComponent); dynamic; overload;
         destructor destroy; override;
         procedure Set_ConnectionStatus(const aValue : TConnectionStatus); override;
@@ -51,6 +50,7 @@ implementation { ==============================================================}
 uses u_xpl_header
      , u_xpl_schema
      , u_xpl_common
+     , u_xpl_messages
      , LResources
      ;
 
@@ -122,8 +122,8 @@ begin
         i := fDiscovered.IndexOf(Source.Device);
 
          if (i=-1)
-            then fDiscovered.Add(Source.Device, TConfigurationRecord.Create(self,aMessage,@OnDie))
-            else fDiscovered.Data[i].HBeatReceived(aMessage);
+            then fDiscovered.Add(Source.Device, TConfigurationRecord.Create(self,THeartBeatMsg(aMessage),@OnDie))
+            else fDiscovered.Data[i].HBeatReceived(THeartBeatMsg(aMessage));
 
          if Schema.Equals(Schema_HBeatApp) then begin
 
