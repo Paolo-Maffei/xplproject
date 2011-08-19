@@ -543,7 +543,7 @@ Public Class xPLDevice
     ''' <summary>
     ''' Creates a new instance of an <c>xPLDevice</c> object.
     ''' </summary>
-    ''' <remarks>The deafult address will be 'vendorid-deviceid.xxx", where 'xxx' will be a 16 character 
+    ''' <remarks>The default address will be 'vendorid-deviceid.xxx", where 'xxx' will be a 16 character 
     ''' randomized instance ID</remarks>
     Public Sub New()
         VersionNumber = GetVersionNumber()
