@@ -1,6 +1,6 @@
 unit fpc_delphi_compat;
 
-{Unit older behaviour differences between fpc and delphi}
+{Unit holding behaviour differences between fpc and delphi}
 
 interface
 
