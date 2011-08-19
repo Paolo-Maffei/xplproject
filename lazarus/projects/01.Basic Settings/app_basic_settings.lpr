@@ -5,8 +5,7 @@ uses {$IFDEF UNIX}
            cthreads,
         {$ENDIF}
      {$ENDIF}
-     Forms
-     , runtimetypeinfocontrols
+     Forms, uniqueinstance_package, multiloglaz, runtimetypeinfocontrols
      , frm_basic_settings
      , u_xpl_application
      , u_xpl_gui_resource

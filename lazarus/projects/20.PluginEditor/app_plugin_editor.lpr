@@ -7,15 +7,15 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms,
+  Forms, uniqueinstance_package,
   frm_plugin_viewer,
-  u_xml_xplplugin,
   u_xpl_application,
-  u_xpl_gui_resource;
+  u_xpl_gui_resource, xpl_win;
 
 {$IFDEF WINDOWS}{$R app_plugin_editor.rc}{$ENDIF}
 
 begin
+  Application.Title:='xPL Plugin Editor';
   Application.Initialize;
 
   xPLApplication := TxPLApplication.Create(Application);

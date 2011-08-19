@@ -88,7 +88,7 @@ procedure TxPLHub.UDPRead(const aString: string);
 var i  : integer;
 begin
    fMessage.RawXPL := aString;                                                 // Check if it is a heart beat
-   if fMessage.IsLifeSign then HandleDevice(THeartBeatMsg(fMessage));          // if this is the case, see if I already recorded it
+   if fMessage.IsLifeSign then HandleDevice(THeartBeatMsg(fMessage));      // if this is the case, see if I already recorded it
 
    if TCustomApplication(Owner).HasOption('v') then
       writeln( Format(K_VERBOSE,[fMessage.source.RawxPL,fMessage.target.RawxPL,fMessage.schema.RawxPL]));

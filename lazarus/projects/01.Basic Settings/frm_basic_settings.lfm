@@ -1,11 +1,11 @@
 inherited frmBasicSettings: TfrmBasicSettings
-  Left = 19
+  Left = 35
   Height = 272
-  Top = 15
-  Width = 473
+  Top = 203
+  Width = 449
   Caption = 'xPL Basic Settings'
   ClientHeight = 272
-  ClientWidth = 473
+  ClientWidth = 449
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
     200010080000CE0400002020000001002000A8100000DE0C0000303000000100
@@ -2268,22 +2268,25 @@ inherited frmBasicSettings: TfrmBasicSettings
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
     Top = 249
-    Width = 473
+    Width = 449
   end
   inherited ToolBar: TToolBar
-    Width = 473
+    Width = 449
     TabOrder = 7
+    inherited ToolButton10: TToolButton
+      Width = 10
+    end
     inherited Panel4: TPanel
-      Left = 273
+      Left = 249
     end
     object tbSave: TToolButton[3]
-      Left = 95
+      Left = 97
       Top = 0
       Action = acSaveSettings
       AutoSize = True
     end
     object tbReload: TToolButton[4]
-      Left = 51
+      Left = 53
       Top = 0
       Action = acReload
     end

@@ -1,3 +1,6 @@
+v 4.1.0.2
+Modified to allow multiple instance of xPL Sender at the same time.
+
 v 4.1.0.1
 Added new functionalities to sender to allow usage of fragment messages (cf http://www.xplproject.org.uk/forums/viewtopic.php?f=2&t=1099)	
 

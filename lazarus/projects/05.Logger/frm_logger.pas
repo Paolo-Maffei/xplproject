@@ -124,6 +124,7 @@ uses frm_xplappslauncher
      , u_xpl_schema
      , u_xpl_common
      , u_xpl_fragment_mgr
+     , u_xpl_messages
      , frm_PluginDetail
      , LCLType
      , LCLIntf
@@ -365,7 +366,7 @@ begin
 
      anode1 := anode2.FindNode(Instance);
      if anode1 = nil then
-        anode1 := tvMessages.Items.AddChildObject(aNode2,Instance,TConfigurationRecord.Create(xPLApplication,axPLMessage,nil));
+        anode1 := tvMessages.Items.AddChildObject(aNode2,Instance,TConfigurationRecord.Create(xPLApplication,THeartBeatMsg(axPLMessage),nil));
 
      s := axPLMessage.Body.GetValueByKey('device');
      if s<>'' then begin
@@ -405,7 +406,6 @@ end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
 var i: integer;
-    //max : integer;
     liste : TMessageList;
 begin
    UpdateFilter;
@@ -457,14 +457,20 @@ end;
 
 procedure TfrmLogger.acAssembleFragmentsExecute(Sender: TObject);
 var aMsg : TxPLMessageGUI;
+    aFrag : TFragBasicMsg;
     fFragFactory : TFragmentFactory;
 begin
-   aMsg := TxPLMessageGUI(dgMessages.Objects[0,dgMessages.Selection.Top]);
-   fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.Combine(aMsg);
-   if fFragFactory.IsCompleted then begin
-      aMsg := TxPLMessageGUI(fFragFactory.Assembled);
-      if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
+   aFrag := TFragBasicMsg.Create(self,TxPLMessage(dgMessages.Objects[0,dgMessages.Selection.Top]));
+   fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.GetFactory(aFrag.Identifier);
+   if Assigned(fFragFactory) then begin
+//   aMsg := TxPLMessageGUI(dgMessages.Objects[0,dgMessages.Selection.Top]);
+//   fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.AddFragment(TFragmentBasicMsg(aMsg));
+     if fFragFactory.IsCompleted then begin
+        aMsg := TxPLMessageGUI(fFragFactory.Assembled);
+        if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
+     end;
    end;
+   aFrag.Free;
 end;
 
 procedure TfrmLogger.acShowMessageExecute(Sender: TObject);
@@ -476,8 +482,6 @@ end;
 
 procedure TfrmLogger.JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
 var aMsg : TxPLMessage;
-    i : integer;
-    fFragFactory : TFragmentFactory;
 begin
    acDiscoverNetwork.Visible := (tvMessages.Selected = NetNode);
    acPluginDetail.Visible    := (tvMessages.Selected.Data <> nil);
@@ -491,29 +495,34 @@ begin
    end;
    tbMacro.Visible           := (tvMessages.Selected = MacNode);
    MacNode.Text              := Format('Macro (%d elts)',[MacroList.Count]);
-
-   acAssembleFragments.Enabled := false;
-   fFragFactory := nil;
-   for i:=dgMessages.selection.top to dgMessages.selection.bottom do begin
-       aMsg := TxPLMessage(dgMessages.Objects[0,i]);
-       if Assigned(aMsg) then begin
-          if aMsg.schema.IsFragment then fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.Combine(aMsg)
-                                    else begin
-                                      fFragFactory := nil;
-                                      break;
-                                    end;
-       end;
-   end;
-   if Assigned(fFragFactory) then acAssembleFragments.Enabled := fFragFactory.IsCompleted;
-
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
 var ControlCoord, NewCell: TPoint;
+    i : integer;
+    fFragFactory : TFragmentFactory;
+    aMsg : TFragBasicMsg;
 begin
    ControlCoord := dgMessages.ScreenToControl(mnuListView.PopupPoint);
    NewCell:=dgMessages.MouseToCell(ControlCoord);
    dgMessages.Row:=NewCell.Y;
+
+   acAssembleFragments.Enabled := false;
+   fFragFactory := nil;
+   for i:=dgMessages.selection.top to dgMessages.selection.bottom do begin
+      if Assigned(dgMessages.Objects[0,i]) then begin
+         aMsg := TFragBasicMsg.Create(self,TxPLMessage(dgMessages.Objects[0,i]));
+         if aMsg.IsValid then
+            fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.AddFragment(aMsg)
+         else begin
+            fFragFactory := nil;
+            aMsg.Free;
+            break;
+         end;
+         aMsg.Free;
+      end;
+   end;
+   if Assigned(fFragFactory) then acAssembleFragments.Enabled := fFragFactory.IsCompleted;
 end;
 
 procedure TfrmLogger.tvMessagesChange(Sender: TObject; Node: TTreeNode);

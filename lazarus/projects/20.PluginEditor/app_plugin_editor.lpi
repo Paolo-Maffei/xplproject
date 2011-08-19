@@ -13,8 +13,7 @@
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
-      <MajorVersionNr Value="3"/>
-      <RevisionNr Value="99"/>
+      <MajorVersionNr Value="4"/>
       <BuildNr Value="1"/>
       <StringTable CompanyName="clinique" InternalName="piedit" ProductName="xPL Plugin Editor" ProductVersion=""/>
     </VersionInfo>
@@ -34,22 +33,28 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="4">
+    <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item1>
       <Item2>
-        <PackageName Value="RunTimeTypeInfoControls"/>
+        <PackageName Value="xpl_win"/>
       </Item2>
       <Item3>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Release="1" Valid="True"/>
       </Item3>
       <Item4>
-        <PackageName Value="LCL"/>
+        <PackageName Value="RunTimeTypeInfoControls"/>
       </Item4>
+      <Item5>
+        <PackageName Value="SynEdit"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="LCL"/>
+      </Item6>
     </RequiredPackages>
-    <Units Count="172">
+    <Units Count="180">
       <Unit0>
         <Filename Value="app_plugin_editor.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -57,8 +62,8 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="13" Y="11"/>
-        <UsageCount Value="140"/>
+        <CursorPos X="1" Y="17"/>
+        <UsageCount Value="142"/>
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -969,17 +974,19 @@
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="118"/>
-        <CursorPos X="28" Y="134"/>
+        <TopLine Value="3"/>
+        <CursorPos X="19" Y="12"/>
         <UsageCount Value="18"/>
       </Unit120>
       <Unit121>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
         <UnitName Value="u_xpl_vendor_file"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="92" Y="134"/>
-        <UsageCount Value="17"/>
+        <TopLine Value="59"/>
+        <CursorPos X="8" Y="68"/>
+        <UsageCount Value="18"/>
+        <Loaded Value="True"/>
       </Unit121>
       <Unit122>
         <Filename Value="..\..\..\components\superobjectv1.2.4\superxmlparser.pas"/>
@@ -994,7 +1001,7 @@
         <UnitName Value="superobject"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <CursorPos X="2" Y="1"/>
         <UsageCount Value="13"/>
       </Unit123>
       <Unit124>
@@ -1002,7 +1009,7 @@
         <UnitName Value="u_xml_plugins"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="8" Y="11"/>
+        <CursorPos X="15" Y="11"/>
         <UsageCount Value="15"/>
       </Unit124>
       <Unit125>
@@ -1121,8 +1128,8 @@
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="49"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="47"/>
+        <CursorPos X="25" Y="66"/>
         <UsageCount Value="11"/>
       </Unit139>
       <Unit140>
@@ -1195,9 +1202,9 @@
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="43"/>
-        <CursorPos X="24" Y="58"/>
-        <UsageCount Value="24"/>
+        <TopLine Value="12"/>
+        <CursorPos X="11" Y="30"/>
+        <UsageCount Value="25"/>
       </Unit148>
       <Unit149>
         <Filename Value="..\..\..\components\jvcllaz\run\JclPeImage.pas"/>
@@ -1287,20 +1294,19 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="391"/>
-        <CursorPos X="63" Y="412"/>
-        <UsageCount Value="23"/>
+        <TopLine Value="160"/>
+        <CursorPos X="1" Y="168"/>
+        <UsageCount Value="25"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
       </Unit159>
       <Unit160>
         <Filename Value="u_xml_xplplugin.pas"/>
-        <IsPartOfProject Value="True"/>
         <UnitName Value="u_xml_xplplugin"/>
         <WindowIndex Value="0"/>
         <TopLine Value="457"/>
         <CursorPos X="1" Y="376"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="24"/>
       </Unit160>
       <Unit161>
         <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
@@ -1314,8 +1320,8 @@
         <Filename Value="..\..\..\components\uniqueinstance\uniqueinstanceraw.pas"/>
         <UnitName Value="UniqueInstanceRaw"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="33"/>
-        <CursorPos X="19" Y="49"/>
+        <TopLine Value="1"/>
+        <CursorPos X="68" Y="12"/>
         <UsageCount Value="10"/>
       </Unit162>
       <Unit163>
@@ -1340,10 +1346,12 @@
       <Unit165>
         <Filename Value="..\..\units\xpl\gui\v_xplmsg_opendialog.pas"/>
         <UnitName Value="v_xplmsg_opendialog"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="7"/>
+        <TopLine Value="22"/>
         <CursorPos X="85" Y="23"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit165>
       <Unit166>
         <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
@@ -1392,120 +1400,198 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit171>
+      <Unit172>
+        <Filename Value="..\..\units\general\MStringGrid.pas"/>
+        <UnitName Value="MStringGrid"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="40"/>
+        <CursorPos X="3" Y="1"/>
+        <UsageCount Value="11"/>
+      </Unit172>
+      <Unit173>
+        <Filename Value="..\..\units\xpl\gui\frm_xmlview.pas"/>
+        <UnitName Value="frm_XMLView"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="23" Y="9"/>
+        <UsageCount Value="11"/>
+      </Unit173>
+      <Unit174>
+        <Filename Value="C:\lazarus\components\synedit\synhighlighterxml.pas"/>
+        <UnitName Value="SynHighlighterXML"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="11"/>
+      </Unit174>
+      <Unit175>
+        <Filename Value="..\..\..\components\lazsolutions\Core\LSUtils.pas"/>
+        <UnitName Value="LSUtils"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="23"/>
+        <CursorPos X="69" Y="28"/>
+        <UsageCount Value="10"/>
+      </Unit175>
+      <Unit176>
+        <Filename Value="C:\lazarus\components\synedit\synregexpr.pas"/>
+        <UnitName Value="SynRegExpr"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="5" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit176>
+      <Unit177>
+        <Filename Value="..\..\units\xpl\gui\ucontrols.pas"/>
+        <UnitName Value="uControls"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="43"/>
+        <CursorPos X="48" Y="14"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit177>
+      <Unit178>
+        <Filename Value="..\..\units\xpl\gui\v_msgbody_stringgrid.pas"/>
+        <UnitName Value="v_msgbody_stringgrid"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="181"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit178>
+      <Unit179>
+        <Filename Value="..\..\units\general\TreeListView.pas"/>
+        <UnitName Value="TreeListView"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2820"/>
+        <CursorPos X="31" Y="2870"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit179>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="18" Column="6" TopLine="1"/>
+        <Caret Line="11" Column="13" TopLine="1"/>
       </Position1>
       <Position2>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="19" Column="1" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="134" Column="92" TopLine="1"/>
       </Position2>
       <Position3>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="21" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="11" Column="11" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="22" Column="1" TopLine="1"/>
+        <Filename Value="..\..\units\general\TreeListView.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="183" Column="35" TopLine="164"/>
       </Position5>
       <Position6>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="19" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="168" Column="1" TopLine="164"/>
       </Position6>
       <Position7>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="170" Column="1" TopLine="164"/>
       </Position7>
       <Position8>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="171" Column="1" TopLine="164"/>
       </Position8>
       <Position9>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="172" Column="1" TopLine="164"/>
       </Position9>
       <Position10>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="173" Column="1" TopLine="164"/>
       </Position10>
       <Position11>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="23" Column="1" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="175" Column="1" TopLine="164"/>
       </Position11>
       <Position12>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="11" Column="11" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="183" Column="1" TopLine="175"/>
       </Position12>
       <Position13>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="17" Column="28" TopLine="1"/>
+        <Caret Line="199" Column="1" TopLine="191"/>
       </Position13>
       <Position14>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="153" Column="1" TopLine="143"/>
+        <Caret Line="201" Column="1" TopLine="191"/>
       </Position14>
       <Position15>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="152" Column="1" TopLine="142"/>
+        <Caret Line="203" Column="1" TopLine="194"/>
       </Position15>
       <Position16>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="285" Column="30" TopLine="271"/>
+        <Caret Line="205" Column="1" TopLine="197"/>
       </Position16>
       <Position17>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="272" Column="1" TopLine="270"/>
+        <Caret Line="206" Column="1" TopLine="197"/>
       </Position17>
       <Position18>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="286" Column="30" TopLine="266"/>
+        <Caret Line="207" Column="1" TopLine="197"/>
       </Position18>
       <Position19>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="507" Column="32" TopLine="476"/>
+        <Caret Line="208" Column="1" TopLine="197"/>
       </Position19>
       <Position20>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="500" Column="5" TopLine="484"/>
+        <Caret Line="209" Column="1" TopLine="197"/>
       </Position20>
       <Position21>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="503" Column="3" TopLine="486"/>
+        <Caret Line="210" Column="1" TopLine="200"/>
       </Position21>
       <Position22>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="507" Column="48" TopLine="483"/>
+        <Caret Line="211" Column="1" TopLine="200"/>
       </Position22>
       <Position23>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="16" Column="40" TopLine="1"/>
+        <Caret Line="212" Column="1" TopLine="200"/>
       </Position23>
       <Position24>
-        <Filename Value="app_plugin_editor.lpr"/>
-        <Caret Line="11" Column="13" TopLine="1"/>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="213" Column="1" TopLine="200"/>
       </Position24>
       <Position25>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="214" Column="1" TopLine="200"/>
       </Position25>
       <Position26>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="499" Column="1" TopLine="487"/>
+        <Caret Line="216" Column="1" TopLine="202"/>
       </Position26>
       <Position27>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="288" Column="29" TopLine="270"/>
+        <Caret Line="229" Column="1" TopLine="221"/>
       </Position27>
       <Position28>
         <Filename Value="frm_plugin_viewer.pas"/>
-        <Caret Line="482" Column="22" TopLine="451"/>
+        <Caret Line="244" Column="1" TopLine="236"/>
       </Position28>
+      <Position29>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="245" Column="1" TopLine="236"/>
+      </Position29>
+      <Position30>
+        <Filename Value="frm_plugin_viewer.pas"/>
+        <Caret Line="206" Column="24" TopLine="198"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1513,7 +1599,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\components\uniqueinstance\;..\..\units\xpl\gui;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\;E:\01.SourceSafe\08.Lazarus\components\superobjectv1.2.4\"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\components\lazsolutions\Core;..\..\units\xpl\gui;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\;E:\01.SourceSafe\08.Lazarus\components\superobjectv1.2.4\;C:\lazarus\components\synedit\;E:\01.SourceSafe\08.Lazarus\components\uniqueinstance\"/>
       <UnitOutputDirectory Value="C:\LazOut"/>
     </SearchPaths>
     <Parsing>
