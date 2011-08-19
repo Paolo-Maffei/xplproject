@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -438,7 +438,7 @@ Public Class xPL_Base
     ''' <remarks>Value is used in the <c>GetState</c> and the <c>NewFromState</c> methods of the <c>xPLListener</c>
     ''' object as well as the <c>GetState</c> and <c>New</c> methods of the <c>xPLDevice</c> object to determine
     ''' what version of xpllib created the SavedState settings string.</remarks>
-    Public Const XPL_LIB_VERSION As String = "5.3" 'when updating check all "State" related methods for updates!!
+    Public Const XPL_LIB_VERSION As String = "5.4" 'when updating check all "State" related methods for updates!!
     ' Specifically;
     '        - Case statement in xPLListener.RestoreFromState(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)
     '        - Case statement in xPLDevice.New(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)
@@ -487,14 +487,19 @@ Public Class xPL_Base
     ''' <summary>
     ''' The maximum supported overall size (in bytes, or ASCII characters) of a raw-xPL message.
     ''' </summary>
-    ''' <remarks></remarks>
-    <Obsolete("No longer used as of 5.3, message size is 'unlimted' within whatever the network hardware supports")> _
-    Public Const XPL_MAX_MSG_SIZE As Integer = 1500
+    ''' <remarks>Though the xPL specs said 1500, actual max size is 1472 to prevent fragmenting.</remarks>
+    Public Const XPL_MAX_MSG_SIZE As Integer = 1472
     ''' <summary>
     ''' Buffer size for the receiving socket
     ''' </summary>
     ''' <remarks></remarks>
     Public Const XPL_SOCKET_BUFFER_SIZE As Integer = (32 * 1024)
+    ''' <summary>
+    ''' Minimum delay required between 2 messages being send. To prevent flooding the network and lost messages.
+    ''' Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_MINIMUM_SEND_DELAY As Integer = 50
     ''' <summary>
     ''' Default heartbeat timeout for an xPL device seen on the network
     ''' </summary>
@@ -682,6 +687,41 @@ Public Class xPL_Base
     ''' </summary>
     ''' <remarks></remarks>
     Public Const XPL_PLUGINSTORE_VERSION As String = "1.0"
+
+
+    '
+    ' Fragmentation constants
+    '
+
+    ''' <summary>
+    ''' The maximum counter size for the fragmented message ID's. ID's in fragmented messages are generated as a 
+    ''' rotating counter, this value is the maximum after which the value resets to 0.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_COUNTER_MAX As Integer = 99
+    ''' <summary>
+    ''' The maximum number of fragments for a single message supported.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_MAX As Integer = 99
+    ''' <summary>
+    ''' How long should a fragmented message be retained for retransmission if requested by other 
+    ''' devices. Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_SEND_RETAIN As Integer = 20000
+    ''' <summary>
+    ''' Timeout value, after receiving the last fragment-message, after which a request for the 
+    ''' remaining fragments will be send (if the overall message remains incomplete). Value in milliseconds.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_REQUEST_AFTER As Integer = 3000
+    ''' <summary>
+    ''' If a resend of fragments was requested, this value is the timeout after which the resend request is 
+    ''' considered failed (if no new fragments arrived) and the message will be disposed of.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Const XPL_FRAGMENT_REQUEST_TIMEOUT As Integer = 5000
 
 #End Region
 

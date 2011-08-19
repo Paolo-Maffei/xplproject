@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -247,7 +247,7 @@ Public Class xPLMessage
     ''' <exception cref="NullReferenceException">Condition: <c>xdev</c> parameter <c>Is Nothing</c> and <c>Source</c>
     ''' address is not found in the local device list of <c>xPLListener</c>.</exception>
     Public Sub Send(Optional ByVal xdev As xPLDevice = Nothing)
-        If (xdev Is Nothing) And (xPLListener.IndexOf(mSource) = -1) Then Throw New NullReferenceException
+        If (xdev Is Nothing) And (xPLListener.IndexOf(mSource) = -1) Then Throw New NullReferenceException("xPL device not provided, or the source address is unknown")
         If xdev Is Nothing Then
             xdev = xPLListener.Device(mSource)
         End If
@@ -291,6 +291,16 @@ Public Class xPLMessage
             "}" & XPL_LF
 
         Return s
+    End Function
+
+    ''' <summary>
+    ''' Returns the message as a printable string. WARNING: the result will have CR + LF line ends, and hence 
+    ''' is not equal to, nor valid as, RawxPL which uses <see cref="XPL_LF">XPL_LF</see> as line feeds.
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Overrides Function ToString() As String
+        Return Me.BuildxPLMsg.Replace(XPL_LF, vbCrLf)
     End Function
 
     ''' <summary>

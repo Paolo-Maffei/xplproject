@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -189,6 +189,26 @@ Public Class xPLDevice
     ''' recreated from a <c>SavedState</c> value. 
     ''' </summary>
     Public CustomSettings As String = ""
+    ''' <summary>
+    ''' If set to <c>True</c> (default), large messages send will automatically be fragmented using the fragment.basic schema. In that case the device 
+    ''' will not receive any fragment related data, only the reconstructed messages (incoming messages). If set to <c>False</c> then no 
+    ''' reconstruction takes place and the individual received fragments will be passed to the host. The fragmenting/defragmenting
+    ''' is done transparantly for the host application if set to <c>True</c>.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public AutoFragment As Boolean = True
+    ''' <summary>
+    ''' Collection contains the fragmented messages send/received by this device (in case a 
+    ''' resend is requested or until all fragments are received)
+    ''' Key is 'sourceaddres:ID', where ID is the ID in the fragment id part; x/y:ID
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend _FragmentedMessageList As New Collection
+    ''' <summary>
+    ''' Rotating fragmented message ID generator.
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private _FragmentedIDCount As Integer = 0
 
     ' other properties
     Private Disposing As Boolean = False
@@ -523,7 +543,7 @@ Public Class xPLDevice
     ''' <summary>
     ''' Creates a new instance of an <c>xPLDevice</c> object.
     ''' </summary>
-    ''' <remarks>The deafult address will be 'vendorid-deviceid.xxx", where 'xxx' will be a 16 character 
+    ''' <remarks>The default address will be 'vendorid-deviceid.xxx", where 'xxx' will be a 16 character 
     ''' randomized instance ID</remarks>
     Public Sub New()
         VersionNumber = GetVersionNumber()
@@ -553,14 +573,6 @@ Public Class xPLDevice
         Dim xVersion As String
         Dim aVersion As String
         Dim i As Integer
-        Dim n As Integer
-        Dim c As Integer
-        Dim addr As xPLAddress
-        Dim ciName As String
-        Dim ciType As xPLConfigTypes
-        Dim ciMaxValues As Integer
-        Dim ciHidden As Boolean
-        Dim ci As xPLConfigItem
         Dim db As String = ""
 
         If SavedState Is Nothing Then SavedState = ""
@@ -589,97 +601,10 @@ Public Class xPLDevice
         Try
 
             Select Case xVersion
+                Case "5.4"
+                    NewFromState54(lst, i, RestoreEnabled, db)
                 Case "5.0", "5.1", "5.2", "5.3"
-                    ' Restore device address
-                    db = db & vbCrLf & "Address: " & lst(i)
-                    addr = New xPLAddress(xPLAddressType.Source, lst(i))
-                    mConfigItems.Address.Vendor = addr.Vendor
-                    mConfigItems.Address.Device = addr.Device
-                    mConfigItems.Address.Instance = addr.Instance
-                    i += 1
-                    db = db & vbCrLf & "Instance type: " & lst(i)
-                    mInstanceType = CType([Enum].Parse(GetType(InstanceCreation), lst(i)), InstanceCreation)
-                    i += 1
-                    ' Restore settings 
-                    db = db & vbCrLf & "Configurable: " & lst(i)
-                    mConfigurable = Boolean.Parse(lst(i))
-                    i += 1
-                    db = db & vbCrLf & "Configured: " & lst(i)
-                    mConfigured = Boolean.Parse(lst(i))
-                    i += 1
-                    ' do not restore the Enabled property, only at the end!
-                    db = db & vbCrLf & "Enabled: " & lst(i) & ", RestoreEnabled: " & RestoreEnabled.ToString
-                    If RestoreEnabled Then RestoreEnabled = Boolean.Parse(lst(i))
-                    i += 1
-                    db = db & vbCrLf & "MessagePassing: " & lst(i)
-                    MessagePassing = CType([Enum].Parse(GetType(MessagePassingEnum), lst(i)), MessagePassingEnum)
-                    i += 1
-                    db = db & vbCrLf & "CustomID: " & lst(i)
-                    CustomID = lst(i)
-                    i += 1
-                    db = db & vbCrLf & "CustomSettings: " & lst(i)
-                    CustomSettings = lst(i)
-                    i += 1
-                    db = db & vbCrLf & "Debug: " & lst(i)
-                    mDebug = Boolean.Parse(lst(i))
-                    i += 1
-                    ' config items
-                    db = db & vbCrLf & "Conf_interval in seconds: " & lst(i)
-                    mConfigItems.conf_IntervalInSec = Integer.Parse(lst(i))
-                    i += 1
-                    ' config items: groups
-                    db = db & vbCrLf & "Groups: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    For n = 1 To c
-                        db = db & vbCrLf & "    " & lst(i)
-                        mConfigItems.conf_Group.Add(lst(i))
-                        i += 1
-                    Next
-                    ' config items: filters
-                    db = db & vbCrLf & "Filters: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    For n = 1 To c
-                        db = db & vbCrLf & "    " & lst(i)
-                        mConfigItems.conf_Filter.Add(lst(i))
-                        i += 1
-                    Next
-                    ' config items: custom config items
-                    db = db & vbCrLf & "Custom ConfigItems: " & lst(i)
-                    c = Integer.Parse(lst(i))
-                    i += 1
-                    While i < lst.Length
-                        ' Get values
-                        db = db & vbCrLf & "    Name: " & lst(i)
-                        ciName = lst(i)
-                        db = db & vbCrLf & "        Type      : " & lst(i)
-                        ciType = CType([Enum].Parse(GetType(xPLConfigTypes), lst(i + 1)), xPLConfigTypes)
-                        db = db & vbCrLf & "        Max values: " & lst(i)
-                        ciMaxValues = Integer.Parse(lst(i + 2))
-                        db = db & vbCrLf & "        Hidden    : " & lst(i)
-                        ciHidden = Boolean.Parse(lst(i + 3))
-                        ' create configitem
-                        ci = New xPLConfigItem(ciName, ciType, ciMaxValues)
-                        ci.Hidden = ciHidden
-                        i += 4
-                        db = db & vbCrLf & "        Values    : " & lst(i)
-                        c = Integer.Parse(lst(i))
-                        i += 1
-                        ' Get configitem values
-                        For n = 1 To c
-                            db = db & vbCrLf & "            " & lst(i)
-                            ci.Add(lst(i))
-                            i += 1
-                        Next
-                        ' add configitem to device CI list
-                        ConfigItems.Add(ci)
-                    End While
-                    ' Go online if required
-                    If Debug Then LogError("xPLDevice.New from State", db, EventLogEntryType.Information)
-                    Me.Enabled = RestoreEnabled
-                    If RestoreEnabled Then LogError("xPLDevice.New from State", "Went Enabled", EventLogEntryType.Information)
-
+                    NewFromState50(lst, i, RestoreEnabled, db)
                 Case Else
                     ' SavedState created by an unknown version of xpllib
                     LogError("xPLDevice.New from SavedState", "SavedState value was created by an unknown version of xpllib")
@@ -696,6 +621,116 @@ Public Class xPLDevice
             Throw New Exception("Device could not be recreated from SavedState value", ex)
         End Try
 
+    End Sub
+    Private Sub NewFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
+        ' get fragmented count
+        db = db & vbCrLf & "Fragmented ID count: " & lst(i)
+        _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
+        i += 1
+        ' Restore AutoFragmentation setting
+        db = db & vbCrLf & "Auto fragment messages: " & lst(i)
+        AutoFragment = Boolean.Parse(lst(i))
+        i += 1
+        NewFromState50(lst, i, RestoreEnabled, db)
+    End Sub
+    Private Sub NewFromState50(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
+        Dim n As Integer
+        Dim c As Integer
+        Dim ciName As String
+        Dim ciType As xPLConfigTypes
+        Dim ciMaxValues As Integer
+        Dim ciHidden As Boolean
+        Dim ci As xPLConfigItem
+        Dim addr As xPLAddress
+        ' Restore device address
+        db = db & vbCrLf & "Address: " & lst(i)
+        addr = New xPLAddress(xPLAddressType.Source, lst(i))
+        mConfigItems.Address.Vendor = addr.Vendor
+        mConfigItems.Address.Device = addr.Device
+        mConfigItems.Address.Instance = addr.Instance
+        i += 1
+        db = db & vbCrLf & "Instance type: " & lst(i)
+        mInstanceType = CType([Enum].Parse(GetType(InstanceCreation), lst(i)), InstanceCreation)
+        i += 1
+        ' Restore settings 
+        db = db & vbCrLf & "Configurable: " & lst(i)
+        mConfigurable = Boolean.Parse(lst(i))
+        i += 1
+        db = db & vbCrLf & "Configured: " & lst(i)
+        mConfigured = Boolean.Parse(lst(i))
+        i += 1
+        ' do not restore the Enabled property, only at the end!
+        db = db & vbCrLf & "Enabled: " & lst(i) & ", RestoreEnabled: " & RestoreEnabled.ToString
+        If RestoreEnabled Then RestoreEnabled = Boolean.Parse(lst(i))
+        i += 1
+        db = db & vbCrLf & "MessagePassing: " & lst(i)
+        MessagePassing = CType([Enum].Parse(GetType(MessagePassingEnum), lst(i)), MessagePassingEnum)
+        i += 1
+        db = db & vbCrLf & "CustomID: " & lst(i)
+        CustomID = lst(i)
+        i += 1
+        db = db & vbCrLf & "CustomSettings: " & lst(i)
+        CustomSettings = lst(i)
+        i += 1
+        db = db & vbCrLf & "Debug: " & lst(i)
+        mDebug = Boolean.Parse(lst(i))
+        i += 1
+        ' config items
+        db = db & vbCrLf & "Conf_interval in seconds: " & lst(i)
+        mConfigItems.conf_IntervalInSec = Integer.Parse(lst(i))
+        i += 1
+        ' config items: groups
+        db = db & vbCrLf & "Groups: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        For n = 1 To c
+            db = db & vbCrLf & "    " & lst(i)
+            mConfigItems.conf_Group.Add(lst(i))
+            i += 1
+        Next
+        ' config items: filters
+        db = db & vbCrLf & "Filters: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        For n = 1 To c
+            db = db & vbCrLf & "    " & lst(i)
+            mConfigItems.conf_Filter.Add(lst(i))
+            i += 1
+        Next
+        ' config items: custom config items
+        db = db & vbCrLf & "Custom ConfigItems: " & lst(i)
+        c = Integer.Parse(lst(i))
+        i += 1
+        While i < lst.Length
+            ' Get values
+            db = db & vbCrLf & "    Name: " & lst(i)
+            ciName = lst(i)
+            db = db & vbCrLf & "        Type      : " & lst(i)
+            ciType = CType([Enum].Parse(GetType(xPLConfigTypes), lst(i + 1)), xPLConfigTypes)
+            db = db & vbCrLf & "        Max values: " & lst(i)
+            ciMaxValues = Integer.Parse(lst(i + 2))
+            db = db & vbCrLf & "        Hidden    : " & lst(i)
+            ciHidden = Boolean.Parse(lst(i + 3))
+            ' create configitem
+            ci = New xPLConfigItem(ciName, ciType, ciMaxValues)
+            ci.Hidden = ciHidden
+            i += 4
+            db = db & vbCrLf & "        Values    : " & lst(i)
+            c = Integer.Parse(lst(i))
+            i += 1
+            ' Get configitem values
+            For n = 1 To c
+                db = db & vbCrLf & "            " & lst(i)
+                ci.Add(lst(i))
+                i += 1
+            Next
+            ' add configitem to device CI list
+            ConfigItems.Add(ci)
+        End While
+        ' Go online if required
+        If Debug Then LogError("xPLDevice.New from State", db, EventLogEntryType.Information)
+        Me.Enabled = RestoreEnabled
+        If RestoreEnabled Then LogError("xPLDevice.New from State", "Went enabled", EventLogEntryType.Information)
     End Sub
 
     ''' <summary>
@@ -716,6 +751,10 @@ Public Class xPLDevice
         ' Add version numbers
         lst.Add(XPL_LIB_VERSION)
         lst.Add(AppVersion)
+        ' Store fragmented ID counter
+        lst.Add(_FragmentedIDCount.ToString)
+        ' Store autofragment seetting
+        lst.Add(AutoFragment.ToString)
         ' Store device address
         lst.Add(mConfigItems.Address.ToString)
         lst.Add(mInstanceType.ToString)
@@ -778,7 +817,16 @@ Public Class xPLDevice
                 If Debug Then LogError("xPLDevice.Dispose", "Disableing success")
             End If
         Catch
-            If Debug Then LogError("xPLDevice.Dispose", "Disableing failure")
+            If Debug Then LogError("xPLDevice.Dispose", "Disabling failure")
+        End Try
+        Try
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing of fragmented message list; " & _FragmentedMessageList.Count.ToString & " messages.")
+            While _FragmentedMessageList.Count > 0
+                CType(_FragmentedMessageList(0), xPLFragmentedMsg).Dispose()
+            End While
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing fragmented messages success")
+        Catch ex As Exception
+            If Debug Then LogError("xPLDevice.Dispose", "Disposing fragmented messages failure")
         End Try
         Try
             ' remove myself from the listener (will deactivate listener if I'm the last one)
@@ -937,6 +985,17 @@ Public Class xPLDevice
                 End If
             End If
 
+            ' Should I pass fragmented messages
+            If AutoFragment Then
+                If Not x.IsMyEcho Or (Me.MessagePassing And MessagePassingEnum.PassMyOwnEcho) <> 0 Then
+                    If New xPLSchema(myXPL.Schema).SchemaClass = "fragment" Then
+                        Call HandleFragmentMessage(myXPL)
+                        pass = False
+                        db += vbCrLf & "   Pass = False, set to automatically handle fragmentation"
+                    End If
+                End If
+            End If
+
             'raise an event if the message was filtered by all the settings
             If Debug Then LogError("xPLDevice.IncomingMessage", "Should the message be passed;" & vbCrLf & db, EventLogEntryType.Information)
             If pass Then
@@ -960,22 +1019,43 @@ Public Class xPLDevice
     ''' <param name="myxPL">The xPL message object that needs to be sent</param>
     ''' <exception cref="MissingFieldsException">Condition: if the message fails the checks for creating a raw xPL string <see cref="xPLMessage.RawxPL"/>.</exception>
     ''' <exception cref="Exception">Condition: if the <c>Enabled</c> property is set to <c>False</c>.</exception>
+    ''' <exception cref="ArgumentException">Condition: if the message size is too large to be send, or a single value is too large, so 
+    ''' fragmentation doesn't work, see <seealso cref="AutoFragment">AutoFragment</seealso> and <seealso cref="xPL_Base.XPL_MAX_MSG_SIZE">XPL_MAX_MSG_SIZE</seealso></exception>
     ''' <remarks>Other exceptions may occur from the network. Before sending the <c>Source</c> address will 
     ''' be set to the address of the device through which it will be sent.</remarks>
     Public Sub Send(ByVal myxPL As xPLMessage)
-        Try
-            If Debug Then LogError("xPLDevice.Send", "Sending message...", EventLogEntryType.Information)
-            If Not mEnabled Then
-                If Debug Then LogError("xPLDevice.Send", "Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.", EventLogEntryType.Error)
-                Throw New Exception("Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.")
-            Else
+        If Debug Then LogError("xPLDevice.Send", "Sending message...", EventLogEntryType.Information)
+        If Not mEnabled Then
+            If Debug Then LogError("xPLDevice.Send", "Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.", EventLogEntryType.Error)
+            Throw New Exception("Cannot send a message through a disabled xPL device. Enabled property must be set to True before sending messages.")
+        Else
+            Try
                 myxPL.Source = Me.Address
-                xPLListener.SendRawxPL(myxPL.RawxPL)
-            End If
-            If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
-        Catch
-            If Debug Then LogError("xPLDevice.Send", "Failed", EventLogEntryType.Information)
-        End Try
+                Dim m As String = myxPL.RawxPL
+                If ((Not Me.AutoFragment) Or myxPL.Schema = "fragment.basic") And Encoding.UTF8.GetByteCount(m) > XPL_MAX_MSG_SIZE Then
+                    If Debug Then LogError("xPLDevice.Send", "Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes.", EventLogEntryType.Error)
+                    Throw New ArgumentException("xPLDevice.Send; Message size (" & Encoding.UTF8.GetByteCount(m).ToString & " bytes) exceeds maximum allowed size of " & XPL_MAX_MSG_SIZE.ToString & " bytes. Use smaller messages or set AutoFragment to True.")
+                End If
+                If Encoding.UTF8.GetByteCount(m) <= XPL_MAX_MSG_SIZE Then
+                    ' just send it as single message
+                    If Debug Then LogError("xPLDevice.Send", "Sending message", EventLogEntryType.Information)
+                    xPLListener.SendRawxPL(m)
+                Else
+                    ' send as fragments
+                    If Debug Then LogError("xPLDevice.Send", "Fragmenting message...", EventLogEntryType.Information)
+                    Dim frag As New xPLFragmentedMsg(myxPL, Me)
+                    If Debug Then LogError("xPLDevice.Send", "Sending message as fragment.basic, " & frag.Count & " fragments.", EventLogEntryType.Information)
+                    frag.Send()
+                End If
+                If Debug Then LogError("xPLDevice.Send", "Success", EventLogEntryType.Information)
+            Catch ex As xPLFragmentedMsg.FragmentationException
+                Throw
+            Catch ex As ArgumentException
+                Throw
+            Catch ex As Exception
+                If Debug Then LogError("xPLDevice.Send", "Failed sending message; " & ex.ToString & vbCrLf & "Message:" & vbCrLf & myxPL.ToString, EventLogEntryType.Warning)
+            End Try
+        End If
     End Sub
 
     Private Sub HandleConfigMessage(ByVal myxPL As xPLMessage)
@@ -1294,5 +1374,126 @@ Public Class xPLDevice
     Public Sub Disable()
         If Me.Enabled = True Then Me.Enabled = False
     End Sub
+
+#Region "Message fragmentation"
+
+    ''' <summary>
+    ''' Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
+    ''' </summary>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Friend Function GetNewFragmentedID() As Integer
+        _FragmentedIDCount += 1
+        If _FragmentedIDCount > XPL_FRAGMENT_COUNTER_MAX Then _FragmentedIDCount = 0
+        Return _FragmentedIDCount
+    End Function
+
+    ''' <summary>
+    ''' Handle an incoming fragment class message, recerating the fragmented message
+    ''' of resending fragments requested.
+    ''' </summary>
+    ''' <param name="msg"></param>
+    ''' <remarks></remarks>
+    Private Sub HandleFragmentMessage(ByVal msg As xPLMessage)
+        'Diagnostics.Debug.Print("Handling a fragmented message; schema=" & msg.Schema & " partid=" & CStr(IIf(msg.KeyValueList.IndexOf("partid") = -1, "none", msg.KeyValueList("partid"))))
+        Select Case msg.Schema
+            Case "fragment.basic"
+                ' construct unique ID
+                Dim fk As xPLFragmentedMsg.FragmentKey
+                Try
+                    fk = New xPLFragmentedMsg.FragmentKey(msg)
+                Catch ex As xPLFragmentedMsg.FragmentationException
+                    ' bad message, construct warning and ignore it
+                    Me.LogMessage("Received fragment from " & msg.Source & " with a bad or missing 'partid' key.")
+                    Exit Sub
+                End Try
+                Dim mid As String = msg.Source & ":" & fk.MessageID
+                ' Go and try to find earlier fragments in the list
+                If _FragmentedMessageList.Contains(mid) Then
+                    ' add fragment to existing message
+                    Try
+
+                        CType(_FragmentedMessageList(mid), xPLFragmentedMsg).AddFragment(msg)
+                    Catch ex As xPLFragmentedMsg.FragmentationException
+                        ' bad message, do nothing, simply ignore
+                    End Try
+                Else
+                    ' create it, just creating will add it to the list, no need to store anywhere
+                    Try
+                        Dim fm As New xPLFragmentedMsg(msg, Me)
+                    Catch ex As xPLFragmentedMsg.FragmentationException
+                        ' bad message, do nothing, simply ignore
+                    End Try
+                End If
+            Case "fragment.request"
+                If msg.MsgType = xPLMessageTypeEnum.Command Then
+                    ' construct unique ID
+                    Dim mid As String = Me.Address & ":" & msg.KeyValueList("message")
+                    ' fetch message and return it
+                    If _FragmentedMessageList.Contains(mid) Then
+                        ' found it, request resend
+                        CType(_FragmentedMessageList(mid), xPLFragmentedMsg).ResendFailedParts(msg)
+                    Else
+                        ' Not found
+                        Dim txt As String = "Received request from " & msg.Source & " to resend fragments with ID " & msg.KeyValueList("message") & ". This is an unknown message, request ignored."
+                        LogMessage(txt, xPLLogLevels.Warning)
+                        LogError("xPLDevice.HandleFragmentMessage", txt & vbCrLf & msg.ToString, EventLogEntryType.Warning)
+                    End If
+                End If
+            Case Else
+                ' unknown, do nothing
+        End Select
+    End Sub
+
+#End Region
+
+    ''' <summary>
+    ''' Enum that defines the loglevels that can be used with a log.basic message
+    ''' </summary>
+    ''' <remarks></remarks>
+    Public Enum xPLLogLevels
+        Information = System.Diagnostics.EventLogEntryType.Information
+        Warning = System.Diagnostics.EventLogEntryType.Warning
+        [Error] = System.Diagnostics.EventLogEntryType.Error
+    End Enum
+
+    ''' <summary>
+    ''' Attempts to send a log.basic message. Any exceptions will be caught and not rethrown. See log.basic schema for the schema use.
+    ''' </summary>
+    ''' <param name="Message"></param>
+    ''' <param name="Level"></param>
+    ''' <param name="ErrorCode"></param>
+    ''' <remarks></remarks>
+    Public Sub LogMessage(ByVal Message As String, Optional ByVal Level As xPLLogLevels = xPLLogLevels.Information, Optional ByVal ErrorCode As String = "")
+        If Message = "" Then Throw New ArgumentException("No message provided", "Message")
+        Dim msg As New xPLMessage
+        msg.Source = Me.Address
+        msg.Target = "*"
+        msg.MsgType = xPLMessageTypeEnum.Trigger
+        msg.Schema = "log.basic"
+        Select Case Level
+
+            Case xPLLogLevels.Information
+                msg.KeyValueList.Add("type", "inf")
+
+            Case xPLLogLevels.Warning
+                msg.KeyValueList.Add("type", "wrn")
+
+            Case xPLLogLevels.Error
+                msg.KeyValueList.Add("type", "err")
+
+        End Select
+        msg.KeyValueList.Add("text", xPL_Base.RemoveInvalidxPLchars(Message, XPL_STRING_TYPES.Values))
+        If ErrorCode <> "" Then
+            msg.KeyValueList.Add("code", xPL_Base.RemoveInvalidxPLchars(ErrorCode, XPL_STRING_TYPES.Values))
+        End If
+
+        ' Now send it
+        Try
+            Me.Send(msg)
+        Catch ex As Exception
+        End Try
+    End Sub
+
 End Class
 

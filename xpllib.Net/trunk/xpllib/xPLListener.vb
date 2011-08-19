@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.3
+'* Version 5.4
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -66,9 +66,24 @@ Public Class xPLListener
     Private Shared mListenToIPs() As String            ' string array with IP adresses to listen to
     Private Shared mBroadcastAddress As IPAddress      ' IP address to broadcast messages to
     Private Shared mDevices As New ArrayList            ' holds all my devices
+    Private Shared mNextSend As New Date(2010, 1, 1)    ' time of earliest next send
+    Private Shared mSendLock As New Object              ' lock object to for sending operation
 
     Private Shared mActive As Boolean = False
     Private Shared LCTimer As Timers.Timer = Nothing   ' Timer incase network connection fails
+
+    ' Private properties for the incoming queue handler
+    Private Shared _IncomingQueue As Collections.Queue = New Collections.Queue
+    Private Shared _IncomingQueueThread As Threading.Thread = Nothing
+    Private Shared _IncomingQueueLock As Object = New Object
+    Private Shared _IncomingHandle As Threading.ManualResetEvent = New Threading.ManualResetEvent(True)
+
+    ' Simple class to store relevant data in the incoming queue
+    Private Class DataIn
+        Public FromIP As String = ""
+        Public RawxPL As String = ""
+    End Class
+
 
     ''' <summary>
     ''' Event that is raised if data has been received that cannot be parsed into a valid xPL message object
@@ -87,10 +102,15 @@ Public Class xPLListener
         If mActive Then Exit Sub
         ' Set active
         mActive = True
+        ' Start incoming queue handler
+        _IncomingQueueThread = New Threading.Thread(AddressOf IncomingQueueHandler)
+        _IncomingQueueThread.Start()
+        _IncomingHandle.Set()
         ' go setup network
         RenewConnection()
         ' start watching the xPL network
         xPLNetwork.StartPassiveScan()
+
         LogError("xPLListener.Initialize", "Initialization completed")
     End Sub
 
@@ -118,6 +138,10 @@ Public Class xPLListener
 
         ' Set mActive to False AFTER destroying the devices, otherwise the devices won't be able to sent a proper END message
         mActive = False
+
+        ' Start incoming queue handler
+        _IncomingQueueThread = Nothing
+        _IncomingHandle.Set()   ' mActive set to false, will cause thread to exit.
 
         ' Stop watching xPL network
         xPLNetwork.StopScan()
@@ -185,7 +209,9 @@ Public Class xPLListener
 
 #Region "Collection management"
 
-    ''' <returns>The number of <c>Enabled</c> xplDevices</returns>
+    ''' <summary>
+    ''' The number of <c>Enabled</c> xplDevices
+    ''' </summary>
     ''' <remarks>If the listener isn't active, 0 is returned, no exception will be thrown</remarks>
     Public Shared ReadOnly Property Count() As Integer
         Get
@@ -356,12 +382,11 @@ Public Class xPLListener
     ''' and can not be handled</exception>
     Public Shared Sub RestoreFromState(ByVal SavedState As String, ByVal RestoreEnabled As Boolean)
         Dim lst() As String
-        Dim xdev As xPLDevice
         Dim xversion As String
         Dim aversion As String
         Dim i As Integer = 0
         If IsActive Then
-            LogError("xPLListener.RestoreFromState", "Listener is still active, start shutdown to dispose existing devices")
+            LogError("xPLListener.RestoreFromState", "Listener is still active, starting shutdown to dispose existing devices")
             ' dispose listener, will also shutdown all devices
             xPLListener.Shutdown()
         End If
@@ -381,26 +406,30 @@ Public Class xPLListener
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
-            Case "5.0", "5.1", "5.2", "5.3"
-                ' get settings for xPLNetwork object
-                xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
-                i += 1
-                ' for each device recreate it
-                While i <= lst.Length - 1
-                    Try
-                        xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
-                    Catch ex As Exception
-                        Dim e As String = "Device " & i & " could not be recreated from State value!"
-                        LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
-                        Throw New Exception(e, ex)
-                    End Try
-                    i += 1
-                End While
+            Case "5.0", "5.1", "5.2", "5.3", "5.4"
+                RestoreFromState50(lst, i, RestoreEnabled)
             Case Else
                 ' SavedState created by an unknown version of xpllib
                 LogError("xPLListener.RestoreFromState", "State created by unknown version of xPLLib: " & xversion & ".")
                 Throw New ArgumentException("SavedState value was created by an unknown version of xpllib: " & xversion, "SavedState")
         End Select
+    End Sub
+    Private Shared Sub RestoreFromState50(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean)
+        Dim xdev As xPLDevice
+        ' get settings for xPLNetwork object
+        xPLNetwork.NetworkKeepEnded = Boolean.Parse(StateDecode(lst(i)))
+        i += 1
+        ' for each device recreate it
+        While i <= lst.Length - 1
+            Try
+                xdev = New xPLDevice(StateDecode(lst(i)), RestoreEnabled)
+            Catch ex As Exception
+                Dim e As String = "Device " & i & " could not be recreated from State value!"
+                LogError("xPLListener.RestoreFromState", e & " Error: " & ex.Message)
+                Throw New Exception(e, ex)
+            End Try
+            i += 1
+        End While
     End Sub
 
     ''' <summary>
@@ -675,14 +704,60 @@ Public Class xPLListener
 
         Dim ep As EndPoint = CType(epIncoming, EndPoint)
         Dim bytes_read As Integer
+        Dim Data As New DataIn
         Try
             bytes_read = sockIncoming.EndReceiveFrom(ar, ep)
+
+            Data.FromIP = epIncoming.Address.ToString()
+            Data.RawxPL = Encoding.UTF8.GetString(XPL_Buff, 0, bytes_read)
+
+            SyncLock _IncomingQueueLock
+                _IncomingQueue.Enqueue(Data)
+                _IncomingHandle.Set()   ' signal data has arrived to incoming queue thread
+            End SyncLock
+
         Catch ex As Exception
-            Exit Sub
+            LogError("xPLListener.ReceiveData", "Error receiving data from socket; " & ex.ToString, EventLogEntryType.Error)
         End Try
 
+        ' restart reading from socket
+        Try
+            sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_SOCKET_BUFFER_SIZE, SocketFlags.None, ep, AddressOf ReceiveData, Nothing)
+        Catch ex As Exception
+            If mDevices.Count <> 0 Then
+                LogError("xPLListener.ReceiveData", ex.ToString)
+            End If
+        End Try
+    End Sub
+
+    Private Shared Sub IncomingQueueHandler()
+        Dim data As DataIn
+        While mActive
+            data = Nothing
+            SyncLock _IncomingQueueLock
+                If _IncomingQueue.Count <> 0 Then
+                    ' get item from queue
+                    data = CType(_IncomingQueue.Dequeue, DataIn)
+                Else
+                    ' no more items, so go into wait-state
+                    _IncomingHandle.Reset()
+                End If
+            End SyncLock
+            If Not data Is Nothing Then
+                HandleIncomingdata(data)
+            End If
+            _IncomingHandle.WaitOne()
+        End While
+    End Sub
+
+    Private Shared Sub HandleIncomingdata(ByVal data As DataIn)
+        'during shutdown, stop listening
+        If Not mActive Then Exit Sub
+
         Dim myXPL As xPLMessage
-        Dim rawXPL As String = ""
+
+        'Debug.Print("")
+        'Debug.Print("Now dealing with incoming data; " & data.RawxPL.Replace(XPL_LF, vbCrLf))
 
         'check origin
         Dim accept As Boolean = False
@@ -695,7 +770,7 @@ Public Class xPLListener
                 If mListenToIPs(i).ToUpper() = XPL_DEFAULT_LISTENON Then
                     ' if the incoming data is from a local address (in LocalIP list) then accept it, as HUB must be local.
                     accept = mLocalIPs.Contains(epIncoming.Address.ToString())
-                ElseIf mListenToIPs(i) = epIncoming.Address.ToString() Then
+                ElseIf mListenToIPs(i) = data.FromIP Then
                     ' only accept if its an exact match
                     accept = True
                 End If
@@ -704,32 +779,30 @@ Public Class xPLListener
         End While
 
         If accept Then
-
             Try
                 ' parse raw xpl into a message object
-                rawXPL = Encoding.UTF8.GetString(XPL_Buff, 0, bytes_read)
-                myXPL = New xPLMessage(rawXPL)
+                myXPL = New xPLMessage(data.RawxPL)
             Catch ex As Exception
-                LogError("xPLListener.ReceiveData", "Error: " & ex.ToString() & vbCrLf & rawXPL & vbCrLf & HexDump(rawXPL))
+                LogError("xPLListener.ReceiveData", "Error: " & ex.ToString() & vbCrLf & data.RawxPL & vbCrLf & HexDump(data.RawxPL))
 
                 Try
-                    RaiseEvent InvalidMessageReceived(rawXPL)
+                    RaiseEvent InvalidMessageReceived(data.RawxPL)
                 Catch
+                    LogError("xPLListener.InvalidMessageReceived", "Eventhandler returned exception; " & ex.ToString, EventLogEntryType.Error)
                 End Try
-
-                rawXPL = ""
+                data.RawxPL = ""
                 myXPL = Nothing
             End Try
 
             ' Valid message has been received
-            If rawXPL <> "" Then
+            If data.RawxPL <> "" Then
                 ' update what we know from the network by what we learn from this message
                 xPLNetwork.MessageReceived(myXPL)
-                ' Distribute to enlisted devices
 
+                ' Distribute to enlisted devices
                 For i = 0 To mDevices.Count - 1
                     ' create new message instance for each device to prevent interference
-                    myXPL = New xPLMessage(rawXPL)
+                    myXPL = New xPLMessage(data.RawxPL)
                     Try
                         CType(mDevices(i), xPLDevice).IncomingMessage(myXPL)
                     Catch
@@ -738,13 +811,6 @@ Public Class xPLListener
             End If
         End If
 
-        Try
-            sockIncoming.BeginReceiveFrom(XPL_Buff, 0, XPL_SOCKET_BUFFER_SIZE, SocketFlags.None, ep, AddressOf ReceiveData, Nothing)
-        Catch ex As Exception
-            If mDevices.Count <> 0 Then
-                LogError("xPLListener.ReceiveData", ex.ToString)
-            End If
-        End Try
     End Sub
 
     ''' <summary>
@@ -772,30 +838,42 @@ Public Class xPLListener
 
     Private Shared Sub SendData(ByVal RawXPL As String)
 
-        Dim s As Socket
-        Dim ep As IPEndPoint
-        Dim data As Byte() = Encoding.UTF8.GetBytes(RawXPL)
+        ' only allow a single send operation at a time
+        SyncLock mSendLock
 
-        s = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
-        If Not _ByPassHub Then
-            ' send to regular xPL port
-            ep = New IPEndPoint(mBroadcastAddress, XPL_BASE_PORT)
-        Else
-            ' send to port I'm listening on myself, so bypass the hub
-            ep = New IPEndPoint(mBroadcastAddress, XPL_Portnum)
-        End If
-        s.EnableBroadcast = True
-        s.SendBufferSize = data.Length
+            While mNextSend > Now
+                ' send delay not passed yet, we have to wait some
+                Threading.Thread.Sleep(20)
+            End While
 
-        'See if we need to specify a source IP for the broadcast
-        Dim sIP As String = mListenOnIPstr
-        If sIP <> XPL_DEFAULT_LISTENON Then
-            Dim a As IPAddress = System.Net.IPAddress.Parse(sIP)
-            Dim lep As New IPEndPoint(a, 0)
-            s.Bind(lep)
-        End If
-        s.SendTo(Encoding.UTF8.GetBytes(RawXPL), ep)
-        s.Close()
+            Dim s As Socket
+            Dim ep As IPEndPoint
+            Dim data As Byte() = Encoding.UTF8.GetBytes(RawXPL)
+
+            s = New Socket(AddressFamily.InterNetwork, SocketType.Dgram, ProtocolType.Udp)
+            If Not _ByPassHub Then
+                ' send to regular xPL port
+                ep = New IPEndPoint(mBroadcastAddress, XPL_BASE_PORT)
+            Else
+                ' send to port I'm listening on myself, so bypass the hub
+                ep = New IPEndPoint(mBroadcastAddress, XPL_Portnum)
+            End If
+            s.EnableBroadcast = True
+            s.SendBufferSize = data.Length
+
+            'See if we need to specify a source IP for the broadcast
+            Dim sIP As String = mListenOnIPstr
+            If sIP <> XPL_DEFAULT_LISTENON Then
+                Dim a As IPAddress = System.Net.IPAddress.Parse(sIP)
+                Dim lep As New IPEndPoint(a, 0)
+                s.Bind(lep)
+            End If
+            s.SendTo(Encoding.UTF8.GetBytes(RawXPL), ep)
+            s.Close()
+
+            ' set next time we can send
+            mNextSend = Now.AddMilliseconds(XPL_MINIMUM_SEND_DELAY)
+        End SyncLock
     End Sub
 
     Private Shared _ByPassHub As Boolean = False
@@ -807,7 +885,7 @@ Public Class xPLListener
     ''' <returns></returns>
     ''' <remarks></remarks>
     <Obsolete("Do not use this setting, its intended to be used only for test purposes!")> _
-        Public Shared Property ByPassHub() As Boolean
+    Public Shared Property ByPassHub() As Boolean
         Get
             Return _ByPassHub
         End Get
