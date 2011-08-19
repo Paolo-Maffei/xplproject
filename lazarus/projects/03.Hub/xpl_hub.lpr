@@ -6,18 +6,15 @@ program xpl_hub;
 {$endif}
 
 uses u_xpl_hub
-     {$IFDEF UNIX}
-             {$IFDEF UseCThreads}
+     {$IFDEF UNIX}{$IFDEF UseCThreads}
              , cthreads
-             {$ENDIF}
-     {$ENDIF}
-     , u_xpl_console_app
-     ;
-
-{$r *.res}
+     {$ENDIF}{$ENDIF}
+     , u_xpl_console_app;
 
 var HubApplication : TxPLConsoleApp;
     xPLHub         : TxPLHub;
+
+{$R *.res}
 
 begin
    HubApplication := TxPLConsoleApp.Create(nil);

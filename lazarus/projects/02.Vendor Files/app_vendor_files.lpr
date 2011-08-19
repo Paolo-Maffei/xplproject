@@ -7,16 +7,19 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces
-  , Forms
+  , Forms, uniqueinstance_package, multiloglaz
   , frm_vendor_files
   , u_xpl_application
   , u_xpl_gui_resource
-  , fpc_delphi_compat
   ;
 
 {$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
 
+{ $ R *.res}
+
 begin
+  Application.Title:='xPL Vendor Files';
+  //Application.Title:='xPL Vendor Files';
   Application.Initialize;
 
   xPLApplication := TxPLApplication.Create(Application);

@@ -1,6 +1,6 @@
 unit dawndusk_listener;
 
-{$mode objfpc}{$H+}{$M+}
+{$mode objfpc}{$H+}
 
 interface
 
@@ -8,7 +8,6 @@ uses Classes
      , SysUtils
      , u_xpl_web_listener
      , u_xpl_config
-     , u_xpl_actionlist
      , u_xpl_schema
      , fpTimer
      , u_xpl_message
@@ -30,7 +29,6 @@ type
 
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   UpdateConfig; override;
         procedure   Process(const aMessage : TxPLMessage);
         procedure   OnTimer(aSender : TObject);
@@ -44,25 +42,18 @@ type
 var  Schema_DDBasic : TxPLSchema;
 
 implementation
-uses u_xpl_common
-     , u_xpl_header
+uses DateUtils
+     , u_xpl_common
      , u_xpl_custom_listener
-     , u_xpl_body
      , TypInfo
      , StrUtils
-     , DateUtils
-     , uxPLConst
-     , u_xpl_custom_message
-     , LResources
      ;
 const //======================================================================================
      K_CONFIG_LATITUDE  = 'latitude';
      K_CONFIG_LONGITUDE = 'longitude';
      K_CONFIG_OFFSET    = 'offset';
 
-// ===========================================================================================
-{ TxPLDawnDuskListener }
-
+// TxPLDawnDuskListener ======================================================================
 constructor TxPLDawnDuskListener.Create(const aOwner: TComponent);
 begin
    inherited Create(aOwner);
@@ -77,14 +68,7 @@ begin
    OnxPLJoinedNet := @OnJoined;
 end;
 
-//procedure TxPLDawnDuskListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//   if CompareText(AClassName, 'TxPLDawnDuskListener') = 0 then ComponentClass := TxplDawnDuskListener
-//   else inherited;
-//end;
-
 procedure TxPLDawnDuskListener.UpdateConfig;
-var found : boolean;
 begin
   inherited UpdateConfig;
   if Config.IsValid then begin
@@ -108,6 +92,7 @@ begin
    end;
 
    fSunTime.Date := now;
+
    if IncMinute(fSunTime.Sunrise,fOffset) > now then fWhatNext := Dawn else
       if IncMinute(fSunTime.Noon,fOffset) > now then fWhatNext := Noon else
          if IncMinute(fSunTime.Sunset,fOffSet) > now then fWhatNext := Dusk else begin

@@ -26,9 +26,8 @@ uses
 var  xPLMessageGUI : TxPLMessageGUI;
 
 begin
-   Application.Title:='xPL Sender';
    Application.Initialize;
-
+   AllowMultiInstance := true;
    xPLApplication := TxPLSender.Create(Application);
    xPLGUIResource := TxPLGUIResource.Create;
    xPLMessageGUI  := TxPLMessageGUI.Create(xPLApplication,'');

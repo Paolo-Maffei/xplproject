@@ -16,25 +16,28 @@ inherited frmPluginViewer: TfrmPluginViewer
   inherited ToolBar: TToolBar
     Width = 886
     TabOrder = 3
+    inherited ToolButton10: TToolButton
+      Width = 10
+    end
     inherited Panel4: TPanel
       Left = 686
     end
     object ToolButton1: TToolButton[3]
-      Left = 96
+      Left = 100
       Top = 0
       Caption = 'View source...'
       ImageIndex = 8
       OnClick = ToolButton1Click
     end
     object ToolButton4: TToolButton[4]
-      Left = 88
+      Left = 90
       Top = 0
-      Width = 8
+      Width = 10
       Caption = 'ToolButton4'
       Style = tbsSeparator
     end
     object ToolButton6: TToolButton[5]
-      Left = 51
+      Left = 53
       Top = 0
       Action = acOpenFile
     end
@@ -71,7 +74,7 @@ inherited frmPluginViewer: TfrmPluginViewer
       Height = 426
       Top = 27
       Width = 698
-      PageIndex = 0
+      PageIndex = 1
       Align = alClient
       TabOrder = 0
       TabStop = True
@@ -134,8 +137,8 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
       end
       object pgDevice: TPage
-        ClientWidth = 11040
-        ClientHeight = 6720
+        ClientWidth = 698
+        ClientHeight = 426
         object Label7: TLabel
           Left = 7
           Height = 16
@@ -202,9 +205,9 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
         object edtDeviceDescription: TMemo
           Left = 82
-          Height = 177
+          Height = 20
           Top = 234
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight, akBottom]
           Color = 14678520
           OnChange = edtDeviceIdEditingDone
@@ -214,7 +217,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 202
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           Font.Color = clBlue
@@ -227,7 +230,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 170
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           Font.Color = clBlue
@@ -240,7 +243,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 138
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           ItemHeight = 15
@@ -259,7 +262,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 106
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           OnChange = edtDeviceIdEditingDone
@@ -269,7 +272,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 74
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           OnChange = edtDeviceIdEditingDone
@@ -279,7 +282,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 41
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           ItemHeight = 15
@@ -298,7 +301,7 @@ inherited frmPluginViewer: TfrmPluginViewer
           Left = 82
           Height = 23
           Top = 11
-          Width = 604
+          Width = 280
           Anchors = [akTop, akLeft, akRight]
           Color = 14678520
           OnChange = edtDeviceIdEditingDone
@@ -306,8 +309,8 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
       end
       object pgMenuItem: TPage
-        ClientWidth = 11040
-        ClientHeight = 6720
+        ClientWidth = 22080
+        ClientHeight = 13440
         object Label2: TLabel
           Left = 7
           Height = 16
@@ -408,8 +411,8 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
       end
       object pgConfigItem: TPage
-        ClientWidth = 11040
-        ClientHeight = 6720
+        ClientWidth = 22080
+        ClientHeight = 13440
         object sgConfigItems: TMStringGrid
           Left = 0
           Height = 420
@@ -442,8 +445,8 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
       end
       object pgSchema: TPage
-        ClientWidth = 11040
-        ClientHeight = 6720
+        ClientWidth = 22080
+        ClientHeight = 13440
         object Label20: TLabel
           Left = 10
           Height = 16
@@ -546,8 +549,8 @@ inherited frmPluginViewer: TfrmPluginViewer
         end
       end
       object pgCommand: TPage
-        ClientWidth = 11040
-        ClientHeight = 6720
+        ClientWidth = 22080
+        ClientHeight = 13440
         object Label22: TLabel
           Left = 7
           Height = 16
@@ -771,8 +774,8 @@ inherited frmPluginViewer: TfrmPluginViewer
             TabOrder = 2
             object tsTextBox: TTabSheet
               Caption = 'tsTextBox'
-              ClientHeight = 1456
-              ClientWidth = 10848
+              ClientHeight = 2912
+              ClientWidth = 21696
               object Label15: TLabel
                 Left = 5
                 Height = 16
@@ -793,8 +796,8 @@ inherited frmPluginViewer: TfrmPluginViewer
             end
             object tsDropDownList: TTabSheet
               Caption = 'tsDropDownList'
-              ClientHeight = 1456
-              ClientWidth = 10848
+              ClientHeight = 2912
+              ClientWidth = 21696
               object sgDropDown: TMStringGrid
                 Left = 0
                 Height = 91
@@ -822,8 +825,8 @@ inherited frmPluginViewer: TfrmPluginViewer
             end
             object tsNumeric: TTabSheet
               Caption = 'tsNumeric'
-              ClientHeight = 1456
-              ClientWidth = 10848
+              ClientHeight = 2912
+              ClientWidth = 21696
               object Label8: TLabel
                 Left = 5
                 Height = 16
@@ -885,7 +888,7 @@ inherited frmPluginViewer: TfrmPluginViewer
         OnClick = btnSaveDeviceClick
       end
       object tbAdd: TToolButton
-        Left = 32
+        Left = 34
         Top = 0
         Caption = 'tbAdd'
         ImageIndex = 10
@@ -894,19 +897,19 @@ inherited frmPluginViewer: TfrmPluginViewer
       object ToolButton2: TToolButton
         Left = 24
         Top = 0
-        Width = 8
+        Width = 10
         Caption = 'ToolButton2'
         Style = tbsSeparator
       end
       object ToolButton3: TToolButton
-        Left = 55
+        Left = 57
         Top = 0
-        Width = 8
+        Width = 10
         Caption = 'ToolButton3'
         Style = tbsSeparator
       end
       object tbDel: TToolButton
-        Left = 63
+        Left = 67
         Top = 0
         Caption = 'tbDel'
         ImageIndex = 11
