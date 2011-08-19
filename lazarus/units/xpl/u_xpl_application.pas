@@ -1,7 +1,7 @@
 unit u_xpl_application;
 
 {$ifdef fpc}
-{$mode objfpc}{$H+}{$M+}
+   {$mode objfpc}{$H+}{$M+}
 {$endif}
 
 interface
@@ -79,14 +79,16 @@ begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
-   fAdresse := TxPLAddress.Create;
-   fAdresse.Device := GetDevice;
-   fAdresse.Vendor := GetVendor;
+   fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
+   //fAdresse.Device := GetDevice;
+   //fAdresse.Vendor := GetVendor;
    fVersion        := GetVersion;
 
+   if not AllowMultiInstance then begin
    {$ifdef fpc}
       if InstanceRunning(GetProductName) then Log(etError,K_MSG_ALREADY_STARTED);
    {$endif}
+   end;
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
@@ -110,8 +112,8 @@ end;
 
 destructor TxPLApplication.Destroy;
 begin
-   fLocaleDomains.Free;
-   fFolders.Free;
+   if Assigned(fLocaleDomains) then fLocaleDomains.Free;
+   if Assigned(fFolders)       then fFolders.Free;
    fAdresse.Free;
    inherited;
 end;
@@ -130,7 +132,6 @@ end;
 
 function TxPLApplication.AppName : string;
 begin
-   //Result := Format('xPL %s',[Adresse.Device]);
    Result := GetProductName;
 end;
 
@@ -166,7 +167,6 @@ begin
    Close(f);
 end;
 
-
 function TxPLApplication.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
 var i : integer;
     f : string;
@@ -193,15 +193,3 @@ begin
 end;
 
 end.
-
-{procedure TxPLApplication.CheckVersion;
-begin
-   fvChecker.CheckVersion;
-end;}
-
-//function TxPLApplication.DeviceInVendorFile: TXMLDeviceType;
-//begin
-//   result := VendorFile.GetDevice(Adresse);
-//end;
-
-

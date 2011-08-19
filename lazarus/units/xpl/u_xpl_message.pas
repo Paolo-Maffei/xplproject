@@ -26,11 +26,9 @@ uses classes,
      u_xPL_Address,
      u_xpl_schema,
      u_xPL_Body,
-//     uxPLConst,
      u_xml_plugins;
 
-type { TxPLMessage ===========================================================}
-
+type // TxPLMessage ===========================================================
      TxPLMessage = class(TxPLCustomMessage)
      private
         fMsgName      : string;
@@ -43,7 +41,7 @@ type { TxPLMessage ===========================================================}
 
         procedure ReadFromJSON(const aCom : TCommandType);
 
-        procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
+//        procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
         procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
      published
         property MsgName      : string      read fMsgName      write fMsgName     ;
@@ -115,14 +113,14 @@ begin
        Body.AddKeyValuePairs([TElementType(item).Name],[TElementType(item).default_]);
 end;
 
-procedure TxPLMessage.Format_HbeatApp(const aInterval: integer; const aPort: string; const aIP: string);
-begin
-   Body.ResetValues;
-   Schema.Assign(Schema_HBeatApp);
-   MessageType:= stat;
-   Target.IsGeneric := True;
-   Body.AddKeyValuePairs([K_HBEAT_ME_INTERVAL,K_HBEAT_ME_PORT,K_HBEAT_ME_REMOTEIP],[IntToStr(aInterval),aPort,aIP]);
-end;
+//procedure TxPLMessage.Format_HbeatApp(const aInterval: integer; const aPort: string; const aIP: string);
+//begin
+//   Body.ResetValues;
+//   Schema.Assign(Schema_HBeatApp);
+//   MessageType:= stat;
+//   Target.IsGeneric := True;
+//   Body.AddKeyValuePairs([K_HBEAT_ME_INTERVAL,K_HBEAT_ME_PORT,K_HBEAT_ME_REMOTEIP],[IntToStr(aInterval),aPort,aIP]);
+//end;
 
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin

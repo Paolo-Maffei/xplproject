@@ -73,7 +73,7 @@ end;
 procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
 begin
      with TProcess.Create(nil) do try
-          CommandLine := TMenuItem(Sender).Hint;
+          Executable := TMenuItem(Sender).Hint;
           Execute;
      finally
         Free;

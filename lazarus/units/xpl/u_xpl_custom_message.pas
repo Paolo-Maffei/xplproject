@@ -33,7 +33,7 @@ type { TxPLCustomMessage =====================================================}
         procedure Set_RawXPL(const AValue: string);
 
      public
-        constructor Create(aOwner : TComponent; const aRawxPL : string = ''); reintroduce;
+        constructor Create(const aOwner : TComponent; const aRawxPL : string = ''); reintroduce;
 
         procedure   Assign(aMessage : TPersistent); override;
         procedure   AssignHeader(aMessage : TxPLCustomMessage);
@@ -56,7 +56,7 @@ Uses SysUtils
      ;
 
 // TxPLCustomMessage ==========================================================
-constructor TxPLCustomMessage.Create(aOwner : TComponent; const aRawxPL : string = '');
+constructor TxPLCustomMessage.Create(const aOwner : TComponent; const aRawxPL : string = '');
 begin
    inherited Create(aOwner);
 
@@ -76,7 +76,8 @@ end;
 function TxPLCustomMessage.IsLifeSign: boolean;
 begin
    result := ( MessageType = stat) and
-             ( Schema.IsConfig or Schema.IsHBeat )
+             ( Schema.IsConfig or Schema.IsHBeat ) and
+             ( Schema.Type_ = 'app' );
 end;
 
 procedure TxPLCustomMessage.Assign(aMessage: TPersistent);

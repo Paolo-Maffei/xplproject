@@ -16,6 +16,7 @@ uses
   u_xpl_config,
   u_xpl_common,
   u_xpl_application,
+  u_xpl_messages,
   u_xpl_custom_message;
 
 type { TConfigurationRecord ==================================================}
@@ -35,10 +36,10 @@ type { TConfigurationRecord ==================================================}
         function Get_XMLCfgAvail: boolean;
         procedure OnTimer(sender : TObject);
      public
-        constructor Create(const aOwner : TxPLApplication; const aHBeatMsg : TxPLCustomMessage; const aDieProc : TNotifyEvent);
+        constructor Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
         destructor  Destroy; override;
 
-        procedure HBeatReceived(const aHBeatMsg : TxPLCustomMessage);
+        procedure HBeatReceived(const aHBeatMsg : THeartBeatMsg);
      published
         property CfgListAvail : boolean          read Get_CfgListAvail;
         property CfgCurrAvail : boolean          read Get_CfgCurrAvail;
@@ -61,7 +62,7 @@ uses DateUtils,
      u_xpl_schema;
 
 { TConfigurationRecord }
-constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : TxPLCustomMessage; const aDieProc : TNotifyEvent);
+constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
 begin
    inherited Create;
    fAddress     := TxPLAddress.Create;
@@ -80,11 +81,11 @@ begin
    end;
 end;
 
-procedure TConfigurationRecord.HBeatReceived(const aHBeatMsg : TxPLCustomMessage);
+procedure TConfigurationRecord.HBeatReceived(const aHBeatMsg : THeartBeatMsg);
 begin
    fLastHBeat := now;
    if not aHBeatMsg.Schema.Equals(Schema_HBeatEnd)
-      then fDieAt := IncMinute( fLastHBeat, 2 * StrToIntDef(aHBeatMsg.Body.GetValueByKey(K_HBEAT_ME_INTERVAL),MIN_HBEAT) + 1) // Defined by specifications as dead-line limit)
+      then fDieAt := IncMinute( fLastHBeat, 2 * aHBeatMsg.Interval + 1) // Defined by specifications as dead-line limit)
       else begin
         fDieAt := now;
         OnTimer(self);

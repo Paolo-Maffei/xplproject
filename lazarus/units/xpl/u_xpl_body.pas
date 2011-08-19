@@ -37,7 +37,7 @@ type // TxPLBody ==============================================================
            function  IsValidValue(const aValue : string) : boolean;
 
            function  Get_RawxPL : string;
-           function Get_Strings: TStringList;
+           function  Get_Strings: TStringList;
            procedure Set_Keys(const AValue: TStringList);
            procedure Set_RawxPL(const AValue: string);
            procedure Set_Strings(const AValue: TStringList);
@@ -195,11 +195,7 @@ function TxPLBody.GetValueByKey(const aKeyValue: string; const aDefVal : string 
 var i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
-   if i>=0 then //begin
-                result := Values[i]//;
-//                for c:=i+1 to Keys.Count-1 do                                  // 1.02 : iterate through other parameters
-//                    if Keys[c]=aKeyValue then result := Result + Values[c]     // to find other lines with the same key
-//           end
+   if i>=0 then result := Values[i]
            else result := aDefVal;
 end;
 
@@ -207,7 +203,8 @@ procedure TxPLBody.SetValueByKey(const aKeyValue, aDefVal : string);
 var i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
-   if i>=0 then Values[i] := aDefVal;
+   if i>=0 then Values[i] := aDefVal
+           else AddKeyValuePair(aKeyValue,aDefVal);
 end;
 
 procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues : TStringList);
@@ -229,18 +226,8 @@ begin
 end;
 
 procedure TxPLBody.AddKeyValuePair(const aKey, aValue: string);
-//var i,c : integer;
-//    s : StringArray;
 begin
-//   if not CheckKey(aKey) then exit;
    Values[AppendItem(aKey)] := aValue;
-
-//   s := StrCutBySize(aValue,MAX_VALUE_LEN);
-//   for c:=low(s) to high(s) do begin                                           // 1.02 : iterate till we reach the end
-//      i := AppendItem(aKey);                                                   // of a string potentially longueur than 128 char
-//      Values[i] := aValue;
-//      Values[i] := s[c];
-//   end;
 end;
 
 procedure TxPLBody.AddKeyValue(const aKeyValuePair: string);

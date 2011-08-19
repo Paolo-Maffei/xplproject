@@ -67,17 +67,17 @@ end;
 
 function TxPLSchema.IsHBeat: boolean;
 begin
-   Result := (Classe = 'config');
+   Result := (Classe = 'hbeat');
 end;
 
 function TxPLSchema.IsConfig: boolean;
 begin
-   Result := (Classe = 'hbeat');
+   Result := (Classe = 'config');
 end;
 
 function TxPLSchema.IsFragment: boolean;
 begin
-   Result := Equals(Schema_FragBasic);
+   Result := (Classe = 'fragment');
 end;
 
 // ============================================================================

@@ -6,7 +6,7 @@ unit u_xpl_heart_beater;
   Récupérer celle qui se trouve ici :
   http://svn.freepascal.org/cgi-bin/viewvc.cgi/trunk/packages/fcl-base/src/fptimer.pp?revision=13012
   et forcer son utilisation en ajoutant le chemin de recherche :
-  C:\pp\packages\fcl-base\src\fptimer.pp dans les paths du projet
+  C:\pp\packages\fcl-base\src\ dans les paths du projet
   }
 
 {$ifdef fpc}

@@ -87,10 +87,10 @@ const   K_DEF_GROUP       = 'xpl-group';
 // General Helper function ====================================================
 class function TxPLAddress.RandomInstance : string;
 var n: integer;
-    const ss: string = 'abcdefghjkmnpqrstuvwxyz'; {list all the charcaters you want to use}
+    const ss: string = 'abcdefghjkmnpqrstuvwxyz';                              // list all the charcaters you want to use
 begin
    Result :='';
-   for n:=1 to 8 do                                                     // Longueur volontairement limitée à 8 chars
+   for n:=1 to 8 do                                                            // Longueur volontairement limitée à 8 chars
        Result := Result +ss[random(length(ss))+1];
 end;
 
@@ -145,7 +145,7 @@ end;
 
 function TxPLAddress.Get_RawxPL: string;
 begin
-   Result := StringReplace(inherited Get_RawxPL,'.','-',[])   // will replace only the first '.' - this is what I want
+   Result := StringReplace(inherited Get_RawxPL,'.','-',[])                    // will replace only the first '.' - this is what I want
 end;
 
 // ============================================================================

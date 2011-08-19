@@ -79,7 +79,7 @@ begin
      if not aMessage.MustFragment
         then Send(TxPLMessage(aMessage).ProcessedxPL)
         else begin
-             FragFactory := fFragMgr.Fragment(aMessage);
+             FragFactory := fFragMgr.Fragment(TxPLMessage(aMessage));
              for i:=0 to Pred(FragFactory.FragmentList.Count) do
                  Send(TxPLMessage(FragFactory.FragmentList[i]).ProcessedxPL);
         end;

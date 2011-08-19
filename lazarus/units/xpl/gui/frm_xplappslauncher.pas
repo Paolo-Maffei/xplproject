@@ -77,7 +77,7 @@ begin
    if lvApps.Selected = nil then exit;
 
    with TProcess.Create(nil) do try
-      CommandLine := lvApps.Selected.SubItems[2];
+      Executable := lvApps.Selected.SubItems[2];
       Execute;
    finally
       Free;

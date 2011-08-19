@@ -42,6 +42,11 @@ begin
   writeln(K_STR_1);
   DoneKeyboard;
   inherited Destroy;
+  {if destroy hangs it comes from this fu**ing fptimer bug :
+   Récupérer celle qui se trouve ici :
+   http://svn.freepascal.org/cgi-bin/viewvc.cgi/trunk/packages/fcl-base/src/fptimer.pp?revision=13012
+   et forcer son utilisation en ajoutant le chemin de recherche :
+   C:\pp\packages\fcl-base\src\ dans les paths du projet }
 end;
 
 procedure TxPLConsoleApp.Run;

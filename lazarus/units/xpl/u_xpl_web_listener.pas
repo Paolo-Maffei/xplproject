@@ -21,6 +21,7 @@ uses u_xPL_Listener
      , SysUtils
      , IdGlobal
      , u_xPL_Message
+     , u_xpl_body
      , u_xpl_udp_socket
      , IdContext
      , IdCustomHTTPServer
@@ -51,13 +52,13 @@ type
          destructor destroy; override;
 
          procedure UpdateConfig; override;
-         procedure FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string); override;
+         procedure FinalizeHBeat(const aBody  : TxPLBody);
          procedure GetData(const aSuperObject : ISuperObject); dynamic;
       end;
 
 implementation  { ==============================================================}
-uses IdStack,
-     cRandom
+uses IdStack
+     //cRandom
           , fpjsonrtti
      , fpjson,
 //     cStrings,
@@ -71,8 +72,9 @@ uses IdStack,
      u_xpl_config;
 //     u_xpl_custom_listener;
 
-//const
+const
 //   K_CONFIG_LIB_SERVER_ROOT = 'webroot';
+  K_HBEAT_ME_WEBPORT = 'webport';
 { Utility functions ============================================================}
 //function StringListToHtml(aSList : TStrings) : widestring;
 //begin
@@ -109,6 +111,7 @@ begin
      if Assigned(fWebServer) then fWebServer.Free;
 
      fWebServer := TWebServer.Create(self);
+     OnxPLHBeatPrepare := @FinalizeHBeat;
 
 //     with fWebServer.Bindings.Add do begin
 //          IP:=K_IP_LOCALHOST;
@@ -407,12 +410,10 @@ begin
    inherited;
 end;
 
-procedure TxPLWebListener.FinalizeHBeatMsg(const aMessage  : TxPLMessage; const aPort : string; const aIP : string);
+procedure TxPLWebListener.FinalizeHBeat(const aBody  : TxPLBody);
 begin
-   inherited;
    if Assigned(fWebServer) then
-//   if Config.GetItemValue(K_HBEAT_ME_WEB_PORT)<>'' then
-   aMessage.Body.AddKeyValuePairs([K_HBEAT_ME_WEB_PORT],[IntToStr(fWebServer.Bindings[0].Port)]);
+      aBody.SetValueByKey(K_HBEAT_ME_WEBPORT,IntToStr(fWebServer.Bindings[0].Port));
 end;
 
 end.
