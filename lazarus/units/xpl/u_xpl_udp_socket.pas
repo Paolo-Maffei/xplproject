@@ -82,7 +82,7 @@ uses  IdStack
 // =============================================================================
 const XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                  // First port used to try to open the listening port
       XPL_BASE_PORT_RANGE   : Integer = 512;                                    //       Range of port to scan for trying to bind socket
-      K_SENDING_TEMPO       : Integer = 30;                                     // Temporisation to avoid message flooding
+      K_SENDING_TEMPO       : Integer = 50;                                     // Temporisation to avoid message flooding
       K_SIZE_ERROR          = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
       K_USING_DEFAULT       = 'xPL settings not set, using default';
 

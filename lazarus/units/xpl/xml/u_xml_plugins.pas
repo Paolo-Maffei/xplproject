@@ -284,15 +284,17 @@ begin
       fPresent  := Fileexists(fFileName);
       if fPresent then begin
          so := XMLParseFile(fFileName,true);
-         s  := so.AsJSon;
-         if length(s)>0 then begin
-            fDevices := TDevicesType.Create(so);
-            o := so['version'];
-            if assigned(o) then Version := o.AsString;
-            o := so['info_url'];
-            if assigned(o) then Info_URL := o.AsString;
-            o := so['plugin_url'];
-            if assigned(o) then Plugin_URL := o.AsString;
+         if Assigned(so) then begin                                            // The file may be present but not XML valid
+            s  := so.AsJSon;
+            if length(s)>0 then begin
+               fDevices := TDevicesType.Create(so);
+               o := so['version'];
+               if assigned(o) then Version := o.AsString;
+               o := so['info_url'];
+               if assigned(o) then Info_URL := o.AsString;
+               o := so['plugin_url'];
+               if assigned(o) then Plugin_URL := o.AsString;
+            end;
          end;
       end;
    end;
