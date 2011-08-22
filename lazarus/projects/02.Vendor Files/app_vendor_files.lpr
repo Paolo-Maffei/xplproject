@@ -15,11 +15,7 @@ uses
 
 {$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
 
-{ $ R *.res}
-
 begin
-  Application.Title:='xPL Vendor Files';
-  //Application.Title:='xPL Vendor Files';
   Application.Initialize;
 
   xPLApplication := TxPLApplication.Create(Application);

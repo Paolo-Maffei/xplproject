@@ -471,8 +471,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="50"/>
-        <CursorPos X="1" Y="57"/>
+        <TopLine Value="17"/>
+        <CursorPos X="74" Y="37"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit54>
@@ -762,7 +762,7 @@
         <UsageCount Value="20"/>
       </Unit90>
     </Units>
-    <JumpHistory Count="17" HistoryIndex="16">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="dawndusk_listener.pas"/>
         <Caret Line="126" Column="73" TopLine="110"/>
@@ -809,28 +809,16 @@
       </Position11>
       <Position12>
         <Filename Value="..\..\units\xpl\u_xpl_web_listener.pas"/>
-        <Caret Line="38" Column="38" TopLine="95"/>
+        <Caret Line="62" Column="11" TopLine="58"/>
       </Position12>
       <Position13>
-        <Filename Value="..\..\units\xpl\u_xpl_web_listener.pas"/>
-        <Caret Line="62" Column="11" TopLine="58"/>
-      </Position13>
-      <Position14>
-        <Filename Value="dawndusk_listener.pas"/>
-        <Caret Line="56" Column="1" TopLine="106"/>
-      </Position14>
-      <Position15>
         <Filename Value="dawndusk_listener.pas"/>
         <Caret Line="80" Column="23" TopLine="22"/>
-      </Position15>
-      <Position16>
-        <Filename Value="dawndusk_listener.pas"/>
-        <Caret Line="92" Column="30" TopLine="104"/>
-      </Position16>
-      <Position17>
+      </Position13>
+      <Position14>
         <Filename Value="xpl_dawndusk.lpr"/>
         <Caret Line="4" Column="1" TopLine="1"/>
-      </Position17>
+      </Position14>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
