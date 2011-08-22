@@ -54,7 +54,7 @@ type // TFragmentFactory ======================================================
         procedure TimerCheck(Sender : TObject);
         function  FragmentName(const aAddress : TxPLAddress; const aId : integer) : string;
      public
-        Constructor Create(const aOwner : TComponent);
+        Constructor Create(const aOwner : TComponent); reintroduce;
         function    Fragment(const aMessage : TxPLMessage) : TFragmentFactory;
         function    AddFragment (const aMessage : TFragBasicMsg) : TFragmentFactory;
         function    GetFactory(const aFragIdent : string) : TFragmentFactory;

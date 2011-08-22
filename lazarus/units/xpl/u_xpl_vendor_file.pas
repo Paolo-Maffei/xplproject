@@ -15,7 +15,7 @@ unit u_xpl_vendor_file;
  }
 
 {$ifdef fpc}
-{$mode objfpc}{$H+}
+   {$mode objfpc}{$H+}
 {$endif}
 
 interface
@@ -25,11 +25,6 @@ uses Classes,
      uxPLConst,
      u_xpl_address,
      u_xml_plugins,
-     { $ ifdef fpc}
-     //u_xml_xplplugin,
-     { $ else}
-     //u_xml_xplplugin_delphi,
-     { $ endif}
      u_xpl_folders,
      superobject,
      superxmlparser;
@@ -42,19 +37,14 @@ type { TxPLVendorSeedFile ====================================================}
         fLocations  : TLocationsType;
         fPlugins    : TPluginsType;
      public
-        constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders);
+        constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders); reintroduce;
         destructor  destroy; override;
         procedure   Load;
-        function    FileName : string; inline;                                                // File name of the current vendor plugin file
+        function    FileName : string; inline;                                 // File name of the current vendor plugin file
 
-        function Updated  : TDateTime;
+        function UpdatedTS : TDateTime;                                        // Renamed to avoid conflict with ancestors
         function Update(const sLocation : string = K_XPL_VENDOR_SEED_LOCATION) : boolean; // Reloads the seed file from website
-//        function UpdatePlugin(const aPluginName : string) : boolean;
-
-//        function VendorFile(const aVendor : tsVendor) : TXMLpluginType;
-//        function GetDevice(const aAddress : TxPLAddress) : TXMLDeviceType;
         function FindDevice(const aAddress : TxPLAddress) : TDeviceType;
-        //function GetPluginFilePath(const aPluginName : string) : string;
 
         property IsValid   : boolean           read fStatus;
      published
@@ -62,14 +52,14 @@ type { TxPLVendorSeedFile ====================================================}
         property Plugins   : TPluginsType   read fPlugins;
      end;
 
-implementation //========================================================================
+implementation //==============================================================
 uses uRegExpr
      , u_downloader_Indy
      , u_xpl_application
      , u_xpl_common
      ;
 
-{ TxPLVendorSeedFile ====================================================================}
+// TxPLVendorSeedFile =========================================================
 constructor TxPLVendorSeedFile.create(const aOwner : TComponent; const aFolders: TxPLCustomFolders);
 begin
    inherited Create(aOwner);
@@ -97,7 +87,7 @@ begin
       TxPLApplication(Owner).Log(etWarning,'Vendor file absent, please consider updating it')
    else
    try
-      fStatus := True;                                                                    // Settings correctly initialised and loaded
+      fStatus := True;                                                         // Settings correctly initialised and loaded
 
       SO := XMLParseFile(FileName,true);
 
@@ -107,31 +97,28 @@ begin
    end;
 end;
 
-function TxPLVendorSeedFile.Updated: TDateTime;
+function TxPLVendorSeedFile.UpdatedTS: TDateTime;
 var fileDate : Integer;
 begin
    fileDate := FileAge(FileName);
    if fileDate > -1 then Result := FileDateToDateTime(fileDate);
 end;
 
-//function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
-//var item : TCollectionItem;
-//begin
-//   result := '';
-//   for item in Plugins do begin
-//       if TPluginType(item).Name = aPluginName then begin
-//          result := fFolders.PluginDir +
-//                    AnsiRightStr( TPluginType(item).URL,
-//                                  length(TPluginType(item).Url)-LastDelimiter('/',TPluginType(item).URL)
-//                    ) + K_FEXT_XML;
-//          break;
-//       end;
-//   end;
-//end;
-
 function TxPLVendorSeedFile.Update(const sLocation : string) : boolean;
 begin
    Result := HTTPDownload(sLocation + '.xml', FileName, xPLApplication.Settings.ProxyServer);
+end;
+
+function TxPLVendorSeedFile.FindDevice(const aAddress: TxPLAddress): TDeviceType;
+var plug, dev : TCollectionItem;
+begin
+   result := nil;
+   if not Assigned(Plugins) then exit;                                         // Bug #FS57,#FS72,#FS73
+   for plug in Plugins do
+         if TPluginType(plug).Vendor = aAddress.Vendor then
+            for dev in TPluginType(plug).Devices do
+                if TDeviceType(dev).Device = aAddress.Device then
+                   result := TDeviceType(dev);
 end;
 
 //function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
@@ -183,20 +170,21 @@ end;
 //       if vf[i].Id = (aAddress.VD) then result := vf[i];
 //end;
 
-function TxPLVendorSeedFile.FindDevice(const aAddress: TxPLAddress): TDeviceType;
-var plug, dev : TCollectionItem;
-begin
-   result := nil;
-   for plug in Plugins do begin
-         if TPluginType(plug).Vendor = aAddress.Vendor then begin
-            for dev in TPluginType(plug).Devices do begin
-                if TDeviceType(dev).Device = aAddress.Device then begin
-                   result := TDeviceType(dev);
-                end;
-            end;
-         end;
-   end;
-end;
+//function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
+//var item : TCollectionItem;
+//begin
+//   result := '';
+//   for item in Plugins do begin
+//       if TPluginType(item).Name = aPluginName then begin
+//          result := fFolders.PluginDir +
+//                    AnsiRightStr( TPluginType(item).URL,
+//                                  length(TPluginType(item).Url)-LastDelimiter('/',TPluginType(item).URL)
+//                    ) + K_FEXT_XML;
+//          break;
+//       end;
+//   end;
+//end;
+
 
 end.
 
