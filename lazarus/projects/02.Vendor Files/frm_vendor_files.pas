@@ -47,10 +47,7 @@ type
     procedure acViewXMLExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure lvPluginsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
-  private
-    { private declarations }
-  public
-    { public declarations }
+
   end; 
 
 var frmvendorfiles: Tfrmvendorfiles;
@@ -64,9 +61,7 @@ uses StrUtils
      ;
 
 // ============================================================================
-const
-     K_UPDATE_STR = 'Updated on %s';
-     K_XPL_VENDOR_SEED_LOCATION = 'http://www.xplmonkey.com/downloads/plugins';
+const K_UPDATE_STR = 'Updated on %s';
 
 // TFrmMain Object ============================================================
 procedure Tfrmvendorfiles.FormCreate(Sender: TObject);
@@ -86,7 +81,6 @@ begin
    if not Assigned(lvPlugins.Selected) then exit;
 
    acViewXML.Enabled := lvPlugins.Selected.ImageIndex = K_IMG_GREEN_BADGE;
-//   acViewPlugin.Enabled := acViewXML.Enabled and (lvPlugins.Selected.SubItems[0] = 'plugin');
 end;
 
 procedure Tfrmvendorfiles.acDeselectExecute(Sender: TObject);
@@ -128,15 +122,17 @@ var item : TCollectionItem;
 begin
    lvPlugins.Items.Clear;
    cbLocations.Items.Clear;
-   cbLocations.Text := K_XPL_VENDOR_SEED_LOCATION;
 
    xPLApplication.VendorFile.Load;
    if not xPLApplication.VendorFile.IsValid then exit;
 
-   lblUpdated.Caption := Format(K_UPDATE_STR,[DateTimeToStr(xPLApplication.VendorFile.Updated)]);
+   lblUpdated.Caption := Format(K_UPDATE_STR,[DateTimeToStr(xPLApplication.VendorFile.UpdatedTS)]);
 
    for item in xPLApplication.VendorFile.Locations do
            cbLocations.Items.Add(TLocationType(item).Url);
+   if cbLocations.Text='' then
+      if cbLocations.Items.Count >0 then cbLocations.Text := cbLocations.Items[0]
+                                   else cbLocations.Text := 'http://www.xplproject.org.uk/plugins';
 
    for item in xPLApplication.VendorFile.Plugins do begin
        with lvPlugins.Items.Add do begin
@@ -157,6 +153,7 @@ end;
 
 procedure Tfrmvendorfiles.acDownloadExecute(Sender: TObject);
 var i : integer;
+    plug : TPluginType;
 begin
    ProgressBar1.Visible := True;
    ProgressBar1.Max := lvPlugIns.Items.Count - 1;
@@ -165,8 +162,8 @@ begin
        with lvPlugins.Items[i] do begin
           application.ProcessMessages;
           if Checked then begin
-             //SubItems[2]  := IfThen(xPLApplication.VendorFile.UpdatePlugin(Caption),'Success','Error');
-             SubItems[2] := IfThen( TPluginType(lvPlugins.selected.Data).Update,'Success','Error');
+             plug := TPluginType(lvPlugins.Items[i].Data);
+             SubItems[2] := IfThen( Plug.Update,'Success','Error');;
              if SubItems[2] = '' then SubItems[2] := 'Done';
              Checked := false;
           end;
@@ -181,22 +178,12 @@ begin
              else xPLApplication.Log(etWarning,'Error downloading file');
 end;
 
-//procedure Tfrmvendorfiles.acViewPluginExecute(Sender: TObject);
-//var s : string;
-//begin
-//   if not Assigned(lvPlugins.Selected) then exit;
-//   s := lvPlugins.Selected.Caption;
-//   //ShowFrmPluginViewer(xPLApplication.VendorFile.GetPluginFilePath(s));
-//end;
-
 procedure Tfrmvendorfiles.acViewXMLExecute(Sender: TObject);
 var plug : TPluginType;
 begin
    if Assigned(lvPlugins.Selected) then begin
       plug := TPluginType(lvPlugins.Selected.Data);
       ShowFrmXMLView(plug.FileName);
-//      s := lvPlugins.Selected.Caption;
-//      ShowfrmXMLView(xPLApplication.VendorFile.GetPluginFilePath(s));
    end;
 end;
 

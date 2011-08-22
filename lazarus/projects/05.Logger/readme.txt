@@ -92,6 +92,8 @@ Changes History :
 	v 4.3.0.1
 		Added new functionalities to logger to allow usage of fragment messages (cf http://www.xplproject.org.uk/forums/viewtopic.php?f=2&t=1099)	
 		Select the first fragment element of a message, extend the selection to the last element. Right click and use 'Assemble fragments'.
-		
+	v 4.3.0.2
+		Corrected bug #FS71
+		Code cleansing for multipart messages handling
 		
 		
