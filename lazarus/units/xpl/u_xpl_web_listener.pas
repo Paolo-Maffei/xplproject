@@ -61,14 +61,11 @@ uses IdStack
      //cRandom
           , fpjsonrtti
      , fpjson,
-//     cStrings,
-//     StrUtils,
      uRegExpr,
      LResources,
      u_xpl_common,
      uxPLConst,
      u_xpl_header,
-//     cUtils,
      u_xpl_config;
 //     u_xpl_custom_listener;
 

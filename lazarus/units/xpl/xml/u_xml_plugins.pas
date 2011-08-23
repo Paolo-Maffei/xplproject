@@ -56,6 +56,16 @@ TElementType = class(TCollectionItem)
          property Elements : TElementsType read fElements;
       end;
 
+      { TConfigItemType }
+
+      TConfigItemType = class(TCollectionItem)
+      public
+         name : string;
+         description : string;
+         format : string;
+         procedure Set_O(o : ISuperObject);
+      end;
+
       { TCommandsType }
 
       TCommandsType = class(TCollection)
@@ -66,12 +76,23 @@ TElementType = class(TCollectionItem)
         property Items[Index : integer] : TCommandType read Get_Items; default;
      end;
 
+      { TConfigItemsType }
+
+      TConfigItemsType = class(TCollection)
+      public
+        Constructor Create(const so : ISuperObject);
+        function  Get_Items(Index : integer) : TConfigItemType;
+
+        property Items[Index : integer] : TConfigItemType read Get_Items; default;
+      end;
+
 
       { TDeviceType }
 
       TDeviceType = class(TCollectionItem)
       private
         fCommands : TCommandsType;
+        fConfigItems : TConfigItemsType;
 
         function Get_Device: string;
         function Get_Vendor: string;
@@ -89,6 +110,7 @@ TElementType = class(TCollectionItem)
         property Device : string read Get_Device;
         property Vendor : string read Get_Vendor;
         property Commands : TCommandsType read fCommands;
+        property ConfigItems : TConfigItemsType read fConfigItems;
       end;
 
       { TDevicesType }
@@ -156,6 +178,7 @@ uses StrUtils
      , u_xPL_Application
      ;
 
+
 { TElementsType }
 
 constructor TElementsType.Create(const so: ISuperObject);
@@ -197,6 +220,14 @@ begin
    fElements := TElementsType.Create(o);
 end;
 
+procedure TConfigItemType.Set_O(o: ISuperObject);
+var b : ISuperObject;
+begin
+   name := o['name'].AsString;
+   b := o['format']; if assigned(b) then format := b.AsString;
+   b := o['description']; if assigned(b) then description := b.AsString;
+end;
+
 { TCommandsType }
 
 constructor TCommandsType.Create(const so: ISuperObject);
@@ -217,6 +248,28 @@ end;
 function TCommandsType.Get_Items(Index: integer): TCommandType;
 begin
   Result := TCommandType(inherited Items[index]);
+end;
+
+{ TConfigItemsType }
+
+constructor TConfigItemsType.Create(const so: ISuperObject);
+var arr : TSuperArray;
+    i : integer;
+    o : isuperobject;
+begin
+  inherited Create(TCommandType);
+  o := so['configItem'];
+  if not assigned(o) then exit;
+  if o.IsType(stArray) then begin
+     arr := o.AsArray;
+     for i := 0 to arr.Length-1 do with TConfigItemType(Add) do Set_O(arr[i]);
+  end else
+      if o.IsType(stObject) then with TConfigItemType(Add) do Set_O(o);
+end;
+
+function TConfigItemsType.Get_Items(Index: integer): TConfigItemType;
+begin
+  Result := TConfigItemType(inherited Items[index]);
 end;
 
 { TDeviceType }
@@ -243,6 +296,7 @@ begin
    b := o['download_url']; if assigned(b) then download_url := b.AsString;
    b := o['type']; if assigned(b) then type_ := b.AsString;
    fCommands := TCommandsType.Create(o);
+   fConfigItems := TConfigItemsType.Create(o);
 end;
 
 { TDevicesType }
