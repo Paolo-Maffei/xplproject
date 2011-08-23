@@ -13,23 +13,26 @@ inherited frmConfigurator: TfrmConfigurator
   end
   inherited ToolBar: TToolBar
     Width = 700
+    inherited ToolButton10: TToolButton
+      Width = 10
+    end
     inherited Panel4: TPanel
       Left = 500
     end
     object ToolButton2: TToolButton[3]
-      Left = 51
+      Left = 53
       Top = 0
       Action = acDiscoverNetwork
     end
     object ToolButton11: TToolButton[4]
-      Left = 152
+      Left = 154
       Top = 0
-      Width = 8
+      Width = 10
       Caption = 'ToolButton10'
       Style = tbsSeparator
     end
     object ToolButton8: TToolButton[5]
-      Left = 160
+      Left = 164
       Top = 0
       Action = acClear
     end
@@ -121,7 +124,7 @@ inherited frmConfigurator: TfrmConfigurator
       object ToolButton12: TToolButton
         Left = 67
         Top = 0
-        Width = 4
+        Width = 5
         Caption = 'ToolButton3'
         Style = tbsDivider
       end
@@ -136,19 +139,19 @@ inherited frmConfigurator: TfrmConfigurator
         Action = acSaveConfig
       end
       object ToolButton7: TToolButton
-        Left = 71
+        Left = 72
         Top = 0
         Action = acSendConfig
       end
       object ToolButton4: TToolButton
-        Left = 109
+        Left = 111
         Top = 0
         Action = acRequestConfig
       end
       object ToolButton13: TToolButton
-        Left = 105
+        Left = 106
         Top = 0
-        Width = 4
+        Width = 5
         Caption = 'ToolButton9'
         Style = tbsDivider
       end
@@ -302,10 +305,5 @@ inherited frmConfigurator: TfrmConfigurator
       ImageIndex = 25
       OnExecute = acClearExecute
     end
-  end
-  object JvAppEvents1: TJvAppEvents[12]
-    OnIdle = JvAppEvents1Idle
-    left = 404
-    top = 69
   end
 end

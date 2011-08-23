@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces
-  , Forms
+  , Forms, jvclinport
   , u_xpl_application
   , u_xpl_listener
   , u_xpl_gui_resource

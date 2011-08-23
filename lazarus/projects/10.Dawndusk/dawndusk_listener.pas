@@ -1,12 +1,12 @@
 unit dawndusk_listener;
 
-{$mode objfpc}{$H+}
+{$mode objfpc}{$H+}{$M+}
 
 interface
 
 uses Classes
      , SysUtils
-     , u_xpl_web_listener
+     , u_xpl_custom_listener
      , u_xpl_config
      , u_xpl_schema
      , fpTimer
@@ -19,7 +19,7 @@ type
 { TxPLDawnDuskListener }
      TSunEventType = (dawn, dusk, noon);
 
-     TxPLDawnDuskListener = class(TxPLWebListener)
+     TxPLDawnDuskListener = class(TxPLCustomListener)
      private
         fSunTime   : TSuntime;
         fOffSet    : integer;
@@ -44,7 +44,6 @@ var  Schema_DDBasic : TxPLSchema;
 implementation
 uses DateUtils
      , u_xpl_common
-     , u_xpl_custom_listener
      , TypInfo
      , StrUtils
      ;
@@ -58,8 +57,8 @@ constructor TxPLDawnDuskListener.Create(const aOwner: TComponent);
 begin
    inherited Create(aOwner);
    FilterSet.AddValues(['xpl-cmnd.*.*.*.dawndusk.request']);
-   Config.DefineItem(K_CONFIG_LATITUDE, TxPLConfigItemType.config,1,'49,4133379');
-   Config.DefineItem(K_CONFIG_LONGITUDE,TxPLConfigItemType.config,1,'1,0344627');
+   Config.DefineItem(K_CONFIG_LATITUDE, TxPLConfigItemType.config,1,'49');                    // This could be decimal but I found a bug on Win2003 that
+   Config.DefineItem(K_CONFIG_LONGITUDE,TxPLConfigItemType.config,1,'1');                     // stops the app launching with error if a decimal value is here
    Config.DefineItem(K_CONFIG_OFFSET,TxPLConfigItemType.reconf,1,'-15');
 
    fSuntime := TSuntime.Create(self);
@@ -74,7 +73,7 @@ begin
   if Config.IsValid then begin
      fSuntime.Latitude.Value  := StrToFloat(Config.GetItemValue(K_CONFIG_LATITUDE));
      fSuntime.Longitude.Value := StrToFloat(Config.GetItemValue(K_CONFIG_LONGITUDE));
-     fOffSet                  := StrToInt(Config.GetItemValue(K_CONFIG_OFFSET));
+     fOffSet                  := StrToInt  (Config.GetItemValue(K_CONFIG_OFFSET));
      fWhenNext := 0;
 
      OnxPLReceived := @Process;
@@ -146,7 +145,7 @@ begin
 end;
 
 initialization
-   Schema_DDBasic := TxPLSchema.Create('dawndusk.basic');
+   Schema_DDBasic := TxPLSchema.Create('dawndusk','basic');
 
 end.
 

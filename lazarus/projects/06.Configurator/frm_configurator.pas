@@ -101,6 +101,8 @@ begin
    ToolBar2.Images:= ToolBar.Images;
    acClearExecute(self);
    TConfigListener(xPLApplication).Listen;
+   JvAppEvents1 := TJvAppEvents.Create(self);
+   JvAppEvents1.OnIdle:=@JvAppEvents1Idle;
 end;
 
 procedure TfrmConfigurator.acDiscoverNetworkExecute(Sender: TObject);
