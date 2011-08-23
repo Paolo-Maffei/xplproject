@@ -1,46 +1,6 @@
 xpl_dawndusk
 
-0.8 
-   This tools allows to download or parse a distant page.
-   
-0.9
-   Added handling of https protocol
-   
-0.9.1
-   Recompiled to use new config file format. Please delete previous file to avoid error at launch.
-
 Todo : 
-Il semble que dawndusk pose un réel problème de performance
-
-Sample of download message :
-xpl-cmnd
-{
-hop=1
-source=clinique-sender.lapfr0005
-target=*
-}
-dawndusk.basic
-{
-protocol=http
-uri=http://xoap.weather.com/weather/local/frxx0076?cc=*&dayf=5&link=xoap&prod=xoap&par=1104318584&key=218f82466abe84c3
-destdir=c:\
-destfn=test.xml
-}
-
-
-Sample of parsing message :
-xpl-cmnd
-{
-hop=0
-source=clinique-logger.lapfr0005
-target=*
-}
-dawndusk.basic
-{
-protocol=get
-uri=http://www.infobel.com/fr/france/Inverse.aspx?q=France
-qphone=0475026474
-regexpr=QName=(.*?)&amp;QNum	
-}
-
-
+   Il y a un problème sur Windows 2003 quand on essaie d'initialiser l'application avec une latitude/longitude décimale ( avec point décimal ou virgule),
+   celà fait planter l'application avant qu'elle ne se connecte au réseau.
+   Est-il normal que l'appli réponde en broadcast à un dawndusk.request ?

@@ -1,3 +1,7 @@
+TODO
+Il serait bien d'inclure quelques fichiers d'exemple
+si l'un des fichiers plugin est incorrect, l'ensemble du menu 'Commands' est grisé 
+
 v 4.1.0.2
 Modified to allow multiple instance of xPL Sender at the same time.
 

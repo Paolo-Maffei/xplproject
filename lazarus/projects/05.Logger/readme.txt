@@ -1,3 +1,11 @@
+TODO 
+- La fenetre application log affiche des boutons 'ressérés' environ toutes les trois ouvertures
+- Il serait bien d'accéder directement aux logs en cliquant sur le message dans la status bar
+- La fenêtre 'Installed xPL Apps' :
+	- Les applications 'non-clinique' n'ont pas de name (il faudrait à défaut prendre la clef fille du vendor
+	- quand on lance une application à partir de là, on a une erreur 2, ce qui n'est pas le cas si on la lance à partir du menu
+
+
 xPL Logger
 
 Changes History : 

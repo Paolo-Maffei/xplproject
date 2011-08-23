@@ -19,8 +19,6 @@ type
 TConfigListener = class(TxPLListener)
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
-
         function    DoHBeatApp (const aMessage : TxPLMessage) : boolean; override;
         procedure   OnReceive(const axPLMsg : TxPLMessage);
         procedure   Set_ConnectionStatus(const aValue : TConnectionStatus); override;
@@ -62,7 +60,7 @@ var item : integer;
     Config_Elmt: TConfigurationRecord;
 begin
    if ((axPLMsg.Body.Keys.Count = 0) or
-       (axPLMsg.Schema.Classe <> K_SCHEMA_CLASS_CONFIG) or
+       (axPLMsg.Schema.Classe <> 'config') or
        (axPLMsg.MessageType <> stat)) then exit;                               // Don't handle config request messages
 
    item := fDiscovered.IndexOf(axPLMsg.Source.Device);                         // I received a config.app message,
@@ -86,12 +84,6 @@ begin
    backval := ConnectionStatus;
    inherited Set_ConnectionStatus(aValue);
    if (backVal<>ConnectionStatus) and (aValue = connected) then SendHBeatRequestMsg;                           // I'm connected, let's discover the network
-end;
-
-procedure TConfigListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TConfigListener') = 0 then ComponentClass := TConfigListener
-   else inherited;
 end;
 
 end.

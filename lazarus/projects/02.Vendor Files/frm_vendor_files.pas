@@ -124,6 +124,7 @@ begin
    cbLocations.Items.Clear;
 
    xPLApplication.VendorFile.Load;
+   cbLocations.Text := 'http://www.xplproject.org.uk/plugins';                 // At least one default value
    if not xPLApplication.VendorFile.IsValid then exit;
 
    lblUpdated.Caption := Format(K_UPDATE_STR,[DateTimeToStr(xPLApplication.VendorFile.UpdatedTS)]);
@@ -131,8 +132,7 @@ begin
    for item in xPLApplication.VendorFile.Locations do
            cbLocations.Items.Add(TLocationType(item).Url);
    if cbLocations.Text='' then
-      if cbLocations.Items.Count >0 then cbLocations.Text := cbLocations.Items[0]
-                                   else cbLocations.Text := 'http://www.xplproject.org.uk/plugins';
+      if cbLocations.Items.Count >0 then cbLocations.Text := cbLocations.Items[0];
 
    for item in xPLApplication.VendorFile.Plugins do begin
        with lvPlugins.Items.Add do begin
