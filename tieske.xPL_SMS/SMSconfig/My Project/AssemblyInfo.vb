@@ -9,9 +9,9 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("SMS Config")> 
-<Assembly: AssemblyDescription("xPL SMS configurator application")> 
-<Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("")> 
+<Assembly: AssemblyDescription("xPL SMS configurator application to accompany the background service")> 
+<Assembly: AssemblyCompany("Tieske")> 
+<Assembly: AssemblyProduct("SMS service configurator")> 
 <Assembly: AssemblyCopyright("Copyright ©  2009-2010 Thijs Schreijer")> 
 <Assembly: AssemblyTrademark("")> 
 
@@ -30,5 +30,5 @@ Imports System.Runtime.InteropServices
 ' You can specify all the values or you can default the Build and Revision Numbers 
 ' by using the '*' as shown below:
 
-<Assembly: AssemblyVersion("1.3.0.0")> 
-<Assembly: AssemblyFileVersion("1.3.0.0")> 
+<Assembly: AssemblyVersion("1.3.1")> 
+<Assembly: AssemblyFileVersion("1.3.1")> 
