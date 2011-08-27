@@ -1,5 +1,4 @@
-﻿Option Explicit On
-
+﻿Option Strict On
 
 ''' <summary>
 ''' Form that displays a message

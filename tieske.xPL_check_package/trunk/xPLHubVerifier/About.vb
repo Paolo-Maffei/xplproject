@@ -1,4 +1,5 @@
-﻿Public NotInheritable Class About
+﻿Option Strict On
+Public NotInheritable Class About
 
     Private Sub About_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
         ' Set the title of the form.
