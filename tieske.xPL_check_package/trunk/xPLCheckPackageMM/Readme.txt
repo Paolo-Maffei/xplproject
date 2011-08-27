@@ -10,18 +10,19 @@ To use it in the first option, just execute the xplcheckpackage.exe application.
 
 Version history
 ===============
- Ver | Date        | Description
- ----+-------------+----------------------------------------------------------------------------------
- 1.3 | 19-May-2010 | 2 bug fixes;
-     |             |  - properly releasing timer resources
-     |             |  - exception when windows firewall is unavailable is now properly handled
-     |             | 
- 1.2 | 26-Feb-2010 | There was an issue with the Windows Installer popping up for an auto-repair 
-     |             | action. Fixed it in this version. The result now also includes  a Windows 
-     |             | Installer "Merge Module".
-     |             |
- 1.1 | 10-Feb-2010 | Updated to automatically download the latest version of the hub and diag tools
-     |             |
+ Ver   | Date        | Description
+ ------+-------------+----------------------------------------------------------------------------------
+ 1.3.1 | 26-Aug-2011 | Updated underlying xPL lib to latest version (5.4)
+ 1.3   | 19-May-2010 | 2 bug fixes;
+       |             |  - properly releasing timer resources
+       |             |  - exception when windows firewall is unavailable is now properly handled
+       |             | 
+ 1.2   | 26-Feb-2010 | There was an issue with the Windows Installer popping up for an auto-repair 
+       |             | action. Fixed it in this version. The result now also includes  a Windows 
+       |             | Installer "Merge Module".
+       |             |
+ 1.1   | 10-Feb-2010 | Updated to automatically download the latest version of the hub and diag tools
+       |             |
 
 
 
