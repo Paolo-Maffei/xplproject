@@ -9,8 +9,8 @@ Imports System.Runtime.InteropServices
 ' Review the values of the assembly attributes
 
 <Assembly: AssemblyTitle("SMS front end")> 
-<Assembly: AssemblyDescription("")> 
-<Assembly: AssemblyCompany("")> 
+<Assembly: AssemblyDescription("Enduser application that allows for sending an SMS through the background service")> 
+<Assembly: AssemblyCompany("Tieske")> 
 <Assembly: AssemblyProduct("SMS front end")> 
 <Assembly: AssemblyCopyright("Copyright ©  2009-2010 Thijs Schreijer")> 
 <Assembly: AssemblyTrademark("")> 
@@ -31,5 +31,5 @@ Imports System.Runtime.InteropServices
 ' by using the '*' as shown below:
  
 
-<Assembly: AssemblyVersion("1.3.0.0")> 
-<Assembly: AssemblyFileVersion("1.3.0.0")> 
+<Assembly: AssemblyVersion("1.3.1")> 
+<Assembly: AssemblyFileVersion("1.3.1")> 
