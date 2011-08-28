@@ -3,8 +3,6 @@ Imports xPL
 Imports xPL.xPL_Base
 Imports System.Xml
 
-' TODO: use sub Main to start and hide window initially
-' TODO: protect log function with lock
 ' TODO: add more logging
 
 Public Class MainForm
@@ -24,8 +22,11 @@ Public Class MainForm
         Me.Icon = XPL_Icon
         LogMessage("UPnP-2-xPL gateway started")
         ' read settings
-        If My.Settings.StartMinimized Then Me.WindowState = FormWindowState.Minimized
         Me.tbLogLines.Text = My.Settings.LogLines.ToString
+        If My.Settings.StartMinimized Then
+            Me.WindowState = FormWindowState.Minimized
+            Me.ShowInTaskbar = False
+        End If
     End Sub
 
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
@@ -41,24 +42,29 @@ Public Class MainForm
 
 #Region "Logger functionality"
 
+    Private LogLock As New Object
     Private Sub lmgo(ByVal message As String)
-        ' replace control chars to proper line separators
-        message = message.Replace(vbCrLf, Chr(0))
-        message = message.Replace(vbLf, Chr(0))
-        message = message.Replace(vbCr, Chr(0))
-        message = message.Replace(Chr(0), vbCrLf)
-        ' make an array of lines
-        Dim s() As String = message.Split(vbCrLf)
-        Dim i As Integer
-        ' add lines to the log
-        For Each message In s
-            i = lbLog.Items.Add(message)
-            lbLog.SelectedIndex = i
-            ' limit list to 150 items
-            While lbLog.Items.Count > My.Settings.LogLines
-                lbLog.Items.RemoveAt(0)
-            End While
-        Next
+        SyncLock LogLock
+            ' replace control chars to proper line separators
+            message = message.Replace(vbCrLf, Chr(0))
+            message = message.Replace(vbLf, Chr(0))
+            message = message.Replace(vbCr, Chr(0))
+            message = message.Replace(Chr(0), vbCrLf)
+            ' make an array of lines
+            Dim s() As String = message.Split(vbCrLf)
+            Dim i As Integer
+            ' add lines to the log
+            Dim t As Date = Now()
+            Dim ts As String = t.ToString("HH:mm:ss.fff") 'ffffZ")
+            For Each message In s
+                i = lbLog.Items.Add(ts & " " & message)
+                lbLog.SelectedIndex = i
+                ' limit list to 150 items
+                While lbLog.Items.Count > My.Settings.LogLines
+                    lbLog.Items.RemoveAt(0)
+                End While
+            Next
+        End SyncLock
     End Sub
     Private Delegate Sub lmgod(ByVal message As String)
     Private lmgods As lmgod = AddressOf lmgo
@@ -109,10 +115,12 @@ Public Class MainForm
 
     Private Sub ShowLogToolStripMenuItem_Click(ByVal sender As Object, ByVal e As System.EventArgs) Handles ShowLogToolStripMenuItem.Click
         Me.ShowInTaskbar = True
+        Me.WindowState = FormWindowState.Normal
         Me.Visible = True
     End Sub
 
     Private Sub btnClose_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClose.Click
+        Me.ShowInTaskbar = False
         Me.Visible = False
     End Sub
 
@@ -122,5 +130,16 @@ Public Class MainForm
 
     Private Sub TaskBarIcon_DoubleClick(ByVal sender As Object, ByVal e As System.EventArgs) Handles TaskBarIcon.DoubleClick
         Me.ShowLogToolStripMenuItem_Click(Nothing, Nothing)
+    End Sub
+
+    Dim frmAbout As About
+    Private Sub AboutToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles AboutToolStripMenuItem.Click
+        If frmAbout Is Nothing Then
+            frmAbout = New About
+            frmAbout.ShowDialog()
+            frmAbout = Nothing
+        Else
+            frmAbout.Show()
+        End If
     End Sub
 End Class

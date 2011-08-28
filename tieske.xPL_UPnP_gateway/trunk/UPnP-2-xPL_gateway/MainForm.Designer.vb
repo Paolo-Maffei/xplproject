@@ -25,7 +25,6 @@ Partial Class MainForm
         Me.components = New System.ComponentModel.Container
         Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(MainForm))
         Me.lbLog = New System.Windows.Forms.ListBox
-        Me.chkStartMinimized = New System.Windows.Forms.CheckBox
         Me.tbLogLines = New System.Windows.Forms.TextBox
         Me.lblLinesToKeep = New System.Windows.Forms.Label
         Me.btnCopyToClipboard = New System.Windows.Forms.Button
@@ -34,6 +33,8 @@ Partial Class MainForm
         Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.btnClose = New System.Windows.Forms.Button
+        Me.chkStartMinimized = New System.Windows.Forms.CheckBox
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.PopupMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -49,19 +50,6 @@ Partial Class MainForm
         Me.lbLog.Name = "lbLog"
         Me.lbLog.Size = New System.Drawing.Size(712, 256)
         Me.lbLog.TabIndex = 2
-        '
-        'chkStartMinimized
-        '
-        Me.chkStartMinimized.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.chkStartMinimized.AutoSize = True
-        Me.chkStartMinimized.Checked = Global.UPnP2xPL.My.MySettings.Default.StartMinimized
-        Me.chkStartMinimized.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.UPnP2xPL.My.MySettings.Default, "StartMinimized", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.chkStartMinimized.Location = New System.Drawing.Point(294, 282)
-        Me.chkStartMinimized.Name = "chkStartMinimized"
-        Me.chkStartMinimized.Size = New System.Drawing.Size(96, 17)
-        Me.chkStartMinimized.TabIndex = 3
-        Me.chkStartMinimized.Text = "Start minimized"
-        Me.chkStartMinimized.UseVisualStyleBackColor = True
         '
         'tbLogLines
         '
@@ -100,20 +88,20 @@ Partial Class MainForm
         '
         'PopupMenu
         '
-        Me.PopupMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.ShowLogToolStripMenuItem, Me.ExitToolStripMenuItem})
+        Me.PopupMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.ShowLogToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.PopupMenu.Name = "PopupMenu"
-        Me.PopupMenu.Size = New System.Drawing.Size(129, 48)
+        Me.PopupMenu.Size = New System.Drawing.Size(153, 92)
         '
         'ShowLogToolStripMenuItem
         '
         Me.ShowLogToolStripMenuItem.Name = "ShowLogToolStripMenuItem"
-        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
-        Me.ShowLogToolStripMenuItem.Text = "Show log"
+        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ShowLogToolStripMenuItem.Text = "Show log..."
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(128, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'btnClose
@@ -125,6 +113,25 @@ Partial Class MainForm
         Me.btnClose.TabIndex = 7
         Me.btnClose.Text = "Close"
         Me.btnClose.UseVisualStyleBackColor = True
+        '
+        'chkStartMinimized
+        '
+        Me.chkStartMinimized.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.chkStartMinimized.AutoSize = True
+        Me.chkStartMinimized.Checked = Global.UPnP2xPL.My.MySettings.Default.StartMinimized
+        Me.chkStartMinimized.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.UPnP2xPL.My.MySettings.Default, "StartMinimized", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
+        Me.chkStartMinimized.Location = New System.Drawing.Point(294, 282)
+        Me.chkStartMinimized.Name = "chkStartMinimized"
+        Me.chkStartMinimized.Size = New System.Drawing.Size(96, 17)
+        Me.chkStartMinimized.TabIndex = 3
+        Me.chkStartMinimized.Text = "Start minimized"
+        Me.chkStartMinimized.UseVisualStyleBackColor = True
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.AboutToolStripMenuItem.Text = "About..."
         '
         'MainForm
         '
@@ -140,7 +147,6 @@ Partial Class MainForm
         Me.Controls.Add(Me.chkStartMinimized)
         Me.MinimumSize = New System.Drawing.Size(493, 163)
         Me.Name = "MainForm"
-        Me.ShowInTaskbar = False
         Me.Text = "UPnP 2 xPL gateway"
         Me.PopupMenu.ResumeLayout(False)
         Me.ResumeLayout(False)
@@ -157,5 +163,6 @@ Partial Class MainForm
     Friend WithEvents ShowLogToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnClose As System.Windows.Forms.Button
+    Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
 
 End Class
