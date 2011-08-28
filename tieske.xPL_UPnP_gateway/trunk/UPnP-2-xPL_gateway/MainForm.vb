@@ -7,8 +7,6 @@ Imports System.Xml
 
 Public Class MainForm
 
-    Const APPVERSION = "0"
-
     Private WithEvents cp As UPnPSmartControlPoint
     Private CacheTime As Integer = 900
     Private xset As String
@@ -30,7 +28,7 @@ Public Class MainForm
     Private Sub Form1_FormClosed(ByVal sender As Object, ByVal e As System.Windows.Forms.FormClosedEventArgs) Handles Me.FormClosed
         ' make sure we properly stop everything
         ' store current xPL devices and stop xPL devices
-        My.Settings.xPLDevices = xPLListener.GetState(APPVERSION)
+        My.Settings.xPLDevices = xPLListener.GetState(xPL_Base.GetVersionNumber(2))
         xPLListener.Shutdown()
         ' stop UPnP control point and dispose
         cp = Nothing
