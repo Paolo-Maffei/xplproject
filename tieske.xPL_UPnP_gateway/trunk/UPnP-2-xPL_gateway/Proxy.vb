@@ -145,8 +145,9 @@ Public Class Proxy
     ''' <param name="obj"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Private Shared Function Create(ByVal obj As Object) As Proxy
+    Private Shared Function Create(ByVal obj As Object, ByVal logger As LogMessageDelegate) As Proxy
         Dim p As New Proxy
+        p._LogMessage = logger
         Dim TypeSet As Boolean = False
         If TypeOf obj Is UPnPArgument Then
             ' its an argument to a method
@@ -177,7 +178,7 @@ Public Class Proxy
             TypeSet = p.SetType(TypeSet, ProxyType.Device)
             obj = Nothing
         Else
-            Throw New Exception("Unknown type encountered; " & obj.GetType.ToString)
+            p.LogMessage("ERROR: While creating a Proxy object an unknown type was encountered; " & obj.GetType.ToString)
         End If
         ' so by now all relevant properties have been set
 
@@ -194,7 +195,7 @@ Public Class Proxy
             Case ProxyType.Argument
                 If GetProxy(p.Argument) IsNot Nothing Then Return GetProxy(p.Argument)
             Case Else
-                Throw New Exception("Unknown ProxyType, please update source code")
+                p.LogMessage("ERROR: Unknown ProxyType, please update source code")
         End Select
         ' I wasn't in the list, so I'm new and ready to be added
         ' Add xPLDevice, but only for devices, for others create the reference
@@ -210,14 +211,16 @@ Public Class Proxy
                         .DeviceID = "upnp"
                         .InstanceID = "proxy" & p.ID.ToString
                         .Configurable = True
-                        .Enabled = True
                         .ConfigItems.Add("name", p.Device.FriendlyName, xPLConfigTypes.xOption, 1)
                         .MessagePassing = .MessagePassing Or MessagePassingEnum.PassWhileAwaitingConfig
+                        .Enabled = True
+                        p.LogMessage("New xPLDevice created; " & .Address & " (status: " & CStr(IIf(.Configured, "configured", "unconfigured")) & ")")
                     End With
                 Else
                     ' Found an existing device, so restart that device
                     p._xPLDevice = xPLListener.Device(p.Device.UniqueDeviceName)
                     p.xPLDevice.Enabled = True
+                    p.LogMessage("Existing xPLDevice restarted; " & p.xPLDevice.Address & " (status: " & CStr(IIf(p.xPLDevice.Configured, "configured", "unconfigured")) & ")")
                 End If
                 p._OldxPLAddress = p.xPLDevice.Address
             Else
@@ -231,6 +234,7 @@ Public Class Proxy
         ' Subscribe to UPnP service to receive its events
         If p.Type = ProxyType.Service Then
             p.Service.Subscribe(900, Nothing)
+            p.LogMessage("Now subscribing to the events of service; " & p.Service.ServiceID)
         End If
         Proxy.AddProxy(p)
         Return p
@@ -357,10 +361,11 @@ Public Class Proxy
     Public Shared Sub AddDevice(ByVal Device As UPnPDevice, Optional ByVal logger As LogMessageDelegate = Nothing)
         If Device Is Nothing Then Throw New ArgumentException("No device provided; Nothing", "Device")
         If Not Device.Root Then Throw New Exception("Only root devices can be added")
-        AddAnyDevice(Device)
+        logger("Adding UPnP device: " & Device.FriendlyName & " (ID = " & Device.UniqueDeviceName & ")")
+        AddAnyDevice(Device, logger)
         Dim dev As Proxy = GetProxy(Device)
         dev._LogMessage = logger
-        dev.LogMessage("UPnP device added : " & Device.FriendlyName & vbCrLf & Device.UniqueDeviceName)
+        dev.LogMessage("UPnP device added: " & Device.FriendlyName & " (ID = " & Device.UniqueDeviceName & ")")
         dev.Announce()
     End Sub
     ''' <summary>
@@ -372,7 +377,9 @@ Public Class Proxy
         If Device Is Nothing Then Throw New ArgumentException("No device provided; Nothing", "Device")
         If Not Device.Root Then Throw New Exception("Only root devices can be removed")
         Dim p As Proxy = GetProxy(Device)
-        p.LogMessage("Removing UPnP Device " & Device.FriendlyName)
+        Dim logger As LogMessageDelegate = AddressOf p.LogMessage
+        Dim devname As String = Device.FriendlyName & " (ID = " & Device.UniqueDeviceName & ")"
+        logger("Removing UPnP Device: " & devname)
         Dim l As ArrayList = p.GetIDList
         SyncLock _SharedLock
             ' count backwards, to remove in reverse order of adding
@@ -385,36 +392,37 @@ Public Class Proxy
                 _Proxylist.Remove(p)
             Next
         End SyncLock
+        logger("UPnP device removed: " & devname)
     End Sub
     ''' <summary>
     ''' Adds a device (also embedded devices) to the list, creating all underlying objects and proxies
     ''' </summary>
     ''' <param name="Device"></param>
     ''' <remarks></remarks>
-    Private Shared Sub AddAnyDevice(ByVal Device As UPnPDevice)
+    Private Shared Sub AddAnyDevice(ByVal Device As UPnPDevice, ByVal logger As LogMessageDelegate)
         If Device Is Nothing Then Throw New ArgumentException("No device provide; Nothing", "Device")
         If GetProxy(Device) IsNot Nothing Then Throw New Exception("Device already in proxylist")
         ' add device
-        Proxy.Create(Device)
+        Proxy.Create(Device, logger)
         ' add services
         For Each Service As UPnPService In Device.Services
-            Proxy.Create(Service)
+            Proxy.Create(Service, logger)
             ' add statevariables
             For Each var As UPnPStateVariable In Service.GetStateVariables
-                Proxy.Create(var)
+                Proxy.Create(var, logger)
             Next
             ' add methods
             For Each Method As UPnPAction In Service.GetActions
-                Proxy.Create(Method)
+                Proxy.Create(Method, logger)
                 ' add parameters
                 For Each param As UPnPArgument In Method.ArgumentList
-                    Proxy.Create(param)
+                    Proxy.Create(param, logger)
                 Next
             Next
         Next
         ' add embedded devices
         For Each dev As UPnPDevice In Device.EmbeddedDevices
-            AddAnyDevice(dev)
+            AddAnyDevice(dev, logger)
         Next
     End Sub
 
@@ -480,23 +488,31 @@ Public Class Proxy
         If Me.Type <> ProxyType.Device Then Exit Sub
         If Not Me.Device.Root Then Exit Sub
         ' Deal with the message
-        If e.IsForMe Then
-            With e.XplMsg
-                If .Schema = "upnp.basic" And .MsgType = xPLMessageTypeEnum.Command Then
-                    If .KeyValueList.IndexOf("command") = -1 Then Exit Sub
-                    Select Case .KeyValueList.Item("command")
-                        Case "announce"
-                            ' must announce device
-                            Me.LogMessage("Received announce request for; " & Me.Device.FriendlyName & "(" & Me.xPLDevice.Address & ")")
-                            Me.Announce()
-                        Case "methodcall"
-                            ' TODO: implement the method call
-                        Case Else
-                            ' unknown command, do nothing
-                    End Select
-                End If
-            End With
-        End If
+        Try
+            If e.IsForMe Then
+                With e.XplMsg
+                    If .Schema = "upnp.basic" And .MsgType = xPLMessageTypeEnum.Command Then
+                        If .KeyValueList.IndexOf("command") = -1 Then Exit Sub
+                        Select Case .KeyValueList.Item("command")
+                            Case "announce"
+                                ' must announce device
+                                Me.LogMessage("Received announce request for; " & Me.Device.FriendlyName & "(" & Me.xPLDevice.Address & ")")
+                                Me.Announce()
+                            Case "methodcall"
+                                ' TODO: implement the method call
+                            Case Else
+                                LogMessage("WARNING: an xPL command message with schema 'upnp.basic' was received with an unknown command '" & .KeyValueList.Item("command") & "'." & vbCrLf & e.XplMsg.RawxPL)
+                        End Select
+                    Else
+                        LogMessage("WARNING: Cannot handle received xPL message;" & vbCrLf & e.XplMsg.RawxPL)
+                    End If
+                End With
+            End If
+        Catch ex As Exception
+            LogMessage("ERROR: handling xPL message;" & vbCrLf & e.XplMsg.RawxPL & vbCrLf & _
+                       "resulted in the following exception:" & vbCrLf & ex.ToString)
+        End Try
+
     End Sub
 
     ''' <summary>
@@ -666,9 +682,8 @@ Public Class Proxy
     ''' changed (a hbeat.end or config.end message has already been send automatically, so remote devices
     ''' now assume that the UPnP device was gone).
     ''' </summary>
-    ''' <param name="xpldev"></param>
     ''' <remarks></remarks>
-    Private Sub _xPLDevice_xPLConfigDone(ByVal xpldev As xPL.xPLDevice) Handles _xPLDevice.xPLConfigDone
+    Private Sub xPLConfigUpdate()
         If xPLDevice.Address <> _OldxPLAddress Then
             ' My xPL address changed, so must announce again
             LogMessage("Address of " & _OldxPLAddress & " was changed to " & xPLDevice.Address & ", now announcing again on the new address.")
@@ -677,12 +692,22 @@ Public Class Proxy
         End If
     End Sub
     ''' <summary>
-    ''' When xPLDevice is reconfigured, executes the ConfigDone handler again.
+    ''' When xPLDevice is reconfigured, executes the xPLConfigUpdate.
+    ''' </summary>
+    ''' <param name="xpldev"></param>
+    ''' <remarks></remarks>
+    Private Sub _xPLDevice_xPLConfigDone(ByVal xpldev As xPL.xPLDevice) Handles _xPLDevice.xPLConfigDone
+        LogMessage("Device " & xPLDevice.Address & " received initial configuration.")
+        xPLConfigUpdate()
+    End Sub
+    ''' <summary>
+    ''' When xPLDevice is reconfigured, executes the xPLConfigUpdate again.
     ''' </summary>
     ''' <param name="xpldev"></param>
     ''' <remarks></remarks>
     Private Sub _xPLDevice_xPLReConfigDone(ByVal xpldev As xPL.xPLDevice) Handles _xPLDevice.xPLReConfigDone
-        Me._xPLDevice_xPLConfigDone(xpldev)
+        LogMessage("Device " & xPLDevice.Address & " received a configuration update.")
+        xPLConfigUpdate()
     End Sub
 
 End Class
