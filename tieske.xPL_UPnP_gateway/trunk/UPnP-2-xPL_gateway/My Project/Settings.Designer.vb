@@ -77,6 +77,18 @@ Namespace My
                 Me("StartMinimized") = value
             End Set
         End Property
+        
+        <Global.System.Configuration.UserScopedSettingAttribute(),  _
+         Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+         Global.System.Configuration.DefaultSettingValueAttribute("150")>  _
+        Public Property LogLines() As Long
+            Get
+                Return CType(Me("LogLines"),Long)
+            End Get
+            Set
+                Me("LogLines") = value
+            End Set
+        End Property
     End Class
 End Namespace
 
