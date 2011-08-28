@@ -489,6 +489,8 @@ Public Class Proxy
                             ' must announce device
                             Me.LogMessage("Received announce request for; " & Me.Device.FriendlyName & "(" & Me.xPLDevice.Address & ")")
                             Me.Announce()
+                        Case "methodcall"
+                            ' TODO: implement the method call
                         Case Else
                             ' unknown command, do nothing
                     End Select

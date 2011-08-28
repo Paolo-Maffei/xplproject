@@ -3,7 +3,9 @@ Imports xPL
 Imports xPL.xPL_Base
 Imports System.Xml
 
-
+' TODO: use sub Main to start and hide window initially
+' TODO: protect log function with lock
+' TODO: add more logging
 
 Public Class MainForm
 
