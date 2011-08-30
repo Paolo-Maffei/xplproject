@@ -1,4 +1,4 @@
-unit u_xpl_common;
+﻿unit u_xpl_common;
 
 {$ifdef fpc}
    {$mode objfpc}{$H+}
@@ -9,15 +9,14 @@ interface
 uses Classes
      , SysUtils
      , IdDateTimeStamp
+     , fpc_delphi_compat
      ;
 
 const K_MSG_TYPE_HEAD = 'xpl-';
 
-Type {$ifndef fpc}                                                             // This is declared only for delphi versions
-        TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
-     {$endif}
+Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
 
-     TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
+     IntArray = array of integer;
 
      TStrParamEvent = procedure(const aString : string) of object;
 
@@ -70,7 +69,7 @@ var  LocalAddresses     : TStringList;
 implementation  //=============================================================
 uses StrUtils
      , TypInfo
-     , JclStrings
+//     , JclStrings
      , IdStack
      , DateUtils
      ;
@@ -104,11 +103,11 @@ var i:Integer;
     buffer1,buffer2:Char;
 begin
    result := false;
-   if msOne.size <> msTwo.size then exit
-   else try
-        p1 := msOne.position; //temp storage for position
+   if msOne.size = msTwo.size then begin
+      p1 := msOne.position; //temp storage for position
+      p2 := msOne.position; //temp storage for position
+      try
         msOne.position := 0; //start at the beginning
-        p2 := msOne.position; //temp storage for position
         msTwo.position := 0; //start at the beginning
         for i := 0 to msOne.size-1 do
             begin
@@ -117,10 +116,11 @@ begin
                  if buffer1 <> buffer2 then exit;
             end;
             result := true;
-        finally
-               msOne.position := p1;
-               msTwo.position := p2;
-        end;
+      finally
+            msOne.position := p1;
+            msTwo.position := p2;
+      end;
+   end;
 end;
 
 // ============================================================================

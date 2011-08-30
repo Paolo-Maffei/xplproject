@@ -26,6 +26,7 @@ uses Classes
      , IdTelnetServer
      , IdSocketHandle
      , u_xpl_common
+     , fpc_delphi_compat
      ;
 
 const XPL_UDP_BASE_PORT     : Integer = 3865;                                   // Port used by devices to send messages
@@ -104,7 +105,7 @@ begin
       else begin
          Tempo := MillisecondsBetween(fLastSentTime, now);
          if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
-         inherited;
+         inherited Send(aData);
          fLastSentTime := now;
       end;
 end;

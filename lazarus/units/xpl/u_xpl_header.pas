@@ -42,8 +42,8 @@ type // TxPLHeader ============================================================
        procedure Set_Source(const AValue: TxPLAddress);
        procedure Set_Target(const AValue: TxPLTargetAddress);
      public
-       constructor Create(aOwner : TComponent); override;
-       constructor Create(aOwner : TComponent; const aFilter : string); overload; // Creates a header based on a filter string
+       constructor Create(aOwner : TComponent; const aFilter : string = ''); reintroduce;
+//       constructor Create(aOwner : TComponent; const aFilter : string); overload; // Creates a header based on a filter string
        destructor  Destroy; override;
 
        procedure   Assign(aHeader : TPersistent); override;
@@ -83,35 +83,43 @@ const K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=]
       K_FMT_FILTER        = '%s.%s.%s';
 
 // TxPLHeader Object ==========================================================
-constructor TxPLHeader.create(aOwner : TComponent);
+//constructor TxPLHeader.create(aOwner : TComponent);
+//begin
+//   inherited;
+//   include(fComponentStyle,csSubComponent);
+//
+//   fSource := TxPLAddress.Create;
+//   fTarget := TxPLTargetAddress.Create;
+//   fSchema := TxPLSchema.Create;
+//
+//   ResetValues;
+//end;
+
+constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string = '');
+var  sFlt : TStringList;
 begin
-   inherited;
+   inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
    fSource := TxPLAddress.Create;
    fTarget := TxPLTargetAddress.Create;
    fSchema := TxPLSchema.Create;
 
-   ResetValues;
-end;
-
-constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string);
-var  sFlt : TStringList;
-begin
-   Create(aOwner);
-
-   sFlt := TStringList.Create;
-   try
-      sFlt.Delimiter := '.';
-      sFlt.StrictDelimiter := True;
-      sFlt.DelimitedText := aFilter;                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-      fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                    // Creates source and target with the same informations
-      fTarget := TxPLTargetAddress.Create(fSource);
-      MessageType := StrToMsgType(sFlt[0]);
-      fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
-   finally
-     sFlt.Free;
-   end;
+//   Create(aOwner);
+   if aFilter <> '' then begin
+      sFlt := TStringList.Create;
+      try
+         sFlt.Delimiter := '.';
+         sFlt.StrictDelimiter := True;
+         sFlt.DelimitedText := aFilter;                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+         fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                    // Creates source and target with the same informations
+         fTarget := TxPLTargetAddress.Create(fSource);
+         MessageType := StrToMsgType(sFlt[0]);
+         fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
+      finally
+        sFlt.Free;
+      end;
+   end else ResetValues;
 end;
 
 destructor TxPLHeader.destroy;

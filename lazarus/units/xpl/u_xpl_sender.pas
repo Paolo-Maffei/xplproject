@@ -52,7 +52,9 @@ type // TxPLSender ============================================================
 implementation // =============================================================
 uses u_xpl_message
      , u_xpl_header
+     , u_xpl_messages
      , SysUtils
+     , fpc_delphi_compat
      ;
 
 constructor TxPLSender.create(const aOwner : TComponent);
@@ -143,8 +145,12 @@ begin
 end;
 
 procedure TxPLSender.SendHBeatRequestMsg;
+var HBeatReq :THeartBeatReq;
 begin
-   SendMessage(cmnd,K_ADDR_ANY_TARGET,Schema_HBeatReq,['command'],['request']);
+   //SendMessage(cmnd,K_ADDR_ANY_TARGET,Schema_HBeatReq,['command'],['request']);
+   HBeatReq := THeartBeatReq.Create(nil);
+   Send(HBeatReq);
+   HBeatReq.Free;
 end;
 
 procedure TxPLSender.SendOSDBasic(const aString: string);

@@ -12,6 +12,7 @@ object FrmTemplate: TFrmTemplate
   object StatusBar1: TStatusBar
     Left = 0
     Height = 23
+    Hint = 'Clic to open log viewer'
     Top = 449
     Width = 708
     Panels = <    
@@ -22,7 +23,10 @@ object FrmTemplate: TFrmTemplate
       item
         Width = 500
       end>
+    ParentShowHint = False
     SimplePanel = False
+    ShowHint = True
+    OnClick = StatusBar1Click
   end
   object imgBullet: TImage
     Left = 8
@@ -57,7 +61,7 @@ object FrmTemplate: TFrmTemplate
     object ToolButton10: TToolButton
       Left = 43
       Top = 0
-      Width = 8
+      Width = 10
       AutoSize = True
       Caption = 'ToolButton3'
       Style = tbsSeparator
@@ -146,5 +150,11 @@ object FrmTemplate: TFrmTemplate
   object XMLPropStorage: TXMLPropStorage
     StoredValues = <>
     left = 200
+  end
+  object RxAboutDialog1: TRxAboutDialog
+    Options = [radLicenseTab, radShowImageLogo]
+    Caption = 'About'
+    left = 64
+    top = 56
   end
 end

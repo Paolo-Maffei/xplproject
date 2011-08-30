@@ -25,7 +25,7 @@ type
        procedure Set_Value(const AValue: string); virtual;
    public
        constructor Create(aOwner: TCollection); override;
-       procedure Assign(Source: TPersistent);   dynamic;
+       procedure Assign(Source: TPersistent);   reintroduce; dynamic;
 
        function GetDisplayName: string; override;
        procedure SetDisplayName(const Value: string); override;

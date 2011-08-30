@@ -6,21 +6,18 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
-  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui,
-  u_xpl_message, frame_message, KHexEditor, SynEdit, SynHighlighterPas,
-  v_xplmsg_opendialog, RTTICtrls;
+  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage,
+  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, SynEdit,
+  SynHighlighterPas, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
+  RxAboutDialog;
 
 type
 
   { TfrmxPLMessage }
-  TfrmxPLMessage = class(TForm)
-    acAbout: TAction;
-    acInstalledApps: TAction;
+  TfrmxPLMessage = class(TFrmTemplate)
     acLoad: TAction;
     acClose: TAction;
-    acQuit: TAction;
     acPaste: TAction;
-    ActionList: TActionList;
     ckLoop: TCheckBox;
     ckBody: TCheckBox;
     ckMsgType: TCheckBox;
@@ -30,11 +27,6 @@ type
     ActionList2: TActionList;
     HexEditor: TKHexEditor;
     Label4: TLabel;
-    MenuItem11: TMenuItem;
-    MenuItem12: TMenuItem;
-    MenuItem14: TMenuItem;
-    MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
     mnuCopyMessage: TMenuItem;
     mnuCopyAddress: TMenuItem;
     mnuCopyFilter: TMenuItem;
@@ -49,24 +41,17 @@ type
     edtMsgName: TTIEdit;
     FrameMessage: TTMessageFrame;
     tbFunctions: TToolButton;
-    ToolButton10: TToolButton;
-    ToolButton2: TToolButton;
-    ToolButton4: TToolButton;
+    ToolButton11: TToolButton;
     tsRaw: TTabSheet;
     tsPSScript: TTabSheet;
-    ToolBar: TToolBar;
     tbOk: TToolButton;
     tbCancel: TToolButton;
     ToolButton3: TToolButton;
     SaveMessage: TxPLMsgSaveDialog;
     OpenMessage: TxPLMsgOpenDialog;
     tbCommands: TToolButton;
-    xPLMenu: TPopupMenu;
 
-    procedure acAboutExecute(Sender: TObject);
-    procedure acInstalledAppsExecute(Sender: TObject);
     procedure acLoadExecute(Sender: TObject);
-    procedure acQuitExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
     procedure acSendExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
@@ -81,7 +66,6 @@ type
     procedure tbFunctionsClick(Sender: TObject);
     procedure tbOkClick(Sender: TObject);
     procedure tbPasteClick(Sender: TObject);
-    procedure ToolButton2Click(Sender: TObject);
 
   private
     arrCommandes : TList;
@@ -102,7 +86,6 @@ uses frm_about,
      u_xpl_custom_message,
      clipbrd,
      LCLType,
-     cStrings,
      StrUtils,
      typInfo,
      u_xpl_schema,
@@ -126,6 +109,9 @@ end;
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);
 var aMenu : TMenuItem;
 begin
+   inherited;
+
+   lblModuleName.Visible := false;
 
    arrCommandes := TList.Create;
    InitPluginsMenu;
@@ -157,20 +143,10 @@ begin
    xPLMenu.Items.Insert(0,aMenu);
 end;
 
-procedure TfrmxPLMessage.acAboutExecute(Sender: TObject);
-begin
-   ShowFrmAbout;
-end;
-
-
-procedure TfrmxPLMessage.acInstalledAppsExecute(Sender: TObject);
-begin
-   ShowFrmAppLauncher;
-end;
-
 procedure TfrmxPLMessage.FormDestroy(Sender: TObject);
 begin
    arrCommandes.free;
+   inherited;
 end;
 
 procedure TfrmxPLMessage.InitPluginsMenu;
@@ -240,7 +216,7 @@ begin
    with xPLMessage do begin
        if not Source.IsValid then Source.Assign(xPLApplication.Adresse);
        if not Target.IsValid then Target.IsGeneric := true;
-       if not Schema.IsValid then Schema.Assign(Schema_ControlBasic);
+       if not Schema.IsValid then Schema.RawxPL := 'control.basic';
        if not IsValid        then MessageType := cmnd;
    end;
 
@@ -256,11 +232,6 @@ begin
    FrameMessage.TheMessage := xPLMessage;
 end;
 
-procedure TfrmxPLMessage.acQuitExecute(Sender: TObject);
-begin
-   Close;
-end;
-
 procedure TfrmxPLMessage.tbCopyClick(Sender: TObject);
 begin
    popCopy.PopUp;
@@ -271,18 +242,11 @@ begin
    popFunctions.PopUp;
 end;
 
-procedure TfrmxPLMessage.ToolButton2Click(Sender: TObject);
-begin
-   xPLMenu.PopUp;
-end;
-
 procedure TfrmxPLMessage.FormShow(Sender: TObject);
 begin
    PageControl1.ActivePage := TabSheet1;
-   ToolBar.Images := xPLGUIResource.Images;
-   xPLMenu.Images := ToolBar.Images;
    acLoad.Visible  := (boLoad in buttonOptions);
-   acSave.Visible := (boSave in buttonOptions);
+   acSave.Visible  := (boSave in buttonOptions);
    acPaste.Visible := not edtMsgName.ReadOnly;
    acSend.Visible  := (boSend in buttonOptions);
    ckLoop.Visible  := acSend.Visible;
@@ -290,15 +254,12 @@ begin
    tbOk.Visible       := (boOk in buttonOptions);
    tbCancel.Visible   := tbOk.Visible;
    acClose.Visible    := (boClose in buttonOptions);
-   acAbout.Visible    := (boAbout in buttonOptions);
-   acQuit.Visible     := not tbOk.Visible;
-   acInstalledApps.Visible := acQuit.Visible;
 
    edtMsgName.Link.TIObject := xPLMessage;
    edtMsgName.Link.TIPropertyName := 'MsgName';
 
-   FrameMessage.ReadOnly   := edtMsgName.ReadOnly;
-
+   FrameMessage.ReadOnly := edtMsgName.ReadOnly;
+   StatusBar1.Visible    := false;
    DisplayMessage;
 end;
 
@@ -364,12 +325,12 @@ var i : integer;
 begin
      mmoPSScript.Lines.Clear;
      mmoPSScript.Lines.Add('// Message handling preformatted procedure');
-     mmoPSScript.Lines.Add( StrReplace('xpl-','',
+     mmoPSScript.Lines.Add( AnsiReplaceText(
                             Format(K_PROC_NAME_TEMPLATE,[ xPLMessage.Source.Vendor,
                                                           IfThen(ckDevice.checked, xPLMessage.Source.Device,''),
                                                           IfThen(ckInstance.checked, xPLMessage.Source.Instance,''),
                                                           IfThen(ckMsgType.checked, MsgTypeToStr(xPLMessage.MessageType),'')
-                                                        ]), false));
+                                                        ]), 'xpl-',''));
      mmoPSScript.Lines.Add('begin');
      if ckBody.Checked then begin
         for i:=0 to xPLMessage.Body.Keys.Count-1 do begin

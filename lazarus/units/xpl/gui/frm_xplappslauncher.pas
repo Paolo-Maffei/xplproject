@@ -46,6 +46,7 @@ uses Process
      , u_xpl_collection
      ;
 
+// ============================================================================
 procedure ShowFrmAppLauncher;
 begin
    if not Assigned(frmAppLauncher) then
@@ -65,7 +66,8 @@ begin
    for i := 0 to sl.Count -1 do begin
        xPLApplication.Settings.GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version, nicename);
        if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
-            Caption := NiceName; //sl[i].DisplayName;
+            if NiceName<>'' then Caption := NiceName
+                            else Caption := sl[i].DisplayName;
             SubItems.DelimitedText:= Sl[i].Value + ',' + version + ',' + path;
        end;
    end;

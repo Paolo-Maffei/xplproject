@@ -20,14 +20,16 @@ unit u_xpl_vendor_file;
 
 interface
 
-uses Classes,
-     SysUtils,
-     uxPLConst,
-     u_xpl_address,
-     u_xml_plugins,
-     u_xpl_folders,
-     superobject,
-     superxmlparser;
+uses Classes
+     , SysUtils
+     , uxPLConst
+     , u_xpl_address
+     , u_xml_plugins
+     , u_xpl_folders
+     , superobject
+     , superxmlparser
+     , fpc_delphi_compat
+     ;
 
 type { TxPLVendorSeedFile ====================================================}
      TxPLVendorSeedFile = class(TComponent)
@@ -38,7 +40,7 @@ type { TxPLVendorSeedFile ====================================================}
         fPlugins    : TPluginsType;
      public
         constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders); reintroduce;
-        destructor  destroy; override;
+        destructor  Destroy; override;
         procedure   Load;
         function    FileName : string; inline;                                 // File name of the current vendor plugin file
 
@@ -98,10 +100,11 @@ begin
 end;
 
 function TxPLVendorSeedFile.UpdatedTS: TDateTime;
-var fileDate : Integer;
+var fileDate : integer;
 begin
    fileDate := FileAge(FileName);
-   if fileDate > -1 then Result := FileDateToDateTime(fileDate);
+   if fileDate > -1 then Result := FileDateToDateTime(filedate)
+                    else Result := 0;
 end;
 
 function TxPLVendorSeedFile.Update(const sLocation : string) : boolean;

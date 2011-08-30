@@ -17,6 +17,7 @@ uses SysUtils
      , u_xpl_settings
      , u_xpl_common
      , u_xpl_vendor_file
+     , fpc_delphi_compat
      ;
 
 type { TxPLApplication =======================================================}
@@ -62,7 +63,6 @@ implementation // =============================================================
 uses filechannel
      , sharedlogger
      , consolechannel
-     , fpc_delphi_compat
      ;
 
 // ============================================================================

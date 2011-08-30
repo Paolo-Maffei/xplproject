@@ -8,38 +8,6 @@ object frmLogViewer: TfrmLogViewer
   ClientWidth = 589
   OnShow = FormShow
   LCLVersion = '0.9.31'
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 589
-    ButtonHeight = 24
-    ButtonWidth = 30
-    Caption = 'ToolBar2'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esRaised
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 0
-    object tbLaunch: TToolButton
-      Left = 1
-      Top = 0
-      Action = acQuit
-    end
-    object ToolButton2: TToolButton
-      Left = 38
-      Top = 0
-      Width = 8
-      Caption = 'ToolButton2'
-      Style = tbsSeparator
-    end
-    object ToolButton5: TToolButton
-      Left = 46
-      Top = 0
-      Action = acDropAllLogs
-    end
-  end
   object Memo1: TMemo
     Left = 0
     Height = 312
@@ -47,7 +15,39 @@ object frmLogViewer: TfrmLogViewer
     Width = 589
     Align = alClient
     ScrollBars = ssVertical
+    TabOrder = 0
+  end
+  object ToolBar1: TToolBar
+    Left = 0
+    Height = 26
+    Top = 0
+    Width = 589
+    ButtonHeight = 24
+    ButtonWidth = 80
+    Caption = 'ToolBar2'
+    EdgeBorders = [ebBottom]
+    EdgeOuter = esRaised
+    Flat = False
+    List = True
+    ShowCaptions = True
     TabOrder = 1
+    object tbClose: TToolButton
+      Left = 1
+      Top = 0
+      Action = acQuit
+    end
+    object ToolButton1: TToolButton
+      Left = 86
+      Top = 0
+      Action = acDropAllLogs
+    end
+    object ToolButton3: TToolButton
+      Left = 81
+      Top = 0
+      Width = 5
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
   end
   object ActionList1: TActionList
     left = 344

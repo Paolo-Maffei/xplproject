@@ -82,7 +82,7 @@ implementation {===============================================================}
 uses uxPLconst
      , StrUtils
      , Math
-     , JclStrings
+//     , JclStrings
      , typinfo
      , u_xpl_address
      ;
@@ -127,7 +127,8 @@ begin
        s := aValue.Values[i];
        if AnsiRightStr(s,1) =']' then begin
           nom    := Copy(s,1, Pos('[',s)-1);
-          maxval := StrToInt(StrBetween(s,'[',']'));                            // Replaced cstrings proc by JVCL proc
+//          maxval := StrToInt(StrBetween(s,'[',']'));                            // Replaced cstrings proc by JVCL proc
+          maxval := StrToInt(ExtractWord(1,s,['[',']']));
        end else begin
           nom    := s;
           maxval := 1;

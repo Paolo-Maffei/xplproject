@@ -227,19 +227,15 @@ var aMessage : TxPLMessage;
 begin
    if csDestroying in ComponentState then exit;
    fProbingTimer.Enabled := false;                                             // Stop waiting anything, I received a message
-   aMessage := TxPLMessage.Create(self, aString);
+   aMessage := MessageBroker(aString);
    with aMessage do try
       if Assigned(OnPreprocessMsg) then OnPreprocessMsg(aMessage);
-      { TODO : There's a bug here : having these three 'or' leads the program to accept messages that are not directed to him if it matches its filters }
-      if ((Adresse.Equals(Target)) or (Target.Isgeneric) (*or MatchesFilter(fFilterSet)*)) then begin  // It is directed to me
-      {EoTODO : check that this modification is ok}
+      if (Adresse.Equals(Target)) or (Target.Isgeneric) then begin            // It is directed to me
 
-         if Schema.IsHBeat then begin
-            if Adresse.Equals(Source)   then ConnectionStatus := connected;    // I heard my heartbeat : I'm connected
-            if Schema.Type_ = 'request' then HBeat.Rate := rfRandom;           // Choose a random value between 2 and 6 second
-         end else
-             if Schema.IsConfig then HandleConfigMessage(aMessage) else
-                if Schema.IsFragment then FragmentMgr.Handle(aMessage);
+         if (aMessage is THeartBeatMsg) and Adresse.Equals(Source) then ConnectionStatus := connected    // I heard my heartbeat : I'm connected
+         else if aMessage is THeartBeatReq then HBeat.Rate := rfRandom
+         else if aMessage is TFragmentMsg  then FragmentMgr.Handle(TFragmentMsg(aMessage))
+         else if Schema.IsConfig then HandleConfigMessage(aMessage);
 
          if ( MatchesFilter(fFilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
             if not DoHBeatApp(aMessage)
@@ -274,8 +270,9 @@ end;
 function TxPLCustomListener.DoHBeatApp(const aMessage: TxPLMessage): boolean;
 begin
    result := false;
-   if aMessage.MessageType <> stat then exit;
-   if not aMessage.Schema.Equals(Schema_HBeatApp) then exit;
+   if not (aMessage is THeartBeatMsg) then exit;
+//   if aMessage.MessageType <> stat then exit;
+//   if not aMessage.Schema.Equals(Schema_HBeatApp) then exit;
 
    if (aMessage.Source.Equals(Adresse)) (*and (not PassMyOwnMessages)*) then exit;
 
@@ -293,7 +290,7 @@ begin
    end;
 end;
 
-end.
-
 initialization // =============================================================
    Classes.RegisterClass(TxPLCustomListener);
+
+end.
