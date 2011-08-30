@@ -30,11 +30,12 @@ Partial Class MainForm
         Me.btnCopyToClipboard = New System.Windows.Forms.Button
         Me.TaskBarIcon = New System.Windows.Forms.NotifyIcon(Me.components)
         Me.PopupMenu = New System.Windows.Forms.ContextMenuStrip(Me.components)
+        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ShowLogToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.btnClose = New System.Windows.Forms.Button
         Me.chkStartMinimized = New System.Windows.Forms.CheckBox
-        Me.AboutToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
+        Me.btnSet = New System.Windows.Forms.Button
         Me.PopupMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -48,7 +49,7 @@ Partial Class MainForm
         Me.lbLog.ItemHeight = 14
         Me.lbLog.Location = New System.Drawing.Point(12, 12)
         Me.lbLog.Name = "lbLog"
-        Me.lbLog.Size = New System.Drawing.Size(712, 256)
+        Me.lbLog.Size = New System.Drawing.Size(708, 256)
         Me.lbLog.TabIndex = 2
         '
         'tbLogLines
@@ -90,24 +91,30 @@ Partial Class MainForm
         '
         Me.PopupMenu.Items.AddRange(New System.Windows.Forms.ToolStripItem() {Me.AboutToolStripMenuItem, Me.ShowLogToolStripMenuItem, Me.ExitToolStripMenuItem})
         Me.PopupMenu.Name = "PopupMenu"
-        Me.PopupMenu.Size = New System.Drawing.Size(153, 92)
+        Me.PopupMenu.Size = New System.Drawing.Size(141, 70)
+        '
+        'AboutToolStripMenuItem
+        '
+        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
+        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(140, 22)
+        Me.AboutToolStripMenuItem.Text = "About..."
         '
         'ShowLogToolStripMenuItem
         '
         Me.ShowLogToolStripMenuItem.Name = "ShowLogToolStripMenuItem"
-        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ShowLogToolStripMenuItem.Size = New System.Drawing.Size(140, 22)
         Me.ShowLogToolStripMenuItem.Text = "Show log..."
         '
         'ExitToolStripMenuItem
         '
         Me.ExitToolStripMenuItem.Name = "ExitToolStripMenuItem"
-        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
+        Me.ExitToolStripMenuItem.Size = New System.Drawing.Size(140, 22)
         Me.ExitToolStripMenuItem.Text = "Exit"
         '
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.Location = New System.Drawing.Point(649, 278)
+        Me.btnClose.Location = New System.Drawing.Point(645, 278)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(75, 23)
         Me.btnClose.TabIndex = 7
@@ -120,32 +127,37 @@ Partial Class MainForm
         Me.chkStartMinimized.AutoSize = True
         Me.chkStartMinimized.Checked = Global.UPnP2xPL.My.MySettings.Default.StartMinimized
         Me.chkStartMinimized.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.UPnP2xPL.My.MySettings.Default, "StartMinimized", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.chkStartMinimized.Location = New System.Drawing.Point(294, 282)
+        Me.chkStartMinimized.Location = New System.Drawing.Point(335, 282)
         Me.chkStartMinimized.Name = "chkStartMinimized"
         Me.chkStartMinimized.Size = New System.Drawing.Size(96, 17)
         Me.chkStartMinimized.TabIndex = 3
         Me.chkStartMinimized.Text = "Start minimized"
         Me.chkStartMinimized.UseVisualStyleBackColor = True
         '
-        'AboutToolStripMenuItem
+        'btnSet
         '
-        Me.AboutToolStripMenuItem.Name = "AboutToolStripMenuItem"
-        Me.AboutToolStripMenuItem.Size = New System.Drawing.Size(152, 22)
-        Me.AboutToolStripMenuItem.Text = "About..."
+        Me.btnSet.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnSet.Location = New System.Drawing.Point(280, 278)
+        Me.btnSet.Name = "btnSet"
+        Me.btnSet.Size = New System.Drawing.Size(34, 23)
+        Me.btnSet.TabIndex = 8
+        Me.btnSet.Text = "Set"
+        Me.btnSet.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(736, 302)
+        Me.ClientSize = New System.Drawing.Size(732, 302)
         Me.ControlBox = False
+        Me.Controls.Add(Me.btnSet)
         Me.Controls.Add(Me.btnCopyToClipboard)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.lblLinesToKeep)
         Me.Controls.Add(Me.lbLog)
         Me.Controls.Add(Me.tbLogLines)
         Me.Controls.Add(Me.chkStartMinimized)
-        Me.MinimumSize = New System.Drawing.Size(493, 163)
+        Me.MinimumSize = New System.Drawing.Size(539, 163)
         Me.Name = "MainForm"
         Me.Text = "UPnP 2 xPL gateway"
         Me.PopupMenu.ResumeLayout(False)
@@ -164,5 +176,6 @@ Partial Class MainForm
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnClose As System.Windows.Forms.Button
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
+    Friend WithEvents btnSet As System.Windows.Forms.Button
 
 End Class
