@@ -1,11 +1,13 @@
-object FrmBalloon: TFrmBalloon
+inherited FrmBalloon: TFrmBalloon
   Left = 75
-  Height = 63
+  Height = 171
   Top = 84
-  Width = 261
+  Width = 377
   AutoSize = True
   BorderIcons = [biSystemMenu]
   BorderStyle = bsNone
+  ClientHeight = 171
+  ClientWidth = 377
   Icon.Data = {
     BE0C00000000010001002020000000001800A80C000016000000280000002000
     0000400000000100180000000000000C00000000000000000000000000000000
@@ -113,13 +115,30 @@ object FrmBalloon: TFrmBalloon
   }
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PopupMenu = PopupMenu1
+  PopupMenu = PopupMenu11
+  SessionProperties = 'acDisplayMessageWindow.Checked'
   ShowInTaskBar = stNever
-  LCLVersion = '0.9.31'
   WindowState = wsMinimized
-  object PopupMenu1: TPopupMenu
-    left = 32
-    top = 8
+  inherited StatusBar1: TStatusBar
+    Top = 148
+    Width = 377
+  end
+  inherited ToolBar: TToolBar
+    Width = 377
+    inherited ToolButton10: TToolButton
+      Width = 10
+    end
+    inherited Panel4: TPanel
+      Left = 177
+    end
+  end
+  object PopupMenu11: TPopupMenu[6]
+    left = 40
+    top = 56
+    object MenuItem3: TMenuItem
+      Action = acDisplayMessageWindow
+      AutoCheck = True
+    end
     object MenuItem1: TMenuItem
       Action = acAbout
       OnClick = acAboutExecute
@@ -129,22 +148,17 @@ object FrmBalloon: TFrmBalloon
       OnClick = acQuitExecute
     end
   end
-  object ActionList: TActionList
-    left = 120
-    top = 8
-    object acQuit: TAction
-      Caption = 'Quit'
-      ImageIndex = 1
-      OnExecute = acQuitExecute
-    end
-    object acAbout: TAction
-      Caption = 'About...'
-      ImageIndex = 2
-      OnExecute = acAboutExecute
+  object ActionList3: TActionList[7]
+    left = 144
+    top = 72
+    object acDisplayMessageWindow: TAction
+      AutoCheck = True
+      Caption = 'Display Message Window'
+      OnExecute = acDisplayWindow
     end
   end
-  object TrayIcon1: TTrayIcon
-    PopUpMenu = PopupMenu1
+  object TrayIcon1: TTrayIcon[8]
+    PopUpMenu = PopupMenu11
     Icon.Data = {
       BE0C00000000010001002020000000001800A80C000016000000280000002000
       0000400000000100180000000000000C00000000000000000000000000000000
@@ -250,7 +264,7 @@ object FrmBalloon: TFrmBalloon
       0000000000000000000000000000000000008000000080000001C0000003FFFF
       FFFF
     }
-    left = 208
-    top = 8
+    left = 232
+    top = 80
   end
 end

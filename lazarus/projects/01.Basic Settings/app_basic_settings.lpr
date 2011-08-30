@@ -5,12 +5,11 @@ uses {$IFDEF UNIX}
            cthreads,
         {$ENDIF}
      {$ENDIF}
-     Forms, uniqueinstance_package, multiloglaz, runtimetypeinfocontrols
+     Forms, uniqueinstance_package, multiloglaz, pl_rx, runtimetypeinfocontrols
      , frm_basic_settings
      , u_xpl_application
      , u_xpl_gui_resource
-     , Interfaces
-     ;
+     , Interfaces;
 
 {$IFDEF WINDOWS}
    {$R app_basic_settings.rc}

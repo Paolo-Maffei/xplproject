@@ -11,15 +11,14 @@ uses
      {$ENDIF}
   {$ENDIF}
   Interfaces,
-  Forms,
+  Forms, pl_kcontrols, pl_rx,
   u_xPL_Message,
   uxPLConst,
   u_xpl_application,
   u_xpl_gui_resource,
-  u_xpl_common,
-  u_xpl_message_GUI,
   u_xpl_sender,
-  frame_message, u_xpl_fragment_mgr;
+  u_xpl_common,
+  u_xpl_message_GUI;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 

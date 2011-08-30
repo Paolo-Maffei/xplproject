@@ -13,7 +13,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="7"/>
+      <RevisionNr Value="1"/>
+      <BuildNr Value="1"/>
       <StringTable CompanyName="clinique" InternalName="vendfile" ProductName="xPL Vendor Files" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -33,13 +34,13 @@
     </RunParams>
     <RequiredPackages Count="9">
       <Item1>
-        <PackageName Value="multiloglaz"/>
+        <PackageName Value="pl_rx"/>
       </Item1>
       <Item2>
-        <PackageName Value="sup_object"/>
+        <PackageName Value="multiloglaz"/>
       </Item2>
       <Item3>
-        <PackageName Value="jcl_clinique_port"/>
+        <PackageName Value="sup_object"/>
       </Item3>
       <Item4>
         <PackageName Value="uniqueinstance_package"/>
@@ -66,10 +67,11 @@
         <Filename Value="app_vendor_files.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_vendor_files"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2"/>
-        <CursorPos X="28" Y="10"/>
+        <TopLine Value="12"/>
+        <CursorPos X="1" Y="18"/>
         <UsageCount Value="177"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -79,13 +81,13 @@
         <ComponentName Value="frmvendorfiles"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_vendor_files"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="125"/>
         <CursorPos X="109" Y="127"/>
         <UsageCount Value="177"/>
         <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\..\..\units\xpl\gui\frm_about.pas"/>
@@ -718,7 +720,7 @@
       </Unit86>
       <Unit87>
         <Filename Value="C:\lazarus\lcl\include\listitem.inc"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="582"/>
         <CursorPos X="1" Y="593"/>
@@ -1007,7 +1009,7 @@
       <Unit123>
         <Filename Value="..\..\..\components\superobjectv1.2.4\superobject.pas"/>
         <UnitName Value="superobject"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2182"/>
         <CursorPos X="1" Y="2194"/>
@@ -1017,7 +1019,7 @@
       <Unit124>
         <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
         <UnitName Value="u_xml_plugins"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="283"/>
         <CursorPos X="1" Y="287"/>
@@ -1052,10 +1054,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_template"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="44"/>
-        <CursorPos X="45" Y="47"/>
-        <UsageCount Value="6"/>
+        <TopLine Value="1"/>
+        <CursorPos X="37" Y="7"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit128>
       <Unit129>
         <Filename Value="frm_vendor_files.lfm"/>
@@ -1314,7 +1318,7 @@
       </Unit160>
       <Unit161>
         <Filename Value="C:\lazarus\lcl\include\customlistview.inc"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="981"/>
         <CursorPos X="1" Y="997"/>
@@ -1322,7 +1326,7 @@
         <Loaded Value="True"/>
       </Unit161>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="147" Column="1" TopLine="130"/>
@@ -1435,6 +1439,14 @@
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="19" Column="1" TopLine="5"/>
       </Position28>
+      <Position29>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <Caret Line="47" Column="45" TopLine="44"/>
+      </Position29>
+      <Position30>
+        <Filename Value="app_vendor_files.lpr"/>
+        <Caret Line="10" Column="28" TopLine="2"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

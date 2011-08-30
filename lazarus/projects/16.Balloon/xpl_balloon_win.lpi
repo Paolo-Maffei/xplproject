@@ -5,7 +5,6 @@
     <PathDelim Value="\"/>
     <General>
       <MainUnit Value="0"/>
-      <Title Value="xpl_balloon"/>
       <UseXPManifest Value="True"/>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
@@ -13,8 +12,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="87"/>
-      <StringTable CompanyName="clinique" FileDescription="balloon" InternalName="balloon" OriginalFilename="balloon" ProductVersion="1.0.0.1"/>
+      <BuildNr Value="3"/>
+      <StringTable CompanyName="clinique" InternalName="balloon" ProductName="xPL Balloon" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -31,27 +30,29 @@
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="3">
+    <RequiredPackages Count="4">
       <Item1>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="RunTimeTypeInfoControls"/>
       </Item1>
       <Item2>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="pl_indycomp"/>
       </Item2>
       <Item3>
-        <PackageName Value="LCL"/>
+        <PackageName Value="SynEdit"/>
       </Item3>
+      <Item4>
+        <PackageName Value="LCL"/>
+      </Item4>
     </RequiredPackages>
-    <Units Count="111">
+    <Units Count="124">
       <Unit0>
         <Filename Value="xpl_balloon.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_balloon"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="21" Y="30"/>
+        <TopLine Value="20"/>
+        <CursorPos X="35" Y="27"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -172,10 +173,11 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_balloon"/>
-        <EditorIndex Value="2"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="147"/>
-        <CursorPos X="27" Y="164"/>
+        <TopLine Value="124"/>
+        <CursorPos X="4" Y="134"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -552,8 +554,8 @@
         <Filename Value="C:\lazarus\lcl\controls.pp"/>
         <UnitName Value="Controls"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1994"/>
-        <CursorPos X="15" Y="2011"/>
+        <TopLine Value="337"/>
+        <CursorPos X="3" Y="319"/>
         <UsageCount Value="28"/>
       </Unit64>
       <Unit65>
@@ -593,7 +595,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="161"/>
         <CursorPos X="13" Y="16"/>
-        <UsageCount Value="75"/>
+        <UsageCount Value="81"/>
       </Unit69>
       <Unit70>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
@@ -675,7 +677,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="14" Y="40"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="34"/>
       </Unit80>
       <Unit81>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
@@ -688,8 +690,8 @@
       <Unit82>
         <Filename Value="C:\pp\rtl\objpas\sysutils\osutilsh.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="31"/>
-        <CursorPos X="26" Y="56"/>
+        <TopLine Value="47"/>
+        <CursorPos X="40" Y="56"/>
         <UsageCount Value="10"/>
       </Unit82>
       <Unit83>
@@ -817,8 +819,8 @@
         <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
         <UnitName Value="IdUDPServer"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="213"/>
-        <CursorPos X="1" Y="241"/>
+        <TopLine Value="165"/>
+        <CursorPos X="1" Y="175"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit98>
@@ -858,12 +860,10 @@
       <Unit103>
         <Filename Value="C:\lazarus\lcl\lresources.pp"/>
         <UnitName Value="LResources"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="919"/>
         <CursorPos X="47" Y="925"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit103>
       <Unit104>
         <Filename Value="C:\lazarus\lcl\lclclasses.pp"/>
@@ -895,7 +895,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="32"/>
         <CursorPos X="29" Y="49"/>
-        <UsageCount Value="23"/>
+        <UsageCount Value="29"/>
       </Unit107>
       <Unit108>
         <Filename Value="C:\lazarus\components\pl_Indy\pl_indycomp.pas"/>
@@ -922,24 +922,255 @@
         <CursorPos X="38" Y="51"/>
         <UsageCount Value="10"/>
       </Unit110>
+      <Unit111>
+        <Filename Value="C:\pp\rtl\win32\classes.pp"/>
+        <UnitName Value="Classes"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="33"/>
+        <CursorPos X="14" Y="46"/>
+        <UsageCount Value="10"/>
+      </Unit111>
+      <Unit112>
+        <Filename Value="frm_balloon.lfm"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="224"/>
+        <CursorPos X="1" Y="138"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="LFM"/>
+      </Unit112>
+      <Unit113>
+        <Filename Value="frm_messages.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="frmMessages"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_messages"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="21"/>
+        <CursorPos X="75" Y="34"/>
+        <UsageCount Value="25"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
+      </Unit113>
+      <Unit114>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <UnitName Value="u_xpl_messages"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="243"/>
+        <CursorPos X="61" Y="268"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+      </Unit114>
+      <Unit115>
+        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
+        <UnitName Value="u_xPL_Schema"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="34"/>
+        <CursorPos X="79" Y="36"/>
+        <UsageCount Value="13"/>
+        <Loaded Value="True"/>
+      </Unit115>
+      <Unit116>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <UnitName Value="u_xpl_common"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="43"/>
+        <CursorPos X="34" Y="53"/>
+        <UsageCount Value="11"/>
+      </Unit116>
+      <Unit117>
+        <Filename Value="..\..\units\xpl\gui\u_xpl_gui_resource.pas"/>
+        <UnitName Value="u_xpl_gui_resource"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="34"/>
+        <CursorPos X="48" Y="47"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit117>
+      <Unit118>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_message.pas"/>
+        <UnitName Value="u_xpl_custom_message"/>
+        <EditorIndex Value="8"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="88"/>
+        <CursorPos X="1" Y="100"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit118>
+      <Unit119>
+        <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
+        <UnitName Value="u_xpl_rawset"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="73"/>
+        <CursorPos X="1" Y="83"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit119>
+      <Unit120>
+        <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
+        <UnitName Value="u_xpl_address"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="166"/>
+        <CursorPos X="33" Y="173"/>
+        <UsageCount Value="10"/>
+      </Unit120>
+      <Unit121>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <UnitName Value="u_xpl_custom_listener"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="157"/>
+        <CursorPos X="67" Y="57"/>
+        <UsageCount Value="12"/>
+        <Loaded Value="True"/>
+      </Unit121>
+      <Unit122>
+        <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
+        <UnitName Value="u_xpl_udp_socket"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="148"/>
+        <CursorPos X="1" Y="158"/>
+        <UsageCount Value="10"/>
+      </Unit122>
+      <Unit123>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <ComponentName Value="FrmTemplate"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="frm_template"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="56" Y="9"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit123>
     </Units>
-    <JumpHistory Count="4" HistoryIndex="3">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="frm_balloon.pas"/>
-        <Caret Line="95" Column="22" TopLine="80"/>
+        <Caret Line="152" Column="9" TopLine="137"/>
       </Position1>
       <Position2>
         <Filename Value="frm_balloon.pas"/>
-        <Caret Line="164" Column="13" TopLine="147"/>
+        <Caret Line="164" Column="34" TopLine="152"/>
       </Position2>
       <Position3>
-        <Filename Value="xpl_balloon.lpr"/>
-        <Caret Line="15" Column="22" TopLine="1"/>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="167" Column="40" TopLine="147"/>
       </Position3>
       <Position4>
-        <Filename Value="xpl_balloon.lpr"/>
-        <Caret Line="20" Column="3" TopLine="6"/>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="191" Column="56" TopLine="164"/>
       </Position4>
+      <Position5>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="144" Column="5" TopLine="129"/>
+      </Position5>
+      <Position6>
+        <Filename Value="xpl_balloon.lpr"/>
+        <Caret Line="10" Column="15" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="10" Column="36" TopLine="1"/>
+      </Position7>
+      <Position8>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <Caret Line="12" Column="15" TopLine="1"/>
+      </Position8>
+      <Position9>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="86" Column="1" TopLine="70"/>
+      </Position9>
+      <Position10>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="17" Column="27" TopLine="13"/>
+      </Position10>
+      <Position11>
+        <Filename Value="frm_balloon.pas"/>
+        <Caret Line="81" Column="26" TopLine="61"/>
+      </Position11>
+      <Position12>
+        <Filename Value="xpl_balloon.lpr"/>
+        <Caret Line="27" Column="35" TopLine="20"/>
+      </Position12>
+      <Position13>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="46" Column="7" TopLine="220"/>
+      </Position13>
+      <Position14>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="228" Column="1" TopLine="220"/>
+      </Position14>
+      <Position15>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="229" Column="1" TopLine="220"/>
+      </Position15>
+      <Position16>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="230" Column="1" TopLine="220"/>
+      </Position16>
+      <Position17>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="231" Column="1" TopLine="226"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="232" Column="1" TopLine="226"/>
+      </Position18>
+      <Position19>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="233" Column="1" TopLine="226"/>
+      </Position19>
+      <Position20>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="235" Column="1" TopLine="226"/>
+      </Position20>
+      <Position21>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="236" Column="1" TopLine="226"/>
+      </Position21>
+      <Position22>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="237" Column="1" TopLine="226"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="238" Column="1" TopLine="226"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="240" Column="1" TopLine="232"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="241" Column="1" TopLine="232"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="272" Column="1" TopLine="263"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="273" Column="1" TopLine="263"/>
+      </Position27>
+      <Position28>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="277" Column="1" TopLine="269"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="279" Column="1" TopLine="269"/>
+      </Position29>
+      <Position30>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="281" Column="1" TopLine="269"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -973,6 +1204,7 @@
   <Debugging>
     <BreakPoints Count="1">
       <Item1>
+        <Kind Value="bpkSource"/>
         <Source Value="..\..\units\xpl\uxplweblistener.pas"/>
         <Line Value="291"/>
       </Item1>

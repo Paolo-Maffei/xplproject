@@ -7,22 +7,21 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ExtCtrls, ActnList, fpTimer,
-  xplNotifier, u_xpl_message;
+  xplNotifier, u_xpl_message, frm_template;
 
 type
 
   { TFrmBalloon }
 
-  TFrmBalloon = class(TForm)
-    acQuit: TAction;
-    acAbout: TAction;
-    ActionList: TActionList;
+  TFrmBalloon = class(TFrmTemplate)
+    acDisplayMessageWindow: TAction;
+    ActionList3: TActionList;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
-    PopupMenu1: TPopupMenu;
+    MenuItem3: TMenuItem;
+    PopupMenu11: TPopupMenu;
     TrayIcon1: TTrayIcon;
-    procedure acAboutExecute(Sender: TObject);
-    procedure acQuitExecute(Sender: TObject);
+    procedure acDisplayWindow(Sender : TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -42,19 +41,26 @@ var
 
 
 implementation //===============================================================
-uses frm_about,
-     uxPLConst,
-     u_xpl_application,
-     u_xpl_custom_listener,
-     u_xpl_config,
-     u_xpl_gui_resource,
-     u_xpl_common,
-     StrUtils;
-const      K_CONFIG_SHOWSEC = 'showsecs';
-{==============================================================================}
+uses frm_about
+     , frm_messages
+     , uxPLConst
+     , u_xpl_application
+     , u_xpl_custom_listener
+     , u_xpl_config
+     , u_xpl_gui_resource
+     , u_xpl_common
+     , u_xpl_messages
+     , StrUtils
+     ;
 
+// ============================================================================
+const
+     K_CONFIG_SHOWSEC = 'showsecs';
+
+// TFrmBalloon ================================================================
 procedure TFrmBalloon.FormCreate(Sender: TObject);
 begin
+   inherited;
    MessageQueue := TStringList.Create;
 
    fTimer       := TfpTimer.Create(self);
@@ -70,18 +76,14 @@ begin
      Listen;
    end;
 
-   ActionList.Images := xPLGUIResource.Images;
+   ActionList3.Images := xPLGUIResource.Images;
    TrayIcon1.Visible := True;
+
 end;
 
-procedure TFrmBalloon.acAboutExecute(Sender: TObject);
+procedure TFrmBalloon.acDisplayWindow(Sender: TObject);
 begin
-   ShowFrmAbout;
-end;
-
-procedure TFrmBalloon.acQuitExecute(Sender: TObject);
-begin
-   Close;
+   frmMessages.Visible := acDisplayMessageWindow.Checked;
 end;
 
 procedure TFrmBalloon.FormDestroy(Sender: TObject);
@@ -89,7 +91,9 @@ begin
     fTimer.Free;
     fNotifier.Free;
     MessageQueue.Free;
+    inherited;
 end;
+
 
 procedure TFrmBalloon.OnTimer(Sender : TObject);
 begin
@@ -123,18 +127,17 @@ begin
 end;
 
 procedure TFrmBalloon.OnReceive(const axPLMsg: TxPLMessage);
-var command, texte, code : string;
-    type_ : TEventType;
-    delay : integer;
+var code, initialmessage : string;
+    Broked : TxPLMessage;
     bHandled, bTimed : boolean;
 begin
+   acDisplayWindow(self);
+   initialmessage := axPLMsg.RawxPL;
    bHandled := false;
-   if not fTimer.Enabled then with axPLMsg do begin
-      texte   := Body.GetValueByKey('text');
-      if (Schema.Classe='osd') then begin                                       // restriction to xpl-cmnd + osd.basic is done by the filter
-         command := Body.GetValueByKey('command','write');
-         delay   := StrToIntDef(Body.GetValueByKey('delay'),-1);
-         Case AnsiIndexStr(command,['exclusive','release','clear','write']) of
+   Broked   := MessageBroker(initialmessage);
+   if not fTimer.Enabled then with Broked do  begin
+      if Broked is TOsdBasic then begin
+         Case AnsiIndexStr(TOsdBasic(Broked).Command,['exclusive','release','clear','write']) of
               0 : if lockedby = '' then begin // Exclusive ======================================
                      lockedby := Source.RawxPL;
                      OnTimer(self);
@@ -150,31 +153,32 @@ begin
                      bHandled := True;
                   end;
               3 : if ((lockedby = Source.RawxPL) or (lockedby='')) then begin // Write ==========
-                     bTimed := ((lockedby<>'') and (delay<>-1)) or (lockedby='');
-                     Display('OSD message',texte,etInfo,bTimed,delay);
+                     bTimed := ((lockedby<>'') and (TOsdBasic(Broked).delay<>-1)) or (lockedby='');
+                     Display('OSD message',TOsdBasic(Broked).text,etInfo,bTimed,TOsdBasic(Broked).delay);
                      bHandled := True;
                   end;
          end;
          if bHandled then begin
             Schema.Type_:='confirm';
-            if fTimer.Enabled then begin
-               if delay=-1 then Body.AddKeyValue('delay=');
-               Body.SetValueByKey('delay', IntToStr(fTimer.Interval div 1000));
-            end;
-            Target.Assign(Source);
-            TxPLCustomListener(xPLApplication).Send(axPLMsg);
+            MessageType := trig;
+            if fTimer.Enabled then TOsdBasic(Broked).Delay := fTimer.Interval div 1000;
+            Target.Assign(Broked.Source);
+            TxPLCustomListener(xPLApplication).Send(Broked);
          end;
-      end else if (Schema.Classe = 'log') then begin                            // restriction to xpl-trig + log.basic is done by the filter
+      end else if Broked is TLogBasic then begin                               // restriction to xpl-trig + log.basic is done by the filter
          if lockedby='' then begin
-            type_   := xPLLevelToEventType(Body.GetValueByKey('type'));
-            code    := '\n' + Body.GetValueByKey('code');
-            Display('Log Message',texte + code, type_);
+            code    := '\n' + TLogBasic(Broked).Code; //.GetValueByKey('code');
+            Display('Log Message',TLogBasic(Broked).text + code, TLogBasic(Broked).type_);
             bHandled := True;
          end;
       end;
    end;
-   if not bHandled then MessageQueue.Add(axPLMsg.RawXPL)
-                   else CheckQueue;
+   if bHandled then begin
+      frmMessages.Display(initialmessage);
+      CheckQueue;
+   end else
+      MessageQueue.Add(initialmessage);
+   Broked.Free;
 end;
 
 

@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
   u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
-  JvAppEvent, RTTICtrls, RTTIGrids,  uxPLConst, frm_template,
+  RTTICtrls, RTTIGrids,  uxPLConst, frm_template,
   frame_message, logger_listener, u_xpl_header;
 
 type
@@ -28,7 +28,6 @@ type
     acAssembleFragments: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
-    JvAppEvents1: TJvAppEvents;
     Label4: TLabel;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -81,17 +80,18 @@ type
     procedure acShowMessageExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
+    procedure dgMessagesClick(Sender: TObject);
     procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; aState: TGridDrawState);
     procedure dgMessagesHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
-    procedure JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
     procedure mnuListViewPopup(Sender: TObject);
     procedure mnuSendMessageClick(Sender: TObject);
     procedure mnuCommandClick(Sender: TObject);
     procedure PlayExecute(Sender: TObject);
     procedure mnuTreeViewPopup(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
+    procedure tvMessagesClick(Sender: TObject);
     procedure tvMessagesSelectionChanged(Sender: TObject);
   private
     NetNode,MsgNode,ConNode,MacNode : TTreeNode;
@@ -115,7 +115,7 @@ uses frm_xplappslauncher
      , frm_AppSettings
      , frm_about
      , StrUtils
-     , JclStrings
+     , StStr
      , u_xpl_message_gui
      , u_xPL_Address
      , u_xpl_gui_resource
@@ -184,6 +184,7 @@ begin
        TGridColumn(Column).Width:=TGridColumn(Column).MinSize;
 
    MessageFrame.ReadOnly:=true;
+   tvMessagesClick(self);
 end;
 
 procedure TfrmLogger.FormDestroy(Sender: TObject);
@@ -200,6 +201,7 @@ end;
 procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
 begin
    MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
+   MacNode.Text := Format('Macro (%d elts)',[MacroList.Count]);
 end;
 
 procedure TfrmLogger.acConversationExecute(Sender: TObject);
@@ -236,7 +238,7 @@ begin
           dgMessages.Row:= i + 1;
           TLoggerListener(xPLApplication).Send(TxPLCustomMessage(MacroList.Items[i]), false);
 
-          iStop := GetTickCount + seSleep.Value * 1000;
+          iStop := GetTickCount + seSleep.Value * 1000 + 1;
           while GetTickCount < iStop do begin
              Application.ProcessMessages;
              sleep(1);
@@ -282,7 +284,7 @@ begin
 end;
 
 function TfrmLogger.UpdateFilter : string;
-var s : string;
+var //s : string;
     sl : TStringList;
     header : TxPLHeader;
 begin
@@ -296,8 +298,9 @@ begin
         header.Target.RawxPL:=sl[1];
         StatusBar1.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
         end else begin
-           s := StringReplace(tvMessages.Selected.GetTextPath,'/',' ',[rfReplaceAll]);
-           StrTokens(s,sl);
+//           s := StringReplace(tvMessages.Selected.GetTextPath,'/',' ',[rfReplaceAll]);
+//           StrTokens(s,sl);
+           ExtractTokensL(tvMessages.Selected.GetTextPath,'/',#0,false,sl);
            if sl[0] = K_ROOT_NODE_NAME then begin
               if (sl.Count>1) then header.source.Vendor := sl[1];
               if (sl.Count>2) then header.source.Device := sl[2];
@@ -322,8 +325,10 @@ procedure TfrmLogger.ClearExecute(Sender: TObject);
 begin
    dgMessages.RowCount:=1;
    PlayExecute(self);
-   if tvMessages.Selected = MacNode then MacroList.Clear
-      else TLoggerListener(xPLApplication).MessageList.Clear;
+   if tvMessages.Selected = MacNode then begin
+      MacroList.Clear;
+      if Assigned(MacNode) then MacNode.Text := 'Macro';
+   end else TLoggerListener(xPLApplication).MessageList.Clear;
 end;
 
 procedure TfrmLogger.ApplySettings(Sender: TObject);                           // Correction bug FS#39 , This method is also called by frmAppSettings
@@ -427,7 +432,7 @@ begin
    with TxPLMessageGUI(aMsg) do begin
         Source.Assign(xPLApplication.Adresse);
         Target.RawxPL := UpdateFilter;
-        Schema.Assign(Schema_ControlBasic);
+        Schema.RawxPL := 'control.basic';
         MessageType := cmnd;                                                   // 2.1.2 correction
         Body.ResetValues;
         Body.AddKeyValuePairs(['key'], ['value']);                             // 2.0.3
@@ -480,21 +485,24 @@ begin
    if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
 end;
 
-procedure TfrmLogger.JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
-var aMsg : TxPLMessage;
+procedure TfrmLogger.tvMessagesClick(Sender: TObject);
 begin
    acDiscoverNetwork.Visible := (tvMessages.Selected = NetNode);
    acPluginDetail.Visible    := (tvMessages.Selected.Data <> nil);
    mnuCommands.Visible       := acPluginDetail.Visible;
+   tbMacro.Visible           := (tvMessages.Selected = MacNode);
+end;
+
+procedure TfrmLogger.dgMessagesClick(Sender: TObject);
+var aMsg : TxPLMessage;
+begin
    acShowMessage.Enabled     := Assigned(dgMessages.Objects[0,dgMessages.Row]);
    acResend.Enabled          := acShowMessage.Enabled;
    if acShowMessage.Enabled then begin
-      aMsg := TxPLMessage(dgMessages.Objects[0,dgMessages.Row]);
-      acConversation.Enabled := not ((aMsg.target.IsGeneric) or (aMsg.source.Equals(aMsg.Target)));
-      MessageFrame.TheMessage := aMsg;
+         aMsg := TxPLMessage(dgMessages.Objects[0,dgMessages.Row]);
+         acConversation.Enabled := not ((aMsg.target.IsGeneric) or (aMsg.source.Equals(aMsg.Target)));
+         MessageFrame.TheMessage := aMsg;
    end;
-   tbMacro.Visible           := (tvMessages.Selected = MacNode);
-   MacNode.Text              := Format('Macro (%d elts)',[MacroList.Count]);
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68

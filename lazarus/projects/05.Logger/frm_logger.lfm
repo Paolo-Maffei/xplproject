@@ -2296,7 +2296,7 @@ inherited frmLogger: TfrmLogger
       Left = 669
     end
     object ToolButton3: TToolButton[3]
-      Left = 51
+      Left = 53
       Top = 0
       Caption = 'Listen'
       Down = True
@@ -2305,7 +2305,7 @@ inherited frmLogger: TfrmLogger
       Style = tbsCheck
     end
     object ToolButton6: TToolButton[4]
-      Left = 90
+      Left = 92
       Top = 0
       Action = Clear
       ImageIndex = 25
@@ -2379,6 +2379,8 @@ inherited frmLogger: TfrmLogger
     ShowRoot = False
     TabOrder = 4
     ToolTips = False
+    OnChange = tvMessagesChange
+    OnClick = tvMessagesClick
     OnSelectionChanged = tvMessagesSelectionChanged
     Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines]
   end
@@ -2405,26 +2407,32 @@ inherited frmLogger: TfrmLogger
         item
           MinSize = 80
           Title.Caption = 'Schema'
+          Title.PrefixOption = poNone
         end      
         item
           MinSize = 120
           Title.Caption = 'TimeStamp'
+          Title.PrefixOption = poNone
         end      
         item
           MinSize = 100
           Title.Caption = 'Target'
+          Title.PrefixOption = poNone
         end      
         item
           MinSize = 70
           Title.Caption = 'Source'
+          Title.PrefixOption = poNone
         end      
         item
           MinSize = 100
           Title.Caption = 'Type'
+          Title.PrefixOption = poNone
         end      
         item
           MinSize = 50
           Title.Caption = 'Body'
+          Title.PrefixOption = poNone
         end>
       DefaultColWidth = 20
       DefaultRowHeight = 20
@@ -2433,6 +2441,7 @@ inherited frmLogger: TfrmLogger
       PopupMenu = mnuListView
       TabOrder = 0
       TitleStyle = tsNative
+      OnClick = dgMessagesClick
       OnDblClick = acShowMessageExecute
       OnDrawCell = dgMessagesDrawCell
       OnHeaderClick = dgMessagesHeaderClick
@@ -2460,12 +2469,12 @@ inherited frmLogger: TfrmLogger
       object ToolButton4: TToolButton
         Left = 31
         Top = 0
-        Width = 8
+        Width = 10
         Caption = 'ToolButton4'
         Style = tbsSeparator
       end
       object Panel5: TPanel
-        Left = 39
+        Left = 41
         Height = 24
         Top = 0
         Width = 104
@@ -2485,9 +2494,9 @@ inherited frmLogger: TfrmLogger
         end
       end
       object ToolButton7: TToolButton
-        Left = 143
+        Left = 145
         Top = 0
-        Width = 8
+        Width = 10
         Caption = 'ToolButton7'
         Style = tbsSeparator
       end
@@ -2514,7 +2523,9 @@ inherited frmLogger: TfrmLogger
     left = 208
     top = 272
   end
-  object ActionList1: TActionList[11]
+  inherited RxAboutDialog1: TRxAboutDialog[11]
+  end
+  object ActionList1: TActionList[12]
     left = 64
     top = 336
     object acConfig: TAction
@@ -2579,11 +2590,11 @@ inherited frmLogger: TfrmLogger
       OnExecute = acAssembleFragmentsExecute
     end
   end
-  object SaveDialog: TSaveDialog[12]
+  object SaveDialog: TSaveDialog[13]
     left = 48
     top = 208
   end
-  object mnuTreeView: TPopupMenu[13]
+  object mnuTreeView: TPopupMenu[14]
     OnPopup = mnuTreeViewPopup
     left = 64
     top = 272
@@ -2675,7 +2686,7 @@ inherited frmLogger: TfrmLogger
       Caption = 'Commands'
     end
   end
-  object xPLMenu2: TPopupMenu[14]
+  object xPLMenu2: TPopupMenu[15]
     left = 40
     top = 72
     object MenuItem18: TMenuItem
@@ -2685,11 +2696,6 @@ inherited frmLogger: TfrmLogger
     object MenuItem10: TMenuItem
       Caption = '-'
     end
-  end
-  object JvAppEvents1: TJvAppEvents[15]
-    OnIdle = JvAppEvents1Idle
-    left = 352
-    top = 80
   end
   object mnuListView: TPopupMenu[16]
     OnPopup = mnuListViewPopup

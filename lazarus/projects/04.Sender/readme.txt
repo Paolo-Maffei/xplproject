@@ -1,6 +1,8 @@
 TODO
 Il serait bien d'inclure quelques fichiers d'exemple
 si l'un des fichiers plugin est incorrect, l'ensemble du menu 'Commands' est grisé 
+Il serait bien que la saisie d'un message par le menu commande aille chercher les valeurs possibles pour 'command'
+Afficher l'icone dans la task bar
 
 v 4.1.0.2
 Modified to allow multiple instance of xPL Sender at the same time.
