@@ -20,8 +20,11 @@ uses {$ifdef fpc}
     function GetCommonAppDataPath : string;
 
 type TxPLTimer = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif});
+     {$ifndef fpc}                                                              // This is declared only for delphi versions
+        TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
+     {$endif}
 
-implementation // =============================================================
+implementation // ==============================================================
 Uses Classes
      , SysUtils
      , StrUtils
