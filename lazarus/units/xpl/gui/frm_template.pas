@@ -6,7 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls, u_xPL_Collection;
+  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls,
+  u_xPL_Collection, RxAboutDialog;
 
 type { TFrmTemplate ==========================================================}
   TFrmTemplate = class(TForm)
@@ -27,6 +28,7 @@ type { TFrmTemplate ==========================================================}
     mnuNull2: TMenuItem;
     MenuItem7: TMenuItem;
     Panel4: TPanel;
+    RxAboutDialog1: TRxAboutDialog;
     StatusBar1: TStatusBar;
     ToolBar: TToolBar;
     ToolButton10: TToolButton;
@@ -39,6 +41,7 @@ type { TFrmTemplate ==========================================================}
     procedure acQuitExecute(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
+    procedure StatusBar1Click(Sender: TObject);
     procedure ToolButton9Click(Sender: TObject);
   private
     procedure acCommonToolsExecute(Sender : TObject);
@@ -53,7 +56,6 @@ var FrmTemplate: TFrmTemplate;
 implementation // =============================================================
 
 uses frm_logviewer
-     , frm_about
      , frm_xplappslauncher
      , lcltype
      , u_xpl_listener
@@ -67,7 +69,11 @@ uses frm_logviewer
 { TFrmTemplate ===============================================================}
 procedure TFrmTemplate.acAboutExecute(Sender: TObject);
 begin
-   ShowFrmAbout;
+   RxAboutDialog1.ApplicationTitle := xPLApplication.AppName;
+   RxAboutDialog1.LicenseFileName := 'license.txt';
+   RxAboutDialog1.Picture.Assign(Application.Icon);
+   RxAboutDialog1.AdditionalInfo.LoadFromFile('readme.txt');
+   RxAboutDialog1.Execute;
 end;
 
 procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
@@ -150,6 +156,11 @@ begin
    AddSubMenuElmt(sl,'piedit');
    AddSubMenuElmt(sl,'sender');
    sl.Free;
+end;
+
+procedure TFrmTemplate.StatusBar1Click(Sender: TObject);
+begin
+   ShowFrmLogViewer;
 end;
 
 procedure TFrmTemplate.OnJoinedEvent;

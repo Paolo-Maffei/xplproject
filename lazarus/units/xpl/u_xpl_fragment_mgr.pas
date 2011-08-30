@@ -42,7 +42,7 @@ type // TFragmentFactory ======================================================
         property    Assembled    : TxPLMessage read Get_Assembled;
      end;
 
-     TFactoryCollection = specialize TxPLCollection<TFragmentFactory>;
+     TFactoryCollection = {$ifdef fpc}specialize{$endif}TxPLCollection<TFragmentFactory>;
 
      // TFragmentManager ======================================================
      TFragmentManager = class(TComponent)
@@ -58,7 +58,7 @@ type // TFragmentFactory ======================================================
         function    Fragment(const aMessage : TxPLMessage) : TFragmentFactory;
         function    AddFragment (const aMessage : TFragBasicMsg) : TFragmentFactory;
         function    GetFactory(const aFragIdent : string) : TFragmentFactory;
-        function    Handle  (const aMessage : TxPLMessage) : boolean;
+        function    Handle  (const aMessage : TFragmentMsg) : boolean;
         procedure   Reemit  (const aRequest : TFragmentReqMsg);
      end;
 
@@ -69,7 +69,7 @@ uses StrUtils
      , u_xpl_schema
      , u_xpl_sender
      , u_xpl_common
-     , jclStrings
+//     , jclStrings
      , DateUtils
      ;
 
@@ -77,7 +77,7 @@ uses StrUtils
 constructor TFragmentManager.Create(const aOwner : TComponent);
 begin
    Assert(aOwner is TxPLSender);
-   inherited;
+   inherited Create(aOwner);
    fCounter := 0;
    fFactoryList := TFactoryCollection.Create(self);
 
@@ -111,23 +111,20 @@ begin
    Result := fFactorylist.FindItemName(aFragIdent);
 end;
 
-function TFragmentManager.Handle(const aMessage: TxPLMessage) : boolean;
+function TFragmentManager.Handle(const aMessage: TFragmentMsg) : boolean;
 var Factory : TFragmentFactory;
     Fragbas : TFragBasicMsg;
 begin
    Result := false;
-   if not aMessage.schema.IsFragment then exit;
-   Case AnsiIndexStr(aMessage.schema.Type_,['basic','request']) of
-        0 : begin
-               FragBas := TFragBasicMsg.Create(self,aMessage);
-               if FragBas.IsValid then begin
-                  Factory := AddFragment(FragBas);
-                  if Factory.IsCompleted then aMessage.Assign(Factory.Assembled);
-                  result := true;
-               end;
-             end;
-        1 : Reemit (TFragmentReqMsg(aMessage));
-   end;
+   if aMessage is TFragBasicMsg then begin
+      FragBas := TFragBasicMsg.Create(self,aMessage);
+      if FragBas.IsValid then begin
+         Factory := AddFragment(FragBas);
+         if Factory.IsCompleted then aMessage.Assign(Factory.Assembled);
+         result := true;
+      end;
+   end
+   else if aMessage is TFragmentReqMsg then Reemit(TFragmentReqMsg(aMessage));
 end;
 
 procedure TFragmentManager.Reemit(const aRequest: TFragmentReqMsg);
@@ -135,7 +132,7 @@ var i, partnum : integer;
     aMsg : TxPLMessage;
     factory : TFragmentFactory;
     msgId : integer;
-    parts : Array of integer;
+    parts : IntArray;
 begin
    msgId := aRequest.Message;
    if msgId = -1 then exit;
@@ -205,7 +202,7 @@ begin
          //end;
       end;
       result := fAssembled;
-   end;
+   end else result := nil;
 end;
 
 procedure TFragmentFactory.Fragment(const aMessage : TxPLMessage; const aCounter : integer);

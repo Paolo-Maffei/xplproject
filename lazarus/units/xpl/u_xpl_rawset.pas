@@ -27,7 +27,7 @@ type // TxPLRawSet ============================================================
         procedure   ResetValues;
 
         procedure   Assign(aRawSet : TPersistent); override;
-        function    Equals(const aRawSet : TxPLRawSet) : boolean; overload;
+        function    Equals(const aRawSet : TxPLRawSet) : boolean; reintroduce; overload;
         function    IsValid : boolean;
 
         function    AsFilter : string; virtual;
@@ -39,8 +39,8 @@ type // TxPLRawSet ============================================================
      end;
 
 implementation // =============================================================
-uses JclStrings
-     , StrUtils
+uses StrUtils
+     , StStr
      ;
 
 // TxPLRawSet =================================================================
@@ -88,7 +88,10 @@ var list : TStringList;
 begin
    ResetValues;
    list := TStringList.Create;
-   StrTokenToStrings(aValue,fRawxPL.Delimiter,list);
+
+   ExtractTokensL(aValue, fRawxPL.Delimiter, #0, true, list);
+   //StrTokenToStrings(aValue,fRawxPL.Delimiter,list);
+
    For i := 0 to Pred(list.count) do Set_Element(i,list[i]);
    list.free;
 end;

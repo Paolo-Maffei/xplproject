@@ -1,4 +1,4 @@
-unit u_xpl_heart_beater;
+﻿unit u_xpl_heart_beater;
 
 { Il y a un bug dans la version fpc 2.5.1 de fpTimer. Ce bug génère un 'hang' général
   de l'application dès que l'on active ou désactive un fptimer. il faut employer une
@@ -32,7 +32,7 @@ type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfN
         procedure Set_Rate(const AValue: TxPLRateFrequency);
         procedure Tick(sender : TObject);
      public
-        constructor create(AOwner: TComponent); override;
+        constructor Create(AOwner: TComponent); override;
      published
         property Rate : TxPLRateFrequency read fRate write Set_Rate;
      end;
@@ -69,11 +69,11 @@ begin
 end;
 
 procedure TxPLHeartBeater.Set_Rate(const AValue: TxPLRateFrequency);
-   procedure Set_Interval(aValue: integer);
+   procedure Set_Interval(aInterval : integer);
    begin
-       if Interval<>aValue then begin
+       if Interval <> aInterval then begin
           Enabled  := False;
-          Interval := aValue;
+          Interval := aInterval;
           Enabled  := True;
        end;
    end;

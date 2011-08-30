@@ -1,30 +1,95 @@
-object frmxPLMessage: TfrmxPLMessage
-  Left = 236
-  Height = 388
-  Top = 131
-  Width = 448
+inherited frmxPLMessage: TfrmxPLMessage
+  Left = 58
+  Height = 406
+  Top = 119
+  Width = 610
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'xPL Message details'
-  ClientHeight = 388
-  ClientWidth = 448
+  ClientHeight = 406
+  ClientWidth = 610
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
-  LCLVersion = '0.9.31'
-  object PageControl1: TPageControl
+  ShowInTaskBar = stAlways
+  inherited StatusBar1: TStatusBar
+    Top = 383
+    Width = 610
+  end
+  inherited ToolBar: TToolBar
+    Width = 610
+    TabOrder = 2
+    inherited Panel4: TPanel
+      Left = 410
+    end
+    object ToolButton3: TToolButton[3]
+      Left = 281
+      Top = 0
+      Action = acSend
+      ImageIndex = 20
+    end
+    object tbOk: TToolButton[4]
+      Left = 251
+      Top = 0
+      Caption = '&Ok'
+      ImageIndex = 15
+      OnClick = tbOkClick
+    end
+    object tbCancel: TToolButton[5]
+      Left = 207
+      Top = 0
+      Caption = '&Cancel'
+      ImageIndex = 16
+    end
+    object ToolButton11: TToolButton[6]
+      Left = 315
+      Top = 0
+      Width = 10
+      AutoSize = True
+      Caption = 'ToolButton3'
+      Style = tbsSeparator
+    end
+    object tbCommands: TToolButton[7]
+      Left = 125
+      Top = 0
+      Caption = 'Commands'
+      DropdownMenu = popCommands
+      ImageIndex = 21
+      OnClick = tbCommandsClick
+      Style = tbsDropDown
+    end
+    object tbFunctions: TToolButton[8]
+      Left = 53
+      Top = 0
+      Caption = 'Functions'
+      DropdownMenu = popFunctions
+      OnClick = tbFunctionsClick
+      PopupMenu = popFunctions
+      Style = tbsDropDown
+    end
+    object ckLoop: TCheckBox[9]
+      Left = 334
+      Height = 24
+      Top = 0
+      Width = 76
+      Align = alRight
+      Caption = 'Loop Send'
+      TabOrder = 1
+    end
+  end
+  object PageControl1: TPageControl[3]
     Left = 0
-    Height = 362
-    Top = 26
-    Width = 448
+    Height = 358
+    Top = 25
+    Width = 610
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Message Elements'
-      ClientHeight = 334
-      ClientWidth = 440
+      ClientHeight = 330
+      ClientWidth = 602
       object Label4: TLabel
         Left = 4
         Height = 16
@@ -39,27 +104,42 @@ object frmxPLMessage: TfrmxPLMessage
         Left = 92
         Height = 23
         Top = 6
-        Width = 336
+        Width = 326
         TabOrder = 0
       end
       inline FrameMessage: TTMessageFrame
         Top = 30
+        Width = 594
+        ClientWidth = 594
         TabOrder = 1
-        inherited lblTS: TTILabel
+        inherited cbMsgType: TTIComboBox[10]
+        end
+        inherited ckGeneric: TTICheckBox[11]
+        end
+        inherited Label6: TLabel[12]
+        end
+        inherited edtHop: TTISpinEdit[13]
+        end
+        inherited lblTS: TTILabel[14]
+        end
+        inherited lblSize: TTILabel[15]
           Height = 1
           Width = 1
+        end
+        inherited edtBody: TTIMemo[16]
+          Width = 532
         end
       end
     end
     object tsRaw: TTabSheet
       Caption = 'Raw'
-      ClientHeight = 346
-      ClientWidth = 535
+      ClientHeight = 333
+      ClientWidth = 598
       object HexEditor: TKHexEditor
         Left = 0
-        Height = 346
+        Height = 333
         Top = 0
-        Width = 535
+        Width = 598
         AddressMode = eamDec
         Align = alClient
         DigitGrouping = 1
@@ -76,8 +156,8 @@ object frmxPLMessage: TfrmxPLMessage
     end
     object tsPSScript: TTabSheet
       Caption = 'PSScript Handling'
-      ClientHeight = 334
-      ClientWidth = 440
+      ClientHeight = 333
+      ClientWidth = 598
       object ckDevice: TCheckBox
         Left = 8
         Height = 19
@@ -113,9 +193,9 @@ object frmxPLMessage: TfrmxPLMessage
       end
       inline mmoPSScript: TSynEdit
         Left = 0
-        Height = 296
+        Height = 295
         Top = 38
-        Width = 440
+        Width = 598
         Align = alBottom
         Anchors = [akTop, akLeft, akRight]
         Font.Height = -13
@@ -824,94 +904,23 @@ object frmxPLMessage: TfrmxPLMessage
       end
     end
   end
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 448
-    AutoSize = True
-    ButtonHeight = 24
-    ButtonWidth = 30
-    Caption = 'ToolBar2'
-    EdgeBorders = [ebBottom]
-    EdgeInner = esLowered
-    EdgeOuter = esRaised
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 1
-    object ToolButton3: TToolButton
-      Left = 47
-      Top = 0
-      Action = acSend
-      ImageIndex = 20
-    end
-    object tbCommands: TToolButton
-      Left = 159
-      Top = 0
-      Caption = 'Commands'
-      DropdownMenu = popCommands
-      ImageIndex = 21
-      OnClick = tbCommandsClick
-      Style = tbsDropDown
-    end
-    object tbOk: TToolButton
-      Left = 81
-      Top = 0
-      Caption = '&Ok'
-      ImageIndex = 15
-      OnClick = tbOkClick
-    end
-    object tbCancel: TToolButton
-      Left = 111
-      Top = 0
-      Caption = '&Cancel'
-      ImageIndex = 16
-    end
-    object ToolButton10: TToolButton
-      Left = 155
-      Top = 0
-      Width = 4
-      Caption = 'ToolButton10'
-      Style = tbsDivider
-    end
-    object ToolButton2: TToolButton
-      Left = 1
-      Top = 0
-      DropdownMenu = xPLMenu
-      ImageIndex = 0
-      OnClick = ToolButton2Click
-      Style = tbsDropDown
-    end
-    object ToolButton4: TToolButton
-      Left = 43
-      Top = 0
-      Width = 4
-      Caption = 'ToolButton3'
-      Style = tbsDivider
-    end
-    object ckLoop: TCheckBox
-      Left = 372
-      Height = 24
-      Top = 0
-      Width = 76
-      Align = alRight
-      Caption = 'Loop Send'
-      TabOrder = 0
-    end
-    object tbFunctions: TToolButton
-      Left = 241
-      Top = 0
-      Caption = 'Functions'
-      DropdownMenu = popFunctions
-      OnClick = tbFunctionsClick
-      PopupMenu = popFunctions
-      Style = tbsDropDown
-    end
+  inherited ActionList: TActionList[4]
+    left = 392
+    top = 176
   end
-  object ActionList2: TActionList
-    left = 456
-    top = 280
+  inherited xPLMenu: TPopupMenu[5]
+    left = 136
+    top = 112
+  end
+  inherited XMLPropStorage: TXMLPropStorage[6]
+    left = 256
+    top = 264
+  end
+  inherited RxAboutDialog1: TRxAboutDialog[7]
+  end
+  object ActionList2: TActionList[8]
+    left = 312
+    top = 120
     object acSave: TAction
       Caption = 'Save'
       Hint = 'Save this message'
@@ -941,19 +950,19 @@ object frmxPLMessage: TfrmxPLMessage
       OnExecute = tbPasteClick
     end
   end
-  object SaveMessage: TxPLMsgSaveDialog
+  object SaveMessage: TxPLMsgSaveDialog[9]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 336
     top = 264
   end
-  object OpenMessage: TxPLMsgOpenDialog
+  object OpenMessage: TxPLMsgOpenDialog[10]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
-    left = 184
+    left = 136
     top = 168
   end
-  object SynPasSyn1: TSynPasSyn
+  object SynPasSyn1: TSynPasSyn[11]
     Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGreen
@@ -969,16 +978,16 @@ object frmxPLMessage: TfrmxPLMessage
     DirectiveAttri.FrameEdges = sfeAround
     CompilerMode = pcmDelphi
     NestedComments = False
-    left = 56
-    top = 248
+    left = 64
+    top = 224
   end
-  object popCommands: TPopupMenu
-    left = 464
-    top = 144
+  object popCommands: TPopupMenu[12]
+    left = 64
+    top = 168
   end
-  object popCopy: TPopupMenu
-    left = 456
-    top = 208
+  object popCopy: TPopupMenu[13]
+    left = 136
+    top = 56
     object mnuCopyMessage: TMenuItem
       Caption = 'Message'
       OnClick = mnuCopyMessageClick
@@ -992,53 +1001,8 @@ object frmxPLMessage: TfrmxPLMessage
       OnClick = mnuCopyFilterClick
     end
   end
-  object ActionList: TActionList
-    left = 152
-    top = 248
-    object acQuit: TAction
-      Category = 'xPL'
-      Caption = 'Quit'
-      Hint = 'Quit the application'
-      ImageIndex = 1
-      OnExecute = acQuitExecute
-    end
-    object acAbout: TAction
-      Category = 'xPL'
-      Caption = 'About...'
-      ImageIndex = 2
-      OnExecute = acAboutExecute
-    end
-    object acInstalledApps: TAction
-      Category = 'xPL'
-      Caption = 'Installed xPL apps'
-      ImageIndex = 5
-      OnExecute = acInstalledAppsExecute
-    end
-  end
-  object xPLMenu: TPopupMenu
-    left = 328
-    top = 184
-    object MenuItem14: TMenuItem
-      Action = acInstalledApps
-      OnClick = acInstalledAppsExecute
-    end
-    object MenuItem16: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem11: TMenuItem
-      Action = acAbout
-      OnClick = acAboutExecute
-    end
-    object MenuItem15: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem12: TMenuItem
-      Action = acQuit
-      OnClick = acQuitExecute
-    end
-  end
-  object popFunctions: TPopupMenu
-    left = 288
-    top = 92
+  object popFunctions: TPopupMenu[14]
+    left = 64
+    top = 112
   end
 end

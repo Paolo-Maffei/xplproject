@@ -33,17 +33,13 @@ type // TxPLSchema ============================================================
         property Type_  : string index 1 read Get_Element write Set_Element;
      end;
 
-var  // Some widely used schema ===============================================
+var  // Core xPL Schema ======================================================
      Schema_ConfigApp,
      Schema_ConfigCurr,
      Schema_ConfigList,
      Schema_ConfigResp,
      Schema_HBeatApp,
      Schema_HBeatEnd,
-     Schema_ControlBasic,
-     Schema_TimerBasic,
-     Schema_LogBasic,
-     Schema_OsdBasic,
      Schema_HBeatReq,
      Schema_FragBasic,
      Schema_FragReq : TxPLSchema;
@@ -91,10 +87,6 @@ initialization
    Schema_ConfigCurr   := TxPLSchema.Create('config','current');
    Schema_ConfigList   := TxPLSchema.Create('config','list');
    Schema_ConfigResp   := TxPLSchema.Create('config','response');
-   Schema_ControlBasic := TxPLSchema.Create('control','basic');
-   Schema_TimerBasic   := TxPLSchema.Create('timer','basic');
-   Schema_OsdBasic     := TxPLSchema.Create('osd','basic');
-   Schema_LogBasic     := TxPLSchema.Create('log','basic');
    Schema_FragBasic    := TxPLSchema.Create('fragment','basic');
    Schema_FragReq      := TxPLSchema.Create('fragment','request');
 

@@ -9,7 +9,7 @@
       <PathDelim Value="\"/>
       <SearchPaths>
         <IncludeFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\class\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);..;..\editors;..\..\..\..\components\multilog-0.5;..\..\general\ssversionchecker;C:\lazarus\packager\registration\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\components\KHex\;E:\01.SourceSafe\08.Lazarus\components\KHex\source\;E:\01.SourceSafe\08.Lazarus\components\KHex\packages\khexeditor\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;E:\01.SourceSafe\08.Lazarus\components\lazsolutions\Core\;C:\lazarus\components\synedit\;E:\01.SourceSafe\08.Lazarus\components\superobjectv1.2.4\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);..;..\editors;..\..\..\..\components\multilog-0.5;..\..\general\ssversionchecker;C:\lazarus\packager\registration\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\components\KHex\;E:\01.SourceSafe\08.Lazarus\components\KHex\source\;E:\01.SourceSafe\08.Lazarus\components\KHex\packages\khexeditor\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\components\lazsolutions\Core\;..;C:\lazarus\components\synedit\;E:\01.SourceSafe\08.Lazarus\components\superobjectv1.2.4\"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -78,16 +78,19 @@
       </Item10>
     </Files>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="4">
       <Item1>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="fpsystools"/>
       </Item1>
       <Item2>
-        <PackageName Value="pl_dcpcomp"/>
+        <PackageName Value="uniqueinstance_package"/>
       </Item2>
       <Item3>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="pl_dcpcomp"/>
       </Item3>
+      <Item4>
+        <PackageName Value="pl_indycomp"/>
+      </Item4>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

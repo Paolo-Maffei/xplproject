@@ -54,7 +54,6 @@ implementation { ==============================================================}
 Uses SysUtils
      , uRegExpr
      , StrUtils
-     , JclStrings
      , u_xpl_common
      , uxPLConst
      ;

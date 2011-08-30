@@ -18,10 +18,10 @@ type
     Memo1: TMemo;
     acQuit: TAction;
     ActionList1: TActionList;
-    tbLaunch: TToolButton;
-    ToolBar: TToolBar;
-    ToolButton2: TToolButton;
-    ToolButton5: TToolButton;
+    tbClose: TToolButton;
+    ToolBar1: TToolBar;
+    ToolButton1: TToolButton;
+    ToolButton3: TToolButton;
     procedure acDropAllLogsExecute(Sender: TObject);
     procedure acReloadExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -34,16 +34,19 @@ type
 
 var frmLogViewer: TfrmLogViewer;
 
-implementation
-uses u_xpl_gui_resource,
-     u_xpl_application;
+implementation // =============================================================
+uses u_xpl_gui_resource
+     , u_xpl_application
+     ;
 
+//=============================================================================
 procedure ShowFrmLogViewer;
 begin
    if not Assigned(FrmLogViewer) then Application.CreateForm(TFrmLogViewer,FrmLogViewer);
    FrmLogViewer.ShowModal;
 end;
 
+//=============================================================================
 procedure TfrmLogViewer.acQuitExecute(Sender: TObject);
 begin
    Close;
@@ -51,7 +54,7 @@ end;
 
 procedure TfrmLogViewer.FormShow(Sender: TObject);
 begin
-   ToolBar.Images := xPLGUIResource.Images;
+   if not Assigned(Toolbar1.Images) then ToolBar1.Images := xPLGUIResource.Images;
    acReloadExecute(self);
 end;
 
@@ -66,6 +69,7 @@ begin
    Memo1.Lines.LoadFromFile(xPLApplication.LogFileName);
 end;
 
+//=============================================================================
 initialization
   {$I frm_logviewer.lrs}
 

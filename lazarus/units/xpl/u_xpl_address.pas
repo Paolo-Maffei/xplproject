@@ -75,7 +75,7 @@ const K_ADDR_ANY_TARGET = '*';
 
 implementation // =============================================================
 uses IdStack
-     , JCLStrings
+     //, JCLStrings
      , SysUtils
      , StrUtils
      , fpc_delphi_compat

@@ -1,4 +1,4 @@
-unit u_xpl_messages;
+﻿unit u_xpl_messages;
 
 // These classes handle specific class of messages and their behaviour
 
@@ -11,9 +11,59 @@ interface
 uses Classes
      , SysUtils
      , u_xpl_message
+     , u_xpl_common
+     , fpc_delphi_compat
      ;
 
 type // THeartBeatMsg =========================================================
+
+     { TOsdBasic }
+
+     TOsdBasic = class(TxPLMessage)
+     private
+       function Get_Column: integer;
+       function Get_Command: string;
+       function Get_Delay: integer;
+       function Get_Row: integer;
+       function Get_Text: string;
+       procedure Set_Column(const AValue: integer);
+       procedure Set_Command(const AValue: string);
+       procedure Set_Delay(const AValue: integer);
+       procedure Set_Row(const AValue: integer);
+       procedure Set_Text(const AValue: string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Command : string read Get_Command write Set_Command;
+        property Text  : string read Get_Text write Set_Text;
+        property Row  : integer read Get_Row write Set_Row;
+        property Column  : integer read Get_Column write Set_Column;
+        property Delay : integer read Get_Delay write Set_Delay;
+     end;
+
+     { TLogBasic }
+
+     TLogBasic = class(TxPLMessage)
+     private
+       function Get_Code: string;
+       function Get_Text: string;
+       function Get_Type: TEventType;
+       procedure Set_Code(const AValue: string);
+       procedure Set_Text(const AValue: string);
+       procedure Set_Type(const AValue: TEventType);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Type_ : TEventType read Get_Type write Set_Type;
+        property Text  : string read Get_Text write Set_Text;
+        property Code  : string read Get_Code write Set_Code;
+     end;
+
+     THeartBeatReq = class(TxPLMessage)
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     end;
+
      THeartBeatMsg = class(TxPLMessage)
      private
         function  Get_AppName: string;
@@ -28,7 +78,7 @@ type // THeartBeatMsg =========================================================
         procedure Set_Version(const AValue: string);
 
      public
-        constructor Create(const aOwner : TComponent); overload;
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
         procedure   Send;
 
      published
@@ -40,11 +90,13 @@ type // THeartBeatMsg =========================================================
      end;
 
      // TFragmentReq ==========================================================
-     IntArray = array of integer;
 
      { TFragmentReqMsg }
+     TFragmentMsg = class(TxPLMessage)
 
-     TFragmentReqMsg = class(TxPLMessage)
+     end;
+
+     TFragmentReqMsg = class(TFragmentMsg)
 
      private
         function Get_Message: integer;
@@ -53,7 +105,7 @@ type // THeartBeatMsg =========================================================
         procedure Set_Parts(const AValue: IntArray);
 
      public
-        constructor Create(const aOwner : TComponent); reintroduce;
+        constructor Create(const aOwner : TComponent); overload;
 
         procedure AddPart(const aPart : integer);
      published
@@ -63,13 +115,10 @@ type // THeartBeatMsg =========================================================
 
      { TFragmentBasicMsg }
 
-     TFragBasicMsg = class(TxPLMessage)
+     TFragBasicMsg = class(TFragmentMsg)
      private
         fPartNum, fPartMax, fUniqueId : integer;
 
-        //function Get_PartMax: integer;
-        //function Get_PartNum: integer;
-        //function Get_UniqueId: integer;
         procedure Set_PartMax(const AValue: integer);
         procedure Set_PartNum(const AValue: integer);
         procedure Set_UniqueId(const AValue: integer);
@@ -78,7 +127,7 @@ type // THeartBeatMsg =========================================================
         procedure WritePartIdElements;
 
      public
-        constructor Create(const aOwner : TComponent; const aSourceMsg : TxPLMessage; const FirstOne : boolean = false); overload; reintroduce;
+        constructor Create(const aOwner : TComponent; const aSourceMsg : TxPLMessage; const FirstOne : boolean = false); reintroduce; overload;
         function    Identifier : string;
         function    IsTheFirst : boolean;
         function    ToMessage  : TxPLMessage;
@@ -87,21 +136,20 @@ type // THeartBeatMsg =========================================================
         property    PartNum  : integer read fPartNum  write Set_PartNum;
         property    PartMax  : integer read fPartMax  write Set_PartMax;
         property    UniqueId : integer read fUniqueId write Set_UniqueId;
-        //property    PartNum  : integer read Get_PartNum  write Set_PartNum;
-        //property    PartMax  : integer read Get_PartMax  write Set_PartMax;
-        //property    UniqueId : integer read Get_UniqueId write Set_UniqueId;
      end;
+
+     function MessageBroker(const aRawxPL : string) : TxPLMessage;
 
 // ============================================================================
 implementation
 
-uses u_xpl_schema
-     , u_xpl_common
+uses StrUtils
+     , StStr
+     , u_xpl_schema
      , u_xpl_sender
      , u_xpl_custom_listener
      , uxplConst
-     , StrUtils
-     , JclStrings
+//     , JclStrings
      ;
 
 const K_HBEAT_ME_INTERVAL = 'interval';
@@ -114,6 +162,134 @@ const K_HBEAT_ME_INTERVAL = 'interval';
       K_FRAGREQ_ME_MESSAGE = 'message';
       K_FRAGBAS_ME_PARTID  = 'partid';
 
+// ===========================================================================
+function MessageBroker(const aRawxPL: string): TxPLMessage;
+var aMsg : TxPLMessage;
+begin
+   aMsg := TxPLMessage.Create(nil,aRawxPL);
+   if
+     aMsg.Schema.Equals(Schema_FragBasic) then result := TFragBasicMsg.Create(nil,aMsg)
+   else if
+     aMsg.Schema.Equals(Schema_FragReq)   then result := TFragmentReqMsg.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.Equals(Schema_HBeatApp)  then result := THeartBeatMsg.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.Equals(Schema_HBeatReq)  then result := THeartBeatReq.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.RawxPL = 'log.basic' then result := TLogBasic.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.RawxPL = 'osd.basic' then result := TOsdBasic.Create(nil,aRawxPL)
+   else result := aMsg;
+
+   if result<>aMsg then aMsg.Free;
+end;
+
+{ TLogBasic }
+constructor TLogBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'log.basic';
+      Target.IsGeneric := True;
+      MessageType      := trig;
+      Body.AddKeyValuePairs( ['type','text'],['','']);
+   end;
+end;
+
+function TLogBasic.Get_Code: string;
+begin
+   result := Body.GetValueByKey('code','');
+end;
+
+function TLogBasic.Get_Text: string;
+begin
+   result := Body.GetValueByKey('text');
+end;
+
+function TLogBasic.Get_Type: TEventType;
+begin
+   result := xPLLevelToEventType(Body.GetValueByKey('type'));
+end;
+
+procedure TLogBasic.Set_Code(const AValue: string);
+begin
+   Body.SetValueByKey('code',aValue);
+end;
+
+procedure TLogBasic.Set_Text(const AValue: string);
+begin
+   Body.SetValueByKey('text',aValue);
+end;
+
+procedure TLogBasic.Set_Type(const AValue: TEventType);
+begin
+   Body.SetValueByKey('type',EventTypeToxPLLevel(aValue));
+end;
+
+{ TOsdBasic }
+
+function TOsdBasic.Get_Column: integer;
+begin
+   result := StrToIntDef(Body.GetValueByKey('column'),0);
+end;
+
+function TOsdBasic.Get_Command: string;
+begin
+   result := Body.GetValueByKey('command','write');
+end;
+
+function TOsdBasic.Get_Delay: integer;
+begin
+   result := StrToIntDef(Body.GetValueByKey('delay'),-1);
+end;
+
+function TOsdBasic.Get_Row: integer;
+begin
+   result := StrToIntDef(Body.GetValueByKey('row'),0);
+end;
+
+function TOsdBasic.Get_Text: string;
+begin
+   result := Body.GetValueByKey('text');
+end;
+
+procedure TOsdBasic.Set_Column(const AValue: integer);
+begin
+   Body.SetValueByKey('column',IntToStr(aValue));
+end;
+
+procedure TOsdBasic.Set_Command(const AValue: string);
+begin
+   Body.SetValueByKey('command',aValue);
+end;
+
+procedure TOsdBasic.Set_Delay(const AValue: integer);
+begin
+   if Get_Delay=-1 then Body.AddKeyValue('delay=');
+   Body.SetValueByKey('delay',IntToStr(aValue));
+end;
+
+procedure TOsdBasic.Set_Row(const AValue: integer);
+begin
+   Body.SetValueByKey('row',IntToStr(aValue));
+end;
+
+procedure TOsdBasic.Set_Text(const AValue: string);
+begin
+   Body.SetValueByKey('text',aValue);
+end;
+
+constructor TOsdBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'osd.basic';
+      Target.IsGeneric := True;
+      MessageType      := cmnd;
+      Body.AddKeyValuePairs( ['command','text'],['','']);
+   end;
+end;
+
 // TFragmentBasicMsg =========================================================
 constructor TFragBasicMsg.Create(const aOwner: TComponent; const aSourceMsg : TxPLMessage; const FirstOne : boolean = false);
 begin
@@ -122,10 +298,10 @@ begin
    fUniqueId := -1;
 
    inherited Create(aOwner);                                                   // This object can be created from two purposes :
-   if aSourceMsg.schema.Equals(Schema_FragBasic) then begin                    //    2°/ Creating it from rawxpl received on the network
+   if aSourceMsg.schema.Equals(Schema_FragBasic) then begin                    //    1°/ Creating it from rawxpl received on the network
       Assign(aSourceMsg);
       ReadPartIdElements;
-   end else begin                                                              //    1°/ Having a big message of class.type schema to explode it
+   end else begin                                                              //    2°/ Having a big message of class.type schema to explode it
       AssignHeader(aSourceMsg);
       Schema.Assign(Schema_FragBasic);
       Body.addkeyvaluepairs([K_FRAGBAS_ME_PARTID],['%d/%d:%d']);
@@ -135,24 +311,6 @@ begin
       end;
    end;
 end;
-
-//function TFragBasicMsg.Get_PartMax: integer;
-//begin
-//   ReadPartIdElements;
-//   Result := fPartMax;
-//end;
-//
-//function TFragBasicMsg.Get_PartNum: integer;
-//begin
-//   ReadPartIdElements;
-//   Result := fPartNum;
-//end;
-//
-//function TFragBasicMsg.Get_UniqueId: integer;
-//begin
-//   ReadPartIdElements;
-//   Result := fUniqueId;
-//end;
 
 procedure TFragBasicMsg.Set_PartMax(const AValue: integer);
 begin
@@ -179,9 +337,10 @@ procedure TFragBasicMsg.ReadPartIdElements;
 var List   : TStringList;
     partid : string;
 begin
-    partid    := AnsiReplaceStr(Body.GetValueByKey('partid'),':','/');
+//    partid    := AnsiReplaceStr(Body.GetValueByKey('partid'),':','/');
     List := TStringList.Create;
-    StrTokenToStrings(partid,'/',list);
+    ExtractTokensL(partid,':/',#0,true,list);
+//    StrTokenToStrings(partid,'/',list);
     if list.Count=3 then begin
        fPartNum  := StrToIntDef(list[0],-1);
        fPartMax  := StrToIntDef(list[1],-1);
@@ -205,25 +364,22 @@ begin
          Result.Body.DeleteItem(0);                                               // Delete the partid line
          if Result.Schema.IsValid then Result.Body.DeleteItem(0);                 // delete the schema line
       end;
-   end;
+   end else Result := nil;
 end;
 
 function TFragBasicMsg.IsValid: boolean;
 begin
-//   ReadPartIdElements;                                                         // Be sure we read it
    Result := inherited IsValid and ( (fPartNum * fPartMax * fUniqueId) >= 0);
    if IsTheFirst then Result := Result and (Body.GetValueByKey('schema')<>'');
 end;
 
 function TFragBasicMsg.Identifier: string;
 begin
-//   ReadPartIdElements;
    result := AnsiReplaceStr(Source.AsFilter,'.','') + IntToStr(fUniqueId);
 end;
 
 function TFragBasicMsg.IsTheFirst: boolean;
 begin
-//   ReadPartIdElements;
    result := (fPartNum = 1);
 end;
 
@@ -269,22 +425,35 @@ begin
    for i:=low(aValue) to high(aValue) do AddPart(aValue[i]);
 end;
 
-// THeartBeatMsg ==============================================================
-constructor THeartBeatMsg.Create(const aOwner: TComponent);
+// THeartBeatReq ==============================================================
+constructor THeartBeatReq.Create(const aOwner: TComponent; const aRawxPL : string = '');
 begin
-   inherited Create(aOwner);
-   Schema.Assign(Schema_HBeatApp);
-   MessageType:= stat;
-   Target.IsGeneric := True;
-   Body.AddKeyValuePairs( [K_HBEAT_ME_INTERVAL,K_HBEAT_ME_PORT,K_HBEAT_ME_REMOTEIP,K_HBEAT_ME_APPNAME ,K_HBEAT_ME_VERSION],
-                          ['','','','','']);
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.Assign(Schema_HBeatReq);
+      Target.IsGeneric := True;
+      MessageType      := cmnd;
+      Body.AddKeyValuePairs( ['command'],['request']);
+   end;
+end;
 
-   if Owner is TxPLCustomListener then with TxPLCustomListener(Owner) do begin
-      Self.Interval := Config.Interval;
-      Self.AppName  := AppName;
-      Self.Version  := Version;
-      if not Config.IsValid then Schema.Classe := 'config';
-      if csDestroying in ComponentState then Schema.Type_ := 'end';
+// THeartBeatMsg ==============================================================
+constructor THeartBeatMsg.Create(const aOwner: TComponent; const aRawxPL : string = '');
+begin
+   inherited Create(aOwner, aRawxPL);
+   if aRawxPL='' then begin
+      Schema.Assign(Schema_HBeatApp);
+      MessageType:= stat;
+      Target.IsGeneric := True;
+      Body.AddKeyValuePairs( [K_HBEAT_ME_INTERVAL,K_HBEAT_ME_PORT,K_HBEAT_ME_REMOTEIP,K_HBEAT_ME_APPNAME ,K_HBEAT_ME_VERSION],
+                             ['','','','','']);
+      if Owner is TxPLCustomListener then with TxPLCustomListener(Owner) do begin
+         Self.Interval := Config.Interval;
+         Self.AppName  := AppName;
+         Self.Version  := Version;
+         if not Config.IsValid then Schema.Classe := 'config';
+         if csDestroying in ComponentState then Schema.Type_ := 'end';
+      end;
    end;
 end;
 
