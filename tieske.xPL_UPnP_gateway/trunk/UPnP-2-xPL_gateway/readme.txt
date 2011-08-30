@@ -18,12 +18,9 @@ is the ID of that element, the others are sub elements (directly or indirectly
 somewhere in its hierarchy)
 
 == Uniqueness ==
-The gateway will use the UDN (UPnP's Unique Device Name; usually a UUID) as a
-permanent identifier. The xPL settings, will be tied to this UDN.
-So the same UDN will always get the same xPL settings, this will be persistent
-over sessions.
 The component IDs will NOT remain the same over sessions, they will be 
-regenerated for each new session. So you should not rely on them.
+regenerated for each new session. So you should not rely on them. You should
+rely only on the UDN (unique device name, usually a UUID) of the UPnP device.
 
 == Announcing a new UPnP device ==
 When a new device is added, it is dissected into its components. For each 
@@ -31,17 +28,21 @@ component a separate announce message will be send. Its a trigger message
 defined as follows;
 upnp.announce
 {
-announce = <device|subdevice|service|variable|method|argument>
+announce = <device|subdevice|service|variable|method|argument|left>
 id = <comma separated ID list>
 [parent = <parentid>]
 [element specific data]
 }
-Remark; only a 'device' anounce message will NOT have a 'parent' key
-
+Remarks;
+ - only a 'device' and 'left' anounce message will NOT have a 'parent' key
+ - an 'announce=left' message is used to indicate a device leaving, it will
+   only have the 'id=...' key value pair. Indicating what ids have left.
+   There will always be only 1 root device leaving per message, and hence the
+   id list is identical to the id list used when announcing the device.
+   
 == Devices leaving ==
-No message will be sent, but the corresponding xPL device will go offline and 
-send its regular hbeat.end (or config.end) message. This should be considered 
-the signal that the UPnP device is no longer available.
+A special case of the announce message will be send. See 'Announcing a new UPnP
+device'.
 
 == Announce requests ==
 To request a device to announce again, send a command message;

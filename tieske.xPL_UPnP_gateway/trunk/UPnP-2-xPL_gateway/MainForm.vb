@@ -16,6 +16,29 @@ Public Class MainForm
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         ' Load xPL devices first, do not enable them
         xPLListener.RestoreFromState(My.Settings.xPLDevices, False)
+        ' cleanup just to be sure
+        Select Case xPLListener.Count
+            Case 0
+                ' Need to create a new one
+                Dim dev As New xPLDevice
+                dev.VendorID = "tieske"
+                dev.DeviceID = "upnp"
+                dev.InstanceIDType = InstanceCreation.HostNameBased
+                dev.Configurable = False
+                dev.MessagePassing = dev.MessagePassing Or MessagePassingEnum.PassWhileAwaitingConfig
+                LogMessage("New xPLDevice created; " & dev.Address & " (status: " & CStr(IIf(dev.Configured, "configured", "unconfigured")) & ")")
+            Case 1
+                ' This is ok.
+                LogMessage("Existing xPLDevice restarted; " & xPLListener.Device(0).Address & " (status: " & CStr(IIf(xPLListener.Device(0).Configured, "configured", "unconfigured")) & ")")
+            Case Is > 1
+                ' delete the too many devices
+                For n As Integer = xPLListener.Count - 1 To 1 Step -1
+                    xPLListener.Device(n).Dispose()
+                Next
+                LogMessage("Existing xPLDevice restarted; " & xPLListener.Device(0).Address & " (status: " & CStr(IIf(xPLListener.Device(0).Configured, "configured", "unconfigured")) & ")")
+        End Select
+        Proxy.xPLDevice = xPLListener.Device(0)
+        Proxy.xPLDevice.Enable()
         ' Now enable UPnP control point, devices will be found
         cp = New UPnPSmartControlPoint
         ' configure form
@@ -49,17 +72,16 @@ Public Class MainForm
             message = message.Replace(vbCrLf, Chr(0))
             message = message.Replace(vbLf, Chr(0))
             message = message.Replace(vbCr, Chr(0))
-            message = message.Replace(Chr(0), vbCrLf)
             ' make an array of lines
-            Dim s() As String = message.Split(vbCrLf)
+            Dim s() As String = message.Split(Chr(0))
             Dim i As Integer
             ' add lines to the log
             Dim t As Date = Now()
-            Dim ts As String = t.ToString("HH:mm:ss.fff") 'ffffZ")
+            Dim ts As String = t.ToString("HH:mm:ss.fff")
             For Each message In s
                 i = lbLog.Items.Add(ts & " " & message)
                 lbLog.SelectedIndex = i
-                ' limit list to 150 items
+                ' limit list to configured number of items
                 While lbLog.Items.Count > My.Settings.LogLines
                     lbLog.Items.RemoveAt(0)
                 End While
@@ -92,17 +114,10 @@ Public Class MainForm
     End Sub
 #End Region
 
+#Region "Interface elements"
+
     Private Sub chkStartMinimized_CheckedChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles chkStartMinimized.CheckedChanged
         My.Settings.StartMinimized = chkStartMinimized.Checked
-    End Sub
-
-    Private Sub tbLogLines_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles tbLogLines.TextChanged
-        ' make sure its a valid positive number
-        Dim l As Long = Int(Val(tbLogLines.Text))
-        If l < 0 Then l = l * -1
-        If tbLogLines.Text <> l.ToString Then
-            tbLogLines.Text = l.ToString
-        End If
     End Sub
 
     Private Sub btnCopyToClipboard_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnCopyToClipboard.Click
@@ -142,4 +157,15 @@ Public Class MainForm
             frmAbout.Show()
         End If
     End Sub
+
+    Private Sub btnSet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSet.Click
+        Dim l As Long = Int(Val(tbLogLines.Text))
+        If l < 20 Then l = 20
+        If l > 20000 Then l = 20000
+        tbLogLines.Text = l.ToString
+        My.Settings.LogLines = l
+    End Sub
+
+#End Region
+
 End Class
