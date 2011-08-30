@@ -9,15 +9,12 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms,
+  Forms, aformula, pl_rx, pl_kcontrols,
   frm_logger,
-  frm_appsettings,
-  frm_plugindetail,
   u_xpl_application,
   u_xpl_common,
-  logger_listener,
-  u_xpl_gui_resource,
-  frame_message, u_xpl_rawset, u_xpl_messages;
+  logger_listener, frm_appsettings, frm_plugindetail,
+  u_xpl_gui_resource;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 
@@ -26,7 +23,6 @@ begin
 
    xPLApplication := TLoggerListener.Create;
    xPLGUIResource := TxPLGUIResource.Create;
-
    Application.CreateForm(TfrmLogger, frmLogger);
    Application.CreateForm(TfrmAppSettings, frmAppSettings);
    Application.Icon := FrmLogger.Icon;

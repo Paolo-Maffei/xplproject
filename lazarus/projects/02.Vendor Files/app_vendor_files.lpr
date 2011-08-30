@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces
-  , Forms, uniqueinstance_package, multiloglaz
+  , Forms, uniqueinstance_package, multiloglaz, pl_rx
   , frm_vendor_files
   , u_xpl_application
   , u_xpl_gui_resource

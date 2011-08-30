@@ -6,12 +6,14 @@
     <General>
       <MainUnit Value="0"/>
       <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
+      <RevisionNr Value="1"/>
       <BuildNr Value="11"/>
       <StringTable CompanyName="clinique" InternalName="dawndusk" ProductName="xPL Dawndusk" ProductVersion="1.0.0.1"/>
     </VersionInfo>
@@ -43,10 +45,11 @@
         <Filename Value="xpl_dawndusk.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_dawndusk"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="1" Y="27"/>
+        <CursorPos X="41" Y="10"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -467,12 +470,11 @@
       <Unit54>
         <Filename Value="dawndusk_listener.pas"/>
         <UnitName Value="dawndusk_listener"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="53"/>
-        <CursorPos X="63" Y="79"/>
-        <UsageCount Value="29"/>
+        <TopLine Value="14"/>
+        <CursorPos X="36" Y="62"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit54>
       <Unit55>
@@ -562,7 +564,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="70"/>
         <CursorPos X="19" Y="80"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit65>
       <Unit66>
