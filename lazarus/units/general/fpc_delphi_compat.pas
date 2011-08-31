@@ -29,9 +29,11 @@ Uses Classes
      , SysUtils
      , StrUtils
      {$ifdef fpc}
-     , vInfo
-     , LSUtils
-     , Windirs
+        , vInfo
+        , LSUtils
+        {$ifdef mswindows}
+           , Windirs
+        {$endif}
      {$else}
      , JvVersionInfo
      , jclPEImage
@@ -92,7 +94,12 @@ var path : array[0..255] of Char;
 {$endif}
 begin
    {$ifdef fpc}
+      {$ifdef mswindows}
       result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
+      {$else}
+      result := GetAppConfigDir(false);
+      result := LeftStr(result,length(result)-length(ApplicationName)-1);
+      {$endif}
    {$else}
       SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);
       result := IncludeTrailingPathDelimiter(path);
@@ -110,4 +117,4 @@ finalization // ===============================================================
    VersionInfo.Free;
 
 end.
-
+

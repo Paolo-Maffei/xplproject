@@ -1,7 +1,7 @@
 inherited frmBasicSettings: TfrmBasicSettings
-  Left = 26
+  Left = 49
   Height = 296
-  Top = 37
+  Top = 251
   Width = 385
   Caption = 'xPL Basic Settings'
   ClientHeight = 296
@@ -2267,7 +2267,8 @@ inherited frmBasicSettings: TfrmBasicSettings
   }
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
-    Top = 273
+    Height = 19
+    Top = 277
     Width = 385
   end
   inherited ToolBar: TToolBar
@@ -2277,7 +2278,7 @@ inherited frmBasicSettings: TfrmBasicSettings
       Left = 185
     end
     object tbSave: TToolButton[3]
-      Left = 97
+      Left = 99
       Top = 0
       Action = acSaveSettings
       AutoSize = True
@@ -2292,7 +2293,7 @@ inherited frmBasicSettings: TfrmBasicSettings
     Left = 16
     Height = 16
     Top = 168
-    Width = 247
+    Width = 257
     Caption = 'Broadcast address used to send xPL Messages :'
     Font.Color = clNavy
     ParentColor = False
@@ -2302,7 +2303,7 @@ inherited frmBasicSettings: TfrmBasicSettings
     Left = 16
     Height = 16
     Top = 120
-    Width = 148
+    Width = 154
     Caption = 'Listen for xPL messages on :'
     Font.Color = clNavy
     ParentColor = False
@@ -2310,18 +2311,18 @@ inherited frmBasicSettings: TfrmBasicSettings
   end
   object e_BroadCast: TComboBox[5]
     Left = 16
-    Height = 23
+    Height = 27
     Top = 184
     Width = 352
-    ItemHeight = 15
+    ItemHeight = 0
     TabOrder = 1
   end
   object e_ListenOn: TComboBox[6]
     Left = 16
-    Height = 23
+    Height = 27
     Top = 136
     Width = 352
-    ItemHeight = 15
+    ItemHeight = 0
     TabOrder = 0
   end
   object StaticText2: TStaticText[7]
@@ -2346,21 +2347,22 @@ inherited frmBasicSettings: TfrmBasicSettings
   end
   object cbListenTo: TComboBox[9]
     Left = 16
-    Height = 23
+    Height = 27
     Top = 232
     Width = 352
-    ItemHeight = 15
+    ItemHeight = 0
     Items.Strings = (
       'Any IP address'
       'Any local IP address'
       'Only the following IP addresses :'
     )
+    OnChange = cbListenToChange
     TabOrder = 2
   end
   object edtListenTo: TEdit[10]
     Left = 16
-    Height = 23
-    Top = 256
+    Height = 25
+    Top = 264
     Width = 352
     TabOrder = 3
   end
@@ -2368,7 +2370,7 @@ inherited frmBasicSettings: TfrmBasicSettings
     Left = 16
     Height = 16
     Top = 216
-    Width = 165
+    Width = 168
     Caption = 'Listen messages coming from :'
     Font.Color = clNavy
     ParentColor = False
@@ -2400,4 +2402,4 @@ inherited frmBasicSettings: TfrmBasicSettings
       OnExecute = acReloadExecute
     end
   end
-end
+end

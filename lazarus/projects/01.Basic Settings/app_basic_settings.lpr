@@ -15,6 +15,8 @@ uses {$IFDEF UNIX}
    {$R app_basic_settings.rc}
 {$ENDIF}
 
+{$R *.res}
+
 begin
    Application.Initialize;
 

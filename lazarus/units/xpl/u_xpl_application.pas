@@ -86,7 +86,11 @@ begin
 
    if not AllowMultiInstance then begin
    {$ifdef fpc}
-      if InstanceRunning(GetProductName) then Log(etError,K_MSG_ALREADY_STARTED);
+      {$ifdef mswindows}
+         if InstanceRunning(GetProductName) then Log(etError,K_MSG_ALREADY_STARTED);
+      {$else}
+         { TODO : Activate Unique Instance under linux }
+      {$endif}
    {$endif}
    end;
 
@@ -192,4 +196,4 @@ begin
             else result := aString;
 end;
 
-end.
+end.

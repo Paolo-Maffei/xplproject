@@ -26,6 +26,7 @@ type { TfrmBasicSettings =====================================================}
         tbSave: TToolButton;
         procedure acReloadExecute(Sender: TObject);
         procedure acSaveSettingsExecute(Sender: TObject);
+        procedure cbListenToChange(Sender: TObject);
         procedure FormCreate(Sender: TObject);
      end;
 
@@ -64,12 +65,7 @@ end;
 procedure TfrmBasicSettings.acReloadExecute(Sender: TObject);
 var ch : string;
 begin
-   e_ListenOn.Items.Assign(LocalAddresses);                                     // This procedure also retrieves IPv6
-   //i := e_ListenOn.Items.Count-1;                                               // Addresses, then I have to clean
-   //while (i>=0) do begin                                                        // the list to present only IPv4 addresses
-   //   if not IsIP(e_ListenOn.Items[i]) then e_ListenOn.Items.Delete(i);
-   //   dec(i);
-   //end;
+   e_ListenOn.Items.Assign(LocalAddresses);
 
    e_BroadCast.Items.Clear;
    e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
@@ -92,6 +88,7 @@ begin
             cbListenTo.ItemIndex := 2;
             edtListenTo.Text := ListenToAddresses;
          end;
+      cbListenToChange(self);
    end;
 end;
 
@@ -117,8 +114,14 @@ begin
    end;
 end;
 
+procedure TfrmBasicSettings.cbListenToChange(Sender: TObject);
+begin
+   edtListenTo.Visible := (cbListenTo.ItemIndex = 2);
+   if edtListenTo.Visible then edtListenTo.SetFocus;
+end;
+
 initialization // =============================================================
   {$I frm_basic_settings.lrs}
 
 end.
-
+

@@ -53,6 +53,8 @@ end;
 
 function TxPLCustomFolders.SharedDir: string;
 begin
+   result := GetCommonAppDataPath;
+   EnsureDirectoryExists( result );
    result := IncludeTrailingPathDelimiter(GetCommonAppDataPath + 'xPL');
    EnsureDirectoryExists( result );                                            // 1.1.1 Correction
 end;
@@ -73,4 +75,4 @@ begin
 end;
 
 end.
-
+
