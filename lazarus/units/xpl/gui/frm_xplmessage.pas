@@ -7,8 +7,8 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
   ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage,
-  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, SynEdit,
-  SynHighlighterPas, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
+  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, 
+  SynEdit, SynHighlighterPas, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
   RxAboutDialog;
 
 type
@@ -50,7 +50,6 @@ type
     SaveMessage: TxPLMsgSaveDialog;
     OpenMessage: TxPLMsgOpenDialog;
     tbCommands: TToolButton;
-
     procedure acLoadExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
     procedure acSendExecute(Sender: TObject);
@@ -80,8 +79,7 @@ type
   end;
 
 implementation // TFrmxPLMessage ===============================================================
-uses frm_about,
-     frm_Downloadfile,
+uses frm_Downloadfile,
      frm_xplappslauncher,
      u_xpl_custom_message,
      clipbrd,
@@ -254,7 +252,7 @@ begin
    tbOk.Visible       := (boOk in buttonOptions);
    tbCancel.Visible   := tbOk.Visible;
    acClose.Visible    := (boClose in buttonOptions);
-
+   if not acLoad.Visible then OnCloseQuery := nil;
    edtMsgName.Link.TIObject := xPLMessage;
    edtMsgName.Link.TIPropertyName := 'MsgName';
 
