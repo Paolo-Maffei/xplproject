@@ -4325,12 +4325,12 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Left = 465
     end
     object ToolButton2: TToolButton[3]
-      Left = 160
+      Left = 162
       Top = 0
       Action = acUpdateList
     end
     object ToolButton4: TToolButton[4]
-      Left = 51
+      Left = 53
       Top = 0
       Action = acDownload
     end
@@ -4421,7 +4421,9 @@ inherited frmvendorfiles: Tfrmvendorfiles
     left = 240
     top = 264
   end
-  object ActionList2: TActionList[8]
+  inherited RxAboutDialog1: TRxAboutDialog[8]
+  end
+  object ActionList2: TActionList[9]
     left = 184
     top = 176
     object acSelectAll: TAction
@@ -4462,7 +4464,7 @@ inherited frmvendorfiles: Tfrmvendorfiles
       OnExecute = acPlugInfoExecute
     end
   end
-  object popPluginList: TPopupMenu[9]
+  object popPluginList: TPopupMenu[10]
     left = 336
     top = 192
     object MenuItem3: TMenuItem

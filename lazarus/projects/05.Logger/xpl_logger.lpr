@@ -9,7 +9,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, aformula, pl_rx, pl_kcontrols,
+  Forms, aformula, pl_rx, pl_kcontrols, uniqueinstance_package, multiloglaz,
   frm_logger,
   u_xpl_application,
   u_xpl_common,

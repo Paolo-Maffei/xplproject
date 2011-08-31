@@ -11,7 +11,7 @@ uses
      {$ENDIF}
   {$ENDIF}
   Interfaces,
-  Forms, pl_kcontrols, pl_rx,
+  Forms, pl_kcontrols, uniqueinstance_package, multiloglaz, pl_rx,
   u_xPL_Message,
   uxPLConst,
   u_xpl_application,

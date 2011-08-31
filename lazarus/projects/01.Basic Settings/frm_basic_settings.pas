@@ -33,7 +33,6 @@ var frmBasicSettings: TfrmBasicSettings;
 
 implementation //===============================================================
 uses StrUtils
-     , frm_about
      , frm_xplappslauncher
      , u_xpl_gui_resource
      , u_xpl_application

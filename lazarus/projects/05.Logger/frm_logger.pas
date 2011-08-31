@@ -113,9 +113,7 @@ implementation { TFrmLogger ====================================================
 uses frm_xplappslauncher
      , u_configuration_record
      , frm_AppSettings
-     , frm_about
      , StrUtils
-     , StStr
      , u_xpl_message_gui
      , u_xPL_Address
      , u_xpl_gui_resource
@@ -300,7 +298,9 @@ begin
         end else begin
 //           s := StringReplace(tvMessages.Selected.GetTextPath,'/',' ',[rfReplaceAll]);
 //           StrTokens(s,sl);
-           ExtractTokensL(tvMessages.Selected.GetTextPath,'/',#0,false,sl);
+           Sl.Delimiter:= '/';
+           Sl.DelimitedText:=tvMessages.Selected.GetTextPath;
+//           ExtractTokensL(tvMessages.Selected.GetTextPath,'/',#0,false,sl);
            if sl[0] = K_ROOT_NODE_NAME then begin
               if (sl.Count>1) then header.source.Vendor := sl[1];
               if (sl.Count>2) then header.source.Device := sl[2];
