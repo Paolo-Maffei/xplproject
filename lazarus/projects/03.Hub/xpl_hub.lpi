@@ -32,23 +32,27 @@
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="sup_object"/>
+        <PackageName Value="LazSolutionsRT"/>
       </Item1>
       <Item2>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="sup_object"/>
       </Item2>
+      <Item3>
+        <PackageName Value="pl_indycomp"/>
+      </Item3>
     </RequiredPackages>
-    <Units Count="192">
+    <Units Count="194">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_hub"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="20"/>
+        <TopLine Value="16"/>
+        <CursorPos X="1" Y="30"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -1339,8 +1343,8 @@
         <UnitName Value="u_xpl_common"/>
         <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="105"/>
-        <CursorPos X="40" Y="114"/>
+        <TopLine Value="4"/>
+        <CursorPos X="8" Y="12"/>
         <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit168>
@@ -1363,10 +1367,12 @@
       <Unit171>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="70" Y="20"/>
+        <TopLine Value="16"/>
+        <CursorPos X="46" Y="24"/>
         <UsageCount Value="28"/>
+        <Loaded Value="True"/>
       </Unit171>
       <Unit172>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
@@ -1387,7 +1393,7 @@
       <Unit174>
         <Filename Value="u_xpl_hub.pas"/>
         <UnitName Value="u_xpl_hub"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="12"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
@@ -1535,135 +1541,154 @@
       <Unit191>
         <Filename Value="C:\lazarus\components\synedit\synregexpr.pas"/>
         <UnitName Value="SynRegExpr"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="3211"/>
         <CursorPos X="57" Y="3220"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit191>
+      <Unit192>
+        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
+        <UnitName Value="u_xPL_Header"/>
+        <EditorIndex Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="66"/>
+        <CursorPos X="8" Y="74"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit192>
+      <Unit193>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <UnitName Value="u_xpl_vendor_file"/>
+        <EditorIndex Value="10"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="19"/>
+        <CursorPos X="8" Y="27"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit193>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="u_xpl_hub.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="xpl_hub.lpr"/>
+        <Caret Line="23" Column="1" TopLine="14"/>
       </Position1>
       <Position2>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="36" Column="1" TopLine="1"/>
+        <Caret Line="32" Column="1" TopLine="14"/>
       </Position2>
       <Position3>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="17" Column="1" TopLine="13"/>
+        <Caret Line="21" Column="1" TopLine="12"/>
       </Position3>
       <Position4>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="34" Column="1" TopLine="16"/>
+        <Caret Line="32" Column="1" TopLine="14"/>
       </Position4>
       <Position5>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="21" Column="41" TopLine="16"/>
+        <Caret Line="21" Column="1" TopLine="9"/>
       </Position5>
       <Position6>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="23" Column="1" TopLine="14"/>
+        <Caret Line="12" Column="23" TopLine="1"/>
       </Position6>
       <Position7>
-        <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="32" Column="1" TopLine="14"/>
+        <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
+        <Caret Line="43" Column="1" TopLine="37"/>
       </Position7>
       <Position8>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="21" Column="1" TopLine="12"/>
+        <Caret Line="30" Column="1" TopLine="13"/>
       </Position8>
       <Position9>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="32" Column="1" TopLine="14"/>
+        <Caret Line="30" Column="1" TopLine="13"/>
       </Position9>
       <Position10>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="21" Column="1" TopLine="9"/>
+        <Caret Line="26" Column="58" TopLine="13"/>
       </Position10>
       <Position11>
         <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="12" Column="23" TopLine="1"/>
+        <Caret Line="20" Column="1" TopLine="11"/>
       </Position11>
       <Position12>
         <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
-        <Caret Line="43" Column="1" TopLine="37"/>
+        <Caret Line="10" Column="12" TopLine="1"/>
       </Position12>
       <Position13>
-        <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="30" Column="1" TopLine="13"/>
-      </Position13>
-      <Position14>
-        <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="30" Column="1" TopLine="13"/>
-      </Position14>
-      <Position15>
-        <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="26" Column="58" TopLine="13"/>
-      </Position15>
-      <Position16>
-        <Filename Value="xpl_hub.lpr"/>
-        <Caret Line="20" Column="1" TopLine="11"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
-        <Caret Line="10" Column="12" TopLine="1"/>
-      </Position17>
-      <Position18>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <Caret Line="32" Column="24" TopLine="22"/>
-      </Position18>
-      <Position19>
+      </Position13>
+      <Position14>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <Caret Line="263" Column="1" TopLine="246"/>
-      </Position19>
-      <Position20>
+      </Position14>
+      <Position15>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <Caret Line="1" Column="1" TopLine="1"/>
-      </Position20>
-      <Position21>
+      </Position15>
+      <Position16>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <Caret Line="46" Column="5" TopLine="37"/>
-      </Position21>
-      <Position22>
+      </Position16>
+      <Position17>
         <Filename Value="C:\pp\packages\fcl-base\src\fptimer.pp"/>
         <Caret Line="249" Column="17" TopLine="240"/>
-      </Position22>
-      <Position23>
+      </Position17>
+      <Position18>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
         <Caret Line="285" Column="45" TopLine="262"/>
-      </Position23>
-      <Position24>
+      </Position18>
+      <Position19>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
         <Caret Line="342" Column="26" TopLine="333"/>
-      </Position24>
-      <Position25>
+      </Position19>
+      <Position20>
         <Filename Value="..\..\..\components\multilog-0.5\filechannel.pas"/>
         <Caret Line="119" Column="37" TopLine="112"/>
-      </Position25>
-      <Position26>
+      </Position20>
+      <Position21>
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
-      </Position26>
-      <Position27>
+      </Position21>
+      <Position22>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <Caret Line="51" Column="27" TopLine="42"/>
-      </Position27>
-      <Position28>
+      </Position22>
+      <Position23>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <Caret Line="122" Column="28" TopLine="113"/>
-      </Position28>
-      <Position29>
+      </Position23>
+      <Position24>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <Caret Line="66" Column="25" TopLine="1"/>
-      </Position29>
-      <Position30>
+      </Position24>
+      <Position25>
         <Filename Value="C:\lazarus\components\synedit\synregexpr.pas"/>
         <Caret Line="1" Column="1" TopLine="1"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="114" Column="40" TopLine="105"/>
+      </Position26>
+      <Position27>
+        <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
+        <Caret Line="20" Column="70" TopLine="1"/>
+      </Position27>
+      <Position28>
+        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position28>
+      <Position29>
+        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position29>
+      <Position30>
+        <Filename Value="xpl_hub.lpr"/>
+        <Caret Line="20" Column="1" TopLine="1"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -1672,7 +1697,7 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl;..\..\..\components\jvcllaz\run;..\..\..\components\uniqueinstance;..\..\..\components\multilog-0.5;C:\pp\packages\fcl-base\src\;C:\lazarus\components\synedit\"/>
+      <OtherUnitFiles Value="..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general\RegExpr;..\..\units\general;..\..\..\components\jvcllaz\run;..\..\..\components\uniqueinstance;..\..\..\components\multilog-0.5;C:\pp\packages\fcl-base\src\;C:\lazarus\components\synedit\"/>
       <UnitOutputDirectory Value="C:\Lazout"/>
     </SearchPaths>
     <Parsing>
