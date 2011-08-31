@@ -112,22 +112,12 @@ inherited frmxPLMessage: TfrmxPLMessage
         Width = 594
         ClientWidth = 594
         TabOrder = 1
-        inherited cbMsgType: TTIComboBox[10]
+        inherited edtBody: TTIMemo
+          Width = 532
         end
-        inherited ckGeneric: TTICheckBox[11]
-        end
-        inherited Label6: TLabel[12]
-        end
-        inherited edtHop: TTISpinEdit[13]
-        end
-        inherited lblTS: TTILabel[14]
-        end
-        inherited lblSize: TTILabel[15]
+        inherited lblSize: TTILabel
           Height = 1
           Width = 1
-        end
-        inherited edtBody: TTIMemo[16]
-          Width = 532
         end
       end
     end

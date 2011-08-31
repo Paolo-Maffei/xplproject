@@ -85,7 +85,7 @@ procedure TConfigurationRecord.HBeatReceived(const aHBeatMsg : THeartBeatMsg);
 begin
    fLastHBeat := now;
    if not aHBeatMsg.Schema.Equals(Schema_HBeatEnd)
-      then fDieAt := IncMinute( fLastHBeat, 2 * aHBeatMsg.Interval + 1) // Defined by specifications as dead-line limit)
+      then fDieAt := IncMinute( fLastHBeat, 2 * Int64(Succ(aHBeatMsg.Interval))) // Defined by specifications as dead-line limit)
       else begin
         fDieAt := now;
         OnTimer(self);

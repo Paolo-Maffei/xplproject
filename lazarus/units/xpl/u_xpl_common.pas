@@ -103,6 +103,8 @@ var i:Integer;
     buffer1,buffer2:Char;
 begin
    result := false;
+   buffer1:= #0;
+   buffer2:= buffer1;
    if msOne.size = msTwo.size then begin
       p1 := msOne.position; //temp storage for position
       p2 := msOne.position; //temp storage for position
@@ -259,27 +261,13 @@ begin
            [year,monthofYear,dayofmonth,HourOf24Day,MinuteOfHour,SecondOfMinute]);
 end;
 
-var i : integer;
 initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
    AllowMultiInstance := false;
-   (* Cette version utilise la librairie Synapse mais pose un problème pour les
-    Versions console des applications car les unités synamisc et synaip appellent
-    Windows
-   LocalAddresses.Delimiter := ',';
-   LocalAddresses.DelimitedText := GetLocalIPs;                                // This procedure also retrieves IPv6
-   i := LocalAddresses.Count-1;                                                // Addresses, then I have to clean
-   while (i>=0) do begin                                                       // the list to present only IPv4 addresses
-      if not IsIP(LocalAddresses[i]) then LocalAddresses.Delete(i);
-      dec(i);
-   end;*)
 
-   (*Cette version utilise la librairie Indy, à tester pour bon fonctionnement
-    entre version console et gui...*)
    TIdStack.IncUsage;
-   for i:=0 to Pred(GStack.LocalAddresses.Count) do
-       LocalAddresses.Add(GStack.LocalAddresses[i]);
+   LocalAddresses.Assign(GStack.LocalAddresses);
 
 finalization // ===============================================================
    LocalAddresses.Free;

@@ -144,12 +144,10 @@ type // THeartBeatMsg =========================================================
 implementation
 
 uses StrUtils
-     , StStr
      , u_xpl_schema
      , u_xpl_sender
      , u_xpl_custom_listener
      , uxplConst
-//     , JclStrings
      ;
 
 const K_HBEAT_ME_INTERVAL = 'interval';
@@ -337,9 +335,12 @@ procedure TFragBasicMsg.ReadPartIdElements;
 var List   : TStringList;
     partid : string;
 begin
-//    partid    := AnsiReplaceStr(Body.GetValueByKey('partid'),':','/');
-    List := TStringList.Create;
-    ExtractTokensL(partid,':/',#0,true,list);
+    partid := AnsiReplaceStr(Body.GetValueByKey('partid'),'/',':');
+    List   := TStringList.Create;
+    List.Delimiter := ':';
+    List.DelimitedText := partid;
+
+//    ExtractTokensL(partid,':/',#0,true,list);
 //    StrTokenToStrings(partid,'/',list);
     if list.Count=3 then begin
        fPartNum  := StrToIntDef(list[0],-1);

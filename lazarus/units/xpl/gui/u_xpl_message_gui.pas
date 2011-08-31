@@ -39,13 +39,15 @@ type TButtonOption = (
      end;
 
 implementation { ==============================================================}
-uses frm_xPLMessage,
-     v_xplmsg_opendialog,
-     Controls;
+uses frm_xPLMessage
+     , v_xplmsg_opendialog
+     , Controls
+     , Forms
+     ;
 
 procedure TxPLMessageGUI.ShowForEdit(const options: TButtonOptions; const bModal: boolean; const bAdvancedMode : boolean = false);
 begin
-   with TfrmxPLMessage.Create(nil) do try
+   with TfrmxPLMessage.Create(Application) do try
         xPLMessage := self;
         buttonOptions := options;
         edtMsgName.ReadOnly := false;
@@ -58,7 +60,7 @@ end;
 
 function TxPLMessageGUI.Edit : boolean;
 begin
-   with TfrmxPLMessage.Create(nil) do try
+   with TfrmxPLMessage.Create(Application) do try
         xPLMessage := self;
         result := (ShowModal = mrOk);
    finally
@@ -68,7 +70,7 @@ end;
 
 procedure TxPLMessageGUI.Show(options : TButtonOptions);
 begin
-   with TfrmxPLMessage.Create(nil) do try
+   with TfrmxPLMessage.Create(Application) do try
         xPLMessage := self;
         buttonOptions := options;
         Show;
@@ -78,7 +80,7 @@ end;
 
 function TxPLMessageGUI.SelectFile: boolean;
 begin
-   with TxPLMsgOpenDialog.create(nil) do try
+   with TxPLMsgOpenDialog.create(Application) do try
         result := Execute;
         if result then LoadFromFile(FileName);
    finally
