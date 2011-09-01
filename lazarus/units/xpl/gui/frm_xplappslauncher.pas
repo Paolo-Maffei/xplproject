@@ -1,7 +1,7 @@
 unit frm_xplappslauncher;
 {==============================================================================
   UnitName      = frm_xplappslauncher
-  UnitDesc      = Standard xPL / Lazarus About box - shared by all projects
+  UnitDesc      = Standard xPL apps launching box
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
  1.0 : Added code to avoid presenting myself in the list of applications to launch
@@ -13,22 +13,16 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ComCtrls, ActnList, Buttons;
+  Dialogs, ComCtrls, ActnList, Buttons, dlg_template;
 
 type
 
   { TfrmAppLauncher }
 
-  TfrmAppLauncher = class(TForm)
-    acClose: TAction;
+  TfrmAppLauncher = class(TDlgTemplate)
     acLaunch: TAction;
-    ActionList: TActionList;
     lvApps: TListView;
-    tbClose: TToolButton;
-    ToolBar: TToolBar;
     ToolButton1: TToolButton;
-    ToolButton2: TToolButton;
-    procedure acCloseExecute(Sender: TObject);
     procedure acLaunchExecute(Sender: TObject);
     procedure FormShow(Sender: TObject);
     procedure lvAppsDblClick(Sender: TObject);
@@ -60,7 +54,7 @@ var sl : TxPLCustomCollection;
     path, version, nicename : string;
     i : integer;
 begin
-   Toolbar.Images := xPLGUIResource.Images;
+   inherited;
    lvApps.Items.Clear;
    sl  := xPLApplication.Settings.GetxPLAppList;
    for i := 0 to sl.Count -1 do begin
@@ -86,15 +80,10 @@ begin
    end;
 end;
 
-procedure TfrmAppLauncher.acCloseExecute(Sender: TObject);
-begin
-   Close;
-end;
-
 procedure TfrmAppLauncher.lvAppsDblClick(Sender: TObject);
 begin
    acLaunchExecute(self);
-   acCloseExecute(sender);
+   DlgAcClose.Execute;
 end;
 
 

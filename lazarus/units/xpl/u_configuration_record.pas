@@ -15,8 +15,8 @@ uses
   u_xpl_address,
   u_xpl_config,
   u_xpl_common,
-  u_xpl_application,
   u_xpl_messages,
+  u_xpl_application,
   u_xpl_custom_message;
 
 type { TConfigurationRecord ==================================================}

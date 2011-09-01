@@ -59,6 +59,60 @@ type // THeartBeatMsg =========================================================
         property Code  : string read Get_Code write Set_Code;
      end;
 
+     { TConfigRespMsg }
+
+     { TConfigReqMsg }
+
+     TConfigReqMsg = class(TxPLMessage)
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     end;
+
+     { TConfigListMsg }
+
+     TConfigCurrMsg = class(TxPLMessage)
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     end;
+
+     TConfigRespMsg = class(TxPLMessage)
+        fFilters : TStringList;
+        fGroups  : TStringList;
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+        destructor  Destroy; override;
+        function  IsCoreValue(const aIndex : integer) : boolean;
+     private
+       function Get_Filters: TStringList;
+       function Get_Groups: TStringList;
+       function get_interval: integer;
+       function get_newconf: string;
+       procedure Set_Filters(const AValue: TStringList);
+       procedure Set_Groups(const AValue: TStringList);
+       procedure set_interval(const AValue: integer);
+       procedure set_newconf(const AValue: string);
+
+     published
+        property newconf : string read get_newconf write set_newconf;
+        property interval: integer read get_interval write set_interval;
+        property filters : TStringList read Get_Filters write Set_Filters;
+        property groups  : TStringList read Get_Groups write Set_Groups;
+     end;
+
+     { TConfigCurrentMsg }
+
+     { TConfigCurrentStat }
+
+     TConfigCurrentStat = class(TConfigRespMsg)
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+
+        procedure   Assign(aMessage : TPersistent); override;
+     published
+        property Interval;
+        property NewConf;
+        property Filters;
+        property Groups;
+     end;
+
      THeartBeatReq = class(TxPLMessage)
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
@@ -180,6 +234,130 @@ begin
    else result := aMsg;
 
    if result<>aMsg then aMsg.Free;
+end;
+
+{ TConfigCurrentMsg }
+
+constructor TConfigCurrentStat.Create(const aOwner: TComponent;  const aRawxPL: string);
+begin
+   inherited Create(aOwner, aRawxPL);
+   MessageType := stat;
+end;
+
+procedure TConfigCurrentStat.Assign(aMessage: TPersistent);
+begin
+   Body.ResetValues;
+   inherited Assign(aMessage);
+end;
+
+{ TConfigListMsg }
+
+constructor TConfigCurrMsg.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner, aRawxPL);
+   if aRawxPL = '' then begin
+      Schema.Assign(Schema_ConfigCurr);
+      MessageType := cmnd;
+      Body.AddKeyValuePairs( ['command'],['request']);
+   end;
+end;
+
+{ TConfigReqMsg }
+
+constructor TConfigReqMsg.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner, aRawxPL);
+   if aRawxPL = '' then begin
+      Schema.Assign(Schema_ConfigList);
+      MessageType := cmnd;
+      Body.AddKeyValuePairs( ['command'],['request']);
+   end;
+end;
+
+{ TConfigRespMsg }
+
+constructor TConfigRespMsg.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner, aRawxPL);
+   fFilters := TStringList.Create;
+   fGroups  := TStringList.Create;
+   if aRawxPL = '' then begin
+      Schema.Assign(Schema_ConfigResp);
+      MessageType := cmnd;
+      Body.AddKeyValuePairs( ['newconf','interval','filter','group'],['','','','']);
+   end;
+end;
+
+destructor TConfigRespMsg.Destroy;
+begin
+   fFilters.Free;
+   fGroups.Free;
+  inherited Destroy;
+end;
+
+function TConfigRespMsg.Get_Filters: TStringList;
+var i : integer;
+begin
+   fFilters.Clear;
+   for i := 0 to Pred(Body.ItemCount) do
+       if (Body.Keys[i] = 'filter') and (Body.Values[i]<>'') then fFilters.Add(Body.Values[i]);
+   result := fFilters;
+end;
+
+procedure TConfigRespMsg.Set_Filters(const AValue: TStringList);
+var i : integer;
+begin
+   for i:=Pred(Body.ItemCount)-1 downto 0 do
+       if Body.Keys[i] = 'filter' then Body.DeleteItem(i);
+   if aValue.Count = 0 then Body.AddKeyValue('filter=')
+   else for i:=0 to Pred(aValue.Count) do
+            Body.AddKeyValue('filter=' + aValue[i]);
+end;
+
+procedure TConfigRespMsg.Set_Groups(const AValue: TStringList);
+var i : integer;
+begin
+   for i:=Pred(Body.ItemCount)-1 downto 0 do
+       if Body.Keys[i] = 'group' then Body.DeleteItem(i);
+   if aValue.Count = 0 then Body.AddKeyValue('group=')
+   else for i:=0 to Pred(aValue.Count) do
+            Body.AddKeyValue('group=' + aValue[i]);
+end;
+
+function TConfigRespMsg.Get_Groups: TStringList;
+var i : integer;
+begin
+   fGroups.Clear;
+   for i := 0 to Pred(Body.ItemCount) do
+       if (Body.Keys[i] = 'group') and (Body.Values[i]<>'') then fGroups.Add(Body.Values[i]);
+   result := fGroups;
+end;
+
+function TConfigRespMsg.get_interval: integer;
+begin
+   result := StrToIntDef(Body.GetValueByKey('interval',''),-1);
+end;
+
+function TConfigRespMsg.get_newconf: string;
+begin
+   result := Body.GetValueByKey('newconf','');
+end;
+
+
+
+procedure TConfigRespMsg.set_interval(const AValue: integer);
+begin
+   Body.SetValueByKey('interval',IntToStr(aValue));
+end;
+
+procedure TConfigRespMsg.set_newconf(const AValue: string);
+begin
+   Body.SetValueByKey('newconf',aValue);
+end;
+
+function TConfigRespMsg.IsCoreValue(const aIndex: integer): boolean;
+begin
+   result := AnsiIndexStr(Body.Keys[aIndex],['newconf','interval','group','filter']) <>-1;
 end;
 
 { TLogBasic }
