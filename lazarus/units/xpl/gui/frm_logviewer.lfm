@@ -1,4 +1,4 @@
-object frmLogViewer: TfrmLogViewer
+inherited frmLogViewer: TfrmLogViewer
   Left = 102
   Height = 338
   Top = 160
@@ -7,8 +7,16 @@ object frmLogViewer: TfrmLogViewer
   ClientHeight = 338
   ClientWidth = 589
   OnShow = FormShow
-  LCLVersion = '0.9.31'
-  object Memo1: TMemo
+  inherited DlgToolbar: TToolBar
+    Width = 589
+    TabOrder = 1
+    object ToolButton1: TToolButton[2]
+      Left = 86
+      Top = 0
+      Action = acDropAllLogs
+    end
+  end
+  object Memo1: TMemo[1]
     Left = 0
     Height = 312
     Top = 26
@@ -17,52 +25,13 @@ object frmLogViewer: TfrmLogViewer
     ScrollBars = ssVertical
     TabOrder = 0
   end
-  object ToolBar1: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 589
-    ButtonHeight = 24
-    ButtonWidth = 80
-    Caption = 'ToolBar2'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esRaised
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 1
-    object tbClose: TToolButton
-      Left = 1
-      Top = 0
-      Action = acQuit
-    end
-    object ToolButton1: TToolButton
-      Left = 86
-      Top = 0
-      Action = acDropAllLogs
-    end
-    object ToolButton3: TToolButton
-      Left = 81
-      Top = 0
-      Width = 5
-      Caption = 'ToolButton2'
-      Style = tbsDivider
-    end
-  end
-  object ActionList1: TActionList
-    left = 344
-    top = 72
-    object acQuit: TAction
-      Caption = 'Close'
-      ImageIndex = 1
-      OnExecute = acQuitExecute
-    end
-    object acDropAllLogs: TAction
+  inherited DlgActions: TActionList[2]
+    object acDropAllLogs: TAction[1]
       Caption = 'Empty Log'
       ImageIndex = 39
       OnExecute = acDropAllLogsExecute
     end
-    object acReload: TAction
+    object acReload: TAction[2]
       Caption = 'acReload'
       OnExecute = acReloadExecute
     end

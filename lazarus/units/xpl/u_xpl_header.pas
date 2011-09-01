@@ -21,8 +21,7 @@ interface
 uses Classes,
      u_xpl_address,
      u_xpl_schema,
-     u_xpl_common,
-     u_xpl_config;
+     u_xpl_common;
 
 type // TxPLHeader ============================================================
      TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
@@ -52,7 +51,7 @@ type // TxPLHeader ============================================================
        function    IsValid : boolean; dynamic;
 
        procedure   Reply;
-       function    MatchesFilter(aFilterSet : TxPLConfigItem) : boolean;
+       function    MatchesFilter(aFilterSet : TPersistent) : boolean;			// Avoid circular references with u_xpl_config
        function    SourceFilter : string;                                       // Returns a message like a filter string
        function    TargetFilter : string;
 
@@ -73,6 +72,7 @@ uses SysUtils
      , typinfo
      , uRegExpr
      , StrUtils
+     , u_xpl_config
      ;
 
 // ============================================================================
@@ -161,13 +161,16 @@ begin
    MessageType := stat;
 end;
 
-function TxPLHeader.MatchesFilter(aFilterSet: TxPLConfigItem): boolean;
+function TxPLHeader.MatchesFilter(aFilterSet: TPersistent): boolean;
 var i : integer;
 begin
-   result := (aFilterSet.ValueCount=0);                                         // If no filter present then always pass
-   if not result then                                                           // if filters are present
-      for i:= 0 to aFilterSet.ValueCount-1 do                                   // check if at least one matches
-          result := result or xPLMatches(aFilterSet.ValueAtId(i), SourceFilter);
+   Assert(aFilterSet is TxPLConfigItem);
+   with TxPLConfigItem(aFilterSet) do begin
+      result := (ValueCount=0);                                                // If no filter present then always pass
+      if not result then                                                       // if filters are present
+         for i:= 0 to Pred(ValueCount) do                                      // check if at least one matches
+             result := result or xPLMatches(ValueAtId(i), SourceFilter);
+   end;
 end;
 
 function TxPLHeader.IsValid: boolean;

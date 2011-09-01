@@ -6,34 +6,30 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, SynHighlighterXML, SynEdit, SynHighlighterAny;
+  ComCtrls, SynHighlighterXML, SynEdit, SynHighlighterAny, dlg_template;
 
 type
 
   { TfrmXMLView }
 
-  TfrmXMLView = class(TForm)
+  TfrmXMLView = class(TDlgTemplate)
     SynEdit1: TSynEdit;
     SynXMLSyn1: TSynXMLSyn;
-    tbLaunch: TToolButton;
-    ToolBar: TToolBar;
     procedure FormShow(Sender: TObject);
-    procedure tbLaunchClick(Sender: TObject);
   private
-    { private declarations }
     filePath : string;
-  public
-    { public declarations }
-
   end;
 
   procedure ShowFrmXMLView(const aFileName : string);
 
 var frmXMLView: TfrmXMLView;
 
-implementation
-uses u_xpl_gui_resource;
+implementation // =============================================================
 
+uses u_xpl_gui_resource
+     ;
+
+// ============================================================================
 procedure ShowFrmXMLView(const aFileName: string);
 begin
   if not Assigned(FrmXMLView) then Application.CreateForm(TFrmXMLView,FrmXMLView);
@@ -41,18 +37,14 @@ begin
   FrmXMLView.ShowModal;
 end;
 
-procedure TfrmXMLView.tbLaunchClick(Sender: TObject);
-begin
-   Close;
-end;
-
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
-   ToolBar.Images := xPLGUIResource.Images;
+   inherited;
    Caption := FilePath;
    SynEdit1.Lines.LoadFromFile(filepath);
 end;
 
+// ============================================================================
 initialization
   {$I frm_xmlview.lrs}
 

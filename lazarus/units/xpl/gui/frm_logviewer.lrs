@@ -1,22 +1,15 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('TfrmLogViewer','FORMDATA',[
-  'TPF0'#13'TfrmLogViewer'#12'frmLogViewer'#4'Left'#2'f'#6'Height'#3'R'#1#3'Top'
-  +#3#160#0#5'Width'#3'M'#2#7'Caption'#6#10'Log viewer'#12'ClientHeight'#3'R'#1
-  +#11'ClientWidth'#3'M'#2#6'OnShow'#7#8'FormShow'#10'LCLVersion'#6#6'0.9.31'#0
+  'TPF0'#241#13'TfrmLogViewer'#12'frmLogViewer'#4'Left'#2'f'#6'Height'#3'R'#1#3
+  +'Top'#3#160#0#5'Width'#3'M'#2#7'Caption'#6#10'Log viewer'#12'ClientHeight'#3
+  +'R'#1#11'ClientWidth'#3'M'#2#6'OnShow'#7#8'FormShow'#0#241#8'TToolBar'#10'Dl'
+  +'gToolbar'#5'Width'#3'M'#2#8'TabOrder'#2#1#0#242#2#2#11'TToolButton'#11'Tool'
+  +'Button1'#4'Left'#2'V'#3'Top'#2#0#6'Action'#7#13'acDropAllLogs'#0#0#0#242#2#1
   +#5'TMemo'#5'Memo1'#4'Left'#2#0#6'Height'#3'8'#1#3'Top'#2#26#5'Width'#3'M'#2#5
-  +'Align'#7#8'alClient'#10'ScrollBars'#7#10'ssVertical'#8'TabOrder'#2#0#0#0#8
-  +'TToolBar'#8'ToolBar1'#4'Left'#2#0#6'Height'#2#26#3'Top'#2#0#5'Width'#3'M'#2
-  +#12'ButtonHeight'#2#24#11'ButtonWidth'#2'P'#7'Caption'#6#8'ToolBar2'#11'Edge'
-  +'Borders'#11#8'ebBottom'#0#9'EdgeOuter'#7#8'esRaised'#4'Flat'#8#4'List'#9#12
-  +'ShowCaptions'#9#8'TabOrder'#2#1#0#11'TToolButton'#7'tbClose'#4'Left'#2#1#3
-  +'Top'#2#0#6'Action'#7#6'acQuit'#0#0#11'TToolButton'#11'ToolButton1'#4'Left'#2
-  +'V'#3'Top'#2#0#6'Action'#7#13'acDropAllLogs'#0#0#11'TToolButton'#11'ToolButt'
-  +'on3'#4'Left'#2'Q'#3'Top'#2#0#5'Width'#2#5#7'Caption'#6#11'ToolButton2'#5'St'
-  +'yle'#7#10'tbsDivider'#0#0#0#11'TActionList'#11'ActionList1'#4'left'#3'X'#1#3
-  +'top'#2'H'#0#7'TAction'#6'acQuit'#7'Caption'#6#5'Close'#10'ImageIndex'#2#1#9
-  +'OnExecute'#7#13'acQuitExecute'#0#0#7'TAction'#13'acDropAllLogs'#7'Caption'#6
-  +#9'Empty Log'#10'ImageIndex'#2''''#9'OnExecute'#7#20'acDropAllLogsExecute'#0
-  +#0#7'TAction'#8'acReload'#7'Caption'#6#8'acReload'#9'OnExecute'#7#15'acReloa'
-  +'dExecute'#0#0#0#0
+  +'Align'#7#8'alClient'#10'ScrollBars'#7#10'ssVertical'#8'TabOrder'#2#0#0#0#243
+  +#2#2#11'TActionList'#10'DlgActions'#0#242#2#1#7'TAction'#13'acDropAllLogs'#7
+  +'Caption'#6#9'Empty Log'#10'ImageIndex'#2''''#9'OnExecute'#7#20'acDropAllLog'
+  +'sExecute'#0#0#242#2#2#7'TAction'#8'acReload'#7'Caption'#6#8'acReload'#9'OnE'
+  +'xecute'#7#15'acReloadExecute'#0#0#0#0
 ]);

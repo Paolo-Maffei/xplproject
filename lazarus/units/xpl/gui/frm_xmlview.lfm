@@ -1,4 +1,4 @@
-object frmXMLView: TfrmXMLView
+inherited frmXMLView: TfrmXMLView
   Left = 72
   Height = 352
   Top = 219
@@ -9,8 +9,11 @@ object frmXMLView: TfrmXMLView
   ClientHeight = 352
   ClientWidth = 704
   OnShow = FormShow
-  LCLVersion = '0.9.28.2'
-  object SynEdit1: TSynEdit
+  inherited DlgToolbar: TToolBar
+    Width = 704
+    TabOrder = 1
+  end
+  inline SynEdit1: TSynEdit[1]
     Left = 0
     Height = 326
     Top = 26
@@ -23,9 +26,32 @@ object frmXMLView: TfrmXMLView
     ParentColor = False
     ParentFont = False
     TabOrder = 0
-    BookMarkOptions.OnChange = nil
     Gutter.Width = 57
     Gutter.MouseActions = <    
+      item
+        Shift = []
+        ShiftMask = []
+        Button = mbLeft
+        ClickCount = ccAny
+        ClickDir = cdDown
+        Command = 13
+        MoveCaret = False
+        Option = 0
+        Priority = 0
+      end    
+      item
+        Shift = []
+        ShiftMask = []
+        Button = mbRight
+        ClickCount = ccSingle
+        ClickDir = cdUp
+        Command = 12
+        MoveCaret = False
+        Option = 0
+        Priority = 0
+      end>
+    RightGutter.Width = 0
+    RightGutter.MouseActions = <    
       item
         Shift = []
         ShiftMask = []
@@ -598,9 +624,9 @@ object frmXMLView: TfrmXMLView
     )
     ReadOnly = True
     BracketHighlightStyle = sbhsBoth
-    object TSynGutterPartList
+    inline TSynGutterPartList
       object TSynGutterMarks
-        Width = 23
+        Width = 24
       end
       object TSynGutterLineNumber
         Width = 17
@@ -706,31 +732,24 @@ object frmXMLView: TfrmXMLView
       end
     end
   end
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 704
-    ButtonHeight = 24
-    ButtonWidth = 80
-    Caption = 'ToolBar2'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esRaised
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 1
-    object tbLaunch: TToolButton
-      Left = 1
-      Top = 0
-      Caption = 'Close'
-      ImageIndex = 1
-      OnClick = tbLaunchClick
-    end
+  inherited DlgActions: TActionList[2]
   end
-  object SynXMLSyn1: TSynXMLSyn
+  object SynXMLSyn1: TSynXMLSyn[3]
     DefaultFilter = 'Documents XML (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
     Enabled = False
+    ElementAttri.FrameEdges = sfeAround
+    AttributeAttri.FrameEdges = sfeAround
+    NamespaceAttributeAttri.FrameEdges = sfeAround
+    AttributeValueAttri.FrameEdges = sfeAround
+    NamespaceAttributeValueAttri.FrameEdges = sfeAround
+    TextAttri.FrameEdges = sfeAround
+    CDATAAttri.FrameEdges = sfeAround
+    EntityRefAttri.FrameEdges = sfeAround
+    ProcessingInstructionAttri.FrameEdges = sfeAround
+    CommentAttri.FrameEdges = sfeAround
+    DocTypeAttri.FrameEdges = sfeAround
+    SpaceAttri.FrameEdges = sfeAround
+    SymbolAttri.FrameEdges = sfeAround
     WantBracesParsed = False
     left = 80
     top = 56

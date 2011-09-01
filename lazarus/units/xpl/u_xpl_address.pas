@@ -20,7 +20,6 @@ interface
 
 uses Classes
      , u_xpl_common
-     , u_xpl_config
      , u_xpl_rawset
      ;
 
@@ -64,7 +63,7 @@ type // TxPLAddress ===========================================================
        procedure Set_IsGeneric(const AValue: boolean);
     public
        function  IsValid : boolean;
-       function  MatchesGroup(const aGroupSet: TxPLConfigItem): boolean;
+       function  MatchesGroup(const aGroupSet : TPersistent): boolean;			// Avoid circular references with config
 
     published
        property  IsGeneric : boolean  read Get_IsGeneric write Set_IsGeneric stored false;
@@ -75,9 +74,9 @@ const K_ADDR_ANY_TARGET = '*';
 
 implementation // =============================================================
 uses IdStack
-     //, JCLStrings
      , SysUtils
      , StrUtils
+     , u_xpl_config
      , fpc_delphi_compat
      ;
 
@@ -209,13 +208,16 @@ begin
              else ResetValues;
 end;
 
-function TxPLTargetAddress.MatchesGroup(const aGroupSet: TxPLConfigItem): boolean;
+function TxPLTargetAddress.MatchesGroup(const aGroupSet : TPersistent): boolean;
 var i : integer;
 begin
-   result := IsGroup;
-   if result then
-      for i := 1 to aGroupSet.ValueCount do
-          result := result or (aGroupSet.ValueAtId(i) = RawxPL);
+   Assert (aGroupSet is TxPLConfigItem);
+   with TxPLConfigItem(aGroupSet) do begin
+      result := IsGroup;
+      if result then
+         for i := 1 to ValueCount do
+             result := result or (ValueAtId(i) = RawxPL);
+   end;
 end;
 
 initialization // =============================================================

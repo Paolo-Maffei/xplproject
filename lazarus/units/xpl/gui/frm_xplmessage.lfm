@@ -123,13 +123,13 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsRaw: TTabSheet
       Caption = 'Raw'
-      ClientHeight = 333
-      ClientWidth = 598
+      ClientHeight = 330
+      ClientWidth = 602
       object HexEditor: TKHexEditor
         Left = 0
-        Height = 333
+        Height = 330
         Top = 0
-        Width = 598
+        Width = 602
         AddressMode = eamDec
         Align = alClient
         DigitGrouping = 1
@@ -146,8 +146,8 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsPSScript: TTabSheet
       Caption = 'PSScript Handling'
-      ClientHeight = 333
-      ClientWidth = 598
+      ClientHeight = 330
+      ClientWidth = 602
       object ckDevice: TCheckBox
         Left = 8
         Height = 19
@@ -183,9 +183,9 @@ inherited frmxPLMessage: TfrmxPLMessage
       end
       inline mmoPSScript: TSynEdit
         Left = 0
-        Height = 295
+        Height = 292
         Top = 38
-        Width = 598
+        Width = 602
         Align = alBottom
         Anchors = [akTop, akLeft, akRight]
         Font.Height = -13
@@ -897,6 +897,34 @@ inherited frmxPLMessage: TfrmxPLMessage
   inherited ActionList: TActionList[4]
     left = 392
     top = 176
+    object acSave: TAction[4]
+      Caption = 'Save'
+      Hint = 'Save this message'
+      ImageIndex = 3
+      OnExecute = acSaveExecute
+    end
+    object acSend: TAction[5]
+      Caption = 'Send'
+      Hint = 'Send this message'
+      ImageIndex = 5
+      OnExecute = acSendExecute
+    end
+    object acLoad: TAction[6]
+      Caption = 'Load'
+      Hint = 'Load a message from file'
+      ImageIndex = 17
+      OnExecute = acLoadExecute
+    end
+    object acClose: TAction[7]
+      Caption = 'Close'
+      ImageIndex = 0
+    end
+    object acPaste: TAction[8]
+      Caption = 'Paste'
+      Hint = 'Paste a message from clipboard'
+      ImageIndex = 19
+      OnExecute = tbPasteClick
+    end
   end
   inherited xPLMenu: TPopupMenu[5]
     left = 136
@@ -908,51 +936,19 @@ inherited frmxPLMessage: TfrmxPLMessage
   end
   inherited RxAboutDialog1: TRxAboutDialog[7]
   end
-  object ActionList2: TActionList[8]
-    left = 312
-    top = 120
-    object acSave: TAction
-      Caption = 'Save'
-      Hint = 'Save this message'
-      ImageIndex = 3
-      OnExecute = acSaveExecute
-    end
-    object acSend: TAction
-      Caption = 'Send'
-      Hint = 'Send this message'
-      ImageIndex = 5
-      OnExecute = acSendExecute
-    end
-    object acLoad: TAction
-      Caption = 'Load'
-      Hint = 'Load a message from file'
-      ImageIndex = 17
-      OnExecute = acLoadExecute
-    end
-    object acClose: TAction
-      Caption = 'Close'
-      ImageIndex = 0
-    end
-    object acPaste: TAction
-      Caption = 'Paste'
-      Hint = 'Paste a message from clipboard'
-      ImageIndex = 19
-      OnExecute = tbPasteClick
-    end
-  end
-  object SaveMessage: TxPLMsgSaveDialog[9]
+  object SaveMessage: TxPLMsgSaveDialog[8]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 336
     top = 264
   end
-  object OpenMessage: TxPLMsgOpenDialog[10]
+  object OpenMessage: TxPLMsgOpenDialog[9]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 136
     top = 168
   end
-  object SynPasSyn1: TSynPasSyn[11]
+  object SynPasSyn1: TSynPasSyn[10]
     Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGreen
@@ -971,11 +967,11 @@ inherited frmxPLMessage: TfrmxPLMessage
     left = 64
     top = 224
   end
-  object popCommands: TPopupMenu[12]
+  object popCommands: TPopupMenu[11]
     left = 64
     top = 168
   end
-  object popCopy: TPopupMenu[13]
+  object popCopy: TPopupMenu[12]
     left = 136
     top = 56
     object mnuCopyMessage: TMenuItem
@@ -991,7 +987,7 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = mnuCopyFilterClick
     end
   end
-  object popFunctions: TPopupMenu[14]
+  object popFunctions: TPopupMenu[13]
     left = 64
     top = 112
   end

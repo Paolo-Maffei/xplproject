@@ -33,15 +33,15 @@ LazarusResources.Add('TfrmxPLMessage','FORMDATA',[
   +'Order'#2#0#0#0#244#14'TTMessageFrame'#12'FrameMessage'#3'Top'#2#30#5'Width'
   +#3'R'#2#11'ClientWidth'#3'R'#2#8'TabOrder'#2#1#0#241#7'TTIMemo'#7'edtBody'#5
   +'Width'#3#20#2#0#0#241#8'TTILabel'#7'lblSize'#6'Height'#2#1#5'Width'#2#1#0#0
-  +#0#0#9'TTabSheet'#5'tsRaw'#7'Caption'#6#3'Raw'#12'ClientHeight'#3'M'#1#11'Cl'
-  +'ientWidth'#3'V'#2#0#11'TKHexEditor'#9'HexEditor'#4'Left'#2#0#6'Height'#3'M'
-  +#1#3'Top'#2#0#5'Width'#3'V'#2#11'AddressMode'#7#6'eamDec'#5'Align'#7#8'alCli'
+  +#0#0#9'TTabSheet'#5'tsRaw'#7'Caption'#6#3'Raw'#12'ClientHeight'#3'J'#1#11'Cl'
+  +'ientWidth'#3'Z'#2#0#11'TKHexEditor'#9'HexEditor'#4'Left'#2#0#6'Height'#3'J'
+  +#1#3'Top'#2#0#5'Width'#3'Z'#2#11'AddressMode'#7#6'eamDec'#5'Align'#7#8'alCli'
   +'ent'#13'DigitGrouping'#2#1#10'DrawStyles'#11#8'edDigits'#6'edText'#15'edIna'
   +'ctiveCaret'#12'edSeparators'#13'edSingleBkGnd'#0#8'EditArea'#7#6'eaText'#11
   +'Font.Height'#2#245#9'Font.Name'#6#11'Courier New'#10'Font.Pitch'#7#7'fpFixe'
   +'d'#10'Font.Style'#11#6'fsBold'#0#8'LineSize'#2#8#8'ReadOnly'#9#8'TabOrder'#2
   +#0#0#0#0#9'TTabSheet'#10'tsPSScript'#7'Caption'#6#17'PSScript Handling'#12'C'
-  +'lientHeight'#3'M'#1#11'ClientWidth'#3'V'#2#0#9'TCheckBox'#8'ckDevice'#4'Lef'
+  +'lientHeight'#3'J'#1#11'ClientWidth'#3'Z'#2#0#9'TCheckBox'#8'ckDevice'#4'Lef'
   +'t'#2#8#6'Height'#2#19#3'Top'#2#6#5'Width'#2'7'#7'Caption'#6#6'Device'#7'Che'
   +'cked'#9#8'OnChange'#7#14'ckDeviceChange'#5'State'#7#9'cbChecked'#8'TabOrder'
   +#2#0#0#0#9'TCheckBox'#10'ckInstance'#4'Left'#2'L'#6'Height'#2#19#3'Top'#2#6#5
@@ -50,17 +50,17 @@ LazarusResources.Add('TfrmxPLMessage','FORMDATA',[
   +'e'#4'Left'#3#148#0#6'Height'#2#19#3'Top'#2#6#5'Width'#2'_'#7'Caption'#6#12
   +'Message Type'#7'Checked'#9#8'OnChange'#7#14'ckDeviceChange'#5'State'#7#9'cb'
   +'Checked'#8'TabOrder'#2#2#0#0#244#8'TSynEdit'#11'mmoPSScript'#4'Left'#2#0#6
-  +'Height'#3''''#1#3'Top'#2'&'#5'Width'#3'V'#2#5'Align'#7#8'alBottom'#7'Anchor'
-  +'s'#11#5'akTop'#6'akLeft'#7'akRight'#0#11'Font.Height'#2#243#9'Font.Name'#6
-  +#11'Courier New'#10'Font.Pitch'#7#7'fpFixed'#12'Font.Quality'#7#16'fqNonAnti'
-  +'aliased'#11'ParentColor'#8#10'ParentFont'#8#8'TabOrder'#2#3#12'Gutter.Width'
-  +#2#12#19'Gutter.MouseActions'#14#1#5'Shift'#11#0#9'ShiftMask'#11#0#6'Button'
-  +#7#6'mbLeft'#10'ClickCount'#7#5'ccAny'#8'ClickDir'#7#6'cdDown'#7'Command'#2
-  +#13#9'MoveCaret'#8#6'Option'#2#0#8'Priority'#2#0#0#1#5'Shift'#11#0#9'ShiftMa'
-  +'sk'#11#0#6'Button'#7#7'mbRight'#10'ClickCount'#7#8'ccSingle'#8'ClickDir'#7#4
-  +'cdUp'#7'Command'#2#12#9'MoveCaret'#8#6'Option'#2#0#8'Priority'#2#0#0#0#17'R'
-  +'ightGutter.Width'#2#0#24'RightGutter.MouseActions'#14#1#5'Shift'#11#0#9'Shi'
-  +'ftMask'#11#0#6'Button'#7#6'mbLeft'#10'ClickCount'#7#5'ccAny'#8'ClickDir'#7#6
+  +'Height'#3'$'#1#3'Top'#2'&'#5'Width'#3'Z'#2#5'Align'#7#8'alBottom'#7'Anchors'
+  +#11#5'akTop'#6'akLeft'#7'akRight'#0#11'Font.Height'#2#243#9'Font.Name'#6#11
+  +'Courier New'#10'Font.Pitch'#7#7'fpFixed'#12'Font.Quality'#7#16'fqNonAntiali'
+  +'ased'#11'ParentColor'#8#10'ParentFont'#8#8'TabOrder'#2#3#12'Gutter.Width'#2
+  +#12#19'Gutter.MouseActions'#14#1#5'Shift'#11#0#9'ShiftMask'#11#0#6'Button'#7
+  +#6'mbLeft'#10'ClickCount'#7#5'ccAny'#8'ClickDir'#7#6'cdDown'#7'Command'#2#13
+  +#9'MoveCaret'#8#6'Option'#2#0#8'Priority'#2#0#0#1#5'Shift'#11#0#9'ShiftMask'
+  +#11#0#6'Button'#7#7'mbRight'#10'ClickCount'#7#8'ccSingle'#8'ClickDir'#7#4'cd'
+  +'Up'#7'Command'#2#12#9'MoveCaret'#8#6'Option'#2#0#8'Priority'#2#0#0#0#17'Rig'
+  +'htGutter.Width'#2#0#24'RightGutter.MouseActions'#14#1#5'Shift'#11#0#9'Shift'
+  +'Mask'#11#0#6'Button'#7#6'mbLeft'#10'ClickCount'#7#5'ccAny'#8'ClickDir'#7#6
   +'cdDown'#7'Command'#2#13#9'MoveCaret'#8#6'Option'#2#0#8'Priority'#2#0#0#1#5
   +'Shift'#11#0#9'ShiftMask'#11#0#6'Button'#7#7'mbRight'#10'ClickCount'#7#8'ccS'
   +'ingle'#8'ClickDir'#7#4'cdUp'#7'Command'#2#12#9'MoveCaret'#8#6'Option'#2#0#8
@@ -190,37 +190,36 @@ LazarusResources.Add('TfrmxPLMessage','FORMDATA',[
   +#2#1#8'Priority'#2#0#0#0#0#0#0#0#9'TCheckBox'#6'ckBody'#4'Left'#3#252#0#6'He'
   +'ight'#2#19#3'Top'#2#6#5'Width'#2'b'#7'Caption'#6#13'Body Elements'#7'Checke'
   +'d'#9#5'State'#7#9'cbChecked'#8'TabOrder'#2#4#0#0#0#0#243#2#4#11'TActionList'
-  +#10'ActionList'#4'left'#3#136#1#3'top'#3#176#0#0#0#243#2#5#10'TPopupMenu'#7
-  +'xPLMenu'#4'left'#3#136#0#3'top'#2'p'#0#0#243#2#6#15'TXMLPropStorage'#14'XML'
-  +'PropStorage'#4'left'#3#0#1#3'top'#3#8#1#0#0#243#2#7#14'TRxAboutDialog'#14'R'
-  ,'xAboutDialog1'#0#0#242#2#8#11'TActionList'#11'ActionList2'#4'left'#3'8'#1#3
-  +'top'#2'x'#0#7'TAction'#6'acSave'#7'Caption'#6#4'Save'#4'Hint'#6#17'Save thi'
-  +'s message'#10'ImageIndex'#2#3#9'OnExecute'#7#13'acSaveExecute'#0#0#7'TActio'
-  +'n'#6'acSend'#7'Caption'#6#4'Send'#4'Hint'#6#17'Send this message'#10'ImageI'
-  +'ndex'#2#5#9'OnExecute'#7#13'acSendExecute'#0#0#7'TAction'#6'acLoad'#7'Capti'
-  +'on'#6#4'Load'#4'Hint'#6#24'Load a message from file'#10'ImageIndex'#2#17#9
-  +'OnExecute'#7#13'acLoadExecute'#0#0#7'TAction'#7'acClose'#7'Caption'#6#5'Clo'
-  +'se'#10'ImageIndex'#2#0#0#0#7'TAction'#7'acPaste'#7'Caption'#6#5'Paste'#4'Hi'
-  +'nt'#6#30'Paste a message from clipboard'#10'ImageIndex'#2#19#9'OnExecute'#7
-  +#12'tbPasteClick'#0#0#0#242#2#9#17'TxPLMsgSaveDialog'#11'SaveMessage'#10'Def'
-  +'aultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.xpl|xPL Config File|xpl_'
-  +'*.xml'#4'left'#3'P'#1#3'top'#3#8#1#0#0#242#2#10#17'TxPLMsgOpenDialog'#11'Op'
-  +'enMessage'#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.xpl|xPL'
-  +' Config File|xpl_*.xml'#4'left'#3#136#0#3'top'#3#168#0#0#0#242#2#11#10'TSyn'
-  +'PasSyn'#10'SynPasSyn1'#7'Enabled'#8#19'AsmAttri.FrameEdges'#7#9'sfeAround'
-  +#23'CommentAttri.Foreground'#7#7'clGreen'#23'CommentAttri.FrameEdges'#7#9'sf'
-  +'eAround'#28'IDEDirectiveAttri.FrameEdges'#7#9'sfeAround'#26'IdentifierAttri'
-  +'.FrameEdges'#7#9'sfeAround'#19'KeyAttri.FrameEdges'#7#9'sfeAround'#22'Numbe'
-  +'rAttri.FrameEdges'#7#9'sfeAround'#21'SpaceAttri.FrameEdges'#7#9'sfeAround'
-  +#22'StringAttri.FrameEdges'#7#9'sfeAround'#22'SymbolAttri.FrameEdges'#7#9'sf'
-  +'eAround'#25'CaseLabelAttri.FrameEdges'#7#9'sfeAround'#25'DirectiveAttri.Fra'
-  +'meEdges'#7#9'sfeAround'#12'CompilerMode'#7#9'pcmDelphi'#14'NestedComments'#8
-  +#4'left'#2'@'#3'top'#3#224#0#0#0#242#2#12#10'TPopupMenu'#11'popCommands'#4'l'
-  +'eft'#2'@'#3'top'#3#168#0#0#0#242#2#13#10'TPopupMenu'#7'popCopy'#4'left'#3
-  +#136#0#3'top'#2'8'#0#9'TMenuItem'#14'mnuCopyMessage'#7'Caption'#6#7'Message'
-  +#7'OnClick'#7#19'mnuCopyMessageClick'#0#0#9'TMenuItem'#14'mnuCopyAddress'#7
-  +'Caption'#6#14'Source Address'#7'OnClick'#7#19'mnuCopyAddressClick'#0#0#9'TM'
-  +'enuItem'#13'mnuCopyFilter'#7'Caption'#6#13'Filter String'#7'OnClick'#7#18'm'
-  +'nuCopyFilterClick'#0#0#0#242#2#14#10'TPopupMenu'#12'popFunctions'#4'left'#2
-  +'@'#3'top'#2'p'#0#0#0
+  +#10'ActionList'#4'left'#3#136#1#3'top'#3#176#0#0#242#2#4#7'TAction'#6'acSave'
+  +#7'Caption'#6#4'Save'#4'Hint'#6#17'Save this message'#10'ImageIndex'#2#3#9'O'
+  +'nExecute'#7#13'acSaveExecute'#0#0#242#2#5#7'TAction'#6'acSend'#7'Caption'#6
+  ,#4'Send'#4'Hint'#6#17'Send this message'#10'ImageIndex'#2#5#9'OnExecute'#7#13
+  +'acSendExecute'#0#0#242#2#6#7'TAction'#6'acLoad'#7'Caption'#6#4'Load'#4'Hint'
+  +#6#24'Load a message from file'#10'ImageIndex'#2#17#9'OnExecute'#7#13'acLoad'
+  +'Execute'#0#0#242#2#7#7'TAction'#7'acClose'#7'Caption'#6#5'Close'#10'ImageIn'
+  +'dex'#2#0#0#0#242#2#8#7'TAction'#7'acPaste'#7'Caption'#6#5'Paste'#4'Hint'#6
+  +#30'Paste a message from clipboard'#10'ImageIndex'#2#19#9'OnExecute'#7#12'tb'
+  +'PasteClick'#0#0#0#243#2#5#10'TPopupMenu'#7'xPLMenu'#4'left'#3#136#0#3'top'#2
+  +'p'#0#0#243#2#6#15'TXMLPropStorage'#14'XMLPropStorage'#4'left'#3#0#1#3'top'#3
+  +#8#1#0#0#243#2#7#14'TRxAboutDialog'#14'RxAboutDialog1'#0#0#242#2#8#17'TxPLMs'
+  +'gSaveDialog'#11'SaveMessage'#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Mess'
+  +'age File|*.xpl|xPL Config File|xpl_*.xml'#4'left'#3'P'#1#3'top'#3#8#1#0#0
+  +#242#2#9#17'TxPLMsgOpenDialog'#11'OpenMessage'#10'DefaultExt'#6#4'.xpl'#6'Fi'
+  +'lter'#6'0xPL Message File|*.xpl|xPL Config File|xpl_*.xml'#4'left'#3#136#0#3
+  +'top'#3#168#0#0#0#242#2#10#10'TSynPasSyn'#10'SynPasSyn1'#7'Enabled'#8#19'Asm'
+  +'Attri.FrameEdges'#7#9'sfeAround'#23'CommentAttri.Foreground'#7#7'clGreen'#23
+  +'CommentAttri.FrameEdges'#7#9'sfeAround'#28'IDEDirectiveAttri.FrameEdges'#7#9
+  +'sfeAround'#26'IdentifierAttri.FrameEdges'#7#9'sfeAround'#19'KeyAttri.FrameE'
+  +'dges'#7#9'sfeAround'#22'NumberAttri.FrameEdges'#7#9'sfeAround'#21'SpaceAttr'
+  +'i.FrameEdges'#7#9'sfeAround'#22'StringAttri.FrameEdges'#7#9'sfeAround'#22'S'
+  +'ymbolAttri.FrameEdges'#7#9'sfeAround'#25'CaseLabelAttri.FrameEdges'#7#9'sfe'
+  +'Around'#25'DirectiveAttri.FrameEdges'#7#9'sfeAround'#12'CompilerMode'#7#9'p'
+  +'cmDelphi'#14'NestedComments'#8#4'left'#2'@'#3'top'#3#224#0#0#0#242#2#11#10
+  +'TPopupMenu'#11'popCommands'#4'left'#2'@'#3'top'#3#168#0#0#0#242#2#12#10'TPo'
+  +'pupMenu'#7'popCopy'#4'left'#3#136#0#3'top'#2'8'#0#9'TMenuItem'#14'mnuCopyMe'
+  +'ssage'#7'Caption'#6#7'Message'#7'OnClick'#7#19'mnuCopyMessageClick'#0#0#9'T'
+  +'MenuItem'#14'mnuCopyAddress'#7'Caption'#6#14'Source Address'#7'OnClick'#7#19
+  +'mnuCopyAddressClick'#0#0#9'TMenuItem'#13'mnuCopyFilter'#7'Caption'#6#13'Fil'
+  +'ter String'#7'OnClick'#7#18'mnuCopyFilterClick'#0#0#0#242#2#13#10'TPopupMen'
+  +'u'#12'popFunctions'#4'left'#2'@'#3'top'#2'p'#0#0#0
 ]);

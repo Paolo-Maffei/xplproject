@@ -24,7 +24,6 @@ type
     ckInstance: TCheckBox;
     ckDevice: TCheckBox;
     acSend: TAction;
-    ActionList2: TActionList;
     HexEditor: TKHexEditor;
     Label4: TLabel;
     mnuCopyMessage: TMenuItem;
