@@ -90,15 +90,15 @@ Public Class Proxy
     End Property
     Private Shared _OldxPLAddress As String
 
-    Private Shared WithEvents xxxPLDevice As xPLDevice = Nothing
+    Private Shared WithEvents _xPLDevice As xPLDevice = Nothing
     Public Shared Property xPLDevice() As xPLDevice
         Get
-            Return xxxPLDevice
+            Return _xPLDevice
         End Get
         Set(ByVal value As xPLDevice)
             If value Is Nothing Then Throw New NullReferenceException
-            xxxPLDevice = value
-            _OldxPLAddress = xxxPLDevice.Address
+            _xPLDevice = value
+            _OldxPLAddress = _xPLDevice.Address
         End Set
     End Property
 
@@ -353,6 +353,25 @@ Public Class Proxy
         dev.AnnounceDevice()
         LogMessage("   UPnP device added: " & Device.FriendlyName & " (ID = " & Device.UniqueDeviceName & ")")
     End Sub
+
+    ''' <summary>
+    ''' Removes this proxy, and its children from the proxy list
+    ''' </summary>
+    ''' <remarks></remarks>
+    Private Sub RemoveProxy()
+        ' count backwards, to remove children in reverse order of adding
+        If IDList.Count > 1 Then
+            ' we have children, remove them first
+            Dim p As Proxy
+            For n As Integer = Me.IDList.Count - 1 To 1 Step -1 ' not to 0, becasue we'll be removing the ID itself below
+                p = GetProxy(Me.IDList(n))
+                p.RemoveProxy()
+            Next
+        End If
+        ' now remove self
+        _Proxylist.Remove(Me)
+    End Sub
+
     ''' <summary>
     ''' Removes a root UPnP device from the list, removing all underlying objects and proxies.
     ''' </summary>
@@ -365,14 +384,10 @@ Public Class Proxy
         Dim idlist As String = p.IDstring
         Dim devname As String = Device.FriendlyName & " (ID = " & Device.UniqueDeviceName & ")"
         LogMessage("Removing UPnP Device: " & devname)
-        Dim l As ArrayList = p.GetIDList
+        Dim l As ArrayList = p.IDList
         SyncLock _SharedLock
-            ' count backwards, to remove in reverse order of adding
-            For n As Integer = l.Count - 1 To 0 Step -1
-                p = GetProxy(l(n))
-                _Proxylist.Remove(p)
-            Next
-            ' last value of p is device itself. Now go sent an 'announce=left' message for this device
+            p.RemoveProxy()
+            ' Now go sent an 'announce=left' message for this device
             Dim m As New xPLMessage
             m.MsgType = xPLMessageTypeEnum.Trigger
             m.Source = xPLDevice.Address
@@ -381,7 +396,7 @@ Public Class Proxy
             m.Schema = "upnp.announce"
             With m.KeyValueList
                 .Add("announce", "left")
-                .Add("id", idlist)
+                .Add("id", p.ID.ToString)
             End With
             ' finally send it
             xPLDevice.Send(m)
@@ -420,56 +435,116 @@ Public Class Proxy
         Next
     End Sub
 
+    Private _IDList As ArrayList = Nothing
     ''' <summary>
-    ''' Returns an ArrayList with all Proxy ID's of this proxy and all that are underneith this proxy (recursively). If an
+    ''' Returns an ArrayList with all Proxy ID's of this proxy (but NOT all that are underneith this proxy). If an
     ''' input list is provided, the ID's will be added to that list.
     ''' </summary>
-    ''' <param name="List"></param>
     ''' <returns></returns>
     ''' <remarks></remarks>
-    Public Function GetIDList(Optional ByVal List As ArrayList = Nothing) As ArrayList
-        If List Is Nothing Then List = New ArrayList
-        Select Case Type
+    Public ReadOnly Property IDList() As ArrayList
+        Get
+            ' lazy creation, create upon request and maintain after that
+            If _IDList Is Nothing Then
+                _IDList = New ArrayList
+                Select Case Type
 
-            Case ProxyType.Device
-                List.Add(Me.ID)
-                ' also add all services and embedded devices
-                For Each s As UPnPService In Me.Device.Services
-                    GetProxy(s).GetIDList(List)
-                Next
-                For Each d As UPnPDevice In Me.Device.EmbeddedDevices
-                    GetProxy(d).GetIDList(List)
-                Next
+                    Case ProxyType.Device
+                        _IDList.Add(Me.ID)
+                        ' also add all services and embedded devices
+                        For Each s As UPnPService In Me.Device.Services
+                            _IDList.Add(GetProxy(s).ID)
+                            'GetProxy(s).GetIDList(List)
+                        Next
+                        For Each d As UPnPDevice In Me.Device.EmbeddedDevices
+                            _IDList.Add(GetProxy(d).ID)
+                            'GetProxy(d).GetIDList(List)
+                        Next
 
-            Case ProxyType.Service
-                List.Add(Me.ID)
-                ' also add all statevariables and methods
-                For Each s As UPnPStateVariable In Me.Service.GetStateVariables
-                    GetProxy(s).GetIDList(List)
-                Next
-                For Each m As UPnPAction In Me.Service.GetActions
-                    GetProxy(m).GetIDList(List)
-                Next
+                    Case ProxyType.Service
+                        _IDList.Add(Me.ID)
+                        ' also add all statevariables and methods
+                        For Each s As UPnPStateVariable In Me.Service.GetStateVariables
+                            _IDList.Add(GetProxy(s).ID)
+                            'GetProxy(s).GetIDList(List)
+                        Next
+                        For Each m As UPnPAction In Me.Service.GetActions
+                            _IDList.Add(GetProxy(m).ID)
+                            'GetProxy(m).GetIDList(List)
+                        Next
 
-            Case ProxyType.Method
-                List.Add(Me.ID)
-                ' also add all arguments
-                For Each a As UPnPArgument In Me.Method.ArgumentList
-                    GetProxy(a).GetIDList(List)
-                Next
+                    Case ProxyType.Method
+                        _IDList.Add(Me.ID)
+                        ' also add all arguments
+                        For Each a As UPnPArgument In Me.Method.ArgumentList
+                            _IDList.Add(GetProxy(a).ID)
+                            'GetProxy(a).GetIDList(List)
+                        Next
 
-            Case ProxyType.Variable
-                List.Add(Me.ID)
+                    Case ProxyType.Variable
+                        _IDList.Add(Me.ID)
 
-            Case ProxyType.Argument
-                List.Add(Me.ID)
+                    Case ProxyType.Argument
+                        _IDList.Add(Me.ID)
 
-            Case Else
-                Throw New Exception("Unknown ProxyType, please update source code")
+                    Case Else
+                        Throw New Exception("Unknown ProxyType, please update source code")
 
-        End Select
-        Return List
-    End Function
+                End Select
+            End If
+            Return _IDList
+        End Get
+    End Property
+
+    'Public Function GetIDList(Optional ByVal List As ArrayList = Nothing) As ArrayList
+    '    ' TODO: make this lazy! to improve performance
+    '    If List Is Nothing Then List = New ArrayList
+    '    Select Case Type
+
+    '        Case ProxyType.Device
+    '            List.Add(Me.ID)
+    '            ' also add all services and embedded devices
+    '            For Each s As UPnPService In Me.Device.Services
+    '                List.Add(GetProxy(s).ID)
+    '                'GetProxy(s).GetIDList(List)
+    '            Next
+    '            For Each d As UPnPDevice In Me.Device.EmbeddedDevices
+    '                List.Add(GetProxy(d).ID)
+    '                'GetProxy(d).GetIDList(List)
+    '            Next
+
+    '        Case ProxyType.Service
+    '            List.Add(Me.ID)
+    '            ' also add all statevariables and methods
+    '            For Each s As UPnPStateVariable In Me.Service.GetStateVariables
+    '                List.Add(GetProxy(s).ID)
+    '                'GetProxy(s).GetIDList(List)
+    '            Next
+    '            For Each m As UPnPAction In Me.Service.GetActions
+    '                List.Add(GetProxy(m).ID)
+    '                'GetProxy(m).GetIDList(List)
+    '            Next
+
+    '        Case ProxyType.Method
+    '            List.Add(Me.ID)
+    '            ' also add all arguments
+    '            For Each a As UPnPArgument In Me.Method.ArgumentList
+    '                List.Add(GetProxy(a).ID)
+    '                'GetProxy(a).GetIDList(List)
+    '            Next
+
+    '        Case ProxyType.Variable
+    '            List.Add(Me.ID)
+
+    '        Case ProxyType.Argument
+    '            List.Add(Me.ID)
+
+    '        Case Else
+    '            Throw New Exception("Unknown ProxyType, please update source code")
+
+    '    End Select
+    '    Return List
+    'End Function
 
     ''' <summary>
     ''' Will handle received xPL messages. 
@@ -477,7 +552,7 @@ Public Class Proxy
     ''' <param name="xpldev"></param>
     ''' <param name="e"></param>
     ''' <remarks></remarks>
-    Private Shared Sub _xPLDevice_xPLMessageReceived(ByVal xpldev As xPL.xPLDevice, ByVal e As xPL.xPLDevice.xPLEventArgs) Handles xxxPLDevice.xPLMessageReceived
+    Private Shared Sub _xPLDevice_xPLMessageReceived(ByVal xpldev As xPL.xPLDevice, ByVal e As xPL.xPLDevice.xPLEventArgs) Handles _xPLDevice.xPLMessageReceived
         ' Deal with the message
         Try
             If e.IsForMe Then
@@ -487,16 +562,28 @@ Public Class Proxy
                         Select Case .KeyValueList.Item("command")
                             Case "announce"
                                 ' must announce device
-                                ' TODO: optional announce only a single device
-                                LogMessage("Received announce request")
-                                Announce()
-                            Case "methodcall"
-                                Proxy.CallMethod(e.XplMsg)
+                                Dim i As Integer = .KeyValueList.IndexOf("id")
+                                If i <> -1 Then
+                                    ' IDs have been listed, serve them
+                                    LogMessage("Received announce request for specific IDs")
+                                    For n = 0 To .KeyValueList.Count
+                                        If .KeyValueList(n).Key = "id" Then
+                                            LogMessage("   Now announcing ID " & .KeyValueList(n).Value)
+                                            Dim mp As Proxy = GetProxy(CInt(Val(.KeyValueList(n).Value)))
+                                            mp.AnnounceElement()
+                                        End If
+                                    Next
+                                Else
+                                    ' No IDs requested, serve ALL
+                                    LogMessage("Received announce request for ALL devices")
+                                    Announce()
+                                End If
+
                             Case "requestvalue"
                                 LogMessage("Received a value request")
-                                Dim i As Integer = e.XplMsg.KeyValueList.IndexOf("id")
+                                Dim i As Integer = .KeyValueList.IndexOf("id")
                                 If i <> -1 Then
-                                    Dim p As Proxy = GetProxy(CInt(Val(e.XplMsg.KeyValueList("id"))))
+                                    Dim p As Proxy = GetProxy(CInt(Val(.KeyValueList("id"))))
                                     If p.Type = ProxyType.Device Or p.Type = ProxyType.Service Or p.Type = ProxyType.Variable Then
                                         Proxy.RequestValues(p)
                                     Else
@@ -507,8 +594,16 @@ Public Class Proxy
                                 End If
 
                             Case Else
-                                    LogMessage("WARNING: an xPL command message with schema 'upnp.basic' was received with an unknown command '" & .KeyValueList.Item("command") & "'." & vbCrLf & e.XplMsg.RawxPL)
+                                LogMessage("WARNING: an xPL command message with schema 'upnp.basic' was received with an unknown command '" & .KeyValueList.Item("command") & "'." & vbCrLf & e.XplMsg.RawxPL)
                         End Select
+
+                    ElseIf .Schema = "upnp.method" And .MsgType = xPLMessageTypeEnum.Command Then
+                        If .KeyValueList.IndexOf("command") <> -1 Then
+                            If .KeyValueList("command") = "methodcall" Then
+                                Proxy.CallMethod(e.XplMsg)
+                            End If
+                        End If
+
                     Else
                         LogMessage("WARNING: Cannot handle received xPL message;" & vbCrLf & e.XplMsg.RawxPL)
                     End If
@@ -522,6 +617,20 @@ Public Class Proxy
     End Sub
 
     ''' <summary>
+    ''' Send the Announce messages for the element. 
+    ''' </summary>
+    ''' <remarks>Don't call directly, use AnnounceDevice</remarks>
+    Private Sub AnnounceElement()
+        Dim p As Proxy
+        ' send my own message
+        xPLDevice.Send(Me.GetAnnounceMessage)
+        ' if there are any subs, call them now
+        For n = 1 To Me.IDList.Count - 1
+            p = Proxy.GetProxy(Me.IDList(n))
+            p.AnnounceElement()
+        Next
+    End Sub
+    ''' <summary>
     ''' Send the Announce messages for the device (only for root devices, exits silently on any other. 
     ''' </summary>
     ''' <remarks></remarks>
@@ -530,13 +639,8 @@ Public Class Proxy
         If Me.Type <> ProxyType.Device Then Exit Sub
         If Not Me.Device.Root Then Exit Sub
         ' we are a root device, now let all elements announce themselves
-        Dim l As ArrayList = Me.GetIDList
-        Dim p As Proxy
         LogMessage("   Now announcing; " & Me.Device.FriendlyName & "(" & xPLDevice.Address & ")")
-        For n = 0 To l.Count - 1
-            p = GetProxy(l(n))
-            xPLDevice.Send(p.GetAnnounceMessage)
-        Next
+        Me.AnnounceElement()
     End Sub
     ''' <summary>
     ''' Announces all UPnP root devices known
@@ -549,17 +653,23 @@ Public Class Proxy
             End If
         Next
     End Sub
+
+    Private _IDstring As String = ""
     ''' <summary>
-    ''' Returns the results of <see cref="GetIDList">GetIDList</see> as a comma delimited string. Auxilary function for creating xpl messages.
+    ''' Returns the results of <see cref="IDList">IDList</see> as a comma delimited string. Auxilary function for creating xpl messages.
     ''' </summary>
     ''' <returns></returns>
     ''' <remarks></remarks>
     Private Function IDstring() As String
-        Dim s As String = ""
-        For Each i As Integer In Me.GetIDList
-            s = s & "," & i
-        Next
-        Return Mid(s, 2)    ' drop first comma
+        ' initialize lazy!
+        If _IDstring = "" Then
+            Dim s As String = ""
+            For Each i As Integer In Me.IDList
+                s = s & "," & i
+            Next
+            _IDstring = Mid(s, 2)    ' drop first comma
+        End If
+        Return _IDstring
     End Function
     ''' <summary>
     ''' Returns the xPLAnnounce message message for the proxy type
@@ -663,6 +773,7 @@ Public Class Proxy
                 xmsg.KeyValueList.Add(Proxy.GetProxy(sender).ID.ToString, NewValue.ToString)
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
+                log = log & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
                 ' its an AV device with XML payload with the changes
                 Dim x As XmlReader
                 Dim sett As New XmlReaderSettings
@@ -734,7 +845,7 @@ Public Class Proxy
     ''' </summary>
     ''' <param name="xpldev"></param>
     ''' <remarks></remarks>
-    Private Shared Sub _xPLDevice_xPLConfigDone(ByVal xpldev As xPL.xPLDevice) Handles xxxPLDevice.xPLConfigDone
+    Private Shared Sub _xPLDevice_xPLConfigDone(ByVal xpldev As xPL.xPLDevice) Handles _xPLDevice.xPLConfigDone
         LogMessage("Device " & xPLDevice.Address & " received initial configuration.")
         xPLConfigUpdate()
     End Sub
@@ -743,7 +854,7 @@ Public Class Proxy
     ''' </summary>
     ''' <param name="xpldev"></param>
     ''' <remarks></remarks>
-    Private Shared Sub _xPLDevice_xPLReConfigDone(ByVal xpldev As xPL.xPLDevice) Handles xxxPLDevice.xPLReConfigDone
+    Private Shared Sub _xPLDevice_xPLReConfigDone(ByVal xpldev As xPL.xPLDevice) Handles _xPLDevice.xPLReConfigDone
         LogMessage("Device " & xPLDevice.Address & " received a configuration update.")
         xPLConfigUpdate()
     End Sub
@@ -779,9 +890,136 @@ Public Class Proxy
         End Select
     End Sub
 
+    ''' <summary>
+    ''' Executes a method call
+    ''' </summary>
+    ''' <param name="msg"></param>
+    ''' <remarks></remarks>
     Private Shared Sub CallMethod(ByVal msg As xPLMessage)
-        ' TODO: implement the method call
-
+        LogMessage("Received MethodCall command from " & msg.Source)
+        Dim method As UPnPAction = Nothing
+        Dim uid As String = ""
+        Dim result As New xPLMessage
+        ' get the method to execute
+        If msg.KeyValueList.IndexOf("method") = -1 Then
+            Proxy.CallMethodError(msg, "ERROR: Missing the 'method' identifier")
+            Exit Sub
+        Else
+            ' lookup the UPnP method/action
+            method = GetProxy(CInt(Val(msg.KeyValueList("method")))).Method
+        End If
+        ' get the unique message id
+        If msg.KeyValueList.IndexOf("callid") <> -1 Then
+            uid = msg.KeyValueList("callid")
+        End If
+        LogMessage("   Method: " & method.Name & ", unique id: " & uid)
+        ' build result message
+        result.MsgType = xPLMessageTypeEnum.Trigger
+        result.Source = xPLDevice.Address
+        result.Target = "*"
+        result.Schema = "upnp.method"
+        If uid <> "" Then
+            result.KeyValueList.Add("callid", uid)
+        End If
+        Try
+            ' define an argument list
+            Dim args(method.Arguments.Count - 1) As UPnPArgument
+            Dim i As Integer = 0
+            For n As Integer = 0 To msg.KeyValueList.Count - 1
+                Dim kvp As xPLKeyValuePair = msg.KeyValueList(n)
+                If kvp.Key <> "command" And kvp.Key <> "method" And kvp.Key <> "callid" Then
+                    args(i) = GetProxy(CInt(Val(kvp.Key))).Argument.Clone
+                    args(i).DataValue = ConvertToUPnPType(args(i).RelatedStateVar.ValueType, kvp.Value)
+                    i = i + 1
+                End If
+            Next
+            method.ValidateArgs(args)
+            Dim retValue As Object = method.ParentService.InvokeSync(method.Name, args)
+            If retValue Is Nothing Then retValue = ""
+            LogMessage("Returned: " & retValue.ToString)
+            result.KeyValueList.Add("success", "true")
+            result.KeyValueList.Add("retval", retValue.ToString)
+            For Each arg As UPnPArgument In args
+                If arg.Direction = "out" Then
+                    ' TODO: return values to be added to message
+                End If
+            Next
+        Catch ex As Exception
+            result.KeyValueList.Add("success", "false")
+            result.KeyValueList.Add("error", ex.Message)
+            LogMessage("   ERROR: " & ex.ToString)
+        End Try
+        xPLDevice.Send(result)
     End Sub
+
+    ''' <summary>
+    ''' Converts a string value to the proper UPnP value type
+    ''' </summary>
+    ''' <param name="UPnPType"></param>
+    ''' <param name="strValue"></param>
+    ''' <returns></returns>
+    ''' <remarks></remarks>
+    Public Shared Function ConvertToUPnPType(ByVal UPnPType As String, ByVal strValue As String) As Object
+        Dim value As Object = Nothing
+        Select Case UPnPType
+            Case "string"
+                value = strValue
+            Case "boolean"
+                value = Boolean.Parse(strValue)
+            Case "uri"
+                ' unknown ??
+            Case "ui1"
+                value = CByte(Val(strValue))
+            Case "ui2"
+                value = CType(Val(strValue), UInt16)
+            Case "ui4"
+                value = CType(Val(strValue), UInt32)
+            Case "int"
+                value = CType(Val(strValue), Int32)
+            Case "i4"
+                value = CType(Val(strValue), Int32)
+            Case "i2"
+                value = CType(Val(strValue), Int16)
+            Case "i1"
+                value = CType(Val(strValue), SByte)
+            Case "r4"
+                value = CType(Val(strValue), Single)
+            Case "r8"
+                value = CType(Val(strValue), Double)
+            Case "number"
+                value = CType(Val(strValue), Double)
+            Case "float"
+                value = CType(Val(strValue), Single)
+            Case "char"
+                value = CChar(strValue)
+            Case "bin.base64"
+                value = System.Text.Encoding.ASCII.GetBytes(strValue)
+            Case "dateTime"
+                value = Date.Parse(strValue)
+            Case Else
+                value = strValue
+        End Select
+        Return value
+    End Function
+
+    ''' <summary>
+    ''' Returns an error if a method call fails
+    ''' </summary>
+    ''' <param name="msg"></param>
+    ''' <remarks></remarks>
+    Private Shared Sub CallMethodError(ByVal msg As xPLMessage, ByVal Text As String)
+        LogMessage("   " & Text)
+        Dim m As New xPLMessage
+        m.MsgType = xPLMessageTypeEnum.Trigger
+        m.Target = "*"
+        m.Schema = "upnp.method"
+        m.KeyValueList.Add("result", "error")
+        If msg.KeyValueList.IndexOf("callid") <> -1 Then
+            m.KeyValueList.Add("callid", msg.KeyValueList("callid"))
+        End If
+        m.KeyValueList.Add("error", Text)
+        xPLDevice.Send(m)
+    End Sub
+
 
 End Class
