@@ -80,8 +80,6 @@ begin
    include(fComponentStyle,csSubComponent);
 
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
-   //fAdresse.Device := GetDevice;
-   //fAdresse.Vendor := GetVendor;
    fVersion        := GetVersion;
 
    if not AllowMultiInstance then begin

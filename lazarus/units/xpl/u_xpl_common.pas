@@ -60,6 +60,9 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      procedure StreamObjectToFile(const aFileName : string; const aObject : TComponent);
      procedure ReadObjectFromFile(const aFileName : string; const aObject : TComponent);
 
+     function GetVendorNameEvent : string;
+     function GetApplicationEvent : string;
+
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
 
 var  LocalAddresses     : TStringList;
@@ -240,6 +243,16 @@ begin
     end;
 end;
 
+function GetVendorNameEvent: string;
+begin
+   result := '';
+end;
+
+function GetApplicationEvent : string;
+begin
+   result := 'xPL';
+end;
+
 function XPLDt2DateTime(const aDateTime : string) : TDateTime;
 var year, month, day, hour, minute, secs : integer;
 begin
@@ -265,6 +278,8 @@ initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
    AllowMultiInstance := false;
+   OnGetVendorName      := @GetVendorNameEvent;
+   OnGetApplicationName := @GetApplicationEvent;
 
    TIdStack.IncUsage;
    LocalAddresses.Assign(GStack.LocalAddresses);
@@ -273,4 +288,4 @@ finalization // ===============================================================
    LocalAddresses.Free;
 
 end.
-
+
