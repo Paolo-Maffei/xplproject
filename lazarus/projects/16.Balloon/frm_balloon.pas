@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ExtCtrls, ActnList, fpTimer,
-  xplNotifier, u_xpl_message, frm_template;
+  ComCtrls, Menus, ExtCtrls, ActnList, XMLPropStorage, Grids, RxAboutDialog,
+  RTTICtrls, fpTimer, xplNotifier, u_xpl_message, frm_template;
 
 type
 
@@ -15,13 +15,11 @@ type
 
   TFrmBalloon = class(TFrmTemplate)
     acDisplayMessageWindow: TAction;
-    ActionList3: TActionList;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    PopupMenu11: TPopupMenu;
+    dgMessages: TStringGrid;
     TrayIcon1: TTrayIcon;
     procedure acDisplayWindow(Sender : TObject);
+    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;
+      aRect: TRect; aState: TGridDrawState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
   private
@@ -34,6 +32,7 @@ type
     procedure OnTimer(Sender: TObject);
     procedure OnReceive(const axPLMsg: TxPLMessage);
     procedure CheckQueue;
+    procedure Display(aMessage : string);
   end;
 
 var
@@ -41,9 +40,7 @@ var
 
 
 implementation //===============================================================
-uses frm_about
-     , frm_messages
-     , uxPLConst
+uses uxPLConst
      , u_xpl_application
      , u_xpl_custom_listener
      , u_xpl_config
@@ -59,6 +56,7 @@ const
 
 // TFrmBalloon ================================================================
 procedure TFrmBalloon.FormCreate(Sender: TObject);
+var aMenu : TMenuItem;
 begin
    inherited;
    MessageQueue := TStringList.Create;
@@ -76,14 +74,49 @@ begin
      Listen;
    end;
 
-   ActionList3.Images := xPLGUIResource.Images;
    TrayIcon1.Visible := True;
 
+   aMenu := TMenuItem.Create(self);
+   aMenu.Caption := '-';
+   xPLMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acDisplayMessageWindow;
+   xPLMenu.Items.Insert(0,aMenu);
+
+   dgMessages.Columns[0].Width := 130;
+   dgMessages.Columns[1].Width := 50;
+   dgMessages.Columns[2].Width := 150;
+   dgMessages.Columns[3].Width := 300;
 end;
 
 procedure TFrmBalloon.acDisplayWindow(Sender: TObject);
 begin
-   frmMessages.Visible := acDisplayMessageWindow.Checked;
+   Self.Visible := acDisplayMessageWindow.Checked;
+end;
+
+procedure TFrmBalloon.dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
+var aMsg : TxPLMessage;
+    img : TImage;
+begin
+   if aCol = 0 then begin
+      aMsg := TxPLMessage(dgMessages.Objects[0,aRow]);
+      if assigned(aMsg) then
+         try
+            img := TImage.Create(self);
+            if aMsg is TLogBasic then
+               Case TLogBasic(aMsg).Type_ of
+                    etInfo    : img.Picture.LoadFromLazarusResource('greenbadge');
+                    etWarning : img.Picture.LoadFromLazarusResource('orangebadge');
+                    etError   : img.Picture.LoadFromLazarusResource('redbadge');
+               end
+            else if aMsg is TOsdBasic then
+                 img.Picture.LoadFromLazarusResource('menu_information');
+            dgMessages.Canvas.Draw(aRect.Left+2,aRect.Top+2,img.Picture.Graphic);
+         finally
+            img.free;
+         end;
+   end;
 end;
 
 procedure TFrmBalloon.FormDestroy(Sender: TObject);
@@ -111,6 +144,22 @@ begin
       OnReceive(aMsg);
       aMsg.Free;
    end;
+end;
+
+procedure TFrmBalloon.Display(aMessage: string);
+var aMsg : TxPLMessage;
+begin
+   aMsg := MessageBroker(aMessage);
+   dgMessages.RowCount := dgMessages.RowCount+1;
+   dgMessages.Objects[0,dgMessages.Rowcount-1] := aMsg;
+   dgMessages.Cells[1,dgMessages.RowCount-1] := DateTimeToStr(now);
+   dgMessages.Cells[2,dgMessages.RowCount-1] := aMsg.schema.Classe;
+   dgMessages.Cells[3,dgMessages.RowCount-1] := aMsg.source.RawxPL;
+   dgMessages.Cells[4,dgMessages.RowCount-1] := '';
+   if aMsg is TLogBasic then
+     dgMessages.Cells[4,dgMessages.RowCount-1] := TLogBasic(aMsg).text;
+   if aMsg is TOSDBasic then
+     dgMessages.Cells[4,dgMessages.RowCount-1] := TOSDBasic(aMsg).text;
 end;
 
 procedure TFrmBalloon.Display(const aTitle, aText : string; const aLevel : TEventType; const bTimed : boolean = true; const aDelay: integer = -1);
@@ -174,7 +223,7 @@ begin
       end;
    end;
    if bHandled then begin
-      frmMessages.Display(initialmessage);
+      Display(initialmessage);
       CheckQueue;
    end else
       MessageQueue.Add(initialmessage);

@@ -2,18 +2,13 @@
    First published version
 
 0.9.8.4 
-   Added common xpl directory information and management via 
-   xplsettings object.
-   Add a line indicating that network settings change may also need a 
-   hub restart
+   Added common xpl directory information and management via xplsettings object.
+   Add a line indicating that network settings change may also need a hub restart
    Icon changed
 
 1.0 
    Modifications for better portability between linux and windows
    Main screen evolution (less radio buttons) for better understanding.
-
-1.1	
-   Introduced a repository stored in registry for all xpl applications
 
 1.1.1 
    Corrected a little bug on Plugins directory string
@@ -44,7 +39,7 @@
    Internal updates to stick to xPL Lazarus library evolution
    Integration of latest functional updates : proxy settings, simplification 
    of path input for root xpl directory
-   Portability validated with Linux version of Lazarus...soon to come
+   Portability validated with Linux version of Lazarus
    Added vendor xml file viewer
    
 1.5.1 (linux update)
@@ -53,16 +48,5 @@
    
 v 2.0
    General code review to support library evolutions
-   Added an enhanced plugin file viewer/editor
-   Corrected code to detect plugin file download error
-   Handle plugin url if the url includes the .xml extension in the filename
 
-v 2.1
-   Added country, language and measure values storage
    
-Todo : 
-   Dans l'éditeur de plugins, il est possible d'ajouter une ligne dans les
-   éléments de commandes sans passer par les boutons new... ce qui génère une 
-   erreur ensuite.
-   L'éditeur de plugin ne prend pas en compte le fait que les sous éléments 
-   des commandes soient modifiés pour activer le bouton de sauvegarde.	

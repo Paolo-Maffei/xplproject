@@ -30,6 +30,7 @@ implementation // =============================================================
 
 uses u_xpl_common
      , u_xpl_schema
+     , u_xpl_messages
      ;
 
 { TConfigListener }
@@ -47,17 +48,25 @@ end;
 
 function TConfigListener.DoHBeatApp(const aMessage: TxPLMessage): boolean;
 var i : integer;
+    Msg : TConfigListCmnd;
 begin
    i := fDiscovered.Count;
    Result:=inherited DoHBeatApp(aMessage);
 
-   if fDiscovered.Count<>i then                                                // a new module was identified
-      SendMessage(cmnd,aMessage.Source.RawxPL,Schema_ConfigList,['command'],['request']); // request its configuration
+   if fDiscovered.Count<>i then begin                                               // a new module was identified
+      Msg := TConfigListCmnd.Create(self);
+      Msg.Target.Assign(aMessage.Source);
+      Send(Msg);
+//      SendMessage(cmnd,aMessage.Source.RawxPL,Schema_ConfigList,['command'],['request']); // request its configuration
+      Msg.Free;
+
+   end;
 end;
 
 procedure TConfigListener.OnReceive(const axPLMsg: TxPLMessage);
 var item : integer;
     Config_Elmt: TConfigurationRecord;
+    Msg : TConfigCurrentCmnd;
 begin
    if ((axPLMsg.Body.Keys.Count = 0) or
        (axPLMsg.Schema.Classe <> 'config') or
@@ -73,9 +82,15 @@ begin
    Config_Elmt := fDiscovered.Data[item];
    if axPLMsg.Schema.Equals(Schema_ConfigList) then begin
       Config_Elmt.Config.ConfigList    := axPLMsg.Body;
-      SendMessage(cmnd,axPLMsg.Source.RawxPL,Schema_ConfigCurr,['command'],['request']);
-   end else if axPLMsg.Schema.Equals(Schema_ConfigCurr) then
-       Config_Elmt.Config.CurrentConfig := axPLMsg.Body;
+      Msg := TConfigCurrentCmnd.Create(self);
+      Msg.target.Assign(axPLMsg.source);
+      Send(Msg);
+      Msg.Free;
+      //SendMessage(cmnd,axPLMsg.Source.RawxPL,Schema_ConfigCurr,['command'],['request']);
+   end else if axPLMsg.Schema.Equals(Schema_ConfigCurr) then begin
+//       Config_Elmt.Config.CurrentConfig := axPLMsg.Body;
+       Config_Elmt.Config.CurrentConfig := TConfigCurrentStat(axPLMsg);
+   end;
 end;
 
 procedure TConfigListener.Set_ConnectionStatus(const aValue: TConnectionStatus);

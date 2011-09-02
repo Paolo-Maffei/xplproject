@@ -1,7 +1,7 @@
 inherited frmvendorfiles: Tfrmvendorfiles
-  Left = 56
+  Left = 58
   Height = 374
-  Top = 40
+  Top = 211
   Width = 665
   Caption = 'xPL Vendor Files'
   ClientHeight = 374
@@ -4317,6 +4317,18 @@ inherited frmvendorfiles: Tfrmvendorfiles
   inherited StatusBar1: TStatusBar
     Top = 351
     Width = 665
+    AutoSize = False
+    Panels = <    
+      item
+        Bevel = pbNone
+        Width = 80
+      end    
+      item
+        Width = 250
+      end    
+      item
+        Width = 50
+      end>
   end
   inherited ToolBar: TToolBar
     Width = 665
@@ -4324,15 +4336,16 @@ inherited frmvendorfiles: Tfrmvendorfiles
     inherited Panel4: TPanel
       Left = 465
     end
-    object ToolButton2: TToolButton[3]
-      Left = 162
-      Top = 0
-      Action = acUpdateList
-    end
-    object ToolButton4: TToolButton[4]
-      Left = 53
+    object ToolButton4: TToolButton[3]
+      Left = 163
       Top = 0
       Action = acDownload
+    end
+    object ToolButton2: TToolButton[4]
+      Left = 53
+      Top = 0
+      Action = acUpdateList
+      Caption = 'Update plugins.xml'
     end
   end
   object lvPlugins: TListView[3]
@@ -4386,32 +4399,64 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Left = 8
       Height = 16
       Top = 39
-      Width = 88
-      Caption = 'Location to use :'
+      Width = 183
+      Caption = 'Reference location of plugins.xml :'
       ParentColor = False
     end
-    object ProgressBar1: TProgressBar
-      Left = 445
-      Height = 24
-      Top = 7
-      Width = 208
-      Anchors = [akTop, akRight]
-      TabOrder = 0
-      Visible = False
-    end
     object cbLocations: TComboBox
-      Left = 102
+      Left = 200
       Height = 23
       Top = 39
-      Width = 551
+      Width = 453
       Anchors = [akTop, akLeft, akRight]
       ItemHeight = 15
+      TabOrder = 0
+    end
+    object ProgressBar1: TProgressBar
+      Left = 461
+      Height = 24
+      Top = 7
+      Width = 192
       TabOrder = 1
+      Visible = False
     end
   end
   inherited ActionList: TActionList[5]
     left = 16
     top = 128
+    object acSelectAll: TAction[4]
+      Category = 'grid'
+      Caption = 'Select All'
+      OnExecute = acSelectAllExecute
+    end
+    object acDeselect: TAction[5]
+      Category = 'grid'
+      Caption = 'Deselect All'
+      OnExecute = acDeselectExecute
+    end
+    object acInvert: TAction[6]
+      Category = 'grid'
+      Caption = 'Invert Selection'
+      OnExecute = acInvertExecute
+    end
+    object acViewXML: TAction[7]
+      Category = 'grid'
+      Caption = 'View XML file'
+      ImageIndex = 8
+      OnExecute = acViewXMLExecute
+    end
+    object acUpdateList: TAction[8]
+      Category = 'toolbar'
+      Caption = 'Update Plugin file'
+      ImageIndex = 4
+      OnExecute = acUpdateListExecute
+    end
+    object acDownload: TAction[9]
+      Category = 'toolbar'
+      Caption = 'Download Selected'
+      ImageIndex = 9
+      OnExecute = acDownloadExecute
+    end
   end
   inherited xPLMenu: TPopupMenu[6]
     left = 112
@@ -4423,48 +4468,7 @@ inherited frmvendorfiles: Tfrmvendorfiles
   end
   inherited RxAboutDialog1: TRxAboutDialog[8]
   end
-  object ActionList2: TActionList[9]
-    left = 184
-    top = 176
-    object acSelectAll: TAction
-      Category = 'grid'
-      Caption = 'Select All'
-      OnExecute = acSelectAllExecute
-    end
-    object acDeselect: TAction
-      Category = 'grid'
-      Caption = 'Deselect All'
-      OnExecute = acDeselectExecute
-    end
-    object acInvert: TAction
-      Category = 'grid'
-      Caption = 'Invert Selection'
-      OnExecute = acInvertExecute
-    end
-    object acViewXML: TAction
-      Category = 'grid'
-      Caption = 'View XML file'
-      ImageIndex = 8
-      OnExecute = acViewXMLExecute
-    end
-    object acUpdateList: TAction
-      Category = 'toolbar'
-      Caption = 'Update Plugin List'
-      ImageIndex = 4
-      OnExecute = acUpdateListExecute
-    end
-    object acDownload: TAction
-      Category = 'toolbar'
-      Caption = 'Download Selected'
-      ImageIndex = 9
-      OnExecute = acDownloadExecute
-    end
-    object acPlugInfo: TAction
-      Caption = 'Plugin informations'
-      OnExecute = acPlugInfoExecute
-    end
-  end
-  object popPluginList: TPopupMenu[10]
+  object popPluginList: TPopupMenu[9]
     left = 336
     top = 192
     object MenuItem3: TMenuItem
@@ -4481,9 +4485,6 @@ inherited frmvendorfiles: Tfrmvendorfiles
     end
     object MenuItem1: TMenuItem
       Caption = '-'
-    end
-    object MenuItem8: TMenuItem
-      Action = acPlugInfo
     end
     object MenuItem5: TMenuItem
       Action = acViewXML

@@ -11,6 +11,7 @@ uses Classes
      , u_xpl_common
      , u_xpl_collection
      , u_xpl_body
+     , u_xpl_messages
      ;
 
 type TxPLCustomConfig = class;
@@ -49,13 +50,13 @@ type TxPLCustomConfig = class;
    private
       fConfigItems : TxPLConfigItems;
       function Get_ConfigList: TxPLBody;
-      function Get_CurrentConfig: TxPLBody;
+      function Get_CurrentConfig: TConfigCurrentStat;
       function Get_FilterSet: TxPLConfigItem;
       function Get_GroupSet: TxPLConfigItem;
       function Get_Instance: string;
       function Get_Interval: integer;
       procedure Set_ConfigList(const AValue: TxPLBody);
-      procedure Set_CurrentConfig(const aBody : TxPLBody);
+      procedure Set_CurrentConfig(const aBody : TConfigCurrentStat);
       procedure Set_ConfigItems(aValuesList : TxPLConfigItems);
       procedure SetItemValue(const aItmName : string; const aValue : string);
       procedure  ResetValues;
@@ -71,7 +72,7 @@ type TxPLCustomConfig = class;
    published
       property ConfigItems   : TxPLConfigItems read fConfigItems write Set_ConfigItems;
       property ConfigList    : TxPLBody  read Get_ConfigList     write Set_ConfigList        stored false;
-      property CurrentConfig : TxPLBody  read Get_CurrentConfig  write Set_CurrentConfig     stored false;
+      property CurrentConfig : TConfigCurrentStat  read Get_CurrentConfig  write Set_CurrentConfig     stored false;
       property Instance      : string    read Get_Instance                                   stored false;
       property Interval      : integer   read Get_Interval                                   stored false;
       property FilterSet     : TxPLConfigItem read Get_FilterSet                             stored false;
@@ -82,7 +83,6 @@ implementation {===============================================================}
 uses uxPLconst
      , StrUtils
      , Math
-//     , JclStrings
      , typinfo
      , u_xpl_address
      ;
@@ -127,8 +127,7 @@ begin
        s := aValue.Values[i];
        if AnsiRightStr(s,1) =']' then begin
           nom    := Copy(s,1, Pos('[',s)-1);
-//          maxval := StrToInt(StrBetween(s,'[',']'));                            // Replaced cstrings proc by JVCL proc
-          maxval := StrToInt(ExtractWord(1,s,['[',']']));
+          maxval := StrToInt(ExtractWord(2,s,['[',']']));
        end else begin
           nom    := s;
           maxval := 1;
@@ -154,11 +153,12 @@ begin
    Vals.Free;
 end;
 
-function TxPLCustomConfig.Get_CurrentConfig: TxPLBody;                          // Builds a body message following
+function TxPLCustomConfig.Get_CurrentConfig: TConfigCurrentStat;                          // Builds a body message following
 var i,j : integer;                                                              // xPL recommandations in for config.current message
     keys, vals : TStringList;                                                   // http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
 begin
-   result := TxPLBody.Create(self);
+//   result := TxPLBody.Create(self);
+   result := TConfigCurrentStat.Create(self);
    Keys := TStringList.Create;
    Vals := TStringList.Create;
    for i := 0 to ConfigItems.Count-1 do begin
@@ -171,7 +171,8 @@ begin
           Vals.Add(ConfigItems[i].ValueAtId(j));
       end;
    end;
-   Result.AddKeyValuePairs(Keys,Vals);
+   Result.Body.ResetValues;
+   Result.Body.AddKeyValuePairs(Keys,Vals);
    Keys.Free;
    Vals.Free;
 end;
@@ -246,12 +247,12 @@ begin
    ci.AddValue(s);                                                              // The collectionitem will handle details of adding, replacing...
 end;
 
-procedure TxPLCustomConfig.Set_CurrentConfig(const aBody: TxPLBody);            // Set configuration elements coming from config.response message
+procedure TxPLCustomConfig.Set_CurrentConfig(const aBody: TConfigCurrentStat);            // Set configuration elements coming from config.response message
 var i : integer;
 begin
   ResetValues;
-  for i:= 0 to aBody.ItemCount-1 do
-     SetItemValue(AnsiLowerCase(aBody.Keys[i]),aBody.Values[i]);
+  for i:= 0 to aBody.Body.ItemCount-1 do
+     SetItemValue(AnsiLowerCase(aBody.Body.Keys[i]),aBody.Body.Values[i]);
 end;
 
 procedure TxPLCustomConfig.ResetValues;

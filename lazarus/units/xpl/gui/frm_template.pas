@@ -15,9 +15,11 @@ type { TFrmTemplate ==========================================================}
     acInstalledApps: TAction;
     acLogViewer: TAction;
     acQuit: TAction;
+    acCoreConfigure: TAction;
     ActionList: TActionList;
     imgBullet: TImage;
     lblModuleName: TTILabel;
+    MnuItem1: TMenuItem;
     mnuNull1: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem15: TMenuItem;
@@ -36,6 +38,7 @@ type { TFrmTemplate ==========================================================}
     XMLPropStorage: TXMLPropStorage;
     xPLMenu: TPopupMenu;
     procedure acAboutExecute(Sender: TObject);
+    procedure acCoreConfigureExecute(Sender: TObject);
     procedure acInstalledAppsExecute(Sender: TObject);
     procedure acLogViewerExecute(Sender: TObject);
     procedure acQuitExecute(Sender: TObject);
@@ -57,11 +60,11 @@ implementation // =============================================================
 
 uses frm_logviewer
      , frm_xplappslauncher
+     , dlg_config
      , lcltype
-     , u_xpl_listener
+     , u_xpl_custom_listener
      , u_xpl_application
      , u_xpl_gui_resource
-     , u_xpl_custom_listener
      , StrUtils
      , Process
      ;
@@ -76,14 +79,19 @@ begin
    RxAboutDialog1.Execute;
 end;
 
+procedure TFrmTemplate.acCoreConfigureExecute(Sender: TObject);
+begin
+   ShowDlgConfig; //(TxPLCustomListener(xPLApplication).Config.CurrentConfig);
+end;
+
 procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
 begin
-     with TProcess.Create(nil) do try
-          Executable := TMenuItem(Sender).Hint;
-          Execute;
-     finally
-        Free;
-     end;
+   with TProcess.Create(nil) do try
+      Executable := TMenuItem(Sender).Hint;
+      Execute;
+   finally
+      Free;
+   end;
 end;
 
 procedure TFrmTemplate.acInstalledAppsExecute(Sender: TObject);
@@ -156,6 +164,8 @@ begin
    AddSubMenuElmt(sl,'piedit');
    AddSubMenuElmt(sl,'sender');
    sl.Free;
+
+   acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
 end;
 
 procedure TFrmTemplate.StatusBar1Click(Sender: TObject);
@@ -165,7 +175,7 @@ end;
 
 procedure TFrmTemplate.OnJoinedEvent;
 begin
-   with TxPLListener(xPLApplication) do
+   with TxPLCustomListener(xPLApplication) do
       imgBullet.Picture.LoadFromLazarusResource(IfThen(ConnectionStatus = connected, K_IMG_RECONNECT, K_IMG_DISCONNECT));
 end;
 

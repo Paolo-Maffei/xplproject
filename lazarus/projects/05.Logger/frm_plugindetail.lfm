@@ -1,7 +1,7 @@
-object frmPluginDetail: TfrmPluginDetail
-  Left = 51
+inherited frmPluginDetail: TfrmPluginDetail
+  Left = 261
   Height = 274
-  Top = 271
+  Top = 301
   Width = 418
   BorderIcons = []
   BorderStyle = bsToolWindow
@@ -9,8 +9,11 @@ object frmPluginDetail: TfrmPluginDetail
   ClientHeight = 274
   ClientWidth = 418
   OnShow = FormShow
-  LCLVersion = '0.9.28.2'
-  object Label1: TLabel
+  inherited DlgToolbar: TToolBar
+    Width = 418
+    TabOrder = 7
+  end
+  object Label1: TLabel[1]
     Left = 6
     Height = 16
     Top = 32
@@ -18,7 +21,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Vendor'
     ParentColor = False
   end
-  object Label2: TLabel
+  object Label2: TLabel[2]
     Left = 7
     Height = 16
     Top = 63
@@ -26,7 +29,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Device'
     ParentColor = False
   end
-  object Label3: TLabel
+  object Label3: TLabel[3]
     Left = 8
     Height = 16
     Top = 96
@@ -34,7 +37,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Type'
     ParentColor = False
   end
-  object Label4: TLabel
+  object Label4: TLabel[4]
     Left = 216
     Height = 16
     Top = 32
@@ -42,7 +45,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Platform'
     ParentColor = False
   end
-  object Label5: TLabel
+  object Label5: TLabel[5]
     Left = 216
     Height = 16
     Top = 64
@@ -50,7 +53,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Stable version'
     ParentColor = False
   end
-  object Label6: TLabel
+  object Label6: TLabel[6]
     Left = 216
     Height = 16
     Top = 96
@@ -58,15 +61,15 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Beta version'
     ParentColor = False
   end
-  object Label7: TLabel
-    Left = 7
+  object Label7: TLabel[7]
+    Left = 8
     Height = 16
-    Top = 136
+    Top = 128
     Width = 61
     Caption = 'Description'
     ParentColor = False
   end
-  object Label9: TLabel
+  object Label9: TLabel[8]
     Left = 6
     Height = 16
     Top = 208
@@ -74,7 +77,7 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Device Info'
     ParentColor = False
   end
-  object Label10: TLabel
+  object Label10: TLabel[9]
     Left = 6
     Height = 16
     Top = 240
@@ -82,118 +85,70 @@ object frmPluginDetail: TfrmPluginDetail
     Caption = 'Download'
     ParentColor = False
   end
-  object DBText1: TLabel
+  object DBText1: TLabel[10]
     Left = 80
-    Height = 16
+    Height = 1
     Top = 208
     Width = 1
     Font.Color = clHotLight
     ParentColor = False
     ParentFont = False
   end
-  object DBText2: TLabel
+  object DBText2: TLabel[11]
     Left = 80
-    Height = 16
+    Height = 1
     Top = 240
     Width = 1
     Font.Color = clHotLight
     ParentColor = False
     ParentFont = False
   end
-  object edtDeviceInfoURL: TLabel
-    Cursor = crHandPoint
-    Left = 80
-    Height = 16
-    Top = 208
-    Width = 10
-    Caption = '...'
-    Font.Color = clHotLight
-    Font.Style = [fsUnderline]
-    ParentColor = False
-    ParentFont = False
-    OnClick = edtDeviceInfoURLClick
-  end
-  object edtDeviceDownloadURL: TLabel
-    Cursor = crHandPoint
-    Left = 80
-    Height = 16
-    Top = 242
-    Width = 10
-    Caption = '...'
-    Font.Color = clHotLight
-    Font.Style = [fsUnderline]
-    ParentColor = False
-    ParentFont = False
-    OnClick = edtDeviceDownloadURLClick
-  end
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 26
-    Top = 0
-    Width = 418
-    ButtonHeight = 24
-    ButtonWidth = 80
-    Caption = 'ToolBar'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esRaised
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 0
-    object tbOk2: TToolButton
-      Left = 1
-      Top = 0
-      Caption = 'Close'
-      ImageIndex = 1
-      OnClick = tbOk2Click
-    end
-  end
-  object edtVendor: TEdit
+  object edtVendor: TEdit[12]
     Left = 72
     Height = 23
     Top = 32
+    Width = 139
+    Color = clBtnFace
+    ReadOnly = True
+    TabOrder = 0
+  end
+  object edtDeviceId: TEdit[13]
+    Left = 72
+    Height = 23
+    Top = 63
     Width = 139
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 1
   end
-  object edtDeviceId: TEdit
-    Left = 72
-    Height = 23
-    Top = 63
-    Width = 139
-    Color = clBtnFace
-    ReadOnly = True
-    TabOrder = 2
-  end
-  object edtDevicePlatform: TEdit
+  object edtDevicePlatform: TEdit[14]
     Left = 296
     Height = 23
     Top = 32
     Width = 112
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 3
+    TabOrder = 2
   end
-  object edtDeviceStableVersion: TEdit
+  object edtDeviceStableVersion: TEdit[15]
     Left = 296
     Height = 23
     Top = 63
     Width = 112
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 4
+    TabOrder = 3
   end
-  object edtDeviceBetaVersion: TEdit
+  object edtDeviceBetaVersion: TEdit[16]
     Left = 296
     Height = 23
     Top = 96
     Width = 112
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 5
+    TabOrder = 4
   end
-  object edtDeviceDescription: TMemo
+  object edtDeviceDescription: TMemo[17]
     Left = 72
     Height = 72
     Top = 128
@@ -203,15 +158,39 @@ object frmPluginDetail: TfrmPluginDetail
       'edtDeviceDescription'
     )
     ReadOnly = True
-    TabOrder = 6
+    TabOrder = 5
   end
-  object edtDeviceType_: TEdit
+  object edtDeviceType_: TEdit[18]
     Left = 72
     Height = 23
     Top = 96
     Width = 139
     Color = clBtnFace
     ReadOnly = True
-    TabOrder = 7
+    TabOrder = 6
+  end
+  object DeviceInfoURL: TOvcURL[19]
+    Left = 72
+    Height = 16
+    Top = 208
+    Width = 78
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    Transparent = True
+  end
+  object DeviceDownloadURL: TOvcURL[20]
+    Left = 72
+    Height = 16
+    Top = 240
+    Width = 111
+    Font.Color = clBlue
+    Font.Style = [fsUnderline]
+    ParentColor = False
+    ParentFont = False
+    Transparent = True
+  end
+  inherited DlgActions: TActionList[21]
   end
 end

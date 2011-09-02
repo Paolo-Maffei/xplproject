@@ -2528,12 +2528,6 @@ inherited frmLogger: TfrmLogger
   object ActionList1: TActionList[12]
     left = 64
     top = 336
-    object acConfig: TAction
-      Category = 'xPL'
-      Caption = 'Configuration ...'
-      ImageIndex = 44
-      OnExecute = acConfigExecute
-    end
     object Load: TAction
       Caption = '&Load a message'
       ImageIndex = 2
@@ -2690,8 +2684,8 @@ inherited frmLogger: TfrmLogger
     left = 40
     top = 72
     object MenuItem18: TMenuItem
-      Action = acConfig
-      OnClick = acConfigExecute
+      Caption = 'Configuration ...'
+      ImageIndex = 44
     end
     object MenuItem10: TMenuItem
       Caption = '-'

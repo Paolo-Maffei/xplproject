@@ -31,15 +31,17 @@ LazarusResources.Add('TFrmTemplate','FORMDATA',[
   +'Caption'#6#18'Installed xPL apps'#10'ImageIndex'#2#5#9'OnExecute'#7#22'acIn'
   +'stalledAppsExecute'#0#0#7'TAction'#11'acLogViewer'#8'Category'#6#3'xPL'#7'C'
   +'aption'#6#15'Application Log'#10'ImageIndex'#2'*'#9'OnExecute'#7#18'acLogVi'
-  +'ewerExecute'#0#0#0#10'TPopupMenu'#7'xPLMenu'#4'left'#3#128#0#0#9'TMenuItem'
-  +#9'MenuItem7'#6'Action'#7#11'acLogViewer'#0#0#9'TMenuItem'#8'mnuNull1'#7'Cap'
-  +'tion'#6#1'-'#0#0#9'TMenuItem'#9'mnuLaunch'#7'Caption'#6#9'Launch...'#0#9'TM'
-  +'enuItem'#10'mnuAllApps'#6'Action'#7#15'acInstalledApps'#0#0#9'TMenuItem'#8
-  +'mnuNull2'#7'Caption'#6#1'-'#0#0#0#9'TMenuItem'#10'MenuItem16'#7'Caption'#6#1
-  +'-'#0#0#9'TMenuItem'#10'MenuItem13'#6'Action'#7#7'acAbout'#0#0#9'TMenuItem'
-  +#10'MenuItem15'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#10'MenuItem17'#6'Action'#7
-  +#6'acQuit'#0#0#0#15'TXMLPropStorage'#14'XMLPropStorage'#12'StoredValues'#14#0
-  +#4'left'#3#200#0#0#0#14'TRxAboutDialog'#14'RxAboutDialog1'#7'Options'#11#13
-  +'radLicenseTab'#16'radShowImageLogo'#0#7'Caption'#6#5'About'#4'left'#2'@'#3
-  +'top'#2'8'#0#0#0
+  +'ewerExecute'#0#0#7'TAction'#15'acCoreConfigure'#8'Category'#6#3'xPL'#7'Capt'
+  +'ion'#6#13'Configuration'#10'ImageIndex'#2','#9'OnExecute'#7#22'acCoreConfig'
+  +'ureExecute'#0#0#0#10'TPopupMenu'#7'xPLMenu'#4'left'#3#128#0#0#9'TMenuItem'#8
+  +'MnuItem1'#6'Action'#7#15'acCoreConfigure'#0#0#9'TMenuItem'#9'MenuItem7'#6'A'
+  +'ction'#7#11'acLogViewer'#0#0#9'TMenuItem'#8'mnuNull1'#7'Caption'#6#1'-'#0#0
+  +#9'TMenuItem'#9'mnuLaunch'#7'Caption'#6#9'Launch...'#0#9'TMenuItem'#10'mnuAl'
+  +'lApps'#6'Action'#7#15'acInstalledApps'#0#0#9'TMenuItem'#8'mnuNull2'#7'Capti'
+  +'on'#6#1'-'#0#0#0#9'TMenuItem'#10'MenuItem16'#7'Caption'#6#1'-'#0#0#9'TMenuI'
+  +'tem'#10'MenuItem13'#6'Action'#7#7'acAbout'#0#0#9'TMenuItem'#10'MenuItem15'#7
+  +'Caption'#6#1'-'#0#0#9'TMenuItem'#10'MenuItem17'#6'Action'#7#6'acQuit'#0#0#0
+  +#15'TXMLPropStorage'#14'XMLPropStorage'#12'StoredValues'#14#0#4'left'#3#200#0
+  +#0#0#14'TRxAboutDialog'#14'RxAboutDialog1'#7'Options'#11#13'radLicenseTab'#16
+  +'radShowImageLogo'#0#7'Caption'#6#5'About'#4'left'#2'@'#3'top'#2'8'#0#0#0
 ]);

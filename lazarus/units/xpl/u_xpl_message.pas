@@ -22,8 +22,6 @@ interface
 
 uses classes,
      u_xPL_Custom_Message,
-     u_xPL_Header,
-     u_xPL_Address,
      u_xpl_schema,
      u_xPL_Body,
      u_xml_plugins;
@@ -111,15 +109,6 @@ begin
    for item in aCom.Elements do
        Body.AddKeyValuePairs([TElementType(item).Name],[TElementType(item).default_]);
 end;
-
-//procedure TxPLMessage.Format_HbeatApp(const aInterval: integer; const aPort: string; const aIP: string);
-//begin
-//   Body.ResetValues;
-//   Schema.Assign(Schema_HBeatApp);
-//   MessageType:= stat;
-//   Target.IsGeneric := True;
-//   Body.AddKeyValuePairs([K_HBEAT_ME_INTERVAL,K_HBEAT_ME_PORT,K_HBEAT_ME_REMOTEIP],[IntToStr(aInterval),aPort,aIP]);
-//end;
 
 procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
 begin
