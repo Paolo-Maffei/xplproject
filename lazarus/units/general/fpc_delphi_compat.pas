@@ -98,7 +98,8 @@ begin
       result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
       {$else}
       result := GetAppConfigDir(false);
-      result := LeftStr(result,length(result)-length(ApplicationName)-1);
+//      result := GetAppConfigDir(fal
+//      result := LeftStr(result,length(result)-length(ApplicationName)-1);
       {$endif}
    {$else}
       SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);

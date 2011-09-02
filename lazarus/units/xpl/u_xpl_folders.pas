@@ -23,7 +23,7 @@ type // TxPLCustomFolders =====================================================
      TxPLCustomFolders  = class
      private
         fAdresse : TxPLAddress;
-        procedure EnsureDirectoryExists(const aDirectoryName: string);
+        //procedure EnsureDirectoryExists(const aDirectoryName: string);
      public
         constructor Create(const axPLAddress : TxPLAddress);
         function SharedDir : string;                                           // Something like c:\programdata\xPL\
@@ -46,32 +46,40 @@ begin
    fAdresse  := axPLAddress;
 end;
 
-procedure TxPLCustomFolders.EnsureDirectoryExists(const aDirectoryName: string);
+{procedure TxPLCustomFolders.EnsureDirectoryExists(const aDirectoryName: string);
 begin
    if not DirectoryExists(aDirectoryName) then CreateDir(aDirectoryName);
-end;
+end;}
 
 function TxPLCustomFolders.SharedDir: string;
 begin
    result := GetCommonAppDataPath;
-   EnsureDirectoryExists( result );
-   result := IncludeTrailingPathDelimiter(GetCommonAppDataPath + 'xPL');
-   EnsureDirectoryExists( result );                                            // 1.1.1 Correction
+   //EnsureDirectoryExists( result );
+   {$ifdef mswindows}
+      result := IncludeTrailingPathDelimiter(GetCommonAppDataPath + 'xPL');
+   {$else}
+      result := IncludeTrailingPathDelimiter(GetCommonAppDataPath);
+   {$endif}
+   //EnsureDirectoryExists( result );                                            // 1.1.1 Correction
+   ForceDirectories(result);
 end;
 
 function TxPLCustomFolders.PluginDir: string;                                  // returns something like c:\program data\xPL\Plugins\
 begin
    result := IncludeTrailingPathDelimiter(SharedDir + K_XPL_SETTINGS_SUBDIR_PLUG);
-   EnsureDirectoryExists( result );                                            // 1.1.1 Correction
+   ForceDirectories(result);
+   //EnsureDirectoryExists( result );                                            // 1.1.1 Correction
 end;
 
 function TxPLCustomFolders.DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;
 begin
    result := IncludeTrailingPathDelimiter(SharedDir + IfThen(aVendor<>'',aVendor,fAdresse.Vendor));
-   EnsureDirectoryExists(result);
+   ForceDirectories(result);
+   //EnsureDirectoryExists(result);
 
    result := IncludeTrailingPathDelimiter(result + IfThen(aDevice<>'',aDevice,fAdresse.Device));
-   EnsureDirectoryExists( result );
+   ForceDirectories(result);
+   //EnsureDirectoryExists( result );
 end;
 
 end.

@@ -101,6 +101,10 @@ const // Registry Key and values constants =====================================
 
 // TxPLCustomSettings =================================================================
 constructor TxPLCustomSettings.Create(aOwner : TComponent);
+{$ifndef windows}
+var sl : TStringList;
+    i  : integer;
+{$endif}
 begin
    inherited;
 
@@ -119,7 +123,12 @@ begin
      fProxyEnable := fRegistry.ReadInteger('ProxyEnable');
      fProxyServer := fRegistry.ReadString('ProxyServer');
    {$else}
-     // to be written for linux support
+     sl := TStringList.Create;
+     sl.Delimiter := '/';
+     sl.DelimitedText := GetEnvironmentVariable('http_proxy');                   // may have http://xx.xx.xx.xx:yy/ as input
+     for i:=0 to pred(sl.count) do
+         if Pos('.',sl[i])<>0 then fProxyServer := sl[i];                        // Quick & dirty way to extract server ip & port
+     sl.free;
    {$endif}
 end;
 
@@ -273,4 +282,4 @@ begin
 end;
 
 end.
-
+
