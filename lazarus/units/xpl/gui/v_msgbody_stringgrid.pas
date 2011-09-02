@@ -56,7 +56,6 @@ type
 procedure Register;
 
 implementation
-uses cStrings;
 
 const
 //      K_sg_LAB_COL = 1;
@@ -202,12 +201,13 @@ begin
 end;
 
 procedure TBodyMessageGrid.NewLine(aLine : string);
-var sLeft, sRight : string;
+var sl : TStringList;
 begin
-     sLeft  := '';
-     sRight := '';
-     StrSplitAtChar(aLine,'=',sLeft,sRight);
-     NewLine(sLeft,sRight);
+   sl := TStringList.Create;
+   sl.Delimiter := '=';
+   sl.DelimitedText := aLine;
+   NewLine(sl[0],sl[1]);
+   sl.Free;
 end;
 
 procedure TBodyMessageGrid.Assign(const aBody: TxPLBody);

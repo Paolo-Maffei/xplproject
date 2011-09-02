@@ -6,7 +6,7 @@ uses
   {$ENDIF}{$ENDIF}
   {$IFNDEF CONSOLE_APP}
      Interfaces, // this includes the LCL widgetset
-     Forms, runtimetypeinfocontrols,
+     Forms, pl_rx, runtimetypeinfocontrols,
      frm_balloon,
   {$ENDIF}
      xplnotifier,
@@ -14,7 +14,7 @@ uses
      u_xpl_gui_resource,
      u_xpl_custom_listener,
      u_xpl_application,
-     u_xpl_common, ngradient, frm_messages;
+     u_xpl_common;
 
 {$IFDEF WINDOWS}{ $ R xpl_balloon.rc}{$ENDIF}
 
@@ -28,7 +28,6 @@ begin
    xPLGUIResource := TxPLGUIResource.Create;
 
    Application.CreateForm(TFrmBalloon, FrmBalloon);
-   Application.CreateForm(TfrmMessages, frmMessages);
    Application.Run;
 
    xPLGUIResource.Free;

@@ -13,8 +13,8 @@ uses
   frm_logger,
   u_xpl_application,
   u_xpl_common,
-  logger_listener, frm_appsettings, frm_plugindetail,
-  u_xpl_gui_resource;
+  logger_listener, frm_plugindetail,
+  u_xpl_gui_resource, dlg_config, frame_config, xpl_win, frm_logger_config;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 
@@ -24,7 +24,7 @@ begin
    xPLApplication := TLoggerListener.Create;
    xPLGUIResource := TxPLGUIResource.Create;
    Application.CreateForm(TfrmLogger, frmLogger);
-   Application.CreateForm(TfrmAppSettings, frmAppSettings);
+   Application.CreateForm(TFrmLoggerConfig, FrmLoggerConfig);
    Application.Icon := FrmLogger.Icon;
    Application.Run;
 

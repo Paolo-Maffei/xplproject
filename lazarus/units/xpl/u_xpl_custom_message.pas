@@ -16,11 +16,10 @@ unit u_xpl_custom_message;
 interface
 
 uses classes
-     , u_xpl_header
-     , u_xpl_address
      , u_xpl_body
      , u_xpl_schema
      , u_xpl_common
+     , u_xpl_header
      ;
 
 type { TxPLCustomMessage =====================================================}

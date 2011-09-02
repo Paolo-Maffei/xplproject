@@ -40,7 +40,8 @@ type
     edtMsgName: TTIEdit;
     FrameMessage: TTMessageFrame;
     tbFunctions: TToolButton;
-    ToolButton11: TToolButton;
+    ToolButton1: TToolButton;
+    ToolButton2: TToolButton;
     tsRaw: TTabSheet;
     tsPSScript: TTabSheet;
     tbOk: TToolButton;
@@ -258,6 +259,8 @@ begin
    FrameMessage.ReadOnly := edtMsgName.ReadOnly;
    StatusBar1.Visible    := false;
    DisplayMessage;
+   lblModuleName.Visible := (lblModuleName.Caption <>'');
+   ToolButton9.Visible   := (OnCloseQuery <> nil);
 end;
 
 procedure TfrmxPLMessage.mnuCopyMessageClick(Sender: TObject);

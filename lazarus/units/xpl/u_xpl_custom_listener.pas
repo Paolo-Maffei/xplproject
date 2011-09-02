@@ -84,8 +84,7 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
      end;
 
 implementation { ==============================================================}
-uses u_xpl_header
-     , u_xpl_schema
+uses u_xpl_schema
      , u_xpl_common
      , u_xpl_messages
      , typinfo
@@ -198,9 +197,12 @@ end;
 
 procedure TxPLCustomListener.HandleConfigMessage(aMessage: TxPLMessage);
 begin
-   if (aMessage.MessageType = cmnd) and (Adresse.Equals(aMessage.Target)) then begin
-      if aMessage.Schema.Equals(Schema_ConfigResp) then begin
-         Config.CurrentConfig := aMessage.Body;
+   if not Adresse.Equals(aMessage.Target) then exit;
+
+//   if (aMessage.MessageType = cmnd) and (Adresse.Equals(aMessage.Target)) then begin
+//      if aMessage.Schema.Equals(Schema_ConfigResp) then begin
+   if aMessage is TConfigResponseCmnd then begin
+         Config.CurrentConfig := TConfigCurrentStat(aMessage);
          if fConfig.IsValid then begin
             Log(etInfo,K_MSG_CONFIG_RECEIVED,[aMessage.Source.RawxPL]);
             SaveConfig;
@@ -209,16 +211,17 @@ begin
             Log(etError, K_MSG_CONF_ERROR);
    end else
        with TxPLMessage(PrepareMessage(stat,aMessage.Schema)) do try
-            if aMessage.Schema.Equals(Schema_ConfigCurr) and
-               (aMessage.Body.GetValueByKey('command') = 'request') then
-               Body.Assign(Config.CurrentConfig)
-            else if aMessage.Schema.Equals(Schema_ConfigList) then
-                    Body.Assign(Config.ConfigList);
+//            if aMessage.Schema.Equals(Schema_ConfigCurr) and
+//               (aMessage.Body.GetValueByKey('command') = 'request') then
+              if aMessage is TConfigCurrentCmnd then Body.Assign(Config.CurrentConfig.Body)
+               else if aMessage is TConfigListCmnd then Body.Assign(Config.ConfigList);
+//            else if aMessage.Schema.Equals(Schema_ConfigList) then
+//                    Body.Assign(Config.ConfigList);
             Send(ProcessedxPL);
        finally
            free;
        end;
-   end;
+//   end;
    ConnectionStatus := connected;
 end;
 

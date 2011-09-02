@@ -2,28 +2,28 @@ inherited frmxPLMessage: TfrmxPLMessage
   Left = 58
   Height = 406
   Top = 119
-  Width = 610
+  Width = 608
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'xPL Message details'
   ClientHeight = 406
-  ClientWidth = 610
+  ClientWidth = 608
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowInTaskBar = stAlways
   inherited StatusBar1: TStatusBar
     Top = 383
-    Width = 610
+    Width = 608
   end
   inherited ToolBar: TToolBar
-    Width = 610
+    Width = 608
     TabOrder = 2
     inherited Panel4: TPanel
-      Left = 410
+      Left = 408
     end
     object ToolButton3: TToolButton[3]
-      Left = 281
+      Left = 53
       Top = 0
       Action = acSend
       ImageIndex = 20
@@ -36,21 +36,13 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = tbOkClick
     end
     object tbCancel: TToolButton[5]
-      Left = 207
+      Left = 281
       Top = 0
       Caption = '&Cancel'
       ImageIndex = 16
     end
-    object ToolButton11: TToolButton[6]
-      Left = 315
-      Top = 0
-      Width = 10
-      AutoSize = True
-      Caption = 'ToolButton3'
-      Style = tbsSeparator
-    end
-    object tbCommands: TToolButton[7]
-      Left = 125
+    object tbCommands: TToolButton[6]
+      Left = 164
       Top = 0
       Caption = 'Commands'
       DropdownMenu = popCommands
@@ -58,8 +50,8 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = tbCommandsClick
       Style = tbsDropDown
     end
-    object tbFunctions: TToolButton[8]
-      Left = 53
+    object tbFunctions: TToolButton[7]
+      Left = 92
       Top = 0
       Caption = 'Functions'
       DropdownMenu = popFunctions
@@ -67,8 +59,8 @@ inherited frmxPLMessage: TfrmxPLMessage
       PopupMenu = popFunctions
       Style = tbsDropDown
     end
-    object ckLoop: TCheckBox[9]
-      Left = 334
+    object ckLoop: TCheckBox[8]
+      Left = 332
       Height = 24
       Top = 0
       Width = 76
@@ -76,12 +68,26 @@ inherited frmxPLMessage: TfrmxPLMessage
       Caption = 'Loop Send'
       TabOrder = 1
     end
+    object ToolButton2: TToolButton[9]
+      Left = 87
+      Top = 0
+      Width = 5
+      Caption = 'ToolButton2'
+      Style = tbsDivider
+    end
+    object ToolButton1: TToolButton[10]
+      Left = 246
+      Top = 0
+      Width = 5
+      Caption = 'ToolButton1'
+      Style = tbsDivider
+    end
   end
   object PageControl1: TPageControl[3]
     Left = 0
     Height = 358
     Top = 25
-    Width = 610
+    Width = 608
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
@@ -89,7 +95,7 @@ inherited frmxPLMessage: TfrmxPLMessage
     object TabSheet1: TTabSheet
       Caption = 'Message Elements'
       ClientHeight = 330
-      ClientWidth = 602
+      ClientWidth = 600
       object Label4: TLabel
         Left = 4
         Height = 16
@@ -101,7 +107,7 @@ inherited frmxPLMessage: TfrmxPLMessage
         ParentFont = False
       end
       object edtMsgName: TTIEdit
-        Left = 92
+        Left = 84
         Height = 23
         Top = 6
         Width = 326
@@ -112,12 +118,63 @@ inherited frmxPLMessage: TfrmxPLMessage
         Width = 594
         ClientWidth = 594
         TabOrder = 1
+        inherited Label5: TLabel
+          Left = 46
+        end
+        inherited Image2: TImage
+          Left = 260
+        end
+        inherited Label7: TLabel
+          Left = 34
+        end
+        inherited edtSource: TTIEdit
+          Left = 84
+        end
+        inherited Label8: TLabel
+          Left = 36
+        end
+        inherited edtTarget: TTIEdit
+          Left = 84
+        end
+        inherited Label9: TLabel
+          Left = 29
+        end
+        inherited edtSchema: TTIEdit
+          Left = 84
+        end
+        inherited Image1: TImage
+          Left = 260
+          Height = 26
+          Top = 97
+        end
+        inherited Label10: TLabel
+          Left = 45
+        end
         inherited edtBody: TTIMemo
-          Width = 532
+          Left = 84
+          Width = 504
+        end
+        inherited cbMsgType: TTIComboBox
+          Left = 84
+        end
+        inherited ckGeneric: TTICheckBox
+          Left = 268
+        end
+        inherited Label6: TLabel
+          Left = 50
+        end
+        inherited edtHop: TTISpinEdit
+          Left = 84
+        end
+        inherited lblTS: TTILabel
+          Left = 140
         end
         inherited lblSize: TTILabel
+          Left = 272
           Height = 1
           Width = 1
+          Font.Style = [fsBold]
+          ParentFont = False
         end
       end
     end
@@ -895,8 +952,8 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
   end
   inherited ActionList: TActionList[4]
-    left = 392
-    top = 176
+    left = 8
+    top = 144
     object acSave: TAction[4]
       Caption = 'Save'
       Hint = 'Save this message'
@@ -925,28 +982,32 @@ inherited frmxPLMessage: TfrmxPLMessage
       ImageIndex = 19
       OnExecute = tbPasteClick
     end
+    inherited acCoreConfigure: TAction[9]
+    end
   end
   inherited xPLMenu: TPopupMenu[5]
-    left = 136
-    top = 112
+    left = 8
+    top = 88
   end
   inherited XMLPropStorage: TXMLPropStorage[6]
-    left = 256
-    top = 264
+    left = 8
+    top = 200
   end
   inherited RxAboutDialog1: TRxAboutDialog[7]
+    left = 8
+    top = 32
   end
   object SaveMessage: TxPLMsgSaveDialog[8]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
-    left = 336
-    top = 264
+    left = 8
+    top = 256
   end
   object OpenMessage: TxPLMsgOpenDialog[9]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
-    left = 136
-    top = 168
+    left = 8
+    top = 312
   end
   object SynPasSyn1: TSynPasSyn[10]
     Enabled = False
@@ -964,16 +1025,16 @@ inherited frmxPLMessage: TfrmxPLMessage
     DirectiveAttri.FrameEdges = sfeAround
     CompilerMode = pcmDelphi
     NestedComments = False
-    left = 64
-    top = 224
+    left = 104
+    top = 64
   end
   object popCommands: TPopupMenu[11]
-    left = 64
-    top = 168
+    left = 192
+    top = 8
   end
   object popCopy: TPopupMenu[12]
-    left = 136
-    top = 56
+    left = 56
+    top = 8
     object mnuCopyMessage: TMenuItem
       Caption = 'Message'
       OnClick = mnuCopyMessageClick
@@ -988,7 +1049,7 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
   end
   object popFunctions: TPopupMenu[13]
-    left = 64
-    top = 112
+    left = 104
+    top = 8
   end
 end

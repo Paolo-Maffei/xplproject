@@ -6,13 +6,13 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, StdCtrls, u_xml_plugins;
+  ComCtrls, Buttons, StdCtrls, ActnList, ovcurl, u_xml_plugins, Dlg_Template;
 
 type
 
   { TfrmPluginDetail }
 
-  TfrmPluginDetail = class(TForm)
+  TfrmPluginDetail = class(TDlgTemplate)
     DBText1: TLabel;
     DBText2: TLabel;
     edtVendor: TEdit;
@@ -23,22 +23,17 @@ type
     edtDeviceType_: TEdit;
     Label1: TLabel;
     Label10: TLabel;
-    edtDeviceDownloadURL: TLabel;
     Label2: TLabel;
     Label3: TLabel;
     Label4: TLabel;
     Label5: TLabel;
     Label6: TLabel;
     Label7: TLabel;
-    edtDeviceInfoURL: TLabel;
     Label9: TLabel;
     edtDeviceDescription: TMemo;
-    tbOk2: TToolButton;
-    ToolBar: TToolBar;
-    procedure edtDeviceDownloadURLClick(Sender: TObject);
-    procedure edtDeviceInfoURLClick(Sender: TObject);
+    DeviceInfoURL: TOvcURL;
+    DeviceDownloadURL: TOvcURL;
     procedure FormShow(Sender: TObject);
-    procedure tbOk2Click(Sender: TObject);
   private
     { private declarations }
   public
@@ -48,8 +43,8 @@ type
 Procedure ShowFrmPluginDetail(aConfiguration : TDeviceType);
 
 implementation // ==============================================================
-uses OpenURLUtil,
-     u_xpl_gui_resource;
+uses u_xpl_gui_resource
+     ;
 
 var  frmPluginDetail: TfrmPluginDetail;
 
@@ -67,31 +62,17 @@ end;
 
 procedure TfrmPluginDetail.FormShow(Sender: TObject);
 begin
-   Toolbar.Images := xPLGUIResource.Images;
+   inherited;
+
    edtDeviceBetaVersion.Text    := Configuration.beta_version;
    edtDeviceDescription.Text    := Configuration.Description;
-   edtDeviceInfoURL.Caption     := Configuration.info_url;
-   edtDeviceDownloadURL.Caption := Configuration.download_url;
    edtDevicePlatform.Text       := Configuration.platform_;
    edtDeviceStableVersion.Text  := Configuration.Version;
    edtDeviceType_.Text          := Configuration.type_;
    edtDeviceId.Text             := Configuration.Device;
    edtVendor.Text               := Configuration.Vendor;
-end;
-
-procedure TfrmPluginDetail.tbOk2Click(Sender: TObject);
-begin
-   Close;
-end;
-
-procedure TfrmPluginDetail.edtDeviceInfoURLClick(Sender: TObject);
-begin
-   OpenURL(edtDeviceInfoURL.Caption);
-end;
-
-procedure TfrmPluginDetail.edtDeviceDownloadURLClick(Sender: TObject);
-begin
-   OpenURL(edtDeviceDownloadURL.Caption);
+   DeviceInfoURL.URL            := Configuration.info_url;
+   DeviceDownloadURL.URL        := Configuration.download_url;
 end;
 
 initialization

@@ -1,10 +1,10 @@
 { This is an automatically generated lazarus resource file }
 
 LazarusResources.Add('Tfrmvendorfiles','FORMDATA',[
-  'TPF0'#241#15'Tfrmvendorfiles'#14'frmvendorfiles'#4'Left'#2'8'#6'Height'#3'v'
-  +#1#3'Top'#2'('#5'Width'#3#153#2#7'Caption'#6#16'xPL Vendor Files'#12'ClientH'
-  +'eight'#3'v'#1#11'ClientWidth'#3#153#2#9'Icon.Data'#10#26#26#2#0#22#26#2#0#0
-  +#0#1#0#6#0#16#16#0#0#1#0' '#0'h'#4#0#0'f'#0#0#0'  '#0#0#1#0' '#0#168#16#0#0
+  'TPF0'#241#15'Tfrmvendorfiles'#14'frmvendorfiles'#4'Left'#2':'#6'Height'#3'v'
+  +#1#3'Top'#3#211#0#5'Width'#3#153#2#7'Caption'#6#16'xPL Vendor Files'#12'Clie'
+  +'ntHeight'#3'v'#1#11'ClientWidth'#3#153#2#9'Icon.Data'#10#26#26#2#0#22#26#2#0
+  +#0#0#1#0#6#0#16#16#0#0#1#0' '#0'h'#4#0#0'f'#0#0#0'  '#0#0#1#0' '#0#168#16#0#0
   +#206#4#0#0'00'#0#0#1#0' '#0#168'%'#0#0'v'#21#0#0'@@'#0#0#1#0' '#0'(B'#0#0#30
   +';'#0#0'``'#0#0#1#0' '#0#168#148#0#0'F}'#0#0#128#128#0#0#1#0' '#0'('#8#1#0
   +#238#17#1#0'('#0#0#0#16#0#0#0' '#0#0#0#1#0' '#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0#0
@@ -5756,49 +5756,48 @@ LazarusResources.Add('Tfrmvendorfiles','FORMDATA',[
   +#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255
   +#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255#255
   +#255#255#8'OnCreate'#7#10'FormCreate'#0#241#10'TStatusBar'#10'StatusBar1'#3
-  +'Top'#3'_'#1#5'Width'#3#153#2#0#0#241#8'TToolBar'#7'ToolBar'#5'Width'#3#153#2
-  +#8'TabOrder'#2#3#0#241#6'TPanel'#6'Panel4'#4'Left'#3#209#1#0#0#242#2#3#11'TT'
-  +'oolButton'#11'ToolButton2'#4'Left'#3#162#0#3'Top'#2#0#6'Action'#7#12'acUpda'
-  +'teList'#0#0#242#2#4#11'TToolButton'#11'ToolButton4'#4'Left'#2'5'#3'Top'#2#0
-  +#6'Action'#7#10'acDownload'#0#0#0#242#2#3#9'TListView'#9'lvPlugins'#4'Left'#2
-  ,#0#6'Height'#3#254#0#3'Top'#2'a'#5'Width'#3#153#2#5'Align'#7#8'alClient'#7'A'
-  +'nchors'#11#5'akTop'#6'akLeft'#8'akBottom'#0#10'Checkboxes'#9#7'Columns'#14#1
-  +#7'Caption'#6#11'Plugin Name'#5'Width'#3#130#0#0#1#7'Caption'#6#4'Type'#5'Wi'
-  +'dth'#2'<'#0#1#7'Caption'#6#3'URL'#5'Width'#3','#1#0#1#7'Caption'#6#6'Update'
-  +#5'Width'#3#150#0#0#0#9'PopupMenu'#7#13'popPluginList'#8'TabOrder'#2#0#9'Vie'
-  +'wStyle'#7#8'vsReport'#12'OnSelectItem'#7#19'lvPluginsSelectItem'#0#0#242#2#4
-  +#6'TPanel'#6'Panel2'#4'Left'#2#0#6'Height'#2'H'#3'Top'#2#25#5'Width'#3#153#2
-  +#5'Align'#7#5'alTop'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2'H'#11'Cli'
-  +'entWidth'#3#153#2#8'TabOrder'#2#1#0#6'TLabel'#10'lblUpdated'#4'Left'#2#8#6
-  +'Height'#2#1#3'Top'#2#7#5'Width'#2#1#11'ParentColor'#8#0#0#6'TLabel'#7'Label'
-  +'12'#4'Left'#2#8#6'Height'#2#16#3'Top'#2''''#5'Width'#2'X'#7'Caption'#6#17'L'
-  +'ocation to use :'#11'ParentColor'#8#0#0#12'TProgressBar'#12'ProgressBar1'#4
-  +'Left'#3#189#1#6'Height'#2#24#3'Top'#2#7#5'Width'#3#208#0#7'Anchors'#11#5'ak'
-  +'Top'#7'akRight'#0#8'TabOrder'#2#0#7'Visible'#8#0#0#9'TComboBox'#11'cbLocati'
-  +'ons'#4'Left'#2'f'#6'Height'#2#23#3'Top'#2''''#5'Width'#3''''#2#7'Anchors'#11
-  +#5'akTop'#6'akLeft'#7'akRight'#0#10'ItemHeight'#2#15#8'TabOrder'#2#1#0#0#0
-  +#243#2#5#11'TActionList'#10'ActionList'#4'left'#2#16#3'top'#3#128#0#0#0#243#2
-  +#6#10'TPopupMenu'#7'xPLMenu'#4'left'#2'p'#3'top'#3#248#0#0#0#243#2#7#15'TXML'
-  +'PropStorage'#14'XMLPropStorage'#4'left'#3#240#0#3'top'#3#8#1#0#0#243#2#8#14
-  +'TRxAboutDialog'#14'RxAboutDialog1'#0#0#242#2#9#11'TActionList'#11'ActionLis'
-  +'t2'#4'left'#3#184#0#3'top'#3#176#0#0#7'TAction'#11'acSelectAll'#8'Category'
-  +#6#4'grid'#7'Caption'#6#10'Select All'#9'OnExecute'#7#18'acSelectAllExecute'
-  +#0#0#7'TAction'#10'acDeselect'#8'Category'#6#4'grid'#7'Caption'#6#12'Deselec'
-  +'t All'#9'OnExecute'#7#17'acDeselectExecute'#0#0#7'TAction'#8'acInvert'#8'Ca'
-  +'tegory'#6#4'grid'#7'Caption'#6#16'Invert Selection'#9'OnExecute'#7#15'acInv'
-  +'ertExecute'#0#0#7'TAction'#9'acViewXML'#8'Category'#6#4'grid'#7'Caption'#6
-  +#13'View XML file'#10'ImageIndex'#2#8#9'OnExecute'#7#16'acViewXMLExecute'#0#0
-  +#7'TAction'#12'acUpdateList'#8'Category'#6#7'toolbar'#7'Caption'#6#18'Update'
-  +' Plugin List'#10'ImageIndex'#2#4#9'OnExecute'#7#19'acUpdateListExecute'#0#0
-  +#7'TAction'#10'acDownload'#8'Category'#6#7'toolbar'#7'Caption'#6#17'Download'
-  +' Selected'#10'ImageIndex'#2#9#9'OnExecute'#7#17'acDownloadExecute'#0#0#7'TA'
-  +'ction'#10'acPlugInfo'#7'Caption'#6#19'Plugin informations'#9'OnExecute'#7#17
-  +'acPlugInfoExecute'#0#0#0#242#2#10#10'TPopupMenu'#13'popPluginList'#4'left'#3
-  +'P'#1#3'top'#3#192#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#11'acSelectAll'
-  +#7'OnClick'#7#18'acSelectAllExecute'#0#0#9'TMenuItem'#9'MenuItem4'#6'Action'
-  +#7#10'acDeselect'#7'OnClick'#7#17'acDeselectExecute'#0#0#9'TMenuItem'#9'Menu'
-  +'Item2'#6'Action'#7#8'acInvert'#7'OnClick'#7#15'acInvertExecute'#0#0#9'TMenu'
-  +'Item'#9'MenuItem1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem8'#6'Action'
-  +#7#10'acPlugInfo'#0#0#9'TMenuItem'#9'MenuItem5'#6'Action'#7#9'acViewXML'#7'O'
-  +'nClick'#7#16'acViewXMLExecute'#0#0#0#0
+  +'Top'#3'_'#1#5'Width'#3#153#2#8'AutoSize'#8#6'Panels'#14#1#5'Bevel'#7#6'pbNo'
+  +'ne'#5'Width'#2'P'#0#1#5'Width'#3#250#0#0#1#5'Width'#2'2'#0#0#0#0#241#8'TToo'
+  +'lBar'#7'ToolBar'#5'Width'#3#153#2#8'TabOrder'#2#3#0#241#6'TPanel'#6'Panel4'
+  +#4'Left'#3#209#1#0#0#242#2#3#11'TToolButton'#11'ToolButton4'#4'Left'#3#163#0
+  +#3'Top'#2#0#6'Action'#7#10'acDownload'#0#0#242#2#4#11'TToolButton'#11'ToolBu'
+  ,'tton2'#4'Left'#2'5'#3'Top'#2#0#6'Action'#7#12'acUpdateList'#7'Caption'#6#18
+  +'Update plugins.xml'#0#0#0#242#2#3#9'TListView'#9'lvPlugins'#4'Left'#2#0#6'H'
+  +'eight'#3#254#0#3'Top'#2'a'#5'Width'#3#153#2#5'Align'#7#8'alClient'#7'Anchor'
+  +'s'#11#5'akTop'#6'akLeft'#8'akBottom'#0#10'Checkboxes'#9#7'Columns'#14#1#7'C'
+  +'aption'#6#11'Plugin Name'#5'Width'#3#130#0#0#1#7'Caption'#6#4'Type'#5'Width'
+  +#2'<'#0#1#7'Caption'#6#3'URL'#5'Width'#3','#1#0#1#7'Caption'#6#6'Update'#5'W'
+  +'idth'#3#150#0#0#0#9'PopupMenu'#7#13'popPluginList'#8'TabOrder'#2#0#9'ViewSt'
+  +'yle'#7#8'vsReport'#12'OnSelectItem'#7#19'lvPluginsSelectItem'#0#0#242#2#4#6
+  +'TPanel'#6'Panel2'#4'Left'#2#0#6'Height'#2'H'#3'Top'#2#25#5'Width'#3#153#2#5
+  +'Align'#7#5'alTop'#10'BevelOuter'#7#6'bvNone'#12'ClientHeight'#2'H'#11'Clien'
+  +'tWidth'#3#153#2#8'TabOrder'#2#1#0#6'TLabel'#10'lblUpdated'#4'Left'#2#8#6'He'
+  +'ight'#2#1#3'Top'#2#7#5'Width'#2#1#11'ParentColor'#8#0#0#6'TLabel'#7'Label12'
+  +#4'Left'#2#8#6'Height'#2#16#3'Top'#2''''#5'Width'#3#183#0#7'Caption'#6'#Refe'
+  +'rence location of plugins.xml :'#11'ParentColor'#8#0#0#9'TComboBox'#11'cbLo'
+  +'cations'#4'Left'#3#200#0#6'Height'#2#23#3'Top'#2''''#5'Width'#3#197#1#7'Anc'
+  +'hors'#11#5'akTop'#6'akLeft'#7'akRight'#0#10'ItemHeight'#2#15#8'TabOrder'#2#0
+  +#0#0#12'TProgressBar'#12'ProgressBar1'#4'Left'#3#205#1#6'Height'#2#24#3'Top'
+  +#2#7#5'Width'#3#192#0#8'TabOrder'#2#1#7'Visible'#8#0#0#0#243#2#5#11'TActionL'
+  +'ist'#10'ActionList'#4'left'#2#16#3'top'#3#128#0#0#242#2#4#7'TAction'#11'acS'
+  +'electAll'#8'Category'#6#4'grid'#7'Caption'#6#10'Select All'#9'OnExecute'#7
+  +#18'acSelectAllExecute'#0#0#242#2#5#7'TAction'#10'acDeselect'#8'Category'#6#4
+  +'grid'#7'Caption'#6#12'Deselect All'#9'OnExecute'#7#17'acDeselectExecute'#0#0
+  +#242#2#6#7'TAction'#8'acInvert'#8'Category'#6#4'grid'#7'Caption'#6#16'Invert'
+  +' Selection'#9'OnExecute'#7#15'acInvertExecute'#0#0#242#2#7#7'TAction'#9'acV'
+  +'iewXML'#8'Category'#6#4'grid'#7'Caption'#6#13'View XML file'#10'ImageIndex'
+  +#2#8#9'OnExecute'#7#16'acViewXMLExecute'#0#0#242#2#8#7'TAction'#12'acUpdateL'
+  +'ist'#8'Category'#6#7'toolbar'#7'Caption'#6#18'Update Plugin file'#10'ImageI'
+  +'ndex'#2#4#9'OnExecute'#7#19'acUpdateListExecute'#0#0#242#2#9#7'TAction'#10
+  +'acDownload'#8'Category'#6#7'toolbar'#7'Caption'#6#17'Download Selected'#10
+  +'ImageIndex'#2#9#9'OnExecute'#7#17'acDownloadExecute'#0#0#0#243#2#6#10'TPopu'
+  +'pMenu'#7'xPLMenu'#4'left'#2'p'#3'top'#3#248#0#0#0#243#2#7#15'TXMLPropStorag'
+  +'e'#14'XMLPropStorage'#4'left'#3#240#0#3'top'#3#8#1#0#0#243#2#8#14'TRxAboutD'
+  +'ialog'#14'RxAboutDialog1'#0#0#242#2#9#10'TPopupMenu'#13'popPluginList'#4'le'
+  +'ft'#3'P'#1#3'top'#3#192#0#0#9'TMenuItem'#9'MenuItem3'#6'Action'#7#11'acSele'
+  +'ctAll'#7'OnClick'#7#18'acSelectAllExecute'#0#0#9'TMenuItem'#9'MenuItem4'#6
+  +'Action'#7#10'acDeselect'#7'OnClick'#7#17'acDeselectExecute'#0#0#9'TMenuItem'
+  +#9'MenuItem2'#6'Action'#7#8'acInvert'#7'OnClick'#7#15'acInvertExecute'#0#0#9
+  +'TMenuItem'#9'MenuItem1'#7'Caption'#6#1'-'#0#0#9'TMenuItem'#9'MenuItem5'#6'A'
+  +'ction'#7#9'acViewXML'#7'OnClick'#7#16'acViewXMLExecute'#0#0#0#0
 ]);

@@ -17,11 +17,9 @@ type
     acSelectAll: TAction;
     acDeselect: TAction;
     acInvert: TAction;
-    acPlugInfo: TAction;
     acUpdateList: TAction;
     acDownload: TAction;
     acViewXML: TAction;
-    ActionList2: TActionList;
     cbLocations: TComboBox;
     lblUpdated: TLabel;
     Label12: TLabel;
@@ -31,7 +29,6 @@ type
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
-    MenuItem8: TMenuItem;
     Panel2: TPanel;
     popPluginList: TPopupMenu;
     ProgressBar1: TProgressBar;
@@ -40,7 +37,6 @@ type
     procedure acDeselectExecute(Sender: TObject);
     procedure acDownloadExecute(Sender: TObject);
     procedure acInvertExecute(Sender: TObject);
-    procedure acPlugInfoExecute(Sender: TObject);
     procedure acReloadExecute(Sender: TObject);
     procedure acSelectAllExecute(Sender: TObject);
     procedure acUpdateListExecute(Sender: TObject);
@@ -61,7 +57,7 @@ uses StrUtils
      ;
 
 // ============================================================================
-const K_UPDATE_STR = 'Updated on %s';
+const K_UPDATE_STR = 'plugins.xml updated on %s';
 
 // TFrmMain Object ============================================================
 procedure Tfrmvendorfiles.FormCreate(Sender: TObject);
@@ -77,10 +73,16 @@ begin
 end;
 
 procedure Tfrmvendorfiles.lvPluginsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+var plug : TPluginType;
 begin
    if not Assigned(lvPlugins.Selected) then exit;
 
-   acViewXML.Enabled := lvPlugins.Selected.ImageIndex = K_IMG_GREEN_BADGE;
+   acViewXML.Enabled := (lvPlugins.Selected.ImageIndex = K_IMG_GREEN_BADGE);
+
+   plug := TPluginType(lvPlugins.Selected.Data);
+   StatusBar1.Panels[0].Text := 'Version : '     + plug.Version;
+   StatusBar1.Panels[1].Text := 'Info : '     + plug.Info_URL;
+   StatusBar1.Panels[2].Text := 'Plugin URL : ' + plug.Plugin_URL;
 end;
 
 procedure Tfrmvendorfiles.acDeselectExecute(Sender: TObject);
@@ -93,27 +95,14 @@ procedure Tfrmvendorfiles.acSelectAllExecute(Sender: TObject);
 var Item : TListItem;
 begin
    for Item in lvPlugins.Items do
-      if Item.ImageIndex = K_IMG_GREEN_BADGE then Item.Checked := true;
+      //if Item.ImageIndex = K_IMG_GREEN_BADGE then
+      Item.Checked := true;
 end;
 
 procedure Tfrmvendorfiles.acInvertExecute(Sender: TObject);
 var Item : TListItem;
 begin
    for Item in lvPlugins.Items do Item.Checked := not Item.Checked;
-end;
-
-procedure Tfrmvendorfiles.acPlugInfoExecute(Sender: TObject);
-var plug : TPluginType;
-    s    : string;
-begin
-   if Assigned(lvPlugins.Selected) then begin
-      plug := TPluginType(lvPlugins.Selected.Data);
-      s := 'Info URL : ' + plug.Info_URL + #13#10;
-      s := s + 'Version : ' + plug.Version + #13#10;
-      s := s + 'Plugin URL : ' + plug.Plugin_URL;
-
-      Application.MessageBox(PChar(s),'Plugin information',1);
-   end;
 end;
 
 procedure Tfrmvendorfiles.acReloadExecute(Sender: TObject);
@@ -174,8 +163,9 @@ end;
 
 procedure Tfrmvendorfiles.acUpdateListExecute(Sender: TObject);
 begin
-   if xPLApplication.VendorFile.Update(cbLocations.Text) then acReloadExecute(self)
-             else xPLApplication.Log(etWarning,'Error downloading file');
+   if xPLApplication.VendorFile.Update(cbLocations.Text)
+      then acReloadExecute(self)
+      else xPLApplication.Log(etWarning,'Error downloading file');
 end;
 
 procedure Tfrmvendorfiles.acViewXMLExecute(Sender: TObject);

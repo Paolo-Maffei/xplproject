@@ -1,23 +1,20 @@
 inherited frmConfigurator: TfrmConfigurator
-  Left = 10
-  Height = 540
-  Top = 242
-  Width = 700
+  Left = 19
+  Height = 577
+  Top = 147
+  Width = 616
   Caption = 'frmConfigurator'
-  ClientHeight = 540
-  ClientWidth = 700
+  ClientHeight = 577
+  ClientWidth = 616
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
-    Top = 517
-    Width = 700
+    Top = 554
+    Width = 616
   end
   inherited ToolBar: TToolBar
-    Width = 700
-    inherited ToolButton10: TToolButton
-      Width = 10
-    end
+    Width = 616
     inherited Panel4: TPanel
-      Left = 500
+      Left = 416
     end
     object ToolButton2: TToolButton[3]
       Left = 53
@@ -39,19 +36,19 @@ inherited frmConfigurator: TfrmConfigurator
   end
   object Splitter1: TSplitter[3]
     Left = 0
-    Height = 492
+    Height = 529
     Top = 25
     Width = 5
   end
   object Panel2: TPanel[4]
     Left = 190
-    Height = 492
+    Height = 529
     Top = 25
-    Width = 510
+    Width = 426
     Align = alClient
     BevelOuter = bvLowered
-    ClientHeight = 492
-    ClientWidth = 510
+    ClientHeight = 529
+    ClientWidth = 426
     TabOrder = 3
     object Label1: TLabel
       Left = 8
@@ -110,7 +107,7 @@ inherited frmConfigurator: TfrmConfigurator
       Left = 1
       Height = 25
       Top = 1
-      Width = 508
+      Width = 424
       AutoSize = True
       ButtonHeight = 24
       ButtonWidth = 30
@@ -156,88 +153,21 @@ inherited frmConfigurator: TfrmConfigurator
         Style = tbsDivider
       end
     end
-    object Panel3: TPanel
-      Left = 8
-      Height = 338
-      Top = 175
-      Width = 418
-      BevelOuter = bvLowered
-      ClientHeight = 338
-      ClientWidth = 418
+    inline frameConfig1: TframeConfig
+      Left = 9
+      Top = 170
       TabOrder = 2
-      object lblError: TLabel
-        Left = 8
-        Height = 16
-        Top = 241
-        Width = 121
-        Caption = '*** Error in the field ***'
-        Font.Color = clRed
-        ParentColor = False
-        ParentFont = False
-        Visible = False
-      end
-      object lblRegExpr: TLabel
-        Left = 200
-        Height = 1
-        Top = 241
-        Width = 1
-        Alignment = taRightJustify
-        ParentColor = False
-      end
-      object HBDetail: TBodyMessageGrid
-        Left = 1
-        Height = 232
-        Top = 1
-        Width = 416
-        Align = alTop
-        ColCount = 4
-        FixedCols = 0
-        Options = [goFixedVertLine, goFixedHorzLine, goHorzLine, goColSizing, goEditing, goTabs, goSmoothScroll]
-        RowCount = 2
-        TabOrder = 0
-        OnEditingDone = HBDetailEditingDone
-        OnSelection = HBDetailSelection
-        RowOptions = [roAllowAppend, roAllowDelete, roAllowInsert, roAllowKeys]
-        ColWidths = (
-          15
-          125
-          15
-          125
-        )
-        Cells = (
-          6
-          0
-          0
-          'Keys'
-          1
-          0
-          'Keys'
-          1
-          1
-          '='
-          2
-          0
-          'Values'
-          2
-          1
-          '='
-          3
-          0
-          'Values'
-        )
-      end
-      object Memo1: TMemo
-        Left = 8
-        Height = 66
-        Top = 265
-        Width = 404
-        TabOrder = 1
+      inherited PageControl1: TPageControl
+        inherited tsSpecific: TTabSheet
+          ClientHeight = 644
+          ClientWidth = 792
+        end
       end
     end
   end
   object tvDevices: TTreeView[5]
     Left = 5
-    Height = 492
+    Height = 529
     Top = 25
     Width = 185
     Align = alLeft
@@ -258,20 +188,22 @@ inherited frmConfigurator: TfrmConfigurator
   end
   inherited XMLPropStorage: TXMLPropStorage[8]
   end
-  object xPLMsgSaveDlg: TxPLMsgSaveDialog[9]
+  inherited RxAboutDialog1: TRxAboutDialog[9]
+  end
+  object xPLMsgSaveDlg: TxPLMsgSaveDialog[10]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     FilterIndex = 2
     left = 112
     top = 32
   end
-  object OpenMessage: TxPLMsgOpenDialog[10]
+  object OpenMessage: TxPLMsgOpenDialog[11]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 112
     top = 88
   end
-  object AppActionList: TActionList[11]
+  object AppActionList: TActionList[12]
     left = 16
     top = 160
     object acDiscoverNetwork: TAction

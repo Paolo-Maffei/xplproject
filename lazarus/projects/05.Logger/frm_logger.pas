@@ -18,7 +18,6 @@ type
     acAppSettings: TAction;
     acLogging: TAction;
     acPluginDetail: TAction;
-    acConfig: TAction;
     acDiscoverNetwork: TAction;
     acShowMessage: TAction;
     acConversation: TAction;
@@ -70,7 +69,6 @@ type
     tvMessages: TTreeView;
     xPLMenu2: TPopupMenu;
     procedure acAddToMacroExecute(Sender: TObject);
-    procedure acConfigExecute(Sender: TObject);
     procedure acConversationExecute(Sender: TObject);
     procedure acDiscoverNetworkExecute(Sender: TObject);
     procedure acPlayExecute(Sender: TObject);
@@ -93,6 +91,7 @@ type
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
     procedure tvMessagesClick(Sender: TObject);
     procedure tvMessagesSelectionChanged(Sender: TObject);
+    procedure acLaunchMyConfig(Sender: TObject);
   private
     NetNode,MsgNode,ConNode,MacNode : TTreeNode;
     MacroList : TMessageList;
@@ -112,9 +111,10 @@ var frmLogger: TfrmLogger;
 implementation { TFrmLogger =============================================================}
 uses frm_xplappslauncher
      , u_configuration_record
-     , frm_AppSettings
      , StrUtils
      , u_xpl_message_gui
+     , dlg_config
+     , frm_logger_config
      , u_xPL_Address
      , u_xpl_gui_resource
      , u_xpl_listener
@@ -156,10 +156,6 @@ begin
    aMenu.Action := acExport;
    xPLMenu.Items.Insert(0,aMenu);
 
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acConfig;
-   xPLMenu.Items.Insert(0,aMenu);
-
    mnuListView.Images:= xPLGUIResource.Images;
    acConversation.ImageIndex := K_IMG_THREAD;
    acResend.ImageIndex:=K_IMG_MAIL_FORWARD;
@@ -183,17 +179,14 @@ begin
 
    MessageFrame.ReadOnly:=true;
    tvMessagesClick(self);
+
+   acCoreConfigure.OnExecute := @acLaunchMyConfig;                          // Override standard config dialog
+
 end;
 
 procedure TfrmLogger.FormDestroy(Sender: TObject);
 begin
    MacroList.Free;
-end;
-
-procedure TfrmLogger.acConfigExecute(Sender: TObject);
-begin
-   frmAppSettings.ShowModal;
-   ApplySettings(Sender);
 end;
 
 procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
@@ -333,7 +326,7 @@ end;
 
 procedure TfrmLogger.ApplySettings(Sender: TObject);                           // Correction bug FS#39 , This method is also called by frmAppSettings
 begin                                                                          //    after having load the application default setup
-   with frmAppSettings do begin
+   with FrmLoggerConfig do begin
         TLoggerListener(xPLApplication).fMessageLimit := seMaxPool.Value;
         TLoggerListener(xPLApplication).fLogAtStartUp := ckStartAtLaunch.Checked;
         PlayExecute(self);
@@ -391,7 +384,7 @@ var sl : TStringList;
 begin
   sl := TStringList.Create;
   sl.DelimitedText := StatusBar1.Panels[2].Text;
-  if frmAppSettings.rgFilterBy.ItemIndex = 0 then sFilter := aMsg.SourceFilter else sFilter := aMsg.TargetFilter;
+  if FrmLoggerConfig.rgFilterBy.ItemIndex = 0 then sFilter := aMsg.SourceFilter else sFilter := aMsg.TargetFilter;
   if sl.Count = 1 then                                                         // We're at VDI or Message level
     begin
        if xPLMatches(StatusBar1.Panels[2].Text, sFilter) then AddToTreeView(TxPLMessage(aMsg));
@@ -407,6 +400,7 @@ begin
        end;
     end;
   sl.Free;
+  DgMessagesClick(self);                                                      // Update message preview panel
 end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
@@ -423,6 +417,12 @@ begin
    for i:=0 to Pred(liste.Count) do
       DisplayFilteredMessage(TxPLMessage(liste.Items[i]));
    if dgMessages.RowCount>1 then dgMessages.Row:=1;
+end;
+
+procedure TfrmLogger.acLaunchMyConfig(Sender: TObject);
+begin
+   ShowDlgLoggerConfig;
+   ApplySettings(sender);
 end;
 
 procedure TfrmLogger.mnuSendMessageClick(Sender: TObject);
@@ -617,7 +617,7 @@ begin
       if assigned(aMsg) then
          try
             img := TImage.Create(self);
-            if frmAppSettings.ckIcons.Checked then s :=aMsg.Schema.Classe
+            if FrmLoggerConfig.ckIcons.Checked then s :=aMsg.Schema.Classe
                                               else s := MsgTypeToStr(aMsg.MessageType);
             if LazarusResources.Find(s)<>nil then
             img.Picture.LoadFromLazarusResource(s);

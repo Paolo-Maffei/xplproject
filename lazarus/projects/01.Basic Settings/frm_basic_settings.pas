@@ -11,7 +11,6 @@ uses
 type { TfrmBasicSettings =====================================================}
      TfrmBasicSettings = class(TFrmTemplate)
         acReload: TAction;
-        ActionList2: TActionList;
         cbListenTo: TComboBox;
         edtListenTo: TEdit;
         e_BroadCast: TComboBox;

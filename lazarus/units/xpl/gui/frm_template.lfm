@@ -116,9 +116,18 @@ object FrmTemplate: TFrmTemplate
       ImageIndex = 42
       OnExecute = acLogViewerExecute
     end
+    object acCoreConfigure: TAction
+      Category = 'xPL'
+      Caption = 'Configuration'
+      ImageIndex = 44
+      OnExecute = acCoreConfigureExecute
+    end
   end
   object xPLMenu: TPopupMenu
     left = 128
+    object MnuItem1: TMenuItem
+      Action = acCoreConfigure
+    end
     object MenuItem7: TMenuItem
       Action = acLogViewer
     end

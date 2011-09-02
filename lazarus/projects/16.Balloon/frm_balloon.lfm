@@ -1,13 +1,12 @@
 inherited FrmBalloon: TFrmBalloon
-  Left = 75
-  Height = 171
-  Top = 84
-  Width = 377
-  AutoSize = True
+  Left = 123
+  Height = 229
+  Top = 52
+  Width = 602
   BorderIcons = [biSystemMenu]
-  BorderStyle = bsNone
-  ClientHeight = 171
-  ClientWidth = 377
+  BorderStyle = bsSizeToolWin
+  ClientHeight = 229
+  ClientWidth = 602
   Icon.Data = {
     BE0C00000000010001002020000000001800A80C000016000000280000002000
     0000400000000100180000000000000C00000000000000000000000000000000
@@ -115,50 +114,72 @@ inherited FrmBalloon: TFrmBalloon
   }
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  PopupMenu = PopupMenu11
-  SessionProperties = 'acDisplayMessageWindow.Checked'
+  SessionProperties = 'acDisplayMessageWindow.Checked;Left;Top;Width;Height'
   ShowInTaskBar = stNever
-  WindowState = wsMinimized
+  Visible = True
   inherited StatusBar1: TStatusBar
-    Top = 148
-    Width = 377
+    Top = 206
+    Width = 602
   end
   inherited ToolBar: TToolBar
-    Width = 377
-    inherited ToolButton10: TToolButton
-      Width = 10
-    end
+    Width = 602
     inherited Panel4: TPanel
-      Left = 177
+      Left = 402
     end
   end
-  object PopupMenu11: TPopupMenu[6]
-    left = 40
-    top = 56
-    object MenuItem3: TMenuItem
-      Action = acDisplayMessageWindow
-      AutoCheck = True
-    end
-    object MenuItem1: TMenuItem
-      Action = acAbout
-      OnClick = acAboutExecute
-    end
-    object MenuItem2: TMenuItem
-      Action = acQuit
-      OnClick = acQuitExecute
-    end
+  object dgMessages: TStringGrid[3]
+    Left = 0
+    Height = 181
+    Top = 25
+    Width = 602
+    Align = alClient
+    AutoEdit = False
+    BorderStyle = bsNone
+    Columns = <    
+      item
+        MinSize = 120
+        Title.Caption = 'TimeStamp'
+        Title.PrefixOption = poNone
+      end    
+      item
+        MinSize = 80
+        Title.Caption = 'Schema'
+        Title.PrefixOption = poNone
+      end    
+      item
+        MinSize = 70
+        Title.Caption = 'Source'
+        Title.PrefixOption = poNone
+      end    
+      item
+        MinSize = 50
+        Title.Caption = 'Body'
+        Title.PrefixOption = poNone
+      end>
+    DefaultColWidth = 20
+    DefaultRowHeight = 20
+    ExtendedSelect = False
+    Options = [goRangeSelect, goColSizing, goColMoving, goRowSelect, goThumbTracking, goDblClickAutoSize, goSmoothScroll]
+    RowCount = 1
+    TabOrder = 2
+    TitleStyle = tsNative
+    OnDrawCell = dgMessagesDrawCell
   end
-  object ActionList3: TActionList[7]
-    left = 144
-    top = 72
-    object acDisplayMessageWindow: TAction
+  inherited ActionList: TActionList[4]
+    object acDisplayMessageWindow: TAction[5]
       AutoCheck = True
       Caption = 'Display Message Window'
       OnExecute = acDisplayWindow
     end
   end
+  inherited xPLMenu: TPopupMenu[5]
+  end
+  inherited XMLPropStorage: TXMLPropStorage[6]
+  end
+  inherited RxAboutDialog1: TRxAboutDialog[7]
+  end
   object TrayIcon1: TTrayIcon[8]
-    PopUpMenu = PopupMenu11
+    PopUpMenu = xPLMenu
     Icon.Data = {
       BE0C00000000010001002020000000001800A80C000016000000280000002000
       0000400000000100180000000000000C00000000000000000000000000000000
@@ -265,6 +286,6 @@ inherited FrmBalloon: TFrmBalloon
       FFFF
     }
     left = 232
-    top = 80
+    top = 64
   end
 end

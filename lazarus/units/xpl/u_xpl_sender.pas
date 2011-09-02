@@ -51,7 +51,6 @@ type // TxPLSender ============================================================
 
 implementation // =============================================================
 uses u_xpl_message
-     , u_xpl_header
      , u_xpl_messages
      , SysUtils
      , fpc_delphi_compat
