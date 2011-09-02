@@ -3,8 +3,6 @@ Imports xPL
 Imports xPL.xPL_Base
 Imports System.Xml
 
-' TODO: add more logging
-
 Public Class MainForm
 
     Private WithEvents cp As UPnPSmartControlPoint
