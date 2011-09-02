@@ -1,0 +1,51 @@
+inherited DlgConfig: TDlgConfig
+  Left = 188
+  Height = 381
+  Top = 31
+  Width = 413
+  Caption = 'Application Configuration'
+  ClientHeight = 381
+  ClientWidth = 413
+  inherited DlgToolbar: TToolBar
+    Width = 413
+    object ToolButton1: TToolButton[2]
+      Left = 86
+      Top = 0
+      Action = DlgacApply
+    end
+  end
+  inline frameConfig1: TframeConfig[1]
+    Left = 2
+    Top = 25
+    Width = 409
+    Align = alBottom
+    BorderSpacing.Around = 2
+    ClientWidth = 409
+    TabOrder = 1
+    inherited PageControl1: TPageControl
+      Width = 405
+      ActivePage = nil
+      TabIndex = -1
+      inherited tsCoreItems: TTabSheet
+        ClientHeight = 970
+        ClientWidth = 1193
+      end
+      inherited tsSpecific: TTabSheet
+        ClientHeight = 1296
+        ClientWidth = 1592
+        inherited HBDetail: TBodyMessageGrid
+          Width = 400
+        end
+      end
+    end
+  end
+  inherited DlgActions: TActionList[2]
+    left = 288
+    top = 0
+    object DlgacApply: TAction[1]
+      Caption = 'Apply'
+      ImageIndex = 15
+      OnExecute = DlgacApplyExecute
+    end
+  end
+end
