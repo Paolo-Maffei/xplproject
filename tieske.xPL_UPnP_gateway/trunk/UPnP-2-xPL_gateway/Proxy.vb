@@ -705,6 +705,7 @@ Public Class Proxy
                     .Add("id", Me.IDstring)
                     .Add("parent", GetProxy(Device).ID.ToString)
                     .Add("service", Service.ServiceID)
+                    .Add("xpl", xPLDevice.Address)
 
                 Case ProxyType.Method
                     .Add("announce", "method")
@@ -860,37 +861,6 @@ Public Class Proxy
     End Sub
 
     ''' <summary>
-    ''' Will request (and post on the xPL network) the values of related variables. The parameter should be a proxy of type
-    ''' device, service or variable. For service and device types all underlying variables will be reported.
-    ''' </summary>
-    ''' <param name="p"></param>
-    ''' <remarks></remarks>
-    Private Shared Sub RequestValues(ByVal p As Proxy)
-        If p Is Nothing Then Exit Sub
-        Select Case p.Type
-            Case ProxyType.Variable
-                ' TODO: report actual variable value
-
-            Case ProxyType.Service
-                If p.Service.GetStateVariables.Count > 0 Then
-                    LogMessage("   Reporting values for service; " & p.Service.ServiceID)
-                    For Each s As UPnPStateVariable In p.Service.GetStateVariables
-                        ' call this sub recursively for each variable
-                        Proxy.RequestValues(Proxy.GetProxy(s))
-                    Next
-                End If
-            Case ProxyType.Device
-                If p.Device.Services.Count > 0 Then
-                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName)
-                    For Each s As UPnPService In p.Device.Services
-                        ' call this sub recursively for each variable
-                        Proxy.RequestValues(Proxy.GetProxy(s))
-                    Next
-                End If
-        End Select
-    End Sub
-
-    ''' <summary>
     ''' Executes a method call
     ''' </summary>
     ''' <param name="msg"></param>
@@ -928,20 +898,24 @@ Public Class Proxy
             For n As Integer = 0 To msg.KeyValueList.Count - 1
                 Dim kvp As xPLKeyValuePair = msg.KeyValueList(n)
                 If kvp.Key <> "command" And kvp.Key <> "method" And kvp.Key <> "callid" Then
-                    args(i) = GetProxy(CInt(Val(kvp.Key))).Argument.Clone
-                    args(i).DataValue = ConvertToUPnPType(args(i).RelatedStateVar.ValueType, kvp.Value)
+                    ' create a copy of the argument and set its value as provided
+                    Dim arg As UPnPArgument = GetProxy(CInt(Val(kvp.Key))).Argument.Clone
+                    arg.DataValue = ConvertToUPnPType(arg.RelatedStateVar.ValueType, kvp.Value)
+                    ' add to arguments list
+                    args(i) = arg
                     i = i + 1
                 End If
             Next
             method.ValidateArgs(args)
             Dim retValue As Object = method.ParentService.InvokeSync(method.Name, args)
             If retValue Is Nothing Then retValue = ""
-            LogMessage("Returned: " & retValue.ToString)
+            LogMessage("   Returned: " & retValue.ToString)
             result.KeyValueList.Add("success", "true")
             result.KeyValueList.Add("retval", retValue.ToString)
             For Each arg As UPnPArgument In args
                 If arg.Direction = "out" Then
-                    ' TODO: return values to be added to message
+                    result.KeyValueList.Add(GetProxy(method.GetArg(arg.Name)).ID, arg.DataValue.ToString)
+                    LogMessage("   " & arg.Name & " = " & arg.DataValue.ToString)
                 End If
             Next
         Catch ex As Exception
@@ -1020,6 +994,99 @@ Public Class Proxy
         m.KeyValueList.Add("error", Text)
         xPLDevice.Send(m)
     End Sub
+
+    ''' <summary>
+    ''' Will request (and post on the xPL network) the values of related variables. The parameter should be a proxy of type
+    ''' device, service or variable. For service and device types all underlying variables will be reported.
+    ''' </summary>
+    ''' <param name="p"></param>
+    ''' <remarks></remarks>
+    Private Shared Sub RequestValues(ByVal p As Proxy)
+        If p Is Nothing Then Exit Sub
+        Select Case p.Type
+            Case ProxyType.Variable
+                If p.Variable.SendEvent Then
+                    ' evented variable, so we can just get the current value
+                    Dim msg As New xPLMessage
+                    msg.MsgType = xPLMessageTypeEnum.Trigger
+                    msg.Target = "*"
+                    msg.Schema = "upnp.basic"
+                    msg.KeyValueList.Add(p.ID.ToString, p.Variable.Value.ToString)
+                    xPLDevice.Send(msg)
+                Else
+                    ' non-evented, we have to go and request the value using an action/method
+                    ' go and find method to request the value
+                    Dim mname As String = "GET" & p.Variable.Name.ToUpper
+                    Dim m As UPnPAction = Nothing
+                    For Each action As UPnPAction In p.Service.GetActions
+                        If action.Name.ToUpper = mname Then
+                            ' found the method, check some requirements
+                            If action.Arguments.Count = 1 Then
+                                If action.ArgumentList(0).Direction = "out" Then
+                                    ' must be it, action with GET name, 1 argument direction OUT
+                                    m = action
+                                    Exit For
+                                End If
+                            End If
+                        End If
+                    Next
+                    If m IsNot Nothing Then
+                        ' a method was found, go invoke it
+                        Dim a(0) As UPnPArgument
+                        a(0) = m.ArgumentList(0).Clone()
+                        p.Service.InvokeAsync(m.Name, a, p, AddressOf Proxy.VariableCallBack, AddressOf Proxy.VariableErrorCallBack)
+                    Else
+                        ' no method found, can't request value
+                        LogMessage("   " & p.Variable.Name & "; doesn't have a GET method to request its value")
+                    End If
+                End If
+                ' TODO: report actual variable value
+
+            Case ProxyType.Service
+                If p.Service.GetStateVariables.Count > 0 Then
+                    LogMessage("   Reporting values for service; " & p.Service.ServiceID)
+                    For Each s As UPnPStateVariable In p.Service.GetStateVariables
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(s))
+                    Next
+                End If
+            Case ProxyType.Device
+                If p.Device.Services.Count > 0 Then
+                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName)
+                    For Each s As UPnPService In p.Device.Services
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(s))
+                    Next
+                End If
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Callback for ASync variable value request used by <see cref="RequestValues">RequestValues</see>
+    ''' </summary>
+    Private Shared Sub VariableCallBack(ByVal sender As OpenSource.UPnP.UPnPService, ByVal MethodName As String, ByVal Args() As OpenSource.UPnP.UPnPArgument, ByVal ReturnValue As Object, ByVal Tag As Object)
+        Dim msg As New xPLMessage
+        Dim p As Proxy = CType(Tag, Proxy)
+        msg.MsgType = xPLMessageTypeEnum.Trigger
+        msg.Target = "*"
+        msg.Schema = "upnp.basic"
+        If Args(0).DataValue Is Nothing Then
+            msg.KeyValueList.Add(p.ID.ToString, "")
+        Else
+            msg.KeyValueList.Add(p.ID.ToString, Args(0).DataValue.ToString)
+        End If
+        If ReturnValue Is Nothing Then ReturnValue = ""
+        msg.KeyValueList.Add("retval", ReturnValue.ToString)
+
+        xPLDevice.Send(msg)
+    End Sub
+    ''' <summary>
+    ''' Callback for ASync variable value request used by <see cref="RequestValues">RequestValues</see>
+    ''' </summary>
+    Private Shared Sub VariableErrorCallBack(ByVal sender As OpenSource.UPnP.UPnPService, ByVal MethodName As String, ByVal Args() As OpenSource.UPnP.UPnPArgument, ByVal ReturnValue As Object, ByVal Tag As Object)
+        LogMessage("ERROR: method " & MethodName & " to request the value of " & CType(Tag, Proxy).Variable.Name & " failed.")
+    End Sub
+
 
 
 End Class
