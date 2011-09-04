@@ -27,7 +27,13 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7D5DC70B5451C5726625B2CD8F909A2F"
+        "MsmKey" = "8:_7350DD9908BD1FF91E64EDBA3BF3494D"
+        "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
+        "MsmKey" = "8:_C3401B3E95621DF9A8DFD917D6447E98"
         "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -39,12 +45,6 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_CD3AA64D7813A68AAAE344D0C1BD6FDA"
-        "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_41B5B1CFC22B416D9BF66C3573CBA6B9"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_CD3AA64D7813A68AAAE344D0C1BD6FDA"
+        "OwnerKey" = "8:_C3401B3E95621DF9A8DFD917D6447E98"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7D5DC70B5451C5726625B2CD8F909A2F"
+        "OwnerKey" = "8:_7350DD9908BD1FF91E64EDBA3BF3494D"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -129,6 +129,19 @@
             "PrerequisitesLocation" = "2:1"
             "Url" = "8:"
             "ComponentsUrl" = "8:"
+                "Items"
+                {
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Net.Framework.3.5"
+                    {
+                    "Name" = "8:.NET Framework 3.5"
+                    "ProductCode" = "8:Microsoft.Net.Framework.3.5"
+                    }
+                    "{EDC2488A-8267-493A-A98E-7D9C3B36CDF3}:Microsoft.Windows.Installer.3.1"
+                    {
+                    "Name" = "8:Windows Installer 3.1"
+                    "ProductCode" = "8:Microsoft.Windows.Installer.3.1"
+                    }
+                }
             }
         }
     }
@@ -207,14 +220,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7D5DC70B5451C5726625B2CD8F909A2F"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7350DD9908BD1FF91E64EDBA3BF3494D"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:UPnP, Version=1.0.3848.24986, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7D5DC70B5451C5726625B2CD8F909A2F"
+                    "_7350DD9908BD1FF91E64EDBA3BF3494D"
                     {
                     "Name" = "8:UPnP.dll"
                     "Attributes" = "3:512"
@@ -238,14 +251,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_CD3AA64D7813A68AAAE344D0C1BD6FDA"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C3401B3E95621DF9A8DFD917D6447E98"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:xpllib, Version=5.2.163.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_CD3AA64D7813A68AAAE344D0C1BD6FDA"
+                    "_C3401B3E95621DF9A8DFD917D6447E98"
                     {
                     "Name" = "8:xpllib.dll"
                     "Attributes" = "3:512"
@@ -336,14 +349,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:UPnP-2-xPL gateway"
-        "ProductCode" = "8:{F7210E6C-DE1E-4618-A4C0-011418FC71D4}"
-        "PackageCode" = "8:{BA35B8F5-F182-4883-9391-30484670F0DE}"
+        "ProductCode" = "8:{206DF06C-C103-4810-B589-1EC951DE7262}"
+        "PackageCode" = "8:{996930ED-EF89-432F-A149-38F9C7928D01}"
         "UpgradeCode" = "8:{7E8CF505-67FE-46F1-B8FF-A64D2239AA16}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.1.0"
+        "ProductVersion" = "8:0.2.0"
         "Manufacturer" = "8:xPL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

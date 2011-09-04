@@ -721,6 +721,7 @@ Public Class Proxy
                     .Add("name", Variable.Name)
                     .Add("event", Variable.SendEvent.ToString)
                     .Add("type", Variable.ValueType)
+                    .Add("xpl", xPLDevice.Address)
 
                 Case ProxyType.Argument
                     .Add("announce", "argument")
@@ -1005,13 +1006,20 @@ Public Class Proxy
         If p Is Nothing Then Exit Sub
         Select Case p.Type
             Case ProxyType.Variable
+                LogMessage("   Requesting value for variable " & p.Variable.Name)
                 If p.Variable.SendEvent Then
                     ' evented variable, so we can just get the current value
                     Dim msg As New xPLMessage
                     msg.MsgType = xPLMessageTypeEnum.Trigger
                     msg.Target = "*"
                     msg.Schema = "upnp.basic"
-                    msg.KeyValueList.Add(p.ID.ToString, p.Variable.Value.ToString)
+                    If p.Variable.Value IsNot Nothing Then
+                        msg.KeyValueList.Add(p.ID.ToString, p.Variable.Value.ToString)
+                    Else
+                        msg.KeyValueList.Add(p.ID.ToString, "")
+                    End If
+                    LogMessage("      Returning value for " & p.Variable.Name & " of service " & p.Service.ServiceID)
+                    LogMessage("         value = " & msg.KeyValueList(p.ID.ToString))
                     xPLDevice.Send(msg)
                 Else
                     ' non-evented, we have to go and request the value using an action/method
@@ -1035,29 +1043,38 @@ Public Class Proxy
                         Dim a(0) As UPnPArgument
                         a(0) = m.ArgumentList(0).Clone()
                         p.Service.InvokeAsync(m.Name, a, p, AddressOf Proxy.VariableCallBack, AddressOf Proxy.VariableErrorCallBack)
+                        LogMessage("      Requested value for " & p.Variable.Name & " of service " & p.Service.ServiceID)
                     Else
                         ' no method found, can't request value
-                        LogMessage("   " & p.Variable.Name & "; doesn't have a GET method to request its value")
+                        LogMessage("      " & p.Variable.Name & "; doesn't have a GET method to request its value")
                     End If
                 End If
-                ' TODO: report actual variable value
 
             Case ProxyType.Service
+                LogMessage("   Reporting values for service; " & p.Service.ServiceID & " it has " & p.Service.GetStateVariables.Count & " variables")
                 If p.Service.GetStateVariables.Count > 0 Then
-                    LogMessage("   Reporting values for service; " & p.Service.ServiceID)
                     For Each s As UPnPStateVariable In p.Service.GetStateVariables
                         ' call this sub recursively for each variable
                         Proxy.RequestValues(Proxy.GetProxy(s))
                     Next
                 End If
             Case ProxyType.Device
+                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.Services.Count.ToString & " services")
                 If p.Device.Services.Count > 0 Then
-                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName)
                     For Each s As UPnPService In p.Device.Services
                         ' call this sub recursively for each variable
                         Proxy.RequestValues(Proxy.GetProxy(s))
                     Next
                 End If
+                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.EmbeddedDevices.Count.ToString & " subdevices")
+                If p.Device.Services.Count > 0 Then
+                    For Each d As UPnPDevice In p.Device.EmbeddedDevices
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(d))
+                    Next
+                End If
+            Case Else
+                LogMessage("Can't request values for proxy type: " & p.Type.ToString)
         End Select
     End Sub
 
@@ -1065,26 +1082,35 @@ Public Class Proxy
     ''' Callback for ASync variable value request used by <see cref="RequestValues">RequestValues</see>
     ''' </summary>
     Private Shared Sub VariableCallBack(ByVal sender As OpenSource.UPnP.UPnPService, ByVal MethodName As String, ByVal Args() As OpenSource.UPnP.UPnPArgument, ByVal ReturnValue As Object, ByVal Tag As Object)
-        Dim msg As New xPLMessage
-        Dim p As Proxy = CType(Tag, Proxy)
-        msg.MsgType = xPLMessageTypeEnum.Trigger
-        msg.Target = "*"
-        msg.Schema = "upnp.basic"
-        If Args(0).DataValue Is Nothing Then
-            msg.KeyValueList.Add(p.ID.ToString, "")
-        Else
-            msg.KeyValueList.Add(p.ID.ToString, Args(0).DataValue.ToString)
-        End If
-        If ReturnValue Is Nothing Then ReturnValue = ""
-        msg.KeyValueList.Add("retval", ReturnValue.ToString)
-
-        xPLDevice.Send(msg)
+        Try
+            Dim msg As New xPLMessage
+            Dim p As Proxy = CType(Tag, Proxy)
+            msg.MsgType = xPLMessageTypeEnum.Trigger
+            msg.Target = "*"
+            msg.Schema = "upnp.basic"
+            If Args(0).DataValue Is Nothing Then
+                msg.KeyValueList.Add(p.ID.ToString, "")
+            Else
+                msg.KeyValueList.Add(p.ID.ToString, Args(0).DataValue.ToString)
+            End If
+            If ReturnValue Is Nothing Then ReturnValue = ""
+            msg.KeyValueList.Add("retval", ReturnValue.ToString)
+            LogMessage("   Returning value for " & p.Variable.Name & " of service " & p.Service.ServiceID)
+            LogMessage("       value = " & msg.KeyValueList(p.ID.ToString))
+            xPLDevice.Send(msg)
+        Catch ex As Exception
+            LogMessage("ERROR: VariableCallBack had exception: " & ex.ToString)
+        End Try
     End Sub
     ''' <summary>
     ''' Callback for ASync variable value request used by <see cref="RequestValues">RequestValues</see>
     ''' </summary>
     Private Shared Sub VariableErrorCallBack(ByVal sender As OpenSource.UPnP.UPnPService, ByVal MethodName As String, ByVal Args() As OpenSource.UPnP.UPnPArgument, ByVal ReturnValue As Object, ByVal Tag As Object)
-        LogMessage("ERROR: method " & MethodName & " to request the value of " & CType(Tag, Proxy).Variable.Name & " failed.")
+        Try
+            LogMessage("ERROR: method " & MethodName & " to request the value of " & CType(Tag, Proxy).Variable.Name & " failed.")
+        Catch ex As Exception
+            LogMessage("ERROR: VariableErrorCallBack had exception: " & ex.ToString)
+        End Try
     End Sub
 
 
