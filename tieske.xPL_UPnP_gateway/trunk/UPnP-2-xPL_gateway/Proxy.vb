@@ -936,7 +936,7 @@ Public Class Proxy
             Dim retValue As Object = method.ParentService.InvokeSync(method.Name, args)
             If retValue Is Nothing Then retValue = ""
             LogMessage("   Returned: " & retValue.ToString)
-            result.KeyValueList.Add("success", "true")
+            result.KeyValueList.Add("success", "True")
             result.KeyValueList.Add("retval", retValue.ToString)
             For Each arg As UPnPArgument In args
                 If arg.Direction = "out" Then
@@ -945,7 +945,7 @@ Public Class Proxy
                 End If
             Next
         Catch ex As Exception
-            result.KeyValueList.Add("success", "false")
+            result.KeyValueList.Add("success", "False")
             result.KeyValueList.Add("error", ex.Message)
             LogMessage("   ERROR: " & ex.ToString)
         End Try
