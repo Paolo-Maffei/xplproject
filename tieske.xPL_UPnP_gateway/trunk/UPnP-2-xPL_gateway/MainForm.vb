@@ -156,12 +156,16 @@ Public Class MainForm
         End If
     End Sub
 
-    Private Sub btnSet_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnSet.Click
+    Private Sub tbLogLines_LostFocus(ByVal sender As Object, ByVal e As System.EventArgs) Handles tbLogLines.LostFocus
         Dim l As Long = Int(Val(tbLogLines.Text))
         If l < 20 Then l = 20
         If l > 20000 Then l = 20000
         tbLogLines.Text = l.ToString
         My.Settings.LogLines = l
+    End Sub
+
+    Private Sub btnClear_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnClear.Click
+        lbLog.Items.Clear()
     End Sub
 
 #End Region
