@@ -8,12 +8,14 @@ uses {$IFDEF UNIX}
      Forms, uniqueinstance_package, multiloglaz, pl_rx, runtimetypeinfocontrols
      , frm_basic_settings
      , u_xpl_application
-     , u_xpl_gui_resource
+     , u_xpl_gui_resource, frame_config, dlg_config
      , Interfaces;
 
 {$IFDEF WINDOWS}
    {$R app_basic_settings.rc}
 {$ENDIF}
+
+{$R *.res}
 
 begin
    Application.Initialize;

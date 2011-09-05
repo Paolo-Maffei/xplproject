@@ -182,4 +182,4 @@ end;
 initialization
    MyNetGetApp:=TMyNetGetApp.Create(nil);
 end.
-
+

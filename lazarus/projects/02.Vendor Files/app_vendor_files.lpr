@@ -16,7 +16,13 @@ uses
   , u_xpl_gui_resource
   ;
 
-{$IFDEF WINDOWS}{$R app_vendor_files.rc}{$ENDIF}
+{$IFDEF WINDOWS}
+   {$R app_vendor_files.rc}
+{$else}
+   {$r *.res}
+{$ENDIF}
+
+
 
 begin
   Application.Initialize;
@@ -29,4 +35,4 @@ begin
 
   xPLGUIResource.Free;
 end.
-
+
