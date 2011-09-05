@@ -13,9 +13,9 @@ uses {$IFDEF UNIX}
 
 {$IFDEF WINDOWS}
    {$R app_basic_settings.rc}
+{$else}
+   {$R *.res}
 {$ENDIF}
-
-{$R *.res}
 
 begin
    Application.Initialize;

@@ -22,8 +22,6 @@ uses
    {$r *.res}
 {$ENDIF}
 
-
-
 begin
   Application.Initialize;
 
@@ -35,4 +33,4 @@ begin
 
   xPLGUIResource.Free;
 end.
-
+
