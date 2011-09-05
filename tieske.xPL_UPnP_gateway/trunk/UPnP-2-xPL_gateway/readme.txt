@@ -40,6 +40,8 @@ Remarks;
    only have the 'id=...' key value pair. Indicating who has left.
    There will always be only 1 root device leaving per message, and hence the
    id will only contain the id of the root device leaving (no child IDs).
+ - the 'allowed' key will contain the allowvaluelist in a comma separated
+   format
    
 == Devices leaving ==
 A special case of the announce message will be send. See 'Announcing a new UPnP
