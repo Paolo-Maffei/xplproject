@@ -4457,6 +4457,8 @@ inherited frmvendorfiles: Tfrmvendorfiles
       ImageIndex = 9
       OnExecute = acDownloadExecute
     end
+    inherited acCoreConfigure: TAction[10]
+    end
   end
   inherited xPLMenu: TPopupMenu[6]
     left = 112
