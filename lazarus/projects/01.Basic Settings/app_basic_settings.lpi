@@ -71,10 +71,11 @@
         <Filename Value="app_basic_settings.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_basic_settings"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="19" Y="10"/>
+        <TopLine Value="16"/>
+        <CursorPos X="27" Y="21"/>
         <UsageCount Value="125"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -907,11 +908,10 @@
       <Unit107>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
         <TopLine Value="252"/>
-        <CursorPos X="1" Y="291"/>
+        <CursorPos X="19" Y="256"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit107>
@@ -1348,7 +1348,7 @@
         <UsageCount Value="10"/>
       </Unit160>
     </Units>
-    <JumpHistory Count="13" HistoryIndex="12">
+    <JumpHistory Count="14" HistoryIndex="13">
       <Position1>
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="10" Column="21" TopLine="1"/>
@@ -1401,6 +1401,10 @@
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <Caret Line="78" Column="38" TopLine="64"/>
       </Position13>
+      <Position14>
+        <Filename Value="app_basic_settings.lpr"/>
+        <Caret Line="10" Column="19" TopLine="4"/>
+      </Position14>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1409,7 +1413,7 @@
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\general;..\..\units\xpl"/>
-      <UnitOutputDirectory Value="c:\lazout"/>
+      <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>

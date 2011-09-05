@@ -5,7 +5,6 @@
     <PathDelim Value="\"/>
     <General>
       <MainUnit Value="0"/>
-      <Title Value="xpl_netget"/>
       <UseXPManifest Value="True"/>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
@@ -32,23 +31,27 @@
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="3">
       <Item1>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="sup_object"/>
       </Item1>
       <Item2>
-        <PackageName Value="LCL"/>
+        <PackageName Value="pl_indycomp"/>
       </Item2>
+      <Item3>
+        <PackageName Value="LCL"/>
+      </Item3>
     </RequiredPackages>
-    <Units Count="263">
+    <Units Count="264">
       <Unit0>
         <Filename Value="xpl_netget.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_netget"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="16"/>
+        <TopLine Value="6"/>
+        <CursorPos X="15" Y="11"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -953,7 +956,7 @@
       <Unit124>
         <Filename Value="..\..\units\xpl\uxplconst.pas"/>
         <UnitName Value="uxPLConst"/>
-        <EditorIndex Value="6"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="20" Y="20"/>
@@ -1936,7 +1939,7 @@
       <Unit256>
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
         <UnitName Value="u_xpl_config"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="109"/>
         <CursorPos X="35" Y="124"/>
@@ -1946,7 +1949,7 @@
       <Unit257>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <EditorIndex Value="9"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="77" Y="56"/>
@@ -1956,7 +1959,7 @@
       <Unit258>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="8"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="8" Y="10"/>
@@ -1966,7 +1969,7 @@
       <Unit259>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="7"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="31"/>
         <CursorPos X="65" Y="52"/>
@@ -1986,7 +1989,6 @@
       <Unit261>
         <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
         <UnitName Value="u_xpl_address"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="19"/>
@@ -2002,8 +2004,18 @@
         <CursorPos X="3" Y="2596"/>
         <UsageCount Value="10"/>
       </Unit262>
+      <Unit263>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <UnitName Value="u_xml_plugins"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="9"/>
+        <CursorPos X="8" Y="11"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit263>
     </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
         <Filename Value="xpl_netget.lpr"/>
         <Caret Line="20" Column="40" TopLine="1"/>
@@ -2116,6 +2128,14 @@
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
         <Caret Line="124" Column="35" TopLine="109"/>
       </Position28>
+      <Position29>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position29>
+      <Position30>
+        <Filename Value="xpl_netget.lpr"/>
+        <Caret Line="16" Column="1" TopLine="1"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -2124,7 +2144,7 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir);C:\lazarus\components\pl_Indy\source\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\"/>
       <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\lazarus\components\pl_Indy\source\base\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\components\synapse39\source\lib\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\components\powtils\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\run\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\components\uniqueinstance\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\ssversionchecker\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\indy\"/>
-      <UnitOutputDirectory Value="C:\Lazout"/>
+      <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -2149,6 +2169,7 @@
   <Debugging>
     <BreakPoints Count="1">
       <Item1>
+        <Kind Value="bpkSource"/>
         <Source Value="..\..\units\xpl\uxplweblistener.pas"/>
         <Line Value="291"/>
       </Item1>

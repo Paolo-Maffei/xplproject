@@ -65,15 +65,16 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="163">
+    <Units Count="165">
       <Unit0>
         <Filename Value="app_vendor_files.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_vendor_files"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="4"/>
-        <CursorPos X="13" Y="14"/>
+        <TopLine Value="27"/>
+        <CursorPos X="1" Y="25"/>
         <UsageCount Value="178"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -83,7 +84,6 @@
         <ComponentName Value="frmvendorfiles"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_vendor_files"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
         <TopLine Value="142"/>
@@ -1301,7 +1301,7 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_XMLView"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="5"/>
         <CursorPos X="21" Y="16"/>
@@ -1332,8 +1332,28 @@
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
       </Unit162>
+      <Unit163>
+        <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
+        <UnitName Value="frame_config"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="118"/>
+        <CursorPos X="4" Y="124"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit163>
+      <Unit164>
+        <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
+        <UnitName Value="dlg_config"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="55"/>
+        <CursorPos X="4" Y="61"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit164>
     </Units>
-    <JumpHistory Count="23" HistoryIndex="22">
+    <JumpHistory Count="27" HistoryIndex="26">
       <Position1>
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="135" Column="100" TopLine="83"/>
@@ -1426,6 +1446,22 @@
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="86" Column="13" TopLine="71"/>
       </Position23>
+      <Position24>
+        <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position24>
+      <Position25>
+        <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
+        <Caret Line="124" Column="4" TopLine="118"/>
+      </Position25>
+      <Position26>
+        <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position26>
+      <Position27>
+        <Filename Value="app_vendor_files.lpr"/>
+        <Caret Line="14" Column="13" TopLine="7"/>
+      </Position27>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1433,8 +1469,8 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general"/>
-      <UnitOutputDirectory Value="C:\LazOut"/>
+      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl;..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general"/>
+      <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
