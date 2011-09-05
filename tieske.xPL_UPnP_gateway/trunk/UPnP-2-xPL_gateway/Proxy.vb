@@ -722,6 +722,19 @@ Public Class Proxy
                     .Add("event", Variable.SendEvent.ToString)
                     .Add("type", Variable.ValueType)
                     .Add("xpl", xPLDevice.Address)
+                    If Variable.Minimum IsNot Nothing Then
+                        .Add("minimum", Variable.Minimum.ToString)
+                    End If
+                    If Variable.Maximum IsNot Nothing Then
+                        .Add("maximum", Variable.Maximum.ToString)
+                    End If
+                    If Variable.Step IsNot Nothing Then
+                        .Add("step", Variable.Step.ToString)
+                    End If
+                    If Variable.AllowedStringValues IsNot Nothing AndAlso Variable.AllowedStringValues.Count > 0 Then
+                        Dim allowed As String = String.Join(",", Variable.AllowedStringValues)
+                        .Add("allowed", allowed)
+                    End If
 
                 Case ProxyType.Argument
                     .Add("announce", "argument")
@@ -776,47 +789,7 @@ Public Class Proxy
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
                 log = log & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
-                ' its an AV device with XML payload with the changes
-                Dim x As XmlReader
-                Dim sett As New XmlReaderSettings
-                With sett
-                    .IgnoreComments = True
-                    .IgnoreWhitespace = True
-                End With
-                x = XmlTextReader.Create(New System.IO.StringReader(NewValue.ToString), sett)
-
-                While x.Read
-                    If x.NodeType = XmlNodeType.Element And x.Name = "InstanceID" Then
-                        x.Read()
-                        While x.NodeType <> XmlNodeType.EndElement
-                            If x.NodeType = XmlNodeType.Element Then
-                                Dim varID As Integer
-                                ' lookup statevariable by its name
-                                Dim s As UPnPStateVariable = Nothing
-                                Debug.Print("Looking for: " & x.Name)
-                                For Each ert As UPnPStateVariable In Me.Service.GetStateVariables
-                                    If x.Name = ert.Name Then
-                                        Debug.Print("  -->" & ert.Name)
-                                        s = ert
-                                    Else
-                                        Debug.Print("   " & ert.Name)
-                                    End If
-                                Next
-                                If s IsNot Nothing Then
-                                    varID = Proxy.GetProxy(s).ID
-                                    s = Nothing
-                                End If
-                                While x.MoveToNextAttribute
-                                    If x.Name = "val" Then
-                                        xmsg.KeyValueList.Add(varID.ToString, x.Value)
-                                        log = log & vbCrLf & "   " & varID.ToString & " = " & x.Value
-                                    End If
-                                End While
-                            End If
-                            x.Read()
-                        End While
-                    End If
-                End While
+                log = log & LastChangeUpdate(NewValue, xmsg)
             End If
             ' send message
             LogMessage(log)
@@ -828,6 +801,58 @@ Public Class Proxy
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Deals with an update variable of type 'LastChange' as used by AV devices
+    ''' </summary>
+    ''' <param name="NewValue">Value of the LastChange property to be analyzed</param>
+    ''' <param name="xmsg">xPLMessage where elements found will be added</param>
+    ''' <returns>a string containing the log message</returns>
+    ''' <remarks></remarks>
+    Private Function LastChangeUpdate(ByVal NewValue As Object, ByVal xmsg As xPLMessage) As String
+        ' its an AV device with XML payload with the changes
+        Dim x As XmlReader
+        Dim log As String = ""
+        Dim sett As New XmlReaderSettings
+        With sett
+            .IgnoreComments = True
+            .IgnoreWhitespace = True
+        End With
+        x = XmlTextReader.Create(New System.IO.StringReader(NewValue.ToString), sett)
+
+        While x.Read
+            If x.NodeType = XmlNodeType.Element And x.Name = "InstanceID" Then
+                x.Read()
+                While x.NodeType <> XmlNodeType.EndElement
+                    If x.NodeType = XmlNodeType.Element Then
+                        Dim varID As Integer
+                        ' lookup statevariable by its name
+                        Dim s As UPnPStateVariable = Nothing
+                        Debug.Print("Looking for: " & x.Name)
+                        For Each ert As UPnPStateVariable In Me.Service.GetStateVariables
+                            If x.Name = ert.Name Then
+                                Debug.Print("  -->" & ert.Name)
+                                s = ert
+                            Else
+                                Debug.Print("   " & ert.Name)
+                            End If
+                        Next
+                        If s IsNot Nothing Then
+                            varID = Proxy.GetProxy(s).ID
+                            s = Nothing
+                        End If
+                        While x.MoveToNextAttribute
+                            If x.Name = "val" Then
+                                xmsg.KeyValueList.Add(varID.ToString, x.Value)
+                                log = log & vbCrLf & "   " & varID.ToString & " = " & x.Value
+                            End If
+                        End While
+                    End If
+                    x.Read()
+                End While
+            End If
+        End While
+        Return log
+    End Function
     ''' <summary>
     ''' Handles update of config info for xPLDevice. Must announce UPnP device again if the xPL address has 
     ''' changed (a hbeat.end or config.end message has already been send automatically, so remote devices
@@ -1013,13 +1038,20 @@ Public Class Proxy
                     msg.MsgType = xPLMessageTypeEnum.Trigger
                     msg.Target = "*"
                     msg.Schema = "upnp.basic"
-                    If p.Variable.Value IsNot Nothing Then
-                        msg.KeyValueList.Add(p.ID.ToString, p.Variable.Value.ToString)
+                    If Not p.Variable.Name = "LastChange" Then
+                        ' regular evented variable
+                        If p.Variable.Value IsNot Nothing Then
+                            msg.KeyValueList.Add(p.ID.ToString, xPL_Base.RemoveInvalidxPLchars(p.Variable.Value.ToString, XPL_STRING_TYPES.Values))
+                        Else
+                            msg.KeyValueList.Add(p.ID.ToString, "")
+                        End If
+                        LogMessage("      Returning value for " & p.Variable.Name & " of service " & p.Service.ServiceID)
+                        LogMessage("         value = " & msg.KeyValueList(p.ID.ToString))
                     Else
-                        msg.KeyValueList.Add(p.ID.ToString, "")
+                        'LastChange' type variable
+                        Dim lm As String = p.LastChangeUpdate(p.Variable.Value.ToString, msg)
+                        LogMessage("      Returning value for LastChange of service " & p.Service.ServiceID & lm)
                     End If
-                    LogMessage("      Returning value for " & p.Variable.Name & " of service " & p.Service.ServiceID)
-                    LogMessage("         value = " & msg.KeyValueList(p.ID.ToString))
                     xPLDevice.Send(msg)
                 Else
                     ' non-evented, we have to go and request the value using an action/method
@@ -1051,30 +1083,30 @@ Public Class Proxy
                 End If
 
             Case ProxyType.Service
-                LogMessage("   Reporting values for service; " & p.Service.ServiceID & " it has " & p.Service.GetStateVariables.Count & " variables")
-                If p.Service.GetStateVariables.Count > 0 Then
-                    For Each s As UPnPStateVariable In p.Service.GetStateVariables
-                        ' call this sub recursively for each variable
-                        Proxy.RequestValues(Proxy.GetProxy(s))
-                    Next
-                End If
+                    LogMessage("   Reporting values for service; " & p.Service.ServiceID & " it has " & p.Service.GetStateVariables.Count & " variables")
+                    If p.Service.GetStateVariables.Count > 0 Then
+                        For Each s As UPnPStateVariable In p.Service.GetStateVariables
+                            ' call this sub recursively for each variable
+                            Proxy.RequestValues(Proxy.GetProxy(s))
+                        Next
+                    End If
             Case ProxyType.Device
-                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.Services.Count.ToString & " services")
-                If p.Device.Services.Count > 0 Then
-                    For Each s As UPnPService In p.Device.Services
-                        ' call this sub recursively for each variable
-                        Proxy.RequestValues(Proxy.GetProxy(s))
-                    Next
-                End If
-                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.EmbeddedDevices.Count.ToString & " subdevices")
-                If p.Device.Services.Count > 0 Then
-                    For Each d As UPnPDevice In p.Device.EmbeddedDevices
-                        ' call this sub recursively for each variable
-                        Proxy.RequestValues(Proxy.GetProxy(d))
-                    Next
-                End If
+                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.Services.Count.ToString & " services")
+                    If p.Device.Services.Count > 0 Then
+                        For Each s As UPnPService In p.Device.Services
+                            ' call this sub recursively for each variable
+                            Proxy.RequestValues(Proxy.GetProxy(s))
+                        Next
+                    End If
+                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.EmbeddedDevices.Count.ToString & " subdevices")
+                    If p.Device.Services.Count > 0 Then
+                        For Each d As UPnPDevice In p.Device.EmbeddedDevices
+                            ' call this sub recursively for each variable
+                            Proxy.RequestValues(Proxy.GetProxy(d))
+                        Next
+                    End If
             Case Else
-                LogMessage("Can't request values for proxy type: " & p.Type.ToString)
+                    LogMessage("Can't request values for proxy type: " & p.Type.ToString)
         End Select
     End Sub
 
