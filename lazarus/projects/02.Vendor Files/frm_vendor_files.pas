@@ -159,6 +159,7 @@ begin
        end;
    end;
    ProgressBar1.Visible := False;
+   acReloadExecute(self);
 end;
 
 procedure Tfrmvendorfiles.acUpdateListExecute(Sender: TObject);

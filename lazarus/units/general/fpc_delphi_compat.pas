@@ -95,11 +95,9 @@ var path : array[0..255] of Char;
 begin
    {$ifdef fpc}
       {$ifdef mswindows}
-      result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
+         result := GetWindowsSpecialDir(CSIDL_COMMON_APPDATA);
       {$else}
-      result := GetAppConfigDir(false);
-//      result := GetAppConfigDir(fal
-//      result := LeftStr(result,length(result)-length(ApplicationName)-1);
+         result := GetAppConfigDir(false);
       {$endif}
    {$else}
       SHGetFolderPath(0,CSIDL_COMMON_APPDATA,0,SHGFP_TYPE_CURRENT,@path[0]);
@@ -118,4 +116,4 @@ finalization // ===============================================================
    VersionInfo.Free;
 
 end.
-
+
