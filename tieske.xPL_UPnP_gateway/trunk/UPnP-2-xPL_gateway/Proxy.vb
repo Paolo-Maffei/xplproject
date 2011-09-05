@@ -1049,8 +1049,12 @@ Public Class Proxy
                         LogMessage("         value = " & msg.KeyValueList(p.ID.ToString))
                     Else
                         'LastChange' type variable
-                        Dim lm As String = p.LastChangeUpdate(p.Variable.Value.ToString, msg)
-                        LogMessage("      Returning value for LastChange of service " & p.Service.ServiceID & lm)
+                        If p.Variable.Value IsNot Nothing Then
+                            Dim lm As String = p.LastChangeUpdate(p.Variable.Value.ToString, msg)
+                            LogMessage("      Returning value for LastChange of service " & p.Service.ServiceID & lm)
+                        Else
+                            LogMessage("      No current value for LastChange of service " & p.Service.ServiceID)
+                        End If
                     End If
                     xPLDevice.Send(msg)
                 Else

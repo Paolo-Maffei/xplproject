@@ -35,7 +35,7 @@ Partial Class MainForm
         Me.ExitToolStripMenuItem = New System.Windows.Forms.ToolStripMenuItem
         Me.btnClose = New System.Windows.Forms.Button
         Me.chkStartMinimized = New System.Windows.Forms.CheckBox
-        Me.btnSet = New System.Windows.Forms.Button
+        Me.btnClear = New System.Windows.Forms.Button
         Me.PopupMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -49,7 +49,7 @@ Partial Class MainForm
         Me.lbLog.ItemHeight = 14
         Me.lbLog.Location = New System.Drawing.Point(12, 12)
         Me.lbLog.Name = "lbLog"
-        Me.lbLog.Size = New System.Drawing.Size(708, 256)
+        Me.lbLog.Size = New System.Drawing.Size(721, 256)
         Me.lbLog.TabIndex = 2
         '
         'tbLogLines
@@ -75,9 +75,9 @@ Partial Class MainForm
         Me.btnCopyToClipboard.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
         Me.btnCopyToClipboard.Location = New System.Drawing.Point(12, 278)
         Me.btnCopyToClipboard.Name = "btnCopyToClipboard"
-        Me.btnCopyToClipboard.Size = New System.Drawing.Size(118, 23)
+        Me.btnCopyToClipboard.Size = New System.Drawing.Size(48, 23)
         Me.btnCopyToClipboard.TabIndex = 6
-        Me.btnCopyToClipboard.Text = "Copy to clipboard"
+        Me.btnCopyToClipboard.Text = "Copy"
         Me.btnCopyToClipboard.UseVisualStyleBackColor = True
         '
         'TaskBarIcon
@@ -114,7 +114,7 @@ Partial Class MainForm
         'btnClose
         '
         Me.btnClose.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
-        Me.btnClose.Location = New System.Drawing.Point(645, 278)
+        Me.btnClose.Location = New System.Drawing.Point(658, 278)
         Me.btnClose.Name = "btnClose"
         Me.btnClose.Size = New System.Drawing.Size(75, 23)
         Me.btnClose.TabIndex = 7
@@ -127,31 +127,31 @@ Partial Class MainForm
         Me.chkStartMinimized.AutoSize = True
         Me.chkStartMinimized.Checked = Global.UPnP2xPL.My.MySettings.Default.StartMinimized
         Me.chkStartMinimized.DataBindings.Add(New System.Windows.Forms.Binding("Checked", Global.UPnP2xPL.My.MySettings.Default, "StartMinimized", True, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged))
-        Me.chkStartMinimized.Location = New System.Drawing.Point(335, 282)
+        Me.chkStartMinimized.Location = New System.Drawing.Point(294, 282)
         Me.chkStartMinimized.Name = "chkStartMinimized"
         Me.chkStartMinimized.Size = New System.Drawing.Size(96, 17)
         Me.chkStartMinimized.TabIndex = 3
         Me.chkStartMinimized.Text = "Start minimized"
         Me.chkStartMinimized.UseVisualStyleBackColor = True
         '
-        'btnSet
+        'btnClear
         '
-        Me.btnSet.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
-        Me.btnSet.Location = New System.Drawing.Point(280, 278)
-        Me.btnSet.Name = "btnSet"
-        Me.btnSet.Size = New System.Drawing.Size(34, 23)
-        Me.btnSet.TabIndex = 8
-        Me.btnSet.Text = "Set"
-        Me.btnSet.UseVisualStyleBackColor = True
+        Me.btnClear.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Left), System.Windows.Forms.AnchorStyles)
+        Me.btnClear.Location = New System.Drawing.Point(66, 278)
+        Me.btnClear.Name = "btnClear"
+        Me.btnClear.Size = New System.Drawing.Size(48, 23)
+        Me.btnClear.TabIndex = 8
+        Me.btnClear.Text = "Clear"
+        Me.btnClear.UseVisualStyleBackColor = True
         '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
-        Me.ClientSize = New System.Drawing.Size(732, 302)
+        Me.ClientSize = New System.Drawing.Size(745, 302)
         Me.ControlBox = False
-        Me.Controls.Add(Me.btnSet)
         Me.Controls.Add(Me.btnCopyToClipboard)
+        Me.Controls.Add(Me.btnClear)
         Me.Controls.Add(Me.btnClose)
         Me.Controls.Add(Me.lblLinesToKeep)
         Me.Controls.Add(Me.lbLog)
@@ -176,6 +176,6 @@ Partial Class MainForm
     Friend WithEvents ExitToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnClose As System.Windows.Forms.Button
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
-    Friend WithEvents btnSet As System.Windows.Forms.Button
+    Friend WithEvents btnClear As System.Windows.Forms.Button
 
 End Class
