@@ -8,8 +8,7 @@
       <Version Value="10"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <IncludeFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\class\"/>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);..;..\editors;..\..\general\ssversionchecker;C:\lazarus\packager\registration\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;C:\lazarus\components\synedit\"/>
+        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);..;..\editors;..\..\general\ssversionchecker;..\..\general;..\..\xpl\xml;..\..\general\RegExpr"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -26,7 +25,7 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="10">
+    <Files Count="9">
       <Item1>
         <Filename Value="v_xplmsg_opendialog.pas"/>
         <HasRegisterProc Value="True"/>
@@ -43,54 +42,59 @@
         <UnitName Value="v_class_combo"/>
       </Item3>
       <Item4>
-        <Filename Value="..\..\general\TreeListView.pas"/>
-        <UnitName Value="TreeListView"/>
-      </Item4>
-      <Item5>
         <Filename Value="..\..\general\MStringGrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MStringGrid"/>
-      </Item5>
-      <Item6>
+      </Item4>
+      <Item5>
         <Filename Value="..\..\general\medit.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MEdit"/>
-      </Item6>
-      <Item7>
+      </Item5>
+      <Item6>
         <Filename Value="..\..\general\mchecklistbox.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MCheckListBox"/>
-      </Item7>
-      <Item8>
+      </Item6>
+      <Item7>
         <Filename Value="..\..\general\mcombobox.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="MComboBox"/>
-      </Item8>
-      <Item9>
+      </Item7>
+      <Item8>
         <Filename Value="v_msgbody_stringgrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_msgbody_stringgrid"/>
-      </Item9>
-      <Item10>
+      </Item8>
+      <Item9>
         <Filename Value="ucontrols.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="uControls"/>
-      </Item10>
+      </Item9>
     </Files>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="4">
+    <RequiredPkgs Count="7">
       <Item1>
-        <PackageName Value="fpsystools"/>
+        <PackageName Value="multiloglaz"/>
       </Item1>
       <Item2>
-        <PackageName Value="uniqueinstance_package"/>
+        <PackageName Value="sup_object"/>
       </Item2>
       <Item3>
-        <PackageName Value="pl_dcpcomp"/>
+        <PackageName Value="LazSolutionsRT"/>
       </Item3>
       <Item4>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="fpsystools"/>
       </Item4>
+      <Item5>
+        <PackageName Value="uniqueinstance_package"/>
+      </Item5>
+      <Item6>
+        <PackageName Value="pl_dcpcomp"/>
+      </Item6>
+      <Item7>
+        <PackageName Value="pl_indycomp"/>
+      </Item7>
     </RequiredPkgs>
     <UsageOptions>
       <UnitPath Value="$(PkgOutDir)"/>

@@ -121,15 +121,16 @@ begin
    OnUDPException := {$ifdef fpc}@{$endif}UDPException;
    fOnReceived    := aReceivedProc;
    if TxPLApplication(aOwner).Settings.IsValid then with TxPLApplication(aOwner).Settings do begin
-      i := LocalAddresses.Count-1;
-      while i>=0 do begin
+      {$ifdef mswindows}
+         i := LocalAddresses.Count-1;
+         while i>=0 do begin
             if ListenOnAll or (LocalAddresses[i] = ListenOnAddress)
                then AddBinding(LocalAddresses[i], aPort);
             dec(i);
-      end;
-      //{ $ ELSE}
-      //AddBinding(ListenOnAddress, aPort);                                      // This code needs testing under linux
-      //{ $ ENDIF}
+         end;
+      {$else}
+         AddBinding(ListenOnAddress, aPort);                                    // This code needs testing under linux
+      {$endif}
    end else xPLApplication.Log(etWarning,K_USING_DEFAULT);
    Active := (Bindings.Count > 0);
 end;
@@ -137,14 +138,12 @@ end;
 procedure TxPLUDPServer.AddBinding(const aIP : string; const aPort : integer);
 begin
    with Bindings.Add do begin
-      IP := aIP;
+      IP   := aIP;
+      Port := aPort;
       if aPort = 0 then begin                                                   // Dynamically assign port
          ClientPortMin := XPL_BASE_DYNAMIC_PORT;
          ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-         Port := aPort;
-      end
-      else                                                                      // Fixed assigned port
-         Port := aPort;
+      end;
    end;
 end;
 
@@ -198,4 +197,4 @@ begin
 end;
 
 end.
-
+

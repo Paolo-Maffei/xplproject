@@ -7,9 +7,8 @@ unit xpl_win;
 interface
 
 uses
-  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, TreeListView, 
-  MStringGrid, MEdit, MCheckListBox, MComboBox, v_msgbody_stringgrid, 
-  uControls, LazarusPackageIntf;
+  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, MStringGrid, MEdit, 
+  MCheckListBox, MComboBox, v_msgbody_stringgrid, uControls, LazarusPackageIntf;
 
 implementation
 
