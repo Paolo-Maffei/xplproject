@@ -14,7 +14,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="3"/>
       <StringTable CompanyName="clinique" InternalName="basicset" ProductName="xPL Basic Settings" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -66,16 +66,20 @@
         <PackageName Value="LCL"/>
       </Item10>
     </RequiredPackages>
-    <Units Count="161">
+    <Units Count="162">
       <Unit0>
         <Filename Value="app_basic_settings.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_basic_settings"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
+<<<<<<< .mine
+        <TopLine Value="6"/>
+        <CursorPos X="20" Y="9"/>
+=======
         <TopLine Value="16"/>
         <CursorPos X="27" Y="21"/>
+>>>>>>> .r582
         <UsageCount Value="125"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -86,10 +90,19 @@
         <ComponentName Value="frmBasicSettings"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_basic_settings"/>
+<<<<<<< .mine
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
+=======
+>>>>>>> .r582
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="35" Y="5"/>
+        <TopLine Value="103"/>
+        <CursorPos X="76" Y="110"/>
         <UsageCount Value="125"/>
+<<<<<<< .mine
+        <Loaded Value="True"/>
+=======
+>>>>>>> .r582
       </Unit1>
       <Unit2>
         <Filename Value="..\..\..\units\xpl\gui\frm_about.pas"/>
@@ -630,7 +643,6 @@
         <TopLine Value="1"/>
         <CursorPos X="54" Y="13"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit72>
       <Unit73>
         <Filename Value="..\..\..\units\general\u_downloader_indy.pas"/>
@@ -668,7 +680,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="13"/>
         <UsageCount Value="6"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit77>
       <Unit78>
         <Filename Value="..\..\..\units\xpl\gui\frm_about2.pas"/>
@@ -890,12 +901,14 @@
       <Unit105>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <UnitName Value="u_xpl_settings"/>
+<<<<<<< .mine
+=======
         <EditorIndex Value="2"/>
+>>>>>>> .r582
         <WindowIndex Value="0"/>
         <TopLine Value="76"/>
         <CursorPos X="16" Y="85"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit105>
       <Unit106>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
@@ -1005,8 +1018,8 @@
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_template"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="13" Y="58"/>
+        <TopLine Value="59"/>
+        <CursorPos X="8" Y="63"/>
         <UsageCount Value="15"/>
       </Unit118>
       <Unit119>
@@ -1338,17 +1351,38 @@
       </Unit159>
       <Unit160>
         <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
+        <IsPartOfProject Value="True"/>
         <ComponentName Value="frameConfig"/>
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Frame"/>
         <UnitName Value="frame_config"/>
         <WindowIndex Value="0"/>
+<<<<<<< .mine
+        <TopLine Value="104"/>
+        <CursorPos X="21" Y="111"/>
+        <UsageCount Value="20"/>
+=======
         <TopLine Value="118"/>
         <CursorPos X="14" Y="124"/>
         <UsageCount Value="10"/>
+>>>>>>> .r582
       </Unit160>
+      <Unit161>
+        <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
+        <IsPartOfProject Value="True"/>
+        <HasResources Value="True"/>
+        <UnitName Value="dlg_config"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="41"/>
+        <CursorPos X="68" Y="45"/>
+        <UsageCount Value="20"/>
+      </Unit161>
     </Units>
+<<<<<<< .mine
+    <JumpHistory Count="7" HistoryIndex="6">
+=======
     <JumpHistory Count="14" HistoryIndex="13">
+>>>>>>> .r582
       <Position1>
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="10" Column="21" TopLine="1"/>
@@ -1370,10 +1404,17 @@
         <Caret Line="9" Column="23" TopLine="5"/>
       </Position5>
       <Position6>
+<<<<<<< .mine
+        <Filename Value="app_basic_settings.lpr"/>
+        <Caret Line="9" Column="23" TopLine="5"/>
+=======
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <Caret Line="251" Column="49" TopLine="235"/>
+>>>>>>> .r582
       </Position6>
       <Position7>
+<<<<<<< .mine
+=======
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="9" Column="23" TopLine="5"/>
       </Position7>
@@ -1390,6 +1431,12 @@
         <Caret Line="16" Column="18" TopLine="10"/>
       </Position10>
       <Position11>
+>>>>>>> .r582
+<<<<<<< .mine
+        <Filename Value="app_basic_settings.lpr"/>
+        <Caret Line="9" Column="20" TopLine="6"/>
+      </Position7>
+=======
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <Caret Line="17" Column="17" TopLine="10"/>
       </Position11>
@@ -1405,6 +1452,7 @@
         <Filename Value="app_basic_settings.lpr"/>
         <Caret Line="10" Column="19" TopLine="4"/>
       </Position14>
+>>>>>>> .r582
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1413,7 +1461,11 @@
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\general;..\..\units\xpl"/>
+<<<<<<< .mine
+      <UnitOutputDirectory Value="\home\sysadmin\lazout"/>
+=======
       <UnitOutputDirectory Value="..\..\..\lazout"/>
+>>>>>>> .r582
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
