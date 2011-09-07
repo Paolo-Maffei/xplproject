@@ -5,11 +5,11 @@ program xpl_hub;
    {$mode objfpc}{$H+}
 {$endif}
 
-uses {$DEFINE UseCThreads}
+uses {$define UseCThreads}
      {$IFDEF UNIX}
-        {$ifdef UseCThreads}                                                   // Warning : this unit must be the first
-           cthreads ,                                                          // loaded under linux
-        {$endif}
+        {$IFDEF UseCThreads}
+           cthreads,
+        {$ENDIF}
      {$ENDIF}
      u_xpl_hub
      , u_xpl_console_app
