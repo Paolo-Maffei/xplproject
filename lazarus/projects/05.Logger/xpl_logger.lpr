@@ -9,7 +9,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, aformula, pl_rx, pl_kcontrols, uniqueinstance_package, multiloglaz,
+  Forms, pl_rx, pl_kcontrols, uniqueinstance_package, multiloglaz, aformula,
   frm_logger,
   u_xpl_application,
   u_xpl_common,
@@ -17,6 +17,8 @@ uses
   u_xpl_gui_resource, dlg_config, frame_config, xpl_win, frm_logger_config;
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
+
+{$R *.res}
 
 begin
    Application.Initialize;

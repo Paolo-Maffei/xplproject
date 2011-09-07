@@ -18,11 +18,13 @@ uses
   u_xpl_gui_resource,
   u_xpl_sender,
   u_xpl_common,
-  u_xpl_message_GUI;
+  u_xpl_message_GUI, xpl_win;
 
 {$IFDEF WINDOWS}{$R xpl_sender.rc}{$ENDIF}
 
 var  xPLMessageGUI : TxPLMessageGUI;
+
+{$R *.res}
 
 begin
    Application.Initialize;
