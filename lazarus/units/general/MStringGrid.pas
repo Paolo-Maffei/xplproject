@@ -1,4 +1,5 @@
 unit MStringGrid;
+{$mode objfpc}{$H+}{$M+}
 
 { TMStringGrid allows rows to be appended, deleted and inserted at runtime
 
@@ -306,4 +307,4 @@ end;
 
 end.
 
-
+

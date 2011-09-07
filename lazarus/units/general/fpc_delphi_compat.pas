@@ -5,7 +5,11 @@ unit fpc_delphi_compat;
 interface
 
 uses {$ifdef fpc}
-     fpTimer
+        {$ifdef mswindow}
+        fpTimer in 'C:/pp/packages/fcl-base/src/fptimer.pp'
+        {$else}
+        fpTimer in '/usr/share/fpcsrc/packages/fcl-base/src/fptimer.pp'
+        {$endif}
      {$else}
      ExtCtrls
      {$endif}
@@ -116,4 +120,4 @@ finalization // ===============================================================
    VersionInfo.Free;
 
 end.
-
+

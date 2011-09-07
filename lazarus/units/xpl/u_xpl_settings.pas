@@ -129,6 +129,7 @@ begin
      for i:=0 to pred(sl.count) do
          if Pos('.',sl[i])<>0 then fProxyServer := sl[i];                        // Quick & dirty way to extract server ip & port
      sl.free;
+     if fProxyServer<>'' then fProxyEnable := 1 else fProxyEnable := 0;
    {$endif}
 end;
 

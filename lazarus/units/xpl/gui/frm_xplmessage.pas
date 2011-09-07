@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
   ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage,
   u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, 
-  SynEdit, SynHighlighterPas, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
+  SynEdit, SynHighlighterPas, SynEditSearch, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
   RxAboutDialog;
 
 type
@@ -379,4 +379,4 @@ initialization
   {$I frm_xplmessage.lrs}
 end.
 
-
+
