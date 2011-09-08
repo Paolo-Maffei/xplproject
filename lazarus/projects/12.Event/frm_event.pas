@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls, u_xpl_config, u_xpl_custom_message,
-  Buttons, JvAppEvent, RTTICtrls, RTTIGrids, event_listener,  JvScheduledEvents,
+  Buttons, RTTICtrls, RTTIGrids, event_listener,  JvScheduledEvents,
   frm_template;
 
 type
@@ -18,7 +18,6 @@ type
     acEditEvent: TAction;
     acDeleteEvent: TAction;
     acRename: TAction;
-    JvAppEvents1: TJvAppEvents;
     lvEvents: TListView;
     MnuEditevent: TMenuItem;
     tbDel1: TToolButton;

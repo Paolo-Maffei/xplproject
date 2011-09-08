@@ -8,7 +8,7 @@
       <Version Value="10"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);..;..\editors;..\..\general\ssversionchecker;..\..\general;..\..\xpl\xml;..\..\general\RegExpr"/>
+        <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\general;..\..\xpl\xml;..\..\general\RegExpr;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>

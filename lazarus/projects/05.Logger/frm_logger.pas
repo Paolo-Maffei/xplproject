@@ -78,9 +78,9 @@ type
     procedure acShowMessageExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
-    procedure dgMessagesClick(Sender: TObject);
     procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; aState: TGridDrawState);
     procedure dgMessagesHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
+    procedure dgMessagesSelection(Sender: TObject; aCol, aRow: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mnuListViewPopup(Sender: TObject);
@@ -400,7 +400,7 @@ begin
        end;
     end;
   sl.Free;
-  DgMessagesClick(self);                                                      // Update message preview panel
+  dgMessagesSelection(self,0,0);                                                // Update message preview panel
 end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
@@ -491,18 +491,6 @@ begin
    acPluginDetail.Visible    := (tvMessages.Selected.Data <> nil);
    mnuCommands.Visible       := acPluginDetail.Visible;
    tbMacro.Visible           := (tvMessages.Selected = MacNode);
-end;
-
-procedure TfrmLogger.dgMessagesClick(Sender: TObject);
-var aMsg : TxPLMessage;
-begin
-   acShowMessage.Enabled     := Assigned(dgMessages.Objects[0,dgMessages.Row]);
-   acResend.Enabled          := acShowMessage.Enabled;
-   if acShowMessage.Enabled then begin
-         aMsg := TxPLMessage(dgMessages.Objects[0,dgMessages.Row]);
-         acConversation.Enabled := not ((aMsg.target.IsGeneric) or (aMsg.source.Equals(aMsg.Target)));
-         MessageFrame.TheMessage := aMsg;
-   end;
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
@@ -633,6 +621,18 @@ begin
    if dgMessages.SortOrder = soAscending then dgMessages.SortOrder := soDescending
                                          else dgMessages.SortOrder := soAscending;
    dgMessages.SortColRow(true,index);
+end;
+
+procedure TfrmLogger.dgMessagesSelection(Sender: TObject; aCol, aRow: Integer);
+var aMsg : TxPLMessage;
+begin
+   acShowMessage.Enabled := Assigned(dgMessages.Objects[0,dgMessages.Row]);
+   acResend.Enabled      := acShowMessage.Enabled;
+   if acShowMessage.Enabled then begin
+      aMsg := TxPLMessage(dgMessages.Objects[0,dgMessages.Row]);
+      acConversation.Enabled := not ((aMsg.target.IsGeneric) or (aMsg.source.Equals(aMsg.Target)));
+      MessageFrame.TheMessage := aMsg;
+   end;
 end;
 
 initialization // =============================================================

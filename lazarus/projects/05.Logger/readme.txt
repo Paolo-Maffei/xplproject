@@ -4,7 +4,7 @@ TODO
 xPL Logger
 
 Changes History : 
-	4.3.0.4
+	4.3.1.5
 		Corrected resource consumption bug (#FS76)
 		Corrected bug in loop sending function when Sleep=0
 		Log viewer button display glitch corrected

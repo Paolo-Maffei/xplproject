@@ -5,13 +5,15 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
      Interfaces, // this includes the LCL widgetset
-     Forms, jvclinport,
+     Forms, aformula, uniqueinstance_package, multiloglaz,
      frm_event,
      u_xpl_application,
      event_listener,
      u_xpl_gui_resource;
 
 {$IFDEF WINDOWS}{$R xpl_event.rc}{$ENDIF}
+
+{$R *.res}
 
 begin
   Application.Initialize;

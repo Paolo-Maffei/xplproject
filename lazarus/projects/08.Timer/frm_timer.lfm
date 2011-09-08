@@ -1472,7 +1472,7 @@ inherited frmTimer: TfrmTimer
       Left = 499
     end
     object ToolButton1: TToolButton[3]
-      Left = 51
+      Left = 53
       Top = 0
       Action = acNewTimer
     end
@@ -1519,10 +1519,16 @@ inherited frmTimer: TfrmTimer
       Caption = 'New Timer'
       OnExecute = acNewTimerExecute
     end
+    inherited acCoreConfigure: TAction[5]
+    end
   end
   inherited xPLMenu: TPopupMenu[5]
   end
-  object popmnuTimer: TPopupMenu[6]
+  inherited XMLPropStorage: TXMLPropStorage[6]
+  end
+  inherited RxAboutDialog1: TRxAboutDialog[7]
+  end
+  object popmnuTimer: TPopupMenu[8]
     left = 408
     top = 64
     object mnuFireNowTimer: TMenuItem
@@ -1549,9 +1555,10 @@ inherited frmTimer: TfrmTimer
       OnClick = acNewTimerExecute
     end
   end
-  object JvAppEvents1: TJvAppEvents[7]
-    OnIdle = JvAppEvents1Idle
-    left = 257
-    top = 109
+  object IdleTimer1: TIdleTimer[9]
+    AutoEnabled = True
+    OnTimer = JvAppEvents1Idle
+    left = 287
+    top = 5
   end
 end

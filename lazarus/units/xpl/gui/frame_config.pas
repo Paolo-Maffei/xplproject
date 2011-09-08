@@ -37,7 +37,7 @@ type
   public
     procedure SetConfigRecord(const aConfig : TConfigurationRecord);
     procedure SetConfigCurrent(const Current : TConfigCurrentStat);
-    procedure Assign(const aResponse : TConfigResponseCmnd);
+    procedure Assign(const aResponse : TConfigResponseCmnd); reintroduce;
   end; 
 
 implementation //==============================================================

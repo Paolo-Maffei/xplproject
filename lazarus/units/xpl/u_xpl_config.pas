@@ -55,7 +55,7 @@ type TxPLCustomConfig = class;
       function Get_GroupSet: TxPLConfigItem;
       function Get_Instance: string;
       function Get_Interval: integer;
-      procedure Set_ConfigList(const AValue: TxPLBody);
+      //procedure Set_ConfigList(const AValue: TxPLBody);
       procedure Set_CurrentConfig(const aBody : TConfigCurrentStat);
       procedure Set_ConfigItems(aValuesList : TxPLConfigItems);
       procedure SetItemValue(const aItmName : string; const aValue : string);
@@ -71,7 +71,7 @@ type TxPLCustomConfig = class;
 
    published
       property ConfigItems   : TxPLConfigItems read fConfigItems write Set_ConfigItems;
-      property ConfigList    : TxPLBody  read Get_ConfigList     write Set_ConfigList        stored false;
+      property ConfigList    : TxPLBody  read Get_ConfigList     {write Set_ConfigList }     stored false;
       property CurrentConfig : TConfigCurrentStat  read Get_CurrentConfig  write Set_CurrentConfig     stored false;
       property Instance      : string    read Get_Instance                                   stored false;
       property Interval      : integer   read Get_Interval                                   stored false;
@@ -95,17 +95,6 @@ begin
 
    fConfigItems := TxPLConfigItems.Create(self);
 
-   //case aInstInitStyle of
-   //     iisRandom     :
-   //     iisHostName   : DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.HostNmInstance);
-   //     iisMacAddress : DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.MacAddInstance);
-   //end;
-
-   { $ ifdef mswindows}
-   //DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.HostNmInstance);          // Standard to all xPL apps configuration elements
-   { $ else}
-   //DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.RandomInstance);          // Standard to all xPL apps configuration elements
-   { $ endif}
    DefineItem(K_CONF_NEWCONF , reconf, 1, TxPLAddress.InitInstanceByDefault);
    DefineItem(K_CONF_INTERVAL, option, 1, IntToStr(K_XPL_DEFAULT_HBEAT));       // Do not change the order of these elements
    DefineItem(K_CONF_FILTER  , option, K_XPL_CFG_MAX_FILTERS);
@@ -117,25 +106,26 @@ begin
    ConfigItems.Assign(aValuesList);
 end;
 
-procedure TxPLCustomConfig.Set_ConfigList(const AValue: TxPLBody);
-var i,maxval : integer;
-    s,nom : string;
-    conftype : TxPLConfigItemType;
-begin
-   ConfigItems.Clear;
-   for i:=0 to aValue.ItemCount-1 do begin
-       s := aValue.Values[i];
-       if AnsiRightStr(s,1) =']' then begin
-          nom    := Copy(s,1, Pos('[',s)-1);
-          maxval := StrToInt(ExtractWord(2,s,['[',']']));
-       end else begin
-          nom    := s;
-          maxval := 1;
-       end;
-       conftype := TxPLConfigItemType(GetEnumValue(TypeInfo(TxPLConfigItemType), aValue.Keys[i]));
-       DefineItem(nom, conftype ,maxval);
-   end;
-end;
+//procedure TxPLCustomConfig.Set_ConfigList(const AValue: TxPLBody);
+//var i,maxval : integer;
+//    s,nom : string;
+//    sl : TStringList;
+//    conftype : TxPLConfigItemType;
+//begin
+//   ConfigItems.Clear;
+//   for i:=0 to aValue.ItemCount-1 do begin
+//       sl := TStringList.Create;
+//       s := AnsiReplaceStr(aValue.Values[i],']','[');
+//       sl.Delimiter := '[';
+//       sl.DelimitedText := s;
+//       nom    := sl[0];
+//       if sl.Count > 1 then maxval := StrToInt(sl[1]);
+//                       else maxval := 1;
+//       conftype := TxPLConfigItemType(GetEnumValue(TypeInfo(TxPLConfigItemType), aValue.Keys[i]));
+//       DefineItem(nom, conftype ,maxval);
+//       sl.Free;
+//   end;
+//end;
 
 function TxPLCustomConfig.Get_ConfigList: TxPLBody;                             // Builds a body message following
 var i : integer;                                                                // xPL recommandations in
@@ -157,7 +147,6 @@ function TxPLCustomConfig.Get_CurrentConfig: TConfigCurrentStat;                
 var i,j : integer;                                                              // xPL recommandations in for config.current message
     keys, vals : TStringList;                                                   // http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
 begin
-//   result := TxPLBody.Create(self);
    result := TConfigCurrentStat.Create(self);
    Keys := TStringList.Create;
    Vals := TStringList.Create;

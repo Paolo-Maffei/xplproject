@@ -69,7 +69,7 @@ begin
 end;
 
 procedure TxPLHeartBeater.Set_Rate(const AValue: TxPLRateFrequency);
-   procedure Set_Interval(aInterval : integer);
+   procedure Set_Interval(aInterval : {$ifdef fpc}integer{$else}cardinal{$endif});
    begin
        if Interval <> aInterval then begin
           Enabled  := False;

@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls, u_xpl_config, u_xpl_custom_message,
-  Buttons,  JvAppEvent, RTTICtrls, RTTIGrids, timer_listener,
+  Buttons, XMLPropStorage, RxAboutDialog,  RTTICtrls, RTTIGrids, timer_listener,
   frm_template;
 
 type
@@ -15,7 +15,7 @@ type
   { TfrmTimer }
   TfrmTimer = class(TFrmTemplate)
     acNewTimer: TAction;
-    JvAppEvents1: TJvAppEvents;
+    IdleTimer1: TIdleTimer;
     lvTimers: TListView;
     MenuItem1: TMenuItem;
     MenuItem11: TMenuItem;
@@ -28,7 +28,7 @@ type
     procedure acNewTimerExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
+    procedure JvAppEvents1Idle(Sender: TObject);
     procedure MnuEditTimerClick(Sender: TObject);
     procedure mnuFireNowTimerClick(Sender: TObject);
     procedure MnuStopTimerClick(Sender: TObject);
@@ -41,8 +41,7 @@ type
 var frmTimer: TfrmTimer;
 
 implementation {===============================================================}
-uses Frm_About,
-     uxPLConst,
+uses uxPLConst,
      StrUtils,
      LCLType,
      uRegExpr,
@@ -78,7 +77,7 @@ begin
    Listener.Listen;
 end;
 
-procedure TfrmTimer.JvAppEvents1Idle(Sender: TObject; var Done: Boolean);
+procedure TfrmTimer.JvAppEvents1Idle(Sender: TObject);
 var item : tListItem;
     Timer : TxPLTimer;
     i : integer;
@@ -110,7 +109,6 @@ end;
 
 procedure TfrmTimer.acNewTimerExecute(Sender: TObject);
 var aTimer : TxPLTimer;
-    s : string;
 begin
    aTimer := Listener.Timers.Add('');
    aTimer.Status    := halted;

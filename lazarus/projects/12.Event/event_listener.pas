@@ -9,7 +9,7 @@ uses Classes
      , u_xpl_custom_listener
      , u_xpl_config
      , u_xpl_actionlist
-     , JvScheduledEvents
+//     , JvScheduledEvents
      , u_xpl_message
      , u_xpl_schema
      ;
