@@ -36,7 +36,7 @@ type TxPLMessageArrived = procedure (aMessage: String) of object;         // Fun
 
         constructor Create(const aOwner : TComponent); overload;
         destructor  Destroy; override;
-        procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
+        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   Joined;
         procedure   Process(const aMessage : TxPLMessage);
 
@@ -76,7 +76,6 @@ type TxPLMessageArrived = procedure (aMessage: String) of object;         // Fun
 implementation // =============================================================
 uses u_xpl_common
      , u_xpl_header
-     , cStrings
      , StrUtils
      , u_Configuration_Record
      , u_xpl_config
@@ -124,11 +123,11 @@ begin
    inherited Destroy;
 end;
 
-procedure TxPLPSListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TxPLPSListener') = 0 then ComponentClass := TxPLPSListener
-   else inherited;
-end;
+//procedure TxPLPSListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
+//begin
+//   if CompareText(AClassName, 'TxPLPSListener') = 0 then ComponentClass := TxPLPSListener
+//   else inherited;
+//end;
 
 procedure TxPLPSListener.Joined;
 begin
@@ -154,7 +153,7 @@ begin
    if D<>'' then ProcName := ProcName + '_' + D;
    if I<>'' then ProcName := ProcName + '_' + I;
    if MT<>'' then ProcName := ProcName + '_' + MT;
-   ProcName := StrReplace('xpl-','',ProcName);
+   ProcName := AnsiReplaceStr('xpl-','',ProcName);
    aMethod  := TxPLMessageArrived(PSScript.GetProcMethod(ProcName));
    result := Assigned(aMethod);
    if result then begin
@@ -188,7 +187,7 @@ begin
    end;
 end;
 
-procedure TxPLPSListener.SendMsg(aMsgType : tsMsgType; aTarget,aSchema,aBody : string);
+procedure TxPLPSListener.SendMsg(aMsgType : string; aTarget,aSchema,aBody : string);
 begin
    SendMessage( StrToMsgType(aMsgType), IfThen(aTarget='','*',aTarget),
                 aSchema, '{'+#10+aBody+#10+'}');

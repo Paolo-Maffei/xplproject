@@ -10,7 +10,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, pl_rx, pl_kcontrols, uniqueinstance_package, multiloglaz, aformula,
-  frm_logger,
+  frm_logger, u_xpl_config,
   u_xpl_application,
   u_xpl_common,
   logger_listener, frm_plugindetail,

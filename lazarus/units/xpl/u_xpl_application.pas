@@ -194,4 +194,4 @@ begin
             else result := aString;
 end;
 
-end.
+end.

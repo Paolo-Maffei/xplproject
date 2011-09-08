@@ -2441,10 +2441,10 @@ inherited frmLogger: TfrmLogger
       PopupMenu = mnuListView
       TabOrder = 0
       TitleStyle = tsNative
-      OnClick = dgMessagesClick
       OnDblClick = acShowMessageExecute
       OnDrawCell = dgMessagesDrawCell
       OnHeaderClick = dgMessagesHeaderClick
+      OnSelection = dgMessagesSelection
     end
     object tbMacro: TToolBar
       Left = 1

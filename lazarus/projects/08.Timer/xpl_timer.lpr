@@ -5,7 +5,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
      Interfaces, // this includes the LCL widgetset
-     Forms, jvclinport, fpTimer,
+     Forms, pl_rx, fpTimer,
      frm_xplappslauncher,
      frm_timer,
      frm_logviewer,

@@ -19,7 +19,6 @@ type // TxPLTimerListener =====================================================
 
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        procedure OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
 
      published
         property Timers : TxPLTimers read fTimers write fTimers;
@@ -45,7 +44,9 @@ end;
 procedure TxPLTimerListener.OnReceive(const axPLMsg: TxPLMessage);
 var adevice : string;
     aAction : string;
+    aMsg    : TxPLMessage;
     timer  : TxPLTimer;
+    i : integer;
 begin
    adevice := axPLMsg.Body.GetValueByKey('device');
    if axPLMsg.Schema.Equals(Schema_TimerBasic) then begin
@@ -69,13 +70,22 @@ begin
          end;
       end;
    end else
-       if axPLMsg.Schema.Equals(Schema_TimerRequest) then Timers.FindItemName(aDevice).SendStatus;
-end;
+      if axPLMsg.Schema.Equals(Schema_TimerRequest) then begin
+         if Timers.FindItemName(aDevice)<>nil then begin
+            Timers.FindItemName(aDevice).SendStatus;
 
-procedure TxPLTimerListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TxPLTimerListener') = 0 then ComponentClass := TxplTimerListener
-   else inherited;
+      end else begin
+          aMsg := TxPLMessage.Create(nil);
+          aMsg.MessageType:=stat;
+          aMsg.Target.Assign(axPLMsg.source);
+          aMsg.schema.rawxPL := 'timer.list';
+          for i:=0 to Timers.Count-1 do begin
+              aMsg.Body.AddKeyValue('timer=' + Timers[i].DisplayName);
+          end;
+          Send(aMsg);
+          aMsg.Free;
+      end;
+   end;
 end;
 
 end.

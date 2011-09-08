@@ -278,8 +278,10 @@ initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
    AllowMultiInstance := false;
-   OnGetVendorName      := @GetVendorNameEvent;
-   OnGetApplicationName := @GetApplicationEvent;
+   {$ifdef fpc}
+      OnGetVendorName      := @GetVendorNameEvent;                             // These functions are not known of Delphi and
+      OnGetApplicationName := @GetApplicationEvent;                            // are present here for linux behaviour consistency
+   {$endif}
 
    TIdStack.IncUsage;
    LocalAddresses.Assign(GStack.LocalAddresses);
@@ -288,4 +290,4 @@ finalization // ===============================================================
    LocalAddresses.Free;
 
 end.
-
+

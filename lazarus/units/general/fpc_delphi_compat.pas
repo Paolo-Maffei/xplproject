@@ -1,6 +1,7 @@
 unit fpc_delphi_compat;
 
 {Unit holding behaviour differences between fpc and delphi}
+{$mode delphi}
 
 interface
 
@@ -23,8 +24,10 @@ uses {$ifdef fpc}
     function GetMacAddress : string;
     function GetCommonAppDataPath : string;
 
-type TxPLTimer = class( {$ifdef fpc}TfpTimer {$else}TTimer {$endif});
-     {$ifndef fpc}                                                              // This is declared only for delphi versions
+type {$ifdef fpc}
+        TxPLTimer = class(TfpTimer);
+     {$else}                                                              // This is declared only for delphi versions
+        TxPLTimer = class(TTimer);
         TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
      {$endif}
 
@@ -120,4 +123,4 @@ finalization // ===============================================================
    VersionInfo.Free;
 
 end.
-
+

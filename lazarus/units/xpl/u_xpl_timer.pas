@@ -232,8 +232,8 @@ begin
 end;
 
 initialization
-  Schema_TimerBasic   := 'timer.basic';
-  Schema_TimerRequest := 'timer.request';
+  Schema_TimerBasic   := TxPLSchema.Create('timer','basic');
+  Schema_TimerRequest := TxPLSchema.Create('timer','request');
 
 end.
 

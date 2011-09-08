@@ -1572,9 +1572,4 @@ inherited frmevent: Tfrmevent
     left = 456
     top = 88
   end
-  object JvAppEvents1: TJvAppEvents[6]
-    OnIdle = JvAppEvents1Idle
-    left = 384
-    top = 144
-  end
 end
