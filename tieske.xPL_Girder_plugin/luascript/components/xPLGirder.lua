@@ -21,7 +21,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
-local Version = '0.1.2'
+local Version = '0.1.3'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -208,6 +208,7 @@ local xPLGirder = Super:New ( {
     Port = UDP_SOCKET,
 
     xPLDevices = {},
+	hbeatCount = 0,	-- counts own heartbeats send until one is received
 
     Initialize = function (self)
         self:AddEvents (Events)
@@ -256,6 +257,18 @@ local xPLGirder = Super:New ( {
 
 
     SendHeartbeat = function (self)
+		if self.hbeatCount ~= 0 then
+			-- a previous hbeat send was not received back... unstable connection!
+			gir.LogMessage(self.Name, 'No connection to xPL hub. Retrying...', 1)
+            if self.Mode == 'Online' then
+				self:SetMode ('Startup')
+				if self.HeartbeatTimer ~= nil then
+					self.HeartbeatTimer:Cancel()
+					self.HeartbeatTimer:Arm (3000)
+				end
+			end
+		end
+		self.hbeatCount = self.hbeatCount + 1
         local hb = "xpl-stat\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.app\n{\ninterval=%s\nport=%s\nremote-ip=%s\nversion=%s\n}\n"
         local msg = string.format(hb, self.Source, INTERVAL, self.Port, self.Address, self.Version)
         self:SendMessage(msg)
@@ -504,7 +517,7 @@ local xPLGirder = Super:New ( {
             local source = data.source
             if self.Mode == 'Startup' then
                 if source == self.Source then
-                    --print ('Hub is present')
+					self.hbeatCount = 0		-- reset counter
 					self:SetMode ('Online')
                     self.HeartbeatTimer:Cancel()
                     self.HeartbeatTimer:Arm (INTERVAL * 60000)
@@ -512,6 +525,9 @@ local xPLGirder = Super:New ( {
                 end
             end
             if self.Mode == 'Online' then
+                if source == self.Source then
+					self.hbeatCount = 0		-- reset counter
+                end
                 if not table.findvalue(self.xPLDevices, source) then
                     --print ('Adding source',source)
                     table.insert(self.xPLDevices, source)
@@ -543,11 +559,15 @@ local xPLGirder = Super:New ( {
 
 
     SendMessage = function (self, msg)
-        --if self.Mode == 'Online' then
-            self.Receiver:sendto(msg,self.xPLBroadcastAddress, XPL_PORT)
-        --else
-        --    print ('xPLGirder not Online')
-        --end
+		if type(msg) == "string" then
+			self.Receiver:sendto(msg,self.xPLBroadcastAddress, XPL_PORT)
+		elseif type(msg) == "table" then
+----------------------------
+-- to be implemented here --
+----------------------------
+			print ("sending objects is not implemented yet!")
+			table.print (msg)
+		end
     end,
 
 
