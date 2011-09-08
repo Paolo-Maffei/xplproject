@@ -34,6 +34,7 @@ See the accompanying ReadMe.txt file for additional information.
 
 ]]--
 
+require 'thread'
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
 
@@ -71,7 +72,7 @@ local myNewHandler = {
 		print ("Shutting down the xPL handler ID: " .. self.ID)
 	end,
 
-	MessageHandler = function (self, msg, filter)
+	_MessageHandler = function (self, msg, filter)
 		--[[
 		The handler function below will handle the actual message. The parameters are the xPL message
 		and the filter string that passed the message.
@@ -116,6 +117,33 @@ local myNewHandler = {
 		--        event.
 		return false
 	end,
+
+	-- Mutex and functions to lock/unlock the handler and make the MessageHandler thread-save
+	_lock = thread.newmutex(),
+	Lock = function (self)
+		self._lock:lock()
+	end,
+	Unlock = function (self)
+		self._lock:unlock()
+	end,
+	MessageHandler = function (self, msg, filter)
+		-- protected handler to run only singular, other threads can only enter after this call completed
+		self:Lock()
+		local result = false
+		local s,r = pcall(self._MessageHandler, self, msg, filter)
+		if s then	-- success
+			result = r
+		else	-- failure
+			-- error was returned from handler
+			print("xPLHandler " .. self.ID .. " had a lua error;" .. r)
+			print("while handling the following xPL message;")
+			table.print(msg)
+			gir.LogMessage(xPLGirder.Name, self.ID .. ' failed while processing a message, see lua console', 2)
+		end
+		self:Unlock()
+		return result
+	end,
+
 }
 
 

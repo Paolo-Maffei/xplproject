@@ -9,7 +9,8 @@ Contents
 4 - xPL message schemas
 5 - Message handlers
 6 - Known issues
-7 - Changelog
+7 - Troubleshooting
+8 - Changelog
 
 Download: http://www.thijsschreijer.nl/blog/?page_id=507
 Support : Girder forums @ http://www.promixis.com/forums/showthread.php?21059
@@ -79,6 +80,8 @@ To install xPLGirder use the following steps;
    2 Restart Girder or press F11 to reset the scripting engine
    3 Enter the Girder component manager and enable the xPLGirder component
      that is now shown in the list of available components
+   4 Check the log for any errors, and make sure you read the known issues
+     below (see 6 Known Issues).
 Done!
 
 If specific message handlers are required (see Using xPLGirder below) then
@@ -161,18 +164,52 @@ as comments in the sample file.
 ============================================================================
 1) does not properly restore from standby/hibernate
 2) does not properly reconfigure network upon network adapter changes and/or
-   lost connections.
+   lost connections. You must restart Girder to recover from this!
+   See this post; http://www.promixis.com/forums/showthread.php?17944-Girder-5-Bug-Thread&p=144529#post144529
 
 ============================================================================
-7 - Changelog
+7 - Troubleshooting
+============================================================================
+When the plugin does not work as expected check the following;
+1) Check the Component manager, to make sure the xPLGirder component is
+   enabled.
+2) Check the lua console for any errors, if so, continue at step 4
+3) watch the Girder log, you should see the following messages at startup;
+	xPLGirder	Status changed to: Online
+	xPLGirder	Status changed to: Startup
+	xPLGirder	Loaded handler SensorBasic
+	xPLGirder	Loaded handler LogBasic
+	xPLGirder	Loaded handler CmndGirderBasic
+   The 'Loaded handler' messages may differ based upon what handlers you
+   have enabled in the handler directory.
+   The 'Startup' message means that Girder is trying to connect to the xPL
+   network. And the 'Online' message means that it succeeded in doing so.
+   If you do not get the 'Online' message, then try;
+   a) Shutdown Girder and restart, make sure it is connected to the network 
+      before you restart Girder. If the network connection changes while
+      Girder is running, it fails (see 6 known issues).
+   b) Try running the xPL CheckPackage wizard again (see 2 Installing) and
+      check everything is ok. Restart Girder afterwards.
+   c) Download an xPL Logger application (for example the one from this
+      site; http://xpl.lhopital.org/) and watch whether you see xPL traffic
+4) drop a support request in the Girder forum thread for xPLGirder (see
+   'Contents' at the top of this readme file)      
+
+============================================================================
+8 - Changelog
 ============================================================================
 xx-xxx-2011 version 0.1.3 by Thijs Schreijer
          Added UPnP.basic handler
+         Added more verbose logging while trying to connect to the xPL Hub, 
+         to aid initial setup.
+         Updated template handler code. Added a mutex to make the message
+         handler thread safe.
+         Added 'Troubleshooting' to the readme (this file).
 09-jul-2011 version 0.1.2 by Thijs Schreijer
          Bugfix; the actions were not visible in the action tree
 13-jun-2011 version 0.1.1 by Thijs Schreijer
          Bugfix in Sensor.Basic handler
-         handlers are now called using pcall to prevent a faulty plugin from
+         Handlers are now called using pcall to prevent a faulty plugin from
          crashing the component.
 07-jun-2011 version 0.1.0 by Thijs Schreijer
          Offloaded the handling of girder.basic messages to a message handler
