@@ -357,10 +357,9 @@ local xPLGirder = Super:New ( {
 				local msg = nil
 				if data then msg = xPLParser(data) end
     			if msg then
-                    if not self:ProcessHeartbeat(msg) then
-                        --print ('Send to message processing queue!',msg.type,msg.source,msg.schema)
+                    --if not self:ProcessHeartbeat(msg) then
                         self:ProcessReceivedMessage (msg)
-                    end
+                    --end
                 end
     		end
     	end
@@ -368,20 +367,18 @@ local xPLGirder = Super:New ( {
 
 
     ProcessReceivedMessage = function (self, data)
-        --local forus = data.Header.source == '*' or data.Header.source == self.Source
-        local forus = data.target == '*' or data.target == self.Source
-        if forus then
---			if data.type == 'xpl-trig' and data.schema == 'girder.basic' then
---                return
---            end
-			if not self:ProcessMessageHandlers ( data ) then
-				-- returned false, so standard xPL event should not be supressed
-				local dotAddr = string.gsub(data.source, "%-", ".", 1)  -- replace address '-'  by '.'
-				local eventstring = string.format("%s.%s.%s", data.type, dotAddr, data.schema)
-				local pld1 = pickle(data)
-				gir.TriggerEvent(eventstring, self.ID, pld1)
+        if not self:ProcessHeartbeat(data) then
+			local forus = data.target == '*' or data.target == self.Source
+			if forus then
+				if not self:ProcessMessageHandlers ( data ) then
+					-- returned false, so standard xPL event should not be supressed
+					local dotAddr = string.gsub(data.source, "%-", ".", 1)  -- replace address '-'  by '.'
+					local eventstring = string.format("%s.%s.%s", data.type, dotAddr, data.schema)
+					local pld1 = pickle(data)
+					gir.TriggerEvent(eventstring, self.ID, pld1)
+				end
 			end
-        end
+		end
     end,
 
 	Handlers = {}, 		-- emtpy table with specific message handlers
@@ -559,14 +556,17 @@ local xPLGirder = Super:New ( {
 
 
     SendMessage = function (self, msg)
+		if not msg then
+			error ("Must provide a message string, call as; SendMessage( self, MsgString )", 2)
+		end
 		if type(msg) == "string" then
 			self.Receiver:sendto(msg,self.xPLBroadcastAddress, XPL_PORT)
 		elseif type(msg) == "table" then
 ----------------------------
 -- to be implemented here --
 ----------------------------
-			print ("sending objects is not implemented yet!")
 			table.print (msg)
+			error ("sending objects is not implemented yet!")
 		end
     end,
 
