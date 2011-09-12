@@ -18,8 +18,6 @@ uses
 
 {$IFDEF WINDOWS}{$R xpl_logger.rc}{$ENDIF}
 
-{$R *.res}
-
 begin
    Application.Initialize;
 
