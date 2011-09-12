@@ -70,8 +70,8 @@
         <UnitName Value="frm_timer"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="72"/>
-        <CursorPos X="33" Y="114"/>
+        <TopLine Value="45"/>
+        <CursorPos X="1" Y="35"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -1461,7 +1461,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="67"/>
         <CursorPos X="4" Y="212"/>
-        <UsageCount Value="57"/>
+        <UsageCount Value="61"/>
       </Unit186>
       <Unit187>
         <Filename Value="..\..\..\units\xpl\gui\frm_xpltimer.pas"/>
@@ -1665,7 +1665,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="11" Y="17"/>
-        <UsageCount Value="55"/>
+        <UsageCount Value="59"/>
       </Unit211>
       <Unit212>
         <Filename Value="..\..\..\units\xpl\u_xpl_udp_socket.pas"/>
@@ -1721,9 +1721,9 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="62"/>
-        <CursorPos X="65" Y="83"/>
-        <UsageCount Value="39"/>
+        <TopLine Value="74"/>
+        <CursorPos X="44" Y="83"/>
+        <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit218>
       <Unit219>
@@ -1881,7 +1881,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="55"/>
         <CursorPos X="48" Y="57"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="32"/>
       </Unit237>
       <Unit238>
         <Filename Value="C:\pp\rtl\objpas\typinfo.pp"/>
@@ -2049,9 +2049,9 @@
         <UnitName Value="u_xpl_timer"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="25"/>
-        <CursorPos X="30" Y="34"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="214"/>
+        <CursorPos X="22" Y="88"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit258>
       <Unit259>
@@ -2077,130 +2077,130 @@
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="4" Y="17"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit261>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="90" Column="20" TopLine="76"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="10" Column="10" TopLine="7"/>
       </Position1>
       <Position2>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="96" Column="49" TopLine="76"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="22" Column="1" TopLine="6"/>
       </Position2>
       <Position3>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="97" Column="61" TopLine="79"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="24" Column="1" TopLine="6"/>
       </Position3>
       <Position4>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="43" Column="1" TopLine="39"/>
+        <Caret Line="10" Column="9" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="10" Column="10" TopLine="7"/>
-      </Position5>
-      <Position6>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="22" Column="1" TopLine="6"/>
-      </Position6>
-      <Position7>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="24" Column="1" TopLine="6"/>
-      </Position7>
-      <Position8>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="10" Column="9" TopLine="1"/>
-      </Position8>
-      <Position9>
         <Filename Value="frm_timer.pas"/>
         <Caret Line="99" Column="25" TopLine="85"/>
-      </Position9>
-      <Position10>
+      </Position5>
+      <Position6>
         <Filename Value="timer_listener.pas"/>
         <Caret Line="10" Column="9" TopLine="1"/>
-      </Position10>
-      <Position11>
+      </Position6>
+      <Position7>
         <Filename Value="timer_listener.pas"/>
         <Caret Line="22" Column="1" TopLine="11"/>
-      </Position11>
-      <Position12>
+      </Position7>
+      <Position8>
         <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
         <Caret Line="92" Column="37" TopLine="83"/>
-      </Position12>
-      <Position13>
+      </Position8>
+      <Position9>
         <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
         <Caret Line="21" Column="13" TopLine="1"/>
-      </Position13>
-      <Position14>
+      </Position9>
+      <Position10>
         <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
         <Caret Line="17" Column="56" TopLine="1"/>
-      </Position14>
-      <Position15>
+      </Position10>
+      <Position11>
         <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
         <Caret Line="236" Column="62" TopLine="218"/>
-      </Position15>
-      <Position16>
+      </Position11>
+      <Position12>
         <Filename Value="frm_timer.pas"/>
         <Caret Line="10" Column="14" TopLine="1"/>
+      </Position12>
+      <Position13>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="18" Column="27" TopLine="7"/>
+      </Position13>
+      <Position14>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="31" Column="20" TopLine="13"/>
+      </Position14>
+      <Position15>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="44" Column="6" TopLine="33"/>
+      </Position15>
+      <Position16>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="8" Column="20" TopLine="1"/>
       </Position16>
       <Position17>
         <Filename Value="frm_timer.pas"/>
-        <Caret Line="18" Column="27" TopLine="7"/>
+        <Caret Line="42" Column="42" TopLine="22"/>
       </Position17>
       <Position18>
         <Filename Value="frm_timer.pas"/>
-        <Caret Line="31" Column="20" TopLine="13"/>
+        <Caret Line="160" Column="1" TopLine="64"/>
       </Position18>
       <Position19>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="44" Column="6" TopLine="33"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="85" Column="21" TopLine="59"/>
       </Position19>
       <Position20>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="8" Column="20" TopLine="1"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="77" Column="42" TopLine="61"/>
       </Position20>
       <Position21>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="42" Column="42" TopLine="22"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="49" Column="17" TopLine="46"/>
       </Position21>
       <Position22>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="160" Column="1" TopLine="64"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="83" Column="52" TopLine="62"/>
       </Position22>
       <Position23>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="85" Column="21" TopLine="59"/>
+        <Caret Line="24" Column="30" TopLine="9"/>
       </Position23>
       <Position24>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="77" Column="42" TopLine="61"/>
+        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
+        <Caret Line="69" Column="47" TopLine="54"/>
       </Position24>
       <Position25>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="49" Column="17" TopLine="46"/>
+        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
+        <Caret Line="34" Column="30" TopLine="25"/>
       </Position25>
       <Position26>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="83" Column="52" TopLine="62"/>
+        <Caret Line="24" Column="30" TopLine="9"/>
       </Position26>
       <Position27>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="24" Column="30" TopLine="9"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="114" Column="33" TopLine="72"/>
       </Position27>
       <Position28>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="69" Column="47" TopLine="54"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="10" Column="41" TopLine="1"/>
       </Position28>
       <Position29>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="34" Column="30" TopLine="25"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="118" Column="1" TopLine="22"/>
       </Position29>
       <Position30>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="24" Column="30" TopLine="9"/>
+        <Caret Line="73" Column="43" TopLine="55"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>

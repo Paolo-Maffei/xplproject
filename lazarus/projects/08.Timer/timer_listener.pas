@@ -80,7 +80,7 @@ begin
           aMsg.Target.Assign(axPLMsg.source);
           aMsg.schema.rawxPL := 'timer.list';
           for i:=0 to Timers.Count-1 do begin
-              aMsg.Body.AddKeyValue('timer=' + Timers[i].DisplayName);
+              aMsg.Body.AddKeyValue('device=' + Timers[i].DisplayName);
           end;
           Send(aMsg);
           aMsg.Free;
