@@ -11,6 +11,8 @@ uses SysUtils
      {$ifdef fpc}
      , UniqueInstanceRaw
      {$endif}
+     , IdSysLog
+     , IdSysLogMessage
      //, VersionChecker
      , u_xpl_address
      , u_xpl_folders
@@ -30,7 +32,11 @@ type { TxPLApplication =======================================================}
         fPluginList : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
         fVersion    : string;
+        fIdSysLog: TIdSysLog;
+        fIdSysLogMessage : TIdSysLogMessage;
         //fVChecker   : TVersionChecker;
+
+        function Get_UseSysLog : boolean;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
@@ -54,6 +60,7 @@ type { TxPLApplication =======================================================}
         property Version   : string             read fVersion;
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
+        property UseSysLog : boolean            read Get_UseSysLog;
         //property VChecker  : TVersionChecker    read fVChecker;
      end;
 
@@ -80,17 +87,22 @@ begin
    include(fComponentStyle,csSubComponent);
 
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
-   fVersion        := GetVersion;
+   fVersion := GetVersion;
 
-   if not AllowMultiInstance then begin
    {$ifdef fpc}
-      {$ifdef mswindows}
-         if InstanceRunning(GetProductName) then Log(etError,K_MSG_ALREADY_STARTED);
-      {$else}
-         { TODO : Activate Unique Instance under linux }
-      {$endif}
+   //if not AllowMultiInstance then
+   //   if InstanceRunning(fAdresse.RawxPL) then Log(etError,K_MSG_ALREADY_STARTED);
    {$endif}
-   end;
+
+   fIdSysLog:= nil;
+   {$ifdef unix}
+      fIdSysLog := TIdSysLog.Create(self);
+      fIdSysLog.Port := 514;
+      fIdSysLog.Host := '127.0.0.1';
+      fIdSysLog.Active := True;
+      fIdSysLogMessage := TIdSysLogMessage.Create(self);
+   {$endif}
+
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
@@ -122,7 +134,10 @@ end;
 
 function TxPLApplication.LogFileName: TFileName;
 begin
-   result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device]);
+   if not UseSysLog then
+      result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device])
+   else
+      result := 'syslog';
 end;
 
 procedure TxPLApplication.RegisterMe;
@@ -144,6 +159,16 @@ end;
 
 Procedure TxPLApplication.Log(EventType : TEventType; Msg : String);
 begin
+   {$ifdef unix}
+   fIdSysLogMessage.Msg.Text := GetDevice + ':' + Msg;
+   Case EventType of
+        etInfo    : fIdSysLogMessage.Severity := slInformational;
+        etWarning : fIdSysLogMessage.Severity := slWarning;
+        etError   : fIdSysLogMessage.Severity := slError;
+   end;
+   fIdSysLog.SendLogMessage(fIdSysLogMessage);
+   if IsConsole then writeln(fIdSysLogMessage.Msg.Content);
+   {$else}
    Case EventType of
         etInfo    : Logger.Send(Msg);                                          // Info are only stored in log file
         etWarning : Logger.SendWarning(Msg);                                   // Warn are stored in log, displayed but doesn't stop the app
@@ -152,7 +177,13 @@ begin
                        Raise Exception.Create(Msg);
                     end;
    end;
+   {$endif}
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
+end;
+
+function TxPLApplication.Get_UseSysLog : boolean;
+begin
+   Result := Assigned(fIdSysLog);
 end;
 
 Procedure TxPLApplication.Log(EventType : TEventType; Fmt : String; Args : Array of const);

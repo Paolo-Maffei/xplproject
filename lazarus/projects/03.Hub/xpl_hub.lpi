@@ -13,7 +13,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="2"/>
       <StringTable CompanyName="clinique" InternalName="hub" ProductName="xPL Hub" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -43,16 +43,15 @@
         <PackageName Value="pl_indycomp"/>
       </Item3>
     </RequiredPackages>
-    <Units Count="201">
+    <Units Count="205">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_hub"/>
-        <IsVisibleTab Value="True"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="3"/>
+        <TopLine Value="4"/>
+        <CursorPos X="25" Y="20"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -488,10 +487,12 @@
       <Unit57>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
         <UnitName Value="u_xpl_udp_socket"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="142"/>
-        <CursorPos X="106" Y="50"/>
-        <UsageCount Value="46"/>
+        <TopLine Value="57"/>
+        <CursorPos X="50" Y="126"/>
+        <UsageCount Value="47"/>
+        <Loaded Value="True"/>
       </Unit57>
       <Unit58>
         <Filename Value="..\..\units\xpl\u_xpl_settings_reg.pas"/>
@@ -1266,10 +1267,13 @@
       <Unit160>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="50" Y="10"/>
+        <TopLine Value="99"/>
+        <CursorPos X="60" Y="170"/>
         <UsageCount Value="29"/>
+        <Loaded Value="True"/>
       </Unit160>
       <Unit161>
         <Filename Value="..\..\units\general\vinfo.pas"/>
@@ -1330,11 +1334,11 @@
       <Unit168>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="196"/>
         <CursorPos X="33" Y="286"/>
-        <UsageCount Value="29"/>
+        <UsageCount Value="30"/>
         <Loaded Value="True"/>
       </Unit168>
       <Unit169>
@@ -1356,11 +1360,11 @@
       <Unit171>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
         <TopLine Value="4"/>
         <CursorPos X="61" Y="11"/>
-        <UsageCount Value="28"/>
+        <UsageCount Value="29"/>
         <Loaded Value="True"/>
       </Unit171>
       <Unit172>
@@ -1384,9 +1388,9 @@
         <UnitName Value="u_xpl_hub"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="84"/>
-        <CursorPos X="75" Y="98"/>
-        <UsageCount Value="14"/>
+        <TopLine Value="1"/>
+        <CursorPos X="30" Y="20"/>
+        <UsageCount Value="15"/>
         <Loaded Value="True"/>
       </Unit174>
       <Unit175>
@@ -1464,16 +1468,16 @@
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
         <UnitName Value="u_xpl_messages"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="333"/>
-        <CursorPos X="26" Y="342"/>
+        <TopLine Value="648"/>
+        <CursorPos X="1" Y="667"/>
         <UsageCount Value="12"/>
       </Unit184>
       <Unit185>
         <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
         <UnitName Value="u_xpl_rawset"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
+        <TopLine Value="94"/>
+        <CursorPos X="1" Y="119"/>
         <UsageCount Value="10"/>
       </Unit185>
       <Unit186>
@@ -1543,38 +1547,40 @@
       <Unit194>
         <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-base\src\fptimer.pp"/>
         <UnitName Value="fpTimer"/>
-        <EditorIndex Value="5"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="43" Y="10"/>
-        <UsageCount Value="10"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit194>
       <Unit195>
         <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
         <UnitName Value="IdUDPServer"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="286"/>
-        <CursorPos X="1" Y="298"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="6"/>
+        <CursorPos X="3" Y="23"/>
+        <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit195>
       <Unit196>
         <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPBase.pas"/>
         <UnitName Value="IdUDPBase"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="205"/>
-        <CursorPos X="21" Y="278"/>
+        <TopLine Value="280"/>
+        <CursorPos X="29" Y="299"/>
         <UsageCount Value="10"/>
       </Unit196>
       <Unit197>
         <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdSocketHandle.pas"/>
         <UnitName Value="IdSocketHandle"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="472"/>
-        <CursorPos X="1" Y="486"/>
-        <UsageCount Value="10"/>
+        <TopLine Value="307"/>
+        <CursorPos X="50" Y="317"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
       </Unit197>
       <Unit198>
         <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdAntiFreezeBase.pas"/>
@@ -1596,100 +1602,128 @@
         <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdStackUnix.pas"/>
         <UnitName Value="IdStackUnix"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1116"/>
-        <CursorPos X="1" Y="1136"/>
+        <TopLine Value="393"/>
+        <CursorPos X="1" Y="410"/>
         <UsageCount Value="10"/>
       </Unit200>
+      <Unit201>
+        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
+        <UnitName Value="u_xPL_Schema"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="52"/>
+        <CursorPos X="1" Y="66"/>
+        <UsageCount Value="10"/>
+      </Unit201>
+      <Unit202>
+        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-base\src\custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="377"/>
+        <CursorPos X="41" Y="338"/>
+        <UsageCount Value="10"/>
+      </Unit202>
+      <Unit203>
+        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPClient.pas"/>
+        <UnitName Value="IdUDPClient"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="237"/>
+        <CursorPos X="1" Y="265"/>
+        <UsageCount Value="10"/>
+      </Unit203>
+      <Unit204>
+        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdGlobal.pas"/>
+        <UnitName Value="IdGlobal"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="3305"/>
+        <CursorPos X="1" Y="3333"/>
+        <UsageCount Value="10"/>
+      </Unit204>
     </Units>
-    <JumpHistory Count="22" HistoryIndex="21">
+    <JumpHistory Count="21" HistoryIndex="20">
       <Position1>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="191" Column="51" TopLine="176"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="94" Column="1" TopLine="76"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="96" Column="1" TopLine="76"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="74" Column="22" TopLine="54"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="97" Column="1" TopLine="76"/>
       </Position3>
       <Position4>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="170" Column="31" TopLine="150"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="98" Column="1" TopLine="76"/>
       </Position4>
       <Position5>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="13" Column="53" TopLine="1"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="110" Column="3" TopLine="78"/>
       </Position5>
       <Position6>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="74" Column="22" TopLine="54"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="106" Column="1" TopLine="98"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="170" Column="31" TopLine="150"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="107" Column="1" TopLine="98"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="313" Column="51" TopLine="301"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="109" Column="1" TopLine="98"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="112" Column="1" TopLine="98"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="41" Column="22" TopLine="21"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="113" Column="1" TopLine="98"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="54" Column="11" TopLine="34"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="114" Column="1" TopLine="98"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="66" Column="25" TopLine="46"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="115" Column="1" TopLine="98"/>
       </Position12>
       <Position13>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="74" Column="24" TopLine="54"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="117" Column="1" TopLine="98"/>
       </Position13>
       <Position14>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="91" Column="71" TopLine="71"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="125" Column="1" TopLine="98"/>
       </Position14>
       <Position15>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="170" Column="33" TopLine="150"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="128" Column="1" TopLine="100"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="172" Column="24" TopLine="152"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="93" Column="1" TopLine="96"/>
       </Position16>
       <Position17>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="173" Column="14" TopLine="153"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="94" Column="1" TopLine="77"/>
       </Position17>
       <Position18>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="307" Column="16" TopLine="287"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="96" Column="1" TopLine="77"/>
       </Position18>
       <Position19>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="298" Column="1" TopLine="287"/>
+        <Filename Value="u_xpl_hub.pas"/>
+        <Caret Line="97" Column="1" TopLine="77"/>
       </Position19>
       <Position20>
-        <Filename Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Caret Line="325" Column="1" TopLine="313"/>
+        <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
+        <Caret Line="133" Column="3" TopLine="117"/>
       </Position20>
       <Position21>
         <Filename Value="u_xpl_hub.pas"/>
-        <Caret Line="24" Column="11" TopLine="17"/>
+        <Caret Line="20" Column="30" TopLine="1"/>
       </Position21>
-      <Position22>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="286" Column="36" TopLine="268"/>
-      </Position22>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1721,22 +1755,12 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="3">
+    <BreakPoints Count="1">
       <Item1>
         <Kind Value="bpkSource"/>
         <Source Value="..\..\units\xpl\uxplweblistener.pas"/>
         <Line Value="291"/>
       </Item1>
-      <Item2>
-        <Kind Value="bpkSource"/>
-        <Source Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
-        <Line Value="152"/>
-      </Item2>
-      <Item3>
-        <Kind Value="bpkSource"/>
-        <Source Value="..\..\..\..\..\..\usr\lib\lazarus\components\pl_Indy\source\base\IdUDPServer.pas"/>
-        <Line Value="329"/>
-      </Item3>
     </BreakPoints>
     <Watches Count="4">
       <Item1>

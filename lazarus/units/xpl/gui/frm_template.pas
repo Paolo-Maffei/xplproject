@@ -72,11 +72,13 @@ uses frm_logviewer
 { TFrmTemplate ===============================================================}
 procedure TFrmTemplate.acAboutExecute(Sender: TObject);
 begin
-   RxAboutDialog1.ApplicationTitle := xPLApplication.AppName;
-   RxAboutDialog1.LicenseFileName := 'license.txt';
-   RxAboutDialog1.Picture.Assign(Application.Icon);
-   RxAboutDialog1.AdditionalInfo.LoadFromFile('readme.txt');
-   RxAboutDialog1.Execute;
+   with RxAboutDialog1 do begin
+      ApplicationTitle := xPLApplication.AppName;
+      LicenseFileName := 'license.txt';
+      Picture.Assign(Application.Icon);
+      AdditionalInfo.LoadFromFile('readme.txt');
+      Execute;
+   end;
 end;
 
 procedure TFrmTemplate.acCoreConfigureExecute(Sender: TObject);
@@ -155,6 +157,7 @@ begin
       TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
 
    xPLApplication.OnLogEvent := @OnLogEvent;
+   acLogViewer.Visible := not xPLApplication.UseSysLog;
 
    Caption := xPLApplication.AppName;
 
@@ -170,7 +173,7 @@ end;
 
 procedure TFrmTemplate.StatusBar1Click(Sender: TObject);
 begin
-   ShowFrmLogViewer;
+   if not xPLApplication.UseSysLog then ShowFrmLogViewer;
 end;
 
 procedure TFrmTemplate.OnJoinedEvent;
@@ -189,4 +192,4 @@ initialization
   {$I frm_template.lrs}
 
 end.
-
+
