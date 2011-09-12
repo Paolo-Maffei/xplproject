@@ -47,6 +47,7 @@ const K_ERROR_SETTINGS = 'xPL Settings may not be set ';
       K_STARTED        = 'Hub started and listening on %s:%d';
       K_RELEASING      = 'No activity on port %s, released';
       K_DISCOVERED     = 'Discovered %s %s on %s';
+      K_INVALID_PORT   = 'Discovered %s but invalid port (%s) in message body';
       K_VERBOSE        = '%s => %s, %s';
 
 // ============================================================================
@@ -98,7 +99,7 @@ begin
 end;
 
 procedure TxPLHub.HandleDevice(const aHBeatMsg : THeartBeatMsg);
-var remoteip, port, s : string;
+var remoteip, port : string;
     Binding : TCollectionItem;
     aSocket : TIdUDPClient;
     i       : integer;
@@ -110,23 +111,21 @@ begin
    {$endif}
 
    for Binding in fInSocket.Bindings do begin
-      if (TIdSocketHandle(Binding).IP = remoteip) then begin                   // The message is sent from a device located on one of my net cards
-         port := IntToStr(aHBeatMsg.Port);
-         i := fSocketList.IndexOfName(port);                                   // Search for the current port
+       if (TIdSocketHandle(Binding).IP = remoteip) then                        // The message is sent from a device located on one of my net cards
+         if (aHBeatMsg.Port<>-1) then begin
+            port := IntToStr(aHBeatMsg.Port);
+            i := fSocketList.IndexOfName(port);                                   // Search for the current port
 
-         if i=-1 then begin                                                    // If not found
-            aSocket := TIdUDPClient.Create(self);
-            aSocket.Port:=StrToInt(port);
-            {$ifdef unix}                                                       // Check if this is also appliable
-            aSocket.Host:=aHBeatMsg.Remote_Ip;                                  // for windows, in this case remove compiler directives
-            {$endif}
-            i := fSocketList.AddObject(port+'=',aSocket);
-            Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
-         end;
-
-         fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
-      end;
-   end;
+            if i=-1 then begin                                                    // If not found
+               aSocket := TIdUDPClient.Create(self);
+               aSocket.Port:=StrToInt(port);
+               i := fSocketList.AddObject(port+'=',aSocket);
+               Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
+            end;
+            fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
+         end else
+             Log(etWarning,K_INVALID_PORT,[aHBeatMsg.AppName,aHBeatMsg.Body.GetValueByKey('port')]);
+       end;
 end;
 
 procedure TxPLHub.OnTimer(Sender: TObject);
@@ -143,4 +142,4 @@ begin
 end;
 
 end.
-
+
