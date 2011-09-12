@@ -6,12 +6,14 @@
     <General>
       <MainUnit Value="0"/>
       <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
       <ActiveWindowIndexAtStart Value="0"/>
     </General>
     <VersionInfo>
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
+      <RevisionNr Value="1"/>
       <BuildNr Value="3"/>
       <StringTable CompanyName="clinique" InternalName="balloon" ProductName="xPL Balloon" ProductVersion="1.0.0.1"/>
     </VersionInfo>
@@ -602,7 +604,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="161"/>
         <CursorPos X="13" Y="16"/>
-        <UsageCount Value="84"/>
+        <UsageCount Value="85"/>
       </Unit69>
       <Unit70>
         <Filename Value="C:\lazarus\lcl\include\application.inc"/>
@@ -684,7 +686,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="17"/>
         <CursorPos X="14" Y="40"/>
-        <UsageCount Value="37"/>
+        <UsageCount Value="38"/>
       </Unit80>
       <Unit81>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
@@ -1026,8 +1028,8 @@
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="273"/>
-        <CursorPos X="57" Y="219"/>
+        <TopLine Value="171"/>
+        <CursorPos X="1" Y="277"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
       </Unit121>
@@ -1155,7 +1157,7 @@
         <Loaded Value="True"/>
       </Unit133>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="28" HistoryIndex="27">
       <Position1>
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
         <Caret Line="169" Column="1" TopLine="147"/>
@@ -1229,53 +1231,45 @@
         <Caret Line="285" Column="33" TopLine="279"/>
       </Position18>
       <Position19>
-        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="76" Column="25" TopLine="120"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
-        <Caret Line="41" Column="45" TopLine="101"/>
-      </Position20>
-      <Position21>
         <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
         <Caret Line="40" Column="59" TopLine="27"/>
-      </Position21>
-      <Position22>
+      </Position19>
+      <Position20>
         <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
         <Caret Line="56" Column="36" TopLine="1"/>
-      </Position22>
-      <Position23>
+      </Position20>
+      <Position21>
         <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
         <Caret Line="50" Column="30" TopLine="37"/>
-      </Position23>
-      <Position24>
+      </Position21>
+      <Position22>
         <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <Caret Line="204" Column="49" TopLine="198"/>
+      </Position22>
+      <Position23>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="69" Column="25" TopLine="61"/>
+      </Position23>
+      <Position24>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="261" Column="16" TopLine="249"/>
       </Position24>
       <Position25>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="69" Column="25" TopLine="61"/>
+        <Caret Line="82" Column="42" TopLine="73"/>
       </Position25>
       <Position26>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="261" Column="16" TopLine="249"/>
+        <Caret Line="286" Column="18" TopLine="270"/>
       </Position26>
       <Position27>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="82" Column="42" TopLine="73"/>
+        <Caret Line="219" Column="7" TopLine="206"/>
       </Position27>
       <Position28>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="286" Column="18" TopLine="270"/>
-      </Position28>
-      <Position29>
-        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
-        <Caret Line="219" Column="7" TopLine="206"/>
-      </Position29>
-      <Position30>
-        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
         <Caret Line="206" Column="13" TopLine="191"/>
-      </Position30>
+      </Position28>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
