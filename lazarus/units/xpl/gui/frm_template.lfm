@@ -11,9 +11,9 @@ object FrmTemplate: TFrmTemplate
   LCLVersion = '0.9.31'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 23
+    Height = 19
     Hint = 'Clic to open log viewer'
-    Top = 449
+    Top = 453
     Width = 708
     Panels = <    
       item
@@ -166,4 +166,4 @@ object FrmTemplate: TFrmTemplate
     left = 64
     top = 56
   end
-end
+end

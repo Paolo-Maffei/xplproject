@@ -90,7 +90,7 @@ uses u_xpl_schema
      , typinfo
      ;
 
-const K_MSG_BIND_OK       = 'Listening on port %u for address %s';
+const K_MSG_BIND_OK       = 'Listening on %s:%u';
       K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
       K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
       K_MSG_IP_ERROR      = 'Socket unable to bind to IP Addresses';
@@ -153,7 +153,7 @@ begin
      IncomingSocket:=TxPLUDPServer.create(self,{$ifdef fpc}@{$endif}UDPRead);
      If IncomingSocket.Active then begin                                       // Lets be sure we found an address to bind to
         HBeat := TxPLHeartBeater.Create(self);
-        Log(etInfo,K_MSG_BIND_OK,[IncomingSocket.Bindings[0].Port,IncomingSocket.Bindings[0].IP]);
+        Log(etInfo,K_MSG_BIND_OK,[IncomingSocket.Bindings[0].IP,IncomingSocket.Bindings[0].Port]);
 
         if not FileExists(fCfgFName) then SaveConfig;
         UpdateConfig;
@@ -296,4 +296,4 @@ end;
 initialization // =============================================================
    Classes.RegisterClass(TxPLCustomListener);
 
-end.
+end.

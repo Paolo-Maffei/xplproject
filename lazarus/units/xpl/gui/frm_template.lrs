@@ -5,8 +5,8 @@ LazarusResources.Add('TFrmTemplate','FORMDATA',[
   +#3#182#0#5'Width'#3#196#2#7'Caption'#6#11'FrmTemplate'#12'ClientHeight'#3#216
   +#1#11'ClientWidth'#3#196#2#12'OnCloseQuery'#7#14'FormCloseQuery'#8'OnCreate'
   +#7#10'FormCreate'#10'LCLVersion'#6#6'0.9.31'#0#10'TStatusBar'#10'StatusBar1'
-  +#4'Left'#2#0#6'Height'#2#23#4'Hint'#6#23'Clic to open log viewer'#3'Top'#3
-  +#193#1#5'Width'#3#196#2#6'Panels'#14#1#5'Bevel'#7#6'pbNone'#5'Width'#2#20#0#1
+  +#4'Left'#2#0#6'Height'#2#19#4'Hint'#6#23'Clic to open log viewer'#3'Top'#3
+  +#197#1#5'Width'#3#196#2#6'Panels'#14#1#5'Bevel'#7#6'pbNone'#5'Width'#2#20#0#1
   +#5'Width'#3#244#1#0#0#14'ParentShowHint'#8#11'SimplePanel'#8#8'ShowHint'#9#7
   +'OnClick'#7#15'StatusBar1Click'#0#0#6'TImage'#9'imgBullet'#4'Left'#2#8#6'Hei'
   +'ght'#2#24#3'Top'#3#160#1#5'Width'#2#24#25'BorderSpacing.InnerBorder'#2#4#6
@@ -44,4 +44,4 @@ LazarusResources.Add('TFrmTemplate','FORMDATA',[
   +#15'TXMLPropStorage'#14'XMLPropStorage'#12'StoredValues'#14#0#4'left'#3#200#0
   +#0#0#14'TRxAboutDialog'#14'RxAboutDialog1'#7'Options'#11#13'radLicenseTab'#16
   +'radShowImageLogo'#0#7'Caption'#6#5'About'#4'left'#2'@'#3'top'#2'8'#0#0#0
-]);
+]);

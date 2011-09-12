@@ -98,15 +98,18 @@ begin
 end;
 
 procedure TxPLHub.HandleDevice(const aHBeatMsg : THeartBeatMsg);
-var remoteip, port : string;
+var remoteip, port, s : string;
     Binding : TCollectionItem;
     aSocket : TIdUDPClient;
     i       : integer;
 begin
    remoteip := aHBeatMsg.Remote_Ip;
    if remoteip='' then remoteip := fLocalIp;
+   {$ifdef unix}                                                                // Related to pb under linux, see
+      if remoteip = Settings.ListenOnAddress then remoteip := fLocalIP;         // xpl_udp_socket line # 131
+   {$endif}
 
-   for Binding in fInSocket.Bindings do
+   for Binding in fInSocket.Bindings do begin
       if (TIdSocketHandle(Binding).IP = remoteip) then begin                   // The message is sent from a device located on one of my net cards
          port := IntToStr(aHBeatMsg.Port);
          i := fSocketList.IndexOfName(port);                                   // Search for the current port
@@ -114,12 +117,16 @@ begin
          if i=-1 then begin                                                    // If not found
             aSocket := TIdUDPClient.Create(self);
             aSocket.Port:=StrToInt(port);
+            {$ifdef unix}                                                       // Check if this is also appliable
+            aSocket.Host:=aHBeatMsg.Remote_Ip;                                  // for windows, in this case remove compiler directives
+            {$endif}
             i := fSocketList.AddObject(port+'=',aSocket);
             Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
          end;
 
          fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
       end;
+   end;
 end;
 
 procedure TxPLHub.OnTimer(Sender: TObject);

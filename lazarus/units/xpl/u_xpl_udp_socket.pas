@@ -128,8 +128,9 @@ begin
                then AddBinding(LocalAddresses[i], aPort);
             dec(i);
          end;
-      {$else}
-         AddBinding(ListenOnAddress, aPort);                                    // This code needs testing under linux
+      {$else}                                                                   // Don't understand why this is needed to work
+         AddBinding('eth0', aPort);                                             // under linux. Tried 127.0.0.1, Local ip address...
+//         AddBinding(ListenOnAddress,aPort);                                   // only ETH0 seams to let incoming message pass in
       {$endif}
    end else xPLApplication.Log(etWarning,K_USING_DEFAULT);
    Active := (Bindings.Count > 0);
@@ -149,12 +150,11 @@ end;
 
 procedure TxPLUDPServer.UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
 begin
-   with TxPLApplication(Owner).Settings do begin
+   with TxPLApplication(Owner).Settings do
         if (ListenToAny) or
            (ListenToLocal) and (LocalAddresses.IndexOf(aBinding.PeerIP) >= 0) or
            (AnsiPos(aBinding.PeerIP, ListenToAddresses) > 0)
         then fOnReceived(BytesToString(AData));
-   end;
 end;
 
 procedure TxPLUDPServer.UDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
