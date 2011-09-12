@@ -89,13 +89,14 @@ begin
 
    fKeys   := TStringList.Create;
    fValues := TStringList.Create;
+   fStrings:= TStringList.Create;
 end;
 
 destructor TxPLBody.destroy;
 begin
+   fStrings.Free;
    fValues.Free;
    fKeys.Free;
-   if Assigned(fStrings) then fStrings.Free;
 
    inherited;
 end;
@@ -154,7 +155,6 @@ end;
 function TxPLBody.IsValid: boolean;
 var s : string;
 begin
-//   result := Values.Count > 0;
    result := true;
    for s in Keys do result := result and IsValidKey(s);
    for s in Values do result := result and IsValidValue(s);
@@ -169,21 +169,31 @@ begin
 end;
 
 function TxPLBody.Get_RawxPL: string;
-var i : integer;
+//var i : integer;
 begin
-   for i:= 0 to ItemCount-1 do begin
-          result := Result + Keys[i] + '=';
-          if i<Values.Count then result := Result + Values[i];
-          result := Result + #10;
-   end;
-   result := Format(K_MSG_BODY_FORMAT,[result]);
+//   for i:= 0 to ItemCount-1 do begin
+//          result := Result + Keys[i] + '=';
+//          if i<Values.Count then result := Result + Values[i];
+//          result := Result + #10;
+//   end;
+//   result := Format(K_MSG_BODY_FORMAT,[result]);
+   result := Format(K_MSG_BODY_FORMAT,[AnsiReplaceStr(Strings.Text,#13,'')]);
 end;
 
 function TxPLBody.Get_Strings: TStringList;
+var i : integer;
+    //a : string;
 begin
-   if not Assigned(fStrings) then fStrings := TStringList.Create;
-   fStrings.Text:=AnsiReplaceStr(RawxPl,#10,#13);
+//   if not Assigned(fStrings) then fStrings := TStringList.Create;
+//   fStrings.Clear;
+   fStrings.Assign(fKeys);
+   for i:= 0 to Pred(ItemCount) do // begin
+       fStrings[i] := fStrings[i] + '=' + Values[i];
+//       fStrings.Add( Keys[i] + '=' + Values[i] );
+
+//   fStrings.Text:=AnsiReplaceStr(RawxPl,#10,#13);
    result := fStrings;
+   //a := result.Text;
 end;
 
 procedure TxPLBody.Set_Strings(const AValue: TStringList);
@@ -203,8 +213,8 @@ procedure TxPLBody.SetValueByKey(const aKeyValue, aDefVal : string);
 var i : integer;
 begin
    i := Keys.IndexOf(aKeyValue);
-   if i>=0 then Values[i] := aDefVal
-           else AddKeyValuePair(aKeyValue,aDefVal);
+   if i>=0 then Values[i] := aDefVal                                           // If the key is found, the value is set
+           else AddKeyValuePair(aKeyValue,aDefVal);                            // else key added and value set
 end;
 
 procedure TxPLBody.AddKeyValuePairs(const aKeys, aValues : TStringList);
