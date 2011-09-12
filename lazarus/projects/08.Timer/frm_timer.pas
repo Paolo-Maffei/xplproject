@@ -32,7 +32,6 @@ type
     procedure MnuEditTimerClick(Sender: TObject);
     procedure mnuFireNowTimerClick(Sender: TObject);
     procedure MnuStopTimerClick(Sender: TObject);
-    procedure Timer1Timer(Sender: TObject);
   private
     Listener : TxPLTimerListener;
     procedure OnJoinedEvent; override;
@@ -113,11 +112,6 @@ begin
    aTimer := Listener.Timers.Add('');
    aTimer.Status    := halted;
    ShowFrmxPLTimer(aTimer);
-end;
-
-procedure TfrmTimer.Timer1Timer(Sender: TObject);
-begin
-
 end;
 
 // Timers manipulations functions ==============================================
