@@ -274,8 +274,6 @@ function TxPLCustomListener.DoHBeatApp(const aMessage: TxPLMessage): boolean;
 begin
    result := false;
    if not (aMessage is THeartBeatMsg) then exit;
-//   if aMessage.MessageType <> stat then exit;
-//   if not aMessage.Schema.Equals(Schema_HBeatApp) then exit;
 
    if (aMessage.Source.Equals(Adresse)) (*and (not PassMyOwnMessages)*) then exit;
 

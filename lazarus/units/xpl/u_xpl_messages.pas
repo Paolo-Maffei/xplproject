@@ -669,7 +669,7 @@ end;
 function THeartBeatMsg.Get_port: integer;
 begin
    Assert(Body.GetValueByKey(K_HBEAT_ME_PORT,'')<>'');
-   result := StrToInt(Body.GetValueByKey(K_HBEAT_ME_PORT));
+   result := StrToIntDef(Body.GetValueByKey(K_HBEAT_ME_PORT),-1);
 end;
 
 function THeartBeatMsg.Get_remote_ip: string;
