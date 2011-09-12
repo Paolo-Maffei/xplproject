@@ -1,7 +1,7 @@
 inherited frmLogger: TfrmLogger
-  Left = 92
+  Left = 177
   Height = 440
-  Top = 251
+  Top = 160
   Width = 869
   Caption = 'frmLogger'
   ClientHeight = 440
@@ -2269,8 +2269,7 @@ inherited frmLogger: TfrmLogger
   OnDestroy = FormDestroy
   SessionProperties = 'dgMessages.Columns;Left;Top'
   inherited StatusBar1: TStatusBar
-    Height = 19
-    Top = 421
+    Top = 417
     Width = 869
     Panels = <    
       item
@@ -2306,7 +2305,7 @@ inherited frmLogger: TfrmLogger
       Style = tbsCheck
     end
     object ToolButton6: TToolButton[4]
-      Left = 94
+      Left = 92
       Top = 0
       Action = Clear
       ImageIndex = 25
@@ -2314,13 +2313,13 @@ inherited frmLogger: TfrmLogger
   end
   object Splitter1: TSplitter[3]
     Left = 143
-    Height = 396
+    Height = 392
     Top = 25
     Width = 5
   end
   object Splitter2: TSplitter[4]
     Left = 553
-    Height = 396
+    Height = 392
     Top = 25
     Width = 5
     Align = alRight
@@ -2328,11 +2327,11 @@ inherited frmLogger: TfrmLogger
   end
   object Panel1: TPanel[5]
     Left = 558
-    Height = 396
+    Height = 392
     Top = 25
     Width = 311
     Align = alRight
-    ClientHeight = 396
+    ClientHeight = 392
     ClientWidth = 311
     TabOrder = 3
     object Label4: TLabel
@@ -2347,49 +2346,42 @@ inherited frmLogger: TfrmLogger
     end
     inline MessageFrame: TTMessageFrame
       Left = 1
-      Height = 378
+      Height = 374
       Top = 17
       Width = 309
       Align = alClient
-      ClientHeight = 378
+      ClientHeight = 374
       ClientWidth = 309
       DesignLeft = 499
       DesignTop = 81
-      inherited edtSource: TTIEdit
-        Height = 25
+      inherited Label5: TLabel
+        Left = 4
       end
-      inherited edtTarget: TTIEdit
-        Height = 25
+      inherited Label7: TLabel
+        Left = 4
       end
-      inherited edtSchema: TTIEdit
-        Height = 25
+      inherited Label8: TLabel
+        Left = 4
       end
       inherited Label10: TLabel
-        Width = 30
+        Left = 4
       end
       inherited edtBody: TTIMemo
         Width = 251
       end
-      inherited cbMsgType: TTIComboBox
-        Height = 27
-      end
-      inherited edtHop: TTISpinEdit
-        Height = 25
-      end
-      inherited lblSize: TTILabel
-        Height = 1
-        Width = 1
+      inherited Label6: TLabel
+        Left = 4
       end
     end
   end
   object tvMessages: TTreeView[6]
     Left = 0
-    Height = 396
+    Height = 392
     Top = 25
     Width = 143
     Align = alLeft
     AutoExpand = True
-    DefaultItemHeight = 18
+    DefaultItemHeight = 17
     DragMode = dmAutomatic
     PopupMenu = mnuTreeView
     ReadOnly = True
@@ -2405,17 +2397,17 @@ inherited frmLogger: TfrmLogger
   end
   object Panel2: TPanel[7]
     Left = 148
-    Height = 396
+    Height = 392
     Top = 25
     Width = 405
     Align = alClient
     Caption = 'Panel2'
-    ClientHeight = 396
+    ClientHeight = 392
     ClientWidth = 405
     TabOrder = 6
     object dgMessages: TStringGrid
       Left = 1
-      Height = 369
+      Height = 365
       Top = 26
       Width = 403
       Align = alClient
@@ -2520,10 +2512,10 @@ inherited frmLogger: TfrmLogger
         Style = tbsSeparator
       end
       object ckLoop: TCheckBox
-        Left = 350
+        Left = 356
         Height = 24
         Top = 0
-        Width = 53
+        Width = 47
         Align = alRight
         Caption = 'Loop'
         TabOrder = 1
@@ -2733,9 +2725,4 @@ inherited frmLogger: TfrmLogger
       Action = acAssembleFragments
     end
   end
-  object IdSysLogMessage1: TIdSysLogMessage[17]
-    Msg.Text = 'logger[0]:'
-    left = 405
-    top = 220
-  end
-end
+end

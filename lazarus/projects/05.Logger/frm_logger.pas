@@ -8,8 +8,8 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
   u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
-  RTTICtrls, RTTIGrids, IdSysLogMessage, RxAboutDialog, uxPLConst, frm_template,
-  frame_message, logger_listener, u_xpl_header;
+  RxAboutDialog, RTTICtrls, RTTIGrids, uxPLConst, frm_template, frame_message,
+  logger_listener, u_xpl_header;
 
 type
 
@@ -27,7 +27,6 @@ type
     acAssembleFragments: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
-    IdSysLogMessage1: TIdSysLogMessage;
     Label4: TLabel;
     MenuItem1: TMenuItem;
     MenuItem10: TMenuItem;
@@ -641,4 +640,4 @@ initialization // =============================================================
   {$I class.lrs}
   {$I msgtype.lrs}
 
-end.
+end.
