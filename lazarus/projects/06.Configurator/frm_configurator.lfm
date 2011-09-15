@@ -8,6 +8,7 @@ inherited frmConfigurator: TfrmConfigurator
   ClientWidth = 616
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
+    Height = 23
     Top = 554
     Width = 616
   end
@@ -158,6 +159,12 @@ inherited frmConfigurator: TfrmConfigurator
       Top = 170
       TabOrder = 2
       inherited PageControl1: TPageControl
+        ActivePage = nil
+        TabIndex = -1
+        inherited tsCoreItems: TTabSheet
+          ClientHeight = 644
+          ClientWidth = 792
+        end
         inherited tsSpecific: TTabSheet
           ClientHeight = 644
           ClientWidth = 792
