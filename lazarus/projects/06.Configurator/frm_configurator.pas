@@ -163,7 +163,7 @@ begin
       adr.Free;
    end;
 
-   Panel2.Visible := not (tvDevices.Items.Count < 3);
+   Panel2.Visible := not (tvDevices.Items.Count < 2);
 end;
 
 procedure TfrmConfigurator.acSaveConfigExecute(Sender: TObject);
@@ -213,7 +213,8 @@ begin
    ckCfgXMLAvail.Link.TIObject := Current_Config;
    ckCfgXMLAvail.Link.TIPropertyName := 'XMLCfgAvail';
 
-   frameConfig1.SetConfigRecord(Current_Config);
+//   frameConfig1.SetConfigRecord(Current_Config);
+   frameConfig1.SetConfigCurrent(Current_Config.Config.CurrentConfig);
 end;
 
 initialization

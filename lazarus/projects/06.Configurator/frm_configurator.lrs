@@ -4,65 +4,67 @@ LazarusResources.Add('TfrmConfigurator','FORMDATA',[
   'TPF0'#241#16'TfrmConfigurator'#15'frmConfigurator'#4'Left'#2#19#6'Height'#3
   +'A'#2#3'Top'#3#147#0#5'Width'#3'h'#2#7'Caption'#6#15'frmConfigurator'#12'Cli'
   +'entHeight'#3'A'#2#11'ClientWidth'#3'h'#2#8'OnCreate'#7#10'FormCreate'#0#241
-  +#10'TStatusBar'#10'StatusBar1'#3'Top'#3'*'#2#5'Width'#3'h'#2#0#0#241#8'TTool'
-  +'Bar'#7'ToolBar'#5'Width'#3'h'#2#0#241#6'TPanel'#6'Panel4'#4'Left'#3#160#1#0
-  +#0#242#2#3#11'TToolButton'#11'ToolButton2'#4'Left'#2'5'#3'Top'#2#0#6'Action'
-  +#7#17'acDiscoverNetwork'#0#0#242#2#4#11'TToolButton'#12'ToolButton11'#4'Left'
-  +#3#154#0#3'Top'#2#0#5'Width'#2#10#7'Caption'#6#12'ToolButton10'#5'Style'#7#12
-  +'tbsSeparator'#0#0#242#2#5#11'TToolButton'#11'ToolButton8'#4'Left'#3#164#0#3
-  +'Top'#2#0#6'Action'#7#7'acClear'#0#0#0#242#2#3#9'TSplitter'#9'Splitter1'#4'L'
-  +'eft'#2#0#6'Height'#3#17#2#3'Top'#2#25#5'Width'#2#5#0#0#242#2#4#6'TPanel'#6
-  +'Panel2'#4'Left'#3#190#0#6'Height'#3#17#2#3'Top'#2#25#5'Width'#3#170#1#5'Ali'
-  +'gn'#7#8'alClient'#10'BevelOuter'#7#9'bvLowered'#12'ClientHeight'#3#17#2#11
-  +'ClientWidth'#3#170#1#8'TabOrder'#2#3#0#6'TLabel'#6'Label1'#4'Left'#2#8#6'He'
-  +'ight'#2#16#3'Top'#2#30#5'Width'#2'K'#7'Caption'#6#13'Device name :'#11'Pare'
-  +'ntColor'#8#0#0#8'TTILabel'#13'lblDeviceName'#4'Left'#2'`'#6'Height'#2#1#3'T'
-  +'op'#2#30#5'Width'#2#1#10'Font.Style'#11#6'fsBold'#0#10'ParentFont'#8#0#0#8
-  +'TTILabel'#9'lblLastHB'#4'Left'#2'r'#6'Height'#2#1#3'Top'#3#131#0#5'Width'#2
-  +#1#0#0#6'TLabel'#6'Label2'#4'Left'#2#16#6'Height'#2#16#3'Top'#3#131#0#5'Widt'
-  +'h'#2'V'#7'Caption'#6#17'Last Heartbeat : '#11'ParentColor'#8#0#0#6'TLabel'#6
-  +'Label3'#4'Left'#2#18#6'Height'#2#16#3'Top'#3#153#0#5'Width'#2'('#7'Caption'
-  +#6#9'Die at : '#11'ParentColor'#8#0#0#8'TTILabel'#8'lblDieAt'#4'Left'#2'p'#6
-  +'Height'#2#1#3'Top'#3#149#0#5'Width'#2#1#0#0#11'TTICheckBox'#13'ckCfgXMLAvai'
-  +'l'#4'Left'#2#16#6'Height'#2#19#3'Top'#2'g'#5'Width'#3#215#0#7'Caption'#6'&C'
-  +'onfiguration available in vendor file'#21'PropertyNameAsCaption'#8#8'TabOrd'
-  +'er'#2#0#0#0#8'TToolBar'#8'ToolBar2'#4'Left'#2#1#6'Height'#2#25#3'Top'#2#1#5
-  +'Width'#3#168#1#8'AutoSize'#9#12'ButtonHeight'#2#24#11'ButtonWidth'#2#30#7'C'
-  +'aption'#6#7'ToolBar'#11'EdgeBorders'#11#8'ebBottom'#0#9'EdgeOuter'#7#6'esNo'
-  +'ne'#4'Flat'#8#4'List'#9#12'ShowCaptions'#9#8'TabOrder'#2#1#0#11'TToolButton'
-  +#12'ToolButton12'#4'Left'#2'C'#3'Top'#2#0#5'Width'#2#5#7'Caption'#6#11'ToolB'
-  +'utton3'#5'Style'#7#10'tbsDivider'#0#0#11'TToolButton'#11'ToolButton5'#4'Lef'
-  +'t'#2#1#3'Top'#2#0#6'Action'#7#12'acLoadConfig'#0#0#11'TToolButton'#11'ToolB'
-  +'utton6'#4'Left'#2'#'#3'Top'#2#0#6'Action'#7#12'acSaveConfig'#0#0#11'TToolBu'
-  +'tton'#11'ToolButton7'#4'Left'#2'H'#3'Top'#2#0#6'Action'#7#12'acSendConfig'#0
-  +#0#11'TToolButton'#11'ToolButton4'#4'Left'#2'o'#3'Top'#2#0#6'Action'#7#15'ac'
-  +'RequestConfig'#0#0#11'TToolButton'#12'ToolButton13'#4'Left'#2'j'#3'Top'#2#0
-  +#5'Width'#2#5#7'Caption'#6#11'ToolButton9'#5'Style'#7#10'tbsDivider'#0#0#0
-  +#244#12'TframeConfig'#12'frameConfig1'#4'Left'#2#9#3'Top'#3#170#0#8'TabOrder'
-  +#2#2#0#241#12'TPageControl'#12'PageControl1'#0#241#9'TTabSheet'#10'tsSpecifi'
-  +'c'#12'ClientHeight'#3#132#2#11'ClientWidth'#3#24#3#0#0#0#0#0#242#2#5#9'TTre'
-  +'eView'#9'tvDevices'#4'Left'#2#5#6'Height'#3#17#2#3'Top'#2#25#5'Width'#3#185
-  +#0#5'Align'#7#6'alLeft'#10'AutoExpand'#9#17'DefaultItemHeight'#2#17#8'SortTy'
-  +'pe'#7#6'stText'#8'TabOrder'#2#4#7'OnClick'#7#14'lbDevicesClick'#7'Options'
-  +#11#13'tvoAutoExpand'#17'tvoAutoItemHeight'#16'tvoHideSelection'#21'tvoKeepC'
-  +'ollapsedNodes'#14'tvoShowButtons'#12'tvoShowLines'#11'tvoShowRoot'#11'tvoTo'
-  +'olTips'#13'tvoThemedDraw'#0#0#0#243#2#6#11'TActionList'#10'ActionList'#4'le'
-  +'ft'#2#16#3'top'#2' '#0#0#243#2#7#10'TPopupMenu'#7'xPLMenu'#4'left'#2#16#3't'
-  +'op'#2'X'#0#0#243#2#8#15'TXMLPropStorage'#14'XMLPropStorage'#0#0#243#2#9#14
-  +'TRxAboutDialog'#14'RxAboutDialog1'#0#0#242#2#10#17'TxPLMsgSaveDialog'#13'xP'
-  +'LMsgSaveDlg'#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.xpl|x'
-  +'PL Config File|xpl_*.xml'#11'FilterIndex'#2#2#4'left'#2'p'#3'top'#2' '#0#0
-  +#242#2#11#17'TxPLMsgOpenDialog'#11'OpenMessage'#10'DefaultExt'#6#4'.xpl'#6'F'
-  +'ilter'#6'0xPL Message File|*.xpl|xPL Config File|xpl_*.xml'#4'left'#2'p'#3
-  +'top'#2'X'#0#0#242#2#12#11'TActionList'#13'AppActionList'#4'left'#2#16#3'top'
-  +#3#160#0#0#7'TAction'#17'acDiscoverNetwork'#7'Caption'#6#16'Discover Network'
-  +#10'ImageIndex'#2#4#9'OnExecute'#7#24'acDiscoverNetworkExecute'#0#0#7'TActio'
-  +'n'#15'acRequestConfig'#8'Category'#6#3'xPL'#7'Caption'#6#21'Request Configu'
-  +'ration'#9'OnExecute'#7#22'acRequestConfigExecute'#0#0#7'TAction'#12'acSaveC'
-  +'onfig'#7'Caption'#6#4'Save'#10'ImageIndex'#2#3#9'OnExecute'#7#19'acSaveConf'
-  +'igExecute'#0#0#7'TAction'#12'acLoadConfig'#7'Caption'#6#4'Load'#10'ImageInd'
-  +'ex'#2#17#9'OnExecute'#7#19'acLoadConfigExecute'#0#0#7'TAction'#12'acSendCon'
-  +'fig'#7'Caption'#6#4'Send'#10'ImageIndex'#2#6#9'OnExecute'#7#19'acSendConfig'
-  +'Execute'#0#0#7'TAction'#7'acClear'#8'Category'#6#3'xPL'#7'Caption'#6#10'Cle'
-  +'ar list'#10'ImageIndex'#2#25#9'OnExecute'#7#14'acClearExecute'#0#0#0#0
+  +#10'TStatusBar'#10'StatusBar1'#6'Height'#2#23#3'Top'#3'*'#2#5'Width'#3'h'#2#0
+  +#0#241#8'TToolBar'#7'ToolBar'#5'Width'#3'h'#2#0#241#6'TPanel'#6'Panel4'#4'Le'
+  +'ft'#3#160#1#0#0#242#2#3#11'TToolButton'#11'ToolButton2'#4'Left'#2'5'#3'Top'
+  +#2#0#6'Action'#7#17'acDiscoverNetwork'#0#0#242#2#4#11'TToolButton'#12'ToolBu'
+  +'tton11'#4'Left'#3#154#0#3'Top'#2#0#5'Width'#2#10#7'Caption'#6#12'ToolButton'
+  +'10'#5'Style'#7#12'tbsSeparator'#0#0#242#2#5#11'TToolButton'#11'ToolButton8'
+  +#4'Left'#3#164#0#3'Top'#2#0#6'Action'#7#7'acClear'#0#0#0#242#2#3#9'TSplitter'
+  +#9'Splitter1'#4'Left'#2#0#6'Height'#3#17#2#3'Top'#2#25#5'Width'#2#5#0#0#242#2
+  +#4#6'TPanel'#6'Panel2'#4'Left'#3#190#0#6'Height'#3#17#2#3'Top'#2#25#5'Width'
+  +#3#170#1#5'Align'#7#8'alClient'#10'BevelOuter'#7#9'bvLowered'#12'ClientHeigh'
+  +'t'#3#17#2#11'ClientWidth'#3#170#1#8'TabOrder'#2#3#0#6'TLabel'#6'Label1'#4'L'
+  +'eft'#2#8#6'Height'#2#16#3'Top'#2#30#5'Width'#2'K'#7'Caption'#6#13'Device na'
+  +'me :'#11'ParentColor'#8#0#0#8'TTILabel'#13'lblDeviceName'#4'Left'#2'`'#6'He'
+  +'ight'#2#1#3'Top'#2#30#5'Width'#2#1#10'Font.Style'#11#6'fsBold'#0#10'ParentF'
+  +'ont'#8#0#0#8'TTILabel'#9'lblLastHB'#4'Left'#2'r'#6'Height'#2#1#3'Top'#3#131
+  +#0#5'Width'#2#1#0#0#6'TLabel'#6'Label2'#4'Left'#2#16#6'Height'#2#16#3'Top'#3
+  +#131#0#5'Width'#2'V'#7'Caption'#6#17'Last Heartbeat : '#11'ParentColor'#8#0#0
+  +#6'TLabel'#6'Label3'#4'Left'#2#18#6'Height'#2#16#3'Top'#3#153#0#5'Width'#2'('
+  +#7'Caption'#6#9'Die at : '#11'ParentColor'#8#0#0#8'TTILabel'#8'lblDieAt'#4'L'
+  +'eft'#2'p'#6'Height'#2#1#3'Top'#3#149#0#5'Width'#2#1#0#0#11'TTICheckBox'#13
+  +'ckCfgXMLAvail'#4'Left'#2#16#6'Height'#2#19#3'Top'#2'g'#5'Width'#3#215#0#7'C'
+  +'aption'#6'&Configuration available in vendor file'#21'PropertyNameAsCaption'
+  +#8#8'TabOrder'#2#0#0#0#8'TToolBar'#8'ToolBar2'#4'Left'#2#1#6'Height'#2#25#3
+  +'Top'#2#1#5'Width'#3#168#1#8'AutoSize'#9#12'ButtonHeight'#2#24#11'ButtonWidt'
+  +'h'#2#30#7'Caption'#6#7'ToolBar'#11'EdgeBorders'#11#8'ebBottom'#0#9'EdgeOute'
+  +'r'#7#6'esNone'#4'Flat'#8#4'List'#9#12'ShowCaptions'#9#8'TabOrder'#2#1#0#11
+  +'TToolButton'#12'ToolButton12'#4'Left'#2'C'#3'Top'#2#0#5'Width'#2#5#7'Captio'
+  +'n'#6#11'ToolButton3'#5'Style'#7#10'tbsDivider'#0#0#11'TToolButton'#11'ToolB'
+  +'utton5'#4'Left'#2#1#3'Top'#2#0#6'Action'#7#12'acLoadConfig'#0#0#11'TToolBut'
+  +'ton'#11'ToolButton6'#4'Left'#2'#'#3'Top'#2#0#6'Action'#7#12'acSaveConfig'#0
+  +#0#11'TToolButton'#11'ToolButton7'#4'Left'#2'H'#3'Top'#2#0#6'Action'#7#12'ac'
+  +'SendConfig'#0#0#11'TToolButton'#11'ToolButton4'#4'Left'#2'o'#3'Top'#2#0#6'A'
+  +'ction'#7#15'acRequestConfig'#0#0#11'TToolButton'#12'ToolButton13'#4'Left'#2
+  +'j'#3'Top'#2#0#5'Width'#2#5#7'Caption'#6#11'ToolButton9'#5'Style'#7#10'tbsDi'
+  +'vider'#0#0#0#244#12'TframeConfig'#12'frameConfig1'#4'Left'#2#9#3'Top'#3#170
+  +#0#8'TabOrder'#2#2#0#241#12'TPageControl'#12'PageControl1'#10'ActivePage'#13
+  +#8'TabIndex'#2#255#0#241#9'TTabSheet'#11'tsCoreItems'#12'ClientHeight'#3#132
+  +#2#11'ClientWidth'#3#24#3#0#0#241#9'TTabSheet'#10'tsSpecific'#12'ClientHeigh'
+  +'t'#3#132#2#11'ClientWidth'#3#24#3#0#0#0#0#0#242#2#5#9'TTreeView'#9'tvDevice'
+  +'s'#4'Left'#2#5#6'Height'#3#17#2#3'Top'#2#25#5'Width'#3#185#0#5'Align'#7#6'a'
+  +'lLeft'#10'AutoExpand'#9#17'DefaultItemHeight'#2#17#8'SortType'#7#6'stText'#8
+  +'TabOrder'#2#4#7'OnClick'#7#14'lbDevicesClick'#7'Options'#11#13'tvoAutoExpan'
+  +'d'#17'tvoAutoItemHeight'#16'tvoHideSelection'#21'tvoKeepCollapsedNodes'#14
+  +'tvoShowButtons'#12'tvoShowLines'#11'tvoShowRoot'#11'tvoToolTips'#13'tvoThem'
+  +'edDraw'#0#0#0#243#2#6#11'TActionList'#10'ActionList'#4'left'#2#16#3'top'#2
+  +' '#0#0#243#2#7#10'TPopupMenu'#7'xPLMenu'#4'left'#2#16#3'top'#2'X'#0#0#243#2
+  +#8#15'TXMLPropStorage'#14'XMLPropStorage'#0#0#243#2#9#14'TRxAboutDialog'#14
+  +'RxAboutDialog1'#0#0#242#2#10#17'TxPLMsgSaveDialog'#13'xPLMsgSaveDlg'#10'Def'
+  +'aultExt'#6#4'.xpl'#6'Filter'#6'0xPL Message File|*.xpl|xPL Config File|xpl_'
+  +'*.xml'#11'FilterIndex'#2#2#4'left'#2'p'#3'top'#2' '#0#0#242#2#11#17'TxPLMsg'
+  +'OpenDialog'#11'OpenMessage'#10'DefaultExt'#6#4'.xpl'#6'Filter'#6'0xPL Messa'
+  +'ge File|*.xpl|xPL Config File|xpl_*.xml'#4'left'#2'p'#3'top'#2'X'#0#0#242#2
+  +#12#11'TActionList'#13'AppActionList'#4'left'#2#16#3'top'#3#160#0#0#7'TActio'
+  +'n'#17'acDiscoverNetwork'#7'Caption'#6#16'Discover Network'#10'ImageIndex'#2
+  +#4#9'OnExecute'#7#24'acDiscoverNetworkExecute'#0#0#7'TAction'#15'acRequestCo'
+  +'nfig'#8'Category'#6#3'xPL'#7'Caption'#6#21'Request Configuration'#9'OnExecu'
+  +'te'#7#22'acRequestConfigExecute'#0#0#7'TAction'#12'acSaveConfig'#7'Caption'
+  +#6#4'Save'#10'ImageIndex'#2#3#9'OnExecute'#7#19'acSaveConfigExecute'#0#0#7'T'
+  +'Action'#12'acLoadConfig'#7'Caption'#6#4'Load'#10'ImageIndex'#2#17#9'OnExecu'
+  +'te'#7#19'acLoadConfigExecute'#0#0#7'TAction'#12'acSendConfig'#7'Caption'#6#4
+  +'Send'#10'ImageIndex'#2#6#9'OnExecute'#7#19'acSendConfigExecute'#0#0#7'TActi'
+  ,'on'#7'acClear'#8'Category'#6#3'xPL'#7'Caption'#6#10'Clear list'#10'ImageInd'
+  +'ex'#2#25#9'OnExecute'#7#14'acClearExecute'#0#0#0#0
 ]);
