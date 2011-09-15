@@ -65,8 +65,7 @@ uses DateUtils,
 constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
 begin
    inherited Create;
-   fAddress     := TxPLAddress.Create;
-   Address.Assign(aHBeatMsg.Source);
+   fAddress     := TxPLAddress.Create(aHBeatMsg.Source);
    fConfig      := TxPLCustomConfig.Create(nil);
 
    fPlug_Detail := aOwner.VendorFile.FindDevice(aHBeatMsg.source);
@@ -96,7 +95,7 @@ end;
 destructor TConfigurationRecord.Destroy;
 begin
    Address.Free;
-   Config.Free;
+   fConfig.Free;
    if Assigned(fTimer) then fTimer.Free;
    inherited;
 end;

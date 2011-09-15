@@ -28,7 +28,6 @@ uses Classes
      , u_xpl_folders
      , superobject
      , superxmlparser
-     , fpc_delphi_compat
      ;
 
 type { TxPLVendorSeedFile ====================================================}
@@ -58,7 +57,6 @@ implementation //==============================================================
 uses uRegExpr
      , u_downloader_Indy
      , u_xpl_application
-     , u_xpl_common
      ;
 
 // TxPLVendorSeedFile =========================================================
