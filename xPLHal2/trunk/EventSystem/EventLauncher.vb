@@ -69,7 +69,8 @@ Public Class xPLEvent
         Dim t, n As Date
         ' get todays date and date/time
         t = Now.Date
-        n = DateAdd(DateInterval.Second, 10, Now)
+        n = Now
+
         ' check if end time passed
         If t <> DateAdd(DateInterval.Minute, Interval, n).Date Then
             t = DateAdd(DateInterval.Day, 1, t)
@@ -183,7 +184,7 @@ Public Class EventLauncher
                 If xPLEvents.Contains(EventKey) And EventKey <> "" Then
                     If CompareEvents(xEvent, xPLEvents(EventKey)) = False Then
                         xPLEvents.Remove(EventKey)
-                        xPLEvents.Add(xEvent)
+                        xPLEvents.Add(xEvent, EventKey)
                         Logger.AddLogEntry(AppInfo, "event", "Modified Event Entry: " & EventKey.ToString.Trim)
                         Return True
                     Else
