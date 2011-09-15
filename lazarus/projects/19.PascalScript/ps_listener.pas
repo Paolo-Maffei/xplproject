@@ -36,8 +36,8 @@ type TxPLMessageArrived = procedure (aMessage: String) of object;         // Fun
 
         constructor Create(const aOwner : TComponent); overload;
         destructor  Destroy; override;
-        //procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   Joined;
+        procedure   UpdateConfig; override;
         procedure   Process(const aMessage : TxPLMessage);
 
         // Message Send functions
@@ -123,15 +123,15 @@ begin
    inherited Destroy;
 end;
 
-//procedure TxPLPSListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-//begin
-//   if CompareText(AClassName, 'TxPLPSListener') = 0 then ComponentClass := TxPLPSListener
-//   else inherited;
-//end;
-
 procedure TxPLPSListener.Joined;
 begin
    if Config.IsValid and (ConnectionStatus = connected) then Compile;
+end;
+
+procedure TxPLPSListener.UpdateConfig;
+begin
+   inherited;
+   Joined;
 end;
 
 procedure TxPLPSListener.PSScriptCompile(Sender: TPSScript);

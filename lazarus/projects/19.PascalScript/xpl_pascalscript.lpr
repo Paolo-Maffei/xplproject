@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}{$ENDIF}
   u_xpl_console_app
-  , PS_Listener, pl_pascalscript, aformula
+  , PS_Listener
   ;
 
 var MyPSScriptApp : TxPLConsoleApp;
