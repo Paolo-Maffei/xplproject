@@ -69,7 +69,7 @@ Public Class xPLFragmentedMsgTest
             msg.KeyValueList.Add("testkey" & n.ToString, New String("A"c, 1000))
         Next
         msg.Source = xDev.Address
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, xDev) ' TODO: Initialize to an appropriate value
+        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, xDev)
         Dim actual As String
         actual = target.Source
         Assert.IsTrue(xDev.Address = actual, "Fragmented source (" & actual & ") should have been equal to xdev.address (" & xDev.Address & ").")
@@ -104,7 +104,7 @@ Public Class xPLFragmentedMsgTest
         msg.KeyValueList.Add("partid", "1/7:34")
         msg.KeyValueList.Add("somekey", "some value")
 
-        target = New xPLFragmentedMsg(msg, xDev) ' TODO: Initialize to an appropriate value
+        target = New xPLFragmentedMsg(msg, xDev)
         actual = target.Source
         Assert.IsTrue(yDev.Address = actual, "Fragmented source (" & actual & ") should have been equal to ydev.address (" & yDev.Address & ").")
         Debug.Print("Success: 'Source' property set as expected.")
@@ -138,7 +138,7 @@ Public Class xPLFragmentedMsgTest
         '    msg.KeyValueList.Add("testkey" & n.ToString, New String("A"c, 1000))
         'Next
         msg.Source = xDev.Address
-        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, xDev) ' TODO: Initialize to an appropriate value
+        Dim target As xPLFragmentedMsg = New xPLFragmentedMsg(msg, xDev)
         Assert.IsTrue(xDev.Address = target.Source, "Fragmented source (" & target.Source & ") should have been equal to xdev.address (" & xDev.Address & ").")
         Debug.Print("Success: 'Source' property set as expected.")
         Assert.IsTrue(target.Created, "Fragmented message should have been created as a 'Created' message (to be sent).")

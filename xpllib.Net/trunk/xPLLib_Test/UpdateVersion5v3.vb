@@ -56,7 +56,6 @@ Imports System.Diagnostics
         msg.MsgType = xPLMessageTypeEnum.Trigger
         msg.Schema = "xpllib.test"
 
-        ' TODO: Add test logic here
         Dim v As String = "test value here!"
         ' set test value to be 1kb length
         While v.Length < 1024
@@ -172,7 +171,6 @@ Imports System.Diagnostics
     'End Function
 
     <TestMethod()> Public Sub ValuesUTF8allowed()
-        ' TODO: Add test logic here
         ' test both sending and parsing
         ' setup test message basics
         Dim msg As New xPLMessage
@@ -180,7 +178,6 @@ Imports System.Diagnostics
         msg.MsgType = xPLMessageTypeEnum.Trigger
         msg.Schema = "xpllib.test"
 
-        ' TODO: Add test logic here
         Dim v As String = "ãéêçúöë"    ' some general non-ASCII characters
         Assert.IsTrue(v.Length <> Encoding.UTF8.GetBytes(v).Length, "Expected more bytes than characters due to UTF8 characters.")
         Debug.Print("Testing value: " & v)
