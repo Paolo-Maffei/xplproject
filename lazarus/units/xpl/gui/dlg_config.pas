@@ -24,7 +24,7 @@ type
     { public declarations }
   end;
 
-  procedure ShowDlgConfig; //(const Current : TConfigCurrentStat);
+  procedure ShowDlgConfig;
 
 implementation
 
