@@ -83,7 +83,7 @@ end;
 
 procedure TFrmTemplate.acCoreConfigureExecute(Sender: TObject);
 begin
-   ShowDlgConfig; //(TxPLCustomListener(xPLApplication).Config.CurrentConfig);
+   ShowDlgConfig;
 end;
 
 procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
@@ -192,4 +192,4 @@ initialization
   {$I frm_template.lrs}
 
 end.
-
+
