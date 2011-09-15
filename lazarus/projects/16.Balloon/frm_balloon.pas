@@ -6,8 +6,8 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ExtCtrls, ActnList, XMLPropStorage, Grids, RxAboutDialog,
-  RTTICtrls, fpTimer, xplNotifier, u_xpl_message, frm_template;
+  ComCtrls, Menus, ExtCtrls, ActnList, Grids, RTTICtrls, fpTimer, xplNotifier,
+  u_xpl_message, frm_template, XMLPropStorage;
 
 type
 
@@ -18,10 +18,10 @@ type
     dgMessages: TStringGrid;
     TrayIcon1: TTrayIcon;
     procedure acDisplayWindow(Sender : TObject);
-    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;
-      aRect: TRect; aState: TGridDrawState);
+    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
+    procedure XMLPropStorageRestoreProperties(Sender: TObject);
   private
     MessageQueue : TStringList;
     lockedby     : string;
@@ -69,8 +69,8 @@ begin
    with TxPLCustomListener(xPLApplication) do begin
      OnxPLReceived:=@OnReceive;
      Config.DefineItem(K_CONFIG_SHOWSEC, reconf, 1, '5');
-     Config.FilterSet.AddValues(['xpl-trig.*.*.*.log.basic',
-                                 'xpl-cmnd.*.*.*.osd.basic']);
+     Config.FilterSet.Add('xpl-trig.*.*.*.log.basic');
+     Config.FilterSet.Add('xpl-cmnd.*.*.*.osd.basic');
      Listen;
    end;
 
@@ -125,6 +125,11 @@ begin
     fNotifier.Free;
     MessageQueue.Free;
     inherited;
+end;
+
+procedure TFrmBalloon.XMLPropStorageRestoreProperties(Sender: TObject);
+begin
+    acDisplayWindow(self);
 end;
 
 
