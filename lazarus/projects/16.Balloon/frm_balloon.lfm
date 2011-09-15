@@ -118,6 +118,7 @@ inherited FrmBalloon: TFrmBalloon
   ShowInTaskBar = stNever
   Visible = True
   inherited StatusBar1: TStatusBar
+    Height = 23
     Top = 206
     Width = 602
   end
@@ -175,6 +176,7 @@ inherited FrmBalloon: TFrmBalloon
   inherited xPLMenu: TPopupMenu[5]
   end
   inherited XMLPropStorage: TXMLPropStorage[6]
+    OnRestoreProperties = XMLPropStorageRestoreProperties
   end
   inherited RxAboutDialog1: TRxAboutDialog[7]
   end
