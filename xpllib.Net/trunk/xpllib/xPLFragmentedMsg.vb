@@ -583,12 +583,12 @@ Public Class xPLFragmentedMsg
         If Not Me._disposed Then
             'Debug.Print("Disposing of fragmented message for: " & Parent.Address)
             If disposing Then
-                ' TODO: free other state (managed objects).
+                ' free other state (managed objects).
 
             End If
 
-            ' TODO: free your own state (unmanaged objects).
-            ' TODO: set large fields to null.
+            ' free your own state (unmanaged objects).
+            ' set large fields to null.
             Try
                 _ResendTimer.Stop()
             Catch ex As Exception
