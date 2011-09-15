@@ -53,7 +53,6 @@ implementation // =============================================================
 uses u_xpl_message
      , u_xpl_messages
      , SysUtils
-     , fpc_delphi_compat
      ;
 
 constructor TxPLSender.create(const aOwner : TComponent);

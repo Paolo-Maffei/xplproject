@@ -47,11 +47,11 @@ type { TxPLCustomMessage =====================================================}
         property TimeStamp : TDateTime read fTimeStamp write fTimeStamp;
         property Size   : integer  read Get_Size;
      end;
+     PxPLCustomMessage = ^TxPLCustomMessage;
 
 implementation // =============================================================
 Uses SysUtils
      , StrUtils
-     , u_xpl_udp_socket
      ;
 
 // TxPLCustomMessage ==========================================================

@@ -26,11 +26,7 @@ uses Classes
      , IdTelnetServer
      , IdSocketHandle
      , u_xpl_common
-     , fpc_delphi_compat
      ;
-
-const XPL_UDP_BASE_PORT     : Integer = 3865;                                   // Port used by devices to send messages
-      XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
 
 type { TxPLUDPClient ==========================================================}
      TxPLUDPClient = class(TIdUDPClient)                                        // Connexion used to send xPL messages
@@ -197,4 +193,4 @@ begin
 end;
 
 end.
-
+

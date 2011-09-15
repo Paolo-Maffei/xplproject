@@ -82,7 +82,6 @@ uses SysUtils
      , StrUtils
      , u_xpl_application
      , uxPLConst
-     , u_xpl_common
      , fpc_delphi_compat
      ;
 
@@ -283,4 +282,4 @@ begin
 end;
 
 end.
-
+
