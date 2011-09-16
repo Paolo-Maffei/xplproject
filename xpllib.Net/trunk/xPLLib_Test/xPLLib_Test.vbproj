@@ -52,6 +52,7 @@
     <Compile Include="GenericTestSetup.vb" />
     <Compile Include="My Project\AssemblyInfo.vb" />
     <Compile Include="UpdateVersion5v3.vb" />
+    <Compile Include="UpdateVersion5v5.vb" />
     <Compile Include="xPLFragmentedMsgTest.vb" />
   </ItemGroup>
   <ItemGroup>
