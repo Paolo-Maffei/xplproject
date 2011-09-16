@@ -1426,7 +1426,7 @@ Public Class xPLDevice
                     End Try
                 End If
             Case "fragment.request"
-                If msg.MsgType = xPLMessageTypeEnum.Command Then
+                If msg.MsgType = xPLMessageTypeEnum.Command And (msg.Target = Me.Address Or msg.Target = "*") Then
                     ' construct unique ID
                     Dim mid As String = Me.Address & ":" & msg.KeyValueList("message")
                     ' fetch message and return it

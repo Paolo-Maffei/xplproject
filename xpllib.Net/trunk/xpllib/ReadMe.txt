@@ -213,6 +213,16 @@ A distribution of the xpllib should include the following files;
 5 - Changelog 
 ==============
 
+Changes in version 5.5 from 5.4
+NEW in 5.5
+  - Nothing yet...
+    
+FIXED in 5.5
+  - Fragmented messages could create an endless message loop. Received message IDs are
+    now stored and retained temporarily to prevent receiving the same message again if
+    another device still requests additional fragments.
+  - Devices responded to fragment.request messages even if not intended for them.
+  
 Changes in version 5.4 from 5.3
 NEW in 5.4
   - max message size is back, at 1472. The receiving buffer remains at 32kb so larger
