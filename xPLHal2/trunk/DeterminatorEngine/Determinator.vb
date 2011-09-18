@@ -29,6 +29,8 @@ Imports System.Xml
 Imports System.Reflection
 Imports GOCManager
 Imports xPLLogging
+Imports EventSystem
+
 
 Public Class Determinator
 
@@ -443,7 +445,7 @@ Public Class Determinator
                 Public logText As String
 
                 Public Sub Execute()
-                    Logger.AddLogEntry(AppError, "rules", logText)
+                    Logger.AddLogEntry(AppInfo, "WRITE", logText)
                 End Sub
             End Class
 
@@ -453,21 +455,24 @@ Public Class Determinator
                 Public suspendRandomise As Integer
 
                 Public Sub Execute(ByVal index As Integer, ByVal ruleName As String)
+                    Logger.AddLogEntry(AppInfo, "rules", "Suspend")
                     '' Handle relative minute suspensions
-                    'If SuspendMinutes > 0 Then
-                    '    Dim d As Date = Now.Add(New TimeSpan(0, SuspendMinutes, 0))
-                    '    If suspendRandomise > 0 Then
-                    '        d = DateAdd(DateInterval.Minute, (Int(Rnd() * (suspendRandomise + 1))), d)
-                    '    End If
-                    '    SYSClass.SingleEvent(d, "{suspended-determinator}", (index + 1).ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString)
-                    'Else
-                    '    ' Handle absolute suspensions
-                    '    Dim d As Date = CDate(Now.ToString("dd/MMM/yyyy") & " " & suspendTime)
-                    '    If suspendRandomise > 0 Then
-                    '        d = DateAdd(DateInterval.Minute, (Int(Rnd() * (suspendRandomise + 1))), d)
-                    '    End If
-                    '    SYSClass.SingleEvent(d, "{suspended-determinator}", index.ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString)
-                    'End If
+                    If SuspendMinutes > 0 Then
+                        Dim d As Date = Now.Add(New TimeSpan(0, SuspendMinutes, 0))
+                        If suspendRandomise > 0 Then
+                            d = DateAdd(DateInterval.Minute, (Int(Rnd() * (suspendRandomise + 1))), d)
+                        End If
+                        'SYSClass.SingleEvent(d, "{suspended-determinator}", (index + 1).ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString)
+                        EventLauncher.Add(EventLauncher.BuildSingleEvent(d, "{suspended-determinator}", (index + 1).ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString))
+                    Else
+                        ' Handle absolute suspensions
+                        Dim d As Date = CDate(Now.ToString("dd/MMM/yyyy") & " " & suspendTime)
+                        If suspendRandomise > 0 Then
+                            d = DateAdd(DateInterval.Minute, (Int(Rnd() * (suspendRandomise + 1))), d)
+                        End If
+                        EventLauncher.Add(EventLauncher.BuildSingleEvent(d, "{suspended-determinator}", (index + 1).ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString))
+                        'SYSClass.SingleEvent(d, "{suspended-determinator}", index.ToString & ":" & ruleName, "Suspended_" & Guid.NewGuid.ToString)
+                        End If
                 End Sub
             End Class
 
