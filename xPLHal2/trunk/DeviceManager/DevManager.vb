@@ -296,11 +296,13 @@ Public Class DevManager
             Dim configvals = newvalues.Split
             For Each entry As String In configvals
                 ' 22-may-2011 Tieske, fixed bug 51; http://xplproject.org.uk/bugs/index.php?do=details&task_id=51&project=2
-                Dim key As String = Split(entry, "=")(0).ToLower
-                Dim val As String = Right(entry, Len(entry) - (Len(key) + 1))
-                Dim GOCPath As String = "config." & msgSource & ".current."
+                If entry.Length > 0 Then
+                    Dim key As String = Split(entry, "=")(0).ToLower
+                    Dim val As String = Right(entry, Len(entry) - (Len(key) + 1))
+                    Dim GOCPath As String = "config." & msgSource & ".current."
 
-                xPLCache.Add(GOCPath & key, val, False)
+                    xPLCache.Add(GOCPath & key, val, False)
+                End If
             Next
 
             'Okay, now send it to the device... but one last check first...
