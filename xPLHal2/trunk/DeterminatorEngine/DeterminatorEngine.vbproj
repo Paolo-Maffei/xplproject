@@ -3,7 +3,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{54EB3606-5749-4978-8FE4-123B1F31AA3D}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -100,6 +100,10 @@
     <ProjectReference Include="..\CacheManager\GOCManager.vbproj">
       <Project>{B9CB7D63-C851-4C58-A84B-86D0DAE266EF}</Project>
       <Name>GOCManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\EventSystem\EventSystem.vbproj">
+      <Project>{48317B52-3A1C-440C-9564-ACDB663F2592}</Project>
+      <Name>EventSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\xpllib_V4.4\xpllib.vbproj">
       <Project>{6CA025DE-C515-4E30-BCCC-846378F2AD20}</Project>
