@@ -208,7 +208,7 @@ Public Class xPLCache
     End Property
 
     Public Shared Function Contains(ByVal ObjectName As String) As Boolean
-        Return ObjectCache.Contains(ObjectName.Trim)
+        Return ObjectCache.Contains(ObjectName.ToLower.Trim)
     End Function
 
     Public Shared Function Add(ByVal oName As String, ByVal oValue As String, ByVal oExpires As Boolean) As Boolean
@@ -240,7 +240,7 @@ Public Class xPLCache
     Public Shared Property ObjectValue(ByVal ObjectName As String) As String
         Get
             If ObjectName = "" Then Return Nothing
-            Dim objectKey As String = ObjectName.Trim
+            Dim objectKey As String = ObjectName.ToLower.Trim
             If ObjectCache.Contains(objectKey) Then
                 Dim entry As CacheEntry = ObjectCache(objectKey)
                 Return entry.ObjectValue
@@ -251,13 +251,13 @@ Public Class xPLCache
 
         Set(ByVal Value As String)
             If ObjectName <> "" Then
-                Dim objectKey As String = ObjectName.Trim
+                Dim objectKey As String = ObjectName.ToLower.Trim
                 If ObjectCache.Contains(objectKey) Then
                     Dim entry As CacheEntry = ObjectCache(objectKey)
                     If entry.ObjectValue <> Value Then
                         entry.ObjectValue = Value
                         entry.LastUpdated = Now
-                        RaiseEvent CacheChanged(ObjectName)
+                        RaiseEvent CacheChanged(objectKey)
                     End If
                 End If
             End If
