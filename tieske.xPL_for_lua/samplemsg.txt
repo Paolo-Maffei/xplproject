@@ -1,0 +1,20 @@
+xpl-cmnd
+{
+hop=1
+source=tieske.number-one
+target=*
+}
+schema.class
+{
+command=something to do
+}
+xpl-cmnd
+{
+hop=1
+source=tieske.number-two
+target=*
+}
+schema.class
+{
+command=something more to do
+}
