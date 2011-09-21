@@ -169,6 +169,42 @@ Public Class xPLMessage
             mSchema.SchemaType = x.SchemaType
         End Set
     End Property
+    ''' <summary>
+    ''' Gets or sets the schemaclass used by the xPL message.
+    ''' </summary>
+    ''' <value>The schema class in proper xPL format.</value>
+    ''' <exception cref="IllegalSchema">Condition: if illegal characters or length is set for the schema class</exception>
+    ''' <remarks>No wildcards are allowed in the schema. Any uppercase characters will automatically be converted to lowercase.</remarks>
+    Public Property SchemaClass() As String
+        Get
+            Return mSchema.SchemaClass
+        End Get
+        Set(ByVal value As String)
+            Dim x As New xPLSchema(value, "okvalue")
+            If x.SchemaClass = "*" Then
+                Throw New IllegalSchema("Wildcards are not allowed in a message schema. Schema class: " & value)
+            End If
+            mSchema.SchemaClass = x.SchemaClass
+        End Set
+    End Property
+    ''' <summary>
+    ''' Gets or sets the schematype used by the xPL message.
+    ''' </summary>
+    ''' <value>The schema type in proper xPL format.</value>
+    ''' <exception cref="IllegalSchema">Condition: if illegal characters or length is set for the schema type</exception>
+    ''' <remarks>No wildcards are allowed in the schema. Any uppercase characters will automatically be converted to lowercase.</remarks>
+    Public Property SchemaType() As String
+        Get
+            Return mSchema.SchemaType
+        End Get
+        Set(ByVal value As String)
+            Dim x As New xPLSchema("okvalue", value)
+            If x.SchemaType = "*" Then
+                Throw New IllegalSchema("Wildcards are not allowed in a message schema. Schema type: " & value)
+            End If
+            mSchema.SchemaType = x.SchemaType
+        End Set
+    End Property
 
     Private mKeyValueList As New xPLKeyValuePairs
     ''' <summary>
