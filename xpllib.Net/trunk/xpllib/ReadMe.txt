@@ -215,7 +215,7 @@ A distribution of the xpllib should include the following files;
 
 Changes in version 5.5 from 5.4
 NEW in 5.5
-  - Nothing yet...
+  - xPLMessage now has properties SchemaClass and SchemaType besides just Schema
     
 FIXED in 5.5
   - Fragmented messages could create an endless message loop. Received message IDs are
