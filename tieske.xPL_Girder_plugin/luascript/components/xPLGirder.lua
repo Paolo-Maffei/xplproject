@@ -375,6 +375,9 @@ local xPLGirder = Super:New ( {
 					local dotAddr = string.gsub(data.source, "%-", ".", 1)  -- replace address '-'  by '.'
 					local eventstring = string.format("%s.%s.%s", data.type, dotAddr, data.schema)
 					local pld1 = pickle(data)
+                    if string.len(pld1) > 2900 then
+                        pld1 = "message too large for a payload"
+                    end
 					gir.TriggerEvent(eventstring, self.ID, pld1)
 				end
 			end
