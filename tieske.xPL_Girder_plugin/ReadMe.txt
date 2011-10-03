@@ -198,12 +198,13 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
-xx-xxx-2011 version 0.1.3 by Thijs Schreijer
+03-oct-2011 version 0.1.3 by Thijs Schreijer
          Added UPnP.basic handler
          Added more verbose logging while trying to connect to the xPL Hub, 
          to aid initial setup.
          Updated template handler code. Added a mutex to make the message
          handler thread safe.
+         Fixed a 'Payload overflow' error (reported by Mike C).
          Added 'Troubleshooting' to the readme (this file).
 09-jul-2011 version 0.1.2 by Thijs Schreijer
          Bugfix; the actions were not visible in the action tree
