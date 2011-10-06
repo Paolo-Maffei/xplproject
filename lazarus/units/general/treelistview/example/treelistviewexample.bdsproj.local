@@ -1,8 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<BorlandProject>
-	<Transactions>
-    <Transaction>2008.05.21 17:59:01.774.pas,C:\Dokumente und Einstellungen\benito\Eigene Dateien\Borland Studio-Projekte\Unit1.pas=U:\components\pascal\data\examples\treelistviewexampleu.pas</Transaction>
-    <Transaction>2008.05.21 17:59:01.855.dfm,C:\Dokumente und Einstellungen\benito\Eigene Dateien\Borland Studio-Projekte\Unit1.dfm=U:\components\pascal\data\examples\treelistviewexampleu.dfm</Transaction>
-    <Transaction>2008.05.21 17:59:09.586.bdsproj,C:\Dokumente und Einstellungen\benito\Eigene Dateien\Borland Studio-Projekte\Project1.bdsproj=U:\components\pascal\data\examples\treelistviewexample.bdsproj</Transaction>
-  </Transactions>
-</BorlandProject>
