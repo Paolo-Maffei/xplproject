@@ -65,20 +65,26 @@ settings = {
     ----------------------------------------------------------------
 	-- Sends an xPL message
     -- @param msg (string) message to be sent.
-    -- @param ip (string) optional, only if there is a need to send to a specific ip/port combination
-    -- @param port (number) optional, only if there is a need to send to a specific ip/port combination
-    -- @return true if succesfull
+    -- @param ip (string) optional, do not use, only for internal use by the hub
+    -- @param port (number) optional, do not use, only for internal use by the hub
+    -- @return true if succesfull, nil and error otherwise
 	send = function (msg, ip, port)
 		assert (type(msg) == "string", "illegal message format, expected string, got " .. type (msg))
         assert ((ip and port) or not (ip or port), "provide both ip and port, or provide neither")
 		local skt, emsg = socket.udp()			-- create and prepair socket
-		assert (skt, "failed to create UDP socket; " .. (emsg or ""))
+        if not skt then
+            return nil, "Failed to create UDP socket; " .. (emsg or "")
+        end
+		--assert (skt, "failed to create UDP socket; " .. (emsg or ""))
 		skt:settimeout(1)
         if ip == nil and port == nil then   -- not provided, so do a regular broadcast
             skt:setoption("broadcast", true)
         end
 		local success, emsg = skt:sendto(msg, ip or settings.broadcast, port or settings.xplport)
-		assert (success, "Failed to send message over UDP socket; " .. (emsg or ""))
+        if not success then
+            return nil, "Failed to send message over UDP socket; " .. (emsg or "")
+        end
+		--assert (success, "Failed to send message over UDP socket; " .. (emsg or ""))
 		return true
 	end
 
@@ -131,7 +137,7 @@ settings = {
 				instance = instance .. string.char(string.byte(allowed, math.random(1,#allowed)))
 			end
 		end
-		return vendor .. "-" .. device .. "." .. instance
+		return string.format("%s-%s.%s", vendor, device, instance)
 	end
 
     ----------------------------------------------------------------
@@ -175,8 +181,6 @@ settings = {
     -- Unregisters a list of devices previously registered through <code>xpl.register()</code>
     -- @param list a table whose values contain the devices to unregister. This list should be the
     -- same as the one returned by <code>register()</code> where strings have been replaced.
-    -- @return the same list, but the list will be modified; any string value will be replaced by
-    -- return value of the 'require'.
     unregister = function(list)
         for _, dev in pairs(list) do
             xpl.listener.unregister(dev)

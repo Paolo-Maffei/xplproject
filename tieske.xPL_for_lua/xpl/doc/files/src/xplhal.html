@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Reference</title>
-    <link rel="stylesheet" href="../../../luadoc.css" type="text/css" />
+    <link rel="stylesheet" href="../../luadoc.css" type="text/css" />
 	<!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
 </head>
 
@@ -24,7 +24,7 @@
 <h1>LuaDoc</h1>
 <ul>
 	
-	<li><a href="../../../index.html">Index</a></li>
+	<li><a href="../../index.html">Index</a></li>
 	
 </ul>
 
@@ -35,19 +35,19 @@
 <ul>
 
 	<li>
-		<a href="../../../modules/xpl.html">xpl</a>
+		<a href="../../modules/xpl.html">xpl</a>
 	</li>
 
 	<li>
-		<a href="../../../modules/xpl.listener.html">xpl.listener</a>
+		<a href="../../modules/xpl.listener.html">xpl.listener</a>
 	</li>
 
 	<li>
-		<a href="../../../modules/xpllogger.html">xpllogger</a>
+		<a href="../../modules/xpllogger.html">xpllogger</a>
 	</li>
 
 	<li>
-		<a href="../../../modules/xplsender.html">xplsender</a>
+		<a href="../../modules/xplsender.html">xplsender</a>
 	</li>
 
 </ul>
@@ -60,37 +60,41 @@
 <ul>
 
 	<li>
-		<a href="../../../files/src/xpl/classes/base.html">src/xpl/classes/base.lua</a>
+		<a href="../../files/src/xpl/classes/base.html">src/xpl/classes/base.lua</a>
 	</li>
 
 	<li>
-		<a href="../../../files/src/xpl/classes/xpldevice.html">src/xpl/classes/xpldevice.lua</a>
+		<a href="../../files/src/xpl/classes/xpldevice.html">src/xpl/classes/xpldevice.lua</a>
 	</li>
 
 	<li>
-		<a href="../../../files/src/xpl/classes/xplfilter.html">src/xpl/classes/xplfilter.lua</a>
+		<a href="../../files/src/xpl/classes/xplfilter.html">src/xpl/classes/xplfilter.lua</a>
 	</li>
 
 	<li>
-		<a href="../../../files/src/xpl/classes/xplmessage.html">src/xpl/classes/xplmessage.lua</a>
+		<a href="../../files/src/xpl/classes/xplmessage.html">src/xpl/classes/xplmessage.lua</a>
 	</li>
 
 	<li>
-		<a href="../../../files/src/xpl/init.html">src/xpl/init.lua</a>
+		<a href="../../files/src/xpl/init.html">src/xpl/init.lua</a>
 	</li>
 
-	<li><strong>src/xpl/new_device_template.lua</strong></li>
+	<li>
+		<a href="../../files/src/xpl/new_device_template.html">src/xpl/new_device_template.lua</a>
+	</li>
+
+	<li>
+		<a href="../../files/src/xpl/xpllistener.html">src/xpl/xpllistener.lua</a>
+	</li>
+
+	<li><strong>src/xplhal.lua</strong></li>
 	
 	<li>
-		<a href="../../../files/src/xpl/xpllistener.html">src/xpl/xpllistener.lua</a>
+		<a href="../../files/src/xpllogger.html">src/xpllogger.lua</a>
 	</li>
 
 	<li>
-		<a href="../../../files/src/xpllogger.html">src/xpllogger.lua</a>
-	</li>
-
-	<li>
-		<a href="../../../files/src/xplsender.html">src/xplsender.lua</a>
+		<a href="../../files/src/xplsender.html">src/xplsender.lua</a>
 	</li>
 
 </ul>
@@ -104,7 +108,7 @@
 
 <div id="content">
 
-<h1>File <code>src/xpl/new_device_template.lua</code></h1>
+<h1>File <code>src/xplhal.lua</code></h1>
 
 
 
@@ -114,6 +118,21 @@
 
 <h2>Functions</h2>
 <table class="function_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#hal:initialize">hal:initialize</a>&nbsp;()</td>
+	<td class="summary">Initializes xPL HAL.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#hal:start">hal:start</a>&nbsp;()</td>
+	<td class="summary">Starts xPL HAL.</td>
+	</tr>
+
+	<tr>
+	<td class="name" nowrap><a href="#hal:stop">hal:stop</a>&nbsp;()</td>
+	<td class="summary">Stops xPL HAL.</td>
+	</tr>
 
 	<tr>
 	<td class="name" nowrap><a href="#xpldevice:createhbeatmsg">xpldevice:createhbeatmsg</a>&nbsp;(exit)</td>
@@ -160,6 +179,57 @@
 
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
+
+
+
+<dt><a name="hal:initialize"></a><strong>hal:initialize</strong>&nbsp;()</dt>
+<dd>
+Initializes xPL HAL. Will be called from the device:initialize() method
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="hal:start"></a><strong>hal:start</strong>&nbsp;()</dt>
+<dd>
+Starts xPL HAL. Will be called from the device:start() method
+
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="hal:stop"></a><strong>hal:stop</strong>&nbsp;()</dt>
+<dd>
+Stops xPL HAL. Will be called from the device:stop() method
+
+
+
+
+
+
+
+
+
+</dd>
+
 
 
 
@@ -287,7 +357,7 @@ Handler called whenever the device status changes. Override this method to imple
 
 <dt><a name="xpldevice:stop"></a><strong>xpldevice:stop</strong>&nbsp;()</dt>
 <dd>
-Stops the xpldevice.
+Stops the xpldevice. It will unregister the device from the xpllistener and stop the heartbeat sequence
 
 
 

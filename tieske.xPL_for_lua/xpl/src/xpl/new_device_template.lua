@@ -4,7 +4,7 @@
 
 require ("xpl")
 
-local xpldevice = xpl.classes.xpldevice:new({})
+local xpldevice = xpl.classes.xpldevice:subclass({})
 
 -----------------------------------------------------------------------------------------
 -- Initializes the xpldevice.
@@ -14,7 +14,7 @@ function xpldevice:initialize()
     self.super.initialize(self)
 
     -- add your stuff here
-	address = xpl.createaddress("tieske", "luadev", "RANDOM")
+	self.address = xpl.createaddress("tieske", "luadev", "RANDOM")
 
 
 end
@@ -32,7 +32,6 @@ end
 
 -----------------------------------------------------------------------------------------
 -- Stops the xpldevice.
--- It will unregister the device from the xpllistener and stop the heartbeat sequence
 function xpldevice:stop()
 
     -- add your stuff here
@@ -98,5 +97,11 @@ function xpldevice:statuschanged(newstatus, oldstatus)
 
 end
 
+-- Pick your option here
+--=======================================================================================
+-- 1) store the class for future use, instantiation and subclassing
+-- xpl.classes.yourclassname = xpldevice    -- store the class
+-- return xpldevice                         -- return the class, not an instance
 
-return xpldevice
+-- 2) do not store the class for reuse/subclassing, just return an instance
+return xpldevice:new({})                 -- instantiate (calls initialize()!) and return

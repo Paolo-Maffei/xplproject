@@ -25,7 +25,7 @@ Options;
                                           hostname based id, or RANDOM for random id.
                                           (HOST is default)
    -t, -time=60                           How long should the logger run (in seconds)
-   -b, -hbeat                             Request an heartbeat upon start
+   -b, -hbeat                             Request a heartbeat upon start
    -v, -verbose                           Displays message contents while sending
    -version                               Print version info
    -h, -help                              Display this usage information
@@ -171,18 +171,10 @@ local logger = xpl.classes.xpldevice:new({    -- create logger device object
 -- register device and start listening
 xpl.listener.register(logger)
 
-if opt.hbeat then
-    -- create a heartbeat request message
-    local m = "xpl-cmnd\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.request\n{\ncommand=request\n}\n"
-    m = string.format(m, logger.address)
-    -- set it to fire in 1 seconds from now
-    copas.timer.create(nil, function() xpl.send(m) end, nil, false):arm(1)
-end
-
 if tonumber(opt.time) then
     -- create a timer to shutdown the logger
-    copas.timer.create(nil, function() xpl.stop() end, nil, false):arm(tonumber(opt.time))
+    copas.timer.create(nil, function() xpl.listener.stop() end, nil, false):arm(tonumber(opt.time))
 end
 
-xpl.start()
+xpl.listener.start()
 
