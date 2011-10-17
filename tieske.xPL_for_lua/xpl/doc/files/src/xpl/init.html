@@ -244,11 +244,11 @@ Sends an xPL message
 	</li>
 	
 	<li>
-	  <code><em>ip</em></code>: (string) optional, only if there is a need to send to a specific ip/port combination
+	  <code><em>ip</em></code>: (string) optional, do not use, only for internal use by the hub
 	</li>
 	
 	<li>
-	  <code><em>port</em></code>: (number) optional, only if there is a need to send to a specific ip/port combination
+	  <code><em>port</em></code>: (number) optional, do not use, only for internal use by the hub
 	</li>
 	
 </ul>
@@ -259,7 +259,7 @@ Sends an xPL message
 
 
 <h3>Return value:</h3>
-<ul>true if succesfull</ul>
+<ul>true if succesfull, nil and error otherwise</ul>
 
 
 
@@ -286,9 +286,6 @@ Unregisters a list of devices previously registered through <code>xpl.register()
 
 
 
-
-<h3>Return value:</h3>
-<ul>the same list, but the list will be modified; any string value will be replaced by return value of the 'require'.</ul>
 
 
 

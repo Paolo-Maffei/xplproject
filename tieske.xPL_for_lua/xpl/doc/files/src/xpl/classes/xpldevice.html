@@ -131,6 +131,11 @@
 	</tr>
 
 	<tr>
+	<td class="name" nowrap><a href="#xpldevice:send">xpldevice:send</a>&nbsp;(msg)</td>
+	<td class="summary">Sends xpl message.</td>
+	</tr>
+
+	<tr>
 	<td class="name" nowrap><a href="#xpldevice:sendhbeat">xpldevice:sendhbeat</a>&nbsp;(exit)</td>
 	<td class="summary">Sends heartbeat message.</td>
 	</tr>
@@ -159,8 +164,8 @@
 <table class="table_list">
 
 	<tr>
-	<td class="name" nowrap><a href="#xpldevice object">xpldevice object</a></td>
-	<td class="summary">object that represents an xpl device.</td>
+	<td class="name" nowrap><a href="#fields/properties of the xpldevice object">fields/properties of the xpldevice object</a></td>
+	<td class="summary"> </td>
 	</tr>
 
 </table>
@@ -240,6 +245,32 @@ Handler for incoming messages. It will handle only the heartbeat messages (echos
 <dd>
 Initializes the xpldevice. Will be called upon instantiation of an object.
 
+
+
+
+
+
+
+
+
+</dd>
+
+
+
+
+<dt><a name="xpldevice:send"></a><strong>xpldevice:send</strong>&nbsp;(msg)</dt>
+<dd>
+Sends xpl message. Will send either a <code>string</code> or an <code>xplmessage</code> object. In the latter case it will set the <code>source</code> property to the address of the device sending.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>msg</em></code>: message to send
+	</li>
+	
+</ul>
 
 
 
@@ -338,7 +369,7 @@ Handler called whenever the device status changes. Override this method to imple
 
 <dt><a name="xpldevice:stop"></a><strong>xpldevice:stop</strong>&nbsp;()</dt>
 <dd>
-Stops the xpldevice. The listener will automatically stop all device upon exiting
+Stops the xpldevice.
 
 
 
@@ -359,8 +390,8 @@ Stops the xpldevice. The listener will automatically stop all device upon exitin
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 
-<dt><a name="xpldevice object"></a><strong>xpldevice object</strong></dt>
-<dd>object that represents an xpl device.<br /><br />
+<dt><a name="fields/properties of the xpldevice object"></a><strong>fields/properties of the xpldevice object</strong></dt>
+<dd><br /><br />
 
 
 <h3>Fields:</h3>
