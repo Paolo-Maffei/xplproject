@@ -9,11 +9,14 @@ interface
 uses SysUtils
      , Classes
      {$ifdef fpc}
-     , UniqueInstanceRaw
+//     , UniqueInstanceRaw
      {$endif}
+     {$ifdef unix}
      , IdSysLog
      , IdSysLogMessage
-     //, VersionChecker
+     {$else}
+     , EventLog
+     {$endif}
      , u_xpl_address
      , u_xpl_folders
      , u_xpl_settings
@@ -32,25 +35,27 @@ type { TxPLApplication =======================================================}
         fPluginList : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
         fVersion    : string;
-        fIdSysLog: TIdSysLog;
-        fIdSysLogMessage : TIdSysLogMessage;
-        //fVChecker   : TVersionChecker;
+        {$ifdef unix}
+           fIdSysLog: TIdSysLog;
+           fIdSysLogMessage : TIdSysLogMessage;
+        {$else}
+           fEventLog : TEventLog;
+        {$endif}
 
-        function Get_UseSysLog : boolean;
+        //function Get_UseSysLog : boolean;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
 
         function AppName     : string;
         function FullTitle   : string;
-        function LogFileName : TFilename;
+        //function LogFileName : TFilename;
         //function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
-        //procedure CheckVersion;
         Procedure Log (EventType : TEventType; Msg : String); overload;
         Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const); overload;
-        Procedure ResetLog;
+        //Procedure ResetLog;
         function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function  Translate(Const aDomain : string; Const aString : string) : string;
 
@@ -60,25 +65,24 @@ type { TxPLApplication =======================================================}
         property Version   : string             read fVersion;
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
-        property UseSysLog : boolean            read Get_UseSysLog;
-        //property VChecker  : TVersionChecker    read fVChecker;
+        //property UseSysLog : boolean            read Get_UseSysLog;
      end;
 
 var xPLApplication : TxPLApplication;
 
 implementation // =============================================================
-uses filechannel
-     , sharedlogger
-     , consolechannel
+uses IdStack
+     //, filechannel
+     //, sharedlogger
+     //, consolechannel
      ;
 
 // ============================================================================
 const
      K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
-     K_MSG_LOGGING         = 'Logging in %s';
-     K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
-     K_FULL_TITLE          = '%s version %s by %s (build %s)';
-     //K_XPATH               = '/xpl-plugin[@vendor="%s"]/device[@id="%s-%s"]/attribute::%s';
+     //K_MSG_LOGGING         = 'Logging in %s';
+     //K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
+     K_FULL_TITLE          = '%s v%s by %s (build %s)';
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
@@ -89,33 +93,34 @@ begin
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
    fVersion := GetVersion;
 
-   {$ifdef fpc}
+   //{$ifdef fpc}
    //if not AllowMultiInstance then
    //   if InstanceRunning(fAdresse.RawxPL) then Log(etError,K_MSG_ALREADY_STARTED);
-   {$endif}
+   //{$endif}
 
-   fIdSysLog:= nil;
    {$ifdef unix}
+      fIdSysLog := nil;
       fIdSysLog := TIdSysLog.Create(self);
       fIdSysLog.Port := 514;
       fIdSysLog.Host := '127.0.0.1';
       fIdSysLog.Active := True;
       fIdSysLogMessage := TIdSysLogMessage.Create(self);
+   {$else}
+      fEventLog := TEventLog.Create(self);
+      fEventLog.DefaultEventType:=etInfo;
+      fEventLog.LogType:=ltSystem;
+      fEventLog.Identification := AppName;
+      fEventLog.Active:=true;
+      fEventlog.RegisterMessageFile('');
    {$endif}
 
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
-   {fVChecker := TVersionChecker.Create(self);
-   fvChecker.ServerLocation := K_DEFAULT_ONLINESTORE;
-   fvChecker.CurrentVersion := aVersion;
-   fvChecker.VersionNode    := Format(K_XPATH,[Adresse.Vendor, Adresse.Vendor, Adresse.Device, 'version']);
-   fvChecker.DownloadNode   := Format(K_XPATH,[Adresse.Vendor, Adresse.Vendor, Adresse.Device, 'download']);}
-
-   if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
-   Logger.Channels.Add(TFileChannel.Create(LogFileName));
+//   if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
+//   Logger.Channels.Add(TFileChannel.Create(LogFileName));
    Log(etInfo,FullTitle);
-   Log(etInfo,K_MSG_LOGGING,[LogFileName]);
+//   Log(etInfo,K_MSG_LOGGING,[LogFileName]);
 
    fSettings   := TxPLCustomSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
@@ -132,13 +137,13 @@ begin
    inherited;
 end;
 
-function TxPLApplication.LogFileName: TFileName;
-begin
-   if not UseSysLog then
-      result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device])
-   else
-      result := 'syslog';
-end;
+//function TxPLApplication.LogFileName: TFileName;
+//begin
+//   if not UseSysLog then
+//      result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device])
+//   else
+//      result := 'syslog';
+//end;
 
 procedure TxPLApplication.RegisterMe;
 var aPath, aVersion, aNiceName : string;
@@ -160,45 +165,47 @@ end;
 Procedure TxPLApplication.Log(EventType : TEventType; Msg : String);
 begin
    {$ifdef unix}
-   fIdSysLogMessage.Msg.Text := GetDevice + ':' + Msg;
-   Case EventType of
-        etInfo    : fIdSysLogMessage.Severity := slInformational;
-        etWarning : fIdSysLogMessage.Severity := slWarning;
-        etError   : fIdSysLogMessage.Severity := slError;
-   end;
-   fIdSysLog.SendLogMessage(fIdSysLogMessage);
-   if IsConsole then writeln(fIdSysLogMessage.Msg.Content);
+      fIdSysLogMessage.Msg.Text := GetDevice + ':' + Msg;
+      Case EventType of
+           etInfo    : fIdSysLogMessage.Severity := slInformational;
+           etWarning : fIdSysLogMessage.Severity := slWarning;
+           etError   : fIdSysLogMessage.Severity := slError;
+      end;
+      fIdSysLog.SendLogMessage(fIdSysLogMessage);
    {$else}
-   Case EventType of
-        etInfo    : Logger.Send(Msg);                                          // Info are only stored in log file
-        etWarning : Logger.SendWarning(Msg);                                   // Warn are stored in log, displayed but doesn't stop the app
-        etError   : begin                                                      // Error are stored as error in log, displayed and stop the app
-                       Logger.SendError(Msg);
-                       Raise Exception.Create(Msg);
-                    end;
-   end;
+   //Case EventType of
+   //     etInfo    : Logger.Send(Msg);                                          // Info are only stored in log file
+   //     etWarning : Logger.SendWarning(Msg);                                   // Warn are stored in log, displayed but doesn't stop the app
+   //     etError   : begin                                                      // Error are stored as error in log, displayed and stop the app
+   //                    Logger.SendError(Msg);
+   //                    Raise Exception.Create(Msg);
+   //                 end;
+   //end;
+      fEventLog.Log(EventType,Msg);
    {$endif}
+   if IsConsole then writeln(FormatDateTime('dd/mm hh:mm:ss',now),' ',EventTypeToxPLLevel(EventType),' ',Msg);
+   if EventType = etError then Raise Exception.Create(Msg);
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
 end;
 
-function TxPLApplication.Get_UseSysLog : boolean;
-begin
-   Result := Assigned(fIdSysLog);
-end;
+//function TxPLApplication.Get_UseSysLog : boolean;
+//begin
+//   Result := Assigned(fIdSysLog);
+//end;
 
 Procedure TxPLApplication.Log(EventType : TEventType; Fmt : String; Args : Array of const);
 begin
    Log(EventType,Format(Fmt,Args));
 end;
 
-procedure TxPLApplication.ResetLog;
-var f : textfile;
-begin
-   System.Assign(f,LogFileName);
-   ReWrite(f);
-   Writeln(f,'');
-   Close(f);
-end;
+//procedure TxPLApplication.ResetLog;
+//var f : textfile;
+//begin
+//   System.Assign(f,LogFileName);
+//   ReWrite(f);
+//   Writeln(f,'');
+//   Close(f);
+//end;
 
 function TxPLApplication.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
 var i : integer;
@@ -224,5 +231,26 @@ begin
    if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString]
             else result := aString;
 end;
+
+{$R C:/pp/packages/fcl-base/src/win/fclel.res}                                 // Load resource strings for windows event log
+
+initialization // =============================================================
+   InstanceInitStyle  := iisHostName;
+   LocalAddresses     := TStringList.Create;
+   AllowMultiInstance := false;
+   {$ifdef fpc}
+      OnGetVendorName      := @GetVendorNameEvent;                             // These functions are not known of Delphi and
+      OnGetApplicationName := @GetApplicationEvent;                            // are present here for linux behaviour consistency
+      VersionInfo          := TxPLVersionInfo.Create;
+   {$else}
+      VersionInfo          := TxPLVersionInfo.Create(ParamStr(0));
+   {$endif}
+
+   TIdStack.IncUsage;
+   LocalAddresses.Assign(GStack.LocalAddresses);
+
+finalization // ===============================================================
+   LocalAddresses.Free;
+   VersionInfo.Free;
 
 end.
