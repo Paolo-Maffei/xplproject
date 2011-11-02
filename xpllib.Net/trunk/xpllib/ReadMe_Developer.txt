@@ -15,16 +15,18 @@ How to create a new release;
 
 3 - set type to "release" and Rebuild solution
 
-4 - exit Visual Studio, saving any changes
+4 - commit changes to SVN repository, and create a new TAG for the new release
 
-5 - package the following files from the bin/release folder
+5 - exit Visual Studio, saving any changes
+
+6 - package the following files from the bin/release folder
        xpllib.dll        : the actual library
        xpllib.xml        : documentation file
        gpl.txt           : license document
        readme.txt        : readme documentation
 
-6 - publish the package on the website
+7 - publish the package on the website
 
-7 - update the xml plugin file with the updated versions
+8 - update the xml plugin file with the updated versions
 
 

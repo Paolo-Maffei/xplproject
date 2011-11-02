@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.4
+'* Version 5.5
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -406,7 +406,7 @@ Public Class xPLListener
         LogError("xPLListener.RestoreFromState", "State created by; AppVersion = " & aversion & ", xPLLib version = " & xversion)
 
         Select Case xversion
-            Case "5.0", "5.1", "5.2", "5.3", "5.4"
+            Case "5.0", "5.1", "5.2", "5.3", "5.4", "5.5"
                 RestoreFromState50(lst, i, RestoreEnabled)
             Case Else
                 ' SavedState created by an unknown version of xpllib
