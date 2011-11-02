@@ -218,6 +218,7 @@ NEW in 5.5
   - xPLMessage now has properties SchemaClass and SchemaType besides just Schema
     
 FIXED in 5.5
+  - Exception thrown when restoring a device from a state string (thx to Tony Tofts)
   - Fragmented messages could create an endless message loop. Received message IDs are
     now stored and retained temporarily to prevent receiving the same message again if
     another device still requests additional fragments.

@@ -625,7 +625,7 @@ Public Class xPLDevice
     Private Sub NewFromState54(ByVal lst() As String, ByVal i As Integer, ByVal RestoreEnabled As Boolean, ByRef db As String)
         ' get fragmented count
         db = db & vbCrLf & "Fragmented ID count: " & lst(i)
-        _FragmentedIDCount = Integer.Parse(StateDecode(lst(i)))
+        _FragmentedIDCount = Integer.Parse(lst(i))
         i += 1
         ' Restore AutoFragmentation setting
         db = db & vbCrLf & "Auto fragment messages: " & lst(i)
