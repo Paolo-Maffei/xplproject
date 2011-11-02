@@ -1,6 +1,6 @@
 '* xPL Library for .NET
 '*
-'* Version 5.4
+'* Version 5.5
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -204,6 +204,12 @@ Public Class xPLDevice
     ''' </summary>
     ''' <remarks></remarks>
     Friend _FragmentedMessageList As New Collection
+    ''' <summary>
+    ''' List with messages that need to be ignored. Contains
+    ''' only expire dates, stored with the messageID as key, formatted as 'xpladdress:xxx'
+    ''' </summary>
+    ''' <remarks></remarks>
+    Friend _FragmentIgnoreList As New Collection
     ''' <summary>
     ''' Rotating fragmented message ID generator.
     ''' </summary>
@@ -601,7 +607,7 @@ Public Class xPLDevice
         Try
 
             Select Case xVersion
-                Case "5.4"
+                Case "5.4", "5.5"
                     NewFromState54(lst, i, RestoreEnabled, db)
                 Case "5.0", "5.1", "5.2", "5.3"
                     NewFromState50(lst, i, RestoreEnabled, db)
@@ -1389,8 +1395,8 @@ Public Class xPLDevice
     End Function
 
     ''' <summary>
-    ''' Handle an incoming fragment class message, recerating the fragmented message
-    ''' of resending fragments requested.
+    ''' Handle an incoming fragment class message, recreating the fragmented message
+    ''' or resending fragments requested.
     ''' </summary>
     ''' <param name="msg"></param>
     ''' <remarks></remarks>
@@ -1408,22 +1414,25 @@ Public Class xPLDevice
                     Exit Sub
                 End Try
                 Dim mid As String = msg.Source & ":" & fk.MessageID
-                ' Go and try to find earlier fragments in the list
-                If _FragmentedMessageList.Contains(mid) Then
-                    ' add fragment to existing message
-                    Try
+                ' If its not in our 'ignore' list, then handle
+                If Not _FragmentIgnoreList.Contains(mid) Then
+                    ' Go and try to find earlier fragments in the list
+                    If _FragmentedMessageList.Contains(mid) Then
+                        ' add fragment to existing message
+                        Try
 
-                        CType(_FragmentedMessageList(mid), xPLFragmentedMsg).AddFragment(msg)
-                    Catch ex As xPLFragmentedMsg.FragmentationException
-                        ' bad message, do nothing, simply ignore
-                    End Try
-                Else
-                    ' create it, just creating will add it to the list, no need to store anywhere
-                    Try
-                        Dim fm As New xPLFragmentedMsg(msg, Me)
-                    Catch ex As xPLFragmentedMsg.FragmentationException
-                        ' bad message, do nothing, simply ignore
-                    End Try
+                            CType(_FragmentedMessageList(mid), xPLFragmentedMsg).AddFragment(msg)
+                        Catch ex As xPLFragmentedMsg.FragmentationException
+                            ' bad message, do nothing, simply ignore
+                        End Try
+                    Else
+                        ' create it, just creating will add it to the list, no need to store anywhere
+                        Try
+                            Dim fm As New xPLFragmentedMsg(msg, Me)
+                        Catch ex As xPLFragmentedMsg.FragmentationException
+                            ' bad message, do nothing, simply ignore
+                        End Try
+                    End If
                 End If
             Case "fragment.request"
                 If msg.MsgType = xPLMessageTypeEnum.Command And (msg.Target = Me.Address Or msg.Target = "*") Then

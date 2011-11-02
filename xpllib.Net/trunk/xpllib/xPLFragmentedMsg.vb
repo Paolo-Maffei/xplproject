@@ -1,6 +1,6 @@
 ﻿'* xPL Library for .NET
 '*
-'* Version 5.4
+'* Version 5.5
 '*
 '* Copyright (c) 2009-2011 Thijs Schreijer
 '* http://www.thijsschreijer.nl
@@ -425,6 +425,15 @@ Public Class xPLFragmentedMsg
                     End If
                 End If
             Next
+        Next
+        ' message completed, now add to ignore list
+        Me._Parent._FragmentIgnoreList.Add(Now().AddMinutes(5), _MessageID)
+        ' remove any expired items from the list
+        For n As Integer = Me._Parent._FragmentIgnoreList.Count To 1 Step -1
+            If CDate(Me._Parent._FragmentIgnoreList(n)) < Now() Then
+                ' item expired, so remove it
+                Me._Parent._FragmentIgnoreList.Remove(n)
+            End If
         Next
     End Sub
 
