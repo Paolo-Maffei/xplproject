@@ -34,7 +34,7 @@ type TButtonOption = (
         public
            function  Edit : boolean;     dynamic;
            procedure Show(options : TButtonOptions);
-           procedure ShowForEdit(const options : TButtonOptions; const bModal : boolean = false; const bAdvancedMode : boolean = false);
+           procedure ShowForEdit(const options : TButtonOptions; const bModal : boolean = false; const bAdvancedMode : boolean = true);
            function  SelectFile : boolean;
      end;
 
@@ -45,7 +45,7 @@ uses frm_xPLMessage
      , Forms
      ;
 
-procedure TxPLMessageGUI.ShowForEdit(const options: TButtonOptions; const bModal: boolean; const bAdvancedMode : boolean = false);
+procedure TxPLMessageGUI.ShowForEdit(const options: TButtonOptions; const bModal: boolean; const bAdvancedMode : boolean = true);
 begin
    with TfrmxPLMessage.Create(Application) do try
         xPLMessage := self;

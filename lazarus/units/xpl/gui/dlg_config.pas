@@ -16,6 +16,7 @@ type
   TDlgConfig = class(TDlgTemplate)
     DlgacApply: TAction;
     frameConfig1: TframeConfig;
+    pnlGUI: TPanel;
     ToolButton1: TToolButton;
     procedure DlgacApplyExecute(Sender: TObject);
   private
@@ -48,13 +49,13 @@ end;
 procedure TDlgConfig.DlgacApplyExecute(Sender: TObject);
 var Msg : TConfigResponseCmnd;
 begin
-     Assert(xPLApplication is TxPLCustomListener);
-     Msg := TConfigResponseCmnd.Create(self);
-     FrameConfig1.Assign(Msg);
-     Msg.target.Assign(xPLApplication.Adresse);
-     Msg.Source.Assign(Msg.target);
-     TxPLCustomListener(xPLApplication).HandleConfigMessage(Msg);
-     Msg.Free;
+   Assert(xPLApplication is TxPLCustomListener);
+   Msg := TConfigResponseCmnd.Create(self);
+   FrameConfig1.Assign(Msg);
+   Msg.target.Assign(xPLApplication.Adresse);
+   Msg.Source.Assign(Msg.target);
+   TxPLCustomListener(xPLApplication).HandleConfigMessage(Msg);
+   Msg.Free;
 end;
 
 initialization

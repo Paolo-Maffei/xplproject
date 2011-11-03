@@ -39,7 +39,7 @@ type { TxPLActionPanel }
         procedure ActClick(aSender : TObject);
         function GetTime: TDateTime;
         procedure SetTime(const AValue: TDateTime);
-        procedure TrackChange(aSender : TObject);
+        procedure TrackChange({%H-}aSender : TObject);
      public
         constructor create(aOwner : TComponent); override;
      property
