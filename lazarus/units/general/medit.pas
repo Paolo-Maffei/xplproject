@@ -31,7 +31,7 @@ TMedit = class(TEdit)
    procedure Register;
 
 implementation
-uses uRegExpr;
+uses RegExpr;
 
 procedure Register;
 begin

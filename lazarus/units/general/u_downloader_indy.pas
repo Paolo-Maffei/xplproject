@@ -30,7 +30,7 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
         procedure HeadersAvailable(Sender: TObject; AHeaders: TIdHeaderList; var VContinue: Boolean);
         procedure WorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Int64);
         procedure Work(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
-        procedure WorkEnd(ASender: TObject; AWorkMode: TWorkMode);
+        procedure WorkEnd({%h-}ASender: TObject; AWorkMode: TWorkMode);
         procedure SetProxy(const aProxyInf : string);
      public
         constructor Create;
@@ -47,7 +47,7 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
      function HTTPDownload(const aSource, aDestination, aProxyInf : string) : boolean;
 
 implementation // =============================================================
-uses uRegExpr
+uses RegExpr
      , SysUtils
      ;
 
