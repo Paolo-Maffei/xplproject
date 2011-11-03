@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, StdCtrls, ExtCtrls,
   RTTICtrls
-  , u_xpl_message;
+  , u_xpl_custom_message;
 
 type
 
@@ -35,15 +35,15 @@ type
     procedure edtBodyEditingDone(Sender: TObject);
     procedure edtSchemaEditingDone(Sender: TObject);
   private
-    fMessage : TxPLMessage;
+    fMessage : TxPLCustomMessage;
     fReadOnly: boolean;
-    procedure Set_Message(const AValue: TxPLMessage);
+    procedure Set_Message(const AValue: TxPLCustomMessage);
     procedure Set_ReadOnly(const AValue: boolean);
   public
     constructor Create(TheOwner: TComponent); override;
 
   published
-    property TheMessage : TxPLMessage read fMessage write Set_Message;
+    property TheMessage : TxPLCustomMessage read fMessage write Set_Message;
     property ReadOnly   : boolean     read fReadOnly write Set_ReadOnly;
   end; 
 
@@ -74,7 +74,7 @@ begin
   If Image1.Visible then Image1.Picture.LoadFromLazarusResource(fMessage.Schema.Classe);
 end;
 
-procedure TTMessageFrame.Set_Message(const AValue: TxPLMessage);
+procedure TTMessageFrame.Set_Message(const AValue: TxPLCustomMessage);
 begin
    fMessage := aValue;
    cbMsgType.Link.TIObject := AValue;
