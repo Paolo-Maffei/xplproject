@@ -34,10 +34,10 @@ type
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
-    procedure IdHTTP1Work(ASender: TObject; AWorkMode: TWorkMode; AWorkCount: Int64);
-    procedure IdHTTP1WorkBegin(ASender: TObject; AWorkMode: TWorkMode; AWorkCountMax: Int64);
-    procedure IdHTTP1WorkEnd(ASender: TObject; AWorkMode: TWorkMode);
-    procedure IdHTTP1Abort(aSender: TObject; anError : integer);
+    procedure IdHTTP1Work({%h-}ASender: TObject; {%h-}AWorkMode: TWorkMode; AWorkCount: Int64);
+    procedure IdHTTP1WorkBegin({%h-}ASender: TObject; {%h-}AWorkMode: TWorkMode; AWorkCountMax: Int64);
+    procedure IdHTTP1WorkEnd({%h-}ASender: TObject; {%h-}AWorkMode: TWorkMode);
+    procedure IdHTTP1Abort({%h-}aSender: TObject; anError : integer);
   private
     Notify,AutoStart : boolean;
     downloader  : TDownloader;

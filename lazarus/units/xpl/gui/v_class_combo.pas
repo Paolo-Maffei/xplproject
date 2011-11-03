@@ -25,7 +25,7 @@ type TxPLClassCombo = class(TCombobox)
      procedure Register;
 
 implementation
-uses uxPLConst, uRegExpr, Graphics;
+uses uxPLConst, RegExpr, Graphics;
 
 procedure Register;
 begin
