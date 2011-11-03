@@ -51,7 +51,7 @@ type // TxPLHeader ============================================================
        function    IsValid : boolean; dynamic;
 
        procedure   Reply;
-       function    MatchesFilter(aFilterSet : TPersistent) : boolean;			// Avoid circular references with u_xpl_config
+       function    MatchesFilter(aFilterSet : TStringList) : boolean;
        function    SourceFilter : string;                                       // Returns a message like a filter string
        function    TargetFilter : string;
 
@@ -70,9 +70,8 @@ const K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10
 implementation //==============================================================
 uses SysUtils
      , typinfo
-     , uRegExpr
+     , RegExpr
      , StrUtils
-     , u_xpl_config
      ;
 
 // ============================================================================
@@ -83,43 +82,31 @@ const K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=]
       K_FMT_FILTER        = '%s.%s.%s';
 
 // TxPLHeader Object ==========================================================
-//constructor TxPLHeader.create(aOwner : TComponent);
-//begin
-//   inherited;
-//   include(fComponentStyle,csSubComponent);
-//
-//   fSource := TxPLAddress.Create;
-//   fTarget := TxPLTargetAddress.Create;
-//   fSchema := TxPLSchema.Create;
-//
-//   ResetValues;
-//end;
-
 constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string = '');
 var  sFlt : TStringList;
 begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
-   fSource := TxPLAddress.Create;
-   fTarget := TxPLTargetAddress.Create;
-   fSchema := TxPLSchema.Create;
-
-//   Create(aOwner);
    if aFilter <> '' then begin
       sFlt := TStringList.Create;
       try
          sFlt.Delimiter := '.';
          sFlt.StrictDelimiter := True;
-         sFlt.DelimitedText := aFilter;                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-         fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                    // Creates source and target with the same informations
+         sFlt.DelimitedText := aFilter;                                         // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+         fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                // Creates source and target with the same informations
          fTarget := TxPLTargetAddress.Create(fSource);
          MessageType := StrToMsgType(sFlt[0]);
          fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
       finally
         sFlt.Free;
       end;
-   end else ResetValues;
+   end else begin
+      fSource := TxPLAddress.Create;
+      fTarget := TxPLTargetAddress.Create;
+      fSchema := TxPLSchema.Create;
+      ResetValues;
+   end;
 end;
 
 destructor TxPLHeader.destroy;
@@ -161,16 +148,13 @@ begin
    MessageType := stat;
 end;
 
-function TxPLHeader.MatchesFilter(aFilterSet: TPersistent): boolean;
+function TxPLHeader.MatchesFilter(aFilterSet: TStringList): boolean;
 var i : integer;
 begin
-   Assert(aFilterSet is TxPLConfigItem);
-   with TxPLConfigItem(aFilterSet) do begin
-      result := (ValueCount=0);                                                // If no filter present then always pass
-      if not result then                                                       // if filters are present
-         for i:= 0 to Pred(ValueCount) do                                      // check if at least one matches
-             result := result or xPLMatches(ValueAtId(i), SourceFilter);
-   end;
+   result := (aFilterSet.Count = 0);
+   if not result then                                                           // if filters are present
+      for i:= 0 to Pred(aFilterSet.Count) do                                    // check if at least one matches
+          result := result or xPLMatches(aFilterSet[i], SourceFilter);
 end;
 
 function TxPLHeader.IsValid: boolean;

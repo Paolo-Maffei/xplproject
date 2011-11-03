@@ -17,6 +17,7 @@ const K_MSG_TYPE_HEAD = 'xpl-';
 Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
 
      IntArray = array of integer;
+     StrArray = array of string;
 
      TStrParamEvent = procedure(const aString : string) of object;
 
@@ -64,16 +65,17 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      function GetApplicationEvent : string;
 
 const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
+      XPL_UDP_BASE_PORT     : Integer = 3865;                                   // Port used by devices to send messages
+      XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
 
 var  LocalAddresses     : TStringList;
      InstanceInitStyle  : TInstanceInitStyle;
      AllowMultiInstance : boolean;
+     VersionInfo        : TxPLVersionInfo;
 
 implementation  //=============================================================
 uses StrUtils
      , TypInfo
-//     , JclStrings
-     , IdStack
      , DateUtils
      ;
 
@@ -273,21 +275,6 @@ begin
     Result := Format('%.4d%.2d%.2d%.2d%.2d%.2d',
            [year,monthofYear,dayofmonth,HourOf24Day,MinuteOfHour,SecondOfMinute]);
 end;
-
-initialization // =============================================================
-   InstanceInitStyle  := iisHostName;
-   LocalAddresses     := TStringList.Create;
-   AllowMultiInstance := false;
-   {$ifdef fpc}
-      OnGetVendorName      := @GetVendorNameEvent;                             // These functions are not known of Delphi and
-      OnGetApplicationName := @GetApplicationEvent;                            // are present here for linux behaviour consistency
-   {$endif}
-
-   TIdStack.IncUsage;
-   LocalAddresses.Assign(GStack.LocalAddresses);
-
-finalization // ===============================================================
-   LocalAddresses.Free;
 
 end.
 

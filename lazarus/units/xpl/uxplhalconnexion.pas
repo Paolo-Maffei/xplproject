@@ -5,7 +5,7 @@ unit uxPLHalConnexion;
 interface
 
 uses
-  Classes, SysUtils, IdTelnet, uxPLAddress;
+  Classes, SysUtils, IdTelnet, u_xPL_Address;
 
 type
     TxPLHalConfigured = procedure of object;
@@ -42,7 +42,7 @@ type
 
 
 implementation { TxPLHalConnexion }
-uses StrUtils, cStrings, cUtils;
+uses StrUtils;
 
 procedure TxPLHalConnexion.DataAvailable(Sender: TIdTelnet; const Buffer: String);
 function AnalyseReponse(const input : string; out comment : string) : integer;

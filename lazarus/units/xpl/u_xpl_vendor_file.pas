@@ -54,7 +54,7 @@ type { TxPLVendorSeedFile ====================================================}
      end;
 
 implementation //==============================================================
-uses uRegExpr
+uses RegExpr
      , u_downloader_Indy
      , u_xpl_application
      ;

@@ -63,7 +63,7 @@ type // TxPLAddress ===========================================================
        procedure Set_IsGeneric(const AValue: boolean);
     public
        function  IsValid : boolean;
-       function  MatchesGroup(const aGroupSet : TPersistent): boolean;			// Avoid circular references with config
+       function  MatchesGroup(const aGroupSet : TStringList): boolean;
 
     published
        property  IsGeneric : boolean  read Get_IsGeneric write Set_IsGeneric stored false;
@@ -76,7 +76,6 @@ implementation // =============================================================
 uses IdStack
      , SysUtils
      , StrUtils
-     , u_xpl_config
      , fpc_delphi_compat
      ;
 
@@ -208,16 +207,17 @@ begin
              else ResetValues;
 end;
 
-function TxPLTargetAddress.MatchesGroup(const aGroupSet : TPersistent): boolean;
+function TxPLTargetAddress.MatchesGroup(const aGroupSet : TStringList): boolean;
 var i : integer;
 begin
-   Assert (aGroupSet is TxPLConfigItem);
-   with TxPLConfigItem(aGroupSet) do begin
+
+//   with TxPLConfigItem(aGroupSet) do begin
+//   with aGroupSet do begin
       result := IsGroup;
       if result then
-         for i := 1 to ValueCount do
-             result := result or (ValueAtId(i) = RawxPL);
-   end;
+         for i := 0 to Pred(aGroupSet.Count) do
+             result := result or (aGroupSet[i] = RawxPL);
+//   end;
 end;
 
 initialization // =============================================================

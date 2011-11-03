@@ -34,9 +34,6 @@ type // TxPLMessage ===========================================================
         function ElementByName(const anItem : string) : string;
         function ProcessedxPL : string;
 
-        procedure LoadFromFile(aFileName : string);
-        procedure SaveToFile(aFileName : string);
-
         procedure ReadFromJSON(const aCom : TCommandType);
 
 //        procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
@@ -50,7 +47,7 @@ const K_KEYWORDS : Array[0..11] of String = ( 'TIMESTAMP','DATE_YMD','DATE_UK','
 
 implementation { ==============================================================}
 Uses SysUtils
-     , uRegExpr
+     , RegExpr
      , StrUtils
      , u_xpl_common
      , uxPLConst
@@ -85,16 +82,6 @@ begin
         end;
         Free;
    end;
-end;
-
-procedure TxPLMessage.SaveToFile(aFileName: string);
-begin
-   StreamObjectToFile(aFileName, self);
-end;
-
-procedure TxPLMessage.LoadFromFile(aFileName: string);
-begin
-   ReadObjectFromFile(aFileName, self);
 end;
 
 procedure TxPLMessage.ReadFromJSON(const aCom: TCommandType);

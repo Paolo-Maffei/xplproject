@@ -43,8 +43,8 @@ type { TxPLUDPClient ==========================================================}
            fOnReceived : TStrParamEvent;
 
            procedure AddBinding(const aIP : string; const aPort : integer);
-           procedure UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
-           procedure UDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage : String; const AExceptionClass : TClass);
+           procedure UDPRead({%H-}AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+           procedure UDPException({%H-}AThread: TIdUDPListenerThread; {%H-}ABinding: TIdSocketHandle; const AMessage : String; const {%H-}AExceptionClass : TClass);
         public
            constructor Create(
                        const aOwner : TComponent;

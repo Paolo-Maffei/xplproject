@@ -108,6 +108,7 @@ constructor TxPLCollectionItem.Create(aOwner: TCollection);
 begin
   inherited Create(aOwner);
   fCreateTS := now;
+  fModifyTS := fCreateTS;
 end;
 
 procedure TxPLCollectionItem.Assign(Source: TPersistent);
@@ -175,6 +176,8 @@ begin
    Result := -1;
 end;
 
-
+initialization
+   Classes.RegisterClass(TxPLCollectionItem);
+//   Classes.RegisterClass(TxPLCollection);
 end.
 

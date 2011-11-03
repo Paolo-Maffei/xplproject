@@ -34,7 +34,6 @@ type // TxPLCustomSettings ====================================================
      TxPLCustomSettings = class(TComponent)
      private
         fRegistry : TRegistry;
-        fRightsError : boolean;
         fProxyEnable : integer;
         fProxyServer,
         fBroadCastAddress,
@@ -56,6 +55,7 @@ type // TxPLCustomSettings ====================================================
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
      public
         constructor Create(AOwner: TComponent); override;
+        procedure InitComponent;
         destructor  Destroy; override;
 
         function    IsValid : boolean;
@@ -72,7 +72,6 @@ type // TxPLCustomSettings ====================================================
         property ListenOnAddress   : string  read fListenOnAddress    write Set_ListenOnAddress;
         property ListenToAddresses : string  read fListenToAddresses  write Set_ListenToAddresses;
         property BroadCastAddress  : string  read fBroadCastAddress   write Set_BroadCastAddress;
-        property RightsError       : boolean read fRightsError;
         property ProxyEnable       : boolean read Get_ProxyEnable;
         property ProxyServer       : string  read fProxyServer;
      end;
@@ -108,8 +107,12 @@ begin
    inherited;
 
    fRegistry := TRegistry.Create(KEY_READ);
-   fRightsError := false;
+   InitComponent;
 
+end;
+
+procedure TxPLCustomSettings.InitComponent;
+begin
    fBroadCastAddress := ReadKeyString(K_REGISTRY_BROADCAST,'255.255.255.255');
    fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON,K_XPL_SETTINGS_NETWORK_ANY);
    fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO,K_XPL_SETTINGS_NETWORK_ANY);
@@ -124,9 +127,9 @@ begin
    {$else}
      sl := TStringList.Create;
      sl.Delimiter := '/';
-     sl.DelimitedText := GetEnvironmentVariable('http_proxy');                   // may have http://xx.xx.xx.xx:yy/ as input
+     sl.DelimitedText := GetEnvironmentVariable('http_proxy');                 // may have http://xx.xx.xx.xx:yy/ as input
      for i:=0 to pred(sl.count) do
-         if Pos('.',sl[i])<>0 then fProxyServer := sl[i];                        // Quick & dirty way to extract server ip & port
+         if Pos('.',sl[i])<>0 then fProxyServer := sl[i];                      // Quick & dirty way to extract server ip & port
      sl.free;
      if fProxyServer<>'' then fProxyEnable := 1 else fProxyEnable := 0;
    {$endif}
@@ -156,7 +159,6 @@ begin
       try
          fRegistry.WriteString(aKeyName,aValue);                                // Try to write the value
       except
-         fRightsError := true;                                                  // We may have an error if we don't have access rights
       end;
    finally
       fRegistry.Access:=KEY_READ;
@@ -274,7 +276,6 @@ begin
          fRegistry.WriteString(K_XPL_REG_PATH_KEY,ParamStr(0));
          fRegistry.WriteString(K_XPL_REG_PRODUCT_NAME,GetProductName);
       except
-         fRightsError := True;
       end;
    finally
       fRegistry.Access := KEY_READ;
