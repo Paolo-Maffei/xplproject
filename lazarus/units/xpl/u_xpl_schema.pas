@@ -16,7 +16,6 @@ unit u_xPL_Schema;
 interface
 
 uses Classes
-     , u_xpl_common
      , u_xpl_rawset
      ;
 

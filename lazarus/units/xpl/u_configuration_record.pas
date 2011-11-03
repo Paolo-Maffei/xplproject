@@ -14,7 +14,6 @@ uses
   u_xml_plugins,
   u_xpl_address,
   u_xpl_config,
-  u_xpl_common,
   u_xpl_messages,
   u_xpl_application,
   u_xpl_custom_message;
@@ -34,7 +33,7 @@ type { TConfigurationRecord ==================================================}
         function Get_CfgCurrAvail: boolean;
         function Get_CfgListAvail: boolean;
         function Get_XMLCfgAvail: boolean;
-        procedure OnTimer(sender : TObject);
+        procedure OnTimer({%h-}sender : TObject);
      public
         constructor Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
         destructor  Destroy; override;

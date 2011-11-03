@@ -169,31 +169,18 @@ begin
 end;
 
 function TxPLBody.Get_RawxPL: string;
-//var i : integer;
 begin
-//   for i:= 0 to ItemCount-1 do begin
-//          result := Result + Keys[i] + '=';
-//          if i<Values.Count then result := Result + Values[i];
-//          result := Result + #10;
-//   end;
-//   result := Format(K_MSG_BODY_FORMAT,[result]);
    result := Format(K_MSG_BODY_FORMAT,[AnsiReplaceStr(Strings.Text,#13,'')]);
 end;
 
 function TxPLBody.Get_Strings: TStringList;
 var i : integer;
-    //a : string;
 begin
-//   if not Assigned(fStrings) then fStrings := TStringList.Create;
-//   fStrings.Clear;
    fStrings.Assign(fKeys);
-   for i:= 0 to Pred(ItemCount) do // begin
+   for i:= 0 to Pred(ItemCount) do
        fStrings[i] := fStrings[i] + '=' + Values[i];
-//       fStrings.Add( Keys[i] + '=' + Values[i] );
 
-//   fStrings.Text:=AnsiReplaceStr(RawxPl,#10,#13);
    result := fStrings;
-   //a := result.Text;
 end;
 
 procedure TxPLBody.Set_Strings(const AValue: TStringList);

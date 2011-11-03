@@ -30,7 +30,7 @@ type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfN
         FNoHubTimerCount : integer;
 
         procedure Set_Rate(const AValue: TxPLRateFrequency);
-        procedure Tick(sender : TObject);
+        procedure Tick({%H-}sender : TObject);
      public
         constructor Create(AOwner: TComponent); override;
      published

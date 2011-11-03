@@ -41,6 +41,9 @@ type { TxPLCustomMessage =====================================================}
         function    IsValid      : boolean; override;
         function    MustFragment : boolean;
 
+        procedure LoadFromFile(aFileName : string);
+        procedure SaveToFile(aFileName : string);
+
      published
         property Body   : TxPLBody read fBody  ;
         property RawXPL : string   read Get_RawXPL  write Set_RawXPL stored false;
@@ -123,6 +126,16 @@ begin
    BodyEnd          := LastDelimiter('}',LeMessage);
    inherited RawxPL := AnsiLeftStr(LeMessage,BodyStart-2);
    Body.RawxPL      := Copy(LeMessage,BodyStart,BodyEnd-BodyStart);
+end;
+
+procedure TxPLCustomMessage.SaveToFile(aFileName: string);
+begin
+   StreamObjectToFile(aFileName, self);
+end;
+
+procedure TxPLCustomMessage.LoadFromFile(aFileName: string);
+begin
+   ReadObjectFromFile(aFileName, self);
 end;
 
 

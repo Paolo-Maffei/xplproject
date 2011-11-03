@@ -145,7 +145,6 @@ end;
 procedure TxPLSender.SendHBeatRequestMsg;
 var HBeatReq :THeartBeatReq;
 begin
-   //SendMessage(cmnd,K_ADDR_ANY_TARGET,Schema_HBeatReq,['command'],['request']);
    HBeatReq := THeartBeatReq.Create(nil);
    Send(HBeatReq);
    HBeatReq.Free;

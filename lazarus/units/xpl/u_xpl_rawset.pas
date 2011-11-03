@@ -89,8 +89,6 @@ begin
    list := TStringList.Create;
    list.Delimiter := fRawxPL.Delimiter;
    list.DelimitedText := aValue;
-   //ExtractTokensL(aValue, fRawxPL.Delimiter, #0, true, list);
-   //StrTokenToStrings(aValue,fRawxPL.Delimiter,list);
 
    For i := 0 to Pred(list.count) do Set_Element(i,list[i]);
    list.free;

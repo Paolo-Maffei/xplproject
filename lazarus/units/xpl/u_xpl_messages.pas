@@ -12,7 +12,6 @@ uses Classes
      , SysUtils
      , u_xpl_message
      , u_xpl_common
-     , fpc_delphi_compat
      ;
 
 type // THeartBeatMsg =========================================================
@@ -73,34 +72,50 @@ type // THeartBeatMsg =========================================================
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      end;
 
+     { TConfigListStat }
+
+     TConfigListStat = class(TConfigListCmnd)
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     public
+        function ItemMax(const i : integer) : integer;
+        function ItemName(const i : integer) : string;
+     end;
+
      { TConfigListMsg }
 
      TConfigCurrentCmnd = class(TConfigListCmnd)
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      end;
 
+     { TConfigResponseCmnd }
+
      TConfigResponseCmnd = class(TConfigMessageFamily)
-        fFilters : TStringList;
-        fGroups  : TStringList;
+     private
+//        fFilters : TStringList;
+//        fGroups  : TStringList;
+        fMultiValued : TStringList;
+
+        function Get_Filters : TStringList;
+        function Get_Groups : TStringList;
+        procedure Read_Multivalued(const aListIndex : integer);
+        function  get_interval: integer;
+        function  get_newconf: string;
+        procedure set_interval(const AValue: integer);
+        procedure set_newconf(const AValue: string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
         destructor  Destroy; override;
         function  IsCoreValue(const aIndex : integer) : boolean;
-     private
-       function Get_Filters: TStringList;
-       function Get_Groups: TStringList;
-       function get_interval: integer;
-       function get_newconf: string;
-       procedure Set_Filters(const AValue: TStringList);
-       procedure Set_Groups(const AValue: TStringList);
-       procedure set_interval(const AValue: integer);
-       procedure set_newconf(const AValue: string);
 
+//        procedure FilterChanged(Sender : TObject);
+//        procedure GroupChanged(Sender : TObject);
+        procedure SlChanged(Sender : TObject);
+        function  GetMultiValued(const aValue : string) : TStringList;
      published
-        property newconf : string read get_newconf write set_newconf;
-        property interval: integer read get_interval write set_interval;
-        property filters : TStringList read Get_Filters write Set_Filters;
-        property groups  : TStringList read Get_Groups write Set_Groups;
+        property newconf : string read get_newconf write set_newconf stored false;
+        property interval: integer read get_interval write set_interval stored false;
+        property filters : TStringList read Get_Filters stored false; //write Set_Filters stored false;
+        property groups  : TStringList read Get_Groups stored false; // write Set_Groups stored false;
      end;
 
      TConfigCurrentStat = class(TConfigResponseCmnd)
@@ -238,6 +253,8 @@ begin
    else if
      (aMsg.Schema.Equals(Schema_ConfigResp)) and (aMsg.MessageType = cmnd) then result := TConfigResponseCmnd.Create(nil,aRawxPL)
    else if
+     (aMsg.Schema.Equals(Schema_ConfigCurr)) and (aMsg.MessageType = stat) then result := TConfigCurrentStat.Create(nil,aRawxPL)
+   else if
      aMsg.Schema.RawxPL = 'log.basic' then result := TLogBasic.Create(nil,aRawxPL)
    else if
      aMsg.Schema.RawxPL = 'osd.basic' then result := TOsdBasic.Create(nil,aRawxPL)
@@ -262,6 +279,7 @@ begin
    if aRawxPL = '' then begin
       Schema.Type_:= 'current';
       MessageType := stat;
+      Target.IsGeneric:=true;
    end;
 end;
 
@@ -269,6 +287,11 @@ procedure TConfigCurrentStat.Assign(aMessage: TPersistent);
 begin
    Body.ResetValues;
    inherited Assign(aMessage);
+   if aMessage is TConfigCurrentStat then begin
+      fMultiValued.Assign(tConfigCurrentStat(aMessage).fMultiValued);
+//      fFilters.Assign(TConfigCurrentStat(aMessage).Filters);
+//      fGroups.Assign(TConfigCurrentStat(aMessage).Groups);
+   end;
 end;
 
 { TConfigListCmnd }
@@ -282,6 +305,40 @@ begin
    end;
 end;
 
+constructor TConfigListStat.Create(const aOwner: TComponent;   const aRawxPL: string);
+begin
+   inherited Create(aOwner, aRawxPL);
+   if aRawxPL = '' then begin
+      MessageType := stat;
+      Body.ResetValues;
+      Body.AddKeyValuePairs( ['reconf','option','option','option'],['newconf','interval','filter[16]','group[16]']);
+   end;
+end;
+
+function TConfigListStat.ItemMax(const i: integer): integer;
+var sl : tstringlist;
+    s  : string;
+begin
+   sl := TStringList.Create;
+   s := AnsiReplaceStr(Body.Values[i],']','[');
+   sl.Delimiter := '[';
+   sl.DelimitedText := s;
+   if sl.Count=1 then result := 1 else result := StrToInt(sl[1]);
+   sl.free;
+end;
+
+function TConfigListStat.ItemName(const i: integer): string;
+var sl : tstringlist;
+    s  : string;
+begin
+   sl := TStringList.Create;
+   s := AnsiReplaceStr(Body.Values[i],']','[');
+   sl.Delimiter := '[';
+   sl.DelimitedText := s;
+   result := sl[0];
+   sl.free;
+end;
+
 { TConfigCurrentCmnd }
 constructor TConfigCurrentCmnd.Create(const aOwner: TComponent; const aRawxPL: string);    // formerly TConfigCurrMsg
 begin
@@ -291,62 +348,142 @@ begin
    end;
 end;
 
-{ TConfigRespMsg }
+// TConfigRespMsg =============================================================
 constructor TConfigResponseCmnd.Create(const aOwner: TComponent; const aRawxPL: string);        // formerly TConfigRespMsg
 begin
    inherited Create(aOwner, aRawxPL);
-   fFilters := TStringList.Create;
-   fGroups  := TStringList.Create;
+   fMultiValued := TStringList.Create;
+   //fMultiValued.OwnsObjects:=true;
+
+   //fFilters := TStringList.Create;
+   //fFilters.Sorted:=true;
+   //fFilters.Duplicates := dupIgnore;
+   //fFilters.OnChange:=@FilterChanged;
+
+   //fGroups  := TStringList.Create;
+   //fGroups.Sorted := true;
+   //fGroups.Duplicates := dupIgnore;
+   //fGroups.OnChange:=@GroupChanged;
+
    if aRawxPL = '' then begin
       Schema.Type_:= 'response';
       MessageType := cmnd;
       Body.AddKeyValuePairs( K_CONFIG_RESPONSE_KEYS,['','','','']);
+   //end else begin
+         //Get_Filters;
+         //Get_Groups;
+         //Read_MultiValued(0);                                                   // Read filter values
+         //Read_MultiValued(1);                                                   // read group values
    end;
+   //GetMultiValued('filter');
+   //GetMultiValued('group');
 end;
 
 destructor TConfigResponseCmnd.Destroy;
 begin
-   fFilters.Free;
-   fGroups.Free;
+   fMultiValued.Free;
+//   fFilters.Free;
+//   fGroups.Free;
    inherited Destroy;
 end;
 
-function TConfigResponseCmnd.Get_Filters: TStringList;
+//procedure TConfigResponseCmnd.Get_Filters;
+//var i : integer;
+//begin
+//   fFilters.BeginUpdate;
+//   fFilters.Clear;
+//   for i := 0 to Pred(Body.ItemCount) do begin
+//       if (Body.Keys[i] = 'filter') and (Body.Values[i]<>'') then fFilters.Add(Body.Values[i]);
+//   end;
+//   fFilters.EndUpdate;
+//end;
+function TConfigResponseCmnd.Get_Filters : TStringList;
+begin
+   result := GetMultiValued('filter');
+end;
+
+function TConfigResponseCmnd.Get_Groups : TStringList;
+begin
+   result := GetMultiValued('group');
+end;
+
+//procedure TConfigResponseCmnd.FilterChanged(Sender : TObject);
+//var i : integer;
+//begin
+//   for i:=Pred(Body.ItemCount) downto 0 do
+//       if Body.Keys[i] = 'filter' then Body.DeleteItem(i);
+//   if fFilters.Count = 0 then Body.AddKeyValue('filter=')
+//   else for i:=0 to Pred(fFilters.Count) do
+//            Body.AddKeyValue('filter=' + fFilters[i]);
+//end;
+
+//procedure TConfigResponseCmnd.GroupChanged(Sender : TObject);
+//var i : integer;
+//begin
+//   for i:=Pred(Body.ItemCount) downto 0 do
+//       if Body.Keys[i] = 'group' then Body.DeleteItem(i);
+//   if fGroups.Count = 0 then Body.AddKeyValue('group=')
+//   else for i:=0 to Pred(fGroups.Count) do
+//            Body.AddKeyValue('group=' + fGroups[i]);
+//end;
+
+procedure TConfigResponseCmnd.SlChanged(Sender: TObject);
+var j,i : integer;
+begin
+   for j:=0 to Pred(fMultiValued.Count) do begin
+       if (fMultiValued.Objects[j] = sender) then begin                        // Identify the sending stringlist
+          for i:=Pred(Body.ItemCount) downto 0 do
+              if Body.Keys[i] = fMultiValued[j] then Body.DeleteItem(i);
+          if TStringList(Sender).Count = 0
+             then Body.AddKeyValue(fMultiValued[j]+'=')
+             else for i:=0 to Pred(TStringList(Sender).Count) do
+                  Body.AddKeyValue(fMultiValued[j] + '=' + TStringList(Sender)[i]);
+       end;
+   end;
+end;
+
+function TConfigResponseCmnd.GetMultiValued(const aValue: string): TStringList;
+         function NewList : TStringList;
+         begin
+            result := TStringList.Create;
+            result.Sorted := true;
+            result.Duplicates:=dupIgnore;
+            result.OnChange  :=@slChanged;
+         end;
 var i : integer;
 begin
-   fFilters.Clear;
+   result := nil;
+
+   for i:=0 to Pred(fMultiValued.count) do
+       if fMultiValued[i] = aValue then
+          result := TStringList(fMultiValued.Objects[i]);
+   if (result = nil) then begin
+      result := NewList;
+      i := fMultiValued.AddObject(aValue,Result);
+      Read_MultiValued(i);
+   end;
+end;
+
+//procedure TConfigResponseCmnd.Get_Groups;
+//var i : integer;
+//begin
+//   fGroups.BeginUpdate;
+//   fGroups.Clear;
+//   for i := 0 to Pred(Body.ItemCount) do
+//       if (Body.Keys[i] = 'group') and (Body.Values[i]<>'') then fGroups.Add(Body.Values[i]);
+//   fGroups.EndUpdate;
+//end;
+
+procedure TConfigResponseCmnd.Read_Multivalued(const aListIndex: integer);
+var i : integer;
+    aSl : TStringList;
+begin
+   aSL := TStringList(fMultiValued.Objects[aListIndex]);
+   aSL.BeginUpdate;
+   aSL.Clear;
    for i := 0 to Pred(Body.ItemCount) do
-       if (Body.Keys[i] = 'filter') and (Body.Values[i]<>'') then fFilters.Add(Body.Values[i]);
-   result := fFilters;
-end;
-
-procedure TConfigResponseCmnd.Set_Filters(const AValue: TStringList);
-var i : integer;
-begin
-   for i:=Pred(Body.ItemCount)-1 downto 0 do
-       if Body.Keys[i] = 'filter' then Body.DeleteItem(i);
-   if aValue.Count = 0 then Body.AddKeyValue('filter=')
-   else for i:=0 to Pred(aValue.Count) do
-            Body.AddKeyValue('filter=' + aValue[i]);
-end;
-
-procedure TConfigResponseCmnd.Set_Groups(const AValue: TStringList);
-var i : integer;
-begin
-   for i:=Pred(Body.ItemCount)-1 downto 0 do
-       if Body.Keys[i] = 'group' then Body.DeleteItem(i);
-   if aValue.Count = 0 then Body.AddKeyValue('group=')
-   else for i:=0 to Pred(aValue.Count) do
-            Body.AddKeyValue('group=' + aValue[i]);
-end;
-
-function TConfigResponseCmnd.Get_Groups: TStringList;
-var i : integer;
-begin
-   fGroups.Clear;
-   for i := 0 to Pred(Body.ItemCount) do
-       if (Body.Keys[i] = 'group') and (Body.Values[i]<>'') then fGroups.Add(Body.Values[i]);
-   result := fGroups;
+       if (Body.Keys[i] = fMultiValued[aListIndex]) and (Body.Values[i]<>'') then aSL.Add(Body.Values[i]);
+   aSL.EndUpdate;
 end;
 
 function TConfigResponseCmnd.get_interval: integer;
