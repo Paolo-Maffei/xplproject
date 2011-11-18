@@ -1,9 +1,12 @@
-TODO 
-	- quand on lance une application à partir de là, on a une erreur 2, ce qui n'est pas le cas si on la lance à partir du menu
-
 xPL Logger
 
 Changes History : 
+	4.3.2.1
+		The 'Clear' button now also reset the left panel treeview
+		Introduced a simplified treeview for network elements discovered ( V-D-I instead of V\D\I )
+		Main window layout saved between sessions
+		Reintroduced filtering capabilities. New schema filters can be added directly from schema tree (right clic on the schema)
+		
 	4.3.1.5
 		Corrected resource consumption bug (#FS76)
 		Corrected bug in loop sending function when Sleep=0
