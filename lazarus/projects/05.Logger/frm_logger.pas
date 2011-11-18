@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
   u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
-  RxAboutDialog, RTTICtrls, RTTIGrids, uxPLConst, frm_template, frame_message,
+  RTTICtrls, RTTIGrids, RxAboutDialog, uxPLConst, frm_template, frame_message,
   logger_listener, u_xpl_header;
 
 type
@@ -25,19 +25,20 @@ type
     acPlay: TAction;
     acAddToMacro: TAction;
     acAssembleFragments: TAction;
+    acAddFilter: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
     Label4: TLabel;
     MenuItem1: TMenuItem;
-    MenuItem10: TMenuItem;
-    MenuItem18: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
     MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
     mnuCommands: TMenuItem;
     mnuSendMessage: TMenuItem;
     Panel1:    TPanel;
@@ -49,13 +50,11 @@ type
     seSleep: TSpinEdit;
     tbMacro: TToolBar;
     ToolBar2: TToolBar;
-    ToolButton1: TToolButton;
     ToolButton102: TToolButton;
     tbListen: TToolButton;
     ToolButton4: TToolButton;
     ToolButton7: TToolButton;
     ToolButton92: TToolButton;
-    ActionList1: TActionList;
     BtnRefresh: TBitBtn;
     Clear:     TAction;
     Load:      TAction;
@@ -67,7 +66,7 @@ type
     ToolButton3: TToolButton;
     ToolButton6: TToolButton;
     tvMessages: TTreeView;
-    xPLMenu2: TPopupMenu;
+    procedure acAddFilterExecute(Sender: TObject);
     procedure acAddToMacroExecute(Sender: TObject);
     procedure acConversationExecute(Sender: TObject);
     procedure acDiscoverNetworkExecute(Sender: TObject);
@@ -78,9 +77,9 @@ type
     procedure acShowMessageExecute(Sender: TObject);
     procedure ClearExecute(Sender: TObject);
     procedure acExportExecute(Sender: TObject);
-    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; aState: TGridDrawState);
-    procedure dgMessagesHeaderClick(Sender: TObject; IsColumn: Boolean; Index: Integer);
-    procedure dgMessagesSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer;  aRect: TRect; {%H-}aState: TGridDrawState);
+    procedure dgMessagesHeaderClick(Sender: TObject; {%H-}IsColumn: Boolean; Index: Integer);
+    procedure dgMessagesSelection(Sender: TObject; {%H-}aCol, {%H-}aRow: Integer);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure mnuListViewPopup(Sender: TObject);
@@ -101,6 +100,7 @@ type
     function UpdateFilter : string;
     procedure AddToTreeview(const axPLMessage: TxPLMessage);
     procedure DisplayFilteredMessage(const aMsg : TxPLCustomMessage);
+    procedure ResetTreeView;
   public
     procedure ApplySettings(Sender: TObject);
     procedure OnJoinedEvent; override;
@@ -109,8 +109,7 @@ type
 var frmLogger: TfrmLogger;
 
 implementation { TFrmLogger =============================================================}
-uses frm_xplappslauncher
-     , u_configuration_record
+uses u_configuration_record
      , StrUtils
      , u_xpl_message_gui
      , dlg_config
@@ -149,12 +148,8 @@ begin
    TxPLListener(xPLApplication).Listen;
 
    aMenu := TMenuItem.Create(self);
-   aMenu.Caption := '-';
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
    aMenu.Action := acExport;
-   xPLMenu.Items.Insert(0,aMenu);
+   AppMenu.Items.Insert(0,aMenu);
 
    mnuListView.Images:= xPLGUIResource.Images;
    acConversation.ImageIndex := K_IMG_THREAD;
@@ -163,16 +158,6 @@ begin
    ToolButton3.ImageIndex:=K_IMG_RECORD;
    tbMacro.Images := xPLGUIResource.Images;
    acPlay.ImageIndex:=K_IMG_MENU_RUN;
-
-   tvMessages.Images := xPLGUIResource.Images;
-   NetNode := tvMessages.Items.AddChild(nil, K_ROOT_NODE_NAME);
-   NetNode.ImageIndex:=K_IMG_NETWORK;
-   msgNode := tvMessages.Items.AddChild(nil, K_MESSAGES_ROOT);
-   msgNode.ImageIndex:=K_IMG_MESSAGE;
-   ConNode := tvMessages.Items.AddChild(nil, K_CONVERSATION_ROOT);
-   ConNode.ImageIndex:=K_IMG_THREAD;
-   MacNode := tvMessages.items.AddChild(nil, K_MACRO_ROOT);
-   tvMessages.Selected := NetNode;
 
    for Column in dgMessages.Columns do
        TGridColumn(Column).Width:=TGridColumn(Column).MinSize;
@@ -193,6 +178,15 @@ procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
 begin
    MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
    MacNode.Text := Format('Macro (%d elts)',[MacroList.Count]);
+end;
+
+procedure TfrmLogger.acAddFilterExecute(Sender: TObject);
+var schema : string;
+begin
+   schema := tvMessages.Selected.Parent.Text + '.' + tvMessages.Selected.Text;
+   FrmLoggerConfig.mmoFilter.Lines.Add(schema);
+   ShowMessage('The schema : ''' + schema + ''' has been added to filtering list.'#13#10'See Application Settings for details'
+   );
 end;
 
 procedure TfrmLogger.acConversationExecute(Sender: TObject);
@@ -275,12 +269,14 @@ begin
 end;
 
 function TfrmLogger.UpdateFilter : string;
-var //s : string;
-    sl : TStringList;
+var sl : TStringList;
     header : TxPLHeader;
 begin
+   if tvMessages.Selected = nil then exit;
+
    header := TxPLHeader.Create(self);
    sl := TStringList.Create;
+
      if tvMessages.Selected.Parent = nil then                                  // We're on one of the roots
          StatusBar1.Panels[2].Text := '*.*.*.*.*.*'
       else if (tvMessages.Selected.Parent = ConNode) then begin                // We're on a conversation node
@@ -288,27 +284,24 @@ begin
         header.source.RawxPL:=sl[0];
         header.Target.RawxPL:=sl[1];
         StatusBar1.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
+      end else begin
+        Sl.Delimiter:= '/';
+        Sl.DelimitedText:=tvMessages.Selected.GetTextPath;
+        if sl[0] = K_ROOT_NODE_NAME then begin
+           if (sl.Count>1) then header.source.Vendor := sl[1];
+           if (sl.Count>2) then header.source.Device := sl[2];
+           if (sl.Count>3) then header.source.Instance:= sl[3];
+           StatusBar1.Panels[2].Text := '*.' + header.Source.AsFilter + '.*.*';
         end else begin
-//           s := StringReplace(tvMessages.Selected.GetTextPath,'/',' ',[rfReplaceAll]);
-//           StrTokens(s,sl);
-           Sl.Delimiter:= '/';
-           Sl.DelimitedText:=tvMessages.Selected.GetTextPath;
-//           ExtractTokensL(tvMessages.Selected.GetTextPath,'/',#0,false,sl);
-           if sl[0] = K_ROOT_NODE_NAME then begin
-              if (sl.Count>1) then header.source.Vendor := sl[1];
-              if (sl.Count>2) then header.source.Device := sl[2];
-              if (sl.Count>3) then header.source.Instance:= sl[3];
-              StatusBar1.Panels[2].Text := '*.' + header.Source.AsFilter + '.*.*';
-           end else begin
-              if (sl.Count>1) then header.MessageType   := StrToMsgType(sl[1]);
-              if (sl.Count>2) then header.schema.Classe := sl[2];
-              if (sl.Count>3) then header.schema.Type_  := sl[3];
-              StatusBar1.Panels[2].Text := header.SourceFilter;
-           end;
-           if Assigned(tvMessages.Selected.Parent.Data) then begin             // We're at a device level
-              StatusBar1.Panels[2].Text := StatusBar1.Panels[2].Text + ',device=' + tvMessages.Selected.Text;
-           end;
-           result := Header.Source.AsFilter;
+           if (sl.Count>1) then header.MessageType   := StrToMsgType(sl[1]);
+           if (sl.Count>2) then header.schema.Classe := sl[2];
+           if (sl.Count>3) then header.schema.Type_  := sl[3];
+           StatusBar1.Panels[2].Text := header.SourceFilter;
+        end;
+        if Assigned(tvMessages.Selected.Parent.Data) then begin             // We're at a device level
+           StatusBar1.Panels[2].Text := StatusBar1.Panels[2].Text + ',device=' + tvMessages.Selected.Text;
+        end;
+        result := Header.Source.AsFilter;
       end;
    sl.free;
    Header.Free;
@@ -316,6 +309,7 @@ end;
 
 procedure TfrmLogger.ClearExecute(Sender: TObject);
 begin
+   ResetTreeView;
    dgMessages.RowCount:=1;
    PlayExecute(self);
    if tvMessages.Selected = MacNode then begin
@@ -341,6 +335,8 @@ var anode1, anode2 : TTreeNode;
 begin
   Application.ProcessMessages;
 
+  if (FrmLoggerConfig.ckFilter.Checked) and (FrmLoggerConfig.mmoFilter.Lines.IndexOf(axPLMessage.Schema.RawxPL) <> -1) then exit;
+
   anode1 := MsgNode.FindNode(MsgTypeToStr(axPLMessage.MessageType));           // Populate message list by message type
   if anode1 = nil then begin
      anode1 := tvMessages.Items.AddChild(MsgNode,MsgTypeToStr(axPLMessage.MessageType));
@@ -354,17 +350,19 @@ begin
      anode1 := tvMessages.Items.AddChild(aNode2,axPLMessage.Schema.Type_);
 
   with axPLMessage.Source do begin                                             // Populate message list by VDI
-     anode1 := NetNode.findnode(Vendor);
-     if anode1 = nil then
-        anode1 := tvMessages.Items.AddChild(NetNode,Vendor);
+      if not FrmLoggerConfig.ckSimpleTree.Checked then begin
+         anode1 := NetNode.findnode(Vendor);
+         if anode1 = nil then anode1 := tvMessages.Items.AddChild(NetNode,Vendor);
 
-     anode2 := anode1.FindNode(Device);
-     if anode2 = nil then
-        anode2 := tvMessages.Items.AddChild(aNode1, Device);
+         anode2 := anode1.FindNode(Device);
+         if anode2 = nil then anode2 := tvMessages.Items.AddChild(aNode1, Device);
 
-     anode1 := anode2.FindNode(Instance);
-     if anode1 = nil then
-        anode1 := tvMessages.Items.AddChildObject(aNode2,Instance,TConfigurationRecord.Create(xPLApplication,THeartBeatMsg(axPLMessage),nil));
+         anode1 := anode2.FindNode(Instance);
+         if anode1 = nil then anode1 := tvMessages.Items.AddChildObject(aNode2,Instance,TConfigurationRecord.Create(xPLApplication,THeartBeatMsg(axPLMessage),nil));
+      end else begin
+         anode1 := NetNode.FindNode(AsFilter);
+         if anode1 = nil then anode1 := tvMessages.Items.AddChildObject(NetNode,AsFilter,TConfigurationRecord.Create(xPLApplication,THeartBeatMsg(axPLMessage),nil));
+      end;
 
      s := axPLMessage.Body.GetValueByKey('device');
      if s<>'' then begin
@@ -401,6 +399,23 @@ begin
     end;
   sl.Free;
   dgMessagesSelection(self,0,0);                                                // Update message preview panel
+end;
+
+procedure TfrmLogger.ResetTreeView;
+begin
+   tvMessages.Images := xPLGUIResource.Images;
+   if not Assigned(NetNode) then NetNode := tvMessages.Items.AddChild(nil, K_ROOT_NODE_NAME)
+                    else NetNode.DeleteChildren;
+   NetNode.ImageIndex:=K_IMG_NETWORK;
+   if not Assigned(MsgNode) then msgNode := tvMessages.Items.AddChild(nil, K_MESSAGES_ROOT)
+                    else MsgNode.DeleteChildren;
+   msgNode.ImageIndex:=K_IMG_MESSAGE;
+   if not Assigned(ConNode) then ConNode := tvMessages.Items.AddChild(nil, K_CONVERSATION_ROOT)
+                    else ConNode.DeleteChildren;
+   ConNode.ImageIndex:=K_IMG_THREAD;
+   if not Assigned(MacNode) then MacNode := tvMessages.items.AddChild(nil, K_MACRO_ROOT)
+                    else MacNode.DeleteChildren;
+   tvMessages.Selected := NetNode;
 end;
 
 procedure TfrmLogger.tvMessagesSelectionChanged(Sender: TObject);
@@ -491,6 +506,7 @@ begin
    acPluginDetail.Visible    := (tvMessages.Selected.Data <> nil);
    mnuCommands.Visible       := acPluginDetail.Visible;
    tbMacro.Visible           := (tvMessages.Selected = MacNode);
+   acAddFilter.Visible       := (tvMessages.Selected.HasAsParent(MsgNode) and (not tvMessages.Selected.HasChildren));
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
@@ -529,7 +545,7 @@ begin
    if (Node<>nil) and (Node.Data <> nil) then begin
       ConfElmts := TConfigurationRecord(Node.Data);
       acPluginDetail.Enabled := (ConfElmts.Plug_Detail <> nil);
-      mnuCommands.Enabled     := acPluginDetail.Enabled;
+      mnuCommands.Enabled    := acPluginDetail.Enabled;
       if mnuCommands.Enabled then begin
          if ConfElmts.plug_detail <> nil then begin
             {$IFDEF WINDOWS}(* At the time, don't understand why this fails under linux *)

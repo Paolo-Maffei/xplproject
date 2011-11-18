@@ -7,7 +7,6 @@ interface
 uses Classes
      , SysUtils
      , u_xpl_message
-     , u_xpl_actionlist
      , u_xpl_custom_listener
      ;
 
@@ -46,7 +45,7 @@ type TMessageList = TList;
      end;
 
 implementation // ==============================================================
-uses uRegExpr
+uses RegExpr
      ;
 
 { TLoggerListener =============================================================}

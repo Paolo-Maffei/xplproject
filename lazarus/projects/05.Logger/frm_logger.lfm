@@ -2267,7 +2267,7 @@ inherited frmLogger: TfrmLogger
   }
   OnCreate = FormCreate
   OnDestroy = FormDestroy
-  SessionProperties = 'dgMessages.Columns;Left;Top'
+  SessionProperties = 'dgMessages.Columns;Left;Top;tvMessages.Width;dgMessages.Width'
   inherited StatusBar1: TStatusBar
     Top = 417
     Width = 869
@@ -2289,14 +2289,21 @@ inherited frmLogger: TfrmLogger
         Width = 50
       end>
   end
+  inherited imgBullet: TImage
+    Left = 8
+    Top = 416
+  end
   inherited ToolBar: TToolBar
     Width = 869
     TabOrder = 0
+    inherited ToolButton9: TToolButton
+      DropdownMenu = nil
+    end
     inherited Panel4: TPanel
       Left = 669
     end
-    object ToolButton3: TToolButton[3]
-      Left = 53
+    object ToolButton3: TToolButton[4]
+      Left = 66
       Top = 0
       Caption = 'Listen'
       Down = True
@@ -2304,8 +2311,8 @@ inherited frmLogger: TfrmLogger
       OnClick = PlayExecute
       Style = tbsCheck
     end
-    object ToolButton6: TToolButton[4]
-      Left = 92
+    object ToolButton6: TToolButton[5]
+      Left = 105
       Top = 0
       Action = Clear
       ImageIndex = 25
@@ -2354,23 +2361,12 @@ inherited frmLogger: TfrmLogger
       ClientWidth = 309
       DesignLeft = 499
       DesignTop = 81
-      inherited Label5: TLabel
-        Left = 4
-      end
-      inherited Label7: TLabel
-        Left = 4
-      end
-      inherited Label8: TLabel
-        Left = 4
-      end
-      inherited Label10: TLabel
-        Left = 4
-      end
       inherited edtBody: TTIMemo
         Width = 251
       end
-      inherited Label6: TLabel
-        Left = 4
+      inherited lblSize: TTILabel
+        Height = 1
+        Width = 1
       end
     end
   end
@@ -2381,7 +2377,7 @@ inherited frmLogger: TfrmLogger
     Width = 143
     Align = alLeft
     AutoExpand = True
-    DefaultItemHeight = 17
+    DefaultItemHeight = 18
     DragMode = dmAutomatic
     PopupMenu = mnuTreeView
     ReadOnly = True
@@ -2472,20 +2468,15 @@ inherited frmLogger: TfrmLogger
       List = True
       ShowCaptions = True
       TabOrder = 1
-      object ToolButton1: TToolButton
-        Left = 1
-        Top = 0
-        Action = acPlay
-      end
       object ToolButton4: TToolButton
-        Left = 31
+        Left = 1
         Top = 0
         Width = 10
         Caption = 'ToolButton4'
         Style = tbsSeparator
       end
       object Panel5: TPanel
-        Left = 41
+        Left = 11
         Height = 24
         Top = 0
         Width = 104
@@ -2505,7 +2496,7 @@ inherited frmLogger: TfrmLogger
         end
       end
       object ToolButton7: TToolButton
-        Left = 145
+        Left = 115
         Top = 0
         Width = 10
         Caption = 'ToolButton7'
@@ -2523,8 +2514,70 @@ inherited frmLogger: TfrmLogger
     end
   end
   inherited ActionList: TActionList[8]
-    left = 232
-    top = 104
+    left = 160
+    top = 96
+    inherited acCoreConfigure: TAction
+      Caption = 'Application Settings'
+    end
+    object Load: TAction[4]
+      Caption = '&Load a message'
+      ImageIndex = 2
+    end
+    object acExport: TAction[5]
+      Caption = '&Export'
+      ImageIndex = 3
+      OnExecute = acExportExecute
+    end
+    object Clear: TAction[6]
+      Caption = 'Clear'
+      ImageIndex = 4
+      OnExecute = ClearExecute
+    end
+    object acAppSettings: TAction[7]
+      Caption = 'Application Settings'
+      ImageIndex = 7
+    end
+    object acLogging: TAction[8]
+      Caption = 'View session log journal'
+    end
+    object acPluginDetail: TAction[9]
+      Caption = 'Plugin Details'
+      ImageIndex = 1
+      OnExecute = acPluginDetailExecute
+    end
+    object acDiscoverNetwork: TAction[10]
+      Caption = 'Discover Network'
+      OnExecute = acDiscoverNetworkExecute
+    end
+    object acShowMessage: TAction[11]
+      Caption = 'Open this message'
+      OnExecute = acShowMessageExecute
+    end
+    object acConversation: TAction[12]
+      Caption = 'Filter this conversation'
+      OnExecute = acConversationExecute
+    end
+    object acResend: TAction[13]
+      Caption = 'Resend this message'
+      OnExecute = acResendExecute
+    end
+    object acPlay: TAction[14]
+      Caption = 'Go !'
+      OnExecute = acPlayExecute
+    end
+    object acAddToMacro: TAction[15]
+      Category = 'xPL'
+      Caption = 'Add to Macro List'
+      OnExecute = acAddToMacroExecute
+    end
+    object acAssembleFragments: TAction[16]
+      Caption = 'Assembre Fragments'
+      OnExecute = acAssembleFragmentsExecute
+    end
+    object acAddFilter: TAction[17]
+      Caption = 'Add in filtering list'
+      OnExecute = acAddFilterExecute
+    end
   end
   inherited xPLMenu: TPopupMenu[9]
     left = 200
@@ -2534,65 +2587,13 @@ inherited frmLogger: TfrmLogger
     left = 208
     top = 272
   end
-  inherited RxAboutDialog1: TRxAboutDialog[11]
-  end
-  object ActionList1: TActionList[12]
+  inherited AboutDlg: TRxAboutDialog[11]
     left = 64
-    top = 336
-    object Load: TAction
-      Caption = '&Load a message'
-      ImageIndex = 2
-    end
-    object acExport: TAction
-      Caption = '&Export'
-      ImageIndex = 3
-      OnExecute = acExportExecute
-    end
-    object Clear: TAction
-      Caption = 'Clear'
-      ImageIndex = 4
-      OnExecute = ClearExecute
-    end
-    object acAppSettings: TAction
-      Caption = 'Application Settings'
-      ImageIndex = 7
-    end
-    object acLogging: TAction
-      Caption = 'View session log journal'
-    end
-    object acPluginDetail: TAction
-      Caption = 'Plugin Details'
-      ImageIndex = 1
-      OnExecute = acPluginDetailExecute
-    end
-    object acDiscoverNetwork: TAction
-      Caption = 'Discover Network'
-      OnExecute = acDiscoverNetworkExecute
-    end
-    object acShowMessage: TAction
-      Caption = 'Open this message'
-      OnExecute = acShowMessageExecute
-    end
-    object acConversation: TAction
-      Caption = 'Filter this conversation'
-      OnExecute = acConversationExecute
-    end
-    object acResend: TAction
-      Caption = 'Resend this message'
-      OnExecute = acResendExecute
-    end
-    object acPlay: TAction
-      Caption = 'Go !'
-      OnExecute = acPlayExecute
-    end
-    object acAddToMacro: TAction
-      Category = 'xPL'
-      Caption = 'Add to Macro List'
-      OnExecute = acAddToMacroExecute
-    end
-    object acAssembleFragments: TAction
-      Caption = 'Assembre Fragments'
-      OnExecute = acAssembleFragmentsExecute
+    top = 56
+  end
+  inherited AppMenu: TPopupMenu[12]
+    object MenuItem9: TMenuItem[0]
+      Caption = 'New Item1'
     end
   end
   object SaveDialog: TSaveDialog[13]
@@ -2690,19 +2691,11 @@ inherited frmLogger: TfrmLogger
     object mnuCommands: TMenuItem
       Caption = 'Commands'
     end
-  end
-  object xPLMenu2: TPopupMenu[15]
-    left = 40
-    top = 72
-    object MenuItem18: TMenuItem
-      Caption = 'Configuration ...'
-      ImageIndex = 44
-    end
-    object MenuItem10: TMenuItem
-      Caption = '-'
+    object MenuItem7: TMenuItem
+      Action = acAddFilter
     end
   end
-  object mnuListView: TPopupMenu[16]
+  object mnuListView: TPopupMenu[15]
     OnPopup = mnuListViewPopup
     left = 342
     top = 244
