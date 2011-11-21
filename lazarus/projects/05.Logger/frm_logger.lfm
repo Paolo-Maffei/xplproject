@@ -2375,17 +2375,22 @@ inherited frmLogger: TfrmLogger
     AutoExpand = True
     DefaultItemHeight = 18
     DragMode = dmAutomatic
+    ExpandSignType = tvestPlusMinus
     PopupMenu = mnuTreeView
     ReadOnly = True
     RightClickSelect = True
+    RowSelect = True
     ScrollBars = ssAutoBoth
+    SelectionColor = 13434879
     ShowRoot = False
     TabOrder = 4
     ToolTips = False
     OnChange = tvMessagesChange
     OnClick = tvMessagesClick
     OnSelectionChanged = tvMessagesSelectionChanged
-    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoShowButtons, tvoShowLines]
+    Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoReadOnly, tvoRightClickSelect, tvoRowSelect, tvoShowButtons, tvoShowLines]
+    TreeLineColor = clSilver
+    TreeLinePenStyle = psSolid
   end
   object Panel2: TPanel[7]
     Left = 148
@@ -2520,6 +2525,7 @@ inherited frmLogger: TfrmLogger
     top = 96
     inherited acCoreConfigure: TAction
       Caption = 'Application Settings'
+      ImageIndex = 44
     end
     object Load: TAction[4]
       Caption = '&Load a message'

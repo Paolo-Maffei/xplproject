@@ -1,6 +1,9 @@
 xPL Logger
 
 Changes History : 
+	4.3.2.2
+		Corrected a display bug in the left tree view (selected icons disappeared)
+		
 	4.3.2.1
 		The 'Clear' button now also reset the left panel treeview
 		Introduced a simplified treeview for network elements discovered ( V-D-I instead of V\D\I )

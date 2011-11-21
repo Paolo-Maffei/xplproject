@@ -15,7 +15,7 @@ uses
   logger_listener,
   xpl_win, frm_logger_config;
 
-{$r *.res}
+{$R *.res}
 
 begin
    Application.Initialize;
