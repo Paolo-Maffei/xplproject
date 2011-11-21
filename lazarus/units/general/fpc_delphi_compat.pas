@@ -6,13 +6,15 @@ unit fpc_delphi_compat;
 interface
 
 uses {$ifdef fpc}
+        vInfo,
         {$ifdef mswindow}
         fpTimer in 'C:/pp/packages/fcl-base/src/fptimer.pp'
         {$else}
         fpTimer in '/usr/share/fpcsrc/packages/fcl-base/src/fptimer.pp'
         {$endif}
      {$else}
-     ExtCtrls
+     ExtCtrls,
+     JvVersionInfo
      {$endif}
     ;
 
@@ -26,29 +28,27 @@ uses {$ifdef fpc}
 
 type {$ifdef fpc}
         TxPLTimer = class(TfpTimer);
+        TxPLVersionInfo = class(TVersionInfo);
      {$else}                                                              // This is declared only for delphi versions
         TxPLTimer = class(TTimer);
         TEventType = (etCustom,etInfo,etWarning,etError,etDebug);
+        TxPLVersionInfo = class(TJvVersionInfo);
      {$endif}
 
 implementation // ==============================================================
 Uses Classes
      , SysUtils
-     , StrUtils
+     , u_xpl_common
      {$ifdef fpc}
-        , vInfo
-        , LSUtils
         {$ifdef mswindows}
            , Windirs
+           , DynLibs
         {$endif}
      {$else}
-     , JvVersionInfo
      , jclPEImage
      , SHFolder
      {$endif}
      ;
-
-var VersionInfo : {$ifdef fpc}TVersionInfo{$else}TJvVersionInfo{$endif};
 
 // ============================================================================
 function BuildDate: string;
@@ -85,14 +85,54 @@ begin
    Assert(length(result)>0,'ProductName in Version Info is missing');
 end;
 
-function GetMacAddress: string;
+function GetMacAddress: string;                                                // This code comes from LSUtils (lazsolutions)
+const CLSUtilsFormatMACMask = '%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x';                // and have been extracted because original package
+{$IFDEF MSWINDOWS}                                                             // implies uses of Windows, thus creating dependency
+type                                                                           // on gui application
+  TCreateGUIDFunction = function(AGUID: PGUID): LongInt; stdcall;
+{$ENDIF}
+var
+  VGUID1, VGUID2: TGUID;
+{$IFDEF MSWINDOWS}
+  VLibHandle: TLibHandle;
+  VCreateGUIDFunction: TCreateGUIDFunction;
+{$ENDIF}
 begin
-   result := {$ifdef fpc}
-                AnsiLowerCase(AnsiReplaceStr(LSGetMacAddress,'-',''));
-             {$else}
-                '00abcdef';
-                // Missing code to define for delphi environment
-             {$endif}
+{$IFDEF MSWINDOWS}
+  VLibHandle := LoadLibrary('rpcrt4.dll');
+  try
+    if VLibHandle <> NilHandle then
+    begin
+      VCreateGUIDFunction := TCreateGUIDFunction(GetProcedureAddress(VLibHandle,
+        'UuidCreateSequential'));
+      if Assigned(VCreateGUIDFunction) then
+{$ENDIF}
+        if (
+{$IFDEF UNIX}
+          CreateGUID
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+          VCreateGUIDFunction
+{$ENDIF}
+          ({$IFDEF MSWINDOWS}@{$ENDIF}VGUID1) = 0) and (
+{$IFDEF UNIX}
+          CreateGUID
+{$ENDIF}
+{$IFDEF MSWINDOWS}
+          VCreateGUIDFunction
+{$ENDIF}
+          ({$IFDEF MSWINDOWS}@{$ENDIF}VGUID2) = 0) and
+          (VGUID1.D4[2] = VGUID2.D4[2]) and (VGUID1.D4[3] = VGUID2.D4[3]) and
+          (VGUID1.D4[4] = VGUID2.D4[4]) and (VGUID1.D4[5] = VGUID2.D4[5]) and
+          (VGUID1.D4[6] = VGUID2.D4[6]) and (VGUID1.D4[7] = VGUID2.D4[7]) then
+            Result := Format(CLSUtilsFormatMACMask, [VGUID1.D4[2], VGUID1.D4[3],
+                        VGUID1.D4[4], VGUID1.D4[5], VGUID1.D4[6], VGUID1.D4[7]]);
+{$IFDEF MSWINDOWS}
+    end;
+  finally
+    UnloadLibrary(VLibHandle);
+  end;
+{$ENDIF}
 end;
 
 function GetCommonAppDataPath : string;
@@ -111,16 +151,6 @@ begin
       result := IncludeTrailingPathDelimiter(path);
    {$endif}
 end;
-
-initialization // =============================================================
-   VersionInfo := {$ifdef fpc}
-                     TVersionInfo.Create;
-                  {$else}
-                     TJvVersionInfo.Create(ParamStr(0));
-                  {$endif}
-
-finalization // ===============================================================
-   VersionInfo.Free;
 
 end.
 
