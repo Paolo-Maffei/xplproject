@@ -1,13 +1,14 @@
 unit frm_vendor_files;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, XMLPropStorage, RTTICtrls,
-  IdComponent, frm_template;
+  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons, RTTICtrls,
+  XMLPropStorage{%H-}, IdComponent, frm_template, RxAboutDialog;
 
 type
 
@@ -29,11 +30,13 @@ type
     MenuItem3: TMenuItem;
     MenuItem4: TMenuItem;
     MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
     Panel2: TPanel;
     popPluginList: TPopupMenu;
     ProgressBar1: TProgressBar;
     ToolButton2: TToolButton;
-    ToolButton4: TToolButton;
+    ToolButton3: TToolButton;
     procedure acDeselectExecute(Sender: TObject);
     procedure acDownloadExecute(Sender: TObject);
     procedure acInvertExecute(Sender: TObject);
@@ -42,7 +45,7 @@ type
     procedure acUpdateListExecute(Sender: TObject);
     procedure acViewXMLExecute(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure lvPluginsSelectItem(Sender: TObject; Item: TListItem; Selected: Boolean);
+    procedure lvPluginsSelectItem(Sender: TObject; {%H-}Item: TListItem; {%H-}Selected: Boolean);
 
   end; 
 
@@ -67,7 +70,6 @@ begin
    lvPlugins.SmallImages := ToolBar.Images;
    lvPlugins.StateImages := ToolBar.Images;
    PopPluginList.Images  := ToolBar.Images;
-   lblModuleName.Visible := False;
 
    acReloadExecute(self);
 end;
@@ -120,19 +122,20 @@ begin
 
    for item in xPLApplication.VendorFile.Locations do
            cbLocations.Items.Add(TLocationType(item).Url);
+
    if cbLocations.Text='' then
       if cbLocations.Items.Count >0 then cbLocations.Text := cbLocations.Items[0];
 
    for item in xPLApplication.VendorFile.Plugins do begin
        with lvPlugins.Items.Add do begin
-           plug := TPluginTYpe(item);
+           plug := TPluginType(item);
            caption := plug.Name;
            subitems.DelimitedText:= Format('%s,%s',[plug.Type_,plug.URL]);
            if plug.present then begin
               SubItems.Add(DateTimeToStr(FileDateToDateTime(FileAge(plug.FileName))));
               ImageIndex := K_IMG_GREEN_BADGE;
            end else begin
-              SubItems.Add('Absent');
+              SubItems.Add('Missing');
               ImageIndex := K_IMG_RED_BADGE;
            end;
            Data := plug;
@@ -177,9 +180,6 @@ begin
       ShowFrmXMLView(plug.FileName);
    end;
 end;
-
-initialization
-  {$I frm_vendor_files.lrs}
 
 end.
 
