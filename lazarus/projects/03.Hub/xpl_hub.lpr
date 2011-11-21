@@ -1,9 +1,9 @@
 program xpl_hub;
 
-{$APPTYPE CONSOLE}
 {$ifdef fpc}
    {$mode objfpc}{$H+}
 {$endif}
+{$R *.res}
 
 uses {$define UseCThreads}
      {$IFDEF UNIX}
@@ -12,14 +12,11 @@ uses {$define UseCThreads}
         {$ENDIF}
      {$ENDIF}
      u_xpl_hub
-     , u_xpl_console_app
-     ;
+     , u_xpl_console_app;
 
 // ============================================================================
 var HubApplication : TxPLConsoleApp;
     xPLHub         : TxPLHub;
-
-{$R *.res}
 
 // ============================================================================
 begin
@@ -34,4 +31,4 @@ begin
    HubApplication.Run;
    HubApplication.Free;
 end.
-
+

@@ -49,6 +49,7 @@ const K_ERROR_SETTINGS = 'xPL Settings may not be set ';
       K_DISCOVERED     = 'Discovered %s %s on %s';
       K_INVALID_PORT   = 'Discovered %s but invalid port (%s) in message body';
       K_VERBOSE        = '%s => %s, %s';
+      XPL_UDP_BASE_PORT= 3865;
 
 // ============================================================================
 procedure TxPLHub.Start;                                                       // Two reason not to start :
@@ -81,7 +82,7 @@ end;
 
 destructor TxPLHub.Destroy;
 begin
-   fSocketList.Free;
+   if Assigned(fSocketList) then fSocketList.Free;
    inherited;
 end;
 
