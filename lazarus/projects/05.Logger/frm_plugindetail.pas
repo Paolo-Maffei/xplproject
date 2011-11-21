@@ -1,6 +1,7 @@
 unit frm_plugindetail; 
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -34,8 +35,6 @@ type
     DeviceInfoURL: TOvcURL;
     DeviceDownloadURL: TOvcURL;
     procedure FormShow(Sender: TObject);
-  private
-    { private declarations }
   public
     Configuration : TDeviceType;
   end; 
@@ -49,7 +48,6 @@ uses u_xpl_gui_resource
 var  frmPluginDetail: TfrmPluginDetail;
 
 // =============================================================================
-
 procedure ShowFrmPluginDetail(aConfiguration: TDeviceType);
 begin
    if not Assigned(frmPluginDetail) then
@@ -59,7 +57,6 @@ begin
 end;
 
 // =============================================================================
-
 procedure TfrmPluginDetail.FormShow(Sender: TObject);
 begin
    inherited;
@@ -74,9 +71,6 @@ begin
    DeviceInfoURL.URL            := Configuration.info_url;
    DeviceDownloadURL.URL        := Configuration.download_url;
 end;
-
-initialization
-  {$I frm_plugindetail.lrs}
 
 end.
 

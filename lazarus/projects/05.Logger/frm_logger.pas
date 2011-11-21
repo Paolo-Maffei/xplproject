@@ -1,14 +1,15 @@
 unit frm_logger;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
-  RTTICtrls, RTTIGrids, RxAboutDialog, uxPLConst, frm_template, frame_message,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, RTTICtrls, RTTIGrids,
+  {%H-} XMLPropStorage, {%H-} RxAboutDialog, uxPLConst, frm_template, frame_message,
   logger_listener, u_xpl_header;
 
 type
@@ -52,6 +53,7 @@ type
     ToolBar2: TToolBar;
     ToolButton102: TToolButton;
     tbListen: TToolButton;
+    ToolButton2: TToolButton;
     ToolButton4: TToolButton;
     ToolButton7: TToolButton;
     ToolButton92: TToolButton;
@@ -85,7 +87,7 @@ type
     procedure mnuListViewPopup(Sender: TObject);
     procedure mnuSendMessageClick(Sender: TObject);
     procedure mnuCommandClick(Sender: TObject);
-    procedure PlayExecute(Sender: TObject);
+    procedure ListenExecute(Sender: TObject);
     procedure mnuTreeViewPopup(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
     procedure tvMessagesClick(Sender: TObject);
@@ -151,12 +153,12 @@ begin
    aMenu.Action := acExport;
    AppMenu.Items.Insert(0,aMenu);
 
-   mnuListView.Images:= xPLGUIResource.Images;
+   mnuListView.Images:= xPLGUIResource.Images16;
    acConversation.ImageIndex := K_IMG_THREAD;
    acResend.ImageIndex:=K_IMG_MAIL_FORWARD;
    acShowMessage.ImageIndex := K_IMG_EDIT_FIND;
    ToolButton3.ImageIndex:=K_IMG_RECORD;
-   tbMacro.Images := xPLGUIResource.Images;
+   tbMacro.Images := xPLGUIResource.Images16;
    acPlay.ImageIndex:=K_IMG_MENU_RUN;
 
    for Column in dgMessages.Columns do
@@ -237,12 +239,12 @@ begin
    inherited;
    with TxPLListener(xPLApplication) do begin
       ToolButton3.Down:=TLoggerListener(xPLApplication).fLogAtStartUp;
-      PlayExecute(self);
+      ListenExecute(self);
       StatusBar1.Panels[1].Text := ConnectionStatusAsStr;
    end;
 end;
 
-procedure TfrmLogger.PlayExecute(Sender: TObject);
+procedure TfrmLogger.ListenExecute(Sender: TObject);
 begin
    TLoggerListener(xPLApplication).Listening := ToolButton3.Down;
 end;
@@ -311,7 +313,7 @@ procedure TfrmLogger.ClearExecute(Sender: TObject);
 begin
    ResetTreeView;
    dgMessages.RowCount:=1;
-   PlayExecute(self);
+   ListenExecute(self);
    if tvMessages.Selected = MacNode then begin
       MacroList.Clear;
       if Assigned(MacNode) then MacNode.Text := 'Macro';
@@ -323,7 +325,7 @@ begin                                                                          /
    with FrmLoggerConfig do begin
         TLoggerListener(xPLApplication).fMessageLimit := seMaxPool.Value;
         TLoggerListener(xPLApplication).fLogAtStartUp := ckStartAtLaunch.Checked;
-        PlayExecute(self);
+        ListenExecute(self);
         Panel1.Visible := ckShowPreview.Checked;
         tvMessagesSelectionChanged(Sender);
   end;
@@ -403,7 +405,7 @@ end;
 
 procedure TfrmLogger.ResetTreeView;
 begin
-   tvMessages.Images := xPLGUIResource.Images;
+   tvMessages.Images := xPLGUIResource.Images16;
    if not Assigned(NetNode) then NetNode := tvMessages.Items.AddChild(nil, K_ROOT_NODE_NAME)
                     else NetNode.DeleteChildren;
    NetNode.ImageIndex:=K_IMG_NETWORK;
@@ -652,7 +654,6 @@ begin
 end;
 
 initialization // =============================================================
-  {$I frm_logger.lrs}
   {$I class.lrs}
   {$I msgtype.lrs}
 

@@ -4,7 +4,11 @@
     <Version Value="9"/>
     <PathDelim Value="\"/>
     <General>
+      <Flags>
+        <LRSInOutputDirectory Value="False"/>
+      </Flags>
       <MainUnit Value="0"/>
+      <ResourceType Value="res"/>
       <UseXPManifest Value="True"/>
       <Icon Value="0"/>
       <ActiveWindowIndexAtStart Value="0"/>
@@ -33,7 +37,7 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="13">
+    <RequiredPackages Count="12">
       <Item1>
         <PackageName Value="LazControls"/>
       </Item1>
@@ -47,36 +51,33 @@
         <PackageName Value="pl_KControls"/>
       </Item4>
       <Item5>
-        <PackageName Value="aformula"/>
+        <PackageName Value="sup_object"/>
       </Item5>
       <Item6>
-        <PackageName Value="sup_object"/>
+        <PackageName Value="pl_rx"/>
       </Item6>
       <Item7>
-        <PackageName Value="pl_rx"/>
-      </Item7>
-      <Item8>
         <PackageName Value="LCLBase"/>
         <MinVersion Major="1" Valid="True" Release="1"/>
+      </Item7>
+      <Item8>
+        <PackageName Value="pl_indycomp"/>
       </Item8>
       <Item9>
-        <PackageName Value="pl_indycomp"/>
-      </Item9>
-      <Item10>
         <PackageName Value="RunTimeTypeInfoControls"/>
         <MinVersion Minor="1" Valid="True"/>
+      </Item9>
+      <Item10>
+        <PackageName Value="SynEdit"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item10>
       <Item11>
-        <PackageName Value="SynEdit"/>
+        <PackageName Value="FCL"/>
         <MinVersion Major="1" Valid="True"/>
       </Item11>
       <Item12>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
-      </Item12>
-      <Item13>
         <PackageName Value="LCL"/>
-      </Item13>
+      </Item12>
     </RequiredPackages>
     <Units Count="255">
       <Unit0>
@@ -85,8 +86,8 @@
         <UnitName Value="xpl_logger"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="4"/>
-        <CursorPos X="45" Y="22"/>
+        <TopLine Value="1"/>
+        <CursorPos X="55" Y="7"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -95,10 +96,11 @@
         <ComponentName Value="frmLogger"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_logger"/>
-        <EditorIndex Value="1"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="164"/>
-        <CursorPos X="114" Y="188"/>
+        <TopLine Value="450"/>
+        <CursorPos X="68" Y="657"/>
         <UsageCount Value="144"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -135,7 +137,7 @@
         <UnitName Value="uxPLAddress"/>
         <TopLine Value="102"/>
         <CursorPos X="22" Y="111"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
       </Unit5>
       <Unit6>
         <Filename Value="..\uxplschema.pas"/>
@@ -473,10 +475,13 @@
         <ComponentName Value="frmPluginDetail"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_plugindetail"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="59" Y="78"/>
+        <TopLine Value="10"/>
+        <CursorPos X="34" Y="16"/>
         <UsageCount Value="200"/>
+        <Loaded Value="True"/>
+        <LoadedDesigner Value="True"/>
       </Unit49>
       <Unit50>
         <Filename Value="..\..\..\lcl\lclintf.pas"/>
@@ -504,7 +509,7 @@
         <UnitName Value="uxplmsgheader"/>
         <TopLine Value="1"/>
         <CursorPos X="19" Y="1"/>
-        <UsageCount Value="0"/>
+        <UsageCount Value="10"/>
       </Unit53>
       <Unit54>
         <Filename Value="..\..\..\components\indy-10.2.0.3\lazarus\IdAboutVCL.pas"/>
@@ -787,12 +792,10 @@
       <Unit90>
         <Filename Value="C:\lazarus\lcl\comctrls.pp"/>
         <UnitName Value="ComCtrls"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="2503"/>
         <CursorPos X="14" Y="2491"/>
         <UsageCount Value="50"/>
-        <Loaded Value="True"/>
       </Unit90>
       <Unit91>
         <Filename Value="C:\lazarus\lcl\imglist.pp"/>
@@ -931,8 +934,8 @@
         <Filename Value="logger_listener.pas"/>
         <UnitName Value="Logger_listener"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="29" Y="86"/>
+        <TopLine Value="67"/>
+        <CursorPos X="39" Y="88"/>
         <UsageCount Value="34"/>
       </Unit107>
       <Unit108>
@@ -1418,13 +1421,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_template"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="131"/>
-        <CursorPos X="45" Y="143"/>
+        <TopLine Value="64"/>
+        <CursorPos X="1" Y="193"/>
         <UsageCount Value="13"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit168>
       <Unit169>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
@@ -1845,7 +1847,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="79" Y="12"/>
-        <UsageCount Value="55"/>
+        <UsageCount Value="56"/>
       </Unit221>
       <Unit222>
         <Filename Value="..\..\units\general\OpenURLUtil.pas"/>
@@ -1873,7 +1875,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="46"/>
+        <UsageCount Value="47"/>
       </Unit224>
       <Unit225>
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
@@ -1889,14 +1891,12 @@
         <ComponentName Value="FrmLoggerConfig"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_logger_config"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="47"/>
-        <CursorPos X="1" Y="75"/>
-        <UsageCount Value="44"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="35"/>
+        <UsageCount Value="45"/>
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit226>
       <Unit227>
         <Filename Value="frm_logger_config.lfm"/>
@@ -2046,10 +2046,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="dlg_template"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="12"/>
-        <CursorPos X="3" Y="21"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="46"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit245>
       <Unit246>
         <Filename Value="..\..\units\xpl\gui\dlg_config.lfm"/>
@@ -2124,134 +2126,136 @@
       <Unit254>
         <Filename Value="C:\lazarus\lcl\dialogs.pp"/>
         <UnitName Value="Dialogs"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="499"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit254>
     </Units>
     <Build>
       <CleanOutputFileMask Value="*.ppu;*.ppl;*.o;*.or"/>
     </Build>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="323" Column="41" TopLine="316"/>
+        <Filename Value="xpl_logger.lpr"/>
+        <Caret Line="31" Column="1" TopLine="2"/>
       </Position1>
       <Position2>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="323" Column="7" TopLine="308"/>
+        <Caret Line="13" Column="3" TopLine="1"/>
       </Position2>
       <Position3>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="113" Column="25" TopLine="107"/>
+        <Caret Line="227" Column="33" TopLine="212"/>
       </Position3>
       <Position4>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="312" Column="23" TopLine="287"/>
+        <Caret Line="18" Column="30" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="490" Column="29" TopLine="474"/>
+        <Filename Value="frm_logger_config.pas"/>
+        <Caret Line="3" Column="29" TopLine="1"/>
       </Position5>
       <Position6>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="491" Column="26" TopLine="474"/>
+        <Filename Value="frm_logger_config.pas"/>
+        <Caret Line="72" Column="1" TopLine="44"/>
       </Position6>
       <Position7>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="492" Column="55" TopLine="474"/>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <Caret Line="149" Column="38" TopLine="145"/>
       </Position7>
       <Position8>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="336" Column="39" TopLine="330"/>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <Caret Line="35" Column="43" TopLine="25"/>
       </Position8>
       <Position9>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="339" Column="39" TopLine="333"/>
+        <Caret Line="126" Column="18" TopLine="104"/>
       </Position9>
       <Position10>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="346" Column="39" TopLine="340"/>
+        <Filename Value="frm_plugindetail.pas"/>
+        <Caret Line="4" Column="11" TopLine="1"/>
       </Position10>
       <Position11>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="174" Column="59" TopLine="158"/>
+        <Filename Value="frm_plugindetail.pas"/>
+        <Caret Line="16" Column="34" TopLine="10"/>
       </Position11>
       <Position12>
-        <Filename Value="frm_logger.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\gui\dlg_template.pas"/>
+        <Caret Line="10" Column="11" TopLine="1"/>
       </Position12>
       <Position13>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="322" Column="23" TopLine="297"/>
+        <Caret Line="86" Column="76" TopLine="80"/>
       </Position13>
       <Position14>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="504" Column="117" TopLine="474"/>
+        <Caret Line="89" Column="26" TopLine="80"/>
       </Position14>
       <Position15>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="184" Column="19" TopLine="174"/>
+        <Caret Line="218" Column="35" TopLine="211"/>
       </Position15>
       <Position16>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="5" Column="39" TopLine="1"/>
+        <Caret Line="241" Column="18" TopLine="216"/>
       </Position16>
       <Position17>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="8" Column="75" TopLine="1"/>
+        <Caret Line="246" Column="33" TopLine="221"/>
       </Position17>
       <Position18>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="188" Column="58" TopLine="175"/>
+        <Caret Line="232" Column="88" TopLine="212"/>
       </Position18>
       <Position19>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="115" Column="21" TopLine="101"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position19>
       <Position20>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="17" Column="31" TopLine="1"/>
+        <Caret Line="26" Column="11" TopLine="1"/>
       </Position20>
       <Position21>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="13" Column="30" TopLine="1"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="74" Column="21" TopLine="49"/>
       </Position21>
       <Position22>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="10" Column="3" TopLine="1"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="161" Column="10" TopLine="142"/>
       </Position22>
       <Position23>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="47" Column="1" TopLine="33"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="218" Column="28" TopLine="193"/>
       </Position23>
       <Position24>
         <Filename Value="frm_logger.pas"/>
-        <Caret Line="187" Column="114" TopLine="163"/>
+        <Caret Line="226" Column="38" TopLine="207"/>
       </Position24>
       <Position25>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="40" Column="40" TopLine="34"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="234" Column="37" TopLine="127"/>
       </Position25>
       <Position26>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="41" Column="40" TopLine="35"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="70" Column="26" TopLine="60"/>
       </Position26>
       <Position27>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="51" Column="65" TopLine="49"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="249" Column="4" TopLine="247"/>
       </Position27>
       <Position28>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="50" Column="65" TopLine="48"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="242" Column="13" TopLine="227"/>
       </Position28>
       <Position29>
-        <Filename Value="frm_logger_config.pas"/>
-        <Caret Line="16" Column="35" TopLine="1"/>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="316" Column="10" TopLine="301"/>
       </Position29>
+      <Position30>
+        <Filename Value="frm_logger.pas"/>
+        <Caret Line="320" Column="27" TopLine="313"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>

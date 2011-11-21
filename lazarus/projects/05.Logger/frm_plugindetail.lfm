@@ -171,9 +171,9 @@ inherited frmPluginDetail: TfrmPluginDetail
   end
   object DeviceInfoURL: TOvcURL[19]
     Left = 72
-    Height = 16
+    Height = 1
     Top = 208
-    Width = 78
+    Width = 1
     Font.Color = clBlue
     Font.Style = [fsUnderline]
     ParentColor = False
@@ -182,9 +182,9 @@ inherited frmPluginDetail: TfrmPluginDetail
   end
   object DeviceDownloadURL: TOvcURL[20]
     Left = 72
-    Height = 16
+    Height = 1
     Top = 240
-    Width = 111
+    Width = 1
     Font.Color = clBlue
     Font.Style = [fsUnderline]
     ParentColor = False
