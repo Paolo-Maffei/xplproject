@@ -8,9 +8,6 @@ interface
 
 uses SysUtils
      , Classes
-     {$ifdef fpc}
-//     , UniqueInstanceRaw
-     {$endif}
      {$ifdef unix}
      , IdSysLog
      , IdSysLogMessage
@@ -42,20 +39,17 @@ type { TxPLApplication =======================================================}
            fEventLog : TEventLog;
         {$endif}
 
-        //function Get_UseSysLog : boolean;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
 
         function AppName     : string;
         function FullTitle   : string;
-        //function LogFileName : TFilename;
-        //function DeviceInVendorFile : TXMLDeviceType;
 
         procedure RegisterMe;
         Procedure Log (EventType : TEventType; Msg : String); overload;
         Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const); overload;
-        //Procedure ResetLog;
+
         function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function  Translate(Const aDomain : string; Const aString : string) : string;
 
@@ -65,23 +59,17 @@ type { TxPLApplication =======================================================}
         property Version   : string             read fVersion;
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
-        //property UseSysLog : boolean            read Get_UseSysLog;
      end;
 
 var xPLApplication : TxPLApplication;
 
 implementation // =============================================================
 uses IdStack
-     //, filechannel
-     //, sharedlogger
-     //, consolechannel
      ;
 
 // ============================================================================
 const
      K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
-     //K_MSG_LOGGING         = 'Logging in %s';
-     //K_MSG_ALREADY_STARTED = 'Another instance is alreay started';
      K_FULL_TITLE          = '%s v%s by %s (build %s)';
 
 // TxPLAppFramework ===========================================================
@@ -92,11 +80,6 @@ begin
 
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
    fVersion := GetVersion;
-
-   //{$ifdef fpc}
-   //if not AllowMultiInstance then
-   //   if InstanceRunning(fAdresse.RawxPL) then Log(etError,K_MSG_ALREADY_STARTED);
-   //{$endif}
 
    {$ifdef unix}
       fIdSysLog := nil;
@@ -117,10 +100,7 @@ begin
 
    fFolders  := TxPLCustomFolders.Create(fAdresse);
 
-//   if IsConsole then Logger.Channels.Add(TConsoleChannel.Create);
-//   Logger.Channels.Add(TFileChannel.Create(LogFileName));
    Log(etInfo,FullTitle);
-//   Log(etInfo,K_MSG_LOGGING,[LogFileName]);
 
    fSettings   := TxPLCustomSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
@@ -136,14 +116,6 @@ begin
    fAdresse.Free;
    inherited;
 end;
-
-//function TxPLApplication.LogFileName: TFileName;
-//begin
-//   if not UseSysLog then
-//      result := Format('%s%s.log',[fFolders.DeviceDir, Adresse.device])
-//   else
-//      result := 'syslog';
-//end;
 
 procedure TxPLApplication.RegisterMe;
 var aPath, aVersion, aNiceName : string;
@@ -188,24 +160,10 @@ begin
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
 end;
 
-//function TxPLApplication.Get_UseSysLog : boolean;
-//begin
-//   Result := Assigned(fIdSysLog);
-//end;
-
 Procedure TxPLApplication.Log(EventType : TEventType; Fmt : String; Args : Array of const);
 begin
    Log(EventType,Format(Fmt,Args));
 end;
-
-//procedure TxPLApplication.ResetLog;
-//var f : textfile;
-//begin
-//   System.Assign(f,LogFileName);
-//   ReWrite(f);
-//   Writeln(f,'');
-//   Close(f);
-//end;
 
 function TxPLApplication.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
 var i : integer;
@@ -237,7 +195,6 @@ end;
 initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
-   AllowMultiInstance := false;
    {$ifdef fpc}
       OnGetVendorName      := @GetVendorNameEvent;                             // These functions are not known of Delphi and
       OnGetApplicationName := @GetApplicationEvent;                            // are present here for linux behaviour consistency

@@ -41,22 +41,17 @@ type
     fStart_Time, fEnd_Time: TDateTime;
     fSysTimer:  TFPTimer;
     procedure Set_Mode(const AValue: TTimerMode);
-//    procedure SetDisplayName(const aValue: string); override;
   protected
-//    function Get_TimerName: string;
-//    procedure Set_TimerName(const aValue: string);
     procedure Set_Status(const aStatus: TTimerStatus);
   public
     constructor Create(aOwner: TCollection); override;
     procedure   InitComponent(const aMsg : TxPLMessage);
-//    destructor Destroy;
 
     function StatusAsStr: string;
     procedure SendStatus(const aMsgType: TxPLMessageType = stat);
     function Target: string;
     procedure Tick(Sender: TObject);                                           // This procedure should be called every second by owner
   published
-//    property TimerName: string Read Get_TimerName Write Set_TimerName;
     property Status: TTimerStatus Read fStatus Write Set_Status;
     property Mode: TTimerMode Read fMode Write Set_Mode;
     property Start_Time: TDateTime Read fStart_Time write fStart_Time;
@@ -67,22 +62,6 @@ type
 
   { TxPLTimerItems }
   TxPLTimers = specialize TxPLCollection<TxPLTimer> ;
-
-  //TxPLTimers = class(TCollection)
-  //private
-  //  fOwner: TPersistent;
-  //  function GetItems(index: integer): TxPLTimer;
-  //  procedure SetItems(index: integer; Value: TxPLTimer);
-  //protected
-  //  function GetOwner: TPersistent; override;
-  //public
-  //  constructor Create(aOwner: TPersistent);
-  //
-  //  function Add: TxPLTimer;
-  //  function FindItemName(const aName: string): TxPLTimer;
-  //  function GetItemId(const aName: string): integer;
-  //  property Items[Index: integer]: TxPLTimer Read GetItems Write SetItems; default;
-  //end;
 
 var
   Schema_TimerBasic, Schema_TimerRequest: TxPLSchema;
@@ -95,7 +74,6 @@ uses SysUtils
      , u_xpl_sender
      , u_xpl_body
      , u_xpl_application
-     , timer_listener
      , Math
      ;
 
@@ -148,13 +126,6 @@ begin
 
    Status := started;
 end;
-
-//destructor TxPLTimer.Destroy;
-//begin
-////  FSysTimer.Free;
-////  fTrigMsg.Free;
-//  inherited;
-//end;
 
 function TxPLTimeR.StatusAsStr: string;
 begin

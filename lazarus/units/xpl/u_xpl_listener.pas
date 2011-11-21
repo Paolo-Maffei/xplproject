@@ -49,9 +49,7 @@ type TxPLPrereqMet = procedure of object;
 implementation { ==============================================================}
 uses u_xpl_header
      , u_xpl_schema
-     , u_xpl_common
      , u_xpl_messages
-     , LResources
      ;
 
 const K_MSG_PREREQ_MET      = 'All required modules found';
@@ -64,9 +62,10 @@ begin
 
    fPrereqList := TStringList.Create;
    fDiscovered := TConfigurationRecordList.Create;
-   FilterSet.AddValues([ 'xpl-stat.*.*.*.hbeat.app',
-                         'xpl-stat.*.*.*.hbeat.end',
-                         'xpl-stat.*.*.*.config.app' ]);
+
+   Config.FilterSet.Add('xpl-stat.*.*.*.hbeat.app');                                         // Add mine
+   Config.FilterSet.Add('xpl-stat.*.*.*.hbeat.end');
+   Config.FilterSet.Add('xpl-stat.*.*.*.config.app');
 end;
 
 destructor TxPLListener.destroy;
@@ -102,6 +101,7 @@ var Config_Elmt : TConfigurationRecord;
 begin
    Config_Elmt := TConfigurationRecord(Sender);
    fDiscovered.Remove(Config_Elmt.Address.Device);
+   Config_Elmt.Free;
 end;
 
 {------------------------------------------------------------------------

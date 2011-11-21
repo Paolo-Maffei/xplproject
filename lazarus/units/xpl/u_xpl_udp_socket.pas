@@ -23,7 +23,6 @@ uses Classes
      , IdUDPClient
      , IdUDPServer
      , IdHTTPServer
-     , IdTelnetServer
      , IdSocketHandle
      , u_xpl_common
      ;
@@ -53,12 +52,6 @@ type { TxPLUDPClient ==========================================================}
 
         published
            property    Bindings: TIdSocketHandles read FBindings;               // Inherited property
-     end;
-
-     { TXHCPServer ============================================================}
-     TXHCPServer = class(TIdTelnetServer)                                       // Connexion used to listen XHCP messages
-        public
-           constructor Create(const aOwner : TComponent);
      end;
 
      { TWebServer =============================================================}
@@ -156,16 +149,6 @@ end;
 procedure TxPLUDPServer.UDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
 begin
    xPLApplication.Log(etWarning,ClassName + ' : ' + AnsiReplaceStr(aMessage,#13,' '));
-end;
-
-// TXHCPServer ===============================================================
-constructor TXHCPServer.Create(const aOwner: TComponent);
-begin
-   inherited Create(aOwner);
-
-   DefaultPort  := XPL_UDP_BASE_PORT;
-   LoginMessage := '';
-   Active       := True;
 end;
 
 // TWebServer =================================================================
