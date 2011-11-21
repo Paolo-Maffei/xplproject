@@ -50,9 +50,8 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         fProbingTimer  : TxPLTimer;
         IncomingSocket : TxPLUDPServer;
         HBeat          : TxPLHeartBeater;
-        fFilterSet     : TxPLConfigItem;
         function Get_ConnectionStatus: TConnectionStatus;
-        procedure  NoAnswerReceived(sender : TObject);
+        procedure  NoAnswerReceived({%H-}sender : TObject);
      public
         OnxPLReceived     : TxPLReceivedEvent;
         OnPreProcessMsg   : TxPLReceivedEvent;
@@ -71,7 +70,6 @@ type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
         procedure SendHeartBeatMessage; dynamic;
         function  ConnectionStatusAsStr : string;
         procedure Set_ConnectionStatus(const aValue : TConnectionStatus); virtual;
-        property  FilterSet  : TxPLConfigItem read fFilterSet;
 
         procedure UpdateConfig; dynamic;
         function  DoHBeatApp    (const aMessage : TxPLMessage) : boolean; dynamic;
@@ -104,7 +102,7 @@ constructor TxPLCustomListener.Create(const aOwner : TComponent);
 begin
    inherited;
    fConfig    := TxPLCustomConfig.Create(self);
-   fFilterSet := fConfig.FilterSet;
+
    fCfgFname  := Folders.DeviceDir + Adresse.VD + '.cfg';
 
    fProbingTimer := TxPLTimer.Create(self);
@@ -197,50 +195,41 @@ end;
 
 procedure TxPLCustomListener.HandleConfigMessage(aMessage: TxPLMessage);
 begin
-   if not Adresse.Equals(aMessage.Target) then exit;
+   if not Adresse.Equals(aMessage.Target) or (aMessage.MessageType<>cmnd) then exit;
 
-//   if (aMessage.MessageType = cmnd) and (Adresse.Equals(aMessage.Target)) then begin
-//      if aMessage.Schema.Equals(Schema_ConfigResp) then begin
-   if aMessage is TConfigResponseCmnd then begin
-         Config.CurrentConfig := TConfigCurrentStat(aMessage);
-         if fConfig.IsValid then begin
-            Log(etInfo,K_MSG_CONFIG_RECEIVED,[aMessage.Source.RawxPL]);
-            SaveConfig;
-            UpdateConfig;
-         end else
-            Log(etError, K_MSG_CONF_ERROR);
-   end else
-       with TxPLMessage(PrepareMessage(stat,aMessage.Schema)) do try
-//            if aMessage.Schema.Equals(Schema_ConfigCurr) and
-//               (aMessage.Body.GetValueByKey('command') = 'request') then
-              if aMessage is TConfigCurrentCmnd then Body.Assign(Config.CurrentConfig.Body)
-               else if aMessage is TConfigListCmnd then Body.Assign(Config.ConfigList);
-//            else if aMessage.Schema.Equals(Schema_ConfigList) then
-//                    Body.Assign(Config.ConfigList);
-            Send(ProcessedxPL);
-       finally
-           free;
-       end;
-//   end;
+   if aMessage is TConfigCurrentCmnd then
+         Send(Config.CurrentConfig)
+   else if aMessage is TConfigListCmnd then
+      Send(Config.ConfigList)
+   else if aMessage is TConfigResponseCmnd then begin
+        Config.CurrentConfig.Body.Assign(aMessage.Body);
+        if fConfig.IsValid then begin
+           Log(etInfo,K_MSG_CONFIG_RECEIVED,[aMessage.Source.RawxPL]);
+           SaveConfig;
+           UpdateConfig;
+        end else
+           Log(etError, K_MSG_CONF_ERROR);
+   end;
+
    ConnectionStatus := connected;
 end;
 
 procedure TxPLCustomListener.UDPRead(const aString : string);
 var aMessage : TxPLMessage;
 begin
-   if csDestroying in ComponentState then exit;
-   fProbingTimer.Enabled := false;                                             // Stop waiting anything, I received a message
+   if csDestroying in ComponentState then exit;   fProbingTimer.Enabled := false;                                             // Stop waiting anything, I received a message
    aMessage := MessageBroker(aString);
    with aMessage do try
       if Assigned(OnPreprocessMsg) then OnPreprocessMsg(aMessage);
       if (Adresse.Equals(Target)) or (Target.Isgeneric) then begin            // It is directed to me
 
-         if (aMessage is THeartBeatMsg) and Adresse.Equals(Source) then ConnectionStatus := connected    // I heard my heartbeat : I'm connected
+//         if (aMessage is THeartBeatMsg) and
+         if Adresse.Equals(Source) then ConnectionStatus := connected         // I heard something from me : I'm connected
          else if aMessage is THeartBeatReq then HBeat.Rate := rfRandom
          else if aMessage is TFragmentMsg  then FragmentMgr.Handle(TFragmentMsg(aMessage))
          else if Schema.IsConfig then HandleConfigMessage(aMessage);
 
-         if ( MatchesFilter(fFilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
+         if ( MatchesFilter(Config.FilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
             if not DoHBeatApp(aMessage)
                then DoxPLReceived(aMessage);
 
@@ -258,6 +247,8 @@ begin
       else
          HBeat.Rate := rfDiscovering;
       Log(etInfo,ConnectionStatusAsStr);
+      if (aValue = connected) and not Config.IsValid
+         then Log(etInfo,'Configuration pending');
       if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet;
    end;
 end;
@@ -275,7 +266,7 @@ begin
    result := false;
    if not (aMessage is THeartBeatMsg) then exit;
 
-   if (aMessage.Source.Equals(Adresse)) (*and (not PassMyOwnMessages)*) then exit;
+   if aMessage.Source.Equals(Adresse)  then exit;
 
    if Assigned(OnxPLHBeatApp) then OnxPLHBeatApp( aMessage);
 
@@ -294,4 +285,4 @@ end;
 initialization // =============================================================
    Classes.RegisterClass(TxPLCustomListener);
 
-end.
+end.

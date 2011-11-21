@@ -70,7 +70,7 @@ const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';  
 
 var  LocalAddresses     : TStringList;
      InstanceInitStyle  : TInstanceInitStyle;
-     AllowMultiInstance : boolean;
+     //AllowMultiInstance : boolean;
      VersionInfo        : TxPLVersionInfo;
 
 implementation  //=============================================================
