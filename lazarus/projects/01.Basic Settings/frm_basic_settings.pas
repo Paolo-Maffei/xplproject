@@ -1,12 +1,14 @@
 unit frm_basic_settings;
 
 {$mode objfpc}{$H+}
+{$R *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, RTTICtrls, frm_template;
+  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons, XMLPropStorage{%H-},
+  RTTICtrls, frm_template, RxAboutDialog{%H-};
 
 type { TfrmBasicSettings =====================================================}
      TfrmBasicSettings = class(TFrmTemplate)
@@ -19,10 +21,12 @@ type { TfrmBasicSettings =====================================================}
         Label4: TLabel;
         Label5: TLabel;
         acSaveSettings: TAction;
+        MenuItem1: TMenuItem;
+        MenuItem2: TMenuItem;
         StaticText1: TStaticText;
         StaticText2: TStaticText;
-        tbReload: TToolButton;
-        tbSave: TToolButton;
+        ToolButton2: TToolButton;
+        ToolButton3: TToolButton;
         procedure acReloadExecute(Sender: TObject);
         procedure acSaveSettingsExecute(Sender: TObject);
         procedure cbListenToChange(Sender: TObject);
@@ -44,32 +48,30 @@ const K_ALL_IPS_JOCKER       = '*** ALL IP Addresses ***';
       K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
       COMMENT_LINE           = 'Your network settings have been saved.'#10#13+
                                #10#13'Note that your computer should use a fixed IP Address'#10#13;
-      ERROR_LINE             = 'You do not have enough rights to write in the registry';
 
 //==============================================================================
-function MakeBroadCast(aAddress : string) : string;                             // transforms a.b.c.d in a.b.c.255
+function MakeBroadCast(const aAddress : string) : string;                      // transforms a.b.c.d in a.b.c.255
 begin
    result := LeftStr(aAddress,LastDelimiter('.',aAddress)) + '255';
 end;
 
-{ TFrmMain Object =============================================================}
+// TFrmMain Object =============================================================
 procedure TfrmBasicSettings.FormCreate(Sender: TObject);
 begin
    inherited;
-   lblModuleName.Visible := false;                                             // These controls, inherited from frm_template
-   StatusBar1.Visible    := false;                                             // has no meaning for this app
    acReloadExecute(self);
 end;
 
 procedure TfrmBasicSettings.acReloadExecute(Sender: TObject);
-var ch : string;
+var address : string;
+
 begin
    e_ListenOn.Items.Assign(LocalAddresses);
 
    e_BroadCast.Items.Clear;
    e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
 
-   for ch in e_ListenOn.Items do e_BroadCast.Items.Add( MakeBroadCast ( ch ));
+   for address in e_ListenOn.Items do e_BroadCast.Items.Add( MakeBroadCast ( address ));
 
    e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
@@ -95,21 +97,16 @@ procedure TfrmBasicSettings.acSaveSettingsExecute(Sender: TObject);
 begin
    with xPLApplication.Settings do begin
         BroadCastAddress := e_BroadCast.text;
-        if RightsError then begin
-              xPLApplication.Log(etWarning,ERROR_LINE);
-              acReloadExecute(self);
-           end else begin
-                ListenOnAll := (e_ListenOn.Text = K_ALL_IPS_JOCKER);
-                if not ListenOnAll then ListenOnAddress := e_ListenOn.Text;
+        ListenOnAll := (e_ListenOn.Text = K_ALL_IPS_JOCKER);
+        if not ListenOnAll then ListenOnAddress := e_ListenOn.Text;
 
-                case cbListenTo.ItemIndex of
-                     0 : ListenToAny := true;
-                     1 : ListenToLocal := true;
-                     2 : ListenToAddresses := edtListenTo.Text;
-                end;
-
-                Application.MessageBox(COMMENT_LINE,'Information',0);
-           end;
+        case cbListenTo.ItemIndex of
+             0 : ListenToAny := true;
+             1 : ListenToLocal := true;
+             2 : ListenToAddresses := edtListenTo.Text;
+        end;
+        ShowMessage(COMMENT_LINE);
+        InitComponent;                                                         // Reload the xPLApplication settings
    end;
 end;
 
@@ -119,8 +116,5 @@ begin
    if edtListenTo.Visible then edtListenTo.SetFocus;
 end;
 
-initialization // =============================================================
-  {$I frm_basic_settings.lrs}
-
 end.
-
+

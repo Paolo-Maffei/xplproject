@@ -1,12 +1,12 @@
 inherited frmBasicSettings: TfrmBasicSettings
   Left = 49
-  Height = 296
+  Height = 328
   Top = 251
   Width = 385
   BorderIcons = []
   BorderStyle = bsDialog
   Caption = 'xPL Basic Settings'
-  ClientHeight = 296
+  ClientHeight = 328
   ClientWidth = 385
   Icon.Data = {
     FE19010000000100060010100000010020006804000066000000161600000100
@@ -2269,31 +2269,38 @@ inherited frmBasicSettings: TfrmBasicSettings
   }
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
-    Top = 273
+    Top = 305
     Width = 385
   end
   inherited ToolBar: TToolBar
     Width = 385
     TabOrder = 7
     inherited Panel4: TPanel
-      Left = 185
+      Left = 257
+      Width = 128
+      ClientWidth = 128
+      inherited lblModuleName: TTILabel
+        Width = 122
+      end
     end
-    object tbSave: TToolButton[3]
-      Left = 97
-      Top = 0
-      Action = acSaveSettings
-      AutoSize = True
+    inherited AppButton: TSpeedButton
+      Visible = False
     end
-    object tbReload: TToolButton[4]
-      Left = 53
+    object ToolButton2: TToolButton[4]
+      Left = 66
       Top = 0
       Action = acReload
+    end
+    object ToolButton3: TToolButton[5]
+      Left = 155
+      Top = 0
+      Action = acSaveSettings
     end
   end
   object Label3: TLabel[3]
     Left = 16
     Height = 16
-    Top = 168
+    Top = 176
     Width = 247
     Caption = 'Broadcast address used to send xPL Messages :'
     Font.Color = clNavy
@@ -2303,7 +2310,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object Label4: TLabel[4]
     Left = 16
     Height = 16
-    Top = 120
+    Top = 128
     Width = 148
     Caption = 'Listen for xPL messages on :'
     Font.Color = clNavy
@@ -2313,7 +2320,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object e_BroadCast: TComboBox[5]
     Left = 16
     Height = 23
-    Top = 184
+    Top = 192
     Width = 352
     ItemHeight = 15
     TabOrder = 1
@@ -2321,7 +2328,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object e_ListenOn: TComboBox[6]
     Left = 16
     Height = 23
-    Top = 136
+    Top = 144
     Width = 352
     ItemHeight = 15
     TabOrder = 0
@@ -2329,7 +2336,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object StaticText2: TStaticText[7]
     Left = 16
     Height = 40
-    Top = 80
+    Top = 88
     Width = 352
     Caption = 'These settings are mandatory to get any xPL application to work as expected.'
     Color = clNone
@@ -2341,7 +2348,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object StaticText1: TStaticText[8]
     Left = 16
     Height = 41
-    Top = 32
+    Top = 40
     Width = 352
     Caption = 'Settings below affect how xPL applications running on this computer transmit and receive xPL messages via the network.'
     TabOrder = 5
@@ -2349,7 +2356,7 @@ inherited frmBasicSettings: TfrmBasicSettings
   object cbListenTo: TComboBox[9]
     Left = 16
     Height = 23
-    Top = 232
+    Top = 240
     Width = 352
     ItemHeight = 15
     Items.Strings = (
@@ -2358,19 +2365,20 @@ inherited frmBasicSettings: TfrmBasicSettings
       'Only the following IP addresses :'
     )
     OnChange = cbListenToChange
+    Style = csDropDownList
     TabOrder = 2
   end
   object edtListenTo: TEdit[10]
     Left = 16
     Height = 23
-    Top = 264
+    Top = 272
     Width = 352
     TabOrder = 3
   end
   object Label5: TLabel[11]
     Left = 16
     Height = 16
-    Top = 216
+    Top = 224
     Width = 165
     Caption = 'Listen messages coming from :'
     Font.Color = clNavy
@@ -2378,15 +2386,17 @@ inherited frmBasicSettings: TfrmBasicSettings
     ParentFont = False
   end
   inherited ActionList: TActionList[12]
-    object acSaveSettings: TAction[4]
-      Caption = '&Save'
+    object acSaveSettings: TAction[3]
+      Caption = '&Save Settings'
       ImageIndex = 3
       OnExecute = acSaveSettingsExecute
     end
-    object acReload: TAction[5]
-      Caption = 'Reload'
+    object acReload: TAction[4]
+      Caption = 'Reload Settings'
       ImageIndex = 4
       OnExecute = acReloadExecute
+    end
+    inherited acCoreConfigure: TAction[5]
     end
   end
   inherited xPLMenu: TPopupMenu[13]
@@ -2395,8 +2405,16 @@ inherited frmBasicSettings: TfrmBasicSettings
   inherited XMLPropStorage: TXMLPropStorage[14]
     left = 336
   end
-  inherited RxAboutDialog1: TRxAboutDialog[15]
-    left = 264
-    top = 0
+  inherited AboutDlg: TRxAboutDialog[15]
+  end
+  inherited AppMenu: TPopupMenu[16]
+    left = 120
+    top = 88
+    object MenuItem1: TMenuItem[0]
+      Action = acSaveSettings
+    end
+    object MenuItem2: TMenuItem[1]
+      Action = acReload
+    end
   end
 end
