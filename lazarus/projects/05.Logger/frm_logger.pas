@@ -343,6 +343,7 @@ begin
   if anode1 = nil then begin
      anode1 := tvMessages.Items.AddChild(MsgNode,MsgTypeToStr(axPLMessage.MessageType));
      anode1.ImageIndex:= K_IMG_CMND + Ord(axPLMessage.MessageType);
+     anode1.SelectedIndex := anode1.ImageIndex;
   end;
   aNode2 := anode1.FindNode(axPLMessage.schema.Classe);
   if aNode2 = nil then
@@ -409,12 +410,15 @@ begin
    if not Assigned(NetNode) then NetNode := tvMessages.Items.AddChild(nil, K_ROOT_NODE_NAME)
                     else NetNode.DeleteChildren;
    NetNode.ImageIndex:=K_IMG_NETWORK;
+   NetNode.SelectedIndex := K_IMG_NETWORK;
    if not Assigned(MsgNode) then msgNode := tvMessages.Items.AddChild(nil, K_MESSAGES_ROOT)
                     else MsgNode.DeleteChildren;
    msgNode.ImageIndex:=K_IMG_MESSAGE;
+   msgNode.SelectedIndex := K_IMG_MESSAGE;
    if not Assigned(ConNode) then ConNode := tvMessages.Items.AddChild(nil, K_CONVERSATION_ROOT)
                     else ConNode.DeleteChildren;
    ConNode.ImageIndex:=K_IMG_THREAD;
+   ConNode.SelectedIndex := K_IMG_THREAD;
    if not Assigned(MacNode) then MacNode := tvMessages.items.AddChild(nil, K_MACRO_ROOT)
                     else MacNode.DeleteChildren;
    tvMessages.Selected := NetNode;
