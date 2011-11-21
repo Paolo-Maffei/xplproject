@@ -1,48 +1,51 @@
 inherited frmxPLMessage: TfrmxPLMessage
   Left = 58
-  Height = 406
+  Height = 389
   Top = 119
-  Width = 608
+  Width = 625
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
   Caption = 'xPL Message details'
-  ClientHeight = 406
-  ClientWidth = 608
+  ClientHeight = 389
+  ClientWidth = 625
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowInTaskBar = stAlways
   inherited StatusBar1: TStatusBar
-    Top = 383
-    Width = 608
+    Top = 366
+    Width = 625
   end
   inherited ToolBar: TToolBar
-    Width = 608
+    Width = 625
     TabOrder = 2
-    inherited Panel4: TPanel
-      Left = 408
+    inherited ToolButton9: TToolButton
+      DropdownMenu = nil
     end
-    object ToolButton3: TToolButton[3]
-      Left = 53
+    inherited Panel4: TPanel
+      Left = 425
+    end
+    object ToolButton3: TToolButton[4]
+      Left = 66
       Top = 0
       Action = acSend
       ImageIndex = 20
     end
-    object tbOk: TToolButton[4]
-      Left = 251
+    object tbOk: TToolButton[5]
+      Left = 259
       Top = 0
       Caption = '&Ok'
       ImageIndex = 15
       OnClick = tbOkClick
     end
-    object tbCancel: TToolButton[5]
-      Left = 281
+    object tbCancel: TToolButton[6]
+      Left = 299
       Top = 0
       Caption = '&Cancel'
       ImageIndex = 16
     end
-    object tbCommands: TToolButton[6]
-      Left = 164
+    object tbCommands: TToolButton[7]
+      Left = 177
       Top = 0
       Caption = 'Commands'
       DropdownMenu = popCommands
@@ -50,8 +53,8 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = tbCommandsClick
       Style = tbsDropDown
     end
-    object tbFunctions: TToolButton[7]
-      Left = 92
+    object tbFunctions: TToolButton[8]
+      Left = 105
       Top = 0
       Caption = 'Functions'
       DropdownMenu = popFunctions
@@ -59,8 +62,8 @@ inherited frmxPLMessage: TfrmxPLMessage
       PopupMenu = popFunctions
       Style = tbsDropDown
     end
-    object ckLoop: TCheckBox[8]
-      Left = 332
+    object ckLoop: TCheckBox[9]
+      Left = 349
       Height = 24
       Top = 0
       Width = 76
@@ -68,40 +71,40 @@ inherited frmxPLMessage: TfrmxPLMessage
       Caption = 'Loop Send'
       TabOrder = 1
     end
-    object ToolButton2: TToolButton[9]
-      Left = 87
+    object ToolButton2: TToolButton[10]
+      Left = 100
       Top = 0
       Width = 5
       Caption = 'ToolButton2'
       Style = tbsDivider
     end
-    object ToolButton1: TToolButton[10]
-      Left = 246
+    object ToolButton4: TToolButton[11]
+      Left = 289
       Top = 0
-      Width = 5
-      Caption = 'ToolButton1'
-      Style = tbsDivider
+      Width = 10
+      Caption = 'ToolButton4'
+      Style = tbsSeparator
     end
   end
   object PageControl1: TPageControl[3]
     Left = 0
-    Height = 358
+    Height = 341
     Top = 25
-    Width = 608
+    Width = 625
     ActivePage = TabSheet1
     Align = alClient
     TabIndex = 0
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Message Elements'
-      ClientHeight = 330
-      ClientWidth = 600
+      ClientHeight = 313
+      ClientWidth = 617
       object Label4: TLabel
         Left = 4
         Height = 16
         Top = 6
-        Width = 70
-        Caption = 'Name / desc'
+        Width = 71
+        Caption = 'Description :'
         Font.Style = [fsBold]
         ParentColor = False
         ParentFont = False
@@ -171,8 +174,6 @@ inherited frmxPLMessage: TfrmxPLMessage
         end
         inherited lblSize: TTILabel
           Left = 272
-          Height = 1
-          Width = 1
           Font.Style = [fsBold]
           ParentFont = False
         end
@@ -180,13 +181,13 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsRaw: TTabSheet
       Caption = 'Raw'
-      ClientHeight = 330
-      ClientWidth = 602
+      ClientHeight = 313
+      ClientWidth = 617
       object HexEditor: TKHexEditor
         Left = 0
-        Height = 330
+        Height = 313
         Top = 0
-        Width = 602
+        Width = 617
         AddressMode = eamDec
         Align = alClient
         DigitGrouping = 1
@@ -203,8 +204,8 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsPSScript: TTabSheet
       Caption = 'PSScript Handling'
-      ClientHeight = 330
-      ClientWidth = 602
+      ClientHeight = 313
+      ClientWidth = 617
       object ckDevice: TCheckBox
         Left = 8
         Height = 19
@@ -240,9 +241,9 @@ inherited frmxPLMessage: TfrmxPLMessage
       end
       inline mmoPSScript: TSynEdit
         Left = 0
-        Height = 292
+        Height = 275
         Top = 38
-        Width = 602
+        Width = 617
         Align = alBottom
         Anchors = [akTop, akLeft, akRight]
         Font.Height = -13
@@ -848,6 +849,7 @@ inherited frmxPLMessage: TfrmxPLMessage
         Lines.Strings = (
           'mmoPSScript'
         )
+        VisibleSpecialChars = [vscSpace, vscTabAtLast]
         BracketHighlightStyle = sbhsBoth
         inline TSynGutterPartList
           object TSynGutterSeparator
@@ -954,35 +956,35 @@ inherited frmxPLMessage: TfrmxPLMessage
   inherited ActionList: TActionList[4]
     left = 8
     top = 144
-    object acSave: TAction[4]
+    object acSave: TAction[3]
       Caption = 'Save'
       Hint = 'Save this message'
       ImageIndex = 3
       OnExecute = acSaveExecute
     end
-    object acSend: TAction[5]
+    object acSend: TAction[4]
       Caption = 'Send'
       Hint = 'Send this message'
       ImageIndex = 5
       OnExecute = acSendExecute
     end
-    object acLoad: TAction[6]
+    object acLoad: TAction[5]
       Caption = 'Load'
       Hint = 'Load a message from file'
       ImageIndex = 17
       OnExecute = acLoadExecute
     end
-    object acClose: TAction[7]
+    object acClose: TAction[6]
       Caption = 'Close'
       ImageIndex = 0
     end
-    object acPaste: TAction[8]
+    object acPaste: TAction[7]
       Caption = 'Paste'
       Hint = 'Paste a message from clipboard'
       ImageIndex = 19
       OnExecute = tbPasteClick
     end
-    inherited acCoreConfigure: TAction[9]
+    inherited acCoreConfigure: TAction[8]
     end
   end
   inherited xPLMenu: TPopupMenu[5]
@@ -993,23 +995,26 @@ inherited frmxPLMessage: TfrmxPLMessage
     left = 8
     top = 200
   end
-  inherited RxAboutDialog1: TRxAboutDialog[7]
-    left = 8
-    top = 32
+  inherited AboutDlg: TRxAboutDialog[7]
   end
-  object SaveMessage: TxPLMsgSaveDialog[8]
+  inherited AppMenu: TPopupMenu[8]
+    object MenuItem2: TMenuItem[0]
+      Caption = 'New Item1'
+    end
+  end
+  object SaveMessage: TxPLMsgSaveDialog[9]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 8
     top = 256
   end
-  object OpenMessage: TxPLMsgOpenDialog[9]
+  object OpenMessage: TxPLMsgOpenDialog[10]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 8
     top = 312
   end
-  object SynPasSyn1: TSynPasSyn[10]
+  object SynPasSyn1: TSynPasSyn[11]
     Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGreen
@@ -1028,13 +1033,16 @@ inherited frmxPLMessage: TfrmxPLMessage
     left = 104
     top = 64
   end
-  object popCommands: TPopupMenu[11]
-    left = 192
-    top = 8
+  object popCommands: TPopupMenu[12]
+    left = 272
+    top = 96
+    object MenuItem1: TMenuItem
+      Caption = 'New Item1'
+    end
   end
-  object popCopy: TPopupMenu[12]
-    left = 56
-    top = 8
+  object popCopy: TPopupMenu[13]
+    left = 88
+    top = 80
     object mnuCopyMessage: TMenuItem
       Caption = 'Message'
       OnClick = mnuCopyMessageClick
@@ -1048,8 +1056,11 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = mnuCopyFilterClick
     end
   end
-  object popFunctions: TPopupMenu[13]
-    left = 104
-    top = 8
+  object popFunctions: TPopupMenu[14]
+    left = 184
+    top = 104
+    object MenuItem3: TMenuItem
+      Caption = 'New Item1'
+    end
   end
 end

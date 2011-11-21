@@ -622,7 +622,9 @@ inherited frmXMLView: TfrmXMLView
     Lines.Strings = (
       'SynEdit1'
     )
+    VisibleSpecialChars = [vscSpace, vscTabAtLast]
     ReadOnly = True
+    ScrollBars = ssAutoBoth
     BracketHighlightStyle = sbhsBoth
     inline TSynGutterPartList
       object TSynGutterMarks

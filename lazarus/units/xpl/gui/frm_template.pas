@@ -1,26 +1,25 @@
 unit frm_template;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, RTTICtrls,
+  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, Buttons, RTTICtrls,
   u_xPL_Collection, RxAboutDialog;
 
 type { TFrmTemplate ==========================================================}
   TFrmTemplate = class(TForm)
     acAbout: TAction;
     acInstalledApps: TAction;
-    acLogViewer: TAction;
     acQuit: TAction;
     acCoreConfigure: TAction;
     ActionList: TActionList;
     imgBullet: TImage;
     lblModuleName: TTILabel;
     MnuItem1: TMenuItem;
-    mnuNull1: TMenuItem;
     MenuItem13: TMenuItem;
     MenuItem15: TMenuItem;
     MenuItem16: TMenuItem;
@@ -28,23 +27,23 @@ type { TFrmTemplate ==========================================================}
     mnuLaunch: TMenuItem;
     mnuAllApps: TMenuItem;
     mnuNull2: TMenuItem;
-    MenuItem7: TMenuItem;
     Panel4: TPanel;
-    RxAboutDialog1: TRxAboutDialog;
+    AboutDlg: TRxAboutDialog;
+    AppButton: TSpeedButton;
     StatusBar1: TStatusBar;
     ToolBar: TToolBar;
-    ToolButton10: TToolButton;
+    ToolButton1: TToolButton;
     ToolButton9: TToolButton;
     XMLPropStorage: TXMLPropStorage;
     xPLMenu: TPopupMenu;
+    AppMenu: TPopupMenu;
     procedure acAboutExecute(Sender: TObject);
     procedure acCoreConfigureExecute(Sender: TObject);
     procedure acInstalledAppsExecute(Sender: TObject);
-    procedure acLogViewerExecute(Sender: TObject);
     procedure acQuitExecute(Sender: TObject);
+    procedure AppButtonClick(Sender: TObject);
     procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
     procedure FormCreate(Sender: TObject);
-    procedure StatusBar1Click(Sender: TObject);
     procedure ToolButton9Click(Sender: TObject);
   private
     procedure acCommonToolsExecute(Sender : TObject);
@@ -58,32 +57,27 @@ var FrmTemplate: TFrmTemplate;
 
 implementation // =============================================================
 
-uses frm_logviewer
-     , frm_xplappslauncher
+uses frm_xplappslauncher
      , dlg_config
      , lcltype
      , u_xpl_custom_listener
      , u_xpl_application
      , u_xpl_gui_resource
-     , StrUtils
      , Process
      ;
 
 { TFrmTemplate ===============================================================}
 procedure TFrmTemplate.acAboutExecute(Sender: TObject);
+const license = 'license.txt';
+      readme  = 'readme.txt';
 begin
-   with RxAboutDialog1 do begin
+   with AboutDlg do begin
       ApplicationTitle := xPLApplication.AppName;
-      LicenseFileName := 'license.txt';
+      if FileExists(license) then LicenseFileName := license;
+      if FileExists(readme)  then AdditionalInfo.LoadFromFile(readme);
       Picture.Assign(Application.Icon);
-      AdditionalInfo.LoadFromFile('readme.txt');
       Execute;
    end;
-end;
-
-procedure TFrmTemplate.acCoreConfigureExecute(Sender: TObject);
-begin
-   ShowDlgConfig;
 end;
 
 procedure TFrmTemplate.acCommonToolsExecute(Sender: TObject);
@@ -101,9 +95,9 @@ begin
    ShowFrmAppLauncher;
 end;
 
-procedure TFrmTemplate.acLogViewerExecute(Sender: TObject);
+procedure TFrmTemplate.acCoreConfigureExecute(Sender: TObject);
 begin
-   ShowFrmLogViewer;
+   ShowDlgConfig;
 end;
 
 procedure TFrmTemplate.acQuitExecute(Sender: TObject);
@@ -121,17 +115,21 @@ begin
    xPLMenu.PopUp;
 end;
 
+procedure TFrmTemplate.AppButtonClick(Sender: TObject);
+begin
+   AppMenu.Popup;
+end;
+
 procedure TFrmTemplate.AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
 var item : TxPLCollectionItem;
     path, version, nicename : string;
     aMenu : TMenuItem;
 begin
     item := aColl.FindItemName(aName);
-    if assigned(item) and (xPLApplication.Adresse.Device<>aName) then begin
+    if assigned(item) then begin
        xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version,nicename);
-       aMenu := TMenuItem.Create(self);
-       aMenu.Caption := nicename;
-       aMenu.OnClick := @acCommonToolsExecute;
+       aMenu := NewItem( nicename,0, false, (xPLApplication.Adresse.Device<>aName),
+                         @acCommonToolsExecute, 0, '');
        aMenu.Hint    := path;
        mnuLaunch.Add(aMenu);
     end;
@@ -140,8 +138,11 @@ end;
 procedure TFrmTemplate.FormCreate(Sender: TObject);
 var sl : TxPLCustomCollection;
 begin
-   ToolBar.Images := xPLGUIResource.Images;
+   ToolBar.Images := xPLGUIResource.Images16;
    xPLMenu.Images := ToolBar.Images;
+   AppMenu.Images := ToolBar.Images;
+   AppMenu.Items.Clear;
+
    XMLPropStorage.FileName := xPLApplication.Folders.DeviceDir + 'settings.xml';
    XMLPropStorage.Restore;
 
@@ -155,41 +156,38 @@ begin
 
    if xPLApplication is TxPLCustomListener then
       TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
+   lblModuleName.Visible := (xPLApplication is TxPLCustomListener);            // This control has no meaning for non listener apps
 
    xPLApplication.OnLogEvent := @OnLogEvent;
-   acLogViewer.Visible := not xPLApplication.UseSysLog;
 
    Caption := xPLApplication.AppName;
 
    sl := xPLApplication.Settings.GetxPLAppList;
-   AddSubMenuElmt(sl,'basicset');
-   AddSubMenuElmt(sl,'vendfile');
-   AddSubMenuElmt(sl,'piedit');
-   AddSubMenuElmt(sl,'sender');
+      AddSubMenuElmt(sl,'basicset');
+      AddSubMenuElmt(sl,'vendfile');
+      AddSubMenuElmt(sl,'piedit');
+      AddSubMenuElmt(sl,'sender');
+      AddSubMenuElmt(sl,'logger');
    sl.Free;
 
    acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
-end;
-
-procedure TFrmTemplate.StatusBar1Click(Sender: TObject);
-begin
-   if not xPLApplication.UseSysLog then ShowFrmLogViewer;
+   AppButton.Glyph.Assign(Application.Icon);
 end;
 
 procedure TFrmTemplate.OnJoinedEvent;
+var picture_index : integer;
 begin
-   with TxPLCustomListener(xPLApplication) do
-      imgBullet.Picture.LoadFromLazarusResource(IfThen(ConnectionStatus = connected, K_IMG_RECONNECT, K_IMG_DISCONNECT));
+   with TxPLCustomListener(xPLApplication) do begin
+      if ConnectionStatus = connected then picture_index := K_IMG_RECONNECT
+                                      else picture_index := K_IMG_DISCONNECT;
+      xPLGUIResource.Images16.GetBitmap(picture_index,imgBullet.Picture.Bitmap);
+   end;
 end;
 
 procedure TFrmTemplate.OnLogEvent(const aString : string);
 begin
    StatusBar1.Panels[1].Text := aString;
 end;
-
-// ============================================================================
-initialization
-  {$I frm_template.lrs}
 
 end.
 

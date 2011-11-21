@@ -100,12 +100,12 @@ object frmDownloadFile: TfrmDownloadFile
     object ToolButton2: TToolButton
       Left = 81
       Top = 0
-      Width = 4
+      Width = 5
       Caption = 'ToolButton2'
       Style = tbsDivider
     end
     object btnStart: TToolButton
-      Left = 85
+      Left = 86
       Top = 0
       Caption = 'Start'
       ImageIndex = 6

@@ -8,6 +8,7 @@ unit frm_xplappslauncher;
 }
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -85,10 +86,6 @@ begin
    acLaunchExecute(self);
    DlgAcClose.Execute;
 end;
-
-
-initialization
-   {$I frm_xplappslauncher.lrs}
 
 end.
 

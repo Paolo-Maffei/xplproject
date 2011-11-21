@@ -1,15 +1,15 @@
 unit frm_xPLMessage;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
-  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage,
-  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, 
-  SynEdit, SynHighlighterPas, SynEditSearch, v_xplmsg_opendialog, RTTICtrls, Frm_Template,
-  RxAboutDialog;
+  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui,
+  u_xpl_message, frame_message, KHexEditor, SynEdit,  SynHighlighterPas,
+  SynEditSearch, v_xplmsg_opendialog, RTTICtrls,{%H-}RxAboutDialog, Frm_Template ;
 
 type
 
@@ -26,6 +26,9 @@ type
     acSend: TAction;
     HexEditor: TKHexEditor;
     Label4: TLabel;
+    MenuItem1: TMenuItem;
+    MenuItem2: TMenuItem;
+    MenuItem3: TMenuItem;
     mnuCopyMessage: TMenuItem;
     mnuCopyAddress: TMenuItem;
     mnuCopyFilter: TMenuItem;
@@ -40,8 +43,8 @@ type
     edtMsgName: TTIEdit;
     FrameMessage: TTMessageFrame;
     tbFunctions: TToolButton;
-    ToolButton1: TToolButton;
     ToolButton2: TToolButton;
+    ToolButton4: TToolButton;
     tsRaw: TTabSheet;
     tsPSScript: TTabSheet;
     tbOk: TToolButton;
@@ -70,6 +73,7 @@ type
     arrCommandes : TList;
     procedure InitPluginsMenu;
     procedure InitFunctionsMenu;
+    procedure InitAppMenu;
     procedure PluginCommandExecute ( Sender: TObject );
     procedure FunctionExecute( Sender : TObject);
     procedure DisplayMessage;
@@ -79,72 +83,58 @@ type
   end;
 
 implementation // TFrmxPLMessage ===============================================================
-uses frm_Downloadfile,
-     frm_xplappslauncher,
-     u_xpl_custom_message,
-     clipbrd,
-     LCLType,
-     StrUtils,
-     typInfo,
-     u_xpl_schema,
-     u_xpl_common,
-     u_xpl_gui_resource,
-     u_xpl_application,
-     u_xpl_sender,
-     u_xml_plugins,
-     u_xpl_address,
-     u_xpl_header;
-
-// =============================================================================================
-function AppendMenu(const aParent : TMenuItem; const aCaption : string) : TMenuItem;
-begin
-   Result := TMenuItem.Create(aParent);
-   Result.Caption := aCaption;
-   aParent.Add(result);
-end;
+uses u_xpl_custom_message
+     , clipbrd
+     , LCLType
+     , StrUtils
+     , typInfo
+     , u_xpl_schema
+     , u_xpl_common
+     , u_xpl_gui_resource
+     , u_xpl_application
+     , u_xpl_sender
+     , u_xml_plugins
+     , u_xpl_address
+     , u_xpl_header
+     ;
 
 // =============================================================================================
 procedure TfrmxPLMessage.FormCreate(Sender: TObject);
-var aMenu : TMenuItem;
 begin
    inherited;
 
-   lblModuleName.Visible := false;
-
    arrCommandes := TList.Create;
+
    InitPluginsMenu;
    InitFunctionsMenu;
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Caption := '-';
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acPaste;
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Caption := 'Copy...';
-   aMenu.OnClick := @tbCopyClick;
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Caption := '-';
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acSave;
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acLoad;
-   xPLMenu.Items.Insert(0,aMenu);
+   InitAppMenu;
 end;
 
 procedure TfrmxPLMessage.FormDestroy(Sender: TObject);
 begin
    arrCommandes.free;
    inherited;
+end;
+
+procedure TfrmxPLMessage.InitAppMenu;
+var aMenu : TMenuItem;
+begin
+   AppMenu.Items.Clear;
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acPaste;
+   AppMenu.Items.Insert(0,aMenu);
+
+   AppMenu.Items.Insert(0,NewItem('Copy...',0,false,true,@tbCopyClick,0,'Copy'));
+   AppMenu.Items.Insert(0,NewLine);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acSave;
+   AppMenu.Items.Insert(0,aMenu);
+
+   aMenu := TMenuItem.Create(self);
+   aMenu.Action := acLoad;
+   AppMenu.Items.Insert(0,aMenu);
 end;
 
 procedure TfrmxPLMessage.InitPluginsMenu;
@@ -154,37 +144,35 @@ var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
     device : TDeviceType;
 begin
    if xPLApplication.VendorFile.Plugins <> nil then begin
-   for plug in xPLApplication.VendorFile.Plugins do begin
-       aMenu := TMenuItem.Create(self);
-       popCommands.Items.Insert(0,aMenu);
-       aMenu.Caption := TPluginType(plug).Vendor;                              // Get the vendor name as menu entry
-       if TPluginType(plug).Present then
-       for item in (TPluginType(plug).Devices) do begin
-           Device := TDeviceType(item);
-           aSubMenu := AppendMenu(aMenu, Device.Id_);
-           for item2 in Device.Commands do begin
-               commande := TCommandType(item2);
-               aSubSubMenu := AppendMenu(aSubMenu,Commande.Name);
-               aSubSubMenu.OnClick := @PluginCommandExecute;
-               aSubSubMenu.Tag := ArrCommandes.Add(Commande);
-           end;
-           if aSubMenu.Count = 0 then aSubMenu.Free;
-       end;
-       if aMenu.Count = 0 then aMenu.Free;
-     end;
-   end else tbCommands.Enabled:=false;
+      popCommands.Items.Clear;
+      for plug in xPLApplication.VendorFile.Plugins do begin
+          aMenu := NewItem(TPluginType(plug).Vendor,0,false,true,nil,0,'');
+          popCommands.Items.Insert(0,aMenu);
+          if TPluginType(plug).Present then
+          for item in (TPluginType(plug).Devices) do begin
+              Device := TDeviceType(item);
+              aSubMenu := NewItem(Device.Id_,0,false,true,nil,0,'');
+              aMenu.Add(aSubMenu);
+              for item2 in Device.Commands do begin
+                  commande := TCommandType(item2);
+                  aSubSubMenu := NewItem(Commande.Name,0,false,true,@PluginCommandExecute,0,'');
+                  aSubSubMenu.Tag := ArrCommandes.Add(Commande);
+                  aSubMenu.Add(aSubSubMenu);
+              end;
+              if aSubMenu.Count = 0 then aSubMenu.Free;
+          end;
+          if aMenu.Count = 0 then aMenu.Free;
+      end;
+   end
+      else tbCommands.Enabled:=false;
 end;
 
 procedure TfrmxPLMessage.InitFunctionsMenu;
 var ch : string;
-    aMenu : TMenuItem;
 begin
-   for ch in K_KEYWORDS do begin
-       aMenu := TMenuItem.Create(self);
-       popFunctions.Items.Insert(0,aMenu);
-       aMenu.Caption := '{SYS::' + ch + '}';
-       aMenu.OnClick := @FunctionExecute;
-   end;
+   popFunctions.Items.Clear;
+   for ch in K_KEYWORDS do
+       popFunctions.Items.Insert(0,NewItem('{SYS::' + ch + '}',0,false,true,@FunctionExecute,0,''));
 end;
 
 procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
@@ -220,7 +208,6 @@ begin
 
    if tsRaw.Visible then begin
       Stream := TStringStream.Create('');
-//      Stream.Position := 0;
       Stream.WriteString(xPLMessage.RawXPL);
       Stream.Position := 0;
       HexEditor.LoadFromStream(Stream);
@@ -258,9 +245,14 @@ begin
 
    FrameMessage.ReadOnly := edtMsgName.ReadOnly;
    StatusBar1.Visible    := false;
-   DisplayMessage;
-   lblModuleName.Visible := (lblModuleName.Caption <>'');
+
    ToolButton9.Visible   := (OnCloseQuery <> nil);
+   Panel4.Visible := ToolButton9.Visible;                                       // Hide the modulename container if not needed
+   if not ToolButton9.Visible then begin
+      BorderStyle := bsSizeToolWin;
+   end;
+
+   DisplayMessage;
 end;
 
 procedure TfrmxPLMessage.mnuCopyMessageClick(Sender: TObject);
@@ -375,8 +367,6 @@ begin
    Close;
 end;
 
-initialization
-  {$I frm_xplmessage.lrs}
 end.
 
-
+

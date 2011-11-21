@@ -19,7 +19,7 @@ object TMessageFrame: TTMessageFrame
     ParentFont = False
   end
   object Image2: TImage
-    Left = 232
+    Left = 224
     Height = 25
     Top = 8
     Width = 24
@@ -78,7 +78,7 @@ object TMessageFrame: TTMessageFrame
     TabOrder = 4
   end
   object Image1: TImage
-    Left = 232
+    Left = 224
     Height = 21
     Top = 99
     Width = 24
@@ -149,8 +149,8 @@ object TMessageFrame: TTMessageFrame
   end
   object lblSize: TTILabel
     Left = 232
-    Height = 16
+    Height = 1
     Top = 272
-    Width = 34
+    Width = 1
   end
 end

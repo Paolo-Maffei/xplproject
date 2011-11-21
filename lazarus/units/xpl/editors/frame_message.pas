@@ -1,6 +1,7 @@
 unit frame_message;
 
 {$mode objfpc}
+{$r *.lfm}
 
 interface
 
@@ -124,7 +125,6 @@ begin
 end;
 
 initialization //==============================================================
-  {$I frame_message.lrs}
   {$I ..\res\class\class.lrs}
   {$I ..\res\msgtype\msgtype.lrs}
 

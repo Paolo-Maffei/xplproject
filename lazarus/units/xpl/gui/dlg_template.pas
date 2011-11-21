@@ -7,6 +7,7 @@ unit dlg_template;
 }
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -35,17 +36,13 @@ uses u_xpl_gui_resource
 // Form procedures ============================================================
 procedure TDlgTemplate.FormShow(Sender: TObject);
 begin
-   DlgToolbar.Images := xPLGUIResource.Images;
+   DlgToolbar.Images := xPLGUIResource.Images16;
 end;
 
 procedure TDlgTemplate.DlgacCloseExecute(Sender: TObject);
 begin
    Close;
 end;
-
-// ============================================================================
-initialization
-   {$I dlg_template.lrs}
 
 end.
 

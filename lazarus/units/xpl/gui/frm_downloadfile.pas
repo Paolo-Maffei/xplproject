@@ -1,6 +1,7 @@
 unit frm_DownloadFile;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -72,7 +73,7 @@ begin
    ProgressBar.Visible := False;
    btnClose.Enabled := not ckAutoClose.Checked;
    btnStart.Enabled := true;
-   Toolbar.Images   := xPLGUIResource.Images;
+   Toolbar.Images   := xPLGUIResource.Images16;
    lblError.Caption := '';
    if AutoStart then btnStartClick(nil);
 end;
@@ -136,11 +137,6 @@ procedure TfrmDownloadFile.btnCloseClick(Sender: TObject);
 begin
    Close;
 end;
-
-{ TDownloader }
-
-initialization
-  {$I frm_downloadfile.lrs}
 
 end.
 

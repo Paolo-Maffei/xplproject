@@ -11,9 +11,9 @@ object FrmTemplate: TFrmTemplate
   LCLVersion = '0.9.31'
   object StatusBar1: TStatusBar
     Left = 0
-    Height = 19
+    Height = 23
     Hint = 'Clic to open log viewer'
-    Top = 453
+    Top = 449
     Width = 708
     Panels = <    
       item
@@ -26,12 +26,11 @@ object FrmTemplate: TFrmTemplate
     ParentShowHint = False
     SimplePanel = False
     ShowHint = True
-    OnClick = StatusBar1Click
   end
   object imgBullet: TImage
-    Left = 8
+    Left = 88
     Height = 24
-    Top = 416
+    Top = 32
     Width = 24
     BorderSpacing.InnerBorder = 4
     Center = True
@@ -54,17 +53,9 @@ object FrmTemplate: TFrmTemplate
     object ToolButton9: TToolButton
       Left = 1
       Top = 0
+      DropdownMenu = xPLMenu
       ImageIndex = 0
       OnClick = ToolButton9Click
-      Style = tbsDropDown
-    end
-    object ToolButton10: TToolButton
-      Left = 43
-      Top = 0
-      Width = 10
-      AutoSize = True
-      Caption = 'ToolButton3'
-      Style = tbsSeparator
     end
     object Panel4: TPanel
       Left = 508
@@ -88,9 +79,25 @@ object FrmTemplate: TFrmTemplate
         ParentFont = False
       end
     end
+    object ToolButton1: TToolButton
+      Left = 61
+      Top = 0
+      Width = 5
+      Caption = 'ToolButton1'
+      Style = tbsDivider
+    end
+    object AppButton: TSpeedButton
+      Left = 31
+      Height = 24
+      Top = 0
+      Width = 30
+      NumGlyphs = 0
+      OnClick = AppButtonClick
+    end
   end
   object ActionList: TActionList
-    left = 64
+    left = 40
+    top = 88
     object acQuit: TAction
       Category = 'xPL'
       Caption = 'Quit'
@@ -110,29 +117,18 @@ object FrmTemplate: TFrmTemplate
       ImageIndex = 5
       OnExecute = acInstalledAppsExecute
     end
-    object acLogViewer: TAction
-      Category = 'xPL'
-      Caption = 'Application Log'
-      ImageIndex = 42
-      OnExecute = acLogViewerExecute
-    end
     object acCoreConfigure: TAction
       Category = 'xPL'
-      Caption = 'Configuration'
+      Caption = 'Application settings'
       ImageIndex = 44
       OnExecute = acCoreConfigureExecute
     end
   end
   object xPLMenu: TPopupMenu
-    left = 128
+    left = 40
+    top = 144
     object MnuItem1: TMenuItem
       Action = acCoreConfigure
-    end
-    object MenuItem7: TMenuItem
-      Action = acLogViewer
-    end
-    object mnuNull1: TMenuItem
-      Caption = '-'
     end
     object mnuLaunch: TMenuItem
       Caption = 'Launch...'
@@ -158,12 +154,17 @@ object FrmTemplate: TFrmTemplate
   end
   object XMLPropStorage: TXMLPropStorage
     StoredValues = <>
-    left = 200
+    left = 40
+    top = 208
   end
-  object RxAboutDialog1: TRxAboutDialog
+  object AboutDlg: TRxAboutDialog
     Options = [radLicenseTab, radShowImageLogo]
     Caption = 'About'
-    left = 64
-    top = 56
+    left = 40
+    top = 32
   end
-end
+  object AppMenu: TPopupMenu
+    left = 112
+    top = 144
+  end
+end
