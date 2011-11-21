@@ -1,13 +1,14 @@
 unit frm_logger_config;
 
 {$mode objfpc}{$H+}{$M+}
+{$r *.lfm}
 
 interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, ExtCtrls, Spin, XMLPropStorage, Buttons, Grids,
-   RTTICtrls, dlg_config, frame_config;
+   RTTICtrls, dlg_config;
 
 type
 
@@ -31,11 +32,7 @@ type
     XMLPropStorage: TXMLPropStorage;
     procedure FormCreate(Sender: TObject);
     procedure XMLPropStorageRestoreProperties(Sender: TObject);
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end; 
+  end;
 
   procedure ShowDlgLoggerConfig;
 
@@ -69,9 +66,6 @@ procedure TFrmLoggerConfig.XMLPropStorageRestoreProperties(Sender: TObject);
 begin
    frmLogger.ApplySettings(self);
 end;
-
-initialization
-  {$I frm_logger_config.lrs}
 
 end.
 

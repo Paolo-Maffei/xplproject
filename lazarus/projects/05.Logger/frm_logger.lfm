@@ -2308,7 +2308,7 @@ inherited frmLogger: TfrmLogger
       Caption = 'Listen'
       Down = True
       ImageIndex = 6
-      OnClick = PlayExecute
+      OnClick = ListenExecute
       Style = tbsCheck
     end
     object ToolButton6: TToolButton[5]
@@ -2363,10 +2363,6 @@ inherited frmLogger: TfrmLogger
       DesignTop = 81
       inherited edtBody: TTIMemo
         Width = 251
-      end
-      inherited lblSize: TTILabel
-        Height = 1
-        Width = 1
       end
     end
   end
@@ -2469,14 +2465,15 @@ inherited frmLogger: TfrmLogger
       ShowCaptions = True
       TabOrder = 1
       object ToolButton4: TToolButton
-        Left = 1
+        Left = 31
         Top = 0
         Width = 10
-        Caption = 'ToolButton4'
+        Caption = 'Go !'
+        OnClick = acPlayExecute
         Style = tbsSeparator
       end
       object Panel5: TPanel
-        Left = 11
+        Left = 41
         Height = 24
         Top = 0
         Width = 104
@@ -2496,7 +2493,7 @@ inherited frmLogger: TfrmLogger
         end
       end
       object ToolButton7: TToolButton
-        Left = 115
+        Left = 145
         Top = 0
         Width = 10
         Caption = 'ToolButton7'
@@ -2510,6 +2507,11 @@ inherited frmLogger: TfrmLogger
         Align = alRight
         Caption = 'Loop'
         TabOrder = 1
+      end
+      object ToolButton2: TToolButton
+        Left = 1
+        Top = 0
+        Action = acPlay
       end
     end
   end
