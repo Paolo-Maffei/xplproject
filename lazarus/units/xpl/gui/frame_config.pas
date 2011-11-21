@@ -1,6 +1,7 @@
 unit frame_config;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -30,7 +31,7 @@ type
     tsCoreItems: TTabSheet;
     tsSpecific: TTabSheet;
     procedure HBDetailEditingDone(Sender: TObject);
-    procedure HBDetailSelection(Sender: TObject; aCol, aRow: Integer);
+    procedure HBDetailSelection(Sender: TObject; {%h-}aCol, aRow: Integer);
   private
     fConfig : TConfigurationRecord;
     fConfigCurrent : TConfigCurrentStat;
@@ -41,11 +42,8 @@ type
   end; 
 
 implementation //==============================================================
-
-uses uRegExpr
+uses RegExpr
      ;
-
-{ TframeConfig }
 
 procedure TframeConfig.HBDetailEditingDone(Sender: TObject);
 begin
@@ -81,16 +79,15 @@ begin
    edtInstance.Caption := fConfigCurrent.NewConf;
    seInterval.Value    := fConfigCurrent.interval;
 
-   mmoFilters.Lines.Assign(fConfigCurrent.filters);
-   mmoGroups.Lines.Assign(fConfigCurrent.groups);
+   mmoGroups.Lines.Assign (fConfigCurrent.Groups);
+   mmoFilters.Lines.Assign(fConfigCurrent.Filters);
 
    HBDetail.Clear;
    HBDetail.PossibleKeys.Clear;
    HBDetail.Visible := True;
 
-   for i := Pred(fConfigCurrent.Body.ItemCount) downto 0 do                         // Delete standard items from the message
-       if fConfigCurrent.IsCoreValue(i) then fConfigCurrent.Body.DeleteItem(i);     // they're not needed to be displayed in
-                                                                                    // the hBDetail grid
+   for i := Pred(fConfigCurrent.Body.ItemCount) downto 0 do                    // Delete standard items from the message
+       if fConfigCurrent.IsCoreValue(i) then fConfigCurrent.Body.DeleteItem(i);// they're not needed to be displayed in                                                                                    // the hBDetail grid
 
    PageControl1.ActivePage := tsCoreItems;
    if fConfigCurrent.Body.ItemCount>0 then HBDetail.Assign(fConfigCurrent.Body);
@@ -102,9 +99,9 @@ end;
 procedure TframeConfig.Assign(const aResponse : TConfigResponseCmnd);
 begin
    aResponse.NewConf  := edtInstance.Caption;
-   aResponse.interval := seInterval.Value;
-   aResponse.filters  := TStringList(mmoFilters.Lines);
-   aResponse.Groups   := TStringList(mmoGroups.Lines);
+   aResponse.Interval := seInterval.Value;
+   aResponse.Filters.Assign(TStringList(mmoFilters.Lines));
+   aResponse.Groups.Assign(TStringList(mmoGroups.Lines));
    HBDetail.CopyTo(aResponse.Body);
 end;
 
@@ -115,13 +112,10 @@ begin
    lblError.Visible := false;
 
    SetConfigCurrent(fConfig.Config.CurrentConfig);
-   for j:=0 to fConfig.Config.ConfigItems.Count-1 do
-       if fConfig.Config.ConfigItems[j].ItemMax > 1 then
-          HBDetail.PossibleKeys.Add(fConfig.Config.ConfigItems[j].DisplayName);
+   for j:=0 to fConfig.Config.ConfigList.Body.ItemCount-1 do
+       if fConfig.Config.ConfigList.ItemMax(j) > 1 then
+          HBDetail.PossibleKeys.Add(fConfig.Config.ConfigList.ItemName(j));
 end;
-
-initialization
-  {$I frame_config.lrs}
 
 end.
 

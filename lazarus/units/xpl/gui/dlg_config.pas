@@ -16,7 +16,6 @@ type
   TDlgConfig = class(TDlgTemplate)
     DlgacApply: TAction;
     frameConfig1: TframeConfig;
-    pnlGUI: TPanel;
     ToolButton1: TToolButton;
     procedure DlgacApplyExecute(Sender: TObject);
   private

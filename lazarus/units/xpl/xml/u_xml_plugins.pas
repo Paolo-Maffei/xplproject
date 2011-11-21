@@ -402,35 +402,5 @@ begin
    Result := TPluginType(inherited Items[index]);
 end;
 
-// TXMLLocationType ======================================================================
-//function TXMLLocationType.Get_Url: AnsiString;
-//begin Result := GetAttribute(K_XML_STR_Url);            end;
-
-// TXMLPluginType ========================================================================
-//function TXMLPluginType.Get_Vendor: AnsiString;
-//begin Result := AnsiLowerCase(ExtractWord(1,Name,[' '])); end;
-//
-//function TXMLPluginType.Get_Description: AnsiString;
-//begin Result := GetAttribute(K_XML_STR_Description);    end;
-//
-//function TXMLPluginType.Get_Url: AnsiString;
-//begin Result := GetAttribute(K_XML_STR_Url);            end;
-//
-//function TXMLPluginType.Get_Type_: AnsiString;
-//begin Result := GetAttribute(K_XML_STR_Type);           end;
-//
-//function TXMLPluginType.Get_Name: AnsiString;
-//begin Result := GetAttribute(K_XML_STR_Name);           end;
-
-// TXMLPluginsFile =======================================================================
-//function TXMLPluginsFile.Get_Version: AnsiString;
-//begin result := FNode.Attributes.GetNamedItem(K_XML_STR_Version).NodeValue; end;
-//
-//constructor TXMLPluginsFile.Create(ANode: TDOMNode);
-//begin
-//   inherited Create(aNode, K_XML_STR_Plugin);
-//   fLocations := TXMLLocationsType.Create(aNode, K_XML_STR_Location);
-//end;
-
 end.
 

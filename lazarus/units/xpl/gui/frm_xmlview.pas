@@ -1,6 +1,7 @@
 unit frm_XMLView;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -21,6 +22,7 @@ type
   end;
 
   procedure ShowFrmXMLView(const aFileName : string);
+  procedure ShowFrmXMLView(const aStringList : TStringList); overload;
 
 var frmXMLView: TfrmXMLView;
 
@@ -37,16 +39,19 @@ begin
   FrmXMLView.ShowModal;
 end;
 
+procedure ShowFrmXMLView(const aStringList: TStringList);
+begin
+  if not Assigned(FrmXMLView) then Application.CreateForm(TFrmXMLView,FrmXMLView);
+  FrmXMLView.SynEdit1.Lines.Assign(aStringList);
+  FrmXMLView.ShowModal;
+end;
+
 procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
    inherited;
    Caption := FilePath;
-   SynEdit1.Lines.LoadFromFile(filepath);
+   if FilePath<>'' then SynEdit1.Lines.LoadFromFile(filepath);
 end;
-
-// ============================================================================
-initialization
-  {$I frm_xmlview.lrs}
 
 end.
 

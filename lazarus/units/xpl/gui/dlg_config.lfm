@@ -2,13 +2,13 @@ inherited DlgConfig: TDlgConfig
   Left = 188
   Height = 381
   Top = 31
-  Width = 677
+  Width = 364
   Caption = 'Application Configuration'
   ClientHeight = 381
-  ClientWidth = 677
+  ClientWidth = 364
   OnShow = FormShow
   inherited DlgToolbar: TToolBar
-    Width = 677
+    Width = 364
     object ToolButton1: TToolButton[2]
       Left = 86
       Top = 0
@@ -18,14 +18,16 @@ inherited DlgConfig: TDlgConfig
   inline frameConfig1: TframeConfig[1]
     Left = 2
     Top = 25
-    Width = 673
+    Width = 360
     Align = alBottom
     BorderSpacing.Around = 2
-    ClientWidth = 673
+    ClientWidth = 360
     TabOrder = 1
     inherited PageControl1: TPageControl
       Width = 353
+      ActivePage = nil
       Align = alLeft
+      TabIndex = -1
       inherited tsCoreItems: TTabSheet
         ClientWidth = 345
       end
@@ -37,15 +39,7 @@ inherited DlgConfig: TDlgConfig
       end
     end
   end
-  object pnlGUI: TPanel[2]
-    Left = 360
-    Height = 322
-    Top = 48
-    Width = 306
-    BevelOuter = bvLowered
-    TabOrder = 2
-  end
-  inherited DlgActions: TActionList[3]
+  inherited DlgActions: TActionList[2]
     left = 288
     top = 0
     inherited DlgacClose: TAction

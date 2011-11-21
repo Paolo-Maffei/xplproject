@@ -6,109 +6,119 @@ interface
 
 uses Classes
      , SysUtils
-     , Controls
+     , ImgList
      ;
 
-type TxPLGUIResource = class
-        private
-           fImages     : TImageList;
+type // TxPLGUIResource =======================================================
+     TxPLGUIResource = class
+     private
+        fImages16 : TCustomImageList;
+        fImages32 : TCustomImageList;
+        function Get_Images16 : TCustomImageList;
+        function Get_Images32 : TCustomImageList;
+     public
+        constructor Create;
 
-        public
-           constructor Create;
-           destructor  Destroy; override;
-
-           property Images    : TImageList         read fImages;
+        property Images16 : TCustomImageList read Get_Images16;
+        property Images32 : TCustomImageList read Get_Images32;
      end;
 
 var xPLGUIResource : TxPLGUIResource;
 
-const K_IMG_RECONNECT  = 'reconnect';
-      K_IMG_DISCONNECT = 'disconnect';
-      K_IMG_OK         = 'button_ok';
-      K_IMG_CANCEL     = 'button_cancel';
-
-var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD, K_IMG_MESSAGE,
-    K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_LOUPE, K_IMG_CE_PROCEDURE,
-    K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE,
-    K_IMG_DOCUMENT_OPEN, K_IMG_RECORD, K_IMG_MENU_RUN,
-    K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE, K_IMG_RED_BADGE : integer;
+var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD,
+    K_IMG_MESSAGE, K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND,
+    K_IMG_LOUPE, K_IMG_CE_PROCEDURE, K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD,
+    K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE, K_IMG_DOCUMENT_OPEN, K_IMG_RECORD,
+    K_IMG_MENU_RUN, K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE,
+    K_IMG_RED_BADGE, K_IMG_RECONNECT, K_IMG_DISCONNECt, K_IMG_OK, K_IMG_CANCEL : integer;
 
 implementation // =============================================================
-uses Forms,
-     LResources;
+uses Forms
+     , LResources
+     ;
 
 constructor TxPLGUIResource.Create;
 begin
    inherited;
-
-   fImages := TImageList.Create(nil);
-   fImages.AddLazarusResource('xpl');               // 0
-   fImages.AddLazarusResource('menu_exit');         // 1
-   fImages.AddLazarusResource('menu_information');  // 2
-   K_IMG_DOCUMENT_SAVE := fImages.AddLazarusResource('laz_save');          // 3
-   fImages.AddLazarusResource('laz_refresh');       // 4
-   K_IMG_CE_PROCEDURE := fImages.AddLazarusResource('ce_procedure');      // 5
-   K_IMG_MENU_RUN := fImages.AddLazarusResource('menu_run');          // 6
-   K_IMG_pkg_installed := fImages.AddLazarusResource('pkg_installed');     // 7
-   fImages.AddLazarusResource('txt');               // 8
-   fImages.AddLazarusResource('2downarrow');        // 9
-   K_IMG_EDIT_ADD := fImages.AddLazarusResource('edit_add');          // 10
-   K_IMG_EDIT_REMOVE := fImages.AddLazarusResource('edit_remove');       // 11
-   fImages.AddLazarusResource('ledgreen');          // 12
-   fImages.AddLazarusResource('ledorange');         // 13
-   fImages.AddLazarusResource('ledred');            // 14
-   fImages.AddLazarusResource(K_IMG_OK);            // 15
-   fImages.AddLazarusResource(K_IMG_CANCEL);        // 16
-   K_IMG_DOCUMENT_OPEN := fImages.AddLazarusResource('fileopen');          // 17
-   fImages.AddLazarusResource('editcopy');          // 18
-   fImages.AddLazarusResource('editpaste');         // 19
-   K_IMG_MAIL_FORWARD := fImages.AddLazarusResource('mail_forward');      // 20
-   fImages.AddLazarusResource('misc');              // 21
-   fImages.AddLazarusResource('player_pause');      // 22
-   fImages.AddLazarusResource('player_stop');       // 23
-   fImages.AddLazarusResource('item_filter');       // 24
-   fImages.AddLazarusResource('menu_clean');        // 25
-   fImages.AddLazarusResource('up');                // 26
-   fImages.AddLazarusResource('down');              // 27
-   fImages.AddLazarusResource('clock');             // 28
-   fImages.AddLazarusResource('etError');           // 29
-   fImages.AddLazarusResource('etInfo');            // 30
-   fImages.AddLazarusResource('etWarning');         // 31
-   fImages.AddLazarusResource('exit');              // 32
-   fImages.AddLazarusResource(K_IMG_DISCONNECT);    // 33
-   fImages.AddLazarusResource(K_IMG_RECONNECT);     // 34
-   fImages.AddLazarusResource('activity');          // 35
-   fImages.AddLazarusResource('trash');             // 36
-   fImages.AddLazarusResource('check');             // 37
-   fImages.AddLazarusResource('notchecked');        // 38
-   fImages.AddLazarusResource('logview');           // 39
-   K_IMG_SYNCHRONIZE := fImages.AddLazarusResource('synchronize');       // 40
-   fImages.AddLazarusResource('preferences');       // 41
-   K_IMG_GREEN_BADGE := fImages.AddLazarusResource('greenbadge');        // 42
-   K_IMG_RED_BADGE := fImages.AddLazarusResource('redbadge');          // 43
-   K_IMG_BLUE_BADGE:= fImages.AddLazarusResource('bluebadge');         // 44
-   K_IMG_ORANGE_BADGE := fImages.AddLazarusResource('orangebadge');       // 45
-   K_IMG_EDIT_FIND := fImages.AddLazarusResource('edit-find');         // 46
-   fImages.AddLazarusResource('Indy');              // 47
-   fImages.AddLazarusResource('splash_logo');       // 48
-   K_IMG_THREAD  := fImages.AddLazarusResource('thread');
-   K_IMG_MESSAGE := fImages.AddLazarusResource('message');
-   K_IMG_NETWORK := fImages.AddLazarusResource('network');
-   K_IMG_CMND := fImages.AddLazarusResource('xpl-cmnd');
-   K_IMG_STAT := fImages.AddLazarusResource('xpl-stat');
-   K_IMG_TRIG := fImages.AddLazarusResource('xpl-trig');
-   K_IMG_LOUPE := fImages.AddLazarusResource('loupe');
-   K_IMG_RECORD := fImages.AddLazarusResource('record');
+   fImages16 := TCustomImageList.Create(Application);
+   fImages32 := TCustomImageList.Create(Application);
 end;
 
-destructor TxPLGUIResource.Destroy;
+function TxPLGUIResource.Get_Images32: TCustomImageList;
 begin
-   fImages.Free;
-   inherited;
+   Result := fImages32;
+   if fImages32.Count = 0 then begin                                           // Resources are only loaded if they are accessed at least once
+      fImages32.AddLazarusResource('etError');                                 // 29
+      fImages32.AddLazarusResource('etInfo');                                  // 30
+      fImages32.AddLazarusResource('etWarning');                               // 31
+   end;
 end;
 
-initialization
+function TxPLGUIResource.Get_Images16: TCustomImageList;
+begin
+   Result := fImages16;
+   if fImages16.Count = 0 then begin                                           // Resources are only loaded if they are accessed at least once
+      fImages16.AddLazarusResource('xpl');                                     // 0
+      fImages16.AddLazarusResource('menu_exit');                               // 1
+      fImages16.AddLazarusResource('menu_information');                        // 2
+      K_IMG_DOCUMENT_SAVE := fImages16.AddLazarusResource('laz_save');         // 3
+      fImages16.AddLazarusResource('laz_refresh');                             // 4
+      K_IMG_CE_PROCEDURE := fImages16.AddLazarusResource('ce_procedure');      // 5
+      K_IMG_MENU_RUN := fImages16.AddLazarusResource('menu_run');              // 6
+      K_IMG_pkg_installed := fImages16.AddLazarusResource('pkg_installed');    // 7
+      fImages16.AddLazarusResource('txt');                                     // 8
+      fImages16.AddLazarusResource('2downarrow');                              // 9
+      K_IMG_EDIT_ADD := fImages16.AddLazarusResource('edit_add');              // 10
+      K_IMG_EDIT_REMOVE := fImages16.AddLazarusResource('edit_remove');        // 11
+      fImages16.AddLazarusResource('ledgreen');                                // 12
+      fImages16.AddLazarusResource('ledorange');                               // 13
+      fImages16.AddLazarusResource('ledred');                                  // 14
+      K_IMG_OK := fImages16.AddLazarusResource('button_ok');                   // 15
+      K_IMG_CANCEL := fImages16.AddLazarusResource('button_cancel');           // 16
+      K_IMG_DOCUMENT_OPEN := fImages16.AddLazarusResource('fileopen');         // 17
+      fImages16.AddLazarusResource('editcopy');                                // 18
+      fImages16.AddLazarusResource('editpaste');                               // 19
+      K_IMG_MAIL_FORWARD := fImages16.AddLazarusResource('mail_forward');      // 20
+      fImages16.AddLazarusResource('misc');                                    // 21
+      fImages16.AddLazarusResource('player_pause');                            // 22
+      fImages16.AddLazarusResource('player_stop');                             // 23
+      fImages16.AddLazarusResource('item_filter');                             // 24
+      fImages16.AddLazarusResource('menu_clean');                              // 25
+      fImages16.AddLazarusResource('up');                                      // 26
+      fImages16.AddLazarusResource('down');                                    // 27
+      fImages16.AddLazarusResource('clock');                                   // 28
+      fImages16.AddLazarusResource('exit');                                    // 32
+      K_IMG_DISCONNECT := fImages16.AddLazarusResource('disconnect');          // 33
+      K_IMG_RECONNECT  := fImages16.AddLazarusResource('reconnect');           // 34
+      fImages16.AddLazarusResource('activity');                                // 35
+      fImages16.AddLazarusResource('trash');                                   // 36
+      fImages16.AddLazarusResource('check');                                   // 37
+      fImages16.AddLazarusResource('notchecked');                              // 38
+      fImages16.AddLazarusResource('logview');                                 // 39
+      K_IMG_SYNCHRONIZE := fImages16.AddLazarusResource('synchronize');        // 40
+      fImages16.AddLazarusResource('preferences');                             // 41
+      K_IMG_GREEN_BADGE := fImages16.AddLazarusResource('greenbadge');         // 42
+      K_IMG_RED_BADGE := fImages16.AddLazarusResource('redbadge');             // 43
+      K_IMG_BLUE_BADGE:= fImages16.AddLazarusResource('bluebadge');            // 44
+      K_IMG_ORANGE_BADGE := fImages16.AddLazarusResource('orangebadge');       // 45
+      K_IMG_EDIT_FIND := fImages16.AddLazarusResource('edit-find');            // 46
+      K_IMG_THREAD  := fImages16.AddLazarusResource('thread');
+      K_IMG_MESSAGE := fImages16.AddLazarusResource('message');
+      K_IMG_NETWORK := fImages16.AddLazarusResource('network');
+      K_IMG_CMND := fImages16.AddLazarusResource('xpl-cmnd');
+      K_IMG_STAT := fImages16.AddLazarusResource('xpl-stat');
+      K_IMG_TRIG := fImages16.AddLazarusResource('xpl-trig');
+      K_IMG_LOUPE := fImages16.AddLazarusResource('loupe');
+      K_IMG_RECORD := fImages16.AddLazarusResource('record');
+   end;
+end;
+
+initialization // =============================================================
    {$I menu.lrs}
+   xPLGUIResource := TxPLGUIResource.Create;
+
+finalization
+   FreeAndNil(xPLGUIResource);
 
 end.
 
