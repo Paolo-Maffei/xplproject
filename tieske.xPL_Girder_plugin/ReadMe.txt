@@ -198,6 +198,9 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
+xx-xxx-2011 version 0.1.4 by Thijs Schreijer
+         More verbose error logging (stacktrace) for handler errors added.
+
 03-oct-2011 version 0.1.3 by Thijs Schreijer
          Added UPnP.basic handler
          Added more verbose logging while trying to connect to the xPL Hub, 
