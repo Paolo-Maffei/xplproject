@@ -421,7 +421,7 @@ local xPLGirder = Super:New ( {
 			for k, v in pairs(handler.Filters) do
 				if self:FilterMatch ( msg, v ) then
 					-- filter matches, go call handler, protected, s = success true/false, r = result
-					s,r = pcall(handler.MessageHandler, handler, msg, v)
+					s,r = gir.pcall(handler.MessageHandler, handler, msg, v)
 					if s then
 						if r then
 							result = true

@@ -467,7 +467,7 @@ local myNewHandler = {
 				svar.announce = "variable"
 				svar.IDlist = {}
 				svar.name = "unknown, value was announced before definition; awaiting completion of announcement"
-				IDlist[kvp.value] = svar
+				self.IDlist[kvp.value] = svar
 				-- we don't have (don't know) our parent, so cannot raise event
 			end
 		end
@@ -561,13 +561,26 @@ local myNewHandler = {
 					-- something is wrong
 					return false, "Could not locate method for this reponse message, UPnP device left?"
 				end
-				response[i] = GetValueByKey(msg, "retval") or ""	-- 2nd argumnet is return value
+				response[i] = GetValueByKey(msg, "retval") or ""	-- 2nd argument is return value
 				i = i + 1
 				-- now add all OUT parameters
 				for n,argID in ipairs(method.order) do	-- loop through the arguments in the correct order as specified
 					if self.IDlist[argID].direction == "out" then
 						-- got an out-going parameter, get value and add it
 						response[i] = GetValueByKey(msg, argID) or ""
+                        if response[i] == "<<chopped_it>>" then
+                            -- it was chopped, so we must reconstruct
+                            local c = 1
+                            local kv
+                            response[i] = ""
+                            repeat
+                                kv = GetValueByKey(msg, argID .. "-" .. c)
+                                if kv then
+                                    response[i] = response[i] .. kv
+                                end
+                                c = c + 1
+                            until kv == nil
+                        end
 						i = i + 1
 					end
 				end
