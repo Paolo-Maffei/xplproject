@@ -200,7 +200,8 @@ When the plugin does not work as expected check the following;
 ============================================================================
 xx-xxx-2011 version 0.1.4 by Thijs Schreijer
          More verbose error logging (stacktrace) for handler errors added.
-
+         Updated the UPnP handler. The UPnP gateway was changed to chop too 
+         large values into smaller pieces, the handler now handles this.
 03-oct-2011 version 0.1.3 by Thijs Schreijer
          Added UPnP.basic handler
          Added more verbose logging while trying to connect to the xPL Hub, 
