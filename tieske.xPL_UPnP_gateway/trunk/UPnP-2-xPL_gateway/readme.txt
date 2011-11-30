@@ -75,7 +75,16 @@ The keys of this message will correspond to the ID's of the statevariable who's
 value changed. The value, is the new value of the variable.
 Generally, its only a single value per message. Devices that use the 
 'LastUpdate' mechanism as described in the AV Rendering Control description 
-(version 1.0, par 2.3) will get more than one value. 
+(version 1.0, par 2.3) will get more than one value.
+In case a value is too large, it will be chopped in pieces. Example;
+the ID = 34, then the following is returned as part of the message;
+34=<<chopped_it>>
+34-1=this is part 1
+34-2=this is part 2
+34-3=etc.
+So if the ID returns "<<chopped_it>>", then the receiver should look for 
+the ID with sub-numbers, the values can be concatenated to get back to the
+original value.
 NOTE: the 'LastUpdate' type updates are for devices supporting multiple 
 instances, the gateway will only handle the first.
 
@@ -112,12 +121,5 @@ In case of success, no 'error' key will be available, but the returnvalue
 (retval) will be present along with all id's and values of arguments with 
 direction 'out'.
 The ID's and the values represent the arguments and the returned values. In
-case a value is too large, it will be chopped in pieces. Example;
-the ID = 34, then the following is returned as part of the response message;
-34=<<chopped_it>>
-34-1=this is part 1
-34-2=this is part 2
-34-3=etc.
-So if the ID returns "<<chopped_it>>", then the receiver should look for 
-the ID with sub-numbers, the values can be concatenated to get back to the
-original value.
+case a value is too large, it will be chopped in pieces, see the 'value 
+updates' section above.
