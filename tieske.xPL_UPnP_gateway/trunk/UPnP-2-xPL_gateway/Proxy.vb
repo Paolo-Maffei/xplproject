@@ -785,7 +785,23 @@ Public Class Proxy
         Try
             If sender.Name <> "LastChange" Then
                 ' its a regular UPnP event value
-                xmsg.KeyValueList.Add(Proxy.GetProxy(sender).ID.ToString, NewValue.ToString)
+                ' cleanup data first
+                Dim Data As String = xPL.xPL_Base.RemoveInvalidxPLchars(NewValue.ToString, XPL_STRING_TYPES.Values)
+                Dim myID As Integer = Proxy.GetProxy(sender).ID
+                Dim i As Integer = 0
+                If Data.Length > 1000 Then
+                    ' response too long, cut it in pieces
+                    xmsg.KeyValueList.Add(myID, "<<chopped_it>>")
+                    i = 1
+                    While Data.Length > 0
+                        xmsg.KeyValueList.Add(myID & "-" & i, Left(Data, 1000))
+                        Data = Mid(Data, 1001)
+                        i = i + 1
+                    End While
+                Else
+                    ' short response, just add it
+                    xmsg.KeyValueList.Add(myID, Data)
+                End If
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
                 log = log & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
