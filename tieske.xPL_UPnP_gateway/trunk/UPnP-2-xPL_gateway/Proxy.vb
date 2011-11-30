@@ -921,8 +921,8 @@ Public Class Proxy
             ' define an argument list
             Dim args(method.Arguments.Count - 1) As UPnPArgument
             Dim i As Integer = 0
-            For n As Integer = 0 To msg.KeyValueList.Count - 1
-                Dim kvp As xPLKeyValuePair = msg.KeyValueList(n)
+            For x As Integer = 0 To msg.KeyValueList.Count - 1
+                Dim kvp As xPLKeyValuePair = msg.KeyValueList(x)
                 If kvp.Key <> "command" And kvp.Key <> "method" And kvp.Key <> "callid" Then
                     ' create a copy of the argument and set its value as provided
                     Dim arg As UPnPArgument = GetProxy(CInt(Val(kvp.Key))).Argument.Clone
@@ -938,9 +938,27 @@ Public Class Proxy
             LogMessage("   Returned: " & retValue.ToString)
             result.KeyValueList.Add("success", "True")
             result.KeyValueList.Add("retval", retValue.ToString)
+            ' now add all returned (out) results to the return message
+            Dim data As String
+            Dim id As Integer
             For Each arg As UPnPArgument In args
                 If arg.Direction = "out" Then
-                    result.KeyValueList.Add(GetProxy(method.GetArg(arg.Name)).ID, arg.DataValue.ToString)
+                    ' cleanup data first
+                    data = xPL.xPL_Base.RemoveInvalidxPLchars(arg.DataValue.ToString, XPL_STRING_TYPES.Values)
+                    id = GetProxy(method.GetArg(arg.Name)).ID
+                    If data.Length > 1000 Then
+                        ' response too long, cut it in pieces
+                        result.KeyValueList.Add(id, "<<chopped_it>>")
+                        i = 1
+                        While data.Length > 0
+                            result.KeyValueList.Add(id & "-" & i, Left(data, 1000))
+                            data = Mid(data, 1001)
+                            i = i + 1
+                        End While
+                    Else
+                        ' short response, just add it
+                        result.KeyValueList.Add(id, data)
+                    End If
                     LogMessage("   " & arg.Name & " = " & arg.DataValue.ToString)
                 End If
             Next
