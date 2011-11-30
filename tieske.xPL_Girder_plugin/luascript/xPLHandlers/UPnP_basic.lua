@@ -442,32 +442,49 @@ local myNewHandler = {
 	UpdateStateVariable = function (self, msg)
 		for i,kvp in ipairs(msg.body) do
 			local svar = self.IDlist[kvp.key]
+            local k = kvp.key
+            local v = kvp.value
+            -- check if value was chopped, and restore if necesary
+            if v == "<<chopped_it>>" then
+                -- it was chopped, so we must reconstruct
+                local c = 1
+                local kv
+                v = ""
+                repeat
+                    kv = GetValueByKey(msg, k .. "-" .. c)
+                    if kv then
+                        v = v .. kv
+                    end
+                    c = c + 1
+                until kv == nil
+            end
+
 			if svar ~= nil then
 				-- found a statevariable
 				local old = svar.value
-				svar.value = kvp.value
+				svar.value = v
 				local pservice = self.IDlist[svar.parent]		-- gets the parent service of the statevariable
 				if pservice ~= nil then
 					local pdevice = self.IDlist[pservice.parent]	-- gets the parent device of the service
 					if pdevice ~= nil then
 						local devname = pdevice.name					-- gets the actual device name
-						gir.TriggerEvent("UPnP value update " .. devname .. ":" .. svar.name, xPLEventDevice, kvp.key, kvp.value, old)
+						gir.TriggerEvent("UPnP value update " .. devname .. ":" .. svar.name, xPLEventDevice, k, v, old)
 					else
 						-- device not found, assume announcement incomplete, no girder event
 					end
 				else
 					-- service not found, assume announcement incomplete, no girder event
 				end
-			elseif tonumber(kvp.key) ~= nil then
+			elseif tonumber(k) ~= nil then
 				-- statevariable was not found, but it is a number, assume that statevariable is not yet
 				-- completely announced and add a table for it anyway
 				local svar = {}
-				svar.ID = kvp.key
-				svar.value = kvp.value
+				svar.ID = k
+				svar.value = v
 				svar.announce = "variable"
 				svar.IDlist = {}
 				svar.name = "unknown, value was announced before definition; awaiting completion of announcement"
-				self.IDlist[kvp.value] = svar
+				self.IDlist[k] = svar
 				-- we don't have (don't know) our parent, so cannot raise event
 			end
 		end
