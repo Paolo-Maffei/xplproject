@@ -1,31 +1,29 @@
---[[
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.
+-- <br/><br/>
+-- This file is an xPL message handler for <code>x10.basic</code> messages.
+-- Received message with this schema will be transformed into a standard Girder event. The event 
+-- source will be xPLGirder. The event payloads will be;
+-- <ol><li>x10 address</li>
+-- <li>command</li>
+-- <li>xpl message type (cmnd, trig, stat)</li>
+-- <li>nil</li></ol>
+-- <br/><br/>
+-- xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
-This file is an xPL message handler for x10.basic messages
-
-
-
-=================================================================================================
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-=================================================================================================
-
-]]--
 
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder

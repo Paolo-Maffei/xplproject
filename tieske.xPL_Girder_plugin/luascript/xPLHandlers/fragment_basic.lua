@@ -1,35 +1,27 @@
---[[
-
-This file is an xPL message handler template to be used with the xPLGirder plugin.
-It allows for the easy handling of specific xPL message types.
-
-This handler enables the use of the 'fragment.basic' schema, for receiving messages. Sending
-these types of messages is not supported through this handler.
-This handler is basically an infrastructure thing, is bypasses the size limit of xPL messages.
-
-
-=================================================================================================
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-=================================================================================================
-
-]]--
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.
+-- <br/><br/>
+-- This file is an xPL message handler for <code>fragment.basic</code> messages. These messages
+-- are fragments of a message that was too large to send at once. This handler will collect them
+-- reconstruct the original message and then deliver that to xPLGirder.
+-- Only receiving these messages is supported, not sending. This handler is basically an 
+-- infrastructure thing, it bypasses the size limit of xPL messages, and should work unnoticed by
+-- the user and other handlers.
+-- <br/><br/>
+-- xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
 require 'Classes.DelayedExecutionDispatcher'
 require 'thread'

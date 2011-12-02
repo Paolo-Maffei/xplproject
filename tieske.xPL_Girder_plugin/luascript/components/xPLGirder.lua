@@ -1,25 +1,41 @@
---[[
-
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-
-]]--
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.
+-- <a href="http://xplproject.org.uk">xPL is an open source home automation protocol</a> that uses simple
+-- text based messages to communicate and provides automatic discovery of devices on the network.
+-- <br/><br/>
+-- After the component has been enabled within Girder and 
+-- <a href="http://www.thijsschreijer.nl/blog/?page_id=150">the xPL infrastructure has been setup</a>,
+-- Girder will automatically connect to the xPL network. xPL uses 
+-- <a href="http://xplproject.org.uk/wiki/index.php?title=XPL_Message_Schema">message schemas</a> to 
+-- identify and specify message contents. For several message schemas handler files have been provided 
+-- and also a template is available to create your own (this requires lua coding).
+-- If the installed handlers do not prevent it, a Girder event will be created for received messages.
+-- The event source will be xPLGirder, the event string will have the format of an xPL filter and the 
+-- event payloads will be;
+-- <ol><li>the xPL message 'pickled'</li>
+-- <li>nil</li>
+-- <li>nil</li>
+-- <li>nil</li></ol>
+-- <br/><br/>
+-- xPLGirder installs in a global table <code>xPLGirder</code>, but that global is only available after 
+-- the component has been started. Several functions can be used through this global table.
+-- <br/><br/>
+-- xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @class module
+-- @name xPLGirder
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
 local Version = '0.1.3'
 local PluginID = 10124
@@ -189,7 +205,17 @@ require 'Components.Classes.Provider'
 require 'Classes.DelayedExecutionDispatcher'
 
 local Super = require 'Components.Classes.Provider'
-
+-----------------------------------------------------------
+-- properties of xPLGirder. These are accessible through the global <code>xPLGirder</code>.
+-- @name properties
+-- @class table
+-- @field Address the xPL address in use by Girder (automatically generated based upon the current systems hostname)
+-- @field Port the current UDP port in use (listening on for incoming xPL messages)
+-- @field ID Girder plugin ID for xPLGirder
+-- @field Name Girder component name for xPL Girder
+-- @field Description Girder component description for xPLGirder
+-- @field Version Component version number
+-- @field Devices table with xPL devices found on the xPL network
 local xPLGirder = Super:New ( {
 
     ID = PluginID,
@@ -255,7 +281,11 @@ local xPLGirder = Super:New ( {
         return true
     end,
 
-
+	-------------------------------------------------------------------
+	-- Sends a heartbeat on to the network.
+	-- This will be done automatically and should normally not be called.
+	-- @name xPLGirder.SendHeartbeat
+	-- @usage xPLGirder:SendHeartbeat()
     SendHeartbeat = function (self)
 		if self.hbeatCount ~= 0 then
 			-- a previous hbeat send was not received back... unstable connection!
@@ -275,6 +305,12 @@ local xPLGirder = Super:New ( {
     end,
 
 
+	-------------------------------------------------------------------
+	-- Sends a heartbeat request for all other devices on the network to
+    -- announce themselves by sending a heartbeat on to the network.
+	-- This will be done automatically at startup.
+	-- @name xPLGirder.SendDiscovery
+	-- @usage xPLGirder:SendDiscovery()
     SendDiscovery = function (self)
         local hb = "xpl-cmnd\n{\nhop=1\nsource=%s\ntarget=*\n}\nhbeat.request\n{\ncommand=request\n}\n"
         local msg = string.format(hb, self.Source)
@@ -558,6 +594,16 @@ local xPLGirder = Super:New ( {
     end,
 
 
+	-------------------------------------------------------------------
+	-- Sends an xPL message on the network.
+	-- The string value provided must be a valid xPL message, but it will
+	-- not be checked for correctness!
+	-- @name xPLGirder.SendMessage
+	-- @param msg a string containing the xPL message to send
+	-- @usage# -- create a heartbeat request message
+	-- local msg = "xpl-cmnd\n{\nhop=1\nsource=tieske-device.girderid\ntarget=*\n}\nhbeat.request\n{\ncommand=request\n}\n"
+	-- -- now send it
+	-- xPLGirder:SendMessage(msg)
     SendMessage = function (self, msg)
 		if not msg then
 			error ("Must provide a message string, call as; SendMessage( self, MsgString )", 2)

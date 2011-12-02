@@ -1,25 +1,44 @@
---[[
-
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-
-]]--
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.
+-- <br/><br/>
+-- This file is part of xPLGirder and provides 2 actions in the Girder interface action tree
+-- <ul><li>send a specific xPL message</li>
+-- <li>send an automatic event message, where the xPL message is being generated based on the 
+-- Girder event that triggered it (see structure below)</li></ul>
+-- Please not that these actions do not work (or might even generate errors) if the xPLGirder
+-- component has not been enabled.
+-- <br/><br/>
+-- The message structure of Girder events being forwarded;<br/>
+-- <code>xpl-trig<br/>
+-- {<br/>
+-- source=vendor.device-instance<br/>
+-- target=*<br/>
+-- hop=1<br/>
+-- }<br/>
+-- girder.basic<br/>
+-- {<br/>
+-- device= ...  Girder device ID<br/>
+-- event= ... Girder eventstring<br/>
+-- [pld1= ... event payload 1]<br/>
+-- [pld2= ... event payload 2]<br/>
+-- [pld3= ... event payload 3]<br/>
+-- [pld4= ... event payload 4]<br/>
+-- }<br/></code>
+-- <br/><br/>
+-- xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
 
 -- This file contains 2 actions;  specific message and the event message
