@@ -329,7 +329,7 @@ local myNewHandler = {
 		-- Check if any of my children are around already
 		if not table.IsEmpty(part.WaitingFor) then
 			-- I do have children, go check each one in the COMPLETED list
-			local done ={}		-- done list, will be deleted at end, top prevent messing with table while iterating
+			local done ={}		-- done list, will be deleted at end, to prevent messing with table while iterating
 			for k,v in pairs(part.WaitingFor) do
 				local p = self.CompFragments[k]
 				if p ~= nil then

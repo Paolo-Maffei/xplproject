@@ -1,41 +1,29 @@
---[[
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.
+-- <br/><br/>
+-- This file is an xPL message handler for <code>sensor.basic</code> messages. A Girder event
+-- will be raised, the value will be in payload 1, any additional fields provided will be stored
+-- in payload 2-4. The events will be raised only for <strong>value changes</strong> so not for
+-- every message received.<br/>
+-- The sensors can be accessed through <code>xPLGirder.Handlers.SensorBasic.sensors</code>. For 
+-- example, to list all sensors type; <code>table.print(xPLGirder.Handlers.SensorBasic.sensors)</code> in the
+-- lua console.
+-- <br/><br/>
+-- xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
-This file was created as an xPL message handler for all messages with schema 'sensor.basic'.
-It generates specific events for just the changed values of the sensors (so new messages
-with same values are not evented).
-
-The value will be in payload 1, any additional fields provided will be stored in payload 2-4.
-
-Sensor values can be accessed in lua through table;
-	xPLGirder.Handlers.SensorBasic.sensors
-
-try typing the following in the interavctive lua console;
-	table.print (xPLGirder.Handlers.SensorBasic.sensors)
-
-
-
-=================================================================================================
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-=================================================================================================
-
-]]--
 
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
