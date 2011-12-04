@@ -141,9 +141,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="readme.txt">
+    <Content Include="readme.txt">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
+    </Content>
     <None Include="xplicon.ico">
     </None>
   </ItemGroup>

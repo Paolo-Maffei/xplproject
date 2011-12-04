@@ -27,13 +27,7 @@
         }
         "Entry"
         {
-        "MsmKey" = "8:_7350DD9908BD1FF91E64EDBA3BF3494D"
-        "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
-        "MsmSig" = "8:_UNDEFINED"
-        }
-        "Entry"
-        {
-        "MsmKey" = "8:_C3401B3E95621DF9A8DFD917D6447E98"
+        "MsmKey" = "8:_A1FF2C1A8D44E4126FA24A6381E8CD00"
         "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
         "MsmSig" = "8:_UNDEFINED"
         }
@@ -45,6 +39,12 @@
         }
         "Entry"
         {
+        "MsmKey" = "8:_C908C2A3C6836E64DE193F0415F85569"
+        "OwnerKey" = "8:_C5B8FF1524F540CA8C41B1B1E7D9F6F9"
+        "MsmSig" = "8:_UNDEFINED"
+        }
+        "Entry"
+        {
         "MsmKey" = "8:_UNDEFINED"
         "OwnerKey" = "8:_41B5B1CFC22B416D9BF66C3573CBA6B9"
         "MsmSig" = "8:_UNDEFINED"
@@ -52,13 +52,13 @@
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_C3401B3E95621DF9A8DFD917D6447E98"
+        "OwnerKey" = "8:_C908C2A3C6836E64DE193F0415F85569"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
         {
         "MsmKey" = "8:_UNDEFINED"
-        "OwnerKey" = "8:_7350DD9908BD1FF91E64EDBA3BF3494D"
+        "OwnerKey" = "8:_A1FF2C1A8D44E4126FA24A6381E8CD00"
         "MsmSig" = "8:_UNDEFINED"
         }
         "Entry"
@@ -220,14 +220,14 @@
             "IsDependency" = "11:FALSE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_7350DD9908BD1FF91E64EDBA3BF3494D"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_A1FF2C1A8D44E4126FA24A6381E8CD00"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
             "AssemblyAsmDisplayName" = "8:UPnP, Version=1.0.3848.24986, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_7350DD9908BD1FF91E64EDBA3BF3494D"
+                    "_A1FF2C1A8D44E4126FA24A6381E8CD00"
                     {
                     "Name" = "8:UPnP.dll"
                     "Attributes" = "3:512"
@@ -251,14 +251,14 @@
             "IsDependency" = "11:TRUE"
             "IsolateTo" = "8:"
             }
-            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C3401B3E95621DF9A8DFD917D6447E98"
+            "{9F6F8455-1EF1-4B85-886A-4223BCC8E7F7}:_C908C2A3C6836E64DE193F0415F85569"
             {
             "AssemblyRegister" = "3:1"
             "AssemblyIsInGAC" = "11:FALSE"
-            "AssemblyAsmDisplayName" = "8:xpllib, Version=5.2.163.0, Culture=neutral, processorArchitecture=MSIL"
+            "AssemblyAsmDisplayName" = "8:xpllib, Version=5.5.0.0, Culture=neutral, processorArchitecture=MSIL"
                 "ScatterAssemblies"
                 {
-                    "_C3401B3E95621DF9A8DFD917D6447E98"
+                    "_C908C2A3C6836E64DE193F0415F85569"
                     {
                     "Name" = "8:xpllib.dll"
                     "Attributes" = "3:512"
@@ -349,14 +349,14 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:UPnP-2-xPL gateway"
-        "ProductCode" = "8:{898D8EF4-2F7B-47F9-95B9-8F3C78D8B257}"
-        "PackageCode" = "8:{FC621157-4465-405E-B2CE-D829FF403945}"
+        "ProductCode" = "8:{C38A430C-F2ED-4DF1-AE00-799F475155A2}"
+        "PackageCode" = "8:{ED22D5E6-695D-4DDD-856A-B99A700E8C19}"
         "UpgradeCode" = "8:{7E8CF505-67FE-46F1-B8FF-A64D2239AA16}"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:FALSE"
-        "ProductVersion" = "8:0.2.1"
+        "ProductVersion" = "8:0.2.2"
         "Manufacturer" = "8:xPL"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"

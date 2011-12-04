@@ -2,7 +2,21 @@
 ==================================
 Copyright 2010-2011 Thijs Schreijer
 
-
+-------------------------------------------------------------------------------
+Changelog;
+04-dec-2011 version 0.2.2
+   - more fixes, illegal xPL characters now properly removed, xml payloads
+     can now be transferred properly
+   - splitting long values over multiple key-value pairs
+   - updated to xPLLib 5.5, so large messages will auto-fragment
+06-sep-2011 version 0.2.1
+   - several fixes, updated media devices code
+04-sep-2011 version 0.2.0
+   - changed announcements (even more messages required) and lots of fixes
+26-aug-2011 version 0.1.0
+   - complete rewrite of the experimental gateway, incorporating lots of 
+     lessons learned
+-------------------------------------------------------------------------------
 Schema used for UPnP gateway
 
 A UPnP device will be dissected into its components and each component will get 
