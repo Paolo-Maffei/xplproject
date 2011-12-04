@@ -1,0 +1,47 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xpllib", "xpllib\xpllib.vbproj", "{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PluginTestApp", "PluginTestApp\PluginTestApp.vbproj", "{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLLib_Code_Examples", "xPLLib_Code_Examples\xPLLib_Code_Examples.vbproj", "{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "xPLLib_Test", "xPLLib_Test\xPLLib_Test.vbproj", "{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEECB23-AF4D-4D26-B339-ECDD2760EC4A}"
+	ProjectSection(SolutionItems) = preProject
+		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		xpllib_5.vsmdi = xpllib_5.vsmdi
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = xpllib_5.vsmdi
+	EndGlobalSection
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1CAF89E-B0DE-4AF5-92E2-A1CC0C654E30}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9BAC82EC-FA9B-406A-A45E-4BE7BF7BC9F3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DBF0D2DA-DA27-4CEB-B7D5-ED6CE20383A6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9FA903CF-8938-4555-8C63-6E3EE98CFEF6}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
