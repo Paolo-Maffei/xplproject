@@ -9,13 +9,15 @@
 -- <a href="http://xplproject.org.uk/wiki/index.php?title=XPL_Message_Schema">message schemas</a> to 
 -- identify and specify message contents. For several message schemas handler files have been provided 
 -- and also a template is available to create your own (this requires lua coding).
--- If the installed handlers do not prevent it, a Girder event will be created for received messages.
+-- If the installed handlers do not prevent it (see below), a Girder event will be created for received 
+-- messages.
 -- The event source will be xPLGirder, the event string will have the format of an xPL filter and the 
 -- event payloads will be;
 -- <ol><li>the xPL message 'pickled'</li>
 -- <li>nil</li>
 -- <li>nil</li>
 -- <li>nil</li></ol>
+-- <br/>To access the message, just unpickle the payload value; <code>local msg = unpickle(pld1)</code>.
 -- <br/><br/>
 -- xPLGirder installs in a global table <code>xPLGirder</code>, but that global is only available after 
 -- the component has been started. Several functions can be used through this global table.
@@ -457,7 +459,7 @@ local xPLGirder = Super:New ( {
 			for k, v in pairs(handler.Filters) do
 				if self:FilterMatch ( msg, v ) then
 					-- filter matches, go call handler, protected, s = success true/false, r = result
-					s,r = gir.pcall(handler.MessageHandler, handler, msg, v)
+					s,r = pcall(handler.MessageHandler, handler, msg, v)
 					if s then
 						if r then
 							result = true
@@ -629,6 +631,23 @@ local xPLGirder = Super:New ( {
 
 } )
 
+local msg -- trick luadoc
+----------------------------------------------------------------------
+-- xPL message table. Each received message is represented in a table
+-- with this structure.
+-- @name message
+-- @class table
+-- @field type the message type, either one of <code>'xpl-cmnd', 'xpl-trig',</code> or <code>'xpl-stat'</code>.
+-- @field hop message hop-count
+-- @field source source address
+-- @field target target address
+-- @field schema message schema
+-- @field body a list/array with all the key-value pairs in the message body. Every item in this list
+-- is a table with 2 key-value pairs; <code>key</code> and <code>value</code> which each contain the key and value
+-- of the key-value pair in that position. So to access the first key use; <code>msg.body[1].key</code> and to access
+-- the accompanying value use <code>msg.body[1].value</code>.
+msg = {}
+msg = nil
 
 return xPLGirder
 

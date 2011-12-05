@@ -1,32 +1,45 @@
---[[
-
-This file is an xPL message handler template to be used with the xPLGirder plugin.
-It grabs UPnP updates from devices and reports them into the global UPnP table.
-
-
-
-=================================================================================================
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
-
-This file is part of xPLGirder.
-
-xPLGirder is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-xPLGirder is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with xPLGirder.  If not, see <http://www.gnu.org/licenses/>.
-
-See the accompanying ReadMe.txt file for additional information.
-=================================================================================================
-
-]]--
+------------------------------------------------------------------------------------------------
+-- xPLGirder is a Girder component to connect Girder to an xPL network.<br/>
+-- <br/>This handler works with the <a href="http://www.thijsschreijer.nl/blog/?tag=upnp">UPnP-2-xPL gateway</a>, the gateway must be installed to make
+-- the handler work (not necessarily on the same system, but within the same network/subnet).
+-- The handler will enable Girder to receive value updates from, and to execute methods on UPnP
+-- devices. It is highly recommended to read the UPnP Device Architecture 1.1 (see <a href="http://www.upnp.org">www.upnp.org</a>)
+-- specifically section 2.3 onwards. And to install the <a href="http://opentools.homeip.net/dev-tools-for-upnp">Developer tools for UPnP</a>, 
+-- which is an essential set of tools and utilities for UPnP development.<br/>
+-- <br/>The handler will create a global table <code>UPnP</code>. This table has two important sub-tables; 
+-- <ul><li><code>UPnP.devices</code> which contains a hierarchical tree of UPnP devices and their underlying components (services, subdevices, etc.)</li>
+-- <li><code>UPnP.IDlist</code> this list contains all elements of the hierarchical tree by their ID</li></ul><br/>
+-- An important note to the hierarchical tree is that the <code>key</code>s of the devices and services are their unique 
+-- names, but adapted for proper display in Girder. The Girder variable inspector will not properly display keys that contain
+-- either '.' (dot) or ':' (colon) characters, hence they will be replaced by '_' (underscore). So it cannot be assumed that the key is
+-- equal to the device/service unique name.
+-- <br/>The UPnP elements that will be listed are;<ul>
+-- <li>devices</li>
+-- <li>services</li>
+-- <li>statevariables</li>
+-- <li>methods</li>
+-- <li>arguments</li>
+-- </ul>Each element has its own ID and has a property <code>parent</code> that contains the ID of the parent element. 
+-- Each parent has a property <code>IDlist</code> with a list of child IDs. <strong>Note:</strong> the IDs are NOT persistent! When 
+-- Girder exits or the UPnP device leaves, the ID will be lost. To identify 
+-- the same device over multiple sessions you should use the unique names of devices and services (see code examples below).<br/>
+-- Each value update reported by a UPnP device as well as UPnP devices arriving/leaving will result in a 
+-- Girder event. The variable updates only arrive if the statevariable is 'evented'. Unevented values may be requested using the <code>poll</code> method.
+-- UPnP methods can be executed using the <code>execute</code> method.<br/>
+-- <br/>xPLGirder is free software: you can redistribute it and/or modify
+-- it under the terms of the GNU General Public License as published by
+-- the Free Software Foundation, either version 3 of the License, or
+-- (at your option) any later version.
+-- xPLGirder is distributed in the hope that it will be useful,
+-- but WITHOUT ANY WARRANTY; without even the implied warranty of
+-- MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+-- GNU General Public License for more details.
+-- You should have received a copy of the GNU General Public License
+-- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
+-- <br/><br/>
+-- See the accompanying ReadMe.txt file for additional information.
+-- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.3, xPLGirder.
 
 require 'Classes.DelayedExecutionDispatcher'
 require 'thread'
@@ -36,6 +49,7 @@ local xPLEventDevice = 10124	-- when raising events, use this as source to set i
 
 local GetValueByKey = function (msg, key)
 	-- get a value from the message at hand by its key (the first occurence of that key)
+	assert(type(msg) == "table", "Expected table for 'msg'; " .. debug.traceback())
 	for k,v in ipairs(msg.body) do
 		if v.key == key then
 			return v.value
@@ -50,6 +64,40 @@ local CleanKey = function (key)
 	end
 	return key
 end
+
+
+local el	-- trick luadoc
+-------------------------------------------------------------------------------------------
+-- Girder events generated by the UPnP handler. All events will have "xPLGirder" as the
+-- event source.
+-- @name UPnP events
+-- @class table
+-- @field arriving Whenever a new UPnP device arrives the following event is raised. Note that 
+-- 3 seconds after the event automatically a variable update request will be sent.<ul>
+-- <li><code>eventstring</code>: "UPnP device arrived; &ltdevice name&gt"</li>
+-- <li><code>pld1</code>: device ID assigned to the device</li>
+-- <li><code>pld2</code>: nil</li>
+-- <li><code>pld3</code>: nil</li>
+-- <li><code>pld3</code>: nil</li>
+-- </ul>
+-- @field leaving Whenever a UPnP device leaves the following event is raised. Note that 
+-- the device has already been removed from the list when the event is raised.<ul>
+-- <li><code>eventstring</code>: "UPnP device left; &ltdevice name&gt"</li>
+-- <li><code>pld1</code>: device ID assigned to the device</li>
+-- <li><code>pld2</code>: nil</li>
+-- <li><code>pld3</code>: nil</li>
+-- <li><code>pld3</code>: nil</li>
+-- </ul>
+-- @field updates Whenever an update of a UPnP variable arrives (automatically for evented variables
+-- or upon request for non-evented variables) the following event is raised.<ul>
+-- <li><code>eventstring</code>: "UPnP value update &ltdevice name&gt:&ltvariable name&gt""</li>
+-- <li><code>pld1</code>: ID of the variable that changed</li>
+-- <li><code>pld2</code>: new value of the variable</li>
+-- <li><code>pld3</code>: old value of the variable</li>
+-- <li><code>pld3</code>: nil</li>
+-- </ul>
+el = {}
+el = nil
 
 local myNewHandler = {
 
@@ -71,6 +119,29 @@ local myNewHandler = {
 		UPnP = {
 			IDlist = self.IDlist,
 			devices = self.DevList,
+			-----------------------------------------------------------------------------------------
+			-- Calls a UPnP method. The call is synchroneous and will immediately return the results
+			-- (eventhough the communications are asynchroneous, both xPL and UPnP). There is a fixed
+			-- timeout of 20 seconds if the UPnP device does not respond.<br/>There are 2 ways to call
+			-- a method; 1) directly on the method table, 2) indirectly using a generic call. See the
+			-- example below for the difference, the results will be identical.
+			-- @name UPnP.CallMethod
+		    -- @param methodid The ID of the method to execute
+			-- @param ... parameters for the method, all parameters MUST be provided for the call to succeed
+		    -- @return success (boolean) <code>true</code> if the call was succesfull, if it failed, the
+			-- second return value will contain the error.
+			-- @return additional return values are all the OUT arguments of the method
+			-- @usage# -- The ID's below are fixed, and will not change over time (but might after firmware update)
+			-- local RecivaUUID = "c29e7602-328f-444d-911c-7cdc8bc74768"
+			-- local RadioServiceID = "urn_reciva-com_serviceId_RecivaRadio"
+			-- -- Get method "GetPlaybackDetails" from the device/service
+			-- local m = UPnP.devices[RecivaUUID].services[RadioServiceID].methods["GetPlaybackDetails"]
+			-- &nbsp
+			-- -- method1: call directly on method table (must provide each argument, even though not used!)
+			-- local success, result = m:execute("", "")
+			-- &nbsp
+			-- -- method2: call indirectly using generic call (must provide each argument, even though not used!)
+			-- local success, result = UPnP:CallMethod(m.ID, "", "")	-- m.ID additional argument needed here
 			CallMethod = function (self, methodid, ...)
 					methodid = (methodid or "") .. ""	-- convert to string
 					local method = self.IDlist[methodid]
@@ -79,6 +150,28 @@ local myNewHandler = {
 					end
 					return method:execute(unpack(arg))
 				end,
+			-----------------------------------------------------------------------------------------
+			-- Requests current value of a device, service or variable. In case of a variable only
+			-- a single value will be requested, in case of a device or service the values off all
+			-- underlying variables (within nested devices/services) will be requested. The request
+			-- will be executed asynchroneously, the updates will come in as regular value updates.
+			-- <br/>There are 2 ways to request a value;
+			-- 1) directly on the service/device/variable table, 2) indirectly using a generic call. See the
+			-- example below for the difference, the results will be identical.
+			-- @name UPnP.PollValue
+			-- @param id The ID of the device, service or variable for which the update is requested.
+			-- @return Nothing
+			-- @usage# -- The ID's below are fixed, and will not change over time (but might after firmware update)
+			-- local RecivaUUID = "c29e7602-328f-444d-911c-7cdc8bc74768"
+			-- local RadioServiceID = "urn_reciva-com_serviceId_RecivaRadio"
+			-- -- Get the service from the device table, the request on a service will return all variables within it
+			-- local s = UPnP.devices[RecivaUUID].services[RadioServiceID]
+			-- &nbsp
+			-- -- method1: call directly on service/device/variable table
+			-- s:poll()
+			-- &nbsp
+			-- -- method2: call indirectly using generic call 
+			-- UPnP:PollValue(s.ID)	-- s.ID additional argument needed here
 			PollValue = function (self, id)
 					id = (id or "") .. "" -- convert to string
 					if id == "" then
@@ -283,7 +376,7 @@ local myNewHandler = {
 		t = string.Split(t, ",")
 		part.ID = t[1]					-- first item is our own ID
 		if self.IDlist[part.ID] ~= nil then
-			if self.IDlist[part.ID].announce == "variable" and GetValueByKey("announce") == "variable" then
+			if self.IDlist[part.ID].announce == "variable" and GetValueByKey(msg, "announce") == "variable" then
 				-- we already have a variable value for this ID, so probably
 				-- a variable update was received before the announcement itself
 				-- get the already created table containing the value and continue
@@ -467,8 +560,8 @@ local myNewHandler = {
 				if pservice ~= nil then
 					local pdevice = self.IDlist[pservice.parent]	-- gets the parent device of the service
 					if pdevice ~= nil then
-						local devname = pdevice.name					-- gets the actual device name
-						gir.TriggerEvent("UPnP value update " .. devname .. ":" .. svar.name, xPLEventDevice, k, v, old)
+						local devname = pdevice.name or "(unannounced device)"					-- gets the actual device name
+						gir.TriggerEvent("UPnP value update " .. devname .. ":" .. svar.name, xPLEventDevice, svar.ID, v, old)
 					else
 						-- device not found, assume announcement incomplete, no girder event
 					end
@@ -489,6 +582,7 @@ local myNewHandler = {
 			end
 		end
 	end,
+
 
 	CallMethod = function (self, method, ...)
 		-- Calls the provided UPnP method using the extra arguments
@@ -578,8 +672,8 @@ local myNewHandler = {
 					-- something is wrong
 					return false, "Could not locate method for this reponse message, UPnP device left?"
 				end
-				response[i] = GetValueByKey(msg, "retval") or ""	-- 2nd argument is return value
-				i = i + 1
+				--response[i] = GetValueByKey(msg, "retval") or ""	-- 2nd argument is return value
+				--i = i + 1
 				-- now add all OUT parameters
 				for n,argID in ipairs(method.order) do	-- loop through the arguments in the correct order as specified
 					if self.IDlist[argID].direction == "out" then

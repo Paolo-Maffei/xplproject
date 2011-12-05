@@ -31,7 +31,10 @@ echo.
 echo Now starting LuaDoc to generate documentation...
 rename luascript\xPLHandlers\xPLHandler_template.txt xPLHandler_template.lua
 rename luascript\xPLHandlers\Block_hbeat_and_config.txt Block_hbeat_and_config.lua
-"%girdocumenter%" -d docs plugins\treescript\xplgirder.lua luascript
+cd luascript
+"%girdocumenter%" -d ..\docs components xplhandlers ..\plugins\treescript\xplgirder.lua
+cd ..
+rem "%girdocumenter%" -d docs plugins\treescript\xplgirder.lua luascript
 rename luascript\xPLHandlers\xPLHandler_template.lua xPLHandler_template.txt
 rename luascript\xPLHandlers\Block_hbeat_and_config.lua Block_hbeat_and_config.txt
 start docs\index.html
