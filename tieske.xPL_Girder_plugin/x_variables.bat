@@ -19,5 +19,5 @@ set girdereditor=C:\Program Files\JGsoft\EditPadPro6\EditPadPro.exe
 rem editor for GUI files
 set girderuieditor=%girder%\designer.exe
 
-rem LuaDoc path
+rem LuaDoc path (executable file)
 set girdocumenter=%LUA_SOURCEPATH%\luadoc_start.lua
