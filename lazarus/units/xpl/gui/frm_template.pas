@@ -171,6 +171,7 @@ begin
    sl.Free;
 
    acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
+   if acCoreConfigure.Visible then acCoreConfigure.ImageIndex:=K_IMG_PREFERENCE;
    AppButton.Glyph.Assign(Application.Icon);
 end;
 

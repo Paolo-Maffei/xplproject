@@ -26,7 +26,7 @@ type // TxPLGUIResource =======================================================
 var xPLGUIResource : TxPLGUIResource;
 
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD,
-    K_IMG_MESSAGE, K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND,
+    K_IMG_MESSAGE, K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_PREFERENCE,
     K_IMG_LOUPE, K_IMG_CE_PROCEDURE, K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD,
     K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE, K_IMG_DOCUMENT_OPEN, K_IMG_RECORD,
     K_IMG_MENU_RUN, K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE,
@@ -87,23 +87,23 @@ begin
       fImages16.AddLazarusResource('up');                                      // 26
       fImages16.AddLazarusResource('down');                                    // 27
       fImages16.AddLazarusResource('clock');                                   // 28
-      fImages16.AddLazarusResource('exit');                                    // 32
-      K_IMG_DISCONNECT := fImages16.AddLazarusResource('disconnect');          // 33
-      K_IMG_RECONNECT  := fImages16.AddLazarusResource('reconnect');           // 34
-      fImages16.AddLazarusResource('activity');                                // 35
-      fImages16.AddLazarusResource('trash');                                   // 36
-      fImages16.AddLazarusResource('check');                                   // 37
-      fImages16.AddLazarusResource('notchecked');                              // 38
-      fImages16.AddLazarusResource('logview');                                 // 39
-      K_IMG_SYNCHRONIZE := fImages16.AddLazarusResource('synchronize');        // 40
-      fImages16.AddLazarusResource('preferences');                             // 41
-      K_IMG_GREEN_BADGE := fImages16.AddLazarusResource('greenbadge');         // 42
-      K_IMG_RED_BADGE := fImages16.AddLazarusResource('redbadge');             // 43
-      K_IMG_BLUE_BADGE:= fImages16.AddLazarusResource('bluebadge');            // 44
-      K_IMG_ORANGE_BADGE := fImages16.AddLazarusResource('orangebadge');       // 45
-      K_IMG_EDIT_FIND := fImages16.AddLazarusResource('edit-find');            // 46
-      K_IMG_THREAD  := fImages16.AddLazarusResource('thread');
-      K_IMG_MESSAGE := fImages16.AddLazarusResource('message');
+      fImages16.AddLazarusResource('exit');                                    // 29
+      K_IMG_DISCONNECT := fImages16.AddLazarusResource('disconnect');          // 30
+      K_IMG_RECONNECT  := fImages16.AddLazarusResource('reconnect');           // 31
+      fImages16.AddLazarusResource('activity');                                // 32
+      fImages16.AddLazarusResource('trash');                                   // 33
+      fImages16.AddLazarusResource('check');                                   // 34
+      fImages16.AddLazarusResource('notchecked');                              // 35
+      fImages16.AddLazarusResource('logview');                                 // 36
+      K_IMG_SYNCHRONIZE := fImages16.AddLazarusResource('synchronize');        // 37
+      K_IMG_PREFERENCE  := fImages16.AddLazarusResource('preferences');        // 38
+      K_IMG_GREEN_BADGE := fImages16.AddLazarusResource('greenbadge');         // 39
+      K_IMG_RED_BADGE := fImages16.AddLazarusResource('redbadge');             // 40
+      K_IMG_BLUE_BADGE:= fImages16.AddLazarusResource('bluebadge');            // 41
+      K_IMG_ORANGE_BADGE := fImages16.AddLazarusResource('orangebadge');       // 42
+      K_IMG_EDIT_FIND := fImages16.AddLazarusResource('edit-find');            // 43
+      K_IMG_THREAD  := fImages16.AddLazarusResource('thread');                 // 44
+      K_IMG_MESSAGE := fImages16.AddLazarusResource('message');                // 45
       K_IMG_NETWORK := fImages16.AddLazarusResource('network');
       K_IMG_CMND := fImages16.AddLazarusResource('xpl-cmnd');
       K_IMG_STAT := fImages16.AddLazarusResource('xpl-stat');

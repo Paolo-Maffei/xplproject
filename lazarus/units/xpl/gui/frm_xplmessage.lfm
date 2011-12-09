@@ -1,7 +1,7 @@
 inherited frmxPLMessage: TfrmxPLMessage
-  Left = 58
+  Left = 681
   Height = 389
-  Top = 119
+  Top = 76
   Width = 625
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
