@@ -31,7 +31,7 @@ type
         constructor Create(const aOwner : TComponent); reintroduce;
         procedure   UpdateConfig; override;
         procedure   Process(const aMessage : TxPLMessage);
-        procedure   OnTimer(aSender : TObject);
+        procedure   OnTimer({%H-}aSender : TObject);
         procedure   OnJoined;
      published
         property    SunTime : TSunTime read fSunTime;
@@ -56,7 +56,7 @@ const //========================================================================
 constructor TxPLDawnDuskListener.Create(const aOwner: TComponent);
 begin
    inherited Create(aOwner);
-   FilterSet.AddValues(['xpl-cmnd.*.*.*.dawndusk.request']);
+   Config.FilterSet.Add('xpl-cmnd.*.*.*.dawndusk.request');
    Config.DefineItem(K_CONFIG_LATITUDE, TxPLConfigItemType.config,1,'49');                    // This could be decimal but I found a bug on Win2003 that
    Config.DefineItem(K_CONFIG_LONGITUDE,TxPLConfigItemType.config,1,'1');                     // stops the app launching with error if a decimal value is here
    Config.DefineItem(K_CONFIG_OFFSET,TxPLConfigItemType.reconf,1,'-15');

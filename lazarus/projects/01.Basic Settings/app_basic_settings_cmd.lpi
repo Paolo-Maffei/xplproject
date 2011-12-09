@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <Flags>
+        <MainUnitHasCreateFormStatements Value="False"/>
+      </Flags>
+      <MainUnit Value="0"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <ActiveWindowIndexAtStart Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <AutoIncrementBuild Value="True"/>
+      <MajorVersionNr Value="4"/>
+      <BuildNr Value="1"/>
+      <StringTable CompanyName="clinique" ProductName="xPL Basic Settings" InternalName="basicset" ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1" Active="Default">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="1">
+      <Item1>
+        <PackageName Value="sup_object"/>
+      </Item1>
+    </RequiredPackages>
+    <Units Count="7">
+      <Unit0>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="app_basic_settings_cmd"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="0"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="37" Y="11"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
+        <UnitName Value="u_xpl_console_app"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="34"/>
+        <CursorPos X="47" Y="36"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="frm_basic_settings.pas"/>
+        <HasResources Value="True"/>
+        <UnitName Value="frm_basic_settings"/>
+        <EditorIndex Value="2"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="31"/>
+        <CursorPos X="1" Y="47"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="118"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="app_basic_settings_common.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="app_basic_settings_common"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="24" Y="19"/>
+        <UsageCount Value="22"/>
+        <Loaded Value="True"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="C:\pp\rtl\morphos\graphics.pas"/>
+        <UnitName Value="graphics"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="2199"/>
+        <CursorPos X="40" Y="2199"/>
+        <UsageCount Value="10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="C:\pp\packages\fcl-base\src\custapp.pp"/>
+        <UnitName Value="CustApp"/>
+        <EditorIndex Value="1"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="273"/>
+        <CursorPos X="25" Y="277"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit6>
+    </Units>
+    <JumpHistory Count="24" HistoryIndex="23">
+      <Position1>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="27" Column="1" TopLine="2"/>
+      </Position1>
+      <Position2>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="21" Column="34" TopLine="3"/>
+      </Position2>
+      <Position3>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="18" Column="17" TopLine="1"/>
+      </Position3>
+      <Position4>
+        <Filename Value="frm_basic_settings.pas"/>
+        <Caret Line="42" Column="17" TopLine="25"/>
+      </Position4>
+      <Position5>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="38" Column="55" TopLine="29"/>
+      </Position5>
+      <Position6>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
+      </Position6>
+      <Position7>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="35" Column="56" TopLine="8"/>
+      </Position7>
+      <Position8>
+        <Filename Value="frm_basic_settings.pas"/>
+        <Caret Line="44" Column="3" TopLine="34"/>
+      </Position8>
+      <Position9>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="41" Column="15" TopLine="24"/>
+      </Position9>
+      <Position10>
+        <Filename Value="frm_basic_settings.pas"/>
+        <Caret Line="59" Column="47" TopLine="55"/>
+      </Position10>
+      <Position11>
+        <Filename Value="app_basic_settings_common.pas"/>
+        <Caret Line="14" Column="15" TopLine="1"/>
+      </Position11>
+      <Position12>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="44" Column="105" TopLine="25"/>
+      </Position12>
+      <Position13>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="35" Column="53" TopLine="20"/>
+      </Position13>
+      <Position14>
+        <Filename Value="app_basic_settings_common.pas"/>
+        <Caret Line="10" Column="29" TopLine="1"/>
+      </Position14>
+      <Position15>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="38" Column="45" TopLine="38"/>
+      </Position15>
+      <Position16>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="36" Column="43" TopLine="24"/>
+      </Position16>
+      <Position17>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="19" Column="33" TopLine="3"/>
+      </Position17>
+      <Position18>
+        <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
+        <Caret Line="36" Column="47" TopLine="19"/>
+      </Position18>
+      <Position19>
+        <Filename Value="C:\pp\packages\fcl-base\src\custapp.pp"/>
+        <Caret Line="58" Column="21" TopLine="43"/>
+      </Position19>
+      <Position20>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="64" Column="46" TopLine="47"/>
+      </Position20>
+      <Position21>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="57" Column="1" TopLine="47"/>
+      </Position21>
+      <Position22>
+        <Filename Value="app_basic_settings_cmd.lpr"/>
+        <Caret Line="60" Column="1" TopLine="47"/>
+      </Position22>
+      <Position23>
+        <Filename Value="C:\pp\packages\fcl-base\src\custapp.pp"/>
+        <Caret Line="288" Column="1" TopLine="273"/>
+      </Position23>
+      <Position24>
+        <Filename Value="C:\pp\packages\fcl-base\src\custapp.pp"/>
+        <Caret Line="283" Column="1" TopLine="273"/>
+      </Position24>
+    </JumpHistory>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="10"/>
+    <PathDelim Value="\"/>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\"/>
+      <UnitOutputDirectory Value="E:\01.SourceSafe\08.Lazarus\Lazout"/>
+    </SearchPaths>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="True"/>
+        <DebugInfoType Value="dsAuto"/>
+      </Debugging>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <UseMsgFile Value="True"/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="3">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
