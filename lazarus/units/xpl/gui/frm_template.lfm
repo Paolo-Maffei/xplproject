@@ -1,7 +1,7 @@
 object FrmTemplate: TFrmTemplate
-  Left = 44
+  Left = 595
   Height = 472
-  Top = 182
+  Top = 285
   Width = 708
   Caption = 'FrmTemplate'
   ClientHeight = 472
@@ -120,7 +120,7 @@ object FrmTemplate: TFrmTemplate
     object acCoreConfigure: TAction
       Category = 'xPL'
       Caption = 'Application settings'
-      ImageIndex = 44
+      ImageIndex = 38
       OnExecute = acCoreConfigureExecute
     end
   end
