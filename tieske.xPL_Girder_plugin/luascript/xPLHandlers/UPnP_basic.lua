@@ -26,6 +26,7 @@
 -- Each value update reported by a UPnP device as well as UPnP devices arriving/leaving will result in a 
 -- Girder event. The variable updates only arrive if the statevariable is 'evented'. Unevented values may be requested using the <code>poll</code> method.
 -- UPnP methods can be executed using the <code>execute</code> method.<br/>
+-- <br/>For a tutorial on using UPnP from Girder see <a href="http://www.thijsschreijer.nl/blog/?p=569">this blog post</a>.<br/>
 -- <br/>xPLGirder is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
 -- the Free Software Foundation, either version 3 of the License, or
@@ -39,7 +40,7 @@
 -- <br/><br/>
 -- See the accompanying ReadMe.txt file for additional information.
 -- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.3, xPLGirder.
+-- @release Version 0.1.4, xPLGirder.
 
 require 'Classes.DelayedExecutionDispatcher'
 require 'thread'

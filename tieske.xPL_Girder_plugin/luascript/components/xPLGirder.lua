@@ -18,8 +18,13 @@
 -- <li>nil</li>
 -- <li>nil</li></ol>
 -- <br/>To access the message, just unpickle the payload value; <code>local msg = unpickle(pld1)</code>.
--- <br/><br/>
--- xPLGirder installs in a global table <code>xPLGirder</code>, but that global is only available after 
+-- <br/><br/>The generated events depend upon the message handlers. Whenever a message is received it will
+-- be handed to every handler in turn. Each handler will only be called if the message matches the filter list
+-- of that handler. If a handler handles a message, if may raise a specific event for that message. The return
+-- values of the handlers determine if there will be a generic event. If at least one handler returns <code>true</code>
+-- after handling the message then the generic xPLGirder event for received messages will be suppressed. Only
+-- if none of the handlers returns <code>true</code> the generic event will be raised.
+-- <br/><br/>xPLGirder installs in a global table <code>xPLGirder</code>, but that global is only available after 
 -- the component has been started. Several functions can be used through this global table.
 -- <br/><br/>
 -- xPLGirder is free software: you can redistribute it and/or modify
@@ -37,9 +42,9 @@
 -- @class module
 -- @name xPLGirder
 -- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.3, xPLGirder.
+-- @release Version 0.1.4, xPLGirder.
 
-local Version = '0.1.3'
+local Version = '0.1.4'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -208,7 +213,7 @@ require 'Classes.DelayedExecutionDispatcher'
 
 local Super = require 'Components.Classes.Provider'
 -----------------------------------------------------------
--- properties of xPLGirder. These are accessible through the global <code>xPLGirder</code>.
+-- properties of global xPLGirder table. These are accessible through the global <code>xPLGirder</code>.
 -- @name properties
 -- @class table
 -- @field Address the xPL address in use by Girder (automatically generated based upon the current systems hostname)
