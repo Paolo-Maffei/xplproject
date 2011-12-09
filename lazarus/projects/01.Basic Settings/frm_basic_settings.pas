@@ -37,23 +37,11 @@ var frmBasicSettings: TfrmBasicSettings;
 
 implementation //===============================================================
 uses StrUtils
-     , frm_xplappslauncher
      , u_xpl_gui_resource
      , u_xpl_application
      , u_xpl_common
+     , app_basic_settings_common
      ;
-
-//==============================================================================
-const K_ALL_IPS_JOCKER       = '*** ALL IP Addresses ***';
-      K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
-      COMMENT_LINE           = 'Your network settings have been saved.'#10#13+
-                               #10#13'Note that your computer should use a fixed IP Address'#10#13;
-
-//==============================================================================
-function MakeBroadCast(const aAddress : string) : string;                      // transforms a.b.c.d in a.b.c.255
-begin
-   result := LeftStr(aAddress,LastDelimiter('.',aAddress)) + '255';
-end;
 
 // TFrmMain Object =============================================================
 procedure TfrmBasicSettings.FormCreate(Sender: TObject);
