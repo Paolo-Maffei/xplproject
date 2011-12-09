@@ -35,6 +35,6 @@ copy 1_install.bat %packdir%\install.bat
 
 rem delete previous archive and pack temp directory
 del xPLGirder.zip
-"c:\program files\winrar\rar.exe" a -r xPLGirder.zip %packdir%\*.*
+"c:\program files\7-zip\7z.exe" a -r xPLGirder.zip %packdir%\*.*
 rem delete temp dir again
-rem rmdir /S/Q %packdir%
+rmdir /S/Q %packdir%

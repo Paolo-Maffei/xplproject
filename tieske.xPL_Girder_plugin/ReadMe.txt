@@ -14,6 +14,7 @@ Contents
 
 Download: http://www.thijsschreijer.nl/blog/?page_id=507
 Support : Girder forums @ http://www.promixis.com/forums/showthread.php?21059
+UPnP tutorial: http://www.thijsschreijer.nl/blog/?p=569
 Sources : xPL SVN @ http://code.google.com/p/xplproject/source/browse/ filed
           under 'tieske.xPL_Girder_plugin'
 
@@ -76,7 +77,7 @@ http://www.thijsschreijer.nl/blog/?page_id=150
 To install xPLGirder use the following steps;
    1 Copy both directories found in the ZIP file to the Girder installation 
      directory. This will merge their contents into the existing
-     installation.
+     installation. You may also use the 'install.bat' to install.
    2 Restart Girder or press F11 to reset the scripting engine
    3 Enter the Girder component manager and enable the xPLGirder component
      that is now shown in the list of available components
@@ -198,10 +199,12 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
-xx-xxx-2011 version 0.1.4 by Thijs Schreijer
+05-dec-2011 version 0.1.4 by Thijs Schreijer
          More verbose error logging (stacktrace) for handler errors added.
          Updated the UPnP handler. The UPnP gateway was changed to chop too 
          large values into smaller pieces, the handler now handles this.
+         several bugfixes
+         changed ValueUpdate event to return variable ID instead of name
 03-oct-2011 version 0.1.3 by Thijs Schreijer
          Added UPnP.basic handler
          Added more verbose logging while trying to connect to the xPL Hub, 
