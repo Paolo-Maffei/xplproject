@@ -58,9 +58,46 @@ type // THeartBeatMsg =========================================================
         property Code  : string read Get_Code write Set_Code;
      end;
 
-     { TConfigRespMsg }
+     TSendmsgBasic = class(TxPLMessage)
+     private
+       function Get_Text: string;
+       function Get_To: string;
+       procedure Set_Text(const AValue: string);
+       procedure Set_To(const AValue: string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Text  : string read Get_Text write Set_Text;
+        property To_  : string read Get_To write Set_To;
+     end;
 
-     { TConfigReqMsg }
+     { TReceiveMsgBasic }
+
+     TReceiveMsgBasic = class(TSendmsgBasic)
+     private
+       function Get_From: string;
+       procedure Set_From(AValue: string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property From : string read Get_From write Set_From;
+     end;
+
+     TSensorBasic = class(TxPLMessage)
+     private
+       function Get_Device : string;
+       function Get_Current : string;
+       function Get_Type : string;
+       procedure Set_Type(const AValue: string);
+       procedure Set_Current(const AValue: string);
+       procedure Set_Device(const aValue : string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Device  : string read Get_Device write Set_Device;
+        property Current : string read Get_Current write Set_Current;
+        property Type_  : string read Get_Type write Set_Type;
+     end;
 
      { TConfigMessageFamily }
 
@@ -91,8 +128,6 @@ type // THeartBeatMsg =========================================================
 
      TConfigResponseCmnd = class(TConfigMessageFamily)
      private
-//        fFilters : TStringList;
-//        fGroups  : TStringList;
         fMultiValued : TStringList;
 
         function Get_Filters : TStringList;
@@ -107,8 +142,6 @@ type // THeartBeatMsg =========================================================
         destructor  Destroy; override;
         function  IsCoreValue(const aIndex : integer) : boolean;
 
-//        procedure FilterChanged(Sender : TObject);
-//        procedure GroupChanged(Sender : TObject);
         procedure SlChanged(Sender : TObject);
         function  GetMultiValued(const aValue : string) : TStringList;
      published
@@ -224,7 +257,6 @@ uses StrUtils
 const K_HBEAT_ME_INTERVAL = 'interval';
       K_HBEAT_ME_PORT     = 'port';
       K_HBEAT_ME_REMOTEIP = 'remote-ip';
-      //K_HBEAT_ME_WEB_PORT = 'webport';
       K_HBEAT_ME_VERSION  = 'version';
       K_HBEAT_ME_APPNAME  = 'appname';
 
@@ -258,6 +290,12 @@ begin
      aMsg.Schema.RawxPL = 'log.basic' then result := TLogBasic.Create(nil,aRawxPL)
    else if
      aMsg.Schema.RawxPL = 'osd.basic' then result := TOsdBasic.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.RawxPL = 'sendmsg.basic' then result := TSendmsgBasic.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.RawxPL = 'rcvmsg.basic' then result := TReceivemsgBasic.Create(nil,aRawxPL)
+   else if
+     aMsg.Schema.RawxPL = 'sensor.basic' then result := TSensorBasic.Create(nil,aRawxPL)
    else result := aMsg;
 
    if result<>aMsg then aMsg.Free;
@@ -289,8 +327,6 @@ begin
    inherited Assign(aMessage);
    if aMessage is TConfigCurrentStat then begin
       fMultiValued.Assign(tConfigCurrentStat(aMessage).fMultiValued);
-//      fFilters.Assign(TConfigCurrentStat(aMessage).Filters);
-//      fGroups.Assign(TConfigCurrentStat(aMessage).Groups);
    end;
 end;
 
@@ -353,50 +389,20 @@ constructor TConfigResponseCmnd.Create(const aOwner: TComponent; const aRawxPL: 
 begin
    inherited Create(aOwner, aRawxPL);
    fMultiValued := TStringList.Create;
-   //fMultiValued.OwnsObjects:=true;
-
-   //fFilters := TStringList.Create;
-   //fFilters.Sorted:=true;
-   //fFilters.Duplicates := dupIgnore;
-   //fFilters.OnChange:=@FilterChanged;
-
-   //fGroups  := TStringList.Create;
-   //fGroups.Sorted := true;
-   //fGroups.Duplicates := dupIgnore;
-   //fGroups.OnChange:=@GroupChanged;
 
    if aRawxPL = '' then begin
       Schema.Type_:= 'response';
       MessageType := cmnd;
       Body.AddKeyValuePairs( K_CONFIG_RESPONSE_KEYS,['','','','']);
-   //end else begin
-         //Get_Filters;
-         //Get_Groups;
-         //Read_MultiValued(0);                                                   // Read filter values
-         //Read_MultiValued(1);                                                   // read group values
    end;
-   //GetMultiValued('filter');
-   //GetMultiValued('group');
 end;
 
 destructor TConfigResponseCmnd.Destroy;
 begin
    fMultiValued.Free;
-//   fFilters.Free;
-//   fGroups.Free;
    inherited Destroy;
 end;
 
-//procedure TConfigResponseCmnd.Get_Filters;
-//var i : integer;
-//begin
-//   fFilters.BeginUpdate;
-//   fFilters.Clear;
-//   for i := 0 to Pred(Body.ItemCount) do begin
-//       if (Body.Keys[i] = 'filter') and (Body.Values[i]<>'') then fFilters.Add(Body.Values[i]);
-//   end;
-//   fFilters.EndUpdate;
-//end;
 function TConfigResponseCmnd.Get_Filters : TStringList;
 begin
    result := GetMultiValued('filter');
@@ -406,26 +412,6 @@ function TConfigResponseCmnd.Get_Groups : TStringList;
 begin
    result := GetMultiValued('group');
 end;
-
-//procedure TConfigResponseCmnd.FilterChanged(Sender : TObject);
-//var i : integer;
-//begin
-//   for i:=Pred(Body.ItemCount) downto 0 do
-//       if Body.Keys[i] = 'filter' then Body.DeleteItem(i);
-//   if fFilters.Count = 0 then Body.AddKeyValue('filter=')
-//   else for i:=0 to Pred(fFilters.Count) do
-//            Body.AddKeyValue('filter=' + fFilters[i]);
-//end;
-
-//procedure TConfigResponseCmnd.GroupChanged(Sender : TObject);
-//var i : integer;
-//begin
-//   for i:=Pred(Body.ItemCount) downto 0 do
-//       if Body.Keys[i] = 'group' then Body.DeleteItem(i);
-//   if fGroups.Count = 0 then Body.AddKeyValue('group=')
-//   else for i:=0 to Pred(fGroups.Count) do
-//            Body.AddKeyValue('group=' + fGroups[i]);
-//end;
 
 procedure TConfigResponseCmnd.SlChanged(Sender: TObject);
 var j,i : integer;
@@ -464,16 +450,6 @@ begin
    end;
 end;
 
-//procedure TConfigResponseCmnd.Get_Groups;
-//var i : integer;
-//begin
-//   fGroups.BeginUpdate;
-//   fGroups.Clear;
-//   for i := 0 to Pred(Body.ItemCount) do
-//       if (Body.Keys[i] = 'group') and (Body.Values[i]<>'') then fGroups.Add(Body.Values[i]);
-//   fGroups.EndUpdate;
-//end;
-
 procedure TConfigResponseCmnd.Read_Multivalued(const aListIndex: integer);
 var i : integer;
     aSl : TStringList;
@@ -509,6 +485,102 @@ end;
 function TConfigResponseCmnd.IsCoreValue(const aIndex: integer): boolean;
 begin
    result := AnsiIndexStr(Body.Keys[aIndex],K_CONFIG_RESPONSE_KEYS) <>-1;
+end;
+
+{ TSendmsgBasic }
+constructor TSensorBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'sensor.basic';
+      Target.IsGeneric := True;
+      MessageType      := trig;
+      Body.AddKeyValuePairs( ['device','type','current'],['','','']);
+   end;
+end;
+
+function TSensorBasic.Get_Device: string;
+begin
+   result := Body.GetValueByKey('device','');
+end;
+
+function TSensorBasic.Get_Type: string;
+begin
+   result := Body.GetValueByKey('type','');
+end;
+
+function TSensorBasic.Get_Current: string;
+begin
+   result := Body.GetValueByKey('current','');
+end;
+
+procedure TSensorBasic.Set_Current(const AValue: string);
+begin
+   Body.SetValueByKey('current',aValue);
+end;
+
+procedure TSensorBasic.Set_Type(const AValue: string);
+begin
+   Body.SetValueByKey('type',aValue);
+end;
+
+procedure TSensorBasic.Set_Device(const AValue: string);
+begin
+   Body.SetValueByKey('device',aValue);
+end;
+
+{ TSendmsgBasic }
+constructor TSendmsgBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'sendmsg.basic';
+      Target.IsGeneric := True;
+      MessageType      := cmnd;
+      Body.AddKeyValuePairs( ['body','to'],['','']);
+   end;
+end;
+
+function TSendmsgBasic.Get_To: string;
+begin
+   result := Body.GetValueByKey('to','');
+end;
+
+function TSendmsgBasic.Get_Text: string;
+begin
+   result := Body.GetValueByKey('body');
+end;
+
+procedure TSendmsgBasic.Set_Text(const AValue: string);
+begin
+   Body.SetValueByKey('body',aValue);
+end;
+
+procedure TSendmsgBasic.Set_To(const AValue: string);
+begin
+   Body.SetValueByKey('to',aValue);
+end;
+
+{ TReceiveMsgBasic }
+
+constructor TReceiveMsgBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'rcvmsg.basic';
+      MessageType      := trig;
+      Body.AddKeyValuePairs( ['from'],['']);
+   end;
+end;
+
+function TReceiveMsgBasic.Get_From: string;
+begin
+   result := Body.GetValueByKey('from','');
+end;
+
+procedure TReceiveMsgBasic.Set_From(AValue: string);
+begin
+   Body.SetValueByKey('from',aValue);
 end;
 
 { TLogBasic }
@@ -669,8 +741,6 @@ begin
     List.Delimiter := ':';
     List.DelimitedText := partid;
 
-//    ExtractTokensL(partid,':/',#0,true,list);
-//    StrTokenToStrings(partid,'/',list);
     if list.Count=3 then begin
        fPartNum  := StrToIntDef(list[0],-1);
        fPartMax  := StrToIntDef(list[1],-1);
