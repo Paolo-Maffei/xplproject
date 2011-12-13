@@ -87,7 +87,7 @@ begin
    if aMessage is TxPLCustomMessage then begin
       fBody.Assign(TxPLCustomMessage(aMessage).Body);                          // Let me do specific part
       AssignHeader(TxPLCustomMessage(aMessage));
-   end;
+   end else inherited;
 end;
 
 procedure TxPLCustomMessage.AssignHeader(aMessage: TxPLCustomMessage);

@@ -42,7 +42,6 @@ type // TxPLHeader ============================================================
        procedure Set_Target(const AValue: TxPLTargetAddress);
      public
        constructor Create(aOwner : TComponent; const aFilter : string = ''); reintroduce;
-//       constructor Create(aOwner : TComponent; const aFilter : string); overload; // Creates a header based on a filter string
        destructor  Destroy; override;
 
        procedure   Assign(aHeader : TPersistent); override;
