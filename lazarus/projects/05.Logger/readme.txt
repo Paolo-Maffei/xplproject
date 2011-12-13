@@ -3,6 +3,9 @@ xPL Logger
 Changes History : 
 	4.3.2.2
 		Corrected a display bug in the left tree view (selected icons disappeared)
+		Corrected some bugs related to simplified display : 
+			* 'Send message to...' is not working
+			* List filtered on device not working
 		
 	4.3.2.1
 		The 'Clear' button now also reset the left panel treeview
