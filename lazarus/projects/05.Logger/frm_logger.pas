@@ -287,8 +287,8 @@ begin
         header.Target.RawxPL:=sl[1];
         StatusBar1.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
       end else begin
-        Sl.Delimiter:= '/';
-        Sl.DelimitedText:=tvMessages.Selected.GetTextPath;
+        Sl.Delimiter:= '.';
+        Sl.DelimitedText:=AnsiReplaceStr(tvMessages.Selected.GetTextPath,'/','.'); // Truncate the path
         if sl[0] = K_ROOT_NODE_NAME then begin
            if (sl.Count>1) then header.source.Vendor := sl[1];
            if (sl.Count>2) then header.source.Device := sl[2];
@@ -448,17 +448,18 @@ end;
 
 procedure TfrmLogger.mnuSendMessageClick(Sender: TObject);
 var aMsg : TxPLMessage;
+    aHeader : TxPLHeader;
 begin
+   aHeader := TxPLHeader.Create(self,StatusBar1.Panels[2].Text);               // The header of the created message is derived from current active filter
    aMsg := TxPLMessage.Create(self);
+   aMsg.Assign(aHeader);
    with TxPLMessageGUI(aMsg) do begin
         Source.Assign(xPLApplication.Adresse);
-        Target.RawxPL := UpdateFilter;
-        Schema.RawxPL := 'control.basic';
-        MessageType := cmnd;                                                   // 2.1.2 correction
         Body.ResetValues;
         Body.AddKeyValuePairs(['key'], ['value']);                             // 2.0.3
         ShowForEdit([boSave, boSend]);
   end;
+   aHeader.Free;
 end;
 
 procedure TfrmLogger.mnuTreeViewPopup(Sender: TObject);
