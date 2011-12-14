@@ -80,11 +80,11 @@
     </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="10"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general;..\..\units\xpl"/>
+      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general;..\..\units\general\RegExpr;..\..\units\xpl"/>
       <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
@@ -92,12 +92,6 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <DebugInfoType Value="dsAuto"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>

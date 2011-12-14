@@ -101,7 +101,9 @@ end;
 
 // TxPLUDPServer ===============================================================
 constructor TxPLUDPServer.Create(const aOwner : TComponent; const aReceivedProc : TStrParamEvent; const aPort : integer = 0);
+{$ifdef mswindows}
 var i : integer;
+{$endif}
 begin
    inherited Create(aOwner);
    Bindings.Clear;
@@ -118,8 +120,8 @@ begin
             dec(i);
          end;
       {$else}                                                                   // Don't understand why this is needed to work
-         AddBinding('eth0', aPort);                                             // under linux. Tried 127.0.0.1, Local ip address...
-//         AddBinding(ListenOnAddress,aPort);                                   // only ETH0 seams to let incoming message pass in
+//         AddBinding('eth0', aPort);                                             // under linux. Tried 127.0.0.1, Local ip address...
+         AddBinding(ListenOnAddress,aPort);                                   // only ETH0 seams to let incoming message pass in
       {$endif}
    end else xPLApplication.Log(etWarning,K_USING_DEFAULT);
    Active := (Bindings.Count > 0);
@@ -176,4 +178,4 @@ begin
 end;
 
 end.
-
+

@@ -190,7 +190,9 @@ begin
             else result := aString;
 end;
 
+{$ifdef mswindows}
 {$R C:/pp/packages/fcl-base/src/win/fclel.res}                                 // Load resource strings for windows event log
+{$endif}
 
 initialization // =============================================================
    InstanceInitStyle  := iisHostName;
@@ -210,4 +212,4 @@ finalization // ===============================================================
    LocalAddresses.Free;
    VersionInfo.Free;
 
-end.
+end.
