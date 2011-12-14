@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="4"/>
+      <BuildNr Value="5"/>
       <StringTable CompanyName="clinique" ProductName="xPL Hub" InternalName="hub" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -54,11 +54,11 @@
     </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="10"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="C:\pp\packages\fcl-base\src\win\;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general;C:\pp\packages\fcl-base\src\"/>
+      <IncludeFiles Value="C:\pp\packages\fcl-base\src\win;$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\..\units\xpl;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\general"/>
       <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
@@ -67,12 +67,6 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <DebugInfoType Value="dsAuto"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>

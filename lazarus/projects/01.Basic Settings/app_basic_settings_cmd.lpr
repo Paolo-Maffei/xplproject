@@ -30,7 +30,7 @@ var ListenOn, BroadCast, ListenTo : string;
 
    function GetWithDefault(const aRequest, aDefault : string) : string;
    begin
-      write(Format(aRequest + ' [%s] : ',[aDefault]));
+      writeln(Format(aRequest + ' [%s] : ',[aDefault]));
       readln(result);
       if result = '' then result := aDefault;
       if result = 'q' then Abort;
@@ -67,4 +67,4 @@ begin
   Application.Run;
   FreeAndNil(Application);
 end.
-
+

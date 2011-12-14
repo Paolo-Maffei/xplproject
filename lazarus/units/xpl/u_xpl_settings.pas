@@ -99,10 +99,6 @@ const // Registry Key and values constants =====================================
 
 // TxPLCustomSettings =================================================================
 constructor TxPLCustomSettings.Create(aOwner : TComponent);
-{$ifndef windows}
-var sl : TStringList;
-    i  : integer;
-{$endif}
 begin
    inherited;
 
@@ -112,6 +108,10 @@ begin
 end;
 
 procedure TxPLCustomSettings.InitComponent;
+{$ifndef mswindows}
+var sl : TStringList;
+    i  : integer;
+{$endif}
 begin
    fBroadCastAddress := ReadKeyString(K_REGISTRY_BROADCAST,'255.255.255.255');
    fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON,K_XPL_SETTINGS_NETWORK_ANY);
@@ -283,4 +283,4 @@ begin
 end;
 
 end.
-
+

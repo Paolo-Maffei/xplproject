@@ -4,9 +4,9 @@ program xpl_jabber;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}
      cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
      u_xpl_console_app,
      jabber_listener;
 
@@ -25,4 +25,4 @@ begin
    MyjabberApp.Run;
    MyjabberApp.Free;
 end.
-
+

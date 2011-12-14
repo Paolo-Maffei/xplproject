@@ -15,7 +15,9 @@ unit tcpsynapse;
 interface
 
 uses
-  Classes, SysUtils, blcksock, ssl_openssl, SyncObjs;
+  Classes, SysUtils, blcksock,
+  ssl_openssl in '/usr/lib/codetyphon/lazarus/components/pl_Synapse/source/ssl_openssl.pas'
+  , SyncObjs;
 
 type
   TTCPClient=class;
@@ -357,4 +359,4 @@ begin
 end;
 }
 
-end.
+end.

@@ -7,7 +7,7 @@ interface
 
 uses {$ifdef fpc}
         vInfo,
-        {$ifdef mswindow}
+        {$ifdef mswindows}
         fpTimer in 'C:/pp/packages/fcl-base/src/fptimer.pp'
         {$else}
         fpTimer in '/usr/share/fpcsrc/packages/fcl-base/src/fptimer.pp'
@@ -153,4 +153,4 @@ begin
 end;
 
 end.
-
+
