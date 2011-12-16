@@ -4,6 +4,8 @@ Copyright 2010-2011 Thijs Schreijer
 
 -------------------------------------------------------------------------------
 Changelog;
+xx-dec-2011 version 0.2.3
+   - Fix; requesting an id to be re-announced caused an exception
 04-dec-2011 version 0.2.2
    - more fixes, illegal xPL characters now properly removed, xml payloads
      can now be transferred properly
