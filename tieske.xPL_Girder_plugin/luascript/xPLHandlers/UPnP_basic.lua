@@ -4,12 +4,12 @@
 -- the handler work (not necessarily on the same system, but within the same network/subnet).
 -- The handler will enable Girder to receive value updates from, and to execute methods on UPnP
 -- devices. It is highly recommended to read the UPnP Device Architecture 1.1 (see <a href="http://www.upnp.org">www.upnp.org</a>)
--- specifically section 2.3 onwards. And to install the <a href="http://opentools.homeip.net/dev-tools-for-upnp">Developer tools for UPnP</a>, 
+-- specifically section 2.3 onwards. And to install the <a href="http://opentools.homeip.net/dev-tools-for-upnp">Developer tools for UPnP</a>,
 -- which is an essential set of tools and utilities for UPnP development.<br/>
--- <br/>The handler will create a global table <code>UPnP</code>. This table has two important sub-tables; 
+-- <br/>The handler will create a global table <code>UPnP</code>. This table has two important sub-tables;
 -- <ul><li><code>UPnP.devices</code> which contains a hierarchical tree of UPnP devices and their underlying components (services, subdevices, etc.)</li>
 -- <li><code>UPnP.IDlist</code> this list contains all elements of the hierarchical tree by their ID</li></ul><br/>
--- An important note to the hierarchical tree is that the <code>key</code>s of the devices and services are their unique 
+-- An important note to the hierarchical tree is that the <code>key</code>s of the devices and services are their unique
 -- names, but adapted for proper display in Girder. The Girder variable inspector will not properly display keys that contain
 -- either '.' (dot) or ':' (colon) characters, hence they will be replaced by '_' (underscore). So it cannot be assumed that the key is
 -- equal to the device/service unique name.
@@ -19,11 +19,11 @@
 -- <li>statevariables</li>
 -- <li>methods</li>
 -- <li>arguments</li>
--- </ul>Each element has its own ID and has a property <code>parent</code> that contains the ID of the parent element. 
--- Each parent has a property <code>IDlist</code> with a list of child IDs. <strong>Note:</strong> the IDs are NOT persistent! When 
--- Girder exits or the UPnP device leaves, the ID will be lost. To identify 
+-- </ul>Each element has its own ID and has a property <code>parent</code> that contains the ID of the parent element.
+-- Each parent has a property <code>IDlist</code> with a list of child IDs. <strong>Note:</strong> the IDs are NOT persistent! When
+-- Girder exits or the UPnP device leaves, the ID will be lost. To identify
 -- the same device over multiple sessions you should use the unique names of devices and services (see code examples below).<br/>
--- Each value update reported by a UPnP device as well as UPnP devices arriving/leaving will result in a 
+-- Each value update reported by a UPnP device as well as UPnP devices arriving/leaving will result in a
 -- Girder event. The variable updates only arrive if the statevariable is 'evented'. Unevented values may be requested using the <code>poll</code> method.
 -- UPnP methods can be executed using the <code>execute</code> method.<br/>
 -- <br/>For a tutorial on using UPnP from Girder see <a href="http://www.thijsschreijer.nl/blog/?p=569">this blog post</a>.<br/>
@@ -66,6 +66,7 @@ local CleanKey = function (key)
 	return key
 end
 
+local announcementtimeout = 3000       -- seconds after which to re-request missing parts
 
 local el	-- trick luadoc
 -------------------------------------------------------------------------------------------
@@ -73,7 +74,7 @@ local el	-- trick luadoc
 -- event source.
 -- @name UPnP events
 -- @class table
--- @field arriving Whenever a new UPnP device arrives the following event is raised. Note that 
+-- @field arriving Whenever a new UPnP device arrives the following event is raised. Note that
 -- 3 seconds after the event automatically a variable update request will be sent.<ul>
 -- <li><code>eventstring</code>: "UPnP device arrived; &ltdevice name&gt"</li>
 -- <li><code>pld1</code>: device ID assigned to the device</li>
@@ -81,7 +82,7 @@ local el	-- trick luadoc
 -- <li><code>pld3</code>: nil</li>
 -- <li><code>pld3</code>: nil</li>
 -- </ul>
--- @field leaving Whenever a UPnP device leaves the following event is raised. Note that 
+-- @field leaving Whenever a UPnP device leaves the following event is raised. Note that
 -- the device has already been removed from the list when the event is raised.<ul>
 -- <li><code>eventstring</code>: "UPnP device left; &ltdevice name&gt"</li>
 -- <li><code>pld1</code>: device ID assigned to the device</li>
@@ -171,7 +172,7 @@ local myNewHandler = {
 			-- -- method1: call directly on service/device/variable table
 			-- s:poll()
 			-- &nbsp
-			-- -- method2: call indirectly using generic call 
+			-- -- method2: call indirectly using generic call
 			-- UPnP:PollValue(s.ID)	-- s.ID additional argument needed here
 			PollValue = function (self, id)
 					id = (id or "") .. "" -- convert to string
@@ -191,11 +192,15 @@ local myNewHandler = {
 
 		-- send announce request, but wait until xPLGirder is fully initialized
 		local ded = Classes.DelayedExecutionDispatcher:New (3000, function () self:RequestAnnounce() end)
+		-- set announcementcheck
+		self:CreateAnnouncementTimer()
+		self.AnnouncementTimer:Arm(3000 + announcementtimeout)
 	end,
 
 	ShutDown = function (self)
 		-- function called upon shuttingdown this handler
 		-- print ("Shutting down the xPL handler ID: " .. self.ID)
+		self:DestroyAnnouncementTimer()
 		for k,v in pairs(self.DevList) do
 			self:DeleteRootDevice(v)
 		end
@@ -203,13 +208,14 @@ local myNewHandler = {
 	end,
 
 
-	AnnFragments = {},		-- list (by their ID) of announcements received, but not yet completed
-	CompFragments = {},		-- list (by their ID) of fragments that are complete (all children attached, or no children)
-	IDlist = {},			-- public list of all elements by their ID
-	DevList = {}, 			-- public list of all completed root devices by their UDN
+	AnnFragments = {},		-- private list (by their ID) of announcements received, but not yet complete ((sub-)children or parent are missing)
+	IDlist = {},			-- public list (UPnP.IDlist) of all elements by their ID, elements will be added once they are complete
+                            -- even if their parent might not yet be complete.
+	DevList = {}, 			-- public list (UPnP.devices) of all completed root devices by their UDN. Devices will be added once a
+                            -- root-device is complete
 	CallID = 0,				-- a unique call ID for method calls
 	ResponseQueue = {},		-- ID's of methods calls waiting for a response
-
+	AnnouncementTimer = nil, -- timer that will be set after each received fragment, to check for completeness
 
 	_lock = thread.newmutex(),
 
@@ -263,6 +269,10 @@ local myNewHandler = {
 			-- updated state variable arrived
 			self:UpdateStateVariable(msg)
 			result = true	-- suppress standard event
+
+		elseif msg.schema == "upnp.basic" and msg.type == "xpl-cmnd"  and msg.source == xPLGirder.Source then
+            -- its a command message send by this UPnP handler, so just disable the event
+            result = true   -- suppress standard event
 
 		elseif msg.schema == "upnp.method" and msg.type == "xpl-trig" then
 			-- method call results are being delivered
@@ -376,15 +386,12 @@ local myNewHandler = {
 		local t = GetValueByKey(msg, "id")
 		t = string.Split(t, ",")
 		part.ID = t[1]					-- first item is our own ID
-		if self.IDlist[part.ID] ~= nil then
-			if self.IDlist[part.ID].announce == "variable" and GetValueByKey(msg, "announce") == "variable" then
-				-- we already have a variable value for this ID, so probably
-				-- a variable update was received before the announcement itself
-				-- get the already created table containing the value and continue
-				-- from there in this case
-				part = self.IDlist[part.ID]
-			end
-		end
+        -- check whether this ID is a duplicate
+        if self.AnnFragments[part.ID] or self.IDlist[part.ID]  then
+            -- ID was found in one of the tables, so it doubles. Nothing more to do, exit
+            self:SetAnnouncementTimer()     -- Set timer to check for completeness
+            return
+        end
 		-- Add remaining data to the part
 		for k,v in ipairs(msg.body) do
 			if v.key ~= "id" then
@@ -395,7 +402,8 @@ local myNewHandler = {
 		if type(part.allowed) == string then
 			part.allowed = string.Split(part.allowed, ',')
 		end
-		-- treat subdevices as devices, check the absence of 'parent' key as inidicator that its a root device
+		-- treat subdevices as devices. When using this from code, just check the
+        -- absence of 'parent' key as inidicator that its a root device
 		if part.announce == "subdevice" then
 			part.announce = "device"
 		end
@@ -416,68 +424,68 @@ local myNewHandler = {
 				part.IDlist[v] = v
 				part.WaitingFor[v] = v
 				if part.announce == "method" then
-					part.order[i-1] = v		-- use n-1 becasause the first is always the skipped own ID
+					part.order[i-1] = v		-- use n-1 because the first is always the skipped own ID
 				end
 			end
 		end
+
 		-- Check if any of my children are around already
 		if not table.IsEmpty(part.WaitingFor) then
 			-- I do have children, go check each one in the COMPLETED list
 			local done ={}		-- done list, will be deleted at end, to prevent messing with table while iterating
 			for k,v in pairs(part.WaitingFor) do
-				local p = self.CompFragments[k]
-				if p ~= nil then
+				local child = self.IDlist[k]
+				if child ~= nil then
 					-- found one !
-					if p.announce == "device" then
+					if child.announce == "device" then
 						part.devices = part.devices or {}
-						part.devices[CleanKey(p.deviceid)] = p
-					elseif p.announce == "service" then
+						part.devices[CleanKey(child.deviceid)] = child
+					elseif child.announce == "service" then
 						part.services = part.services or {}
-						part.services[CleanKey(p.service)] = p
-					elseif p.announce == "method" then
+						part.services[CleanKey(child.service)] = child
+					elseif child.announce == "method" then
 						part.methods = part.methods or {}
-						part.methods[p.name] = p
-					elseif p.announce == "argument" then
+						part.methods[child.name] = child
+					elseif child.announce == "argument" then
 						part.arguments = part.arguments or {}
-						part.arguments[p.name] = p
-					elseif p.announce == "variable" then
+						part.arguments[child.name] = child
+					elseif child.announce == "variable" then
 						part.variables = part.variables or {}
-						part.variables[p.name] = p
+						part.variables[child.name] = child
 					end
 					-- add to list to be removed because they are done
-					done[p.ID] = p.ID
+					done[child.ID] = child.ID
 				end
 			end
 			-- remove 'done' list
 			for k,v in pairs(done) do
 				part.WaitingFor[k] = nil
-				self.CompFragments = nil
 			end
 		end
 
-		-- store received fragment
-		self.AnnFragments[part.ID] = part
-
 		-- Check if I'm complete...
 		if table.IsEmpty(part.WaitingFor) then
-			-- Part is complete go deal with it
+			-- Part is complete store in completed list
+			part.WaitingFor = nil
+			self.IDlist[part.ID] = part
 			self:PartComplete(part.ID)
+		else
+			-- store received fragment
+			self.AnnFragments[part.ID] = part
 		end
+
+		-- Set timer to check for completeness
+		self:SetAnnouncementTimer()
 	end,
 
 	PartComplete = function (self, pID)
-		-- the mentioned ID is complete and in the CompFragments list, attach it to parent
+		-- the mentioned ID is complete and in the completed elements IDlist, attach it to parent
 		-- and check parent completenss
-		local p = self.AnnFragments[pID]
-		if pID == nil then
-			return
-		end
+		local p = self.IDlist[pID]
+
 		if p.announce == "device" and p.parent == nil then
-			-- its a completed root-device, just move it to the complete lists
-			self.AnnFragments[p.ID] = nil
+			-- its a completed root-device, just copy it to the device list
 			self.DevList[p.deviceid] = p
-			self.IDlist[p.ID] = p
-			p.WaitingFor = nil
 			gir.TriggerEvent("UPnP device arrived; " .. p.name, xPLEventDevice, p.deviceid)
 			-- announcement complete, request the devices variable values, but delayed to prevent flooding the xPL network
 			local ded = Classes.DelayedExecutionDispatcher:New (3000, function () self:RequestVariableValues(pID) end)
@@ -519,14 +527,14 @@ local myNewHandler = {
 					pt.variables = pt.variables or {}
 					pt.variables[p.name] = p
 				end
-				-- remove from waiting for list and add to complete list
-				self.AnnFragments[p.ID] = nil
+				-- remove from parents waiting for list 
 				pt.WaitingFor[p.ID] = nil
-				self.IDlist[p.ID] = p
-				p.WaitingFor = nil
 				-- check parent completeness
 				if table.IsEmpty(pt.WaitingFor) then
-					-- handle complete item (resursive function call)
+					-- move to completed list and handle complete item (recursive function call)
+					pt.WaitingFor = nil
+					self.AnnFragments[p.parent] = nil
+					self.IDlist[pt.ID] = pt
 					self:PartComplete(pt.ID)
 				end
 			end
@@ -569,17 +577,8 @@ local myNewHandler = {
 				else
 					-- service not found, assume announcement incomplete, no girder event
 				end
-			elseif tonumber(k) ~= nil then
-				-- statevariable was not found, but it is a number, assume that statevariable is not yet
-				-- completely announced and add a table for it anyway
-				local svar = {}
-				svar.ID = k
-				svar.value = v
-				svar.announce = "variable"
-				svar.IDlist = {}
-				svar.name = "unknown, value was announced before definition; awaiting completion of announcement"
-				self.IDlist[k] = svar
-				-- we don't have (don't know) our parent, so cannot raise event
+            else
+                -- no variable found, not announced yet, so do nothing
 			end
 		end
 	end,
@@ -734,6 +733,108 @@ local myNewHandler = {
 		local id = element.ID
 		element.poll = function () self:RequestVariableValues(id) end
 	end,
+
+	-- Timer elements to verify completeness of announcement, and request missing elements if necessary
+	CheckAnnouncement = function(self)
+		-- check whether all announced parts have been completed to complete root-devices
+		-- request missing parts if necessary
+
+		local request = {}  -- List with IDs to request
+
+        -- send xplmessage to request single id
+        local requestid = function(childid)
+            local req = "xpl-cmnd\n{\nhop=1\nsource=%s\ntarget=*\n}\nupnp.basic\n{\ncommand=announce\nid=%s\n}\n"
+            local msg = string.format(req, xPLGirder.Source, childid)
+            xPLGirder:SendMessage(msg)
+        end
+
+		-- setup local recursive function to check 1 individual part recursively
+		local checkpart = nil
+		checkpart = function(self, id)
+			local part = self.AnnFragments[id]
+            -- check parent availability
+            if part.parent then
+                if self.AnnFragments[part.parent] then
+                    -- parent is available (but incomplete), do nothing
+                else
+                    -- no parent available, must request it then, add parent to the list
+                    request[part.parent] = part.parent
+                    -- requesting a parent will also automatically announce all children, so no need
+                    -- to go check them anymore, just return here.
+                    return
+                end
+            end
+            -- check children
+			if not table.IsEmpty(part.WaitingFor) then
+				for childid, _ in pairs(part.WaitingFor) do
+					if self.AnnFragments[childid] then
+						-- this child has been announced, but apparently is also incomplete still -> recurse!
+						checkpart(self,childid)
+					else
+						-- this child is unknown to us still, so go add to the request list
+						request[childid] = childid
+					end
+				end
+			end
+		end
+
+		self:Lock()
+		if not table.IsEmpty(self.AnnFragments) then
+			-- so we're not complete, go check the announced fragments list
+
+            -- first remove any duplicates
+			for id, part in pairs(self.AnnFragments) do
+				if self.IDlist[id] then
+					-- its in both lists, should not occur, but can happen if parts are announced twice
+					-- play safe and keep the complete one, delete the new announced part to prevent an
+					-- endless loop of re-requesting parts
+					self.AnnFragments[id] = nil
+                end
+			end
+            -- go check all remaining parts for completeness
+			for id, part in pairs(self.AnnFragments) do
+                checkpart(self, id)
+            end
+            -- do any requests we have to do
+            local count = 0
+            for id, _ in pairs(request) do
+                requestid(id)       -- send xpl message with request
+                count = count + 1
+            end
+            -- signal warning
+            if count ~= 0 then
+                gir.LogMessage(xPLGirder.Name, self.ID .. ' bad announcement, now requesting ' .. tostring(count) ..  ' elements still missing', 1)
+            end
+			-- set timer again, if still not complete
+			if not table.IsEmpty(self.AnnFragments) then
+				self:SetAnnouncementTimer()
+			end
+		end
+		self:Unlock()
+	end,
+
+	CreateAnnouncementTimer = function(self)
+		-- creates the announcement timer at component startup, will NOT arm the timer
+		self:DestroyAnnouncementTimer()
+		self.AnnouncementTimer = gir.CreateTimer(nil, function() self:CheckAnnouncement() end, nil, false)
+	end,
+
+	SetAnnouncementTimer = function(self)
+		-- sets the timer to expire in x seconds, and hence go check for announcement completeness
+		if self.AnnouncementTimer then
+            self.AnnouncementTimer:Cancel()
+			self.AnnouncementTimer:Arm(announcementtimeout)
+		end
+	end,
+
+	DestroyAnnouncementTimer = function(self)
+		-- destroys the announcement timer at component stop
+		if self.AnnouncementTimer then
+			self.AnnouncementTimer:Destroy()
+			self.AnnouncementTimer = nil
+		end
+	end,
+
 }
 
 

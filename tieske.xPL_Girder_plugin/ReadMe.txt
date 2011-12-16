@@ -199,6 +199,9 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
+xx-dec-2011 version 0.1.5 by Thijs Schreijer
+         The UPnP handler had a very subtle bug that could in sporadic
+         cases prevent a device from being announced in Girder. Fixed.
 05-dec-2011 version 0.1.4 by Thijs Schreijer
          More verbose error logging (stacktrace) for handler errors added.
          Updated the UPnP handler. The UPnP gateway was changed to chop too 
