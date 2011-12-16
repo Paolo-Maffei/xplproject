@@ -6,6 +6,9 @@ Imports OpenSource.UPnP
 Imports System.Xml
 
 Public Class Proxy
+
+    'Private Shared missercount As Integer = 0 ' temp check to force missing announcements
+
     ''' <summary>
     ''' The proxy type indication
     ''' </summary>
@@ -566,7 +569,7 @@ Public Class Proxy
                                 If i <> -1 Then
                                     ' IDs have been listed, serve them
                                     LogMessage("Received announce request for specific IDs")
-                                    For n = 0 To .KeyValueList.Count
+                                    For n = 0 To .KeyValueList.Count - 1
                                         If .KeyValueList(n).Key = "id" Then
                                             LogMessage("   Now announcing ID " & .KeyValueList(n).Value)
                                             Dim mp As Proxy = GetProxy(CInt(Val(.KeyValueList(n).Value)))
@@ -623,7 +626,12 @@ Public Class Proxy
     Private Sub AnnounceElement()
         Dim p As Proxy
         ' send my own message
+        'If missercount < 5 Then         '' temporary skip every 5th message to test re-requesting/announcing
         xPLDevice.Send(Me.GetAnnounceMessage)
+        '    missercount = missercount + 1
+        'Else
+        '    missercount = 0
+        'End If
         ' if there are any subs, call them now
         For n = 1 To Me.IDList.Count - 1
             p = Proxy.GetProxy(Me.IDList(n))
@@ -1121,30 +1129,30 @@ Public Class Proxy
                 End If
 
             Case ProxyType.Service
-                    LogMessage("   Reporting values for service; " & p.Service.ServiceID & " it has " & p.Service.GetStateVariables.Count & " variables")
-                    If p.Service.GetStateVariables.Count > 0 Then
-                        For Each s As UPnPStateVariable In p.Service.GetStateVariables
-                            ' call this sub recursively for each variable
-                            Proxy.RequestValues(Proxy.GetProxy(s))
-                        Next
-                    End If
+                LogMessage("   Reporting values for service; " & p.Service.ServiceID & " it has " & p.Service.GetStateVariables.Count & " variables")
+                If p.Service.GetStateVariables.Count > 0 Then
+                    For Each s As UPnPStateVariable In p.Service.GetStateVariables
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(s))
+                    Next
+                End If
             Case ProxyType.Device
-                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.Services.Count.ToString & " services")
-                    If p.Device.Services.Count > 0 Then
-                        For Each s As UPnPService In p.Device.Services
-                            ' call this sub recursively for each variable
-                            Proxy.RequestValues(Proxy.GetProxy(s))
-                        Next
-                    End If
-                    LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.EmbeddedDevices.Count.ToString & " subdevices")
-                    If p.Device.Services.Count > 0 Then
-                        For Each d As UPnPDevice In p.Device.EmbeddedDevices
-                            ' call this sub recursively for each variable
-                            Proxy.RequestValues(Proxy.GetProxy(d))
-                        Next
-                    End If
+                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.Services.Count.ToString & " services")
+                If p.Device.Services.Count > 0 Then
+                    For Each s As UPnPService In p.Device.Services
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(s))
+                    Next
+                End If
+                LogMessage("   Reporting values for device; " & p.Device.FriendlyName & " it has " & p.Device.EmbeddedDevices.Count.ToString & " subdevices")
+                If p.Device.Services.Count > 0 Then
+                    For Each d As UPnPDevice In p.Device.EmbeddedDevices
+                        ' call this sub recursively for each variable
+                        Proxy.RequestValues(Proxy.GetProxy(d))
+                    Next
+                End If
             Case Else
-                    LogMessage("Can't request values for proxy type: " & p.Type.ToString)
+                LogMessage("Can't request values for proxy type: " & p.Type.ToString)
         End Select
     End Sub
 
