@@ -73,7 +73,7 @@ command = announce
 [id = ...]
 }
 This will trigger a new announce cycle, which will announce all elements of the
-requested ID again. If no ID is provided, then all devices known by the getway 
+requested ID again. If no ID is provided, then all devices known by the gateway 
 will announce again. At start up an application may broadcast this command to 
 discover all UPnP devices available. Multiple requests can be combined by 
 having multiple ID keys, each with 1 ID requested.
@@ -103,6 +103,26 @@ the ID with sub-numbers, the values can be concatenated to get back to the
 original value.
 NOTE: the 'LastUpdate' type updates are for devices supporting multiple 
 instances, the gateway will only handle the first.
+
+== Value requests ==
+To request a statevariable value, send a command message;
+
+upnp.basic
+{
+command = requestvalue
+id = <ID>
+[id = ...]
+}
+This will trigger a set of response messages with the variable values (see
+Value updates). There must be at least 1 ID in the command message and it can be
+the ID of either a; device, service or variable. In the first two cases all 
+underlying variables will be reported.
+Caveat: UPnP does not provide a standard way of getting variable values, but it
+has a convention that methods to get a variable value are named as the variable
+name, prefixed with 'Get'. So this command will return the last received value
+for evented statevariables, and for non-evented statevariables if will look for
+a UPnP method called 'Get<variablename>' (with 1 parameter, direction OUT) and 
+return the result of executing that method.
 
 == call methods ==
 To call a method on a device, use the following command message;
