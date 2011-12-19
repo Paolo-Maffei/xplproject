@@ -92,7 +92,7 @@ local el	-- trick luadoc
 -- </ul>
 -- @field updates Whenever an update of a UPnP variable arrives (automatically for evented variables
 -- or upon request for non-evented variables) the following event is raised.<ul>
--- <li><code>eventstring</code>: "UPnP value update &ltdevice name&gt:&ltvariable name&gt""</li>
+-- <li><code>eventstring</code>: "UPnP value update &ltdevice name&gt:&ltvariable name&gt"</li>
 -- <li><code>pld1</code>: ID of the variable that changed</li>
 -- <li><code>pld2</code>: new value of the variable</li>
 -- <li><code>pld3</code>: old value of the variable</li>
@@ -157,6 +157,9 @@ local myNewHandler = {
 			-- a single value will be requested, in case of a device or service the values off all
 			-- underlying variables (within nested devices/services) will be requested. The request
 			-- will be executed asynchroneously, the updates will come in as regular value updates.
+			-- <br/><strong>Important note</strong>: UPnP does not provide a way to request variable
+			-- values. The UPnP-2-xPL gateway provides a rudimentary workaround, which quite often
+			-- won't work. See the gateway documentation for details on what to expect.
 			-- <br/>There are 2 ways to request a value;
 			-- 1) directly on the service/device/variable table, 2) indirectly using a generic call. See the
 			-- example below for the difference, the results will be identical.
