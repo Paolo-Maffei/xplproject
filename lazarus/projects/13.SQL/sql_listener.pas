@@ -8,7 +8,6 @@ uses
   Classes, SysUtils,
   u_xpl_custom_listener,
   u_xpl_config,
-  u_xpl_actionlist,
   u_xpl_message,
   zDataset,
   zConnection;
@@ -26,7 +25,6 @@ type
         procedure ExecQuery(const aQuery : string);
      public
         constructor Create(const aOwner : TComponent); reintroduce;
-        procedure   OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass); override;
         procedure   UpdateConfig; override;
         procedure   Preprocess(const aMessage : TxPLMessage);
         procedure   Process(const aMessage : TxPLMessage);
@@ -54,7 +52,11 @@ procedure TxPLSqlListener.ConnectToDatabase(const aSchema : string);
 begin
    SQLConnection.Connected := false;
    SQLConnection.Database  := aSchema;
-   SQLConnection.Connected := true;
+   try
+      SQLConnection.Connected := true;
+   except
+      on E : Exception do Log(etError, 'Database library missing');
+   end;
 end;
 
 procedure TxPLSqlListener.OpenQuery(const aQuery : string);
@@ -75,18 +77,12 @@ constructor TxPLSqlListener.Create(const aOwner: TComponent);
 begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
-   FilterSet.AddValues(['xpl-cmnd.*.*.*.db.basic']);
+   Config.FilterSet.Add('xpl-cmnd.*.*.*.db.basic');
    Config.DefineItem(rsHostname, TxPLConfigItemType.config, 1, 'localhost');
    Config.DefineItem(rsUsername, TxPLConfigItemType.config, 1, 'root');
    Config.DefineItem(rsPassword, TxPLConfigItemType.option, 1, '');
-   Config.DefineItem(rsDatabase, TxPLConfigItemType.config, 1, '');
+   Config.DefineItem(rsDatabase, TxPLConfigItemType.config, 1, 'xpl');
    Config.DefineItem(rsLoggAll,  TxPLConfigItemType.reconf, 1, 'y');
-end;
-
-procedure TxPLSqlListener.OnFindClass(Reader: TReader; const AClassName: string; var ComponentClass: TComponentClass);
-begin
-   if CompareText(AClassName, 'TxPLSqlListener') = 0 then ComponentClass := TxplSqlListener
-   else inherited;
 end;
 
 procedure TxPLSqlListener.UpdateConfig;
@@ -195,6 +191,7 @@ begin
                savebody.Free;
             except
               answer.Body.SetValueByKey('status','fail');
+              answer.Body.CleanEmptyValues;
               send(answer);
             end;
 

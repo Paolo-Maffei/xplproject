@@ -8,7 +8,6 @@ inherited frmConfigurator: TfrmConfigurator
   ClientWidth = 616
   OnCreate = FormCreate
   inherited StatusBar1: TStatusBar
-    Height = 23
     Top = 554
     Width = 616
   end
@@ -17,20 +16,20 @@ inherited frmConfigurator: TfrmConfigurator
     inherited Panel4: TPanel
       Left = 416
     end
-    object ToolButton2: TToolButton[3]
-      Left = 53
+    object ToolButton2: TToolButton[4]
+      Left = 66
       Top = 0
       Action = acDiscoverNetwork
     end
-    object ToolButton11: TToolButton[4]
-      Left = 154
+    object ToolButton11: TToolButton[5]
+      Left = 167
       Top = 0
       Width = 10
       Caption = 'ToolButton10'
       Style = tbsSeparator
     end
-    object ToolButton8: TToolButton[5]
-      Left = 164
+    object ToolButton8: TToolButton[6]
+      Left = 177
       Top = 0
       Action = acClear
     end
@@ -161,14 +160,6 @@ inherited frmConfigurator: TfrmConfigurator
       inherited PageControl1: TPageControl
         ActivePage = nil
         TabIndex = -1
-        inherited tsCoreItems: TTabSheet
-          ClientHeight = 644
-          ClientWidth = 792
-        end
-        inherited tsSpecific: TTabSheet
-          ClientHeight = 644
-          ClientWidth = 792
-        end
       end
     end
   end
@@ -179,7 +170,7 @@ inherited frmConfigurator: TfrmConfigurator
     Width = 185
     Align = alLeft
     AutoExpand = True
-    DefaultItemHeight = 17
+    DefaultItemHeight = 18
     SortType = stText
     TabOrder = 4
     OnClick = lbDevicesClick
@@ -195,22 +186,24 @@ inherited frmConfigurator: TfrmConfigurator
   end
   inherited XMLPropStorage: TXMLPropStorage[8]
   end
-  inherited RxAboutDialog1: TRxAboutDialog[9]
+  inherited AboutDlg: TRxAboutDialog[9]
   end
-  object xPLMsgSaveDlg: TxPLMsgSaveDialog[10]
+  inherited AppMenu: TPopupMenu[10]
+  end
+  object xPLMsgSaveDlg: TxPLMsgSaveDialog[11]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     FilterIndex = 2
     left = 112
     top = 32
   end
-  object OpenMessage: TxPLMsgOpenDialog[11]
+  object OpenMessage: TxPLMsgOpenDialog[12]
     DefaultExt = '.xpl'
     Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
     left = 112
     top = 88
   end
-  object AppActionList: TActionList[12]
+  object AppActionList: TActionList[13]
     left = 16
     top = 160
     object acDiscoverNetwork: TAction

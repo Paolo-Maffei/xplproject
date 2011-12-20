@@ -6,9 +6,7 @@ uses
   {$ENDIF}{$ENDIF}
      Interfaces, // this includes the LCL widgetset
      Forms, pl_rx, fpTimer,
-     frm_xplappslauncher,
      frm_timer,
-     frm_logviewer,
      u_xpl_timer,
      u_xpl_application,
      u_xpl_listener,
@@ -17,6 +15,7 @@ uses
      u_xpl_common;
 
 {$IFDEF WINDOWS}{$R xpl_timer.rc}{$ENDIF}
+
 
 begin
   Application.Initialize;

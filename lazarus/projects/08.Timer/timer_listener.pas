@@ -34,10 +34,9 @@ uses u_xpl_common
 constructor TxPLTimerListener.Create(const aOwner: TComponent);
 begin
    inherited Create(aOwner);
-   Config.FilterSet.AddValues(['xpl-cmnd.*.*.*.timer.basic',
-                               'xpl-cmnd.*.*.*.timer.request']);
+   Config.FilterSet.Add('xpl-cmnd.*.*.*.timer.basic');
+   Config.FilterSet.Add('xpl-cmnd.*.*.*.timer.request');
    fTimers := TxPLTimers.Create(self);
-   include(fComponentStyle,csSubComponent);
    OnxPLReceived     := @OnReceive;
 end;
 

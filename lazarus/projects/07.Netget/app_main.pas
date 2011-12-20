@@ -36,7 +36,7 @@ implementation //===============================================================
 uses uxPLConst,
      FileUtil,
      uGetHTTP,
-     uRegExpr,
+     RegExpr,
      StrUtils,
      IdHTTP,
      u_xpl_common,
@@ -182,4 +182,4 @@ end;
 initialization
    MyNetGetApp:=TMyNetGetApp.Create(nil);
 end.
-
+

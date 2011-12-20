@@ -47,12 +47,9 @@ end;
 
 function TxPLCustomFolders.SharedDir: string;
 begin
-   result := GetCommonAppDataPath;
-   {$ifdef mswindows}
-      result := IncludeTrailingPathDelimiter(GetCommonAppDataPath + 'xPL');
-   {$else}
-      result := IncludeTrailingPathDelimiter(GetCommonAppDataPath);
-   {$endif}
+   result := IncludeTrailingPathDelimiter( GetCommonAppDataPath
+                                         {$ifdef mswindows} + 'xPL' {$endif}
+                                         );
    ForceDirectories(result);
 end;
 

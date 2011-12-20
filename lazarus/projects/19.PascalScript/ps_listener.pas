@@ -103,7 +103,7 @@ begin
 
    fGlobalList := TxPLGlobals.Create(self);
 
-   fCacheManager := TxPLCacheManager.Create(Folders.DeviceDir, fGlobalList);
+   fCacheManager := TxPLCacheManager.Create(Folders.DeviceDir); //, fGlobalList);
    xPLMessage  := TxPLMessage.Create(self);
 
    PSScript := TPS_Scripter.Create(self);

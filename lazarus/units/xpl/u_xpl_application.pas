@@ -145,14 +145,6 @@ begin
       end;
       fIdSysLog.SendLogMessage(fIdSysLogMessage);
    {$else}
-   //Case EventType of
-   //     etInfo    : Logger.Send(Msg);                                          // Info are only stored in log file
-   //     etWarning : Logger.SendWarning(Msg);                                   // Warn are stored in log, displayed but doesn't stop the app
-   //     etError   : begin                                                      // Error are stored as error in log, displayed and stop the app
-   //                    Logger.SendError(Msg);
-   //                    Raise Exception.Create(Msg);
-   //                 end;
-   //end;
       fEventLog.Log(EventType,Msg);
    {$endif}
    if IsConsole then writeln(FormatDateTime('dd/mm hh:mm:ss',now),' ',EventTypeToxPLLevel(EventType),' ',Msg);
@@ -212,4 +204,4 @@ finalization // ===============================================================
    LocalAddresses.Free;
    VersionInfo.Free;
 
-end.
+end.

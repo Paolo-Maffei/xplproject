@@ -206,6 +206,7 @@ end;
 procedure TElementType.Set_O(o: ISuperObject);
 begin
   name := o['name'].AsString;
+  if Assigned(o['default']) then default_ := o['default'].AsString;
 end;
 
 { TCommandType }
