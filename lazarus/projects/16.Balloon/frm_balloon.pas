@@ -7,7 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ExtCtrls, ActnList, Grids, RTTICtrls, fpTimer, xplNotifier,
-  u_xpl_message, frm_template, XMLPropStorage;
+  u_xpl_message, frm_template;
 
 type
 
@@ -18,7 +18,7 @@ type
     dgMessages: TStringGrid;
     TrayIcon1: TTrayIcon;
     procedure acDisplayWindow(Sender : TObject);
-    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
+    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; {%H-}aState: TGridDrawState);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure XMLPropStorageRestoreProperties(Sender: TObject);
@@ -77,12 +77,10 @@ begin
    TrayIcon1.Visible := True;
 
    aMenu := TMenuItem.Create(self);
-   aMenu.Caption := '-';
-   xPLMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
    aMenu.Action := acDisplayMessageWindow;
    xPLMenu.Items.Insert(0,aMenu);
+
+   AppButton.Visible:=false;
 
    dgMessages.Columns[0].Width := 130;
    dgMessages.Columns[1].Width := 50;

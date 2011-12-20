@@ -7,8 +7,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, Menus, ActnList, ExtCtrls, u_xpl_config, u_xpl_custom_message,
-  Buttons, XMLPropStorage, RxAboutDialog,  RTTICtrls, RTTIGrids, timer_listener,
-  frm_template;
+  Buttons, RTTICtrls, RTTIGrids, timer_listener, frm_template;
 
 type
 
@@ -43,10 +42,9 @@ implementation {===============================================================}
 uses uxPLConst,
      StrUtils,
      LCLType,
-     uRegExpr,
+     RegExpr,
      u_xpl_custom_listener,
      u_xpl_timer,
-     frm_LogViewer,
      u_xpl_header,
      u_xpl_application,
      u_xpl_gui_resource,

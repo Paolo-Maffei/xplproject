@@ -19,7 +19,7 @@ type
     procedure TestTarget;
     procedure TestHeader;
     procedure TestBody;
-    procedure TestConfigItem;
+    //procedure TestConfigItem;
     procedure TestMessage;
     procedure Test_u_xpl_common;
     procedure test_folders;
@@ -34,8 +34,6 @@ uses u_xPL_Schema,
      u_xpl_Common,
      u_xpl_custom_message,
      u_xpl_application,
-     u_xpl_settings,
-     u_xpl_vendor_file,
      u_xpl_folders,
      u_xPL_Config;
 
@@ -65,7 +63,7 @@ begin
    AssertEquals(schema2.isvalid,true);          // Tester le test de valeurs correctes
    AssertEquals(schema2.rawxPL,'log.basic');    // Tester la constitution de rawxpl
    schema2.Type_:='basictoolong';                  // chaine trop longue
-   AssertEquals(schema2.rawxPL,'log.basic');
+   AssertEquals(schema2.isvalid,false);
    schema2.RawxPL:='control.reply';                // affectation directe par rawxpl
    AssertEquals(schema2.classe,'control');         // vérifier sa décomposition
    AssertEquals(schema2.type_,'reply');
@@ -210,20 +208,20 @@ begin
    body2.Free;
 end;
 
-procedure ClinxPLfpcUnit.TestConfigItem;
-var configitem : TxPLConfigItem;
-begin
-     configitem := TxPLConfigItem.Create(nil);
-     configitem.ItemMax:=1;
-     AssertEquals(ConfigItem.ItemMaxAsString,'');
-     configitem.ItemMax:=12;
-     AssertEquals(ConfigItem.ItemMaxAsString,'[12]');
-     configitem.ItemDefault:='default';
-     AssertEquals(ConfigItem.ValueCount,0);
-     AssertEquals(ConfigItem.IsValid,true);
-     ConfigItem.AddValue('valeur');
-     AssertEquals(ConfigItem.ValueCount,1);
-end;
+//procedure ClinxPLfpcUnit.TestConfigItem;
+//var configitem : TxPLConfigItem;
+//begin
+//     configitem := TxPLConfigItem.Create(nil);
+//     configitem.ItemMax:=1;
+//     AssertEquals(ConfigItem.ItemMaxAsString,'');
+//     configitem.ItemMax:=12;
+//     AssertEquals(ConfigItem.ItemMaxAsString,'[12]');
+//     configitem.ItemDefault:='default';
+//     AssertEquals(ConfigItem.ValueCount,0);
+//     AssertEquals(ConfigItem.IsValid,true);
+//     ConfigItem.AddValue('valeur');
+//     AssertEquals(ConfigItem.ValueCount,1);
+//end;
 
 procedure ClinxPLfpcUnit.TestMessage;
 var message, message2 : TxPLCustomMessage;

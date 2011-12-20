@@ -48,7 +48,6 @@ type TDownloadAbordEvent = procedure(aSender : TObject; anError : integer) of ob
 
 implementation // =============================================================
 uses RegExpr
-     , StrUtils
      , SysUtils
      ;
 
@@ -148,4 +147,4 @@ end;
 
 
 end.
-
+

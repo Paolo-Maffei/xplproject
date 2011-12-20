@@ -12,7 +12,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <StringTable CompanyName="clinique" InternalName="exec" ProductName="xPL Exec" ProductVersion=""/>
+      <StringTable CompanyName="clinique" ProductName="xPL Exec" InternalName="exec" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -29,27 +29,30 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="sup_object"/>
       </Item1>
       <Item2>
-        <PackageName Value="FCL"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="LCLBase"/>
+        <MinVersion Major="1" Valid="True" Release="1"/>
       </Item2>
       <Item3>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="FCL"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item3>
       <Item4>
-        <PackageName Value="IDEIntf"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="pl_indycomp"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCL"/>
+        <PackageName Value="IDEIntf"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item5>
+      <Item6>
+        <PackageName Value="LCL"/>
+      </Item6>
     </RequiredPackages>
-    <Units Count="163">
+    <Units Count="166">
       <Unit0>
         <Filename Value="xpl_exec.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -57,7 +60,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="13" Y="12"/>
+        <CursorPos X="1" Y="25"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -392,8 +395,8 @@
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="13"/>
-        <CursorPos X="3" Y="24"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="77"/>
         <UsageCount Value="30"/>
       </Unit40>
       <Unit41>
@@ -617,13 +620,10 @@
         <Filename Value="exec_listener.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="exec_listener"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="145"/>
-        <CursorPos X="20" Y="3"/>
+        <TopLine Value="21"/>
+        <CursorPos X="70" Y="118"/>
         <UsageCount Value="206"/>
-        <Loaded Value="True"/>
       </Unit69>
       <Unit70>
         <Filename Value="C:\lazarus\lcl\actnlist.pas"/>
@@ -725,9 +725,9 @@
       <Unit82>
         <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1469"/>
-        <CursorPos X="3" Y="1469"/>
-        <UsageCount Value="34"/>
+        <TopLine Value="624"/>
+        <CursorPos X="3" Y="551"/>
+        <UsageCount Value="35"/>
       </Unit82>
       <Unit83>
         <Filename Value="C:\lazarus\components\pl_VisualPlanIt\source\vpdbds.pas"/>
@@ -839,7 +839,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="172"/>
         <CursorPos X="31" Y="183"/>
-        <UsageCount Value="90"/>
+        <UsageCount Value="92"/>
         <Loaded Value="True"/>
       </Unit96>
       <Unit97>
@@ -847,7 +847,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="139"/>
         <CursorPos X="37" Y="29"/>
-        <UsageCount Value="89"/>
+        <UsageCount Value="91"/>
         <Loaded Value="True"/>
       </Unit97>
       <Unit98>
@@ -985,7 +985,6 @@
         <TopLine Value="176"/>
         <CursorPos X="1" Y="189"/>
         <UsageCount Value="3"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit114>
       <Unit115>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\dbc\ZDbcMyexecUtils.pas"/>
@@ -994,7 +993,6 @@
         <TopLine Value="377"/>
         <CursorPos X="1" Y="392"/>
         <UsageCount Value="3"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit115>
       <Unit116>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\component\ZDataset.pas"/>
@@ -1003,7 +1001,6 @@
         <TopLine Value="52"/>
         <CursorPos X="39" Y="65"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit116>
       <Unit117>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\component\ZAbstractRODataset.pas"/>
@@ -1012,7 +1009,6 @@
         <TopLine Value="102"/>
         <CursorPos X="38" Y="117"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit117>
       <Unit118>
         <Filename Value="C:\pp\packages\fcl-db\src\base\db.pas"/>
@@ -1061,7 +1057,6 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="5"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit123>
       <Unit124>
         <Filename Value="C:\lazarus\components\pl_ZeosDBO\source\parseexec\ZGenericexecToken.pas"/>
@@ -1078,7 +1073,6 @@
         <TopLine Value="151"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="3"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit125>
       <Unit126>
         <Filename Value="utrymyexec.lrs"/>
@@ -1191,79 +1185,75 @@
       <Unit140>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
         <TopLine Value="128"/>
         <CursorPos X="1" Y="149"/>
-        <UsageCount Value="14"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="15"/>
       </Unit140>
       <Unit141>
         <Filename Value="..\..\units\xpl\u_xpl_body.pas"/>
         <UnitName Value="u_xpl_body"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="231"/>
-        <CursorPos X="1" Y="244"/>
+        <TopLine Value="235"/>
+        <CursorPos X="1" Y="217"/>
         <UsageCount Value="11"/>
       </Unit141>
       <Unit142>
         <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
         <UnitName Value="u_xpl_message"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="122"/>
-        <CursorPos X="1" Y="132"/>
+        <TopLine Value="36"/>
+        <CursorPos X="1" Y="77"/>
         <UsageCount Value="13"/>
       </Unit142>
       <Unit143>
         <Filename Value="..\..\units\xpl\u_xpl_custom_message.pas"/>
         <UnitName Value="u_xpl_custom_message"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="80"/>
-        <CursorPos X="1" Y="96"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="66"/>
         <UsageCount Value="11"/>
       </Unit143>
       <Unit144>
         <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
         <UnitName Value="u_xPL_Header"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="146"/>
-        <CursorPos X="1" Y="163"/>
-        <UsageCount Value="15"/>
-        <Loaded Value="True"/>
+        <TopLine Value="212"/>
+        <CursorPos X="1" Y="110"/>
+        <UsageCount Value="16"/>
       </Unit144>
       <Unit145>
         <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <UnitName Value="u_xpl_custom_listener"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="221"/>
-        <CursorPos X="41" Y="245"/>
-        <UsageCount Value="15"/>
+        <TopLine Value="261"/>
+        <CursorPos X="52" Y="226"/>
+        <UsageCount Value="17"/>
         <Loaded Value="True"/>
       </Unit145>
       <Unit146>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="139"/>
-        <CursorPos X="1" Y="165"/>
+        <TopLine Value="1"/>
+        <CursorPos X="13" Y="12"/>
         <UsageCount Value="13"/>
       </Unit146>
       <Unit147>
         <Filename Value="..\..\units\xpl\u_xpl_address.pas"/>
         <UnitName Value="u_xpl_address"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="159"/>
-        <CursorPos X="1" Y="175"/>
+        <TopLine Value="94"/>
+        <CursorPos X="1" Y="117"/>
         <UsageCount Value="13"/>
       </Unit147>
       <Unit148>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="26"/>
-        <CursorPos X="22" Y="72"/>
+        <TopLine Value="113"/>
+        <CursorPos X="1" Y="128"/>
         <UsageCount Value="12"/>
       </Unit148>
       <Unit149>
@@ -1295,16 +1285,18 @@
         <UnitName Value="u_xml_plugins"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
-        <CursorPos X="7" Y="1"/>
-        <UsageCount Value="10"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="11"/>
       </Unit152>
       <Unit153>
         <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
         <UnitName Value="u_xpl_config"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="184"/>
-        <CursorPos X="1" Y="202"/>
-        <UsageCount Value="12"/>
+        <TopLine Value="346"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit153>
       <Unit154>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
@@ -1364,154 +1356,109 @@
       <Unit161>
         <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
         <UnitName Value="u_xpl_rawset"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="61"/>
-        <CursorPos X="1" Y="78"/>
-        <UsageCount Value="12"/>
-        <Loaded Value="True"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="122"/>
+        <UsageCount Value="13"/>
       </Unit161>
       <Unit162>
         <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
         <UnitName Value="u_xPL_Schema"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="58"/>
         <CursorPos X="31" Y="75"/>
+        <UsageCount Value="13"/>
+      </Unit162>
+      <Unit163>
+        <Filename Value="..\..\units\xpl\u_xpl_actionlist.pas"/>
+        <UnitName Value="u_xpl_actionlist"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+      </Unit163>
+      <Unit164>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <UnitName Value="u_xpl_messages"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="253"/>
+        <CursorPos X="1" Y="354"/>
         <UsageCount Value="12"/>
         <Loaded Value="True"/>
-      </Unit162>
+      </Unit164>
+      <Unit165>
+        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdUDPBase.pas"/>
+        <UnitName Value="IdUDPBase"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="303"/>
+        <CursorPos X="1" Y="317"/>
+        <UsageCount Value="11"/>
+      </Unit165>
     </Units>
-    <JumpHistory Count="30" HistoryIndex="29">
+    <JumpHistory Count="13" HistoryIndex="12">
       <Position1>
-        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
-        <Caret Line="76" Column="1" TopLine="58"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="279" Column="1" TopLine="265"/>
       </Position1>
       <Position2>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="243" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="284" Column="1" TopLine="265"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="252" Column="1" TopLine="226"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="263" Column="1" TopLine="249"/>
       </Position3>
       <Position4>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="230" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position4>
       <Position5>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="231" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position5>
       <Position6>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="232" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position6>
       <Position7>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="233" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="438" Column="55" TopLine="424"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="235" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
-        <Caret Line="77" Column="1" TopLine="61"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
-        <Caret Line="78" Column="1" TopLine="61"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="238" Column="1" TopLine="224"/>
+        <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
+        <Caret Line="354" Column="1" TopLine="340"/>
       </Position11>
       <Position12>
-        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
-        <Caret Line="69" Column="1" TopLine="58"/>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <Caret Line="365" Column="48" TopLine="346"/>
       </Position12>
       <Position13>
-        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
-        <Caret Line="70" Column="1" TopLine="58"/>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="112" Column="34" TopLine="101"/>
       </Position13>
-      <Position14>
-        <Filename Value="..\..\units\xpl\u_xpl_schema.pas"/>
-        <Caret Line="75" Column="31" TopLine="58"/>
-      </Position14>
-      <Position15>
-        <Filename Value="exec_listener.pas"/>
-        <Caret Line="119" Column="1" TopLine="111"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="234" Column="17" TopLine="231"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="238" Column="1" TopLine="231"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="242" Column="1" TopLine="231"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="243" Column="1" TopLine="231"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="158" Column="1" TopLine="146"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="159" Column="1" TopLine="146"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="160" Column="1" TopLine="146"/>
-      </Position22>
-      <Position23>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="161" Column="1" TopLine="146"/>
-      </Position23>
-      <Position24>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="162" Column="1" TopLine="146"/>
-      </Position24>
-      <Position25>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <Caret Line="163" Column="1" TopLine="146"/>
-      </Position25>
-      <Position26>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="246" Column="45" TopLine="231"/>
-      </Position26>
-      <Position27>
-        <Filename Value="exec_listener.pas"/>
-        <Caret Line="131" Column="1" TopLine="117"/>
-      </Position27>
-      <Position28>
-        <Filename Value="exec_listener.pas"/>
-        <Caret Line="133" Column="1" TopLine="117"/>
-      </Position28>
-      <Position29>
-        <Filename Value="exec_listener.pas"/>
-        <Caret Line="148" Column="1" TopLine="128"/>
-      </Position29>
-      <Position30>
-        <Filename Value="xpl_exec.lpr"/>
-        <Caret Line="12" Column="13" TopLine="1"/>
-      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="10"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="$(ProjOutDir);E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;C:\lazarus\components\pl_Indy\source\;..\..\..\..\components\jcl-2.2.1.3886\source\include;E:\01.SourceSafe\08.Lazarus\components\jvcllaz\common\"/>
-      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;..\..\..\..\components\jvcllaz\run;..\..\..\..\components\powtils;E:\01.SourceSafe\08.Lazarus\components\multilog-0.5\;..\..\..\units\general\ssversionchecker;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\System\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\fndUtl328\Utils\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\RegExpr\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\pp\packages\fcl-base\src\;C:\lazarus\components\pl_Indy\source\base\;..\..\..\..\components\jvcllaz\packages;E:\01.SourceSafe\08.Lazarus\components\lazsolutions\Core\;E:\01.SourceSafe\08.Lazarus\components\lazsolutions\3rdParty\DCPcrypt\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\;..\..\..\components\jvcllaz\run"/>
-      <UnitOutputDirectory Value="C:\Lazout"/>
+      <IncludeFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\res\pictures\;C:\lazarus\components\pl_Indy\source\;$(ProjOutDir)"/>
+      <OtherUnitFiles Value="E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui\;E:\01.SourceSafe\08.Lazarus\SVN\units\general\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\;C:\pp\packages\fcl-base\src\;E:\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml\"/>
+      <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -1520,6 +1467,10 @@
       </SyntaxOptions>
     </Parsing>
     <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="True"/>
+        <DebugInfoType Value="dsAuto"/>
+      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

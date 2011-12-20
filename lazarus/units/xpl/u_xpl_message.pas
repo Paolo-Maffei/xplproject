@@ -29,23 +29,21 @@ uses classes,
 type // TxPLMessage ===========================================================
      TxPLMessage = class(TxPLCustomMessage)
      private
-        fMsgName      : string;
+        fMsgName : string;
      public
-        function ElementByName(const anItem : string) : string;
-        function ProcessedxPL : string;
+        function  ProcessedxPL : string;
+        function  ElementByName(const anItem : string) : string;
+        procedure ReadFromJSON (const aCom : TCommandType);
 
-        procedure ReadFromJSON(const aCom : TCommandType);
-
-//        procedure Format_HbeatApp   (const aInterval : integer; const aPort : string; const aIP : string);
-        procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string);
+        //procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string); Replaced by TSensorBasic in u_xpl_messages
      published
-        property MsgName      : string      read fMsgName      write fMsgName     ;
+        property MsgName : string read fMsgName write fMsgName;
      end;
 
 const K_KEYWORDS : Array[0..11] of String = ( 'TIMESTAMP','DATE_YMD','DATE_UK','DATE_US','DATE','DAY',
                                               'MONTH','YEAR','TIME','HOUR','MINUTE','SECOND');
 
-implementation { ==============================================================}
+implementation // =============================================================
 Uses SysUtils
      , RegExpr
      , StrUtils
@@ -53,7 +51,7 @@ Uses SysUtils
      , uxPLConst
      ;
 
-// TxPLMessage =================================================================
+// TxPLMessage ================================================================
 function TxPLMessage.ElementByName(const anItem: string): string;
 begin
    if anItem = 'Schema' then result := Schema.RawxPL;
@@ -65,9 +63,12 @@ begin
 end;
 
 function TxPLMessage.ProcessedxPL: string;
-const K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd','dd/mm/yyyy','mm/dd/yyyy','dd','dd/mm/yyyy',
-                                              'm','yyyy','hh:nn:ss','hh','nn','ss');
-      K_RE_VARIABLE    = '{[s|S][y|Y][s|S]::(.*?)}';
+const K_RE_VARIABLE    = '{[s|S][y|Y][s|S]::(.*?)}';
+      K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd',
+                                              'dd/mm/yyyy','mm/dd/yyyy','dd',
+                                              'dd/mm/yyyy', 'm','yyyy',
+                                              'hh:nn:ss','hh','nn','ss');
+
 var rep : string;
     bLoop   : boolean;
 begin
@@ -97,11 +98,11 @@ begin
        Body.AddKeyValuePairs([TElementType(item).Name],[TElementType(item).default_]);
 end;
 
-procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
-begin
-   Body.ResetValues;
-   Schema.RawxPL := 'sensor.basic';
-   Body.AddKeyValuePairs(['device','type','current'],[aDevice,aType,aCurrent]);
-end;
+//procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
+//begin
+//   Body.ResetValues;
+//   Schema.RawxPL := 'sensor.basic';
+//   Body.AddKeyValuePairs(['device','type','current'],[aDevice,aType,aCurrent]);
+//end;
 
 end.

@@ -14,7 +14,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <BuildNr Value="1"/>
-      <StringTable CompanyName="clinique" InternalName="timer" ProductName="xPL Timer" ProductVersion=""/>
+      <StringTable CompanyName="clinique" ProductName="xPL Timer" InternalName="timer" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
       <Item1 Name="default" Default="True"/>
@@ -31,34 +31,37 @@
         <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="5">
+    <RequiredPackages Count="6">
       <Item1>
-        <PackageName Value="pl_rx"/>
+        <PackageName Value="sup_object"/>
       </Item1>
       <Item2>
-        <PackageName Value="pl_indycomp"/>
+        <PackageName Value="pl_rx"/>
       </Item2>
       <Item3>
-        <PackageName Value="RunTimeTypeInfoControls"/>
-        <MinVersion Minor="1" Valid="True"/>
+        <PackageName Value="pl_indycomp"/>
       </Item3>
       <Item4>
-        <PackageName Value="IDEIntf"/>
-        <MinVersion Major="1" Valid="True"/>
+        <PackageName Value="RunTimeTypeInfoControls"/>
+        <MinVersion Minor="1" Valid="True"/>
       </Item4>
       <Item5>
-        <PackageName Value="LCL"/>
+        <PackageName Value="IDEIntf"/>
+        <MinVersion Major="1" Valid="True"/>
       </Item5>
+      <Item6>
+        <PackageName Value="LCL"/>
+      </Item6>
     </RequiredPackages>
-    <Units Count="262">
+    <Units Count="267">
       <Unit0>
         <Filename Value="xpl_timer.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_timer"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="15"/>
-        <CursorPos X="38" Y="28"/>
+        <TopLine Value="8"/>
+        <CursorPos X="1" Y="18"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -68,10 +71,10 @@
         <ComponentName Value="frmTimer"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_timer"/>
-        <EditorIndex Value="4"/>
+        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="45"/>
-        <CursorPos X="1" Y="35"/>
+        <TopLine Value="1"/>
+        <CursorPos X="28" Y="9"/>
         <UsageCount Value="200"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
@@ -885,10 +888,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplTimer"/>
+        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="17"/>
-        <CursorPos X="32" Y="48"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="17"/>
+        <Loaded Value="True"/>
       </Unit109>
       <Unit110>
         <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
@@ -1718,11 +1723,10 @@
         <Filename Value="timer_listener.pas"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="timer_listener"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="1"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="74"/>
-        <CursorPos X="44" Y="83"/>
+        <TopLine Value="23"/>
+        <CursorPos X="39" Y="39"/>
         <UsageCount Value="43"/>
         <Loaded Value="True"/>
       </Unit218>
@@ -1810,7 +1814,6 @@
         <TopLine Value="303"/>
         <CursorPos X="1" Y="330"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit228>
       <Unit229>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32callback.inc"/>
@@ -1913,7 +1916,6 @@
         <TopLine Value="54"/>
         <CursorPos X="3" Y="71"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit241>
       <Unit242>
         <Filename Value="C:\lazarus\components\pl_Indy\pl_indycomp.pas"/>
@@ -1922,7 +1924,6 @@
         <TopLine Value="1"/>
         <CursorPos X="19" Y="19"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit242>
       <Unit243>
         <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdHTTP.pas"/>
@@ -1931,7 +1932,6 @@
         <TopLine Value="320"/>
         <CursorPos X="13" Y="337"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit243>
       <Unit244>
         <Filename Value="C:\lazarus\components\pl_Indy\source\IdCompilerDefines.inc"/>
@@ -1939,7 +1939,6 @@
         <TopLine Value="1"/>
         <CursorPos X="12" Y="6"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit244>
       <Unit245>
         <Filename Value="C:\lazarus\ideintf\propeditutils.pp"/>
@@ -2018,7 +2017,6 @@
         <TopLine Value="268"/>
         <CursorPos X="35" Y="288"/>
         <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit254>
       <Unit255>
         <Filename Value="..\..\..\..\components\jvcllaz\run\JclRegistry.pas"/>
@@ -2039,17 +2037,20 @@
       <Unit257>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="44" Y="8"/>
+        <TopLine Value="173"/>
+        <CursorPos X="1" Y="187"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit257>
       <Unit258>
         <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
         <UnitName Value="u_xpl_timer"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="214"/>
+        <TopLine Value="211"/>
         <CursorPos X="22" Y="88"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
@@ -2073,134 +2074,185 @@
       <Unit261>
         <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
         <UnitName Value="u_xpl_collection"/>
-        <EditorIndex Value="3"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="14"/>
         <CursorPos X="4" Y="17"/>
         <UsageCount Value="11"/>
         <Loaded Value="True"/>
       </Unit261>
+      <Unit262>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <HasResources Value="True"/>
+        <UnitName Value="frm_template"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit262>
+      <Unit263>
+        <Filename Value="..\..\units\xpl\gui\u_xpl_gui_resource.pas"/>
+        <UnitName Value="u_xpl_gui_resource"/>
+        <EditorIndex Value="5"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="87"/>
+        <CursorPos X="28" Y="104"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit263>
+      <Unit264>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <UnitName Value="u_xml_plugins"/>
+        <EditorIndex Value="6"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit264>
+      <Unit265>
+        <Filename Value="..\..\units\xpl\u_xpl_config.pas"/>
+        <UnitName Value="u_xpl_config"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="66"/>
+        <CursorPos X="16" Y="80"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit265>
+      <Unit266>
+        <Filename Value="..\..\units\xpl\u_configuration_record.pas"/>
+        <UnitName Value="u_Configuration_Record"/>
+        <EditorIndex Value="11"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit266>
     </Units>
     <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="10" Column="10" TopLine="7"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="77" Column="42" TopLine="61"/>
       </Position1>
       <Position2>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="22" Column="1" TopLine="6"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="49" Column="17" TopLine="46"/>
       </Position2>
       <Position3>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="24" Column="1" TopLine="6"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="83" Column="52" TopLine="62"/>
       </Position3>
       <Position4>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="10" Column="9" TopLine="1"/>
+        <Caret Line="24" Column="30" TopLine="9"/>
       </Position4>
       <Position5>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="99" Column="25" TopLine="85"/>
+        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
+        <Caret Line="69" Column="47" TopLine="54"/>
       </Position5>
       <Position6>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="10" Column="9" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
+        <Caret Line="34" Column="30" TopLine="25"/>
       </Position6>
       <Position7>
         <Filename Value="timer_listener.pas"/>
-        <Caret Line="22" Column="1" TopLine="11"/>
+        <Caret Line="24" Column="30" TopLine="9"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="92" Column="37" TopLine="83"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="114" Column="33" TopLine="72"/>
       </Position8>
       <Position9>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="21" Column="13" TopLine="1"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="10" Column="41" TopLine="1"/>
       </Position9>
       <Position10>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="17" Column="56" TopLine="1"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="118" Column="1" TopLine="22"/>
       </Position10>
       <Position11>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="236" Column="62" TopLine="218"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="73" Column="43" TopLine="55"/>
       </Position11>
       <Position12>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="10" Column="14" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\gui\u_xpl_gui_resource.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position12>
       <Position13>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="18" Column="27" TopLine="7"/>
+        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position13>
       <Position14>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="31" Column="20" TopLine="13"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="83" Column="44" TopLine="65"/>
       </Position14>
       <Position15>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="44" Column="6" TopLine="33"/>
+        <Filename Value="timer_listener.pas"/>
+        <Caret Line="37" Column="16" TopLine="23"/>
       </Position15>
       <Position16>
-        <Filename Value="xpl_timer.lpr"/>
-        <Caret Line="8" Column="20" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position16>
       <Position17>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="42" Column="42" TopLine="22"/>
+        <Filename Value="..\..\units\xpl\u_configuration_record.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position17>
       <Position18>
         <Filename Value="frm_timer.pas"/>
-        <Caret Line="160" Column="1" TopLine="64"/>
+        <Caret Line="46" Column="6" TopLine="33"/>
       </Position18>
       <Position19>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="85" Column="21" TopLine="59"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position19>
       <Position20>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="77" Column="42" TopLine="61"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xpltimer.pas"/>
+        <Caret Line="48" Column="32" TopLine="17"/>
       </Position20>
       <Position21>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="49" Column="17" TopLine="46"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="48" Column="18" TopLine="40"/>
       </Position21>
       <Position22>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="83" Column="52" TopLine="62"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="49" Column="1" TopLine="22"/>
       </Position22>
       <Position23>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="24" Column="30" TopLine="9"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="10" Column="50" TopLine="1"/>
       </Position23>
       <Position24>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="69" Column="47" TopLine="54"/>
+        <Filename Value="frm_timer.pas"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position24>
       <Position25>
-        <Filename Value="..\..\units\xpl\u_xpl_timer.pas"/>
-        <Caret Line="34" Column="30" TopLine="25"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="30" Column="38" TopLine="11"/>
       </Position25>
       <Position26>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="24" Column="30" TopLine="9"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="1" Column="1" TopLine="1"/>
       </Position26>
       <Position27>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="114" Column="33" TopLine="72"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="8" Column="28" TopLine="1"/>
       </Position27>
       <Position28>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="10" Column="41" TopLine="1"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="18" Column="1" TopLine="8"/>
       </Position28>
       <Position29>
-        <Filename Value="frm_timer.pas"/>
-        <Caret Line="118" Column="1" TopLine="22"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="35" Column="1" TopLine="10"/>
       </Position29>
       <Position30>
-        <Filename Value="timer_listener.pas"/>
-        <Caret Line="73" Column="43" TopLine="55"/>
+        <Filename Value="xpl_timer.lpr"/>
+        <Caret Line="18" Column="1" TopLine="8"/>
       </Position30>
     </JumpHistory>
   </ProjectOptions>
@@ -2210,7 +2262,7 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\..\units\xpl;..\..\units\xpl\gui"/>
-      <UnitOutputDirectory Value="C:\Lazout"/>
+      <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -2219,6 +2271,10 @@
       </SyntaxOptions>
     </Parsing>
     <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="True"/>
+        <DebugInfoType Value="dsAuto"/>
+      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>

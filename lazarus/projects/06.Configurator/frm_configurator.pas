@@ -6,10 +6,9 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, StdCtrls, XMLPropStorage, RxAboutDialog,
-  RTTICtrls, frm_template, v_xplmsg_opendialog,
-  frame_config, u_configuration_record, fpTimer, u_xpl_message,
-  fpc_delphi_compat;
+  ComCtrls, ExtCtrls, ActnList, Menus, StdCtrls, RTTICtrls, frm_template,
+  v_xplmsg_opendialog, frame_config, u_configuration_record, fpTimer,
+  u_xpl_message, fpc_delphi_compat, RxAboutDialog;
 
 type
 
@@ -69,12 +68,9 @@ var
 
 implementation // =============================================================
 uses uxPLConst
-     , uRegExpr
-     , frm_xplappslauncher
-     , frm_logviewer
+     , RegExpr
      , u_xpl_gui_resource
      , u_xpl_application
-     , u_xpl_common
      , u_xpl_custom_message
      , u_xpl_messages
      , u_xpl_schema

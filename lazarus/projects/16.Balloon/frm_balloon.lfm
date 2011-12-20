@@ -118,7 +118,6 @@ inherited FrmBalloon: TFrmBalloon
   ShowInTaskBar = stNever
   Visible = True
   inherited StatusBar1: TStatusBar
-    Height = 23
     Top = 206
     Width = 602
   end
@@ -167,7 +166,7 @@ inherited FrmBalloon: TFrmBalloon
     OnDrawCell = dgMessagesDrawCell
   end
   inherited ActionList: TActionList[4]
-    object acDisplayMessageWindow: TAction[5]
+    object acDisplayMessageWindow: TAction[4]
       AutoCheck = True
       Caption = 'Display Message Window'
       OnExecute = acDisplayWindow
@@ -178,9 +177,11 @@ inherited FrmBalloon: TFrmBalloon
   inherited XMLPropStorage: TXMLPropStorage[6]
     OnRestoreProperties = XMLPropStorageRestoreProperties
   end
-  inherited RxAboutDialog1: TRxAboutDialog[7]
+  inherited AboutDlg: TRxAboutDialog[7]
   end
-  object TrayIcon1: TTrayIcon[8]
+  inherited AppMenu: TPopupMenu[8]
+  end
+  object TrayIcon1: TTrayIcon[9]
     PopUpMenu = xPLMenu
     Icon.Data = {
       BE0C00000000010001002020000000001800A80C000016000000280000002000
