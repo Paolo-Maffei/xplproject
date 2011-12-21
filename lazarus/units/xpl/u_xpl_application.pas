@@ -148,10 +148,10 @@ initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
 
-   TIdStack.IncUsage;
-   LocalAddresses.Assign(GStack.LocalAddresses);
+//   TIdStack.IncUsage;
+   LocalAddresses.Assign(IPAddresses);
 
 finalization // ===============================================================
    LocalAddresses.Free;
 
-end.
+end.
