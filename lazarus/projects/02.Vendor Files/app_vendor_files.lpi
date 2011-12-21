@@ -1,1568 +1,3 @@
-<<<<<<< .mine
-<?xml version="1.0"?>
-<CONFIG>
-  <ProjectOptions>
-    <Version Value="9"/>
-    <PathDelim Value="\"/>
-    <General>
-      <MainUnit Value="0"/>
-      <UseXPManifest Value="True"/>
-      <Icon Value="0"/>
-      <ActiveWindowIndexAtStart Value="0"/>
-    </General>
-    <VersionInfo>
-      <UseVersionInfo Value="True"/>
-      <AutoIncrementBuild Value="True"/>
-      <MajorVersionNr Value="4"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="1"/>
-      <StringTable CompanyName="clinique" InternalName="vendfile" ProductName="xPL Vendor Files" ProductVersion=""/>
-    </VersionInfo>
-    <BuildModes Count="1">
-      <Item1 Name="default" Default="True"/>
-    </BuildModes>
-    <PublishOptions>
-      <Version Value="2"/>
-      <IgnoreBinaries Value="False"/>
-      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
-      <ExcludeFileFilter Value="*.(bak|ppu|ppw|o|so);*~;backup"/>
-    </PublishOptions>
-    <RunParams>
-      <local>
-        <FormatVersion Value="1"/>
-        <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
-      </local>
-    </RunParams>
-    <RequiredPackages Count="10">
-      <Item1>
-        <PackageName Value="LazSolutionsRT"/>
-      </Item1>
-      <Item2>
-        <PackageName Value="pl_rx"/>
-      </Item2>
-      <Item3>
-        <PackageName Value="multiloglaz"/>
-      </Item3>
-      <Item4>
-        <PackageName Value="sup_object"/>
-      </Item4>
-      <Item5>
-        <PackageName Value="uniqueinstance_package"/>
-      </Item5>
-      <Item6>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
-      </Item6>
-      <Item7>
-        <PackageName Value="pl_indycomp"/>
-      </Item7>
-      <Item8>
-        <PackageName Value="RunTimeTypeInfoControls"/>
-      </Item8>
-      <Item9>
-        <PackageName Value="SynEdit"/>
-      </Item9>
-      <Item10>
-        <PackageName Value="LCL"/>
-      </Item10>
-    </RequiredPackages>
-    <Units Count="171">
-      <Unit0>
-        <Filename Value="app_vendor_files.lpr"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="app_vendor_files"/>
-        <EditorIndex Value="0"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="17" Y="15"/>
-        <UsageCount Value="181"/>
-        <Loaded Value="True"/>
-      </Unit0>
-      <Unit1>
-        <Filename Value="frm_vendor_files.pas"/>
-        <IsPartOfProject Value="True"/>
-        <ComponentName Value="frmvendorfiles"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_vendor_files"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="49"/>
-        <CursorPos X="12" Y="54"/>
-        <UsageCount Value="181"/>
-      </Unit1>
-      <Unit2>
-        <Filename Value="..\..\..\units\xpl\gui\frm_about.pas"/>
-        <ComponentName Value="frmAbout"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_about"/>
-        <TopLine Value="56"/>
-        <CursorPos X="67" Y="115"/>
-        <UsageCount Value="135"/>
-      </Unit2>
-      <Unit3>
-        <Filename Value="app_main.pas"/>
-        <UnitName Value="app_main"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="7"/>
-        <UsageCount Value="26"/>
-      </Unit3>
-      <Unit4>
-        <Filename Value="C:\lazarus\lcl\fpcadds.pas"/>
-        <UnitName Value="FPCAdds"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="59"/>
-        <CursorPos X="1" Y="53"/>
-        <UsageCount Value="6"/>
-      </Unit4>
-      <Unit5>
-        <Filename Value="..\..\..\..\components\powtils\pwhostname.pas"/>
-        <UnitName Value="pwhostname"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="55"/>
-      </Unit5>
-      <Unit6>
-        <Filename Value="..\..\..\units\xpl\u_xpl_settings.pas"/>
-        <UnitName Value="u_xpl_settings"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="81"/>
-      </Unit6>
-      <Unit7>
-        <Filename Value="..\..\..\units\xpl\res\pictures\menu.lrs"/>
-        <TopLine Value="1"/>
-        <CursorPos X="17" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit7>
-      <Unit8>
-        <Filename Value="C:\lazarus\lcl\lresources.pp"/>
-        <UnitName Value="LResources"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="989"/>
-        <CursorPos X="1" Y="1005"/>
-        <UsageCount Value="7"/>
-      </Unit8>
-      <Unit9>
-        <Filename Value="C:\lazarus\lcl\controls.pp"/>
-        <UnitName Value="Controls"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1941"/>
-        <CursorPos X="15" Y="1955"/>
-        <UsageCount Value="6"/>
-      </Unit9>
-      <Unit10>
-        <Filename Value="C:\lazarus\lcl\include\graphic.inc"/>
-        <TopLine Value="236"/>
-        <CursorPos X="31" Y="250"/>
-        <UsageCount Value="6"/>
-      </Unit10>
-      <Unit11>
-        <Filename Value="..\..\..\units\xpl\uxpladdress.pas"/>
-        <UnitName Value="uxPLAddress"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit11>
-      <Unit12>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\objpas\classes\classesh.inc"/>
-        <TopLine Value="105"/>
-        <CursorPos X="56" Y="120"/>
-        <UsageCount Value="8"/>
-      </Unit12>
-      <Unit13>
-        <Filename Value="..\..\Network\frm_main.pas"/>
-        <ComponentName Value="FrmMain"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_main"/>
-        <TopLine Value="456"/>
-        <CursorPos X="8" Y="460"/>
-        <UsageCount Value="6"/>
-      </Unit13>
-      <Unit14>
-        <Filename Value="..\..\..\units\xpl\gui\frm_xplappslauncher.pas"/>
-        <ComponentName Value="frmAppLauncher"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_xplappslauncher"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="20" Y="10"/>
-        <UsageCount Value="135"/>
-      </Unit14>
-      <Unit15>
-        <Filename Value="..\..\..\units\xpl\u_xpl_config.pas"/>
-        <UnitName Value="u_xpl_config"/>
-        <TopLine Value="82"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit15>
-      <Unit16>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\packages\fcl-base\src\custapp.pp"/>
-        <UnitName Value="CustApp"/>
-        <TopLine Value="11"/>
-        <CursorPos X="3" Y="26"/>
-        <UsageCount Value="6"/>
-      </Unit16>
-      <Unit17>
-        <Filename Value="..\..\..\units\xpl\u_xpl_application.pas"/>
-        <UnitName Value="u_xpl_application"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="27"/>
-        <CursorPos X="41" Y="53"/>
-        <UsageCount Value="83"/>
-      </Unit17>
-      <Unit18>
-        <Filename Value="C:\lazarus\lcl\forms.pp"/>
-        <UnitName Value="Forms"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1627"/>
-        <CursorPos X="3" Y="1639"/>
-        <UsageCount Value="18"/>
-      </Unit18>
-      <Unit19>
-        <Filename Value="C:\lazarus\lcl\lclproc.pas"/>
-        <UnitName Value="LCLProc"/>
-        <TopLine Value="1343"/>
-        <CursorPos X="26" Y="1373"/>
-        <UsageCount Value="6"/>
-      </Unit19>
-      <Unit20>
-        <Filename Value="C:\lazarus\lcl\include\customaction.inc"/>
-        <TopLine Value="122"/>
-        <CursorPos X="1" Y="137"/>
-        <UsageCount Value="6"/>
-      </Unit20>
-      <Unit21>
-        <Filename Value="C:\lazarus\lcl\include\customform.inc"/>
-        <TopLine Value="1624"/>
-        <CursorPos X="1" Y="1639"/>
-        <UsageCount Value="2"/>
-      </Unit21>
-      <Unit22>
-        <Filename Value="C:\lazarus\lcl\include\application.inc"/>
-        <TopLine Value="1946"/>
-        <CursorPos X="15" Y="1955"/>
-        <UsageCount Value="6"/>
-      </Unit22>
-      <Unit23>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\packages\fcl-registry\src\registry.pp"/>
-        <UnitName Value="registry"/>
-        <TopLine Value="201"/>
-        <CursorPos X="10" Y="231"/>
-        <UsageCount Value="19"/>
-      </Unit23>
-      <Unit24>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\packages\fcl-registry\src\regdef.inc"/>
-        <TopLine Value="21"/>
-        <CursorPos X="12" Y="44"/>
-        <UsageCount Value="19"/>
-      </Unit24>
-      <Unit25>
-        <Filename Value="..\..\..\units\xpl\uxplclient.pas"/>
-        <UnitName Value="uxPLClient"/>
-        <TopLine Value="112"/>
-        <CursorPos X="51" Y="115"/>
-        <UsageCount Value="26"/>
-      </Unit25>
-      <Unit26>
-        <Filename Value="..\..\..\units\xpl\uxplvendorfile.pas"/>
-        <UnitName Value="uxPLVendorFile"/>
-        <TopLine Value="33"/>
-        <CursorPos X="1" Y="33"/>
-        <UsageCount Value="3"/>
-      </Unit26>
-      <Unit27>
-        <Filename Value="..\..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <UnitName Value="u_xml_xplplugin"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="14"/>
-      </Unit27>
-      <Unit28>
-        <Filename Value="..\..\..\units\xpl\uxplconst.pas"/>
-        <UnitName Value="uxPLConst"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="85"/>
-        <CursorPos X="4" Y="94"/>
-        <UsageCount Value="26"/>
-      </Unit28>
-      <Unit29>
-        <Filename Value="..\..\..\units\xpl\u_xpl_folders.pas"/>
-        <UnitName Value="u_xpl_folders"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="33"/>
-        <CursorPos X="1" Y="61"/>
-        <UsageCount Value="42"/>
-      </Unit29>
-      <Unit30>
-        <Filename Value="..\..\..\units\general\fndUtl328\System\cFileUtils.pas"/>
-        <UnitName Value="cFileUtils"/>
-        <TopLine Value="31"/>
-        <CursorPos X="37" Y="38"/>
-        <UsageCount Value="1"/>
-      </Unit30>
-      <Unit31>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\win32\system.pp"/>
-        <UnitName Value="System"/>
-        <TopLine Value="106"/>
-        <CursorPos X="20" Y="37"/>
-        <UsageCount Value="1"/>
-      </Unit31>
-      <Unit32>
-        <Filename Value="..\..\..\units\xpl\xml\u_xml_plugins.pas"/>
-        <UnitName Value="u_xml_plugins"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="25"/>
-        <CursorPos X="6" Y="37"/>
-        <UsageCount Value="7"/>
-      </Unit32>
-      <Unit33>
-        <Filename Value="..\..\..\units\general\ssversionchecker\VersionChecker.pas"/>
-        <UnitName Value="VersionChecker"/>
-        <TopLine Value="23"/>
-        <CursorPos X="32" Y="34"/>
-        <UsageCount Value="1"/>
-      </Unit33>
-      <Unit34>
-        <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <UnitName Value="u_xpl_vendor_file"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="37"/>
-        <CursorPos X="1" Y="39"/>
-        <UsageCount Value="33"/>
-      </Unit34>
-      <Unit35>
-        <Filename Value="..\..\..\units\xpl\gui\frm_downloadfile.pas"/>
-        <ComponentName Value="frmDownloadFile"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_DownloadFile"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="106"/>
-        <CursorPos X="19" Y="116"/>
-        <UsageCount Value="88"/>
-      </Unit35>
-      <Unit36>
-        <Filename Value="C:\lazarus\lcl\include\control.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="3172"/>
-        <CursorPos X="14" Y="3181"/>
-        <UsageCount Value="6"/>
-      </Unit36>
-      <Unit37>
-        <Filename Value="..\..\..\units\xpl\ugethttp.pas"/>
-        <UnitName Value="uGetHTTP"/>
-        <TopLine Value="8"/>
-        <CursorPos X="128" Y="10"/>
-        <UsageCount Value="25"/>
-      </Unit37>
-      <Unit38>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdComponent.pas"/>
-        <UnitName Value="IdComponent"/>
-        <TopLine Value="79"/>
-        <CursorPos X="3" Y="94"/>
-        <UsageCount Value="24"/>
-      </Unit38>
-      <Unit39>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdIOHandler.pas"/>
-        <UnitName Value="IdIOHandler"/>
-        <TopLine Value="1843"/>
-        <CursorPos X="50" Y="1225"/>
-        <UsageCount Value="23"/>
-      </Unit39>
-      <Unit40>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\inc\objpash.inc"/>
-        <TopLine Value="169"/>
-        <CursorPos X="46" Y="185"/>
-        <UsageCount Value="23"/>
-      </Unit40>
-      <Unit41>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdAntiFreeze.pas"/>
-        <UnitName Value="IdAntiFreeze"/>
-        <TopLine Value="61"/>
-        <CursorPos X="35" Y="76"/>
-        <UsageCount Value="23"/>
-      </Unit41>
-      <Unit42>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdAntiFreezeBase.pas"/>
-        <UnitName Value="IdAntiFreezeBase"/>
-        <TopLine Value="60"/>
-        <CursorPos X="37" Y="63"/>
-        <UsageCount Value="23"/>
-      </Unit42>
-      <Unit43>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdBaseComponent.pas"/>
-        <UnitName Value="IdBaseComponent"/>
-        <TopLine Value="102"/>
-        <CursorPos X="3" Y="105"/>
-        <UsageCount Value="23"/>
-      </Unit43>
-      <Unit44>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdHTTP.pas"/>
-        <UnitName Value="IdHTTP"/>
-        <TopLine Value="450"/>
-        <CursorPos X="35" Y="450"/>
-        <UsageCount Value="24"/>
-      </Unit44>
-      <Unit45>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdTCPClient.pas"/>
-        <UnitName Value="IdTCPClient"/>
-        <TopLine Value="147"/>
-        <CursorPos X="3" Y="147"/>
-        <UsageCount Value="24"/>
-      </Unit45>
-      <Unit46>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdTCPConnection.pas"/>
-        <UnitName Value="IdTCPConnection"/>
-        <TopLine Value="359"/>
-        <CursorPos X="33" Y="365"/>
-        <UsageCount Value="24"/>
-      </Unit46>
-      <Unit47>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\inc\systemh.inc"/>
-        <TopLine Value="658"/>
-        <CursorPos X="11" Y="673"/>
-        <UsageCount Value="6"/>
-      </Unit47>
-      <Unit48>
-        <Filename Value="..\..\..\units\general\uhttpprothandler.pas"/>
-        <UnitName Value="uhttpprothandler"/>
-        <TopLine Value="25"/>
-        <CursorPos X="23" Y="23"/>
-        <UsageCount Value="6"/>
-      </Unit48>
-      <Unit49>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdReplyRFC.pas"/>
-        <UnitName Value="IdReplyRFC"/>
-        <TopLine Value="137"/>
-        <CursorPos X="3" Y="152"/>
-        <UsageCount Value="6"/>
-      </Unit49>
-      <Unit50>
-        <Filename Value="C:\lazarus\lcl\include\customcheckbox.inc"/>
-        <TopLine Value="117"/>
-        <CursorPos X="1" Y="132"/>
-        <UsageCount Value="6"/>
-      </Unit50>
-      <Unit51>
-        <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit51>
-      <Unit52>
-        <Filename Value="..\..\..\units\xpl\gui\frm_xmlview.pas"/>
-        <ComponentName Value="frmXMLView"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_XMLView"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="26"/>
-        <CursorPos X="36" Y="51"/>
-        <UsageCount Value="46"/>
-      </Unit52>
-      <Unit53>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\objpas\sysutils\filutilh.inc"/>
-        <TopLine Value="72"/>
-        <CursorPos X="10" Y="83"/>
-        <UsageCount Value="6"/>
-      </Unit53>
-      <Unit54>
-        <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\objpas\sysutils\datih.inc"/>
-        <TopLine Value="91"/>
-        <CursorPos X="10" Y="133"/>
-        <UsageCount Value="6"/>
-      </Unit54>
-      <Unit55>
-        <Filename Value="..\..\..\units\xpl\gui\frm_plugin_viewer.pas"/>
-        <ComponentName Value="frmPluginViewer"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_plugin_viewer"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="130"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="46"/>
-      </Unit55>
-      <Unit56>
-        <Filename Value="..\..\..\units\xpl\gui\v_msgbody_stringgrid.pas"/>
-        <UnitName Value="v_msgbody_stringgrid"/>
-        <TopLine Value="1"/>
-        <CursorPos X="58" Y="16"/>
-        <UsageCount Value="6"/>
-      </Unit56>
-      <Unit57>
-        <Filename Value="..\..\..\units\general\MStringGrid.pas"/>
-        <UnitName Value="MStringGrid"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="72"/>
-        <CursorPos X="3" Y="93"/>
-        <UsageCount Value="16"/>
-      </Unit57>
-      <Unit58>
-        <Filename Value="..\..\..\units\general\medit.pas"/>
-        <UnitName Value="MEdit"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit58>
-      <Unit59>
-        <Filename Value="..\..\..\units\xpl\xml\u_xml_xplplugin_ex.pas"/>
-        <UnitName Value="u_xml_xplplugin_ex"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="84"/>
-        <CursorPos X="69" Y="94"/>
-        <UsageCount Value="8"/>
-      </Unit59>
-      <Unit60>
-        <Filename Value="..\..\..\units\xpl\u_xpl_header.pas"/>
-        <UnitName Value="u_xPL_Header"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="40"/>
-        <CursorPos X="95" Y="63"/>
-        <UsageCount Value="8"/>
-      </Unit60>
-      <Unit61>
-        <Filename Value="..\..\..\units\xpl\u_xpl_custom_message.pas"/>
-        <UnitName Value="u_xpl_custom_message"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
-        <CursorPos X="8" Y="51"/>
-        <UsageCount Value="7"/>
-      </Unit61>
-      <Unit62>
-        <Filename Value="..\..\..\units\xpl\u_xpl_message.pas"/>
-        <UnitName Value="u_xpl_message"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="8"/>
-      </Unit62>
-      <Unit63>
-        <Filename Value="..\..\..\units\xpl\u_xpl_settings_db.pas"/>
-        <UnitName Value="u_xpl_settings_db"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit63>
-      <Unit64>
-        <Filename Value="..\..\..\units\xpl\u_xpl_body.pas"/>
-        <UnitName Value="u_xpl_body"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="6" Y="72"/>
-        <UsageCount Value="7"/>
-      </Unit64>
-      <Unit65>
-        <Filename Value="..\..\..\units\xpl\gui\v_msgtype_radio.pas"/>
-        <UnitName Value="v_msgtype_radio"/>
-        <TopLine Value="48"/>
-        <CursorPos X="60" Y="64"/>
-        <UsageCount Value="6"/>
-      </Unit65>
-      <Unit66>
-        <Filename Value="..\..\..\units\xpl\gui\v_class_combo.pas"/>
-        <UnitName Value="v_class_combo"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit66>
-      <Unit67>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\lazarus\IdAboutVCL.pas"/>
-        <UnitName Value="IdAboutVCL"/>
-        <TopLine Value="154"/>
-        <CursorPos X="3" Y="171"/>
-        <UsageCount Value="6"/>
-      </Unit67>
-      <Unit68>
-        <Filename Value="..\..\..\units\xpl\u_xpl_appframework.pas"/>
-        <UnitName Value="u_xpl_AppFramework"/>
-        <TopLine Value="79"/>
-        <CursorPos X="80" Y="97"/>
-        <UsageCount Value="6"/>
-      </Unit68>
-      <Unit69>
-        <Filename Value="..\..\..\units\xpl\gui\u_xpl_appframework_gui.pas"/>
-        <UnitName Value="u_xpl_appframework_gui"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="6" Y="10"/>
-        <UsageCount Value="6"/>
-      </Unit69>
-      <Unit70>
-        <Filename Value="C:\lazarus\components\synedit\syneditlines.pas"/>
-        <UnitName Value="SynEditLines"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit70>
-      <Unit71>
-        <Filename Value="C:\lazarus\components\synedit\synedit.pp"/>
-        <UnitName Value="SynEdit"/>
-        <TopLine Value="58"/>
-        <CursorPos X="10" Y="90"/>
-        <UsageCount Value="6"/>
-      </Unit71>
-      <Unit72>
-        <Filename Value="C:\lazarus\lcl\stdactns.pas"/>
-        <UnitName Value="StdActns"/>
-        <TopLine Value="1"/>
-        <CursorPos X="22" Y="22"/>
-        <UsageCount Value="6"/>
-      </Unit72>
-      <Unit73>
-        <Filename Value="C:\lazarus\ideintf\propedits.pp"/>
-        <UnitName Value="PropEdits"/>
-        <TopLine Value="1"/>
-        <CursorPos X="56" Y="14"/>
-        <UsageCount Value="6"/>
-      </Unit73>
-      <Unit74>
-        <Filename Value="C:\lazarus\lcl\calendarx.pp"/>
-        <UnitName Value="calendarx"/>
-        <TopLine Value="18"/>
-        <CursorPos X="35" Y="39"/>
-        <UsageCount Value="6"/>
-      </Unit74>
-      <Unit75>
-        <Filename Value="C:\lazarus\lcl\widgetset\wscalendar.pp"/>
-        <UnitName Value="WSCalendar"/>
-        <TopLine Value="25"/>
-        <CursorPos X="19" Y="47"/>
-        <UsageCount Value="6"/>
-      </Unit75>
-      <Unit76>
-        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32wsfactory.pas"/>
-        <UnitName Value="Win32WSFactory"/>
-        <TopLine Value="1"/>
-        <CursorPos X="50" Y="7"/>
-        <UsageCount Value="6"/>
-      </Unit76>
-      <Unit77>
-        <Filename Value="C:\lazarus\lcl\extdlgs.pas"/>
-        <UnitName Value="ExtDlgs"/>
-        <TopLine Value="1"/>
-        <CursorPos X="100" Y="16"/>
-        <UsageCount Value="6"/>
-      </Unit77>
-      <Unit78>
-        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32wscalendar.pp"/>
-        <UnitName Value="Win32WSCalendar"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="18"/>
-        <CursorPos X="45" Y="36"/>
-        <UsageCount Value="6"/>
-      </Unit78>
-      <Unit79>
-        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32wsstdctrls.pp"/>
-        <UnitName Value="Win32WSStdCtrls"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="106"/>
-        <CursorPos X="35" Y="118"/>
-        <UsageCount Value="6"/>
-      </Unit79>
-      <Unit80>
-        <Filename Value="C:\lazarus\lcl\interfaces\win32\win32defines.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit80>
-      <Unit81>
-        <Filename Value="C:\lazarus\lcl\calendar.pp"/>
-        <UnitName Value="Calendar"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="37"/>
-        <CursorPos X="40" Y="17"/>
-        <UsageCount Value="6"/>
-      </Unit81>
-      <Unit82>
-        <Filename Value="C:\lazarus\lcl\fileutil.pas"/>
-        <UnitName Value="FileUtil"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="214"/>
-        <CursorPos X="2" Y="238"/>
-        <UsageCount Value="6"/>
-      </Unit82>
-      <Unit83>
-        <Filename Value="C:\lazarus\lcl\interfaces\win32\interfaces.pp"/>
-        <UnitName Value="Interfaces"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="11"/>
-        <CursorPos X="3" Y="32"/>
-        <UsageCount Value="6"/>
-      </Unit83>
-      <Unit84>
-        <Filename Value="..\..\..\units\xpl\u_xpl_common.pas"/>
-        <UnitName Value="u_xpl_common"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="13"/>
-        <CursorPos X="6" Y="30"/>
-        <UsageCount Value="6"/>
-      </Unit84>
-      <Unit85>
-        <Filename Value="C:\lazarus\lcl\grids.pas"/>
-        <UnitName Value="Grids"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1448"/>
-        <CursorPos X="17" Y="1465"/>
-        <UsageCount Value="6"/>
-      </Unit85>
-      <Unit86>
-        <Filename Value="C:\lazarus\lcl\extctrls.pp"/>
-        <UnitName Value="ExtCtrls"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="313"/>
-        <CursorPos X="14" Y="330"/>
-        <UsageCount Value="6"/>
-      </Unit86>
-      <Unit87>
-        <Filename Value="C:\lazarus\lcl\include\listitem.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="582"/>
-        <CursorPos X="1" Y="593"/>
-        <UsageCount Value="29"/>
-      </Unit87>
-      <Unit88>
-        <Filename Value="..\..\..\units\general\udownloader.pas"/>
-        <UnitName Value="uDownloader"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="103"/>
-        <CursorPos X="26" Y="116"/>
-        <UsageCount Value="8"/>
-      </Unit88>
-      <Unit89>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\objpas\classes\classesh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="867"/>
-        <CursorPos X="3" Y="884"/>
-        <UsageCount Value="6"/>
-      </Unit89>
-      <Unit90>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\fpc\IdHTTP.pas"/>
-        <UnitName Value="IdHTTP"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="445"/>
-        <CursorPos X="33" Y="450"/>
-        <UsageCount Value="21"/>
-      </Unit90>
-      <Unit91>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\fpc\IdTCPClient.pas"/>
-        <UnitName Value="IdTCPClient"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="226"/>
-        <CursorPos X="3" Y="147"/>
-        <UsageCount Value="7"/>
-      </Unit91>
-      <Unit92>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\fpc\IdTCPConnection.pas"/>
-        <UnitName Value="IdTCPConnection"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="429"/>
-        <CursorPos X="37" Y="445"/>
-        <UsageCount Value="7"/>
-      </Unit92>
-      <Unit93>
-        <Filename Value="..\..\..\..\components\indy-10.2.0.3\fpc\IdComponent.pas"/>
-        <UnitName Value="IdComponent"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="70"/>
-        <CursorPos X="68" Y="102"/>
-        <UsageCount Value="7"/>
-      </Unit93>
-      <Unit94>
-        <Filename Value="..\..\..\..\components\powtils\pwhttp.pas"/>
-        <UnitName Value="pwhttp"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="207"/>
-        <CursorPos X="28" Y="224"/>
-        <UsageCount Value="7"/>
-      </Unit94>
-      <Unit95>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\win\sockets.pp"/>
-        <UnitName Value="Sockets"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="91"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit95>
-      <Unit96>
-        <Filename Value="..\..\..\..\components\powtils\compactsysutils.pas"/>
-        <UnitName Value="CompactSysUtils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="52"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit96>
-      <Unit97>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\win\sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit97>
-      <Unit98>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\inc\filerec.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit98>
-      <Unit99>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\inc\textrec.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="12"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit99>
-      <Unit100>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\inc\socketsh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit100>
-      <Unit101>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\win\fpwinsockh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="98"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit101>
-      <Unit102>
-        <Filename Value="..\..\..\..\components\synapse39\source\lib\blcksock.pas"/>
-        <UnitName Value="blcksock"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="18"/>
-      </Unit102>
-      <Unit103>
-        <Filename Value="..\..\..\..\components\synapse39\source\lib\httpsend.pas"/>
-        <UnitName Value="httpsend"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="770"/>
-        <CursorPos X="58" Y="782"/>
-        <UsageCount Value="6"/>
-      </Unit103>
-      <Unit104>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\packages\fcl-xml\src\dom.pp"/>
-        <UnitName Value="DOM"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="297"/>
-        <CursorPos X="17" Y="314"/>
-        <UsageCount Value="7"/>
-      </Unit104>
-      <Unit105>
-        <Filename Value="C:\lazarus\fpc\2.4.2\source\packages\fcl-xml\src\xmlread.pp"/>
-        <UnitName Value="XMLRead"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="32"/>
-        <CursorPos X="22" Y="57"/>
-        <UsageCount Value="7"/>
-      </Unit105>
-      <Unit106>
-        <Filename Value="..\1.Basic Settings\app_basic_settings.lpr"/>
-        <UnitName Value="app_basic_settings"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="31"/>
-        <UsageCount Value="6"/>
-      </Unit106>
-      <Unit107>
-        <Filename Value="..\3.Hub\xpl_hub.lpr"/>
-        <UnitName Value="xpl_hub"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="132" Y="12"/>
-        <UsageCount Value="6"/>
-      </Unit107>
-      <Unit108>
-        <Filename Value="..\..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <ComponentName Value="frmxPLMessage"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_xPLMessage"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="145"/>
-        <CursorPos X="27" Y="160"/>
-        <UsageCount Value="6"/>
-      </Unit108>
-      <Unit109>
-        <Filename Value="..\..\..\units\general\u_downloader_indy.pas"/>
-        <UnitName Value="u_Downloader_Indy"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="25"/>
-        <CursorPos X="70" Y="48"/>
-        <UsageCount Value="37"/>
-      </Unit109>
-      <Unit110>
-        <Filename Value="..\..\..\units\xpl\gui\u_xpl_gui_resource.pas"/>
-        <UnitName Value="u_xpl_gui_resource"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="37" Y="80"/>
-        <UsageCount Value="7"/>
-      </Unit110>
-      <Unit111>
-        <Filename Value="C:\lazarus\components\pl_Indy\pl_indycomp.pas"/>
-        <UnitName Value="pl_indycomp"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="21" Y="13"/>
-        <UsageCount Value="6"/>
-      </Unit111>
-      <Unit112>
-        <Filename Value="..\..\..\units\xpl\u_xpl_schema.pas"/>
-        <UnitName Value="u_xPL_Schema"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="23"/>
-        <CursorPos X="127" Y="45"/>
-        <UsageCount Value="7"/>
-      </Unit112>
-      <Unit113>
-        <Filename Value="..\..\..\units\xpl\u_xpl_address.pas"/>
-        <UnitName Value="u_xpl_address"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="34"/>
-        <CursorPos X="24" Y="70"/>
-        <UsageCount Value="7"/>
-      </Unit113>
-      <Unit114>
-        <Filename Value="..\..\..\..\components\jvcllaz\run\JclStrings.pas"/>
-        <UnitName Value="JclStrings"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="43"/>
-        <CursorPos X="2" Y="60"/>
-        <UsageCount Value="6"/>
-      </Unit114>
-      <Unit115>
-        <Filename Value="..\..\..\..\components\superobjectv1.2.4\superxmlparser.pas"/>
-        <UnitName Value="superxmlparser"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="33" Y="19"/>
-        <UsageCount Value="35"/>
-      </Unit115>
-      <Unit116>
-        <Filename Value="..\..\..\..\components\superobjectv1.2.4\superobject.pas"/>
-        <UnitName Value="superobject"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="523"/>
-        <CursorPos X="3" Y="493"/>
-        <UsageCount Value="6"/>
-      </Unit116>
-      <Unit117>
-        <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
-        <UnitName Value="u_xPL_Header"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="38" Y="17"/>
-        <UsageCount Value="6"/>
-      </Unit117>
-      <Unit118>
-        <Filename Value="..\..\..\components\powtils\pwhostname.pas"/>
-        <UnitName Value="pwhostname"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="107"/>
-        <CursorPos X="36" Y="123"/>
-        <UsageCount Value="6"/>
-      </Unit118>
-      <Unit119>
-        <Filename Value="..\..\units\xpl\u_xpl_collection.pas"/>
-        <UnitName Value="u_xpl_collection"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="44"/>
-        <CursorPos X="42" Y="51"/>
-        <UsageCount Value="10"/>
-      </Unit119>
-      <Unit120>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="1"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="147"/>
-        <CursorPos X="1" Y="161"/>
-        <UsageCount Value="36"/>
-        <Loaded Value="True"/>
-      </Unit120>
-      <Unit121>
-        <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
-        <UnitName Value="u_xpl_vendor_file"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="98"/>
-        <CursorPos X="92" Y="134"/>
-        <UsageCount Value="13"/>
-      </Unit121>
-      <Unit122>
-        <Filename Value="..\..\..\components\superobjectv1.2.4\superxmlparser.pas"/>
-        <UnitName Value="superxmlparser"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="382"/>
-        <CursorPos X="3" Y="252"/>
-        <UsageCount Value="9"/>
-      </Unit122>
-      <Unit123>
-        <Filename Value="..\..\..\components\superobjectv1.2.4\superobject.pas"/>
-        <UnitName Value="superobject"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="2182"/>
-        <CursorPos X="1" Y="2194"/>
-        <UsageCount Value="11"/>
-      </Unit123>
-      <Unit124>
-        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
-        <UnitName Value="u_xml_plugins"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="353"/>
-        <CursorPos X="72" Y="362"/>
-        <UsageCount Value="34"/>
-      </Unit124>
-      <Unit125>
-        <Filename Value="..\..\units\xpl\xml\u_xml.pas"/>
-        <UnitName Value="u_xml"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="129"/>
-        <CursorPos X="14" Y="139"/>
-        <UsageCount Value="7"/>
-      </Unit125>
-      <Unit126>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="416"/>
-        <CursorPos X="3" Y="430"/>
-        <UsageCount Value="8"/>
-      </Unit126>
-      <Unit127>
-        <Filename Value="C:\pp\rtl\objpas\classes\collect.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="390"/>
-        <CursorPos X="3" Y="408"/>
-        <UsageCount Value="7"/>
-      </Unit127>
-      <Unit128>
-        <Filename Value="..\..\units\xpl\gui\frm_template.pas"/>
-        <ComponentName Value="FrmTemplate"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_template"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="37" Y="7"/>
-        <UsageCount Value="10"/>
-      </Unit128>
-      <Unit129>
-        <Filename Value="frm_vendor_files.lfm"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="4442"/>
-        <CursorPos X="12" Y="4459"/>
-        <UsageCount Value="10"/>
-        <DefaultSyntaxHighlighter Value="LFM"/>
-      </Unit129>
-      <Unit130>
-        <Filename Value="frm_vendor_files.lrs"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit130>
-      <Unit131>
-        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdStack.pas"/>
-        <UnitName Value="IdStack"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="628"/>
-        <CursorPos X="19" Y="652"/>
-        <UsageCount Value="6"/>
-      </Unit131>
-      <Unit132>
-        <Filename Value="..\..\units\xpl\gui\frm_plugin_viewer.pas"/>
-        <UnitName Value="frm_plugin_viewer"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="173"/>
-        <CursorPos X="57" Y="187"/>
-        <UsageCount Value="6"/>
-      </Unit132>
-      <Unit133>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin_ex.pas"/>
-        <UnitName Value="u_xml_xplplugin_ex"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit133>
-      <Unit134>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin.pas"/>
-        <UnitName Value="u_xml_xplplugin"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="229"/>
-        <CursorPos X="43" Y="241"/>
-        <UsageCount Value="9"/>
-      </Unit134>
-      <Unit135>
-        <Filename Value="C:\pp\rtl\objpas\strutils.pp"/>
-        <UnitName Value="strutils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="141"/>
-        <CursorPos X="10" Y="155"/>
-        <UsageCount Value="6"/>
-      </Unit135>
-      <Unit136>
-        <Filename Value="..\..\units\xpl\uxplconst.pas"/>
-        <UnitName Value="uxPLConst"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="52"/>
-        <CursorPos X="4" Y="68"/>
-        <UsageCount Value="6"/>
-      </Unit136>
-      <Unit137>
-        <Filename Value="..\..\units\general\ssversionchecker\VersionChecker.pas"/>
-        <UnitName Value="VersionChecker"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="67"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="7"/>
-      </Unit137>
-      <Unit138>
-        <Filename Value="C:\pp\rtl\objpas\classes\streams.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="475"/>
-        <CursorPos X="14" Y="479"/>
-        <UsageCount Value="7"/>
-      </Unit138>
-      <Unit139>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="3"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="244"/>
-        <CursorPos X="35" Y="254"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit139>
-      <Unit140>
-        <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin_delphi.pas"/>
-        <UnitName Value="u_xml_xplplugin_delphi"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="103"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="7"/>
-      </Unit140>
-      <Unit141>
-        <Filename Value="..\..\units\xpl\gui\frm_about.pas"/>
-        <UnitName Value="frm_about"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="115"/>
-        <CursorPos X="6" Y="25"/>
-        <UsageCount Value="7"/>
-      </Unit141>
-      <Unit142>
-        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdTrivialFTPServer.pas"/>
-        <UnitName Value="IdTrivialFTPServer"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="395"/>
-        <CursorPos X="35" Y="419"/>
-        <UsageCount Value="6"/>
-      </Unit142>
-      <Unit143>
-        <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdGlobalProtocols.pas"/>
-        <UnitName Value="IdGlobalProtocols"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="807"/>
-        <CursorPos X="3" Y="810"/>
-        <UsageCount Value="6"/>
-      </Unit143>
-      <Unit144>
-        <Filename Value="..\..\..\components\multilog-0.5\filechannel.pas"/>
-        <UnitName Value="filechannel"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="158"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit144>
-      <Unit145>
-        <Filename Value="..\..\..\components\multilog-0.5\sharedlogger.pas"/>
-        <UnitName Value="sharedlogger"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit145>
-      <Unit146>
-        <Filename Value="..\..\..\components\multilog-0.5\consolechannel.pas"/>
-        <UnitName Value="consolechannel"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="28" Y="110"/>
-        <UsageCount Value="6"/>
-      </Unit146>
-      <Unit147>
-        <Filename Value="..\..\units\xpl\gui\u_xpl_gui_resource.pas"/>
-        <UnitName Value="u_xpl_gui_resource"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="100"/>
-        <CursorPos X="5" Y="111"/>
-        <UsageCount Value="10"/>
-      </Unit147>
-      <Unit148>
-        <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
-        <UnitName Value="fpc_delphi_compat"/>
-        <EditorIndex Value="4"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="90"/>
-        <CursorPos X="1" Y="101"/>
-        <UsageCount Value="22"/>
-        <Loaded Value="True"/>
-      </Unit148>
-      <Unit149>
-        <Filename Value="..\..\..\components\jvcllaz\run\JclPeImage.pas"/>
-        <UnitName Value="JclPeImage"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="28"/>
-        <CursorPos X="5" Y="44"/>
-        <UsageCount Value="8"/>
-      </Unit149>
-      <Unit150>
-        <Filename Value="..\..\..\components\jvcllaz\common\jcl.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="61"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="8"/>
-      </Unit150>
-      <Unit151>
-        <Filename Value="..\..\units\general\vinfo.pas"/>
-        <UnitName Value="vinfo"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="88"/>
-        <CursorPos X="1" Y="107"/>
-        <UsageCount Value="10"/>
-      </Unit151>
-      <Unit152>
-        <Filename Value="..\..\..\components\jvcllaz\run\JvJVCLUtils.pas"/>
-        <UnitName Value="JvJVCLUtils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="70"/>
-        <CursorPos X="17" Y="23"/>
-        <UsageCount Value="8"/>
-      </Unit152>
-      <Unit153>
-        <Filename Value="..\..\..\components\jvcllaz\run\JvVersionInfo.pas"/>
-        <UnitName Value="JvVersionInfo"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="90"/>
-        <CursorPos X="14" Y="82"/>
-        <UsageCount Value="8"/>
-      </Unit153>
-      <Unit154>
-        <Filename Value="C:\pp\packages\fcl-res\src\versiontypes.pp"/>
-        <UnitName Value="versiontypes"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="10"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit154>
-      <Unit155>
-        <Filename Value="C:\pp\packages\fcl-res\src\versionresource.pp"/>
-        <UnitName Value="versionresource"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="121"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit155>
-      <Unit156>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <UnitName Value="u_xpl_settings"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="5"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="161"/>
-        <CursorPos X="14" Y="131"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit156>
-      <Unit157>
-        <Filename Value="C:\pp\packages\fcl-registry\src\regdef.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="14"/>
-        <CursorPos X="34" Y="28"/>
-        <UsageCount Value="6"/>
-      </Unit157>
-      <Unit158>
-        <Filename Value="..\..\units\general\u_downloader_indy.pas"/>
-        <UnitName Value="u_Downloader_Indy"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="41"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-      </Unit158>
-      <Unit159>
-        <Filename Value="..\..\units\xpl\gui\frm_xmlview.pas"/>
-        <ComponentName Value="frmXMLView"/>
-        <HasResources Value="True"/>
-        <ResourceBaseClass Value="Form"/>
-        <UnitName Value="frm_XMLView"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="5"/>
-        <CursorPos X="21" Y="16"/>
-        <UsageCount Value="10"/>
-      </Unit159>
-      <Unit160>
-        <Filename Value="C:\lazarus\components\synedit\synhighlighterxml.pas"/>
-        <UnitName Value="SynHighlighterXML"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="6"/>
-      </Unit160>
-      <Unit161>
-        <Filename Value="C:\lazarus\lcl\include\customlistview.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="981"/>
-        <CursorPos X="1" Y="997"/>
-        <UsageCount Value="29"/>
-      </Unit161>
-      <Unit162>
-        <Filename Value="..\..\..\components\lazsolutions\Core\LSUtils.pas"/>
-        <UnitName Value="LSUtils"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="1" Y="1"/>
-        <UsageCount Value="10"/>
-      </Unit162>
-      <Unit163>
-        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
-        <UnitName Value="u_xpl_folders"/>
-        <EditorIndex Value="2"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="66" Y="61"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit163>
-      <Unit164>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-registry\src\registry.pp"/>
-        <UnitName Value="registry"/>
-        <EditorIndex Value="7"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="187"/>
-        <CursorPos X="3" Y="199"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit164>
-      <Unit165>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-registry\src\xregreg.inc"/>
-        <EditorIndex Value="6"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="9"/>
-        <CursorPos X="27" Y="20"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit165>
-      <Unit166>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\objpas\sysutils\diskh.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="17" Y="22"/>
-        <UsageCount Value="10"/>
-      </Unit166>
-      <Unit167>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\objpas\sysutils\sysutils.inc"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="605"/>
-        <CursorPos X="3" Y="609"/>
-        <UsageCount Value="10"/>
-      </Unit167>
-      <Unit168>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\objpas\sysutils\osutilsh.inc"/>
-        <EditorIndex Value="8"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="11"/>
-        <CursorPos X="16" Y="23"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit168>
-      <Unit169>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\unix\sysutils.pp"/>
-        <UnitName Value="sysutils"/>
-        <EditorIndex Value="9"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="1137"/>
-        <CursorPos X="3" Y="1140"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit169>
-      <Unit170>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\objpas\sysutils\osutil.inc"/>
-        <EditorIndex Value="10"/>
-        <WindowIndex Value="0"/>
-        <TopLine Value="78"/>
-        <CursorPos X="33" Y="94"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
-      </Unit170>
-    </Units>
-    <JumpHistory Count="28" HistoryIndex="27">
-      <Position1>
-        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
-        <Caret Line="59" Column="6" TopLine="45"/>
-      </Position1>
-      <Position2>
-        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
-        <Caret Line="67" Column="6" TopLine="54"/>
-      </Position2>
-      <Position3>
-        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
-        <Caret Line="36" Column="16" TopLine="25"/>
-      </Position3>
-      <Position4>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-registry\src\xregreg.inc"/>
-        <Caret Line="15" Column="57" TopLine="1"/>
-      </Position4>
-      <Position5>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\unix\sysutils.pp"/>
-        <Caret Line="1310" Column="8" TopLine="1303"/>
-      </Position5>
-      <Position6>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\objpas\sysutils\osutil.inc"/>
-        <Caret Line="84" Column="25" TopLine="69"/>
-      </Position6>
-      <Position7>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="63" Column="25" TopLine="57"/>
-      </Position7>
-      <Position8>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="275" Column="40" TopLine="260"/>
-      </Position8>
-      <Position9>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\unix\sysutils.pp"/>
-        <Caret Line="1312" Column="56" TopLine="1303"/>
-      </Position9>
-      <Position10>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="281" Column="46" TopLine="266"/>
-      </Position10>
-      <Position11>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="280" Column="26" TopLine="267"/>
-      </Position11>
-      <Position12>
-        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
-        <Caret Line="281" Column="27" TopLine="267"/>
-      </Position12>
-      <Position13>
-        <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\rtl\unix\sysutils.pp"/>
-        <Caret Line="1312" Column="57" TopLine="1303"/>
-      </Position13>
-      <Position14>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="122" Column="51" TopLine="110"/>
-      </Position14>
-      <Position15>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="116" Column="14" TopLine="110"/>
-      </Position15>
-      <Position16>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="125" Column="1" TopLine="110"/>
-      </Position16>
-      <Position17>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="105" Column="1" TopLine="93"/>
-      </Position17>
-      <Position18>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="107" Column="1" TopLine="93"/>
-      </Position18>
-      <Position19>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="110" Column="1" TopLine="106"/>
-      </Position19>
-      <Position20>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="114" Column="1" TopLine="106"/>
-      </Position20>
-      <Position21>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="159" Column="1" TopLine="147"/>
-      </Position21>
-      <Position22>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="160" Column="1" TopLine="147"/>
-      </Position22>
-      <Position23>
-        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
-        <Caret Line="161" Column="1" TopLine="147"/>
-      </Position23>
-      <Position24>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="122" Column="1" TopLine="106"/>
-      </Position24>
-      <Position25>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="116" Column="12" TopLine="106"/>
-      </Position25>
-      <Position26>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="122" Column="1" TopLine="106"/>
-      </Position26>
-      <Position27>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="128" Column="1" TopLine="114"/>
-      </Position27>
-      <Position28>
-        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
-        <Caret Line="126" Column="11" TopLine="114"/>
-      </Position28>
-    </JumpHistory>
-  </ProjectOptions>
-  <CompilerOptions>
-    <Version Value="10"/>
-    <PathDelim Value="\"/>
-    <SearchPaths>
-      <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general"/>
-      <UnitOutputDirectory Value="\home\sysadmin\lazout"/>
-    </SearchPaths>
-    <Parsing>
-      <SyntaxOptions>
-        <UseAnsiStrings Value="False"/>
-      </SyntaxOptions>
-    </Parsing>
-    <Linking>
-      <Options>
-        <Win32>
-          <GraphicApplication Value="True"/>
-        </Win32>
-      </Options>
-    </Linking>
-    <Other>
-      <CompilerMessages>
-        <UseMsgFile Value="True"/>
-      </CompilerMessages>
-      <CompilerPath Value="$(CompPath)"/>
-    </Other>
-  </CompilerOptions>
-  <Debugging>
-    <Exceptions Count="4">
-      <Item1>
-        <Name Value="EAbort"/>
-      </Item1>
-      <Item2>
-        <Name Value="ECodetoolError"/>
-      </Item2>
-      <Item3>
-        <Name Value="EFOpenError"/>
-      </Item3>
-      <Item4>
-        <Name Value="EIdHTTPProtocolException"/>
-      </Item4>
-    </Exceptions>
-  </Debugging>
-</CONFIG>
-=======
 <?xml version="1.0"?>
 <CONFIG>
   <ProjectOptions>
@@ -1595,7 +30,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+        <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
     <RequiredPackages Count="8">
@@ -1625,16 +60,22 @@
         <PackageName Value="LCL"/>
       </Item8>
     </RequiredPackages>
-    <Units Count="165">
+    <Units Count="171">
       <Unit0>
         <Filename Value="app_vendor_files.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="app_vendor_files"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
+<<<<<<< .mine
+        <TopLine Value="9"/>
+        <CursorPos X="17" Y="15"/>
+        <UsageCount Value="181"/>
+=======
         <TopLine Value="1"/>
         <CursorPos X="27" Y="17"/>
         <UsageCount Value="178"/>
+>>>>>>> .r658
         <Loaded Value="True"/>
       </Unit0>
       <Unit1>
@@ -1643,14 +84,24 @@
         <ComponentName Value="frmvendorfiles"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_vendor_files"/>
+<<<<<<< .mine
+        <IsVisibleTab Value="True"/>
+        <EditorIndex Value="6"/>
+=======
         <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
+>>>>>>> .r658
         <WindowIndex Value="0"/>
+<<<<<<< .mine
+        <TopLine Value="153"/>
+        <CursorPos X="7" Y="6"/>
+        <UsageCount Value="181"/>
+=======
         <TopLine Value="48"/>
         <CursorPos X="13" Y="56"/>
         <UsageCount Value="178"/>
+>>>>>>> .r658
         <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
       </Unit1>
       <Unit2>
         <Filename Value="..\..\..\units\xpl\gui\frm_about.pas"/>
@@ -2545,10 +996,12 @@
       <Unit120>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
+        <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="3"/>
-        <CursorPos X="8" Y="11"/>
+        <TopLine Value="147"/>
+        <CursorPos X="1" Y="157"/>
         <UsageCount Value="36"/>
+        <Loaded Value="True"/>
       </Unit120>
       <Unit121>
         <Filename Value="..\..\units\xpl\u_xpl_vendor_file.pas"/>
@@ -2579,8 +1032,13 @@
         <UnitName Value="u_xml_plugins"/>
         <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
+<<<<<<< .mine
+        <TopLine Value="353"/>
+        <CursorPos X="72" Y="362"/>
+=======
         <TopLine Value="1"/>
         <CursorPos X="5" Y="403"/>
+>>>>>>> .r658
         <UsageCount Value="34"/>
         <Loaded Value="True"/>
       </Unit124>
@@ -2698,10 +1156,12 @@
       <Unit139>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
+        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="5"/>
-        <CursorPos X="18" Y="12"/>
+        <TopLine Value="244"/>
+        <CursorPos X="35" Y="254"/>
         <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit139>
       <Unit140>
         <Filename Value="..\..\units\xpl\xml\u_xml_xplplugin_delphi.pas"/>
@@ -2770,10 +1230,12 @@
       <Unit148>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
         <UnitName Value="fpc_delphi_compat"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1"/>
-        <CursorPos X="46" Y="8"/>
+        <TopLine Value="90"/>
+        <CursorPos X="1" Y="101"/>
         <UsageCount Value="22"/>
+        <Loaded Value="True"/>
       </Unit148>
       <Unit149>
         <Filename Value="..\..\..\components\jvcllaz\run\JclPeImage.pas"/>
@@ -2795,8 +1257,8 @@
         <UnitName Value="vinfo"/>
         <WindowIndex Value="0"/>
         <TopLine Value="88"/>
-        <CursorPos X="41" Y="87"/>
-        <UsageCount Value="7"/>
+        <CursorPos X="1" Y="107"/>
+        <UsageCount Value="10"/>
       </Unit151>
       <Unit152>
         <Filename Value="..\..\..\components\jvcllaz\run\JvJVCLUtils.pas"/>
@@ -2833,10 +1295,12 @@
       <Unit156>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
         <UnitName Value="u_xpl_settings"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="164"/>
-        <CursorPos X="20" Y="180"/>
-        <UsageCount Value="7"/>
+        <TopLine Value="161"/>
+        <CursorPos X="14" Y="131"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit156>
       <Unit157>
         <Filename Value="C:\pp\packages\fcl-registry\src\regdef.inc"/>
@@ -2849,8 +1313,8 @@
         <Filename Value="..\..\units\general\u_downloader_indy.pas"/>
         <UnitName Value="u_Downloader_Indy"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="43"/>
-        <CursorPos X="6" Y="50"/>
+        <TopLine Value="41"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="10"/>
       </Unit158>
       <Unit159>
@@ -2859,12 +1323,18 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_XMLView"/>
+<<<<<<< .mine
+=======
         <EditorIndex Value="2"/>
+>>>>>>> .r658
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="11" Y="4"/>
         <UsageCount Value="10"/>
+<<<<<<< .mine
+=======
         <Loaded Value="True"/>
+>>>>>>> .r658
       </Unit159>
       <Unit160>
         <Filename Value="C:\lazarus\components\synedit\synhighlighterxml.pas"/>
@@ -2890,119 +1360,293 @@
         <UsageCount Value="10"/>
       </Unit162>
       <Unit163>
-        <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
-        <UnitName Value="frame_config"/>
+        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
+        <UnitName Value="u_xpl_folders"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="118"/>
-        <CursorPos X="4" Y="124"/>
+        <TopLine Value="1"/>
+        <CursorPos X="66" Y="61"/>
         <UsageCount Value="10"/>
       </Unit163>
       <Unit164>
+<<<<<<< .mine
+        <Filename Value="E:\usr\share\fpcsrc\packages\fcl-registry\src\registry.pp"/>
+        <UnitName Value="registry"/>
+=======
         <Filename Value="..\..\units\xpl\gui\dlg_config.pas"/>
         <UnitName Value="dlg_config"/>
+>>>>>>> .r658
         <WindowIndex Value="0"/>
-        <TopLine Value="55"/>
-        <CursorPos X="4" Y="61"/>
+        <TopLine Value="187"/>
+        <CursorPos X="3" Y="199"/>
         <UsageCount Value="10"/>
       </Unit164>
+      <Unit165>
+        <Filename Value="E:\usr\share\fpcsrc\packages\fcl-registry\src\xregreg.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="9"/>
+        <CursorPos X="27" Y="20"/>
+        <UsageCount Value="10"/>
+      </Unit165>
+      <Unit166>
+        <Filename Value="E:\usr\share\fpcsrc\rtl\objpas\sysutils\diskh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="17" Y="22"/>
+        <UsageCount Value="10"/>
+      </Unit166>
+      <Unit167>
+        <Filename Value="E:\usr\share\fpcsrc\rtl\objpas\sysutils\sysutils.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="605"/>
+        <CursorPos X="3" Y="609"/>
+        <UsageCount Value="10"/>
+      </Unit167>
+      <Unit168>
+        <Filename Value="E:\usr\share\fpcsrc\rtl\objpas\sysutils\osutilsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="11"/>
+        <CursorPos X="16" Y="23"/>
+        <UsageCount Value="10"/>
+      </Unit168>
+      <Unit169>
+        <Filename Value="E:\usr\share\fpcsrc\rtl\unix\sysutils.pp"/>
+        <UnitName Value="sysutils"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1137"/>
+        <CursorPos X="3" Y="1140"/>
+        <UsageCount Value="10"/>
+      </Unit169>
+      <Unit170>
+        <Filename Value="E:\usr\share\fpcsrc\rtl\objpas\sysutils\osutil.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="78"/>
+        <CursorPos X="33" Y="94"/>
+        <UsageCount Value="10"/>
+      </Unit170>
     </Units>
+<<<<<<< .mine
+    <JumpHistory Count="24" HistoryIndex="23">
+=======
     <JumpHistory Count="30" HistoryIndex="29">
+>>>>>>> .r658
       <Position1>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
+        <Caret Line="59" Column="6" TopLine="45"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="115" Column="25" TopLine="109"/>
+>>>>>>> .r658
       </Position1>
       <Position2>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
+        <Caret Line="67" Column="6" TopLine="54"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="88" Column="47" TopLine="82"/>
+>>>>>>> .r658
       </Position2>
       <Position3>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_folders.pas"/>
+        <Caret Line="36" Column="16" TopLine="25"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="87" Column="47" TopLine="81"/>
+>>>>>>> .r658
       </Position3>
       <Position4>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="63" Column="25" TopLine="57"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="84" Column="29" TopLine="81"/>
+>>>>>>> .r658
       </Position4>
       <Position5>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="275" Column="40" TopLine="260"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="83" Column="29" TopLine="80"/>
+>>>>>>> .r658
       </Position5>
       <Position6>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="281" Column="46" TopLine="266"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="82" Column="29" TopLine="79"/>
+>>>>>>> .r658
       </Position6>
       <Position7>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="280" Column="26" TopLine="267"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="40" Column="1" TopLine="32"/>
+>>>>>>> .r658
       </Position7>
       <Position8>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
+        <Caret Line="281" Column="27" TopLine="267"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="86" Column="13" TopLine="71"/>
+>>>>>>> .r658
       </Position8>
       <Position9>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="122" Column="51" TopLine="110"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="14" Column="13" TopLine="7"/>
+>>>>>>> .r658
       </Position9>
       <Position10>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="116" Column="14" TopLine="110"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="151" Column="11" TopLine="142"/>
+>>>>>>> .r658
       </Position10>
       <Position11>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="125" Column="1" TopLine="110"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="27" Column="1" TopLine="17"/>
+>>>>>>> .r658
       </Position11>
       <Position12>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="105" Column="1" TopLine="93"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="23" Column="9" TopLine="1"/>
+>>>>>>> .r658
       </Position12>
       <Position13>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="107" Column="1" TopLine="93"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="9" Column="50" TopLine="1"/>
+>>>>>>> .r658
       </Position13>
       <Position14>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="110" Column="1" TopLine="106"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="45" Column="57" TopLine="31"/>
+>>>>>>> .r658
       </Position14>
       <Position15>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="114" Column="1" TopLine="106"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="12" Column="16" TopLine="7"/>
+>>>>>>> .r658
       </Position15>
       <Position16>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="159" Column="1" TopLine="147"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="10" Column="43" TopLine="1"/>
+>>>>>>> .r658
       </Position16>
       <Position17>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="160" Column="1" TopLine="147"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="7" Column="61" TopLine="1"/>
+>>>>>>> .r658
       </Position17>
       <Position18>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
+        <Caret Line="161" Column="1" TopLine="147"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="54" Column="17" TopLine="49"/>
+>>>>>>> .r658
       </Position18>
       <Position19>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="122" Column="1" TopLine="106"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="4" Column="11" TopLine="1"/>
+>>>>>>> .r658
       </Position19>
       <Position20>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="116" Column="12" TopLine="106"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="30" Column="3" TopLine="1"/>
+>>>>>>> .r658
       </Position20>
       <Position21>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="122" Column="1" TopLine="106"/>
+=======
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="24" Column="40" TopLine="2"/>
+>>>>>>> .r658
       </Position21>
       <Position22>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="128" Column="1" TopLine="114"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="165" Column="45" TopLine="109"/>
+>>>>>>> .r658
       </Position22>
       <Position23>
+<<<<<<< .mine
+        <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
+        <Caret Line="126" Column="11" TopLine="114"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="10" Column="78" TopLine="1"/>
+>>>>>>> .r658
       </Position23>
       <Position24>
+<<<<<<< .mine
+        <Filename Value="frm_vendor_files.pas"/>
+        <Caret Line="54" Column="12" TopLine="49"/>
+=======
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="11" Column="54" TopLine="1"/>
+>>>>>>> .r658
       </Position24>
+<<<<<<< .mine
+=======
       <Position25>
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="31" Column="1" TopLine="2"/>
@@ -3015,6 +1659,7 @@
         <Filename Value="app_vendor_files.lpr"/>
         <Caret Line="31" Column="1" TopLine="2"/>
       </Position27>
+>>>>>>> .r658
       <Position28>
         <Filename Value="frm_vendor_files.pas"/>
         <Caret Line="151" Column="3" TopLine="142"/>
@@ -3034,8 +1679,13 @@
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
+<<<<<<< .mine
+      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\general\RegExpr;..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general"/>
+      <UnitOutputDirectory Value="\home\sysadmin\lazout"/>
+=======
       <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general"/>
       <UnitOutputDirectory Value="..\..\..\lazout"/>
+>>>>>>> .r658
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -3043,10 +1693,22 @@
       </SyntaxOptions>
     </Parsing>
     <Linking>
+<<<<<<< .mine
       <Debugging>
         <GenerateDebugInfo Value="True"/>
         <DebugInfoType Value="dsAuto"/>
       </Debugging>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+=======
+      <Debugging>
+        <GenerateDebugInfo Value="True"/>
+        <DebugInfoType Value="dsAuto"/>
+      </Debugging>
+>>>>>>> .r658
     </Linking>
     <Other>
       <CompilerMessages>
@@ -3072,4 +1734,3 @@
     </Exceptions>
   </Debugging>
 </CONFIG>
->>>>>>> .r582
