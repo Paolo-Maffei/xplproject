@@ -100,7 +100,7 @@ var proc : TProcess;
 begin
 {$ifdef mswindows}
    TIdStack.IncUsage;
-   result := GStack.LocalAddresses;
+   result := TStringList(GStack.LocalAddresses);
 {$else}
    proc := TProcess.Create(nil);
    try
@@ -154,4 +154,4 @@ finalization
    fEventLog.Free;
 {$endif}
 
-end.
+end.
