@@ -8,23 +8,28 @@ unit lin_win_compat;
 
 interface
 
-uses SysUtils;
+uses Classes
+     , SysUtils
+     ;
 
    procedure GetProxySettings(out bEnabled : boolean; out sServer : string);
    procedure SystemLog (const EventType : TEventType; const Msg : String);
+   function  IPAddresses : TStringList;
 
 implementation // =============================================================
-uses Registry
-     , Classes
-     , fpc_delphi_compat
+uses fpc_delphi_compat
      {$ifndef fpc}
      , windows                                                                 // Needed on delphi to define KEY_READ
      {$endif}
      {$ifdef unix}
      , IdSysLog
      , IdSysLogMessage
+     , Process
+     , StrUtils
      {$else}
      , EventLog
+     , Registry
+     , IdStack
      {$endif}
      ;
 
@@ -58,9 +63,9 @@ begin
        sl.Delimiter := '/';
        sl.DelimitedText := GetEnvironmentVariable('http_proxy');               // may have http://xx.xx.xx.xx:yy/ as input
        for s in sl do
-           if Pos('.',s)<>0 then fProxyServer := s;                            // Quick & dirty way to extract server ip & port
+           if Pos('.',s)<>0 then sServer := s;                                 // Quick & dirty way to extract server ip & port
        sl.free;
-       bEnabled := (fProxyServer<>'');
+       bEnabled := (sServer<>'');
     {$endif}
 end;
 
@@ -83,6 +88,46 @@ end;
 {$ifdef mswindows}
 {$R C:/pp/packages/fcl-base/src/win/fclel.res}                                 // Load resource strings for windows event log
 {$endif}
+
+// ============================================================================
+function IPAddresses : TStringList;
+{$ifndef mswindows}
+var proc : TProcess;
+    slOutput : TStringList;
+    start : integer;
+    s : string;
+{$endif}
+begin
+{$ifdef mswindows}
+   TIdStack.IncUsage;
+   result := GStack.LocalAddresses;
+{$else}
+   proc := TProcess.Create(nil);
+   try
+      slOutput := TStringList.Create;
+      result   := TStringList.Create;
+      try
+         proc.CommandLine := 'ifconfig';
+         proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
+         proc.Execute;
+         slOutput.LoadFromStream(proc.Output);
+         for s in slOutput do begin
+             Start := Pos('inet adr',s);
+             if Start<>0 then begin
+                s := AnsiRightStr(s,Length(s)-(Start+8));
+                Start := Pos(' ',s);
+                s := AnsiLeftStr(s,Pred(Start));
+                Result.Add(s);
+             end;
+         end;
+      finally
+         FreeAndNil(slOutput);
+      end;
+   finally
+      FreeAndNil(proc);
+   end;
+{$endif}
+end;
 
 initialization // =============================================================
 {$ifdef unix}
@@ -109,4 +154,4 @@ finalization
    fEventLog.Free;
 {$endif}
 
-end.
+end.
