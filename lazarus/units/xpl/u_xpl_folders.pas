@@ -19,8 +19,8 @@ uses Classes,
      SysUtils,
      u_xpl_address;
 
-type // TxPLCustomFolders =====================================================
-     TxPLCustomFolders  = class
+type // TxPLFolders ===========================================================
+     TxPLFolders  = class
      private
         fAdresse : TxPLAddress;
      public
@@ -30,7 +30,7 @@ type // TxPLCustomFolders =====================================================
         function DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;  // something like c:\programdata\xPL\vendor\appli\
      end;
 
-implementation // ==============================================================
+implementation // =============================================================
 
 uses fpc_delphi_compat
      , StrUtils
@@ -38,14 +38,14 @@ uses fpc_delphi_compat
 
 const K_XPL_SETTINGS_SUBDIR_PLUG   = 'Plugins';
 
-// TxPLCustomFolders ===========================================================
-constructor TxPLCustomFolders.Create(const axPLAddress: TxPLAddress);
+// TxPLFolders ================================================================
+constructor TxPLFolders.Create(const axPLAddress: TxPLAddress);
 begin
    inherited Create;
-   fAdresse  := axPLAddress;
+   fAdresse := axPLAddress;
 end;
 
-function TxPLCustomFolders.SharedDir: string;
+function TxPLFolders.SharedDir: string;
 begin
    result := IncludeTrailingPathDelimiter( GetCommonAppDataPath
                                          {$ifdef mswindows} + 'xPL' {$endif}
@@ -53,13 +53,13 @@ begin
    ForceDirectories(result);
 end;
 
-function TxPLCustomFolders.PluginDir: string;                                  // returns something like c:\program data\xPL\Plugins\
+function TxPLFolders.PluginDir: string;                                  // returns something like c:\program data\xPL\Plugins\
 begin
    result := IncludeTrailingPathDelimiter(SharedDir + K_XPL_SETTINGS_SUBDIR_PLUG);
    ForceDirectories(result);
 end;
 
-function TxPLCustomFolders.DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;
+function TxPLFolders.DeviceDir(const aVendor : string = ''; const aDevice : string = '') : string;
 begin
    result := IncludeTrailingPathDelimiter(SharedDir + IfThen(aVendor<>'',aVendor,fAdresse.Vendor));
    ForceDirectories(result);

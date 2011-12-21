@@ -33,12 +33,12 @@ uses Classes
 type { TxPLVendorSeedFile ====================================================}
      TxPLVendorSeedFile = class(TComponent)
      private
-        fFolders    : TxPLCustomFolders;
+        fFolders    : TxPLFolders;
         fStatus     : boolean;
         fLocations  : TLocationsType;
         fPlugins    : TPluginsType;
      public
-        constructor create(const aOwner : TComponent ;const aFolders : TxPLCustomFolders); reintroduce;
+        constructor create(const aOwner : TComponent ;const aFolders : TxPLFolders); reintroduce;
         destructor  Destroy; override;
         procedure   Load;
         function    FileName : string; inline;                                 // File name of the current vendor plugin file
@@ -60,7 +60,7 @@ uses RegExpr
      ;
 
 // TxPLVendorSeedFile =========================================================
-constructor TxPLVendorSeedFile.create(const aOwner : TComponent; const aFolders: TxPLCustomFolders);
+constructor TxPLVendorSeedFile.create(const aOwner : TComponent; const aFolders: TxPLFolders);
 begin
    inherited Create(aOwner);
    fStatus  := false;

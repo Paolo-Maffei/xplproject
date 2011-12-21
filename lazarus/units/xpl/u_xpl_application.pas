@@ -8,36 +8,25 @@ interface
 
 uses SysUtils
      , Classes
-     {$ifdef unix}
-     , IdSysLog
-     , IdSysLogMessage
-     {$else}
-     , EventLog
-     {$endif}
      , u_xpl_address
      , u_xpl_folders
      , u_xpl_settings
      , u_xpl_common
      , u_xpl_vendor_file
      , fpc_delphi_compat
+     , lin_win_compat
      ;
 
 type { TxPLApplication =======================================================}
      TxPLApplication = class(TComponent)
      private
-        fSettings   : TxPLCustomSettings;
-        fFolders    : TxPLCustomFolders;
+        fSettings   : TxPLSettings;
+        fFolders    : TxPLFolders;
         fAdresse    : TxPLAddress;
         fOnLogEvent : TStrParamEvent;
         fPluginList : TxPLVendorSeedFile;
         fLocaleDomains : TStringList;
         fVersion    : string;
-        {$ifdef unix}
-           fIdSysLog: TIdSysLog;
-           fIdSysLogMessage : TIdSysLogMessage;
-        {$else}
-           fEventLog : TEventLog;
-        {$endif}
 
      public
         constructor Create(const aOwner : TComponent); reintroduce;
@@ -47,15 +36,15 @@ type { TxPLApplication =======================================================}
         function FullTitle   : string;
 
         procedure RegisterMe;
-        Procedure Log (EventType : TEventType; Msg : String); overload;
-        Procedure Log (EventType : TEventType; Fmt : String; Args : Array of const); overload;
+        Procedure Log (const EventType : TEventType; const Msg : String); overload;
+        Procedure Log (const EventType : TEventType; const Fmt : String; const Args : Array of const); overload;
 
         function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
         function  Translate(Const aDomain : string; Const aString : string) : string;
 
-        property Settings  : TxPLCustomSettings read fSettings;
+        property Settings  : TxPLSettings       read fSettings;
         property Adresse   : TxPLAddress        read fAdresse;
-        property Folders   : TxPLCustomFolders  read fFolders;
+        property Folders   : TxPLFolders        read fFolders;
         property Version   : string             read fVersion;
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
@@ -81,28 +70,11 @@ begin
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
    fVersion := GetVersion;
 
-   {$ifdef unix}
-      fIdSysLog := nil;
-      fIdSysLog := TIdSysLog.Create(self);
-      fIdSysLog.Port := 514;
-      fIdSysLog.Host := '127.0.0.1';
-      fIdSysLog.Active := True;
-      fIdSysLogMessage := TIdSysLogMessage.Create(self);
-   {$else}
-      fEventLog := TEventLog.Create(self);
-      fEventLog.DefaultEventType:=etInfo;
-      fEventLog.LogType:=ltSystem;
-      fEventLog.Identification := AppName;
-      fEventLog.Active:=true;
-      fEventlog.RegisterMessageFile('');
-   {$endif}
-
-
-   fFolders  := TxPLCustomFolders.Create(fAdresse);
+   fFolders  := TxPLFolders.Create(fAdresse);
 
    Log(etInfo,FullTitle);
 
-   fSettings   := TxPLCustomSettings.Create(self);
+   fSettings   := TxPLSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
 
    fLocaleDomains := TStringList.Create;
@@ -134,25 +106,15 @@ begin
    Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
 end;
 
-Procedure TxPLApplication.Log(EventType : TEventType; Msg : String);
+Procedure TxPLApplication.Log(const EventType : TEventType; const Msg : String);
 begin
-   {$ifdef unix}
-      fIdSysLogMessage.Msg.Text := GetDevice + ':' + Msg;
-      Case EventType of
-           etInfo    : fIdSysLogMessage.Severity := slInformational;
-           etWarning : fIdSysLogMessage.Severity := slWarning;
-           etError   : fIdSysLogMessage.Severity := slError;
-      end;
-      fIdSysLog.SendLogMessage(fIdSysLogMessage);
-   {$else}
-      fEventLog.Log(EventType,Msg);
-   {$endif}
+   SystemLog(EventType,Msg);
    if IsConsole then writeln(FormatDateTime('dd/mm hh:mm:ss',now),' ',EventTypeToxPLLevel(EventType),' ',Msg);
    if EventType = etError then Raise Exception.Create(Msg);
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
 end;
 
-Procedure TxPLApplication.Log(EventType : TEventType; Fmt : String; Args : Array of const);
+Procedure TxPLApplication.Log(const EventType : TEventType; const Fmt : String; const Args : Array of const);
 begin
    Log(EventType,Format(Fmt,Args));
 end;
@@ -182,26 +144,14 @@ begin
             else result := aString;
 end;
 
-{$ifdef mswindows}
-{$R C:/pp/packages/fcl-base/src/win/fclel.res}                                 // Load resource strings for windows event log
-{$endif}
-
 initialization // =============================================================
    InstanceInitStyle  := iisHostName;
    LocalAddresses     := TStringList.Create;
-   {$ifdef fpc}
-      OnGetVendorName      := @GetVendorNameEvent;                             // These functions are not known of Delphi and
-      OnGetApplicationName := @GetApplicationEvent;                            // are present here for linux behaviour consistency
-      VersionInfo          := TxPLVersionInfo.Create;
-   {$else}
-      VersionInfo          := TxPLVersionInfo.Create(ParamStr(0));
-   {$endif}
 
    TIdStack.IncUsage;
    LocalAddresses.Assign(GStack.LocalAddresses);
 
 finalization // ===============================================================
    LocalAddresses.Free;
-   VersionInfo.Free;
 
 end.

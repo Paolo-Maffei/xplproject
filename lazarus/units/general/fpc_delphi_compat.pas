@@ -35,6 +35,8 @@ type {$ifdef fpc}
         TxPLVersionInfo = class(TJvVersionInfo);
      {$endif}
 
+var VersionInfo        : TxPLVersionInfo;
+
 implementation // ==============================================================
 Uses Classes
      , SysUtils
@@ -152,5 +154,17 @@ begin
    {$endif}
 end;
 
+initialization // =============================================================
+{$ifdef fpc}
+   OnGetVendorName      := @GetVendorNameEvent;                                // These functions are not known of Delphi and
+   OnGetApplicationName := @GetApplicationEvent;                               // are present here for linux behaviour consistency
+   VersionInfo          := TxPLVersionInfo.Create;
+{$else}
+   VersionInfo          := TxPLVersionInfo.Create(ParamStr(0));
+{$endif}
+
+finalization // ===============================================================
+   VersionInfo.Free;
+
 end.
-
+

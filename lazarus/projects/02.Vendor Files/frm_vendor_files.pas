@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons, RTTICtrls,
-  XMLPropStorage{%H-}, IdComponent, frm_template, RxAboutDialog;
+  XMLPropStorage{%H-}, IdComponent, frm_template, RxAboutDialog{%H-};
 
 type
 

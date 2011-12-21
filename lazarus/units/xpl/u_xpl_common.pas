@@ -9,7 +9,6 @@ interface
 uses Classes
      , SysUtils
      , IdDateTimeStamp
-     , fpc_delphi_compat
      ;
 
 const K_MSG_TYPE_HEAD = 'xpl-';
@@ -71,7 +70,6 @@ const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';  
 var  LocalAddresses     : TStringList;
      InstanceInitStyle  : TInstanceInitStyle;
      //AllowMultiInstance : boolean;
-     VersionInfo        : TxPLVersionInfo;
 
 implementation  //=============================================================
 uses StrUtils
