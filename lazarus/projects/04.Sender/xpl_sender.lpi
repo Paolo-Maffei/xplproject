@@ -34,7 +34,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <LaunchingApplication PathPlusParams="/usr/X11R6/bin/xterm -T 'Lazarus Run Output' -e $(LazarusDir)/tools/runwait.sh $(TargetCmdLine)"/>
+        <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
     <RequiredPackages Count="7">
@@ -60,7 +60,7 @@
         <PackageName Value="LCL"/>
       </Item7>
     </RequiredPackages>
-    <Units Count="264">
+    <Units Count="269">
       <Unit0>
         <Filename Value="xpl_sender.lpr"/>
         <IsPartOfProject Value="True"/>
@@ -68,7 +68,7 @@
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
         <TopLine Value="7"/>
-        <CursorPos X="14" Y="19"/>
+        <CursorPos X="1" Y="25"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -950,7 +950,7 @@
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="1" Y="11"/>
-        <UsageCount Value="97"/>
+        <UsageCount Value="99"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit107>
       <Unit108>
@@ -1020,9 +1020,10 @@
       <Unit116>
         <Filename Value="..\..\units\general\medit.pas"/>
         <UnitName Value="MEdit"/>
-        <TopLine Value="34"/>
-        <CursorPos X="37" Y="38"/>
-        <UsageCount Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="38"/>
+        <CursorPos X="1" Y="48"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit116>
       <Unit117>
@@ -1047,13 +1048,10 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xplappslauncher"/>
-        <EditorIndex Value="7"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="61"/>
+        <TopLine Value="58"/>
         <CursorPos X="56" Y="66"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
-        <LoadedDesigner Value="True"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit119>
       <Unit120>
@@ -1085,9 +1083,10 @@
       <Unit123>
         <Filename Value="..\..\units\general\RegExpr\uRegExpr.pas"/>
         <UnitName Value="uRegExpr"/>
-        <TopLine Value="1111"/>
-        <CursorPos X="1" Y="1162"/>
-        <UsageCount Value="9"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="714"/>
+        <CursorPos X="13" Y="611"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit123>
       <Unit124>
@@ -1101,9 +1100,10 @@
       <Unit125>
         <Filename Value="..\..\units\general\mcombobox.pas"/>
         <UnitName Value="MComboBox"/>
-        <TopLine Value="19"/>
-        <CursorPos X="37" Y="32"/>
-        <UsageCount Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="31"/>
+        <CursorPos X="1" Y="49"/>
+        <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit125>
       <Unit126>
@@ -1136,12 +1136,10 @@
       <Unit129>
         <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
         <UnitName Value="u_xml_plugins"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="44"/>
         <CursorPos X="7" Y="47"/>
-        <UsageCount Value="10"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="11"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit129>
       <Unit130>
@@ -1203,12 +1201,10 @@
       <Unit137>
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
-        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
         <TopLine Value="23"/>
         <CursorPos X="1" Y="1"/>
-        <UsageCount Value="88"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="89"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit137>
       <Unit138>
@@ -1281,11 +1277,12 @@
         <HasResources Value="True"/>
         <ResourceBaseClass Value="Form"/>
         <UnitName Value="frm_xPLMessage"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="7"/>
-        <CursorPos X="30" Y="16"/>
-        <UsageCount Value="23"/>
+        <TopLine Value="94"/>
+        <CursorPos X="1" Y="111"/>
+        <UsageCount Value="24"/>
         <Loaded Value="True"/>
         <LoadedDesigner Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
@@ -1311,15 +1308,16 @@
         <TopLine Value="878"/>
         <CursorPos X="1" Y="893"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit149>
       <Unit150>
         <Filename Value="..\..\units\xpl\gui\u_xpl_message_gui.pas"/>
         <UnitName Value="u_xpl_message_GUI"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="40"/>
-        <CursorPos X="12" Y="42"/>
-        <UsageCount Value="22"/>
+        <TopLine Value="21"/>
+        <CursorPos X="19" Y="42"/>
+        <UsageCount Value="23"/>
         <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit150>
@@ -1329,24 +1327,28 @@
         <TopLine Value="411"/>
         <CursorPos X="3" Y="414"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit151>
       <Unit152>
         <Filename Value="C:\lazarus\lcl\interfaces\win32\win32memostrings.inc"/>
         <TopLine Value="62"/>
         <CursorPos X="1" Y="77"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit152>
       <Unit153>
         <Filename Value="C:\lazarus\lcl\include\wincontrol.inc"/>
         <TopLine Value="6077"/>
         <CursorPos X="1" Y="6092"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit153>
       <Unit154>
         <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\objpas\classes\classesh.inc"/>
         <TopLine Value="552"/>
         <CursorPos X="3" Y="497"/>
         <UsageCount Value="13"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit154>
       <Unit155>
         <Filename Value="..\..\units\xpl\u_xpl_settings_db.pas"/>
@@ -1362,6 +1364,7 @@
         <TopLine Value="388"/>
         <CursorPos X="1" Y="409"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit156>
       <Unit157>
         <Filename Value="C:\lazarus\fpc\2.2.4\source\packages\fcl-db\src\base\db.pas"/>
@@ -1369,6 +1372,7 @@
         <TopLine Value="1290"/>
         <CursorPos X="15" Y="1308"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit157>
       <Unit158>
         <Filename Value="C:\lazarus\components\synedit\synedit.pp"/>
@@ -1376,6 +1380,7 @@
         <TopLine Value="1"/>
         <CursorPos X="47" Y="18"/>
         <UsageCount Value="18"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit158>
       <Unit159>
         <Filename Value="..\..\..\components\indy-10.2.0.3\lazarus\IdGlobal.pas"/>
@@ -1422,13 +1427,17 @@
         <TopLine Value="241"/>
         <CursorPos X="1" Y="259"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit164>
       <Unit165>
         <Filename Value="..\..\units\xpl\gui\v_xplmsg_opendialog.pas"/>
         <UnitName Value="v_xplmsg_opendialog"/>
-        <TopLine Value="1"/>
-        <CursorPos X="12" Y="10"/>
-        <UsageCount Value="8"/>
+        <EditorIndex Value="4"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="19"/>
+        <CursorPos X="46" Y="38"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit165>
       <Unit166>
@@ -1445,6 +1454,7 @@
         <TopLine Value="62"/>
         <CursorPos X="1" Y="79"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit167>
       <Unit168>
         <Filename Value="C:\lazarus\lcl\forms.pp"/>
@@ -1453,12 +1463,14 @@
         <TopLine Value="1638"/>
         <CursorPos X="3" Y="1651"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit168>
       <Unit169>
         <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\inc\objpash.inc"/>
         <TopLine Value="153"/>
         <CursorPos X="26" Y="170"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit169>
       <Unit170>
         <Filename Value="C:\lazarus\lcl\graphics.pp"/>
@@ -1466,12 +1478,14 @@
         <TopLine Value="899"/>
         <CursorPos X="23" Y="912"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit170>
       <Unit171>
         <Filename Value="C:\lazarus\lcl\include\picture.inc"/>
         <TopLine Value="493"/>
         <CursorPos X="3" Y="509"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit171>
       <Unit172>
         <Filename Value="..\..\..\units\xpl\gui\u_xpl_message_gui.pas"/>
@@ -1707,6 +1721,7 @@
         <TopLine Value="10"/>
         <CursorPos X="1" Y="75"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit197>
       <Unit198>
         <Filename Value="..\..\..\units\xpl\u_xpl_folders.pas"/>
@@ -1721,12 +1736,14 @@
         <TopLine Value="1"/>
         <CursorPos X="17" Y="34"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit199>
       <Unit200>
         <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\objpas\sysutils\osutil.inc"/>
         <TopLine Value="10"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit200>
       <Unit201>
         <Filename Value="C:\lazarus\fpc\2.2.4\source\rtl\win\sysutils.pp"/>
@@ -1734,6 +1751,7 @@
         <TopLine Value="1"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit201>
       <Unit202>
         <Filename Value="C:\lazarus\lcl\filectrl.pp"/>
@@ -1741,6 +1759,7 @@
         <TopLine Value="109"/>
         <CursorPos X="14" Y="79"/>
         <UsageCount Value="8"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit202>
       <Unit203>
         <Filename Value="..\..\..\units\xpl\u_xpl_vendor_file.pas"/>
@@ -1800,6 +1819,7 @@
         <TopLine Value="49"/>
         <CursorPos X="36" Y="74"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit209>
       <Unit210>
         <Filename Value="C:\lazarus\fpc\2.4.2\source\rtl\objpas\sysutils\osutilsh.inc"/>
@@ -1807,6 +1827,7 @@
         <TopLine Value="30"/>
         <CursorPos X="3" Y="56"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit210>
       <Unit211>
         <Filename Value="..\..\..\units\xpl\u_xpl_appframework.pas"/>
@@ -1824,6 +1845,7 @@
         <TopLine Value="297"/>
         <CursorPos X="14" Y="317"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit212>
       <Unit213>
         <Filename Value="..\2.Vendor Files\app_vendor_files.lpr"/>
@@ -1841,6 +1863,7 @@
         <TopLine Value="1"/>
         <CursorPos X="16" Y="22"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit214>
       <Unit215>
         <Filename Value="C:\lazarus\components\pl_Indy\pl_indycomp.pas"/>
@@ -1849,6 +1872,7 @@
         <TopLine Value="1"/>
         <CursorPos X="16" Y="24"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit215>
       <Unit216>
         <Filename Value="..\..\..\units\xpl\gui\frm_xplmessage.lfm"/>
@@ -1872,24 +1896,19 @@
       <Unit218>
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
-        <EditorIndex Value="9"/>
         <WindowIndex Value="0"/>
         <TopLine Value="75"/>
-        <CursorPos X="45" Y="197"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <CursorPos X="45" Y="157"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit218>
       <Unit219>
         <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
         <UnitName Value="u_xpl_message"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="77"/>
-        <CursorPos X="20" Y="80"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <TopLine Value="75"/>
+        <CursorPos X="46" Y="84"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit219>
       <Unit220>
@@ -1908,6 +1927,7 @@
         <TopLine Value="256"/>
         <CursorPos X="3" Y="258"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit221>
       <Unit222>
         <Filename Value="..\..\..\components\superobjectv1.2.4\superobject.pas"/>
@@ -1937,12 +1957,11 @@
       </Unit224>
       <Unit225>
         <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="732"/>
         <CursorPos X="60" Y="757"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit225>
       <Unit226>
         <Filename Value="C:\pp\rtl\inc\objpash.inc"/>
@@ -1950,6 +1969,7 @@
         <TopLine Value="153"/>
         <CursorPos X="70" Y="182"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit226>
       <Unit227>
         <Filename Value="C:\pp\rtl\inc\objpas.inc"/>
@@ -1957,6 +1977,7 @@
         <TopLine Value="458"/>
         <CursorPos X="12" Y="462"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit227>
       <Unit228>
         <Filename Value="..\..\units\xpl\editors\frame_message.pas"/>
@@ -1977,6 +1998,7 @@
         <TopLine Value="976"/>
         <CursorPos X="31" Y="992"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit229>
       <Unit230>
         <Filename Value="C:\lazarus\lcl\stdctrls.pp"/>
@@ -1985,6 +2007,7 @@
         <TopLine Value="787"/>
         <CursorPos X="3" Y="791"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit230>
       <Unit231>
         <Filename Value="C:\lazarus\lcl\clipbrd.pp"/>
@@ -1993,6 +2016,7 @@
         <TopLine Value="248"/>
         <CursorPos X="1" Y="264"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit231>
       <Unit232>
         <Filename Value="C:\lazarus\lcl\include\clipbrd.inc"/>
@@ -2000,6 +2024,7 @@
         <TopLine Value="452"/>
         <CursorPos X="1" Y="478"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit232>
       <Unit233>
         <Filename Value="..\..\..\components\jvcllaz\run\JclStrings.pas"/>
@@ -2017,13 +2042,14 @@
         <TopLine Value="82"/>
         <CursorPos X="1" Y="1"/>
         <UsageCount Value="9"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit234>
       <Unit235>
         <Filename Value="..\..\units\xpl\u_xpl_header.pas"/>
         <UnitName Value="u_xPL_Header"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="66"/>
-        <CursorPos X="8" Y="74"/>
+        <TopLine Value="188"/>
+        <CursorPos X="15" Y="205"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit235>
@@ -2060,6 +2086,7 @@
         <TopLine Value="278"/>
         <CursorPos X="3" Y="294"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit239>
       <Unit240>
         <Filename Value="C:\pp\rtl\objpas\dateutils.pp"/>
@@ -2068,6 +2095,7 @@
         <TopLine Value="1"/>
         <CursorPos X="11" Y="1"/>
         <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit240>
       <Unit241>
         <Filename Value="C:\pp\rtl\objpas\dateutil.inc"/>
@@ -2075,6 +2103,7 @@
         <TopLine Value="238"/>
         <CursorPos X="22" Y="255"/>
         <UsageCount Value="12"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit241>
       <Unit242>
         <Filename Value="..\..\units\xpl\u_xpl_heart_beater.pas"/>
@@ -2110,6 +2139,7 @@
         <TopLine Value="45"/>
         <CursorPos X="30" Y="61"/>
         <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit245>
       <Unit246>
         <Filename Value="..\..\units\xpl\u_xpl_rawset.pas"/>
@@ -2163,16 +2193,15 @@
         <TopLine Value="132"/>
         <CursorPos X="14" Y="139"/>
         <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit251>
       <Unit252>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
         <UnitName Value="u_xpl_common"/>
-        <EditorIndex Value="10"/>
         <WindowIndex Value="0"/>
         <TopLine Value="67"/>
         <CursorPos X="8" Y="73"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit252>
       <Unit253>
@@ -2190,8 +2219,8 @@
       <Unit254>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.lfm"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="910"/>
-        <CursorPos X="11" Y="927"/>
+        <TopLine Value="997"/>
+        <CursorPos X="1" Y="1005"/>
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="LFM"/>
       </Unit254>
@@ -2224,12 +2253,10 @@
       <Unit258>
         <Filename Value="..\..\units\xpl\gui\frame_config.pas"/>
         <UnitName Value="frame_config"/>
-        <EditorIndex Value="11"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1"/>
         <CursorPos X="7" Y="46"/>
-        <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <UsageCount Value="12"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit258>
       <Unit259>
@@ -2265,12 +2292,11 @@
       <Unit262>
         <Filename Value="C:\lazarus\lcl\menus.pp"/>
         <UnitName Value="Menus"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="422"/>
         <CursorPos X="54" Y="529"/>
         <UsageCount Value="11"/>
-        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit262>
       <Unit263>
         <Filename Value="..\..\units\xpl\res\class\class.lrs"/>
@@ -2280,132 +2306,181 @@
         <UsageCount Value="10"/>
         <DefaultSyntaxHighlighter Value="Delphi"/>
       </Unit263>
+      <Unit264>
+        <Filename Value="..\..\units\xpl\gui\v_class_combo.pas"/>
+        <UnitName Value="v_class_combo"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="48"/>
+        <CursorPos X="1" Y="66"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit264>
+      <Unit265>
+        <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\printers"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <DefaultSyntaxHighlighter Value="None"/>
+      </Unit265>
+      <Unit266>
+        <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\synedit\synhighlighterpas.pp"/>
+        <UnitName Value="SynHighlighterPas"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="9" Y="14"/>
+        <UsageCount Value="11"/>
+        <Loaded Value="True"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit266>
+      <Unit267>
+        <Filename Value="..\..\units\general\RegExpr\RegExpr.pas"/>
+        <UnitName Value="RegExpr"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="181"/>
+        <CursorPos X="55" Y="186"/>
+        <UsageCount Value="11"/>
+        <DefaultSyntaxHighlighter Value="Delphi"/>
+      </Unit267>
+      <Unit268>
+        <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\fpcsrc\packages\regexpr\src\regex.pp"/>
+        <UnitName Value="Regex"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="161"/>
+        <CursorPos X="27" Y="182"/>
+        <UsageCount Value="10"/>
+      </Unit268>
     </Units>
-    <JumpHistory Count="29" HistoryIndex="28">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
-        <Caret Line="147" Column="36" TopLine="132"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position1>
       <Position2>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="154" Column="27" TopLine="141"/>
+        <Caret Line="160" Column="1" TopLine="142"/>
       </Position2>
       <Position3>
-        <Filename Value="C:\lazarus\lcl\menus.pp"/>
-        <Caret Line="436" Column="16" TopLine="421"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="161" Column="1" TopLine="142"/>
       </Position3>
       <Position4>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="99" Column="1" TopLine="96"/>
+        <Caret Line="162" Column="1" TopLine="142"/>
       </Position4>
       <Position5>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="104" Column="1" TopLine="129"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position5>
       <Position6>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="105" Column="1" TopLine="105"/>
+        <Caret Line="160" Column="1" TopLine="142"/>
       </Position6>
       <Position7>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="106" Column="1" TopLine="106"/>
+        <Caret Line="161" Column="1" TopLine="142"/>
       </Position7>
       <Position8>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="114" Column="99" TopLine="107"/>
+        <Caret Line="162" Column="1" TopLine="142"/>
       </Position8>
       <Position9>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position9>
       <Position10>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="39" Column="16" TopLine="14"/>
+        <Caret Line="165" Column="1" TopLine="142"/>
       </Position10>
       <Position11>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="143" Column="19" TopLine="118"/>
+        <Caret Line="156" Column="1" TopLine="142"/>
       </Position11>
       <Position12>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="142" Column="20" TopLine="134"/>
+        <Caret Line="157" Column="1" TopLine="142"/>
       </Position12>
       <Position13>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="12" Column="49" TopLine="1"/>
+        <Caret Line="158" Column="1" TopLine="142"/>
       </Position13>
       <Position14>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="13" Column="16" TopLine="1"/>
+        <Caret Line="159" Column="1" TopLine="142"/>
       </Position14>
       <Position15>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="95" Column="15" TopLine="82"/>
+        <Caret Line="160" Column="1" TopLine="142"/>
       </Position15>
       <Position16>
-        <Filename Value="..\..\units\xpl\xml\u_xml_plugins.pas"/>
-        <Caret Line="163" Column="36" TopLine="160"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="161" Column="1" TopLine="142"/>
       </Position16>
       <Position17>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="470" Column="3" TopLine="500"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="162" Column="1" TopLine="142"/>
       </Position17>
       <Position18>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="669" Column="12" TopLine="644"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position18>
       <Position19>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="1" Column="1" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="160" Column="1" TopLine="142"/>
       </Position19>
       <Position20>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="669" Column="12" TopLine="644"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="161" Column="1" TopLine="142"/>
       </Position20>
       <Position21>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="674" Column="24" TopLine="649"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="162" Column="1" TopLine="142"/>
       </Position21>
       <Position22>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="703" Column="58" TopLine="678"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position22>
       <Position23>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="735" Column="23" TopLine="710"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="160" Column="1" TopLine="142"/>
       </Position23>
       <Position24>
-        <Filename Value="C:\pp\rtl\objpas\classes\classesh.inc"/>
-        <Caret Line="742" Column="34" TopLine="717"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="161" Column="1" TopLine="142"/>
       </Position24>
       <Position25>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="174" Column="23" TopLine="163"/>
+        <Caret Line="162" Column="1" TopLine="142"/>
       </Position25>
       <Position26>
-        <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="37" Column="27" TopLine="22"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="163" Column="1" TopLine="142"/>
       </Position26>
       <Position27>
-        <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
-        <Caret Line="87" Column="54" TopLine="77"/>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="165" Column="1" TopLine="142"/>
       </Position27>
       <Position28>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="44" Column="28" TopLine="40"/>
+        <Caret Line="156" Column="1" TopLine="142"/>
       </Position28>
       <Position29>
         <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
-        <Caret Line="111" Column="4" TopLine="304"/>
+        <Caret Line="157" Column="1" TopLine="142"/>
       </Position29>
+      <Position30>
+        <Filename Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Caret Line="158" Column="1" TopLine="142"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="10"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
       <IncludeFiles Value="..\..\units\xpl\res\class;..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl\editors;..\..\units\xpl;..\..\units\general;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\xpl\gui"/>
+      <OtherUnitFiles Value="..\..\units\xpl\editors;..\..\units\xpl;..\..\units\general;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\xpl\gui;$(LazarusDir)\components\synedit"/>
       <UnitOutputDirectory Value="..\..\..\lazout"/>
     </SearchPaths>
     <Parsing>
@@ -2416,10 +2491,6 @@
       </SyntaxOptions>
     </Parsing>
     <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <DebugInfoType Value="dsAuto"/>
-      </Debugging>
       <Options>
         <Win32>
           <GraphicApplication Value="True"/>
@@ -2434,6 +2505,15 @@
     </Other>
   </CompilerOptions>
   <Debugging>
+    <BreakPoints Count="1">
+      <Item1>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="..\..\units\xpl\gui\frm_xplmessage.pas"/>
+        <Line Value="111"/>
+      </Item1>
+    </BreakPoints>
     <Watches Count="2">
       <Item1>
         <Expression Value="Match[1]"/>

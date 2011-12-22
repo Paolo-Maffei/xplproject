@@ -7,8 +7,8 @@ unit xpl_win;
 interface
 
 uses
-  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, MStringGrid, MEdit, 
-  MCheckListBox, MComboBox, v_msgbody_stringgrid, uControls, LazarusPackageIntf;
+  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, MStringGrid, 
+  v_msgbody_stringgrid, uControls, LazarusPackageIntf;
 
 implementation
 
@@ -18,9 +18,6 @@ begin
   RegisterUnit('v_msgtype_radio', @v_msgtype_radio.Register); 
   RegisterUnit('v_class_combo', @v_class_combo.Register); 
   RegisterUnit('MStringGrid', @MStringGrid.Register); 
-  RegisterUnit('MEdit', @MEdit.Register); 
-  RegisterUnit('MCheckListBox', @MCheckListBox.Register); 
-  RegisterUnit('MComboBox', @MComboBox.Register); 
   RegisterUnit('v_msgbody_stringgrid', @v_msgbody_stringgrid.Register); 
   RegisterUnit('uControls', @uControls.Register); 
 end; 

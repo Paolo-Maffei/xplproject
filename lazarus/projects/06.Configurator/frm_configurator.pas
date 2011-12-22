@@ -8,7 +8,7 @@ uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ExtCtrls, ActnList, Menus, StdCtrls, RTTICtrls, frm_template,
   v_xplmsg_opendialog, frame_config, u_configuration_record, fpTimer,
-  u_xpl_message, fpc_delphi_compat, RxAboutDialog;
+  u_xpl_message, fpc_delphi_compat, RxAboutDialog{%H-};
 
 type
 
@@ -45,7 +45,7 @@ type
     ToolButton7: TToolButton;
     ToolButton8: TToolButton;
     tvDevices: TTreeView;
-    xPLMsgSaveDlg: TxPLMsgSaveDialog;
+    xPLMsgSaveDlg : TxPLMsgSaveDialog;
     procedure acClearExecute(Sender: TObject);
     procedure acDiscoverNetworkExecute(Sender: TObject);
     procedure acLoadConfigExecute(Sender: TObject);
@@ -93,6 +93,12 @@ begin
    ToolBar2.Images:= ToolBar.Images;
    acClearExecute(self);
    TConfigListener(xPLApplication).Listen;
+
+   OpenMessage := TxPLMsgOpenDialog.Create(self);
+   xPLMsgSaveDlg := TxPLMsgSaveDialog.Create(self);
+
+   OpenMessage.Filter := 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml';
+   xPLMsgSaveDlg.Filter := 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml';
 
    timer := TxPLTimer.Create(self);
    timer.Interval := 50;
@@ -217,4 +223,4 @@ initialization
   {$I frm_configurator.lrs}
 
 end.
-
+

@@ -3,7 +3,7 @@ inherited frmXMLView: TfrmXMLView
   Height = 352
   Top = 219
   Width = 704
-  ActiveControl = SynEdit1
+  ActiveControl = SynEdit
   BorderIcons = [biMinimize, biMaximize]
   Caption = 'frmXMLView'
   ClientHeight = 352
@@ -13,7 +13,7 @@ inherited frmXMLView: TfrmXMLView
     Width = 704
     TabOrder = 1
   end
-  inline SynEdit1: TSynEdit[1]
+  inline SynEdit: TSynEdit[1]
     Left = 0
     Height = 326
     Top = 26
@@ -74,7 +74,7 @@ inherited frmXMLView: TfrmXMLView
         Option = 0
         Priority = 0
       end>
-    Highlighter = SynXMLSyn1
+    Highlighter = SynXMLSyn
     Keystrokes = <    
       item
         Command = ecUp
@@ -620,7 +620,7 @@ inherited frmXMLView: TfrmXMLView
         Priority = 0
       end>
     Lines.Strings = (
-      'SynEdit1'
+      'SynEdit'
     )
     VisibleSpecialChars = [vscSpace, vscTabAtLast]
     ReadOnly = True
@@ -736,7 +736,7 @@ inherited frmXMLView: TfrmXMLView
   end
   inherited DlgActions: TActionList[2]
   end
-  object SynXMLSyn1: TSynXMLSyn[3]
+  object SynXMLSyn: TSynXMLSyn[3]
     DefaultFilter = 'Documents XML (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
     Enabled = False
     ElementAttri.FrameEdges = sfeAround
@@ -756,4 +756,4 @@ inherited frmXMLView: TfrmXMLView
     left = 80
     top = 56
   end
-end
+end

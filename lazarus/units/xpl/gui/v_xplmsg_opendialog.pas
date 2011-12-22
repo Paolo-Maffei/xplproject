@@ -33,6 +33,7 @@ begin
 
   Filter := K_DEFAULT_FILTER;
   DefaultExt := 'xpl';
+  Filter := 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml';
   FilterIndex := 1;                                
 end;
 
@@ -42,6 +43,7 @@ begin
 
   Filter := K_DEFAULT_FILTER;
   DefaultExt := 'xpl';
+  Filter := 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml';
   FilterIndex := 1;
 end;
 

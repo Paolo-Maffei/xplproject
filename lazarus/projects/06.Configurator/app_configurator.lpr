@@ -3,9 +3,9 @@ program app_configurator;
 {$mode objfpc}{$H+}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
   Interfaces
   , Forms, pl_rx
   , u_xpl_application
@@ -18,6 +18,7 @@ uses
   ;
 
 {$IFDEF WINDOWS}{$R app_configurator.rc}{$ENDIF}
+{$R *.res}
 
 begin
   Application.Title:='xPL configurator';
@@ -28,7 +29,5 @@ begin
   Application.CreateForm(TfrmConfigurator, frmConfigurator);
   Application.Run;
 
-  xPLGUIResource.Free;
-  xPLApplication.Free;
 end.
-
+

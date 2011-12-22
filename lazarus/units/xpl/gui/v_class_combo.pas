@@ -25,7 +25,7 @@ type TxPLClassCombo = class(TCombobox)
      procedure Register;
 
 implementation
-uses uxPLConst, RegExpr, Graphics;
+uses uxPLConst, RegEx, Graphics;
 
 procedure Register;
 begin
@@ -57,13 +57,15 @@ begin
 end;
 
 procedure TxPLClassCombo.EditingDone;
+var matchpos, offset : integer;
 begin
   inherited;
 
   if RegExpr='' then exit;
-  with TRegExpr.Create do try
-       Expression := RegExpr;
-       IsValid := Exec(Text);
+  with TRegexEngine.Create(RegExpr) do try
+       IsValid := MatchString(Text,matchpos,offset);
+  //     Expression := RegExpr;
+  //     IsValid := Exec(Text);
   finally
        free;
   end;

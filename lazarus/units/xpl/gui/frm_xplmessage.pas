@@ -103,6 +103,9 @@ procedure TfrmxPLMessage.FormCreate(Sender: TObject);
 begin
    inherited;
 
+   SaveMessage := TxPLMsgSaveDialog.Create(self);
+   OpenMessage := TxPLMsgOpenDialog.Create(self);
+
    arrCommandes := TList.Create;
 
    InitPluginsMenu;
@@ -369,4 +372,4 @@ end;
 
 end.
 
-
+

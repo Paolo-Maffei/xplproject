@@ -5,10 +5,10 @@
     <Name Value="xpl_win"/>
     <AddToProjectUsesSection Value="True"/>
     <CompilerOptions>
-      <Version Value="10"/>
+      <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\xpl\xml;..\..\general\RegExpr;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)"/>
+        <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\xpl\xml;..\..\xpl\gui;..\..\general\RegExpr;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS)"/>
         <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
       </SearchPaths>
       <Parsing>
@@ -17,12 +17,6 @@
           <UseAnsiStrings Value="False"/>
         </SyntaxOptions>
       </Parsing>
-      <Linking>
-        <Debugging>
-          <GenerateDebugInfo Value="True"/>
-          <DebugInfoType Value="dsAuto"/>
-        </Debugging>
-      </Linking>
       <Other>
         <CompilerMessages>
           <UseMsgFile Value="True"/>
@@ -31,7 +25,7 @@
       </Other>
     </CompilerOptions>
     <Version Major="1"/>
-    <Files Count="9">
+    <Files Count="6">
       <Item1>
         <Filename Value="v_xplmsg_opendialog.pas"/>
         <HasRegisterProc Value="True"/>
@@ -53,30 +47,15 @@
         <UnitName Value="MStringGrid"/>
       </Item4>
       <Item5>
-        <Filename Value="..\..\general\medit.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MEdit"/>
-      </Item5>
-      <Item6>
-        <Filename Value="..\..\general\mchecklistbox.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MCheckListBox"/>
-      </Item6>
-      <Item7>
-        <Filename Value="..\..\general\mcombobox.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MComboBox"/>
-      </Item7>
-      <Item8>
         <Filename Value="v_msgbody_stringgrid.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="v_msgbody_stringgrid"/>
-      </Item8>
-      <Item9>
+      </Item5>
+      <Item6>
         <Filename Value="ucontrols.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="uControls"/>
-      </Item9>
+      </Item6>
     </Files>
     <Type Value="RunAndDesignTime"/>
     <RequiredPkgs Count="3">
@@ -98,4 +77,4 @@
       <IgnoreBinaries Value="False"/>
     </PublishOptions>
   </Package>
-</CONFIG>
+</CONFIG>
