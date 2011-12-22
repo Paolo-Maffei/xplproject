@@ -146,9 +146,8 @@ end;
 
 initialization // =============================================================
    InstanceInitStyle  := iisHostName;
-   LocalAddresses     := TStringList.Create;
 
-//   TIdStack.IncUsage;
+   LocalAddresses     := TStringList.Create;
    LocalAddresses.Assign(IPAddresses);
 
 finalization // ===============================================================

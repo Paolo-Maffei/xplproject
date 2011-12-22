@@ -187,8 +187,9 @@ end;
 
 procedure TFrmTemplate.OnLogEvent(const aString : string);
 begin
-   StatusBar1.Panels[1].Text := aString;
+   if Assigned(StatusBar1.Panels) then
+      StatusBar1.Panels[1].Text := aString;
 end;
 
 end.
-
+

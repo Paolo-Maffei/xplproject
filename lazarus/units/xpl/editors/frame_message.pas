@@ -125,8 +125,8 @@ begin
 end;
 
 initialization //==============================================================
-  {$I ..\res\class\class.lrs}
-  {$I ..\res\msgtype\msgtype.lrs}
+  {$I class.lrs}
+  {$I msgtype.lrs}
 
 end.
-
+

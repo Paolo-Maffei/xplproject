@@ -190,19 +190,6 @@ inherited frmConfigurator: TfrmConfigurator
   end
   inherited AppMenu: TPopupMenu[10]
   end
-  object xPLMsgSaveDlg: TxPLMsgSaveDialog[11]
-    DefaultExt = '.xpl'
-    Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
-    FilterIndex = 2
-    left = 112
-    top = 32
-  end
-  object OpenMessage: TxPLMsgOpenDialog[12]
-    DefaultExt = '.xpl'
-    Filter = 'xPL Message File|*.xpl|xPL Config File|xpl_*.xml'
-    left = 112
-    top = 88
-  end
   object AppActionList: TActionList[13]
     left = 16
     top = 160
@@ -238,4 +225,4 @@ inherited frmConfigurator: TfrmConfigurator
       OnExecute = acClearExecute
     end
   end
-end
+end

@@ -89,7 +89,7 @@ begin
 
    Config_Elmt := fDiscovered.Data[item];
    if axPLMsg.Schema.Equals(Schema_ConfigList) then begin
-      Config_Elmt.Config.ConfigList.Assign(axPLMsg.Body);
+      Config_Elmt.Config.ConfigList.Assign(axPLMsg);
       Msg := TConfigCurrentCmnd.Create(self);
       Msg.target.Assign(axPLMsg.source);
       Send(Msg);
@@ -121,4 +121,4 @@ begin
 end;
 
 end.
-
+

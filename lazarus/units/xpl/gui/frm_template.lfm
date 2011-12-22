@@ -167,4 +167,4 @@ object FrmTemplate: TFrmTemplate
     left = 112
     top = 144
   end
-end
+end

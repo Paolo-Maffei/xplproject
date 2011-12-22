@@ -659,7 +659,7 @@ begin
 end;
 
 initialization // =============================================================
-  {$I class.lrs}
-  {$I msgtype.lrs}
+  { $ I class.lrs}
+  { $ I msgtype.lrs}
 
-end.
+end.

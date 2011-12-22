@@ -7,15 +7,15 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, SynHighlighterXML, SynEdit, SynHighlighterAny, dlg_template;
+  SynHighlighterXML, SynEdit, SynHighlighterAny, dlg_template;
 
 type
 
   { TfrmXMLView }
 
   TfrmXMLView = class(TDlgTemplate)
-    SynEdit1: TSynEdit;
-    SynXMLSyn1: TSynXMLSyn;
+    SynEdit: TSynEdit;
+    SynXMLSyn: TSynXMLSyn;
     procedure FormShow(Sender: TObject);
   private
     filePath : string;
@@ -42,7 +42,7 @@ end;
 procedure ShowFrmXMLView(const aStringList: TStringList);
 begin
   if not Assigned(FrmXMLView) then Application.CreateForm(TFrmXMLView,FrmXMLView);
-  FrmXMLView.SynEdit1.Lines.Assign(aStringList);
+  FrmXMLView.SynEdit.Lines.Assign(aStringList);
   FrmXMLView.ShowModal;
 end;
 
@@ -50,8 +50,8 @@ procedure TfrmXMLView.FormShow(Sender: TObject);
 begin
    inherited;
    Caption := FilePath;
-   if FilePath<>'' then SynEdit1.Lines.LoadFromFile(filepath);
+   if FilePath<>'' then SynEdit.Lines.LoadFromFile(filepath);
 end;
 
 end.
-
+
