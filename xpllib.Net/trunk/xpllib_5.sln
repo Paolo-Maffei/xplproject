@@ -12,6 +12,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{CEEECB23-AF4D-4D26-B339-ECDD2760EC4A}"
 	ProjectSection(SolutionItems) = preProject
 		LocalTestRun.testrunconfig = LocalTestRun.testrunconfig
+		Documentation\xpllib.shfbproj = Documentation\xpllib.shfbproj
 		xpllib_5.vsmdi = xpllib_5.vsmdi
 	EndProjectSection
 EndProject
