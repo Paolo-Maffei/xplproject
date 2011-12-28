@@ -199,7 +199,7 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
-xx-dec-2011 version 0.1.5 by Thijs Schreijer
+28-dec-2011 version 0.1.5 by Thijs Schreijer
          The UPnP handler had a very subtle bug that could in sporadic
          cases prevent a device from being announced in Girder. Fixed.
 05-dec-2011 version 0.1.4 by Thijs Schreijer
