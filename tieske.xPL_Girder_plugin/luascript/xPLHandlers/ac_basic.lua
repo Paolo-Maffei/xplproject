@@ -23,7 +23,7 @@
 -- <br/><br/>
 -- See the accompanying ReadMe.txt file for additional information.
 -- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.4, xPLGirder.
+-- @release Version 0.1.5, xPLGirder.
 
 
 
