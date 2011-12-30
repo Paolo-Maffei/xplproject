@@ -813,7 +813,7 @@ Public Class Proxy
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
                 log = log & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
-                log = log & LastChangeUpdate(NewValue, xmsg)
+                log = log & LastChangeUpdate(sender, NewValue, xmsg)
             End If
             ' send message
             LogMessage(log)
@@ -828,11 +828,12 @@ Public Class Proxy
     ''' <summary>
     ''' Deals with an update variable of type 'LastChange' as used by AV devices
     ''' </summary>
+    ''' <param name="StateVar">The statevariable object (always a LastChange statevar object) that changed</param>
     ''' <param name="NewValue">Value of the LastChange property to be analyzed</param>
     ''' <param name="xmsg">xPLMessage where elements found will be added</param>
     ''' <returns>a string containing the log message</returns>
     ''' <remarks></remarks>
-    Private Function LastChangeUpdate(ByVal NewValue As Object, ByVal xmsg As xPLMessage) As String
+    Private Function LastChangeUpdate(ByVal StateVar As OpenSource.UPnP.UPnPStateVariable, ByVal NewValue As Object, ByVal xmsg As xPLMessage) As String
         ' its an AV device with XML payload with the changes
         Dim x As XmlReader
         Dim log As String = ""
@@ -851,25 +852,24 @@ Public Class Proxy
                         Dim varID As Integer
                         ' lookup statevariable by its name
                         Dim s As UPnPStateVariable = Nothing
-                        Debug.Print("Looking for: " & x.Name)
-                        For Each ert As UPnPStateVariable In Me.Service.GetStateVariables
-                            If x.Name = ert.Name Then
-                                Debug.Print("  -->" & ert.Name)
-                                s = ert
-                            Else
-                                Debug.Print("   " & ert.Name)
-                            End If
-                        Next
-                        If s IsNot Nothing Then
-                            varID = Proxy.GetProxy(s).ID
-                            s = Nothing
-                        End If
+                        Dim v As String = ""
+                        log = log & vbCrLf & "   Looking for: " & x.Name & " in " & StateVar.OwningService.ServiceURN
+                        ' lookup the statevariable being reported
+                        s = StateVar.OwningService.GetStateVariableObject(x.Name)
+                        ' get the actual value
                         While x.MoveToNextAttribute
                             If x.Name = "val" Then
-                                xmsg.KeyValueList.Add(varID.ToString, x.Value)
-                                log = log & vbCrLf & "   " & varID.ToString & " = " & x.Value
+                                v = x.Value
                             End If
                         End While
+                        If s IsNot Nothing Then
+                            varID = Proxy.GetProxy(s).ID
+                            xmsg.KeyValueList.Add(varID.ToString, v)
+                            log = log & vbCrLf & "      " & varID.ToString & " = " & v
+                            s = Nothing
+                        Else
+                            log = log & vbCrLf & "      WARNING: statevariable not found! Value reported: " & v
+                        End If
                     End If
                     x.Read()
                 End While
@@ -1092,7 +1092,7 @@ Public Class Proxy
                     Else
                         'LastChange' type variable
                         If p.Variable.Value IsNot Nothing Then
-                            Dim lm As String = p.LastChangeUpdate(p.Variable.Value.ToString, msg)
+                            Dim lm As String = p.LastChangeUpdate(p.Variable, p.Variable.Value.ToString, msg)
                             LogMessage("      Returning value for LastChange of service " & p.Service.ServiceID & lm)
                         Else
                             LogMessage("      No current value for LastChange of service " & p.Service.ServiceID)
