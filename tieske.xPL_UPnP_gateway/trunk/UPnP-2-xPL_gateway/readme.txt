@@ -4,6 +4,9 @@ Copyright 2010-2011 Thijs Schreijer
 
 -------------------------------------------------------------------------------
 Changelog;
+xx-dec-2011 version 0.2.4
+   - Updated logging, to show a warning when a 'LastChange' update comes in
+     that contains references to non-existing statevariables.
 28-dec-2011 version 0.2.3
    - Fix; requesting an id to be re-announced caused an exception
 04-dec-2011 version 0.2.2
