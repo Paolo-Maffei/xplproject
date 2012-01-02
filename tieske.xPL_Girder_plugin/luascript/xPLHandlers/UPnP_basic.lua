@@ -122,7 +122,7 @@ local myNewHandler = {
 			IDlist = self.IDlist,
 			devices = self.DevList,
 			-----------------------------------------------------------------------------------------
-			-- Calls a UPnP method. The call is synchroneous and will immediately return the results
+			-- Calls a UPnP method. The call is synchroneous and will (wait for) and return the results
 			-- (eventhough the communications are asynchroneous, both xPL and UPnP). There is a fixed
 			-- timeout of 20 seconds if the UPnP device does not respond.<br/>There are 2 ways to call
 			-- a method; 1) directly on the method table, 2) indirectly using a generic call. See the
@@ -219,6 +219,7 @@ local myNewHandler = {
 	CallID = 0,				-- a unique call ID for method calls
 	ResponseQueue = {},		-- ID's of methods calls waiting for a response
 	AnnouncementTimer = nil, -- timer that will be set after each received fragment, to check for completeness
+	LastFragmentReceived = nil, -- date/time when the last fragment was received during an announcement
 
 	_lock = thread.newmutex(),
 
@@ -290,6 +291,7 @@ local myNewHandler = {
 
 		elseif msg.schema == "upnp.announce" and msg.type == "xpl-trig" and GetValueByKey(msg, "announce") ~= "left" then
 			-- new device or service or other element added
+			self.LastFragmentReceived = date:now()
 			self:AddAnnouncedFragment(msg)
 			result = true	-- suppress standard event
 
@@ -367,13 +369,55 @@ local myNewHandler = {
 	DeleteElement = function (self, dev)
 		-- removes a specific element table from the global ID list, will call itself recursive
 		-- go delete the child elements
-		if dev.IDlist ~= nil then
+		if dev and dev.IDlist ~= nil then
 			for k, v in pairs(dev.IDlist) do
-				self:DeleteElement(self.IDlist[v])
+				self:DeleteElement(self.IDlist[v])	 	 -- remove from completed list
+				self:DeleteElement(self.AnnFragments[v]) -- remove from incomplete list
 			end
 		end
-		-- delete myself
-		self.IDlist[dev.ID] = nil
+		-- delete element itself
+        if dev and dev.ID then
+            self.IDlist[dev.ID] = nil
+            self.AnnFragments[dev.ID] = nil
+        end
+	end,
+
+	DeleteOrphan = function (self, elem)
+		-- the ID delivered is an Orphan and the requests for announcement failed, so must
+		-- cleanup this one and any related elements
+
+		-- traverse up the tree to find the highest level available
+		while elem and elem.parent do
+			local p = self.IDlist[elem.parent] or self.AnnFragments[elem.parent]
+			if p then
+				-- found a parent, move up one level
+				elem = p
+			else
+				-- a parent was set, but not found, delete all elements with the same parent id
+				-- as they are orphans too
+				p = elem.parent		-- temporary store parent ID
+				-- remove current element
+				self:DeleteElement(elem)
+				elem = nil
+				-- now go and delete all other elements with this parent in the incomplete list
+				for _, v in pairs(self.AnnFragments) do
+					if v.parent == p then
+						self:DeleteElement(v)
+					end
+				end
+				-- now go and delete all other elements with this parent in the completed list
+				for _, v in pairs(self.IDlist) do
+					if v.parent == p then
+						self:DeleteElement(v)
+					end
+				end
+			end
+		end
+		if elem then
+			-- it is a root device, because it doesn't have a parent, go delete it
+			self:DeleteRootDevice(elem)
+			elem = nil
+		end
 	end,
 
 	RequestAnnounce = function (self)
@@ -530,7 +574,7 @@ local myNewHandler = {
 					pt.variables = pt.variables or {}
 					pt.variables[p.name] = p
 				end
-				-- remove from parents waiting for list 
+				-- remove from parents waiting for list
 				pt.WaitingFor[p.ID] = nil
 				-- check parent completeness
 				if table.IsEmpty(pt.WaitingFor) then
@@ -785,7 +829,21 @@ local myNewHandler = {
 		if not table.IsEmpty(self.AnnFragments) then
 			-- so we're not complete, go check the announced fragments list
 
-            -- first remove any duplicates
+			-- check whether we received anything lately, if not, we've got orphans
+			local dl = date:now()
+			dl.Second = dl.Second - (3 * announcementtimeout/1000)
+			if self.LastFragmentReceived < dl then
+				-- nothing was received for 3 x timeout seconds, assume fragment to be orphaned
+                while not table.IsEmpty(self.AnnFragments) do
+                    for id, part in pairs(self.AnnFragments) do
+                        self:DeleteOrphan(part)
+                        break   -- exit loop because we're messing with the table while iterating it
+                    end
+                end
+                gir.LogMessage(xPLGirder.Name, self.ID .. ' announcement request time-out; removed orphaned elements', 1)
+			end
+
+            -- remove any duplicates
 			for id, part in pairs(self.AnnFragments) do
 				if self.IDlist[id] then
 					-- its in both lists, should not occur, but can happen if parts are announced twice

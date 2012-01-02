@@ -22,7 +22,7 @@ Sources : xPL SVN @ http://code.google.com/p/xplproject/source/browse/ filed
 1 - Copyright and license
 ============================================================================
 
-(c) Copyright 2011 Richard A Fox Jr., Thijs Schreijer
+(c) Copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
 
 This file is part of xPLGirder.
 
@@ -199,6 +199,10 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
+xx-jan-2012 version 0.1.6 by Thijs Schreijer
+         UPnP handler update to fix endless loop in re-requesting
+         announcements when a device leaves before being completely
+         announced.
 28-dec-2011 version 0.1.5 by Thijs Schreijer
          The UPnP handler had a very subtle bug that could in sporadic
          cases prevent a device from being announced in Girder. Fixed.
