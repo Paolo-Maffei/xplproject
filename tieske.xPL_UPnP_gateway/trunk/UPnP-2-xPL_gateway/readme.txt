@@ -1,12 +1,17 @@
 ﻿Readme file for UPnP-2-xPL gateway
 ==================================
-Copyright 2010-2011 Thijs Schreijer
+Copyright 2010-2012 Thijs Schreijer
 
 -------------------------------------------------------------------------------
 Changelog;
-xx-dec-2011 version 0.2.4
+xx-jan-2012 version 0.2.4
    - Updated logging, to show a warning when a 'LastChange' update comes in
      that contains references to non-existing statevariables.
+   - Fixed logging, to show proper warnings when an announcement is requested
+     for a non-existing ID (reported by Mike C)
+   - Fixed logging, to no longer show warnings for unknown message schemas
+     (reported by Mike C)
+   - Added a button to show the debug window (of the underlying UPnP lib)
 28-dec-2011 version 0.2.3
    - Fix; requesting an id to be re-announced caused an exception
 04-dec-2011 version 0.2.2

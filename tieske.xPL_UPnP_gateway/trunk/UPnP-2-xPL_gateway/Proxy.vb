@@ -571,9 +571,17 @@ Public Class Proxy
                                     LogMessage("Received announce request for specific IDs")
                                     For n = 0 To .KeyValueList.Count - 1
                                         If .KeyValueList(n).Key = "id" Then
-                                            LogMessage("   Now announcing ID " & .KeyValueList(n).Value)
                                             Dim mp As Proxy = GetProxy(CInt(Val(.KeyValueList(n).Value)))
-                                            mp.AnnounceElement()
+                                            If mp IsNot Nothing Then
+                                                LogMessage("   Now announcing ID " & .KeyValueList(n).Value)
+                                                mp.AnnounceElement()
+                                            Else
+                                                If CInt(Val(.KeyValueList(n).Value)) <= _Counter Then
+                                                    LogMessage("   Requested ID " & .KeyValueList(n).Value & " is no longer available, the UPnP device already left")
+                                                Else
+                                                    LogMessage("   Requested ID " & .KeyValueList(n).Value & " is unknown, this ID hasn't been in use")
+                                                End If
+                                            End If
                                         End If
                                     Next
                                 Else
@@ -608,7 +616,8 @@ Public Class Proxy
                         End If
 
                     Else
-                        LogMessage("WARNING: Cannot handle received xPL message;" & vbCrLf & e.XplMsg.RawxPL)
+                        ' Some unknown schema, let go of it.
+                        'LogMessage("WARNING: Cannot handle received xPL message;" & vbCrLf & e.XplMsg.RawxPL)
                     End If
                 End With
             End If
@@ -626,7 +635,7 @@ Public Class Proxy
     Private Sub AnnounceElement()
         Dim p As Proxy
         ' send my own message
-        'If missercount < 5 Then         '' temporary skip every 5th message to test re-requesting/announcing
+        'If missercount < 5 Then         ' temporary skip every 5th message to test re-requesting/announcing
         xPLDevice.Send(Me.GetAnnounceMessage)
         '    missercount = missercount + 1
         'Else
@@ -812,7 +821,7 @@ Public Class Proxy
                 End If
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
-                log = log & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
+                log = log & vbCrLf & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
                 log = log & LastChangeUpdate(sender, NewValue, xmsg)
             End If
             ' send message

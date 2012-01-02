@@ -137,6 +137,12 @@ Public Class MainForm
         Me.Visible = False
     End Sub
 
+    Private Sub btnDebug_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles btnDebug.Click
+        OpenSource.Utilities.EventLogger.Enabled = True
+        OpenSource.Utilities.EventLogger.ShowAll = True
+        OpenSource.Utilities.InstanceTracker.Display()
+    End Sub
+
     Private Sub ExitToolStripMenuItem_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles ExitToolStripMenuItem.Click
         Me.Close()
     End Sub
