@@ -36,6 +36,7 @@ Partial Class MainForm
         Me.btnClose = New System.Windows.Forms.Button
         Me.chkStartMinimized = New System.Windows.Forms.CheckBox
         Me.btnClear = New System.Windows.Forms.Button
+        Me.btnDebug = New System.Windows.Forms.Button
         Me.PopupMenu.SuspendLayout()
         Me.SuspendLayout()
         '
@@ -144,12 +145,23 @@ Partial Class MainForm
         Me.btnClear.Text = "Clear"
         Me.btnClear.UseVisualStyleBackColor = True
         '
+        'btnDebug
+        '
+        Me.btnDebug.Anchor = CType((System.Windows.Forms.AnchorStyles.Bottom Or System.Windows.Forms.AnchorStyles.Right), System.Windows.Forms.AnchorStyles)
+        Me.btnDebug.Location = New System.Drawing.Point(577, 278)
+        Me.btnDebug.Name = "btnDebug"
+        Me.btnDebug.Size = New System.Drawing.Size(75, 23)
+        Me.btnDebug.TabIndex = 9
+        Me.btnDebug.Text = "Show debug"
+        Me.btnDebug.UseVisualStyleBackColor = True
+        '
         'MainForm
         '
         Me.AutoScaleDimensions = New System.Drawing.SizeF(6.0!, 13.0!)
         Me.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font
         Me.ClientSize = New System.Drawing.Size(745, 302)
         Me.ControlBox = False
+        Me.Controls.Add(Me.btnDebug)
         Me.Controls.Add(Me.btnCopyToClipboard)
         Me.Controls.Add(Me.btnClear)
         Me.Controls.Add(Me.btnClose)
@@ -177,5 +189,6 @@ Partial Class MainForm
     Friend WithEvents btnClose As System.Windows.Forms.Button
     Friend WithEvents AboutToolStripMenuItem As System.Windows.Forms.ToolStripMenuItem
     Friend WithEvents btnClear As System.Windows.Forms.Button
+    Friend WithEvents btnDebug As System.Windows.Forms.Button
 
 End Class
