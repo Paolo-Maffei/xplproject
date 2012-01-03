@@ -4,7 +4,7 @@ Copyright 2010-2012 Thijs Schreijer
 
 -------------------------------------------------------------------------------
 Changelog;
-xx-jan-2012 version 0.2.4
+03-jan-2012 version 0.2.4
    - Updated logging, to show a warning when a 'LastChange' update comes in
      that contains references to non-existing statevariables.
    - Fixed logging, to show proper warnings when an announcement is requested
