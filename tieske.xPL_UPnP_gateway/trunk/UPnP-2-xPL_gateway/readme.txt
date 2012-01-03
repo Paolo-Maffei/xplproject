@@ -11,7 +11,10 @@ xx-jan-2012 version 0.2.4
      for a non-existing ID (reported by Mike C)
    - Fixed logging, to no longer show warnings for unknown message schemas
      (reported by Mike C)
-   - Added a button to show the debug window (of the underlying UPnP lib)
+   - Added a button to show the debug window (of the underlying UPnP lib) and
+     a commandline option '/debug' to show it from the start.
+   - Fixed a bug (reported by Mike C) for a value too large for an xPL message
+     when delivered in a 'LastChange' AV event value.
 28-dec-2011 version 0.2.3
    - Fix; requesting an id to be re-announced caused an exception
 04-dec-2011 version 0.2.2

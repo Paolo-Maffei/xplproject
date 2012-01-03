@@ -783,6 +783,32 @@ Public Class Proxy
     End Sub
 
     ''' <summary>
+    ''' Adds a value update to the xpl message, chopping large values into smaller ones as needed.
+    ''' </summary>
+    ''' <param name="msg">xPLMessage object</param>
+    ''' <param name="key">Key of the key-value pair</param>
+    ''' <param name="value">Value of the key-val;ue pair. This will be cleanedup before being added.</param>
+    ''' <remarks></remarks>
+    Private Shared Sub AddKeyValue(ByVal msg As xPLMessage, ByVal key As String, ByVal value As String)
+        ' cleanup data first
+        value = xPL.xPL_Base.RemoveInvalidxPLchars(value, XPL_STRING_TYPES.Values)
+        Dim i As Integer = 0
+        If value.Length > 1000 Then
+            ' response too long, cut it in pieces
+            msg.KeyValueList.Add(key, "<<chopped_it>>")
+            i = 1
+            While value.Length > 0
+                msg.KeyValueList.Add(key & "-" & i, Left(value, 1000))
+                value = Mid(value, 1001)
+                i = i + 1
+            End While
+        Else
+            ' short response, just add it
+            msg.KeyValueList.Add(key, value)
+        End If
+
+    End Sub
+    ''' <summary>
     ''' handle UPnP events for updated statevariables and forward as xPL message
     ''' </summary>
     ''' <param name="sender"></param>
@@ -802,23 +828,7 @@ Public Class Proxy
         Try
             If sender.Name <> "LastChange" Then
                 ' its a regular UPnP event value
-                ' cleanup data first
-                Dim Data As String = xPL.xPL_Base.RemoveInvalidxPLchars(NewValue.ToString, XPL_STRING_TYPES.Values)
-                Dim myID As Integer = Proxy.GetProxy(sender).ID
-                Dim i As Integer = 0
-                If Data.Length > 1000 Then
-                    ' response too long, cut it in pieces
-                    xmsg.KeyValueList.Add(myID, "<<chopped_it>>")
-                    i = 1
-                    While Data.Length > 0
-                        xmsg.KeyValueList.Add(myID & "-" & i, Left(Data, 1000))
-                        Data = Mid(Data, 1001)
-                        i = i + 1
-                    End While
-                Else
-                    ' short response, just add it
-                    xmsg.KeyValueList.Add(myID, Data)
-                End If
+                Proxy.AddKeyValue(xmsg, Proxy.GetProxy(sender).ID.ToString, NewValue.ToString)
                 log = log & vbCrLf & "   " & Variable.Name & " = " & NewValue.ToString
             Else
                 log = log & vbCrLf & "New value is of type 'LastChange' with the following xml;" & vbCrLf & NewValue.ToString
@@ -872,8 +882,7 @@ Public Class Proxy
                             End If
                         End While
                         If s IsNot Nothing Then
-                            varID = Proxy.GetProxy(s).ID
-                            xmsg.KeyValueList.Add(varID.ToString, v)
+                            Proxy.AddKeyValue(xmsg, Proxy.GetProxy(s).ID.ToString, v)
                             log = log & vbCrLf & "      " & varID.ToString & " = " & v
                             s = Nothing
                         Else
@@ -972,26 +981,10 @@ Public Class Proxy
             result.KeyValueList.Add("success", "True")
             result.KeyValueList.Add("retval", retValue.ToString)
             ' now add all returned (out) results to the return message
-            Dim data As String
-            Dim id As Integer
             For Each arg As UPnPArgument In args
                 If arg.Direction = "out" Then
                     ' cleanup data first
-                    data = xPL.xPL_Base.RemoveInvalidxPLchars(arg.DataValue.ToString, XPL_STRING_TYPES.Values)
-                    id = GetProxy(method.GetArg(arg.Name)).ID
-                    If data.Length > 1000 Then
-                        ' response too long, cut it in pieces
-                        result.KeyValueList.Add(id, "<<chopped_it>>")
-                        i = 1
-                        While data.Length > 0
-                            result.KeyValueList.Add(id & "-" & i, Left(data, 1000))
-                            data = Mid(data, 1001)
-                            i = i + 1
-                        End While
-                    Else
-                        ' short response, just add it
-                        result.KeyValueList.Add(id, data)
-                    End If
+                    Proxy.AddKeyValue(result, GetProxy(method.GetArg(arg.Name)).ID.ToString, arg.DataValue.ToString)
                     LogMessage("   " & arg.Name & " = " & arg.DataValue.ToString)
                 End If
             Next

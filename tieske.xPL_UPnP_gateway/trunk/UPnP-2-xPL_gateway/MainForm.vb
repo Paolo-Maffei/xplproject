@@ -12,6 +12,16 @@ Public Class MainForm
 #Region "Form startup and shutdown"
 
     Private Sub Form1_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        ' Handle commandline
+        For Each parm As String In My.Application.CommandLineArgs
+            If (parm.ToUpper() = "/DEBUG") Then
+
+                OpenSource.Utilities.EventLogger.Enabled = True
+                OpenSource.Utilities.EventLogger.ShowAll = True
+                OpenSource.Utilities.InstanceTracker.Display()
+            End If
+        Next
+
         ' Load xPL devices first, do not enable them
         xPLListener.RestoreFromState(My.Settings.xPLDevices, False)
         ' cleanup just to be sure
@@ -37,6 +47,7 @@ Public Class MainForm
         End Select
         Proxy.xPLDevice = xPLListener.Device(0)
         Proxy.xPLDevice.Enable()
+
         ' Now enable UPnP control point, devices will be found
         cp = New UPnPSmartControlPoint
         ' configure form
