@@ -200,6 +200,16 @@ When the plugin does not work as expected check the following;
 8 - Changelog
 ============================================================================
 xx-jan-2012 version 0.1.6 by Thijs Schreijer
+         Added 6 lua events to the xPLGirder component;
+            - xPLMessage
+            - xPLHandlerLoaded
+            - xPLHandlerInitialized
+            - xPLHandlerShutDown
+            - xPLDeviceArrived (also a new Girder event)
+            - xPLDeviceLeft (also a new Girder event)
+         And the Status event has been updated to show the connection state.
+         xPL Devices are now also monitored on their heartbeats, and removed
+         if they time out.
          UPnP handler update to fix endless loop in re-requesting
          announcements when a device leaves before being completely
          announced.

@@ -12,7 +12,7 @@ echo.
 echo Press any key to continue, or CTRL+C to abort
 pause > nul
 
-rem  temp direectory 
+rem  temp directory 
 set packdir=xPLGirder_Install
 rem delete it if it exists
 rmdir /S/Q %packdir%
