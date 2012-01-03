@@ -1,0 +1,2806 @@
+﻿<?xml version="1.0"?>
+<doc>
+<assembly>
+<name>
+xpllib
+</name>
+</assembly>
+<members>
+<member name="M:xPL.xPL_Base.#ctor">
+	<summary>
+ Alle exposed methods, properties and constants are Shared. No object instances can be created 
+ because the Constructor New is Private.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.IllegalFieldContentsException">
+	<summary>
+ Exception that will be thrown if an element in an xPL message is set to a value that doesn't adhere to
+ the xPL protocol specification.
+ </summary>
+	<remarks>General checks are minimum and maximum length and allowed characters</remarks>
+</member><member name="F:xPL.xPL_Base.InvalidXPLMessageException.RawxPL">
+	<summary>
+ Contains the rawxPL string that could not be parsed.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.InvalidXPLMessageException">
+	<summary>
+ Exception that will be thrown if a rawxPL string cannot be parsed to an xPLMessage object
+ </summary>
+	<remarks>The exception contains the <c>RawxPL</c> property that contains the message that couldn't be parsed.</remarks>
+</member><member name="T:xPL.xPL_Base.MissingFieldsException">
+	<summary>
+		<para>Exception thrown when (for the <c>xPLMessage</c> object) required fields are missing or any of the following checks failed;</para>
+		<para>   - Message type may not be wildcard '*'</para>
+		<para>   - Source address has type 'Target'</para>
+		<para>   - Target address has type 'Source'</para>
+		<para>   - Schema may not be wildcarded</para>
+		<para>   - No key/value pairs have been set</para>
+		<para>   - Status messages must always be broadcasted (target='*')</para>
+		<para>   - Trigger messages must always be broadcasted (target='*')</para>
+	</summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.IllegalSchema">
+	<summary>
+ Exception will be thrown if illegal characters or length will be set for schema properties
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.IllegalIDsInAddress">
+	<summary>
+ Exception that will be thrown by the xPLAddress class if an attempt is made to either;
+ <para>  a) set a value that contains illegal characters</para>
+		<para>  b) set a value that is either to long or to short</para>
+		<para>  c) set a wildcard value ("*") in a source address</para>
+	</summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.IllegalConfigItemName">
+	<summary>
+ Exception thrown if a reserved ("newconf", "interval", "filter" or "group") name is assigned, or the name does not adhere to xPL requirements.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.IllegalConfigItemValue">
+	<summary>
+ Exception thrown if a value is being assigned that does not adhere to xPL requirements.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.DuplicateConfigItemValue">
+	<summary>
+ Exception thrown if a value is being set that causes a duplicate.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.DuplicateConfigItemName">
+	<summary>
+ Exception that will be thrown if an attempt is made to add a duplicate to the configitems list
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.xPLMessageTypeEnum.Trigger">
+	<summary>
+ xPL trigger message
+ </summary>
+</member><member name="F:xPL.xPL_Base.xPLMessageTypeEnum.Status">
+	<summary>
+ xPL status message
+ </summary>
+</member><member name="F:xPL.xPL_Base.xPLMessageTypeEnum.Command">
+	<summary>
+ xPL command message
+ </summary>
+</member><member name="F:xPL.xPL_Base.xPLMessageTypeEnum.Any">
+	<summary>
+ 'Any' is not an xPL message type, but respresents the string wildcard '*' to match 'any type of message' with an xPL filter.
+ </summary>
+</member><member name="T:xPL.xPL_Base.xPLMessageTypeEnum">
+	<summary>
+ Enumerator for the different types of messages; command, trigger or status messages
+ </summary>
+	<remarks>The <c>Any</c> value is only valid for filters</remarks>
+</member><member name="F:xPL.xPL_Base.InstanceCreation.HostNameBased">
+	<summary>
+ Generates an instance id for the device based upon the hostname of the PC the application is running on.
+ </summary>
+	<remarks>If multiple xPL devices do this, there might be an xPL address conflict. Be carefull with duplicates!</remarks>
+</member><member name="F:xPL.xPL_Base.InstanceCreation.Randomized">
+	<summary>
+ Generates a random instance id for the device, 16 characters long consisting of characters a-z and 0-9.
+ </summary>
+	<remarks>The randomized name has a very, nearly non-existing, small probability of generating duplicates</remarks>
+</member><member name="F:xPL.xPL_Base.InstanceCreation.SetByParent">
+	<summary>
+ No name will be generated, it must be set using the InstanceID property.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.InstanceCreation">
+	<summary>
+ Determines how the instance part of the address 'vendor.device.instance' will be set.
+ </summary>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.ToBeHandledOnly">
+	<summary>
+ The default setting is to send only content that needs handling (and hasn't been handled by the xpllib 
+ already). No messages of class 'hbeat' and 'config' will be passed nor any messages that do not pass 
+ the filter settings. No messages at all will be passed while awaiting configuration.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassWhileAwaitingConfig">
+	<summary>
+ If set instructs the xPL device to pass messages while it is awaiting configuration
+ </summary>
+	<remarks>Responses to heartbeat requests and config messges will be handled by the xpllib independent of this setting</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassMyHeartbeatStuff">
+	<summary>
+ If set instructs the device to pass my own heartbeats and heartbeat requests (schema class 'hbeat'). 
+ </summary>
+	<remarks>Heartbeats will always be dealt with by the xpllib, independent of this setting. 'My' is defined as targetted at: 1) me specific, 2) a group I belong to 3) NOT a broadcast.</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassOthersHeartbeats">
+	<summary>
+ If set instructs the device to pass any heartbeat messages from or requests for other devices (schema class 'hbeat').
+ </summary>
+	<remarks>This overrides <c>DoNotApplyFilters</c>. 'Others' is defined as everything except if targetted at 1) me specific, 2) a group I belong to.</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassMyOwnEcho">
+	<summary>
+ If set instructs the device to pass the echo's of the device's own sent messages.
+ </summary>
+	<remarks>This overrides the <c>PassWhileAwaitingConfig</c></remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassMyConfigStuff">
+	<summary>
+ If set instructs the device to pass any configuration type messages for me (schema class 'config').
+ </summary>
+	<remarks>The messages will be dealt with anyway by the xpllib. 
+ This setting overrides the <c>PassWhileAwaitingConfig</c>. 'My' is defined as targetted at: 1) me specific, 2) a group I belong to 3) NOT a broadcast.</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.PassOthersConfig">
+	<summary>
+ If set instructs the device to pass any configuration messages for other devices (schema class 'config').
+ </summary>
+	<remarks>This overrides <c>DoNotApplyFilters</c>. 'Others' is defined as everything except if targetted at 1) me specific, 2) a group I belong to.</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.DoNotApplyFilters">
+	<summary>
+ If set instructs the device to pass messages even if they do not match the filter settings.
+ </summary>
+	<remarks>NOTE: Filters only apply to broadcast messages, so non-broadcast messages will not be handled differently based upon
+ this setting.</remarks>
+</member><member name="F:xPL.xPL_Base.MessagePassingEnum.All">
+	<summary>
+ If set, passes all messages.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.MessagePassingEnum">
+	<summary>
+ Enumeration used by the <see cref="F:xPL.xPLDevice.MessagePassing"/> property. This
+ setting determines for which messages an <see cref="E:xPL.xPLDevice.xPLMessageReceived"/> event will be raised.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.xPLDeviceStatus.Offline">
+	<summary>
+ The Enabled property has been set to <c>False</c> and the device is not receiving nor sending any messages. Its been disconnected 
+ from the xPL network.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.xPLDeviceStatus.Connecting">
+	<summary>
+ The Enabled property has been set to <c>True</c> and the device is now sending heartbeats. Once an echo is received back from the 
+ xPL hub the status will go to <c>Online</c>.
+ </summary>
+	<remarks>When going to <c>Online</c> and <c>xPLStatusChange</c> event will be raised.</remarks>
+</member><member name="F:xPL.xPL_Base.xPLDeviceStatus.Online">
+	<summary>
+ The Enabled property is set to <c>True</c> and heartbeats are being echoed back by the hub. The device is connected to the xPL network.
+ </summary>
+	<remarks>If an echo of sent heartbeats is not received within <c>XPL_MYECHO_TIMEOUT</c> seconds, status will go back to <c>Connecting</c> 
+ and a <c>xPLStatusChange</c> event will be raised.</remarks>
+</member><member name="T:xPL.xPL_Base.xPLDeviceStatus">
+	<summary>
+ Represents the status of an <c>xPLDevice</c> object.
+ </summary>
+	<remarks>See also <see cref="P:xPL.xPLDevice.Status"/></remarks>
+</member><member name="T:xPL.xPL_Base.xPLAddressType">
+	<summary>
+ Enumerator for indicating the type of xPLAddress; source or target.
+ </summary>
+	<remarks>The difference is that for a source address, the wildcards ("*") are not allowed.</remarks>
+</member><member name="F:xPL.xPL_Base.xPLConfigTypes.xConfig">
+	<summary>
+ 'Config' requires the configuration value to be set upon initial configuration. This value cannot be modified once the xPL device has been configured. It is once only.
+ </summary>
+	<remarks>It MUST be set and CANNOT be changed afterwards. That it MUST be set, doesn't mean that it couldn't have an empty value.</remarks>
+</member><member name="F:xPL.xPL_Base.xPLConfigTypes.xReconf">
+	<summary>
+ 'Reconf' requires the configuration value to be set upon initial configuration, it may be altered later.
+ </summary>
+	<remarks>It MUST be set and CAN be changed afterwards. That it MUST be set, doesn't mean that it couldn't have an empty value.</remarks>
+</member><member name="F:xPL.xPL_Base.xPLConfigTypes.xOption">
+	<summary>
+ 'Option' does not require the configuration value to be set upon initial configuration, it may be set or altered later.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.xPLConfigTypes">
+	<summary>
+ Enumerator for the xPL config item type
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPL_Base.XPL_STRING_TYPES">
+	<summary>
+ Enumerator listing the three possible xPL string types. Each one has its own XPL_ALLOWED_xxxxx constant with
+ the allowed characters for that type.
+ </summary>
+	<remarks>Use the <c>IsValidxPL</c> function to verify strings.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_LIB_VERSION">
+	<summary>
+ used to avoid configuration files of different versions getting mixed up.
+ </summary>
+	<remarks>Value is used in the <c>GetState</c> and the <c>NewFromState</c> methods of the <c>xPLListener</c>
+ object as well as the <c>GetState</c> and <c>New</c> methods of the <c>xPLDevice</c> object to determine
+ what version of xpllib created the SavedState settings string.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_BASE_PORT">
+	<summary>
+ The base port that is used in the xPL communications protocol is 3865. All xPL devices communicate on this port.
+ </summary>
+	<remarks>Exception to this is the case where multiple devices are hosted on a single system, in that case only
+ sending is done to this port, incoming data is received from a local hub. See 
+ also <seealso cref="F:xPL.xPL_Base.XPL_BASE_DYNAMIC_PORT"/>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_BASE_DYNAMIC_PORT">
+	<summary>
+ The dynamic port range to be used if an xPL device is hosted on a system where the xPL hub is connecting to 
+ the XPL_BASE_PORT. Because of this, individual devices will connect to the hub on a dynamic port range from 
+ 50000 to 50256. The hub will forward incoming messages from the outside world to the dynamic port where
+ the device will be able to receive them.
+ </summary>
+	<remarks>See also <seealso cref="F:xPL.xPL_Base.XPL_BASE_PORT"/>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_DEFAULT_LISTENTO">
+	<summary>
+ If not configured otherwise (through registry xPL network settings), then listen to incoming data from 
+ IP addresses defined in <c>XPL_DEFAULT_LISTENTO</c> (the IP address where the message originates from)
+ </summary>
+	<remarks>valid: "ANY" or "ANY_LOCAL" or a comma separated list of IPs</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_DEFAULT_BROADCAST">
+	<summary>
+ If not configured otherwise (through registry xPL network settings), then broadcast xPL messages
+ to the address defined in <c>XPL_DEFAULT_BROADCAST</c>
+	</summary>
+</member><member name="F:xPL.xPL_Base.XPL_DEFAULT_LISTENON">
+	<summary>
+ If not configured otherwise (through registry xPL network settings), then listen for incoming data on
+ the network adapter with the address defined in <c>XPL_DEFAULT_BROADCAST</c> (the IP address the 
+ message was sent to)
+ </summary>
+	<remarks>valid: "ANY_LOCAL" or a comma separated list of IPs</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MAX_MSG_SIZE">
+	<summary>
+ The maximum supported overall size (in bytes, or ASCII characters) of a raw-xPL message.
+ </summary>
+	<remarks>Though the xPL specs said 1500, actual max size is 1472 to prevent fragmenting.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_SOCKET_BUFFER_SIZE">
+	<summary>
+ Buffer size for the receiving socket
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MINIMUM_SEND_DELAY">
+	<summary>
+ Minimum delay required between 2 messages being send. To prevent flooding the network and lost messages.
+ Value in milliseconds.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_DEFAULT_HBEAT_TIMEOUT">
+	<summary>
+ Default heartbeat timeout for an xPL device seen on the network
+ </summary>
+	<remarks>Specified in seconds</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MAX_FILTERS">
+	<summary>
+ Maximum number of filters for a configurable xPL device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MAX_GROUPS">
+	<summary>
+ Maximum number of groups for a configurable xPL device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_DEFAULT_HBEAT">
+	<summary>
+ Default heartbeat interval for an xPL device
+ </summary>
+	<remarks>Specified in seconds</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MIN_HBEAT">
+	<summary>
+ Minimum heartbeat interval for an xPL device
+ </summary>
+	<remarks>Specified in seconds</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MAX_HBEAT">
+	<summary>
+ Maximum heartbeat interval for an xPL device
+ </summary>
+	<remarks>Specified in seconds</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_NOHUB_HBEAT">
+	<summary>
+ Heartbeat interval to be used when no hub has been detected yet
+ </summary>
+	<remarks>Specified in seconds. This interval will be used for <c>XPL_NOHUB_TIMEOUT</c> seconds, if still no
+ hub has been detected the interval will be set at <c>XPL_NOHUB_LOWERFREQ</c>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_NOHUB_TIMEOUT">
+	<summary>
+ Timeout period for hub detection.
+ </summary>
+	<remarks>Specified in seconds. The heartbeat interval will be <c>XPL_NOHUB_HBEAT</c> seconds, until the 
+ timeout period expires, if still no hub has been detected the interval will be set at 
+ <c>XPL_NOHUB_LOWERFREQ</c>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_NOHUB_LOWERFREQ">
+	<summary>
+ Heartbeat interval to be used if after expiration of the <c>XPL_NOHUB_TIMEOUT</c> period still no hub has been 
+ detected
+ </summary>
+	<remarks>Specified in seconds. The heartbeat interval will be <c>XPL_NOHUB_HBEAT</c> seconds, until the 
+ timeout period expires, if still no hub has been detected the interval will be set at 
+ <c>XPL_NOHUB_LOWERFREQ</c>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_TIMER_FREQ">
+	<summary>
+ Frequency of the timer for <c>xPLDevice</c> objects. In which heartbeats and other items are being handled.
+ </summary>
+	<remarks>Specified in seconds. This value must be equal or smaller than the lowest heartbeat interval.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_MYECHO_TIMEOUT">
+	<summary>
+ Timeout period for hearing the echos of sent messages. If no echo is received within this period it is assumed
+ that the network connection was lost and the <c>xPLDevice</c> object will inform the listener of the lost
+ connection.
+ </summary>
+	<remarks>Specified in seconds.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_NETWORK_RESET_TIMEOUT">
+	<summary>
+ If a network issue has been arising then the xPLListener will reset the network configuration every 
+ <c>XPL_NETWORK_RESET_TIMEOUT</c> seconds until the network connection has been restored (this also applies if the 
+ network is functioning, but only on the local loopback address)
+ </summary>
+	<remarks>Specified in seconds.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_ALLOWED_VENDOR_DEVICE">
+	<summary>
+ Constant containing the characters that are allowed in the 'VendorID' and 'DeviceID'. These are lowercase characters a-z and numbers 0-9. This is the same as for the other structural elements except in this case the hyphen/dash character (ASCII 45) is not allowed.
+ </summary>
+	<remarks>This is the most restrictive set. See also <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_ELEMENTS"/> and <seealso cref="P:xPL.xPL_Base.XPL_UNALLOWED_VALUE"/>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_ALLOWED_ELEMENTS">
+	<summary>
+ Constant containing the characters that are allowed in the structural elements (keynames, schemas, etc) of an xPL message. Allowed are lowercase a-z, numbers 0-9 and the hyphen/dash character (ASCII 45).
+ </summary>
+	<remarks>See also <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="P:xPL.xPL_Base.XPL_UNALLOWED_VALUE"/>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_ALLOWED_VALUE">
+	<summary>
+ Constant containing the characters that are allowed in data/values in an xPL message. Allowed are ASCII 32 to 126.
+ Developers are urged to consider platform portability when constructing messages, and should pay special attention that characters with structural meaning such as "{", "}", "-" and "." are not misinterpreted.
+ </summary>
+	<remarks>See also <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_ELEMENTS"/>.</remarks>
+</member><member name="P:xPL.xPL_Base.XPL_UNALLOWED_VALUE">
+	<summary>
+ Constant containing the characters that are NOT allowed in data/values in an xPL message. Allowed are UTF8 characters.
+ Which means byte values 32 to 255, unallowed values are control characters, bytes 0 to 31.
+ Developers are urged to consider platform portability when constructing messages, and should pay special attention that characters with structural meaning such as "{", "}", "-" and "." are not misinterpreted.
+ </summary>
+	<remarks>See also <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_VENDOR_DEVICE"/> and <seealso cref="F:xPL.xPL_Base.XPL_ALLOWED_ELEMENTS"/>.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_TYPELBL_CMND">
+	<summary>
+ xPL message identifier for command messages
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_TYPELBL_STAT">
+	<summary>
+ xPL message identifier for status messages
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_TYPELBL_TRIG">
+	<summary>
+ xPL message identifier for trigger messages
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_TYPELBL_ANY">
+	<summary>
+ xPL message identifier wildcard for use in filters
+ </summary>
+	<remarks>This setting is not allowed for xPLMessages</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_LF">
+	<summary>
+ Line separator character for xPL messages. Defined in the xPL protocol as a single ASCII 10 character.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_STATESEP">
+	<summary>
+ Separator character used in State strings to separate individual values
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGIN_URL1">
+	<summary>
+ Vendorplugin list download location 1
+ </summary>
+	<remarks>The extension is set in the <seealso cref="F:xPL.xPL_Base.XPL_PLUGIN_EXTENSION"/> constant</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGIN_URL2">
+	<summary>
+ Vendorplugin list download location 2
+ </summary>
+	<remarks>The extension is set in the <seealso cref="F:xPL.xPL_Base.XPL_PLUGIN_EXTENSION"/> constant</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGIN_URL3">
+	<summary>
+ Vendorplugin list download location 3
+ </summary>
+	<remarks>The extension is set in the <seealso cref="F:xPL.xPL_Base.XPL_PLUGIN_EXTENSION"/> constant</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGIN_EXTENSION">
+	<summary>
+ Vendorplugin list extension to be used for the plugin and list downloads, also used for the
+ local pluginstore file, see <seealso cref="F:xPL.xPL_Base.XPL_PLUGINSTORE_PATH"/>.
+ </summary>
+	<remarks>The dot ('.') preceeding the extension is included.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGINSTORE_PATH">
+	<summary>
+ The relative path to the pluginstore. The base path is the system directory 'Common Application Data'.
+ </summary>
+	<remarks>The path includes the filename, but not the extension. The extension is 
+ set in the <seealso cref="F:xPL.xPL_Base.XPL_PLUGIN_EXTENSION"/> constant.</remarks>
+</member><member name="F:xPL.xPL_Base.XPL_PLUGINSTORE_VERSION">
+	<summary>
+ Version of the PluginStore created by the xPLPlugin object
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_FRAGMENT_COUNTER_MAX">
+	<summary>
+ The maximum counter size for the fragmented message ID's. ID's in fragmented messages are generated as a 
+ rotating counter, this value is the maximum after which the value resets to 0.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_FRAGMENT_MAX">
+	<summary>
+ The maximum number of fragments for a single message supported.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_FRAGMENT_SEND_RETAIN">
+	<summary>
+ How long should a fragmented message be retained for retransmission if requested by other 
+ devices. Value in milliseconds.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_FRAGMENT_REQUEST_AFTER">
+	<summary>
+ Timeout value, after receiving the last fragment-message, after which a request for the 
+ remaining fragments will be send (if the overall message remains incomplete). Value in milliseconds.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPL_Base.XPL_FRAGMENT_REQUEST_TIMEOUT">
+	<summary>
+ If a resend of fragments was requested, this value is the timeout after which the resend request is 
+ considered failed (if no new fragments arrived) and the message will be disposed of.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPL_Base.XPL_Icon">
+	<returns>The xPL logo icon</returns>
+	<remarks>
+		<example>This sample shows how to set the <c>Icon</c> property of a form to the xPL icon.
+ <code>
+ Form1.Icon = xPL.xPL_Base.XPL_Icon
+ </code>
+		</example>
+	</remarks>
+</member><member name="F:xPL.xPL_Base.xPLErrorEventLog">
+	<summary>
+ Holds the eventlog where errors should be logged to.
+ </summary>
+	<remarks>Errors can be logged using the <c>LogError</c> method. If set to <c>Nothing</c>, then no errors will
+ be logged. <seealso cref="F:xPL.xPL_Base.xPLErrorLogFile"/></remarks>
+</member><member name="F:xPL.xPL_Base.xPLErrorLogFile">
+	<summary>
+ Holds the logfile where errors should be logged to.
+ </summary>
+	<remarks>Errors can be logged using the <c>LogError</c> method. If set to an empty string, then no errors will
+ be logged. <seealso cref="F:xPL.xPL_Base.xPLErrorEventLog"/></remarks>
+</member><member name="M:xPL.xPL_Base.LogError(System.String,System.String,System.Diagnostics.EventLogEntryType)">
+	<summary>
+ Logs a string into the errorlog and logfile, and optionally, if the DEBUG compiler directive is present, to the 
+ immediate window in Visual Studio
+ </summary>
+	<param name="Source">The source of the error (eg. device address, method or function).</param>
+	<param name="Message">String containing the error message to be logged.</param>
+	<remarks>use <see cref="F:xPL.xPL_Base.xPLErrorEventLog"/> to set the log where to write the message and/or set the
+ <see cref="F:xPL.xPL_Base.xPLErrorLogFile"/> to write the message to an error logfile.</remarks>
+</member><member name="M:xPL.xPL_Base.StateEncode(System.String)">
+	<summary>
+ Allows for encoding of strings into SavedState string
+ </summary>
+	<param name="value">input string to be encoded</param>
+	<returns>encoded string</returns>
+	<remarks>In an encoded string all characters have been replaced by the Base64 encoded 
+ equivalent. This ensures that the result will have only the Base64 characters, so character 
+ <see cref="F:xPL.xPL_Base.XPL_STATESEP"/> can be used as a separator for concatenating values. When decoding a
+ SavedState string the <c>Split</c> function can be used to return the individual values 
+ eg. <c>ResultArray = StateValue.Split(XPL_STATESEP)</c> and individual values can be decoded 
+ using the <see cref="M:xPL.xPL_Base.StateDecode(System.String)"/> method, eg. <c>value1 = StateDecode(ResultArray(0))</c>
+	</remarks>
+</member><member name="M:xPL.xPL_Base.StateDecode(System.String)">
+	<summary>
+ Allows for decoding of strings from SavedState string
+ </summary>
+	<param name="StateValue">SavedState string to be decoded</param>
+	<returns>decoded string</returns>
+	<remarks>See <see cref="M:xPL.xPL_Base.StateEncode(System.String)"/> for more details.</remarks>
+</member><member name="M:xPL.xPL_Base.StateAppVersion(System.String)">
+	<summary>
+ Returns the application version that created the SavedState string. This can be used when a newer application version has different xPL Device
+ settings. After recreating the device, the upgrade modifications can be made to enable a smooth transition.
+ </summary>
+	<param name="SavedState">SavedState string that was created to store the settings</param>
+	<returns>Application version string as supplied to the <see cref="M:xPL.xPL_Base.StateEncode(System.String)"/> method.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPL_Base.StatexPLLibVersion(System.String)">
+	<summary>
+ Returns the xPLLib version that created the SavedState string.
+ </summary>
+	<param name="SavedState">SavedState string that was created to store the settings</param>
+	<returns>xPLLib version at the time of creating the SavedState by the <see cref="M:xPL.xPL_Base.StateEncode(System.String)"/> method.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPL_Base.GetVersionNumber(System.Byte)">
+	<summary>
+ Gets the assembly version numbers consisting of Major, Minor, Build and Revision numbers, separated by '.' (dot) characters
+ </summary>
+	<param name="levels">Number of levels to include; 1 to 4; 1) only includes Major, 4) includes Major, Minor, Build and Revision</param>
+	<returns>Assembly version numbers consisting of Major, Minor, Build and Revision numbers, separated by '.' (dot) characters</returns>
+	<remarks>Returns the values from the main assembly, not the xPLLib version numbers.</remarks>
+</member><member name="M:xPL.xPL_Base.IsValidxPL(System.String,System.Int32,System.Int32,xPL.xPL_Base.XPL_STRING_TYPES)">
+	<summary>
+ Verifies a string to be a valid xPL value. Verification against minimum and maximum length, and characters allowed.
+ </summary>
+	<param name="CheckMe">The string to be verified as a valid xPL string</param>
+	<param name="min">required minimum length</param>
+	<param name="max">allowed maximum length (set to 0 to allow any length)</param>
+	<param name="sType">The type of xPL element to verify against</param>
+	<returns><c>True</c> if the string is valid, <c>False</c> otherwise</returns>
+	<remarks>This function will NOT automatically convert to lowercase</remarks>
+</member><member name="M:xPL.xPL_Base.RemoveInvalidxPLchars(System.String,xPL.xPL_Base.XPL_STRING_TYPES)">
+	<summary>
+ Removes any invalid characters from an xPL string
+ </summary>
+	<param name="s">String to clean up</param>
+	<param name="stype">Type of xPL elements to be generated (determines what characters are allowed)</param>
+	<returns>String with all unallowed characters removed</returns>
+	<remarks>Any input is first converted to lowercase. Note that the length of the result is not adjusted
+ to within allowed limits</remarks>
+</member><member name="P:xPL.xPLSchema.SchemaClass">
+	<summary>
+ Returns or sets the CLASS part of a schema name, defined as 'class.type'. 
+ </summary>
+	<value>Class name to be set.</value>
+	<returns>Class name currently set.</returns>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition when setting the value: length must be between 1 and 8 and allowed characters are a-z, 0-9 
+ and - (dash or hyphen), all lowercase.</exception>
+	<remarks>All input will be converted to lower case. Default value is 'hbeat'. Wildcards are allowed as a special case, 1 character only; '*'</remarks>
+</member><member name="P:xPL.xPLSchema.SchemaType">
+	<summary>
+ Returns or sets the TYPE part of a schema name, defined as 'schema.type'. 
+ </summary>
+	<value>Type name to be set.</value>
+	<returns>Type name currently set.</returns>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition when setting the value: length must be between 1 and 8 and allowed characters are a-z, 0-9 and - (dash or hyphen), all lowercase.</exception>
+	<remarks>All input will be converted to lower case. Default value is 'app'. Wildcards are allowed as a special case, 1 character only; '*'</remarks>
+</member><member name="M:xPL.xPLSchema.Matches(xPL.xPLSchema)">
+	<summary>
+ Compares two schema's.
+ </summary>
+	<param name="CompareTo">xPLSchema object to compare with the current values</param>
+	<returns>True if the schemas are equal or the wildcards match, False otherwise</returns>
+	<remarks>Wildcard character is '*', for either or both Class and Type.</remarks>
+</member><member name="M:xPL.xPLSchema.Matches(xPL.xPLSchema,xPL.xPLSchema)">
+	<summary>
+ Compares two schema's.
+ </summary>
+	<param name="xPLschema1">first xPLSchema object to compare</param>
+	<param name="xPLschema2">second xPLSchema object to compare with the first one</param>
+	<returns>True if the schemas are equal or the wildcards match, False otherwise</returns>
+	<remarks>Wildcard character is '*', for either or both Class and Type.</remarks>
+</member><member name="M:xPL.xPLSchema.Matches(System.String)">
+	<summary>
+ Compares two schema's.
+ </summary>
+	<param name="CompareTo">xPLSchema in string format 'class.type' to compare with the current values</param>
+	<returns>True if the schemas are equal or the wildcards match, False otherwise</returns>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition for both class and type: length must be between 1 and 8 and allowed 
+ characters are a-z, 0-9 and - (dash or hyphen), all lowercase. Schema and Class must be separated by a single '.' (dot)</exception>
+	<remarks>All input will be converted to lower case. Wildcard character is '*', for either or both Class and Type.</remarks>
+</member><member name="M:xPL.xPLSchema.Matches(System.String,System.String)">
+	<summary>
+ Compares two schema's.
+ </summary>
+	<param name="xPLschema1">first xPLSchema in string format 'class.type' to compare</param>
+	<param name="xPLschema2">second xPLSchema in string format 'class.type' to compare with the first one</param>
+	<returns>True if the schemas are equal or the wildcards match, False otherwise</returns>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition for both class and type: length must be between 1 and 8 and allowed 
+ characters are a-z, 0-9 and - (dash or hyphen), all lowercase. Schema and Class must be separated by a single '.' (dot)</exception>
+	<remarks>All input will be converted to lower case. Wildcard character is '*', for either or both Class and Type.</remarks>
+</member><member name="M:xPL.xPLSchema.#ctor">
+	<summary>
+ Creates a new object instance of xPLSchema, with default value 'hbeat.app'.
+ </summary>
+</member><member name="M:xPL.xPLSchema.#ctor(System.String)">
+	<summary>
+ Creates an xPLSchema object from a properly formatted string
+ </summary>
+	<param name="sSchema">xPLSchema in string format 'class.type'</param>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition for both class and type: length must be between 1 and 8 and allowed 
+ characters are a-z, 0-9 and - (dash or hyphen), all lowercase. Schema and Class must be separated by a single '.' (dot)</exception>
+	<remarks>All input will be converted to lower case.</remarks>
+</member><member name="M:xPL.xPLSchema.#ctor(System.String,System.String)">
+	<summary>
+ Creates an xPLSchema object from a specified set of schema-class and schema-type.
+ </summary>
+	<param name="sClass">Class of the schema to be set.</param>
+	<param name="sType">Type of the schema to be set.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">condition for both class and type: length must be between 1 and 8 and allowed 
+ characters are a-z, 0-9 and - (dash or hyphen), all lowercase.</exception>
+	<remarks>All input will be converted to lower case.</remarks>
+</member><member name="M:xPL.xPLSchema.ToString">
+	<returns>Schema in a string formatted as 'class.type'</returns>
+</member><member name="M:xPL.xPLSchema.IsWildCarded">
+	<summary>
+ Checks wether either the Class or Type property have been set to a wildcard ('*')
+ </summary>
+	<returns>True if a wildcard is used in either class or type, False otherwise</returns>
+</member><member name="T:xPL.xPLSchema">
+	<summary>
+ Class representing an xPL schema. The class contains verification for valid values and matching methods for filters.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLMessage.#ctor">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLMessage"/> class. All properties set to their default values.
+ </summary>
+</member><member name="M:xPL.xPLMessage.#ctor(System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLMessage"/> class from a raw xPL message string.
+ </summary>
+	<exception cref="T:xPL.xPL_Base.InvalidXPLMessageException">Condition: If the message does not adhere to the xML specifications.</exception>
+	<param name="RawxPLMsg">The raw xPL MSG.</param>
+	<remarks>All elements that only allow for lowercase characters are transparently converted to lowercase and will 
+ not raise any exceptions.</remarks>
+</member><member name="P:xPL.xPLMessage.MsgType">
+	<summary>
+ Gets or sets the type of the message.
+ </summary>
+	<value>The type of the message as xPLMessageTypeEnum, except for the 'Any' (wildcard) value</value>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Conditions: when the wildcard value 'Any' is being set.</exception>
+	<remarks>Default value for new xPLMessageObjects is 'Trigger'</remarks>
+</member><member name="P:xPL.xPLMessage.Hop">
+	<summary>
+ Gets the hop count of the message.
+ </summary>
+	<value>The message hop count.</value>
+	<remarks>Default value is 1. Only for messages created from a raw xPL string (usually received messages from the xPL network) 
+ this can be something else. If a value of 1 or less is being set, then the result will be 1, no exceptions will be thrown.</remarks>
+</member><member name="P:xPL.xPLMessage.Source">
+	<summary>
+ Gets or sets the source address of the xPL message.
+ </summary>
+	<value>The source address in format 'vendor-device.instance'.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: if illegal characters or length is set for the address(parts)</exception>
+	<remarks>No wildcards are allowed in the source address. Any uppercase characters will automatically be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLMessage.Target">
+	<summary>
+ Gets or sets the target address of the xPL message.
+ </summary>
+	<value>The target address in format 'vendor-device.instance'.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: if illegal characters or length is set for the address(parts)</exception>
+	<remarks>Wildcards are allowed. Any uppercase characters will automatically be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLMessage.Schema">
+	<summary>
+ Gets or sets the schema used by the xPL message.
+ </summary>
+	<value>The schema in format 'class.type'.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">Condition: if illegal characters or length is set for the schema(parts)</exception>
+	<remarks>No wildcards are allowed in the schema. Any uppercase characters will automatically be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLMessage.SchemaClass">
+	<summary>
+ Gets or sets the schemaclass used by the xPL message.
+ </summary>
+	<value>The schema class in proper xPL format.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">Condition: if illegal characters or length is set for the schema class</exception>
+	<remarks>No wildcards are allowed in the schema. Any uppercase characters will automatically be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLMessage.SchemaType">
+	<summary>
+ Gets or sets the schematype used by the xPL message.
+ </summary>
+	<value>The schema type in proper xPL format.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalSchema">Condition: if illegal characters or length is set for the schema type</exception>
+	<remarks>No wildcards are allowed in the schema. Any uppercase characters will automatically be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLMessage.KeyValueList">
+	<summary>
+ Gets the key value list for this message containing all the key value pairs in the message body.
+ </summary>
+	<value>The key value list.</value>
+	<remarks>Read only</remarks>
+</member><member name="P:xPL.xPLMessage.RawxPL">
+	<summary>
+ Returns or sets the raw xPL string for the current message.
+ </summary>
+	<value>The raw xPL string to set for the xPL message object</value>
+	<returns>The raw xPL string generated from the current xPL message objects contents</returns>
+	<exception cref="T:xPL.xPL_Base.MissingFieldsException"><para>Condition: When required fields are missing or any of the following checks failed;</para>
+		<para>   - Message type may not be wildcard '*'</para>
+		<para>   - Source address has type 'Target'</para>
+		<para>   - Target address has type 'Source'</para>
+		<para>   - Schema may not be wildcarded</para>
+		<para>   - No key/value pairs have been set</para>
+		<para>   - Status messages must always be broadcasted (target='*')</para>
+		<para>   - Trigger messages must always be broadcasted (target='*')</para>
+		<para>If the conversion fails; then the current object values might be partially overwritten by the values from the raw xPL string.</para>
+	</exception>
+	<remarks>When getting this property, the content is dynamically created. This means that a raw xPL value set 
+ is not necessarily equal to the raw xPL returned. Uppercase may have been converted to lowercase for example.</remarks>
+</member><member name="P:xPL.xPLMessage.RawxPLReceived">
+	<summary>
+	</summary>
+	<returns>Raw xPL as set for the message, or an empty string ( "" ) if nothing was set.</returns>
+	<remarks>Setting a raw xPL string to the <see cref="P:xPL.xPLMessage.RawxPL"/> property will set this value, 
+ or providing a rawxPL string when creating the object.</remarks>
+</member><member name="M:xPL.xPLMessage.Send(xPL.xPLDevice)">
+	<summary>
+ Send the message though the specified xPL device, using the <c>xPLDevice.Send</c> method. Any 
+ exceptions from that method will not be caught, so see <seealso>xPLDevice.Send</seealso> for 
+ other exception that might occur.
+ </summary>
+	<param name="xdev">An <c>xPLDevice</c> object through which the message should be sent. If this
+ parameter is not provided, the device will be lookedup in the <see cref="T:xPL.xPLListener"/> device list
+ by the <c>Source</c> address specified in the message.</param>
+	<remarks>The <c>Source</c> property of the message will be overwritten with the address of the
+ device through which to sent (if provided).</remarks>
+	<exception cref="T:System.NullReferenceException">Condition: <c>xdev</c> parameter <c>Is Nothing</c> and <c>Source</c>
+ address is not found in the local device list of <c>xPLListener</c>.</exception>
+</member><member name="M:xPL.xPLMessage.RequiredFieldsFilled">
+	<summary>
+ Checks if all required fields to build and raw xPL string are complete and properly filled.
+ </summary>
+	<returns>Empty string is all is OK, error message (the deficit) if not OK</returns>
+</member><member name="M:xPL.xPLMessage.BuildxPLMsg">
+	<summary>
+ Builds the xPL message.
+ </summary>
+	<returns>string containing the raw xPL</returns>
+</member><member name="M:xPL.xPLMessage.ToString">
+	<summary>
+ Returns the message as a printable string. WARNING: the result will have CR + LF line ends, and hence 
+ is not equal to, nor valid as, RawxPL which uses <see cref="F:xPL.xPL_Base.XPL_LF">XPL_LF</see> as line feeds.
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLMessage.ExtractContents(System.String)">
+	<summary>
+ Extracts the contents of a raw xPL message into the xPL message object.
+ </summary>
+	<param name="themsg">The raw xPL string containing the message.</param>
+	<returns>True if the conversion was succesfull, false if it failed</returns>
+</member><member name="M:xPL.xPLMessage.MsgType2Enum(System.String)">
+	<summary>
+ Converts a string into an <see cref="T:xPL.xPL_Base.xPLMessageTypeEnum"/> value
+ </summary>
+	<param name="MsgType">Can be any of the XPL_TYPELBL_xxxx constants</param>
+	<returns>An xPLMessageTypeEnum value</returns>
+	<exception cref="T:System.ArgumentException">condition: if a string value is passed that doesn't match any of the XPL_TYPELBL_xxxx constants.</exception>
+	<remarks>Any input will be converted to lower case.</remarks>
+</member><member name="M:xPL.xPLMessage.MsgType2String(xPL.xPL_Base.xPLMessageTypeEnum)">
+	<summary>
+ Converts an <see cref="T:xPL.xPL_Base.xPLMessageTypeEnum"/> value into a string
+ </summary>
+	<param name="MsgType">An xPLMessageTypeEnum value</param>
+	<returns>Can be any of the XPL_TYPELBL_xxxx constants</returns>
+</member><member name="T:xPL.xPLMessage">
+	<summary>
+ The xPLMessage object represents  a single xPL message
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLAddress.#ctor(xPL.xPL_Base.xPLAddressType)">
+	<summary>
+ Creates a new xPLAddress object with default "vendorid", "deviceid" and a randomized instance ID
+ </summary>
+	<param name="AddrType">Indicates the address type; source or target</param>
+</member><member name="M:xPL.xPLAddress.#ctor(xPL.xPL_Base.xPLAddressType,System.String)">
+	<summary>
+ Creates a new xPLaddress object from a properly formatted string.
+ </summary>
+	<param name="AddrType">Indicates the address type; source or target</param>
+	<param name="address">The address string in the xPL prescribed format; "vendor-device.instance", or a wildcard "*"</param>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or any of the elements 
+ has a length outside allowed boundaries, or any of the elements contains unallowed characters.</exception>
+</member><member name="M:xPL.xPLAddress.#ctor(xPL.xPL_Base.xPLAddressType,System.String,System.String)">
+	<summary>
+ Creates a new xPLAddress object with the given vendor ID and device ID. The instance ID will be randomized.
+ </summary>
+	<param name="AddrType">Indicates the address type; source or target</param>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or any of the elements 
+ has a length outside allowed boundaries, or any of the elements contains unallowed characters.</exception>
+</member><member name="M:xPL.xPLAddress.#ctor(xPL.xPL_Base.xPLAddressType,System.String,System.String,System.String)">
+	<summary>
+ Creates a new xPLAddress object with the given vendor ID, device ID and instance ID.
+ </summary>
+	<param name="AddrType">Indicates the address type; source or target</param>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or any of the elements 
+ has a length outside allowed boundaries, or any of the elements contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLAddress.Type">
+	<summary>
+ Read-only indicator of address type; source or target
+ </summary>
+	<returns>Type of address; source or target</returns>
+	<remarks>Can only be set during creation of the xPLAddress object</remarks>
+</member><member name="P:xPL.xPLAddress.Vendor">
+	<summary>
+ Reads or sets the vendor ID
+ </summary>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLAddress.Device">
+	<summary>
+ Reads or sets the device ID
+ </summary>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLAddress.Instance">
+	<summary>
+ Reads or sets the instance ID
+ </summary>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLAddress.FullAddress">
+	<summary>
+ Property representing the full xPL address in format 'vendor-device.instance'.
+ </summary>
+	<value>xPL address in format 'vendor-device.instance'</value>
+	<returns>xPL address in format 'vendor-device.instance'</returns>
+	<remarks>The wildcard "*" value is only allowed for <c>Target</c> type addresses. All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; source type address contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="M:xPL.xPLAddress.Matches(xPL.xPLAddress)">
+	<summary>
+ Compares the address with the given address and returns TRUE if there is a match. Use of wildcards is allowed.
+ The <c>xPLAddress.Type</c> property (source or target) is not used in the comparison!! 
+ </summary>
+	<param name="CompareTo">The <c>xPLAddress</c> to compare with</param>
+	<returns><c>True</c> if the address matches, <c>False</c> otherwise</returns>
+	<remarks>If the given object is <c>Nothing</c> it returns FALSE.</remarks>
+</member><member name="M:xPL.xPLAddress.Matches(xPL.xPLAddress,xPL.xPLAddress)">
+	<summary>
+ Compares 2 addresses and returns TRUE if there is a match. Use of wildcards is allowed.
+ The <c>xPLAddress.Type</c> properties (source or target) will not be used in the comparison!! 
+ </summary>
+	<returns><c>True</c> if the addresses match, <c>False</c> otherwise</returns>
+	<remarks>If either of the given objects is <c>Nothing</c> it returns <c>False</c>.</remarks>
+</member><member name="M:xPL.xPLAddress.Matches(System.String)">
+	<summary>
+ Compares the address with the provided address and returns TRUE if there is a match. Use of wildcards is allowed.
+ The <c>xPLAddress.Type</c> properties (source or target) will not be used in the comparison!! 
+ </summary>
+	<returns><c>True</c> if the addresses match, <c>False</c> otherwise</returns>
+	<remarks>All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; <c>CompareTo</c> elements have a length outside 
+ allowed boundaries, or <c>CompareTo</c> elements contain unallowed characters.</exception>
+</member><member name="M:xPL.xPLAddress.Matches(System.String,System.String)">
+	<summary>
+ Compares 2 addresses and returns TRUE if there is a match. Use of wildcards is allowed.
+ The <c>xPLAddress.Type</c> properties (source or target) will not be used in the comparison!! 
+ </summary>
+	<returns><c>True</c> if the addresses match, <c>False</c> otherwise</returns>
+	<remarks>All provided values will be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either of the addresses has elements that have a length outside 
+ allowed boundaries, or either of the addresses have elements that contain unallowed characters.</exception>
+</member><member name="M:xPL.xPLAddress.ToString">
+	<returns>Full xPLaddress in text format</returns>
+	<remarks>Format is; "vendor-device.instance" (without the quotes). If any of the elements has been wildcarded ("*") then the result will be "*".</remarks>
+</member><member name="M:xPL.xPLAddress.GetRandomInstanceId">
+	<summary>
+ Returns a randomized instance id, 16 characters long
+ </summary>
+	<returns>String containing a randomized instance id, 16 characters long</returns>
+	<remarks>It will just return a random ID, it will not be set (shared method). Possibility of duplicates is extremely small; 36^16.</remarks>
+</member><member name="M:xPL.xPLAddress.GetHostBasedInstanceId">
+	<summary>
+ Returns a hostname based instance id
+ </summary>
+	<returns>String containing a (valid) hostname-based instance id</returns>
+	<remarks>It will just return the ID, it will not be set. When using multiple xPL software devices on the same system, with the 
+ same vendor and device ID's, there is a large possibility of an address conflict (duplicate) in the xPL network! Use the 
+ <c>GetRandomInstanceID</c> function to get a random ID to resolve this. If no instance ID can be deducted from the hostname, 
+ then a randomized ID is returned.</remarks>
+</member><member name="T:xPL.xPLAddress">
+	<summary>
+ The xPLAdress class represents a valid xPL address, containing a vendor id, device id and instance id. The type of 
+ address (source or target), must be set upon creation, and cannot be changed.
+ </summary>
+	<remarks>The type indication makes the difference for allowing the wildcard ('*') as a value for any of the ID's. If any of the ID's is set to the wildcard, 
+ the overall result will also be a wildcard. Example: 
+ <c>x = New xPLAddress(xPLAddressType.Target, "vendor-dev.*").ToString</c>
+ will always result in <c>x = "*"</c></remarks>
+</member><member name="M:xPL.xPLKeyValuePair.#ctor(System.String,System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLKeyValuePair"/> class.
+ </summary>
+	<param name="k">The key</param>
+	<param name="v">The value</param>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: if either the key or the value doesn't 
+ match the xPL requirements.</exception>
+	<remarks>The value for key will always be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLKeyValuePair.Key">
+	<summary>
+ Gets or sets the key.
+ </summary>
+	<value>The key</value>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: if the key doesn't match the xPL requirements.</exception>
+	<remarks>The key provided will always be converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLKeyValuePair.Value">
+	<summary>
+ Gets or sets the value.
+ </summary>
+	<value>The value.</value>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: if the value doesn't match the xPL requirements.</exception>
+</member><member name="M:xPL.xPLKeyValuePair.ToString">
+	<summary>
+ Returns a string that represents this key value pair.
+ </summary>
+	<returns>A string that represents this instance in the format 'key=value'.</returns>
+</member><member name="T:xPL.xPLKeyValuePair">
+	<summary>
+ The <see cref="T:xPL.xPLKeyValuePair"/> object represents a single Key-value pair in an xPL message. The object is stored
+ in the <see cref="T:xPL.xPLKeyValuePairs"/> object which represents all key value pairs in an xPL message.
+ </summary>
+	<remarks>The keys of the key-value pairs do not need to be unique in the list.</remarks>
+</member><member name="P:xPL.xPLKeyValuePairs.Item(System.Int32)">
+	<summary>
+ Gets or sets the <see cref="T:xPL.xPLKeyValuePair"/> at the specified index from/to the KeyValuePair list.
+ </summary>
+	<value>object of type <see cref="T:xPL.xPLKeyValuePair"/></value>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: if the index provided is out of range (less than 0 or 
+ greater than or the index is equal to or greater than Count.</exception>
+	<exception cref="T:System.NullReferenceException">Condition: if the reference to the <see cref="T:xPL.xPLKeyValuePair"/> object <c>Is Nothing</c></exception>
+</member><member name="P:xPL.xPLKeyValuePairs.Item(System.String)">
+	<summary>
+ Gets or sets the value of the first <see cref="T:xPL.xPLKeyValuePair"/> in the list with the specified key.
+ </summary>
+	<value>The value of the key-value pair</value>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: if the key provided cannot be found in the list.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: if the value doesn't match the xPL requirements.</exception>
+	<remarks>The same key value may appear more than once, this property accesses only the first match found. The value for Key is always 
+ converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLKeyValuePairs.Count">
+	<summary>
+ Gets the number of <see cref="T:xPL.xPLKeyValuePair"/> objects in the list.
+ </summary>
+	<value>The number of items in the list</value>
+</member><member name="M:xPL.xPLKeyValuePairs.IndexOf(System.String)">
+	<summary>
+ Returns the index of the first <see cref="T:xPL.xPLKeyValuePair"/> object with the specified key.
+ </summary>
+	<param name="key">The key.</param>
+	<returns>The index of the item, or -1 if it wasn't found.</returns>
+	<remarks>The key provided will always be converted to lowercase before looking it up.</remarks>
+</member><member name="M:xPL.xPLKeyValuePairs.Add(xPL.xPLKeyValuePair)">
+	<summary>
+ Adds the specified <see cref="T:xPL.xPLKeyValuePair"/> object to the list.
+ </summary>
+	<param name="kvp">The key-valuepair.</param>
+	<remarks>if the value provided <c>Is Nothing</c> then it will not be added, no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLKeyValuePairs.Add(System.String,System.String)">
+	<summary>
+ Adds a <see cref="T:xPL.xPLKeyValuePair"/> object to the list with the given key and value.
+ </summary>
+	<param name="key">The key of the keyvalue pair.</param>
+	<param name="value">The value of the keyvalue pair.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: if either the key or the value doesn't 
+ match the xPL requirements.</exception>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLKeyValuePairs.Remove(System.Int32)">
+	<summary>
+ Removes the <see cref="T:xPL.xPLKeyValuePair"/> object at the specified index from the list.
+ </summary>
+	<param name="index">The index of the item to be removed.</param>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: if the index provided is less than 0 or 
+ greater than or equal to the <c>Count</c> property.</exception>
+</member><member name="M:xPL.xPLKeyValuePairs.Clear">
+	<summary>
+ Clears the list, removing all <see cref="T:xPL.xPLKeyValuePair"/> objects from it.
+ </summary>
+</member><member name="M:xPL.xPLKeyValuePairs.ToString">
+	<summary>
+ Returns a <see cref="T:System.String"/> that represents this instance. It will be formatted as in the raw xPL message; each individual pair formatted as 'key=value' and the key-value pairs separated by the <c>XPL_LF</c> constant. 
+ </summary>
+	<returns>A <see cref="T:System.String"/> that represents this instance.</returns>
+	<remarks>Returns an empty string, eg. "", if there are no items in the list.</remarks>
+</member><member name="T:xPL.xPLKeyValuePairs">
+	<summary>
+ The <see cref="T:xPL.xPLKeyValuePairs"/> object represents a list of key-value pairs in an xPL message. The object stores
+ members of <see cref="T:xPL.xPLKeyValuePair"/> which represent the individual key value pairs in an xPL message.
+ </summary>
+	<remarks>The keys of the key-value pairs do not need to be unique in the list.</remarks>
+</member><member name="F:xPL.xPLPluginUpdateDlgSmall.Plugin">
+	<summary>
+ Plugin is to be set by the calling code to the pluginstore being updated
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLPluginUpdateDlgSmall">
+	<summary>
+ Form to be used to show progress while updating the PluginStore. This form shows a status text, 
+ a progressbar and closes automatically when the update is complete.
+ </summary>
+	<remarks>To use it, first set the <c>Plugin</c> property of the form, then start the update by
+ calling the <seealso cref="M:xPL.xPLPluginStore.UpdatePluginStore(System.Boolean)"/> method, finally call either the
+ <c>Show</c> or <c>ShowModal</c> methods of the form.</remarks>
+</member><member name="F:xPL.xPLPluginVendor.Name">
+	<summary>
+ Plugin name, source is the central xPL plugin download list
+ </summary>
+</member><member name="F:xPL.xPLPluginVendor.Type">
+	<summary>
+ Plugin type, source is the central xPL plugin download list
+ </summary>
+	<remarks>Should be 'plugin'.</remarks>
+</member><member name="F:xPL.xPLPluginVendor.Description">
+	<summary>
+ Plugin description, source is the central xPL plugin download list
+ </summary>
+</member><member name="F:xPL.xPLPluginVendor.URL">
+	<summary>
+ Plugin download URL, source is the central xPL plugin download list
+ </summary>
+	<remarks>This URL is used to download the plugin itself</remarks>
+</member><member name="F:xPL.xPLPluginVendor.Vendor">
+	<summary>
+ Vendor name, source is the vendor provided plugin download
+ </summary>
+</member><member name="F:xPL.xPLPluginVendor.InfoURL">
+	<summary>
+ Informational URL, source is the vendor provided plugin download
+ </summary>
+</member><member name="M:xPL.xPLPluginVendor.StrToVersion(System.String)">
+	<summary>
+ Parse a string to a version object, any missing or uncovertable element will be set to 0
+ </summary>
+</member><member name="P:xPL.xPLPluginVendor.VersionStr">
+	<summary>
+ Version, source is the vendor provided plugin download
+ </summary>
+	<remarks>Version is provided as a string</remarks>
+</member><member name="P:xPL.xPLPluginVendor.VersionV">
+	<summary>
+ Version, source is the vendor provided plugin download
+ </summary>
+	<remarks>Version is provided as a Version object</remarks>
+</member><member name="F:xPL.xPLPluginVendor.PluginURL">
+	<summary>
+ Plugin download URL, source is the vendor provided plugin download
+ </summary>
+	<remarks>This URL is NOT used, for downloading the central URL is used, see <seealso cref="F:xPL.xPLPluginVendor.URL"/>.</remarks>
+</member><member name="P:xPL.xPLPluginVendor.Attributes">
+	<summary>
+ Collection containing remaining xml attributes of the vendor
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginVendor.ID">
+	<summary>Contains the Vendor ID, as used in the xPL address notation 'vendor-device.instance'</summary>
+</member><member name="M:xPL.xPLPluginVendor.#ctor(System.String)">
+	<summary>
+ Creates a new xPLVendor object with the given Vendor ID
+ </summary>
+	<param name="strID">Vendor ID, as used in the xPL address notation 'vendor-device.instance'</param>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentException">Condition: ID provided is an empty string</exception>
+</member><member name="T:xPL.xPLPluginVendor">
+	<summary>
+ Represents a Vendor from the central vendor xml list downloaded from the xPL site
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginDevice.URLinfo">
+	<summary>
+ Device specific information URL. Source is the vendor specific xml file.
+ </summary>
+</member><member name="F:xPL.xPLPluginDevice.Description">
+	<summary>
+ Device description. Source is the vendor specific xml file.
+ </summary>
+</member><member name="P:xPL.xPLPluginDevice.VersionStr">
+	<summary>
+ Most recent device version. Source is the vendor specific xml file.
+ </summary>
+	<remarks>Version is provided as a string, zeros for build or revision are left out, if you need
+ those included use Version.ToString instead.</remarks>
+</member><member name="P:xPL.xPLPluginDevice.VersionV">
+	<summary>
+ Most recent device version. Source is the vendor specific xml file.
+ </summary>
+	<remarks>Version is provided as a Version object</remarks>
+</member><member name="P:xPL.xPLPluginDevice.BetaVersionStr">
+	<summary>
+ Most recent device beta version. Source is the vendor specific xml file.
+ </summary>
+	<remarks>Beta Version is provided as a string, zeros for build or revision are left out, if you need
+ those included use BetaVersion.ToString instead.</remarks>
+</member><member name="P:xPL.xPLPluginDevice.BetaVersionV">
+	<summary>
+ Most recent device beta version. Source is the vendor specific xml file.
+ </summary>
+	<remarks>Beta Version is provided as a Version object</remarks>
+</member><member name="F:xPL.xPLPluginDevice.URLplugin">
+	<summary>
+ Download URL for the xml-plugin that (also) contains this device. Source is the vendor specific xml file.
+ </summary>
+	<remarks>This URL is NOT used. For downloading the central URL is used, see <seealso cref="F:xPL.xPLPluginVendor.URL"/>.</remarks>
+</member><member name="F:xPL.xPLPluginDevice.URLdownload">
+	<summary>
+ Download URL for the software package. Source is the vendor specific xml file.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginDevice.Type">
+	<summary>
+ The type of device; real xPL device package, or another piece of software that is not an xPL device.
+ Source is the vendor specific xml file.
+ </summary>
+	<remarks>Examples of non-device items are; xPL code libraries, hubs, diagnostic tools, etc.</remarks>
+</member><member name="F:xPL.xPLPluginDevice.Platform">
+	<summary>
+ Target platform for the device. Source is the vendor specific xml file.
+ </summary>
+	<remarks>Examples; windows, os x, linux, java, perl.</remarks>
+</member><member name="F:xPL.xPLPluginDevice.XML">
+	<summary>
+ Contains the xml of the device.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginDevice.Attributes">
+	<summary>
+ Collection containing remaining xml attributes of the device
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginDevice.ID">
+	<returns>Contains the Device ID in format 'vendor-device', as used in the xPL address notation 'vendor-device.instance'</returns>
+</member><member name="M:xPL.xPLPluginDevice.#ctor(System.String)">
+	<summary>
+ Creates a new xPLDevicePlugin object with the given Device ID
+ </summary>
+	<param name="strID">Device ID in format 'vendor-device', as used in the xPL address notation 'vendor-device.instance'</param>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentException">Condition: ID provided is an empty string</exception>
+</member><member name="T:xPL.xPLPluginDevice">
+	<summary>
+ Represents a device plugin from the vendor specific xml, downloaded from the vendors site
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginStore.UpdateInfo.PercentComplete">
+	<summary>
+ Percentage complete of current update operation
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginStore.UpdateInfo.StatusMsg">
+	<summary>
+ Status message of current activity
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginStore.UpdateInfo.LogUpdate">
+	<summary>
+ Log lines added since last event
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginStore.UpdateInfo.LogComplete">
+	<summary>
+ Complete log, including the last lines.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLPluginStore.UpdateInfo.HasError">
+	<summary>
+ True if this LogUpd contains errors, false otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLPluginStore.UpdateInfo">
+	<summary>
+ EventArgs class used with the <seealso cref="E:xPL.xPLPluginStore.UpdateProgress"/> event
+ </summary>
+	<remarks></remarks>
+</member><member name="E:xPL.xPLPluginStore.UpdateProgress">
+	<summary>
+ Event raised during the update process to inform owner about progress
+ </summary>
+	<param name="e">Event parameters containing status information</param>
+	<remarks></remarks>
+</member><member name="E:xPL.xPLPluginStore.UpdateComplete">
+	<summary>
+ Event raised when the update process is completed
+ </summary>
+	<param name="e">Event parameters containing status information</param>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginStore.MainXmlElement">
+	<summary>
+ Returns the main xml element from the plugin store
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="P:xPL.xPLPluginStore.IsLoaded"/>.</remarks>
+</member><member name="P:xPL.xPLPluginStore.VendorsXmlElement">
+	<summary>
+ Returns the xml element containing the vendors from the plugin store
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="P:xPL.xPLPluginStore.IsLoaded"/>.</remarks>
+</member><member name="P:xPL.xPLPluginStore.DevicesXmlElement">
+	<summary>
+ Returns the xml element containing the devices from the plugin store
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="P:xPL.xPLPluginStore.IsLoaded"/>.</remarks>
+</member><member name="P:xPL.xPLPluginStore.LocationsXmlElement">
+	<summary>
+ Returns the xml element containing the locations from the plugin store
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks>Returns <c>Nothing</c> if the store isn't loaded <seealso cref="P:xPL.xPLPluginStore.IsLoaded"/>.</remarks>
+</member><member name="P:xPL.xPLPluginStore.PluginStoreFile">
+	<summary>
+ Filename of the plugin store, fullpath and name including the '.xml' extension
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginStore.UpdateRunning">
+	<summary>
+ Indicates whether an update is currently running
+ </summary>
+	<remarks>call <seealso cref="M:xPL.xPLPluginStore.UpdatePluginStore(System.Boolean)"/> to start an update.</remarks>
+</member><member name="P:xPL.xPLPluginStore.IsLoaded">
+	<summary>
+ Returns True if the store is loaded.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLPluginStore.LastUpdate">
+	<summary>
+ Returns the date/time the last succesfull update (downloading plugins) was performed.
+ </summary>
+</member><member name="P:xPL.xPLPluginStore.Debug">
+	<summary>
+ Sets or gets the debugging status of the object. If set to <c>True</c> there will be substantially more
+ logging.
+ </summary>
+</member><member name="P:xPL.xPLPluginStore.Vendors">
+	<summary>
+ Collection representing all vendors in the PluginStore
+ </summary>
+	<remarks>The key is the Vendor ID. Changes made to this collection and its items will not be stored
+ in the PluginStore.</remarks>
+</member><member name="P:xPL.xPLPluginStore.Devices">
+	<summary>
+ Collection representing all devices in the PluginStore
+ </summary>
+	<remarks>The key is a combination of the Vendor ID and the Device ID in the xPL address 
+ format; 'vendor-device'. Changes made to this collection and its items will not be stored
+ in the PluginStore.</remarks>
+</member><member name="P:xPL.xPLPluginStore.DevicesByVendor(System.String)">
+	<summary>
+ Collection representing all devices in the PluginStore by the specified vendor
+ </summary>
+	<param name="VendorID">The ID of the vendor of which the devices should be returned</param>
+	<remarks>The key is a combination of the Vendor ID and the Device ID in the xPL address 
+ format; 'vendor-device'. Changes made to this collection and its items will not be stored
+ in the PluginStore.</remarks>
+</member><member name="M:xPL.xPLPluginStore.#ctor">
+	<summary>
+ Creates a new object and loads the shared pluginstore, if it doesn't exist
+ a blank one will be created in memory (not yet written to disk)
+ </summary>
+	<remarks>Use SavePluginStore to save the store to disk</remarks>
+</member><member name="M:xPL.xPLPluginStore.LoadPluginStore">
+	<summary>
+ Loads the shared pluginstore, if it doesn't exist
+ a blank one will be created in memory (not yet written to disk)
+ </summary>
+	<remarks>Use SavePluginStore to save the store to disk</remarks>
+</member><member name="M:xPL.xPLPluginStore.CreateNewPluginStore">
+	<summary>
+ Creates a new PluginStore, with the version attribute
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLPluginStore.SavePluginStore">
+	<summary>
+ Stores the PluginStore in memory to disk
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLPluginStore.GetPluginList">
+	<summary>
+ Loads the central plugin list from the download location, and updates the list download locations
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLPluginStore.UpdatePluginStore(System.Boolean)">
+	<summary>
+ Asynchroneously updates the plugins store, first downloads the plugin list, then downloads 
+ all plugins. If the store hasn't been loaded yet, it will be loaded.
+ </summary>
+	<param name="SaveStore">If <c>True</c>, the store will be saved to the default location. If 
+ <c>False</c>, then the store will not be saved but only stored in memory.</param>
+	<remarks>The update will be started on a new thread. Check the 
+ <seealso cref="P:xPL.xPLPluginStore.UpdateRunning"/> property to check the status or use the events to
+ receive progress information on the update.</remarks>
+</member><member name="T:xPL.xPLPluginStore">
+	<summary>
+ Class to manage and update the local shared PluginStore. Provides methods to download an update plugins
+ and update the local store.
+ The xPL Project maintains a list of vendor plugins, in which each vendor maintains the details of their
+ available applications/services. This class collects and parses all plugins.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLConfigItem.#ctor(System.String,xPL.xPL_Base.xPLConfigTypes,System.Int32)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLConfigItem"/> class.
+ </summary>
+	<param name="itemName">Name or key of the configitem</param>
+	<param name="itemtype">The item type</param>
+	<param name="maxValues">The maximum number of values allowed for this ConfigItem</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name equals one of the reserved values ("newconf", "interval", "filter" or "group") or
+ it does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only. If <c>maxValues</c> 
+ is set to less than 1, it will be set at 1, no exception will be thrown</remarks>
+</member><member name="P:xPL.xPLConfigItem.Name">
+	<returns>The name of the ConfigItem</returns>
+	<remarks>Read-only. This value can only be set upon creation of the object instance.</remarks>
+</member><member name="P:xPL.xPLConfigItem.Item">
+	<summary>
+	</summary>
+	<value>The value to be set for the first value in the list (at index position 0)</value>
+	<returns>The value set at index position 0</returns>
+	<remarks>If <c>Count</c> is 0, then an empty string ("") will be returned, no exception will be thrown.</remarks>
+</member><member name="P:xPL.xPLConfigItem.Item(System.Int32)">
+	<param name="idx">Index of the item in the list to get/set.</param>
+	<value>Value to set at position <c>idx</c> in the list</value>
+	<returns>The current value set at position <c>idx</c> in the list.</returns>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than 0 or higher than or equal to <c>Count</c>.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemValue">Condition: the assigned value already exists in the list</exception>
+</member><member name="P:xPL.xPLConfigItem.MaxValues">
+	<value>Sets the maximum number of values that can be stored in the ConfigItem</value>
+	<returns>The maximum number of values allowed</returns>
+	<remarks>If the value is set to less than 1, it will be set at 1. If <c>value</c> is less than the current value of <c>Count</c>, 
+ then all excess items will be deleted from the list.</remarks>
+</member><member name="P:xPL.xPLConfigItem.ConfigType">
+	<returns>The xPL configuration item type; config, reconf or option.</returns>
+	<remarks>Read-only, can only be set upon creation.</remarks>
+</member><member name="P:xPL.xPLConfigItem.Hidden">
+	<summary>
+ If set to <c>True</c>, then the configitem will not be listed in config.list and config.current 
+ messages. Any settings received in a config.response message will be handled.
+ </summary>
+	<remarks>Creating hidden items can be handy for debugging purposes.</remarks>
+</member><member name="P:xPL.xPLConfigItem.Count">
+	<returns>The number of values stored in the value list</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLConfigItem.Remove(System.String)">
+	<summary>
+	</summary>
+	<param name="itemValue">The itemValue to be removed from the list</param>
+	<remarks>If the value isn't found, then no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLConfigItem.Add(System.String)">
+	<summary>
+ Adds a value to the list of values stored in the <c>ConfigItem</c> object
+ </summary>
+	<param name="itemValue">Value to be added to the list</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>Count</c> equals <c>MaxValues</c>, no items can be added.</exception>
+	<remarks>If the <c>itemValue</c> is a duplicate of a value already in the list, then no item will be added and no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLConfigItem.IndexOf(System.String)">
+	<param name="v">The value being sought in the list</param>
+	<returns>The index at which the value <c>v</c> is located in the list, or -1 if it doesn't exist in the list</returns>
+</member><member name="M:xPL.xPLConfigItem.Clear">
+	<summary>
+ Clears the list with values
+ </summary>
+	<remarks>The <c>Name</c>, <c>ConfigType</c> and <c>MaxValues</c> properties of the config item remain unchanged.</remarks>
+</member><member name="M:xPL.xPLConfigItem.ToString">
+	<returns>A string representing the ConfigItem in the format used for raw XPL. Each value will be in the list in the format "name=value". Hence 'name' is 
+ the same for each value in the list. The individual values (lines) will be separated by the <c>XPL_LF</c> constant.</returns>
+	<remarks>If there are no items in the list, "name=" will be returned</remarks>
+</member><member name="T:xPL.xPLConfigItem">
+	<summary>
+ This object represents a single Configuration key. Each configuration key can have multiple values (no duplicates are allowed).
+ The ConfigItems collection holds the ConfigItem objects.
+ The names of the config item cannot be any of the required values; "newconf", "interval", "filter" or "group". The 
+ ConfigItems object has special properties for these.
+ </summary>
+	<remarks>Properties <c>Name</c> and <c>ConfigType</c> can only be set upon creation, they are read-only.</remarks>
+</member><member name="M:xPL.xPLConfigItems.#ctor">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLConfigItems"/> class.
+ </summary>
+</member><member name="P:xPL.xPLConfigItems.Address">
+	<summary>
+ Returns the address of the device the ConfigItems collection belongs to.
+ </summary>
+	<returns>xPL Address of the device this <c>ConfigItems</c> object belongs to.</returns>
+	<remarks>The 'instance' part of the address can also be returned or set through the <c>conf_Newconf</c> property.</remarks>
+</member><member name="P:xPL.xPLConfigItems.conf_Newconf">
+	<value>a valid xPL device instance name</value>
+	<returns>The Instance name of the xPL device. ConfigItem name is "newconf".</returns>
+	<remarks></remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; <c>value</c> contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLConfigItems.conf_IntervalInSec">
+	<summary>
+ ConfigItem name is "interval" (set in minutes).
+ </summary>
+	<value>The heartbeat interval to be set (in seconds)</value>
+	<returns>Current heartbeat interval (in seconds)</returns>
+	<remarks>If the <c>value</c> is less than <c>XPL_MIN_HBEAT</c> then it will be set at <c>XPL_MIN_HBEAT</c>.
+ If the <c>value</c> is greater than <c>XPL_MAX_HBEAT</c> then it will be set at <c>XPL_MAX_HBEAT</c>.</remarks>
+</member><member name="P:xPL.xPLConfigItems.conf_IntervalInMin">
+	<summary>
+ ConfigItem name is "interval".
+ </summary>
+	<value>The heartbeat interval to be set (in minutes)</value>
+	<returns>Current heartbeat interval (in minutes). Note that internally the interval is stored in seconds, any value returned will be the rounded number of minutes.</returns>
+	<remarks>If the <c>value</c> is less than <c>XPL_MIN_HBEAT / 60</c> then it will be set at <c>XPL_MIN_HBEAT / 60</c>.
+ If the <c>value</c> is greater than <c>XPL_MAX_HBEAT / 60</c> then it will be set at <c>XPL_MAX_HBEAT / 60</c>. No exceptions will be thrown.</remarks>
+</member><member name="P:xPL.xPLConfigItems.conf_Filter">
+	<summary>
+ Contains the xPLFilters object that holds the filter collection. ConfigItem name "filter".
+ </summary>
+	<remarks>Read-only.</remarks>
+</member><member name="P:xPL.xPLConfigItems.conf_Group">
+	<summary>
+ Contains the xPLGroups object that holds the group collection. ConfigItem name "group".
+ </summary>
+	<remarks>Read-only.</remarks>
+</member><member name="P:xPL.xPLConfigItems.Item(System.String)">
+	<param name="key">The <c>Name</c> of the ConfigItem object being sought</param>
+	<returns>the xPLConfigItem from the list that has a <c>Name</c> value that corresponds to the provide <c>key</c> value</returns>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: the <c>key</c> cannot be found.</exception>
+	<remarks>Read-only, use <c>Add</c> or <c>Remove</c> to modify the list. Value of <c>key</c> will be converted to lowercase. The ConfigItems for "newconf", "interval", "group" and 
+ "filter" cannot be retrieved this way, they have their own properties; <c>xPLConfigItems.conf_xxxxxx</c></remarks>
+</member><member name="P:xPL.xPLConfigItems.Item(System.Int32)">
+	<param name="idx">The index of the ConfigItem object in the list</param>
+	<returns>A reference to the xPLConfigItem object in the list at position <c>idx</c>.</returns>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: the <c>idx</c> value is less than 0 or greater than <c>Count</c>.</exception>
+	<remarks>Read-only, use <c>Add</c> or <c>Remove</c> to modify the list. The ConfigItems for "newconf", "interval", "group" and "filter" cannot be retrieved this way, they have
+ their own properties; <c>xPLConfigItems.conf_xxxxxx</c></remarks>
+</member><member name="P:xPL.xPLConfigItems.Count">
+	<returns>The number of ConfigItem objects in the list</returns>
+	<remarks><c>Count</c> does not include the 4 ConfigItems for "newconf", "interval", "group" and 
+ "filter". They are not in the list but have their own properties; <c>xPLConfigItems.conf_xxxxxx</c></remarks>
+</member><member name="M:xPL.xPLConfigItems.IndexOf(System.String)">
+	<returns>The index of the ConfigItem with a <c>Name</c> that equals <c>itemName</c>.</returns>
+	<remarks><c>itemName</c> will be converted to lowercase. Returns -1 if not found. The ConfigItems for "newconf", 
+ "interval", "group" and "filter" cannot be retrieved this way, they have their own properties; <c>xPLConfigItems.conf_xxxxxx</c></remarks>
+</member><member name="M:xPL.xPLConfigItems.Add(System.String,System.String,xPL.xPL_Base.xPLConfigTypes,System.Int32)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLConfigItem"/> class and adds it to the list.
+ </summary>
+	<param name="itemName">Name or key of the configitem</param>
+	<param name="itemDefaultValue">The item value (the first one to add to list of values stored in the config item, use
+ the <c>Add</c> method to add more values to the list).</param>
+	<param name="itemtype">The item type</param>
+	<param name="maxValues">The maximum number of values allowed for this ConfigItem</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name equals one of the reserved values ("newconf", 
+ "interval", "filter" or "group") or it does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If <c>itemName</c> is already present in the list, or it equals any of; 
+ "newconf", "interval", "filter" or "group".</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only. If <c>maxValues</c> 
+ is set to less than 1, it will be set at 1, no exception will be thrown</remarks>
+</member><member name="M:xPL.xPLConfigItems.Add(System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLConfigItem"/> class and adds it to the list. The value will be set to an empty 
+ string (eg. ""), the type will be set to "option" and the maximum number of values allowed to 1.
+ </summary>
+	<param name="itemName">Name or key of the configitem.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name equals one of the reserved values ("newconf", 
+ "interval", "filter" or "group") or it does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If <c>itemName</c> is already present in the list, or it equals any of; 
+ "newconf", "interval", "filter" or "group".</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only.</remarks>
+</member><member name="M:xPL.xPLConfigItems.Add(xPL.xPLConfigItem)">
+	<summary>
+ Adds a ConfigItem object to the list of ConfigItems
+ </summary>
+	<param name="ci">ConfigItem object to be added to the list</param>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If the <c>Name</c> of the <c>ConfigItem</c> object 
+ provided is already present in the list, or it equals any of; "newconf", "interval", "filter" or "group".</exception>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLConfigItems.Remove(System.String)">
+	<param name="key">The <c>Name</c> of the ConfigItem object to remove from the list.</param>
+	<remarks><c>key</c> will be converted to lowercase. If the item is not found, no exception is thrown. The ConfigItems for 
+ "newconf", "interval", "group" and "filter" cannot be removed this way, they have their own properties; 
+ <c>xPLConfigItems.conf_xxxxxx</c> and cannot be removed.</remarks>
+</member><member name="M:xPL.xPLConfigItems.Remove(System.Int32)">
+	<param name="idx">The index of the item to remove from the list.</param>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than 0 or greater than or equal to <c>Count</c>.</exception>
+	<remarks>The ConfigItems for "newconf", "interval", "group" and "filter" cannot be removed this way, they have their own properties; 
+ <c>xPLConfigItems.conf_xxxxxx</c> and cannot be removed.</remarks>
+</member><member name="M:xPL.xPLConfigItems.ConfigCurrent">
+	<summary>
+ Creates an xPL message containing a valid 'config.current' status message, based upon the content of the
+ <c>ConfigItems</c> object.
+ </summary>
+	<returns>A complete xPL message containg a valid 'config.current' status message</returns>
+	<remarks>ConfigItems with the <seealso cref="P:xPL.xPLConfigItem.Hidden"/> property set to <c>True</c> 
+ will not be added to the message.</remarks>
+</member><member name="M:xPL.xPLConfigItems.ConfigList">
+	<summary>
+ Creates an xPL message containing a valid 'config.list' status message, based upon the content of the
+ <c>ConfigItems</c> object.
+ </summary>
+	<returns>A complete xPL message containg a valid 'config.list' status message</returns>
+	<remarks>ConfigItems with the <seealso cref="P:xPL.xPLConfigItem.Hidden"/> property set to <c>True</c> 
+ will not be added to the message.</remarks>
+</member><member name="M:xPL.xPLConfigItems.ConfigResponse(xPL.xPLMessage)">
+	<summary>
+ Replaces current configuration settings with the setting received in a 'config.response' xPL message. NOTE: if
+ after handling the message the <c>conf_Newconf</c> property has changed then the device has a new address and
+ appropriate hbeat/config messages must be sent by the device (the xPLDevice object takes care of this).
+ </summary>
+	<param name="myxpl">xPL message containing the 'config.response' message. If this parameter 
+ <c>Is Nothing</c> then the method immediately exits without making any changes to the <c>ConfigItems</c> 
+ object</param>
+	<remarks>The message must be a 'command' message and the schema must be 'config.response', if not no changes
+ will be made and no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLConfigItems.ToString">
+	<summary>
+ Returns a raw xPL string containing all the configuration items. In the order; "newconf", "interval", "group", "filter" followed by the custom items
+ in the list.
+ </summary>
+	<returns>String representation of configuration values.</returns>
+	<remarks>Each line has a format 'name=value', lines are separated by XPL_LF.</remarks>
+</member><member name="P:xPL.xPLConfigItems.Debug">
+	<summary>
+ Determine whether the object is running in debugging mode, by looking up its parent xPLDevice
+ </summary>
+	<returns><c>True</c> if the xPLDevice object with address <c>mAddress</c> is in debug mode.</returns>
+	<remarks>Default value (if not found) is <c>False</c>.</remarks>
+</member><member name="T:xPL.xPLConfigItems">
+	<summary>
+ This class represents all configuration items of an xPL device. It has a list of ConfigItem objects and 
+ 4 special properties; <c>conf_Newconf</c>, <c>conf_Interval</c>, <c>conf_Groups</c> and 
+ <c>conf_Filters</c>
+	</summary>
+	<remarks>Duplicate configitemnames are not allowed.</remarks>
+</member><member name="F:xPL.xPLPluginUpdateDlgLog.Plugin">
+	<summary>
+ Plugin is to be set by the calling code to the pluginstore being updated
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLPluginUpdateDlgLog">
+	<summary>
+ Form to be used to show progress while updating the PluginStore. This form shows a message log, 
+ a progressbar and a close button when the update is complete. The form is not automatically 
+ dismissed when the update completes.
+ </summary>
+	<remarks>To use it, first set the <c>Plugin</c> property of the form, then start the update by
+ calling the <seealso cref="M:xPL.xPLPluginStore.UpdatePluginStore(System.Boolean)"/> method, finally call either the
+ <c>Show</c> or <c>ShowModal</c> methods of the form.</remarks>
+</member><member name="P:xPL.My.Resources.Resources.ResourceManager">
+	<summary>
+  Returns the cached ResourceManager instance used by this class.
+</summary>
+</member><member name="P:xPL.My.Resources.Resources.Culture">
+	<summary>
+  Overrides the current thread's CurrentUICulture property for all
+  resource lookups using this strongly typed resource class.
+</summary>
+</member><member name="T:xPL.My.Resources.Resources">
+	<summary>
+  A strongly-typed resource class, for looking up localized strings, etc.
+</summary>
+</member><member name="E:xPL.xPLListener.InvalidMessageReceived">
+	<summary>
+ Event that is raised if data has been received that cannot be parsed into a valid xPL message object
+ </summary>
+	<param name="RawxPL">Contains the raw xPL data received from the network</param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.Shutdown">
+	<summary>
+ Shutsdown all <c>xPLDevices</c> by calling their <c>Dispose</c> method and cleans up the timer objects.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLListener.IPaddress">
+	<returns>The IP address the listener is listening on for incoming messages from the hub.</returns>
+	<remarks>If the listener is inactive, an empty string ("") is returned</remarks>
+</member><member name="P:xPL.xPLListener.PortNumber">
+	<returns>The port number the listener is listening on for incoming messages from the hub.</returns>
+	<remarks>If the listener is inactive, -1 is returned</remarks>
+</member><member name="P:xPL.xPLListener.IsActive">
+	<summary>
+ Índicates whether the listener is active (eg. initialized)
+ </summary>
+	<returns><c>True</c> if the listener is active</returns>
+	<remarks>The listener is considered active if at least 1 device is in its device collection. Even if the
+ device is not enabled, the listener is still considered active.</remarks>
+</member><member name="P:xPL.xPLListener.Count">
+	<summary>
+ The number of <c>Enabled</c> xplDevices
+ </summary>
+	<remarks>If the listener isn't active, 0 is returned, no exception will be thrown</remarks>
+</member><member name="P:xPL.xPLListener.Device(System.Int32)">
+	<summary>
+ Use this method to retrieve individual <c>xPLDevice</c> objects from the listeners device list by their index.
+ </summary>
+	<param name="idx">Index of the xPLDevice to be returned from the list</param>
+	<returns>The <c>xPLDevice</c> object at position <c>idx</c> in the device list</returns>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less then 0 or greater than or equal to <c>xPLDeviceCount</c>.</exception>
+</member><member name="P:xPL.xPLListener.Device(System.String)">
+	<summary>
+ Use this method to retrieve individual <c>xPLDevice</c> objects from the listeners device list by their <c>CustomID</c>.
+ </summary>
+	<param name="CustomID"><c>CustomID</c> value of the xPLDevice to be returned from the list</param>
+	<returns>The first <c>xPLDevice</c> object in the device list with this <c>CustomID</c></returns>
+	<remarks>If the listener is inactive or the <c>CustomID</c> isn't found <c>Nothing</c> is returned, no exception will be thrown.</remarks>
+</member><member name="P:xPL.xPLListener.Device(xPL.xPLAddress)">
+	<summary>
+ Use this method to retrieve individual <c>xPLDevice</c> objects from the listeners device list by their xPL address.
+ </summary>
+	<param name="Address"><c>xPLAddress</c> object with address of the xPLDevice to be returned from the list</param>
+	<returns>The first <c>xPLDevice</c> object in the device list with this xPL address</returns>
+	<remarks>If the listener is inactive, <c>Address Is Nothing</c> or the <c>Address</c> isn't found <c>Nothing</c> is returned, no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLListener.IndexOf(System.String)">
+	<summary>
+ Returns the index of a <c>xPLDevice</c> object by its <c>CustomID</c>
+	</summary>
+	<param name="CustomID">ID being sought</param>
+	<returns>Index of the first <c>xPLDevice</c> object from the list with a matching <c>CustomID</c> value</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.IndexOf(xPL.xPLAddress)">
+	<summary>
+ Returns the index of a <c>xPLDevice</c> object by its xPL address
+ </summary>
+	<param name="Address"><c>xPLAddress</c> object containing the address being sought</param>
+	<returns>Index of the <c>xPLDevice</c> object from the list with a matching <c>Address</c> value</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.Add(xPL.xPLDevice)">
+	<summary>
+ Adds the device to the list
+ </summary>
+	<param name="xdev">Device to be added</param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.Remove(xPL.xPLDevice)">
+	<summary>
+ Removes the device from the list
+ </summary>
+	<param name="xdev">Device to be removed</param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.RestoreFromState(System.String,System.Boolean)">
+	<summary>
+ Recreates all xPLDevices from a SavedState string. Any existing devices will first be removed (disposed).
+ </summary>
+	<param name="SavedState">SavedState string containing all parameters to recreate the entire list of 
+ xPLDevices and the <see cref="P:xPL.xPLNetwork.NetworkKeepEnded"/> setting. It can be created by calling the <c>GetState</c> method.</param>
+	<param name="RestoreEnabled">If <c>True</c>, the <c>Enabled</c> property for the devices will be set as recorded 
+ in the SavedState string, if set to <c>False</c> the devices will not be Enabled, independent of the 
+ setting stored in the SavedState string.</param>
+	<remarks>The SavedState string can be obtained from the <c>GetState</c> method. If the <c>SavedState</c> string is an 
+ empty string ("") then all currently existing devices will be disposed of and no new ones will be created. Before 
+ recreating the devices, the <see cref="M:xPL.xPL_Base.StateAppVersion(System.String)"/> method can be used the check the application version that created
+ the SavedState string.</remarks>
+	<exception cref="T:System.Exception">Condition: An individual device returned an exception upon recreating it from its
+ SavedState string.</exception>
+	<exception cref="T:System.ArgumentException">Condition: SavedState string was created by a newer/unknown version of xpllib 
+ and can not be handled</exception>
+</member><member name="M:xPL.xPLListener.GetState(System.String)">
+	<summary>
+ Returns a SavedState string enabling the persistence of configuration information of a list of devices.
+ </summary>
+	<returns>A SavedState string, containing all configuration info from the devices in the list and the 
+ <see cref="P:xPL.xPLNetwork.NetworkKeepEnded"/> property value.</returns>
+	<param name="AppVersion">Version information of the host application.</param>
+	<remarks>The SavedState string can be used with the <c>xPLListener.NewFromState</c>
+ method to recreate the device list in the exact same state, including the settings of the <see cref="T:xPL.xPLNetwork"/>
+ object.</remarks>
+</member><member name="M:xPL.xPLListener.NewAddress">
+	<summary>
+ inform my devices that the network address; IP address or Port number have changed.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLListener.ReportLostConnection">
+	<summary>
+ Calling this method informs the Listener that the device has lost connection and the listener needs to renew the network settings.
+ </summary>
+	<remarks>From a device perspective this method should be called when status goes from <c>Online</c> back to <c>Connecting</c>, or 
+ when the <c>XPL_NOHUB_TIMEOUT</c> expires. As these are the two occurences at which no network seems to be available.</remarks>
+</member><member name="M:xPL.xPLListener.SendRawxPL(System.String)">
+	<summary>
+ Sends a raw xPL string.
+ </summary>
+	<param name="RawxPL">The raw xPL string that needs to be sent.</param>
+	<exception cref="T:System.Exception">Condition: The network returned an exception when sending, or the 
+ network was not yet initialized by the xPLListener (at least one xPLDevice object must have been created for this, but 
+ there is no need for that device to be enabled, just creating it will initialize the xPLListener)</exception>
+	<remarks>NOTE: no verification of any kind will be done on the string provided. It will simply be sent.</remarks>
+</member><member name="P:xPL.xPLListener.ByPassHub">
+	<summary>
+ If set to True, the xPL network connections will be configured to broadcast to the port the xPLLib is listening on. This
+ will enable the bypassing of the hub and to test message characteristics not yet supported by the hub.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLListener">
+	<summary>
+ The listener actually connects to the network and keeps track of all <c>xPLDevice</c> objects and
+ feeds the <c>xPLNetwork</c> object with xPL network information.
+ The listener object only has shared members, no instances can be created.
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLDevice.HBeatItemsCallback">
+	<summary>
+ This is a delegate function that can be used to add your own items to the heartbeat messages generated by 
+ an <c>xPLDevice</c> object. The function will be called before the heartbeat is sent.
+ </summary>
+	<returns>You must provide the items to be added as a <c>xPLKeyValuePairs</c> object</returns>
+	<remarks></remarks>
+</member><member name="E:xPL.xPLDevice.xPLMessageReceived">
+	<summary>
+ Event signalling that an xPL message has been received
+ </summary>
+	<param name="xpldev">The xPLDevice object that raised the event.</param>
+	<param name="e">Event parameter containing the received message.</param>
+	<remarks>All internal handling has been done before the event is raised (heartbeats, configuration, requests, etc.)</remarks>
+</member><member name="E:xPL.xPLDevice.xPLConfigDone">
+	<summary>
+ Event signalling that the device has been configured using an xPL configuration tool.
+ </summary>
+	<param name="xpldev">Device that was configured</param>
+	<remarks>Only raised once, after initial configuration the <c>Configured</c> property will be set to 
+ <c>True</c> and any following updates of the configuration will result in an <see cref="E:xPL.xPLDevice.xPLReConfigDone"/> event.</remarks>
+</member><member name="E:xPL.xPLDevice.xPLReConfigDone">
+	<summary>
+ Event signalling that the device has been reconfigured using an xPL configuration tool.
+ </summary>
+	<param name="xpldev">Device that was reconfigured</param>
+	<remarks>Will not be raised after initial configuration, but only after any following updates of the
+  configuration. The initial configuration will result in an <see cref="E:xPL.xPLDevice.xPLConfigDone"/> event.</remarks>
+</member><member name="E:xPL.xPLDevice.xPLStatusChange">
+	<summary>
+ Event signalling that the device has changed status. See <see cref="P:xPL.xPLDevice.Status"/> property for details on 
+ the different statusses
+ </summary>
+	<param name="xpldev">Device that changed status</param>
+	<param name="prevState">Status of the device before the change</param>
+	<param name="newState">New status of the device after the change</param>
+	<remarks>The <c>Status</c> property will still have the old value when the event is raised!</remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.XplMsg">
+	<summary>
+ The <c>xPLMessage</c> object representing the message received
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsMyEcho">
+	<summary>
+		<c>True</c> if the message is an echo of a message send by the device itself, <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsHeartbeat">
+	<summary>
+		<c>True</c> if the message has a schema class 'hbeat', <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsConfig">
+	<summary>
+		<c>True</c> if the message has a schema class 'config', <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsForMeSpecific">
+	<summary>
+		<c>True</c> if the message has a target address that is equal to the device address, <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsForMeGroup">
+	<summary>
+		<c>True</c> if the message was send to a xPL group address that the device is a member of, <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsForMeBroadcast">
+	<summary>
+		<c>True</c> if the message was send to the xPL broadcast address "*", <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsFilterMatch">
+	<summary>
+		<c>True</c> if the message matches with any of the filters as set for the device, <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLEventArgs.IsForMe">
+	<summary>
+		<c>True</c> if the message was sent to either 1) specific address of the device, or 2) to a group the 
+ device is member of, or 3) to the xPL broadcast address "*", <c>False</c> otherwise
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLDevice.xPLEventArgs">
+	<summary>
+ Eventarguments containing the received xPLMessage
+ </summary>
+	<remarks>Use by the xPLMessageReceived event, to pass the message that was received.</remarks>
+</member><member name="F:xPL.xPLDevice.MessagePassing">
+	<summary>
+ Set the flags of this property to indicate for which messages an xPLMessageReceived event needs to be raised.
+ </summary>
+	<remarks>See xPLDevice.MessagePassingEnum for details.</remarks>
+</member><member name="F:xPL.xPLDevice.VersionNumber">
+	<summary>
+ The version number will initially hold the version information of the main assembly (not of xPLLib) and will be added to heartbeat messages. 
+ It can be overwritten by any other value, which will then be added to the heartbeat messages.
+ </summary>
+	<remarks>This property will NOT be stored when calling the <c>GetState</c> method. So if a custom value is
+ being used, that custom value must be restored after recreating a device from a SavedState string.
+ Setting it to an empty string will prevent it from being added to the heartbeat messages.</remarks>
+</member><member name="F:xPL.xPLDevice.CustomID">
+	<summary>
+ Provides a custom identification tag for an <c>xPLDevice</c> object. Use <see cref="P:xPL.xPLListener.Device(System.Int32)"/> 
+ to return a <c>xPLDevice</c> object from the devicelist based on the <c>CustomID</c> value.
+ </summary>
+	<remarks>When using the <see cref="M:xPL.xPLListener.RestoreFromState(System.String,System.Boolean)"/> method, then the <c>CustomID</c> property can 
+ be used to uniquely identify the devices (that have been recreated from the <c>SavedState</c> value) to 
+ reattach the eventhandlers and callback methods for each specific object.</remarks>
+</member><member name="F:xPL.xPLDevice.CustomSettings">
+	<summary>
+ This string property of the <c>xPLDevice</c> object can be used to store custom settings. The settings are persistent in between
+ application sessions through the <c>GetState</c> method. It is not being used by the 
+ <c>xPLDevice</c> object itself, but will be included when <c>GetState</c> is used and when a new <c>xPLDevice</c> object is 
+ recreated from a <c>SavedState</c> value. 
+ </summary>
+</member><member name="F:xPL.xPLDevice.AutoFragment">
+	<summary>
+ If set to <c>True</c> (default), large messages send will automatically be fragmented using the fragment.basic schema. In that case the device 
+ will not receive any fragment related data, only the reconstructed messages (incoming messages). If set to <c>False</c> then no 
+ reconstruction takes place and the individual received fragments will be passed to the host. The fragmenting/defragmenting
+ is done transparantly for the host application if set to <c>True</c>.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice._FragmentedMessageList">
+	<summary>
+ Collection contains the fragmented messages send/received by this device (in case a 
+ resend is requested or until all fragments are received)
+ Key is 'sourceaddres:ID', where ID is the ID in the fragment id part; x/y:ID
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice._FragmentIgnoreList">
+	<summary>
+ List with messages that need to be ignored. Contains
+ only expire dates, stored with the messageID as key, formatted as 'xpladdress:xxx'
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice._FragmentedIDCount">
+	<summary>
+ Rotating fragmented message ID generator.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLDevice.xPLGetHBeatItems">
+	<summary>
+ This is a delegate function that can be used to add your own items to the heartbeat messages generated by 
+ an <c>xPLDevice</c> object.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLDevice.ConfigItems">
+	<summary>
+ This property provides access to the xPLConfigItems object that holds the configuration items for the device.
+ </summary>
+	<remarks>See xPLConfigItems for details.</remarks>
+</member><member name="P:xPL.xPLDevice.Configurable">
+	<summary>
+ Determines whether the device is configurable. If <c>True</c>, instructs the device to respond on configuration requests received from the xPL network.
+ </summary>
+	<value><c>True</c> if the device is configurable, <c>False</c> otherwise</value>
+	<returns><c>True</c> if the device is configurable, <c>False</c> otherwise</returns>
+	<remarks>If the device is already online and it has already been configured, changing this setting has no effect. If it 
+ wasn't configured already extra heartbeats will be send to end regular/config status and enter the correct status as appropriate.
+ NOTE: If set to <c>False</c> the device addres; 'vendor.device.instance' will not be configurable, so they must be set properly before going online!!</remarks>
+</member><member name="P:xPL.xPLDevice.VendorID">
+	<summary>
+ Property to read or set the "Vendor" part of the xPL device address
+ </summary>
+	<value>vendor id to be set</value>
+	<returns>string containing the vendor id</returns>
+	<remarks>Changing the value of the <c>VendorID</c> property while the device is enabled will cause the
+ appropriate heartbeats to be sent.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; <c>value</c> contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLDevice.DeviceID">
+	<summary>
+ Property to read or set the "Device" part of the xPL device address
+ </summary>
+	<value>device id to be set</value>
+	<returns>string containing the device id</returns>
+	<remarks>Changing the value of the <c>DeviceID</c> property while the device is enabled will cause the
+ appropriate heartbeats to be sent.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; <c>value</c> contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLDevice.InstanceID">
+	<summary>
+ Property to read or set the "Instance" part of the xPL device address
+ </summary>
+	<value>instance id to be set</value>
+	<returns>string containing the instance id</returns>
+	<remarks>Changing the value of the <c>InstanceID</c> property while the device is enabled will cause the
+ appropriate heartbeats to be sent.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: Either; <c>value</c> contains a wildcard, or <c>value</c> has a length outside 
+ allowed boundaries, or <c>value</c> contains unallowed characters.</exception>
+</member><member name="P:xPL.xPLDevice.InstanceIDType">
+	<summary>
+ Set the type of instance name to be used.
+ If this property is set to either a randomized or a hostbased instance, then this will be generated and be used to replace the
+ current value of the <c>InstanceID</c> property (appropriate hbeats will be sent if the device is Enabled).
+ </summary>
+	<remarks>The value of this property is only valid as long as the user of the xPL device has not reconfigured
+ the device with a new name.</remarks>
+</member><member name="P:xPL.xPLDevice.Address">
+	<summary>
+ Returns the full xPL address of the device formatted as 'vendor-device.instance'
+ </summary>
+	<remarks>If the device is enabled, then appropriate heartbeat/config end messages will be sent.</remarks>
+</member><member name="P:xPL.xPLDevice.Configured">
+	<summary>
+ Read-only property indicating whether the device was configured through an xPL device manager.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLDevice.Enabled">
+	<summary>
+ Use this property to enable or disable the device on the xPL network. Setting it to True will start the heartbeat sequence, 
+ and/or the configuration sequence. Setting it to False will stop those sequences and send a final heartbeat (type 'end') 
+ message to indicate the device is leaving the network.
+ </summary>
+	<remarks>Check the Status property for actual status of the device being connected or not.</remarks>
+</member><member name="P:xPL.xPLDevice.Status">
+	<summary>
+ Returns the actual status of the device regarding it being connected to the xPL network. <c>Offline</c> and <c>Online</c> 
+ are obvious. <c>Connecting</c> means the device has been enabled, yet has not yet received its own heartbeat echo back.
+ This might indicate that there is no hub or the hub is not properly functioning. While no echo has been received
+ back, it cannot be assumed that the device is connected to the xPL network.
+ </summary>
+	<remarks>Read-only. Use the <c>Enabled</c> property to make changes.</remarks>
+</member><member name="P:xPL.xPLDevice.Debug">
+	<summary>
+ Sets or gets the debugging status of the device. If set to <c>True</c> there will be substantially more
+ logging. If there is a configitem called 'debug' then the property value can be changed through a 
+ config.response command message with 'debug=true/on/1' or 'debug=false/off/0'.
+ </summary>
+	<remarks>By default a (hidden) configitem 'debug' will be created for every new device. If the user 
+ should not be able to modify the value of the <seealso cref="P:xPL.xPLDevice.Debug"/> property then remove 
+ the configitem by calling <c>ConfigItems.Remove("debug")</c> on the xPLDevice object.</remarks>
+</member><member name="M:xPL.xPLDevice.#ctor">
+	<summary>
+ Creates a new instance of an <c>xPLDevice</c> object.
+ </summary>
+	<remarks>The default address will be 'vendorid-deviceid.xxx", where 'xxx' will be a 16 character 
+ randomized instance ID</remarks>
+</member><member name="M:xPL.xPLDevice.#ctor(System.String,System.Boolean)">
+	<summary>
+ Recreates an xPLDevice from a SavedState string. PLEASE NOTE: no attached event handlers nor callback 
+ functions will be restored. So after recreating the device they must be updated or no events nor callbacks
+ will be received (see also <seealso cref="F:xPL.xPLDevice.CustomID"/> property). Also; when restoring a device this way the <c>VersionNumber</c>
+ property will NOT be restored, so if it was manually overriden, then it must be done again after each restore.
+ </summary>
+	<param name="SavedState">SavedState string containing all parameters to recreate the xPLDevice.</param>
+	<param name="RestoreEnabled">If <c>True</c>, the <c>Enabled</c> property will be set as recorded 
+ in the SavedState string, if set to <c>False</c> the device will not be Enabled, independent of the 
+ setting stored in the SavedState string.</param>
+	<remarks>The SavedState string can be obtained from the <c>GetState</c> method. Before recreating any devices
+ the <see cref="M:xPL.xPL_Base.StateAppVersion(System.String)"/> method can be used to verify the application version that created the SavedState.</remarks>
+	<exception cref="T:System.ArgumentException">Condition: 1) <c>SavedState</c> is either an empty string ("") or
+ <c>Is Nothing</c>, 2) <c>SavedState</c> value was created by a newer/unknown version of xpllib</exception>
+	<exception cref="T:System.Exception">Condition: parsing <c>SavedState</c> value failed</exception>
+</member><member name="M:xPL.xPLDevice.GetState(System.String)">
+	<summary>
+ Returns a SavedState string enabling the persistence of configuration information.
+ </summary>
+	<returns>A SavedState string, containing all configuration info from the device.</returns>
+	<param name="AppVersion">Version information of the host application.</param>
+	<remarks>The SavedState string can be used with the <c>xPLDevice.New(SavedState, RestoreEnabled)</c>
+ constructor to recreate the device in the exact same state.</remarks>
+</member><member name="M:xPL.xPLDevice.Dispose">
+	<summary>
+ Disposes the xPLDevice object, before disposing the <c>Enabled</c> property will be set to <c>False</c>, which 
+ will provide a clean exit.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLDevice.Send(xPL.xPLMessage)">
+	<summary>
+ Sends an xPL message.
+ </summary>
+	<param name="myxPL">The xPL message object that needs to be sent</param>
+	<exception cref="T:xPL.xPL_Base.MissingFieldsException">Condition: if the message fails the checks for creating a raw xPL string <see cref="P:xPL.xPLMessage.RawxPL"/>.</exception>
+	<exception cref="T:System.Exception">Condition: if the <c>Enabled</c> property is set to <c>False</c>.</exception>
+	<exception cref="T:System.ArgumentException">Condition: if the message size is too large to be send, or a single value is too large, so 
+ fragmentation doesn't work, see <seealso cref="F:xPL.xPLDevice.AutoFragment">AutoFragment</seealso> and <seealso cref="F:xPL.xPL_Base.XPL_MAX_MSG_SIZE">XPL_MAX_MSG_SIZE</seealso></exception>
+	<remarks>Other exceptions may occur from the network. Before sending the <c>Source</c> address will 
+ be set to the address of the device through which it will be sent.</remarks>
+</member><member name="M:xPL.xPLDevice.SendHeartbeatMessage">
+	<summary>
+ Sends a heartbeat message. Either a 'hbeat.app' or 'config.app' depending on configuration status.
+ </summary>
+	<remarks>Heartbeat will only be sent if device is currently <c>Enabled</c>, if not, then no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLDevice.IPaddressChange">
+	<summary>
+ sub gets called by the listener whenever the IP address or Port number changes.
+ </summary>
+	<remarks>Device must send a new heartbeat with the latest settings</remarks>
+</member><member name="M:xPL.xPLDevice.Enable">
+	<summary>
+ Sets the Enabled property to <c>True</c>
+	</summary>
+	<remarks>See also <seealso cref="P:xPL.xPLDevice.Enabled"/>.</remarks>
+</member><member name="M:xPL.xPLDevice.Disable">
+	<summary>
+ Sets the Enabled property to <c>False</c>
+	</summary>
+	<remarks>See also <seealso cref="P:xPL.xPLDevice.Enabled"/>.</remarks>
+</member><member name="M:xPL.xPLDevice.GetNewFragmentedID">
+	<summary>
+ Returns a new ID for a fragmented message, a rotating number from 0-999, which will be stored in STATE values
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLDevice.HandleFragmentMessage(xPL.xPLMessage)">
+	<summary>
+ Handle an incoming fragment class message, recreating the fragmented message
+ or resending fragments requested.
+ </summary>
+	<param name="msg"></param>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLDevice.xPLLogLevels">
+	<summary>
+ Enum that defines the loglevels that can be used with a log.basic message
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLDevice.LogMessage(System.String,xPL.xPLDevice.xPLLogLevels,System.String)">
+	<summary>
+ Attempts to send a log.basic message. Any exceptions will be caught and not rethrown. See log.basic schema for the schema use.
+ </summary>
+	<param name="Message"></param>
+	<param name="Level"></param>
+	<param name="ErrorCode"></param>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLDevice">
+	<summary>
+ Represents an xPL device with all handling that comes with it; configuration 
+ items, status reporting, events generated, etc.
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLGroups.Items(System.Int32)">
+	<summary>
+ Gets or sets the value of an item at the specififed index in the list.
+ </summary>
+	<param name="idx">The index at which to get/set the value</param>
+	<value>The value to be set. If an empty string value ("") is set, then the item will be removed from the list.</value>
+	<returns>String with the group address</returns>
+	<remarks>Values must be in full xPL address format, with 'xpl' as vendor value and 'group' as device value. 
+ Example: 'xpl-group.mygroup'. Values will always be converted to lowercase.</remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: Value doesn't adhere to the xPL requirements for groupnames.</exception>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than zero, or <c>idx</c> is equal to or greater than <c>Count</c></exception>
+	<exception cref="T:System.Data.DuplicateNameException">Condition: Groupname as provided is already present in the list</exception>
+</member><member name="P:xPL.xPLGroups.MaxValues">
+	<summary>Gets the maximum number of values allowed in the list.</summary>
+	<remarks>Read-only. The maximum is set by the <c>XPL_MAX_GROUPS</c> constant</remarks>
+</member><member name="P:xPL.xPLGroups.Count">
+	<returns>The number of values stored in the list</returns>
+</member><member name="M:xPL.xPLGroups.Remove(System.String)">
+	<summary>
+ Removes the specified value from the list.
+ </summary>
+	<param name="itemValue">The value being removed.</param>
+	<remarks>If the value isn't found in the list, no changes will be made nor any exceptions thrown.</remarks>
+</member><member name="M:xPL.xPLGroups.Add(System.String)">
+	<summary>
+ Adds a new item to the list.
+ </summary>
+	<param name="itemValue">The group address to be added in full xPL address format, with 'xpl' as vendor value and 
+ 'group' as device value. Example: 'xpl-group.mygroup'. There is one excpetion; if the value is an empty 
+ string ("") then it will simply not be added and no exception will be thrown.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: Value doesn't adhere to the xPL requirements for groupnames.</exception>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: if the <c>Count</c> is equal to the <c>MaxValues</c>, no values can be added.</exception>
+	<remarks>Values will always be converted to lowercase. If the value is already present in the list, then it will not be added and no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLGroups.IndexOf(System.String)">
+	<returns>The index if the specified value in the list or -1 if it isn't found.</returns>
+	<remarks>The value provided will always be converted to lowercase before looking it up.</remarks>
+</member><member name="M:xPL.xPLGroups.Clear">
+	<summary>
+ Clears all values from the list
+ </summary>
+</member><member name="M:xPL.xPLGroups.ToString">
+	<summary>
+ Returns a String that represents this instance. It will be formatted as in the raw xPL message; each individual group formatted as 'group=value' and the groups will separated by the <c>XPL_LF</c> constant. 
+ </summary>
+	<returns>A String that represents this instance.</returns>
+	<remarks>Returns an empty group value, eg. "group=", if there are no items in the list.</remarks>
+</member><member name="T:xPL.xPLGroups">
+	<summary>
+ Object to hold the xPL groups a device belongs to.
+ </summary>
+	<remarks>No duplicates are allowed. This object is a used as the <see cref="P:xPL.xPLConfigItems.conf_Group"/> property in an ConfigItems object.</remarks>
+</member><member name="T:xPL.xPLFragmentedMsg.FragmentationException">
+	<summary>
+ Exception thrown incase of fragmentation related errors
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg.FragmentKey.FragmentNumber">
+	<summary>
+ From the 'partid' key this is part x in 'partid=x/y:z'
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg.FragmentKey.FragmentTotal">
+	<summary>
+ From the 'partid' key this is part y in 'partid=x/y:z'
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg.FragmentKey.MessageID">
+	<summary>
+ From the 'partid' key this is part z in 'partid=x/y:z'
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.FragmentKey.ToString">
+	<summary>
+ Returns the fragmentkey as a formatted fragment key;  'nr/max:id'
+ </summary>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.FragmentKey.#ctor(System.String)">
+	<summary>
+ Dissects fragmentkey 'nr/max:id' into its underlying components as a FragmentKey object
+ </summary>
+	<param name="FragKey"></param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.FragmentKey.#ctor(xPL.xPLMessage)">
+	<summary>
+ Dissects the partidkey 'nr/max:id' from the provided message into its underlying components as a FragmentKey object
+ </summary>
+	<param name="msg"></param>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLFragmentedMsg.FragmentKey">
+	<summary>
+ Simple class to dissect a fragment key into its components; fragment nr, total number of fragments and message ID
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._Message">
+	<summary>
+ Will hold the original xPLMessage object that created, or was reconstructed from, the fragments
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._Checklist">
+	<summary>
+ A checklist containing the numbers of the parts still missing/expected, if the list is empty, the message is complete.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._Fragments">
+	<summary>
+ Holds all the individual message fragments (xPLMessage objects), by their fragment number
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Fragment(System.Int32)">
+	<summary>
+ Returns the individual message fragments (xPLMessage objects), by their fragment number, ranging from 1 to <see cref="P:xPL.xPLFragmentedMsg.Count">Count</see>.
+ If the fragment is unavailable <c>Nothing</c> is returned. If the index is out of range, an exception is thrown.
+ </summary>
+	<exception cref="T:System.IndexOutOfRangeException">Thrown when <paramref name="index"/> is less then 1 or greater than <see cref="P:xPL.xPLFragmentedMsg.Count">Count</see></exception>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Source">
+	<summary>
+ The source address the message originates from
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Parent">
+	<summary>
+ The parent device the message belongs to
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.MessageID">
+	<summary>
+ The message ID of a fragmented message is the senders xPL address with the message specific ID 
+ in the partid key, separated by a colon ':'. For example 'tieske-mydev.instance:124'.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Count">
+	<summary>
+ Total number of fragments for the message
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._blnReceived">
+	<summary>
+ If True, the message was received, false it was created
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Received">
+	<summary>
+ Returns <c>True</c> if the message was received from the network, this allows other fragments to be added to this message.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.Created">
+	<summary>
+ Returns <c>True</c> if the message was self created (and not received), this prevents other fragments of being added to this message
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.#ctor(xPL.xPLMessage,xPL.xPLDevice)">
+	<summary>
+ Creates a new fragmented message, if the provided message has a 'fragment.basic' schema then it becomes a
+ 'received' message, otherwise it becomes a 'created' message.
+ </summary>
+	<param name="msg"></param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.AddFragment(xPL.xPLMessage)">
+	<summary>
+ If the object is set as received from the network, this methods allows for the addition of new fragments received. Only if the
+ partid matches the existing parts it will be added. No exceptions will be thrown if it doesn't match.
+ Returns either te reconstructed message, if its the last fragment, or <c>Nothing</c>.
+ </summary>
+	<param name="msg"></param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.Reconstruct">
+	<summary>
+ Once the last fragment has been received, this will reconstruct the original message. Header is already done, now restore key-valuepairs in correct order
+ </summary>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLFragmentedMsg.IsComplete">
+	<summary>
+ Returns <c>True</c> if the message is complete. Only usefull for received messages, which wait for other fragments to come in.
+ </summary>
+	<value></value>
+	<returns></returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.RequestMissingParts(xPL.xPLDevice)">
+	<summary>
+ Requests the still missing parts of the message through the provided device (will be used as the sender for the request). If no 
+ device provided an active device will be gotten from the xPLListener to send it through.
+ </summary>
+	<param name="dev"></param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.ResendFailedParts(xPL.xPLMessage)">
+	<summary>
+ Will resend requested parts, as requested in the provided message. If the partid doesn't match, nothing will be send and 
+ no exception will be thrown. <c>True</c> is returned when the parts have been succesfully resend.
+ </summary>
+	<param name="msg">Message containing the resend request</param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.Send">
+	<summary>
+ Send the fragmented message through its parent device. Will send all fragments.
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._DismissTimer">
+	<summary>
+ Timer for dismissing a send message. Will expire when the message fragments can no longer be requested by other devices
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._ResendTimer">
+	<summary>
+ Timer that will be set after receiving a fragment, when it expires a resend request needs to be fired for the missing 
+ fragments, and the timer will be reused for expiring the incomplete message (if no new fragments are received after
+ the resend request).
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLFragmentedMsg._ReceivedFragmentSinceLastResendRequest">
+	<summary>
+ If this is <c>False</c> when the <see cref="P:xPL.xPLFragmentedMsg._ResendTimer">_ResendTimer</see> expires, then it expired for the second 
+ time, which means the incoming message should be dismissed.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.ResetDismissTimer">
+	<summary>
+ Timer that will expire when the message can be dismissed, when no new resend requests will be handled
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFragmentedMsg.ResetResendTimer">
+	<summary>
+ Timer that will be set when a fragment is received, if not timely all fragments are in, this timer requests a resend
+ </summary>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLFragmentedMsg">
+	<summary>
+ represents a fragmented xPL message, either received from the xPL network, or created from an internal message as preparation to send it.
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtConfigItem.#ctor(System.String,xPL.xPL_Base.xPLConfigTypes,System.Int32)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLExtConfigItem"/> class.
+ </summary>
+	<param name="itemName">Name or key of the configitem</param>
+	<param name="itemtype">The item type</param>
+	<param name="maxValues">The maximum number of values allowed for this xPLExtConfigItem</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only. If <c>maxValues</c> 
+ is set to less than 1, it will be set at 1, no exception will be thrown</remarks>
+</member><member name="P:xPL.xPLExtConfigItem.Name">
+	<returns>The name of the xPLExtConfigItem</returns>
+	<remarks>Read-only. This value can only be set upon creation of the object instance.</remarks>
+</member><member name="P:xPL.xPLExtConfigItem.Item(System.Int32)">
+	<param name="idx">Index of the item in the list to get/set.</param>
+	<value>Value to set at position <c>idx</c> in the list</value>
+	<returns>The current value set at position <c>idx</c> in the list.</returns>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than 0 or higher than or equal to <c>Count</c>.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+</member><member name="P:xPL.xPLExtConfigItem.MaxValues">
+	<value>Sets the maximum number of values that can be stored in the xPLExtConfigItem</value>
+	<returns>The maximum number of values allowed</returns>
+	<remarks>If the value is set to less than 1, it will be set at 1. If <c>value</c> is less than the current value of <c>Count</c>, 
+ then all excess items will be deleted from the list.</remarks>
+</member><member name="P:xPL.xPLExtConfigItem.ConfigType">
+	<returns>The xPL configuration item type; config, reconf or option.</returns>
+</member><member name="P:xPL.xPLExtConfigItem.Count">
+	<returns>The number of values stored in the value list</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtConfigItem.Remove(System.String)">
+	<param name="itemValue">The itemValue to be removed from the list</param>
+	<remarks>If the value isn't found, then no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLExtConfigItem.Add(System.String)">
+	<summary>
+ Adds a value to the list of values stored in the <c>xPLExtConfigItem</c> object
+ </summary>
+	<param name="itemValue">Value to be added to the list</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards</exception>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>Count</c> equals <c>MaxValues</c>, no items can be added.</exception>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtConfigItem.IndexOf(System.String)">
+	<param name="v">The value being sought in the list</param>
+	<returns>The index at which the value <c>v</c> is located in the list, or -1 if it doesn't exist in the list</returns>
+</member><member name="M:xPL.xPLExtConfigItem.Clear">
+	<summary>
+ Clears the list with values
+ </summary>
+	<remarks>The <c>Name</c>, <c>ConfigType</c> and <c>MaxValues</c> properties of the config item remain unchanged.</remarks>
+</member><member name="M:xPL.xPLExtConfigItem.ToString">
+	<returns>A string representing the xPLExtConfigItem in the format used for raw XPL. Each value will be in the list in the format "name=value". Hence 'name' is 
+ the same for each value in the list. The individual values (lines) will be separated by the <c>XPL_LF</c> constant.</returns>
+	<remarks>If there are no items in the list, "name=" will be returned</remarks>
+</member><member name="T:xPL.xPLExtConfigItem">
+	<summary>
+ This object represents a single Configuration key and will be used by the xPLExtDevice object to maintain the 
+ configuration information on devices seen on the xPL network. 
+ Each configuration key can have multiple values (no duplicates are allowed).
+ </summary>
+	<remarks>Property <c>Name</c> can only be set upon creation, it is read-only.</remarks>
+</member><member name="M:xPL.xPLExtDevice.#ctor(System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLExtDevice"/> class.
+ </summary>
+</member><member name="F:xPL.xPLExtDevice.LastSeen">
+	<summary>
+ The date/time the device was last seen on the network (a message from it was received)
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLExtDevice.TimeOut">
+	<summary>
+ The date/time the device will timeout if no new heartbeat has been received
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLExtDevice.ConfigList">
+	<summary>
+		<c>True</c> if a config.list status message has been received from this device
+ </summary>
+	<remarks></remarks>
+</member><member name="F:xPL.xPLExtDevice.ConfigCurrent">
+	<summary>
+		<c>True</c> if a config.current status message has been received from this device
+ </summary>
+	<remarks>If a config.response command message for a device is seen, then this property is 
+ returned to <c>False</c> until a new config.current status message is received.</remarks>
+</member><member name="F:xPL.xPLExtDevice.Ended">
+	<summary>
+		<c>True</c> if a heartbeat END message has been received
+ </summary>
+	<remarks>see also <seealso cref="F:xPL.xPLExtDevice.TimedOut"/></remarks>
+</member><member name="F:xPL.xPLExtDevice.TimedOut">
+	<summary>
+		<c>True</c> if no new heartbeat was received from the device within INTERVAL * 2 + 1 minutes
+ </summary>
+	<remarks>see also <seealso cref="F:xPL.xPLExtDevice.Ended"/></remarks>
+</member><member name="F:xPL.xPLExtDevice.HeartBeatItems">
+	<summary>
+ A list with all heartbeat items received from the device
+ </summary>
+	<remarks>Every time a message with schema type hbeat.basic, hbeat.app, config.basic or 
+ config.app is received the values in the list are overwritten with the new ones received.</remarks>
+</member><member name="P:xPL.xPLExtDevice.Address">
+	<summary>
+ Returns the address of the device.
+ </summary>
+	<returns>xPL Address of the device.</returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLExtDevice.Item(System.String)">
+	<param name="key">The <c>Name</c> of the xPLExtConfigItem object being sought</param>
+	<returns>the xPLExtConfigItem from the list that has a <c>Name</c> value that corresponds to the provide <c>key</c> value</returns>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: the <c>key</c> cannot be found.</exception>
+	<remarks>Read-only, use <c>Add</c> or <c>Remove</c> to modify the list. Value of <c>key</c> will be 
+ converted to lowercase.</remarks>
+</member><member name="P:xPL.xPLExtDevice.Item(System.Int32)">
+	<param name="idx">The index of the xPLExtConfigItem object in the list</param>
+	<returns>A reference to the xPLExtConfigItem object in the list at position <c>idx</c>.</returns>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: the <c>idx</c> value is less than 0 or greater than <c>Count</c>.</exception>
+	<remarks>Read-only, use <c>Add</c> or <c>Remove</c> to modify the list.</remarks>
+</member><member name="P:xPL.xPLExtDevice.Count">
+	<returns>The number of xPLExtConfigItem objects in the list</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtDevice.IndexOf(System.String)">
+	<returns>The index of the xPLExtConfigItem with a <c>Name</c> that equals <c>itemName</c>.</returns>
+	<remarks><c>itemName</c> will be converted to lowercase. Returns -1 if not found.</remarks>
+</member><member name="M:xPL.xPLExtDevice.Add(System.String,xPL.xPL_Base.xPLConfigTypes,System.Int32)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLExtConfigItem"/> class and adds it to the list.
+ </summary>
+	<param name="itemName">Name or key of the configitem</param>
+	<param name="itemtype">The item type</param>
+	<param name="maxValues">The maximum number of values allowed for this xPLExtConfigItem</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemValue">Condition: the value doesn't adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If <c>itemName</c> is already present in the list.</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only. If <c>maxValues</c> 
+ is set to less than 1, it will be set at 1, no exception will be thrown</remarks>
+</member><member name="M:xPL.xPLExtDevice.Add(System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLExtConfigItem"/> class and adds it to the list. The type 
+ will be set to "option" and the maximum number of values allowed to 1.
+ </summary>
+	<param name="itemName">Name or key of the configitem.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalConfigItemName">Condition: The name does not adhere to xPL standards.</exception>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If <c>itemName</c> is already present in the list.</exception>
+	<remarks>The <c>itemName</c> will always be converted to lowercase, and can only be set upon creation; it is read-only.</remarks>
+</member><member name="M:xPL.xPLExtDevice.Add(xPL.xPLExtConfigItem)">
+	<summary>
+ Adds a xPLExtConfigItem object to the list of the xPLExtDevice
+ </summary>
+	<param name="ci">xPLExtConfigItem object to be added to the list</param>
+	<exception cref="T:xPL.xPL_Base.DuplicateConfigItemName">Condition: If the <c>Name</c> of the <c>ConfigItem</c> object 
+ provided is already present in the list.</exception>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtDevice.Remove(System.String)">
+	<param name="key">The <c>Name</c> of the xPLExtConfigItem object to remove from the list.</param>
+	<remarks><c>key</c> will be converted to lowercase. If the item is not found, no exception is thrown.</remarks>
+</member><member name="M:xPL.xPLExtDevice.Remove(System.Int32)">
+	<param name="idx">The index of the item to remove from the list.</param>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than 0 or greater than or equal to <c>Count</c>.</exception>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLExtDevice.ToString">
+	<summary>
+ Returns a raw xPL string containing all the configuration items. 
+ </summary>
+	<returns>String representation of configuration values.</returns>
+	<remarks>Each line has a format 'name=value', lines are separated by XPL_LF.</remarks>
+</member><member name="T:xPL.xPLExtDevice">
+	<summary>
+ This class represents an external xPL device on the xPL network. The <c>xPLNetwork</c> object will automatically
+ create a list of external devices as it receives messages from the network.
+ </summary>
+	<remarks></remarks>
+</member><member name="E:xPL.xPLNetwork.xPLDeviceFound">
+	<summary>
+ Event raised when a device is seen for the first time on the network.
+ </summary>
+	<remarks>When using 1 eventhandler for both the Lost and Found events, check the 
+ <see cref="F:xPL.xPLExtDevice.Ended"/> and <see cref="F:xPL.xPLExtDevice.TimedOut"/> properties
+ to determine whether the device was found (both <c>False</c>) or lost (at least 1 <c>True</c>).</remarks>
+</member><member name="E:xPL.xPLNetwork.xPLDeviceLost">
+	<summary>
+ Event raised when a device is lost (either heartbeat timed out, or an END message was received).
+ </summary>
+	<remarks>Check the <see cref="F:xPL.xPLExtDevice.Ended"/> and <see cref="F:xPL.xPLExtDevice.TimedOut"/> of the device to 
+ find out the reason. When using 1 eventhandler for both the Lost and Found events, these two properties
+ can be used to determine whether the device was found (both <c>False</c>) or lost (at least 1 <c>True</c>).</remarks>
+</member><member name="E:xPL.xPLNetwork.xPLNetworkReset">
+	<summary>
+ Event raised when the network has been reset by calling the <see cref="M:xPL.xPLNetwork.Reset"/> method.
+ </summary>
+</member><member name="F:xPL.xPLNetwork.xPLNetworkEventArgs.ExtDevice">
+	<summary>
+ Contains the <see cref="T:xPL.xPLExtDevice"/> object that as found/lost on the network
+ </summary>
+	<remarks>Check the <see cref="F:xPL.xPLExtDevice.Ended"/> and <see cref="F:xPL.xPLExtDevice.TimedOut"/> properties
+ to determine whether the device was found (both <c>False</c>) or lost (at least 1 <c>True</c>)</remarks>
+</member><member name="T:xPL.xPLNetwork.xPLNetworkEventArgs">
+	<summary>
+ Eventarguments containing the <see cref="T:xPL.xPLExtDevice"/> found or lost. Used by  
+ <see cref="E:xPL.xPLNetwork.xPLDeviceFound"/> and <see cref="E:xPL.xPLNetwork.xPLDeviceLost"/> events.
+ </summary>
+</member><member name="T:xPL.xPLNetwork.ScanASyncCompleteCallback">
+	<summary>
+ Delegate function used for a CallBack when the <c>ScanASync</c> completes
+ </summary>
+	<remarks>see <see cref="M:xPL.xPLNetwork.ScanASync(xPL.xPLDevice,xPL.xPLNetwork.ScanASyncCompleteCallback,System.Int32)"/>.</remarks>
+</member><member name="P:xPL.xPLNetwork.NetworkKeepEnded">
+	<summary>
+ Should devices having send an END message (or having been timed-out) be kept in the list?
+ </summary>
+	<remarks>If set to <c>False</c> all ended and timedout devices will be removed from the list. If set 
+ to <c>True</c> the status of devices can still be checked by the properties 
+ <see cref="F:xPL.xPLExtDevice.TimedOut"/> and <see cref="F:xPL.xPLExtDevice.Ended"/>.
+ NOTE: this property is included in the <see cref="M:xPL.xPLListener.GetState(System.String)"/>.</remarks>
+</member><member name="M:xPL.xPLNetwork.IndexOf(System.String)">
+	<summary>
+ Returns the index of a device (based on its xPL address) in the network list.
+ </summary>
+	<param name="DeviceAddress">Full xPL address formatted as 'vendor-device.instance'</param>
+	<returns>Index value, or -1 if not found.</returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLNetwork.Devices(System.Int32)">
+	<summary>
+ Gets an <c>xPLExtDevice</c> object from the list by its index
+ </summary>
+	<param name="idx">Index of the <c>xPLExtDevice</c> object requested from the list</param>
+	<returns><c>xPLExtDevice</c> object at position <c>idx</c></returns>
+	<remarks></remarks>
+	<exception cref="T:System.IndexOutOfRangeException">Condition: <c>idx</c> is less than 0 or greater than or equal to <c>Count</c>.</exception>
+</member><member name="P:xPL.xPLNetwork.Devices(System.String)">
+	<summary>
+ Gets an <c>xPLExtDevice</c> object from the list by its device address
+ </summary>
+	<param name="addr">xPL Address of the <c>xPLExtDevice</c> object requested from the list</param>
+	<returns>First <c>xPLExtDevice</c> object with address <c>addr</c>, or <c>Nothing</c> if <c>addr</c> 
+ was not found in the list</returns>
+	<remarks></remarks>
+</member><member name="P:xPL.xPLNetwork.Count">
+	<returns>The number of devices in the list</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLNetwork.Reset">
+	<summary>
+ Resets all information currently known from the network
+ </summary>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLNetwork.NetworkTimerElapsed(System.Object,System.Timers.ElapsedEventArgs)">
+	<summary>
+ Check whether the devices in my network list are still valid, or they timed-out
+ </summary>
+	<param name="sender"></param>
+	<param name="e"></param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLNetwork.MessageReceived(xPL.xPLMessage)">
+	<summary>
+ Everytime a message is received from the network, the listener calls this method to
+ update the <c>Network</c> property containing the list of all known devices
+ </summary>
+	<param name="xmsg">The message just received</param>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLNetwork.ScanASyncRunning">
+	<returns><c>True</c> if currently an asynchronous network scan is running</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLNetwork.ScanASync(xPL.xPLDevice,xPL.xPLNetwork.ScanASyncCompleteCallback,System.Int32)">
+	<summary>
+ Performs an xPL network scan asynchroneously (will not block the current thread). The scan has 
+ 3 stages; 1) sending a heartbeat (and waiting for responses), 2) requesting config.list from all 
+ devices known but yet lacking a config.list (and waiting for responses), 3) requesting config.current 
+ from all known devices but lacking a config.current (and waiting for responses).
+ When the scan is complete the callback method is called.
+ </summary>
+	<param name="SourceDev">The <c>xPLDevice</c> object used to send the various requests.</param>
+	<param name="StageWait">How long to wait (in milliseconds) for responses at the end of each stage.
+ The duration of the entire scan is at least 3x this value.</param>
+	<param name="ScanCompleteCallBack">Callback method that will be called when the scan completes</param>
+	<remarks>If the information in the config.list and config.current messages is not required, then it is easier
+ to just send out a heartbeat request using the <see cref="M:xPL.xPLNetwork.RequestHeartbeat(xPL.xPLDevice,System.String)"/> method.
+ Scanning the network will scan for missing information, so known devices for which a 
+ config.list or config.current was received already, will not be scanned again. If an entirely new
+ scan must be performed, then call the <see cref="M:xPL.xPLNetwork.Reset"/> method first.
+ (if a config.response command message was received for a device and no new config.current status
+ message has been received since, it will be scanned again, see <seealso cref="F:xPL.xPLExtDevice.ConfigCurrent"/>)</remarks>
+</member><member name="M:xPL.xPLNetwork.RequestHeartbeat(xPL.xPLDevice,System.String)">
+	<summary>
+ Sends out a heartbeat request from the specified xPLDevice to the target address
+ </summary>
+	<param name="xPLDev"><c>xPLDevice</c> object used as source of the heartbeat request</param>
+	<param name="Target">string with target address the heartbeat is requested from. If not specified
+ a wildcard "*" is used, requesting the entire xPL network to send a heartbeat.</param>
+	<remarks></remarks>
+	<exception cref="T:System.NullReferenceException">Condition: xPLDev <c>Is Nothing</c></exception>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: <c>target</c> is not a valid xPLAddress</exception>
+</member><member name="M:xPL.xPLNetwork.RequestConfigList(xPL.xPLDevice,System.String)">
+	<summary>
+ Sends out a config.list request from the specified xPLDevice to the target address
+ </summary>
+	<param name="xPLDev"><c>xPLDevice</c> object used as source of the config.list request</param>
+	<param name="Target">string with target address the config.list is requested from.</param>
+	<remarks></remarks>
+	<exception cref="T:System.NullReferenceException">Condition: xPLDev <c>Is Nothing</c></exception>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: <c>target</c> is not a valid xPLAddress</exception>
+</member><member name="M:xPL.xPLNetwork.RequestConfigCurrent(xPL.xPLDevice,System.String)">
+	<summary>
+ Sends out a config.current request from the specified xPLDevice to the target address
+ </summary>
+	<param name="xPLDev"><c>xPLDevice</c> object used as source of the config.current request</param>
+	<param name="Target">string with target address the config.list is requested from.</param>
+	<remarks></remarks>
+	<exception cref="T:System.NullReferenceException">Condition: xPLDev <c>Is Nothing</c></exception>
+	<exception cref="T:xPL.xPL_Base.IllegalIDsInAddress">Condition: <c>target</c> is not a valid xPLAddress</exception>
+</member><member name="T:xPL.xPLNetwork">
+	<summary>
+ The <c>xPLNetwork</c> class is a shared class that provides access to the xPL devices as seen on the
+ xPL network. The <c>xPLListener</c> initiates and terminates information collecting automatically. 
+ No instances of the xPLNetwork object can be created.
+ Passive scanning is automatic; all messages received by the <c>xPLListener</c> object will be passed 
+ on and any new information on the xPL network will be stored.
+ For active scanning of individual devices use the methods <see cref="M:xPL.xPLNetwork.RequestHeartbeat(xPL.xPLDevice,System.String)"/>, 
+ <see cref="M:xPL.xPLNetwork.RequestConfigList(xPL.xPLDevice,System.String)"/>,  <see cref="M:xPL.xPLNetwork.RequestConfigCurrent(xPL.xPLDevice,System.String)"/> or start
+ an asynchroneous scan of the entire network by calling <see cref="M:xPL.xPLNetwork.ScanASync(xPL.xPLDevice,xPL.xPLNetwork.ScanASyncCompleteCallback,System.Int32)"/>.
+ </summary>
+	<remarks>There must be at least 1 enabled device for the listener to remain connected and receive
+ messages. If the last device is disabled, connection with the xPL network is lost and the 
+ <see cref="T:xPL.xPLNetwork"/> object will not receive any updates from the listener. The network information 
+ will then become unreliable!! Consider doing a reset or activescan after reconnecting to the network.
+ </remarks>
+</member><member name="P:xPL.xPLFilter.MsgType">
+	<summary>
+ A xPLMessageTypeEnum value representing the value for the messagetype in the filter.
+ </summary>
+	<value>A valid message type value.</value>
+	<returns>The current messagetype</returns>
+	<remarks>The default value is wildcard (Any, or "*").</remarks>
+</member><member name="P:xPL.xPLFilter.Address">
+	<summary>
+ A xPLMessageAddress object representing the value for the vendor, device and instance in the filter.
+ </summary>
+	<value>A valid xPLaddress object. Please note that not a reference to the object provided will be set, but the values within the object will be copied to the filter.</value>
+	<returns>A reference to the xPLAddress object.</returns>
+	<remarks>If the value is set to <c>Nothing</c> then a wildcard will be put in place for the address elements, no exception will be thrown.
+ The default value is wildcard ("*").</remarks>
+</member><member name="P:xPL.xPLFilter.Schema">
+	<summary>
+ A xPLSchema object representing the value for the schema class and schema type in the filter.
+ </summary>
+	<value>A valid xPLSchema object. Please note that not a reference to the object provided will be set, but the values within the object will be copied to the filter.</value>
+	<returns>A reference to the xPLSchema object</returns>
+	<remarks>If the value is set to <c>Nothing</c> then a wildcard will be put in place for the schema elements, no exception will be thrown.
+ The default value is wildcard ("*").</remarks>
+</member><member name="M:xPL.xPLFilter.#ctor(xPL.xPL_Base.xPLMessageTypeEnum,xPL.xPLAddress,xPL.xPLSchema)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLFilter"/> class.
+ </summary>
+	<param name="t">The message type to be set</param>
+	<param name="a">The address to be set</param>
+	<param name="s">The schema to be set</param>
+</member><member name="M:xPL.xPLFilter.#ctor(System.String)">
+	<summary>
+ Initializes a new instance of the <see cref="T:xPL.xPLFilter"/> class.
+ </summary>
+	<param name="flt">A valid filter string in the format 'msgtype.vendor.device.instance.schemaclass.schematype'. Any of the elements may be wildcarded.</param>
+	<remarks></remarks>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: any of the elements has illegal content, by means of length or characters used.</exception>
+</member><member name="M:xPL.xPLFilter.Matches(xPL.xPL_Base.xPLMessageTypeEnum,xPL.xPLAddress,xPL.xPLSchema)">
+	<summary>
+ Matches the provided set of type, address and schema with the values in the filter object
+ </summary>
+	<param name="t">Message Type to be matched against the filter</param>
+	<param name="a">Address to be matched against the filter</param>
+	<param name="s">Schema to be matched against the filter</param>
+	<returns>True if the individual elements are equal or wildcarded.</returns>
+	<remarks>If either the address or the schema <c>Is Nothing</c> then they will be wildcarded</remarks>
+</member><member name="M:xPL.xPLFilter.Matches(xPL.xPLMessage)">
+	<summary>
+ Matches the provided xPLMessage against with the values in the filter object
+ </summary>
+	<param name="msg">The xPL message to match against the filter</param>
+	<returns>True if the individual elements are equal or wildcarded.</returns>
+</member><member name="M:xPL.xPLFilter.ToString">
+	<returns>A filter string in the format 'msgtype.vendor.device.instance.schemaclass.schematype'.</returns>
+</member><member name="T:xPL.xPLFilter">
+	<summary>
+ Represents an xPL filter for filtering incoming messages. Filters exist of 5 parts; 1) messagetype (cmnd/trig/stat), 2) Target vendor, 3) Target device, 4)Target instance, 5) Schema class, 6) Schema type
+ Each part can be either wildcarded or set to a specific value.
+ </summary>
+	<remarks>The xPLFilter objects can be stored in an xPLFilters object.</remarks>
+</member><member name="P:xPL.xPLFilters.Item(System.Int32)">
+	<summary>
+ Get or sets a filter in the filters list based on the index provided.
+ </summary>
+	<param name="idx">Index of the item to get/set</param>
+	<value>A valid xPLFilter object</value>
+	<returns>a reference to the filter at the position <c>idx</c> in the list</returns>
+	<remarks></remarks>
+	<exception cref="T:System.Data.DuplicateNameException">Condition: if the filter string being set is already present in the list.</exception>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than zero or <c>idx</c> is equal to or greater than <c>Count</c></exception>
+</member><member name="P:xPL.xPLFilters.Count">
+	<returns>The number of filters currently in the list</returns>
+</member><member name="M:xPL.xPLFilters.IndexOf(xPL.xPLFilter)">
+	<summary>
+ Looks up a filter string in the list of filters.
+ </summary>
+	<param name="flt">the filter being searched for</param>
+	<returns>Index position of the filter in the list, or -1 if it isn't found</returns>
+	<remarks>Match is made on the filter CONTENT (the <c>flt.ToString</c> value), not on the xPLFilter-objectreference.</remarks>
+</member><member name="M:xPL.xPLFilters.IndexOf(System.String)">
+	<summary>
+ Looks up a filter string in the list of filters.
+ </summary>
+	<param name="flt">the filter being searched for</param>
+	<returns>Index position of the filter in the list, or -1 if it isn't found</returns>
+	<remarks>Filter string provided will always be converted to lowercase, no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLFilters.Add(xPL.xPLFilter)">
+	<summary>
+ Add a filter object to the list.
+ </summary>
+	<param name="flt">The filter object to be added.</param>
+	<remarks>The filter will only be added if it is not a duplicate. If it is a duplicate, no exception will be thrown.
+ Note that the filter value (eg. <c>flt.ToString</c>) is used to check for duplicates, not the reference to the filter object.</remarks>
+</member><member name="M:xPL.xPLFilters.Add(System.String)">
+	<summary>
+ Creates a new filter object and adds it to the list.
+ </summary>
+	<param name="flt">The filter to be added. If an empty string ("") is provided, it will 
+ not be added and no exception will be thrown.</param>
+	<exception cref="T:xPL.xPL_Base.IllegalFieldContentsException">Condition: any of the filter elements has illegal content, by means of length or characters used.</exception>
+	<remarks>The filter will only be added if it is not a duplicate. If it is a duplicate, no exception will be thrown.
+ Note that the filter value (eg. <c>flt.ToString</c>) is used to check for duplicates, not the reference 
+ to the filter object. The string provided will be converted to lowercase.</remarks>
+</member><member name="M:xPL.xPLFilters.Remove(System.Int32)">
+	<summary>
+ Removes the item at the position <c>idx</c>
+	</summary>
+	<param name="idx">The index of the item to be removed</param>
+	<remarks></remarks>
+	<exception cref="T:System.ArgumentOutOfRangeException">Condition: <c>idx</c> is less than zero or <c>idx</c> is equal to or greater than <c>Count</c></exception>
+</member><member name="M:xPL.xPLFilters.Remove(xPL.xPLFilter)">
+	<summary>
+ Removes the filter from the list
+ </summary>
+	<param name="flt">The filter object to be removed.</param>
+	<remarks>Note that the filter that matches <c>flt.ToString</c> will be removed. If the filter in't found in 
+ the list, no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLFilters.Remove(System.String)">
+	<summary>
+ Removes the filter from the list
+ </summary>
+	<param name="flt">The filter string to be removed.</param>
+	<remarks>If the filter in't found in the list, no exception will be thrown.</remarks>
+</member><member name="M:xPL.xPLFilters.Clear">
+	<summary>
+ Clears the filter list.
+ </summary>
+</member><member name="M:xPL.xPLFilters.ToString">
+	<summary>
+ Returns a string representation of the filter list.
+ </summary>
+	<returns>String representation of the filter list in the format as found in an raw xPL string; each filter listed in the 
+ format 'filter=value', with the different filter values separated by XPL_LF constant.</returns>
+	<remarks>If the list has no items, then "filter=" will be the return value.</remarks>
+</member><member name="M:xPL.xPLFilters.Matches(xPL.xPL_Base.xPLMessageTypeEnum)">
+	<summary>
+ Matches a specific xPL messagetype with the entire list of filters.
+ </summary>
+	<param name="t">The xPL message type to check</param>
+	<returns>True if it matches any of the filters in the list, or if there are no filters in the list. False otherwise.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFilters.Matches(xPL.xPLAddress)">
+	<summary>
+ Matches a specific xPL address with the entire list of filters.
+ </summary>
+	<param name="a">The xPL address to check</param>
+	<returns>True if it matches any of the filters in the list, or if there are no filters in the list. False otherwise.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFilters.Matches(xPL.xPLSchema)">
+	<summary>
+ Matches a specific xPL schema with the entire list of filters.
+ </summary>
+	<param name="s">The xPL schema to check</param>
+	<returns>True if it matches any of the filters in the list, or if there are no filters in the list. False otherwise.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFilters.Matches(xPL.xPL_Base.xPLMessageTypeEnum,xPL.xPLAddress,xPL.xPLSchema)">
+	<summary>
+ Matches a specific xPL messagetype, xPL address and xPL schema with the entire list of filters.
+ </summary>
+	<param name="t">The xPL message type to check</param>
+	<param name="a">The xPL address to check</param>
+	<param name="s">The xPL schema to check</param>
+	<returns>True if the values match any of the filters in the list, or if there are no filters in the list. False otherwise.</returns>
+	<remarks></remarks>
+</member><member name="M:xPL.xPLFilters.Matches(xPL.xPLMessage)">
+	<summary>
+ Matches a specific xPL message with the entire list of filters.
+ </summary>
+	<param name="m">The xPL message to check</param>
+	<returns>True if the message values for Type, Address and Schema match any of the filters in the list, or if there are no filters in the list. False otherwise.</returns>
+	<remarks></remarks>
+</member><member name="T:xPL.xPLFilters">
+	<summary>
+ This object represents a list of filters, as set for an xPL device.
+ </summary>
+	<remarks>Duplicate values are not allowed in the filter list.</remarks>
+</member>
+</members>
+</doc>
