@@ -25,7 +25,7 @@ type { TxPLApplication =======================================================}
         fAdresse    : TxPLAddress;
         fOnLogEvent : TStrParamEvent;
         fPluginList : TxPLVendorSeedFile;
-        fLocaleDomains : TStringList;
+        //fLocaleDomains : TStringList;
         fVersion    : string;
 
      public
@@ -39,8 +39,8 @@ type { TxPLApplication =======================================================}
         Procedure Log (const EventType : TEventType; const Msg : String); overload;
         Procedure Log (const EventType : TEventType; const Fmt : String; const Args : Array of const); overload;
 
-        function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
-        function  Translate(Const aDomain : string; Const aString : string) : string;
+        //function  RegisterLocaleDomain(Const aTarget : string; const aDomain : string) : boolean;
+        //function  Translate(Const aDomain : string; Const aString : string) : string;
 
         property Settings  : TxPLSettings       read fSettings;
         property Adresse   : TxPLAddress        read fAdresse;
@@ -58,7 +58,7 @@ uses IdStack
 
 // ============================================================================
 const
-     K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
+     //K_MSG_LOCALISATION    = 'Localisation file loaded for : %s';
      K_FULL_TITLE          = '%s v%s by %s (build %s)';
 
 // TxPLAppFramework ===========================================================
@@ -77,13 +77,13 @@ begin
    fSettings   := TxPLSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
 
-   fLocaleDomains := TStringList.Create;
+   //fLocaleDomains := TStringList.Create;
    RegisterMe;
 end;
 
 destructor TxPLApplication.Destroy;
 begin
-   if Assigned(fLocaleDomains) then fLocaleDomains.Free;
+   //if Assigned(fLocaleDomains) then fLocaleDomains.Free;
    if Assigned(fFolders)       then fFolders.Free;
    fAdresse.Free;
    inherited;
@@ -119,38 +119,38 @@ begin
    Log(EventType,Format(Fmt,Args));
 end;
 
-function TxPLApplication.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
-var i : integer;
-    f : string;
-begin
-   result := true;
-   if aTarget <> 'us' then begin;                                                           // Right now, we assume base language is english
-      f := GetCurrentDir + '\loc_' + aDomain + '_' + aTarget + '.txt';
-      result := FileExists(f);
-      if result then begin
-         i := fLocaleDomains.AddObject(aDomain,TStringList.Create);
-         TStringList(fLocaleDomains.Objects[i]).LoadFromFile(f);
-         TStringList(fLocaleDomains.Objects[i]).Sort;
-         Log(etInfo,K_MSG_LOCALISATION,[aDomain]);
-      end;
-   end;
-end;
-
-function TxPLApplication.Translate(const aDomain: string; const aString : string): string;
-var i : integer;
-begin
-   i := fLocaleDomains.IndexOf(aDomain);
-   if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString]
-            else result := aString;
-end;
+//function TxPLApplication.RegisterLocaleDomain(const aTarget: string; const aDomain: string) : boolean;
+//var i : integer;
+//    f : string;
+//begin
+//   result := true;
+//   if aTarget <> 'us' then begin;                                                           // Right now, we assume base language is english
+//      f := GetCurrentDir + '\loc_' + aDomain + '_' + aTarget + '.txt';
+//      result := FileExists(f);
+//      if result then begin
+//         i := fLocaleDomains.AddObject(aDomain,TStringList.Create);
+//         TStringList(fLocaleDomains.Objects[i]).LoadFromFile(f);
+//         TStringList(fLocaleDomains.Objects[i]).Sort;
+//         Log(etInfo,K_MSG_LOCALISATION,[aDomain]);
+//      end;
+//   end;
+//end;
+//
+//function TxPLApplication.Translate(const aDomain: string; const aString : string): string;
+//var i : integer;
+//begin
+//   i := fLocaleDomains.IndexOf(aDomain);
+//   if i<>-1 then result := TStringList(fLocaleDomains.Objects[i]).Values[aString]
+//            else result := aString;
+//end;
 
 initialization // =============================================================
-   InstanceInitStyle  := iisHostName;
+   InstanceInitStyle := iisHostName;
 
-   LocalAddresses     := TStringList.Create;
+   LocalAddresses := TStringList.Create;
    LocalAddresses.Assign(IPAddresses);
 
 finalization // ===============================================================
    LocalAddresses.Free;
 
-end.
+end.

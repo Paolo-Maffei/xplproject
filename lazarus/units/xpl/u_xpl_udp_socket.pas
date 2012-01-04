@@ -42,8 +42,9 @@ type { TxPLUDPClient ==========================================================}
            fOnReceived : TStrParamEvent;
 
            procedure AddBinding(const aIP : string; const aPort : integer);
-           procedure UDPRead({%H-}AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
-           procedure UDPException({%H-}AThread: TIdUDPListenerThread; {%H-}ABinding: TIdSocketHandle; const AMessage : String; const {%H-}AExceptionClass : TClass);
+        protected
+           procedure DoUDPRead({%H-}AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle); override;
+           procedure DoOnUDPException({%H-}AThread: TIdUDPListenerThread; {%H-}ABinding: TIdSocketHandle; const AMessage : String; const {%H-}AExceptionClass : TClass); override;
         public
            constructor Create(
                        const aOwner : TComponent;
@@ -52,12 +53,6 @@ type { TxPLUDPClient ==========================================================}
 
         published
            property    Bindings: TIdSocketHandles read FBindings;               // Inherited property
-     end;
-
-     { TWebServer =============================================================}
-     TWebServer = class(TIdHTTPServer)
-        public
-           constructor Create(const aOwner : TComponent);
      end;
 
 implementation //==============================================================
@@ -107,11 +102,10 @@ var i : integer;
 begin
    inherited Create(aOwner);
    Bindings.Clear;
-   BufferSize     := XPL_MAX_MSG_SIZE;
-   OnUDPRead      := {$ifdef fpc}@{$endif}UDPRead;
-   OnUDPException := {$ifdef fpc}@{$endif}UDPException;
-   fOnReceived    := aReceivedProc;
-   if TxPLApplication(aOwner).Settings.IsValid then with TxPLApplication(aOwner).Settings do begin
+   BufferSize  := XPL_MAX_MSG_SIZE;
+   fOnReceived := aReceivedProc;
+   if not TxPLApplication(aOwner).Settings.IsValid then xPLApplication.Log(etWarning,K_USING_DEFAULT);
+   with TxPLApplication(aOwner).Settings do begin
       {$ifdef mswindows}
          i := LocalAddresses.Count-1;
          while i>=0 do begin
@@ -119,11 +113,11 @@ begin
                then AddBinding(LocalAddresses[i], aPort);
             dec(i);
          end;
-      {$else}                                                                   // Don't understand why this is needed to work
-//         AddBinding('eth0', aPort);                                             // under linux. Tried 127.0.0.1, Local ip address...
-         AddBinding(ListenOnAddress,aPort);                                   // only ETH0 seams to let incoming message pass in
+      {$else}                                                                  // Don't understand why this is needed to work
+//         AddBinding('eth0', aPort);                                          // under linux. Tried 127.0.0.1, Local ip address...
+         AddBinding(ListenOnAddress,aPort);                                    // only ETH0 seams to let incoming message pass in
       {$endif}
-   end else xPLApplication.Log(etWarning,K_USING_DEFAULT);
+   end;
    Active := (Bindings.Count > 0);
 end;
 
@@ -139,7 +133,7 @@ begin
    end;
 end;
 
-procedure TxPLUDPServer.UDPRead(AThread: TIdUDPListenerThread; AData: TIdBytes; ABinding: TIdSocketHandle);
+procedure TxPLUDPServer.DoUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 begin
    with TxPLApplication(Owner).Settings do
         if (ListenToAny) or
@@ -148,34 +142,10 @@ begin
         then fOnReceived(BytesToString(AData));
 end;
 
-procedure TxPLUDPServer.UDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
+procedure TxPLUDPServer.DoOnUDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
 begin
    xPLApplication.Log(etWarning,ClassName + ' : ' + AnsiReplaceStr(aMessage,#13,' '));
 end;
 
-// TWebServer =================================================================
-constructor TWebServer.Create(const aOwner: TComponent);
-begin
-   inherited Create(aOwner);
-
-   with Bindings.Add do begin                                                  // Dynamically assign port
-        IP:=K_IP_LOCALHOST;
-        ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-        ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-        Port := 0;
-   end;
-
-   //if TxPLApplication(Owner).Settings.ListenOnAddress<>K_IP_LOCALHOST then with Bindings.Add do begin
-   //     IP:=TxPLApplication(Owner).Settings.ListenOnAddress;
-   //     ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-   //     ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-   //     Port := 0;
-   // end;
-
-    AutoStartSession := True;
-    SessionTimeOut := 600000;
-    SessionState := True;
-end;
-
 end.
-
+
