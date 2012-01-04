@@ -85,7 +85,7 @@ const   K_DEF_GROUP       = 'xpl-group';
 // General Helper function ====================================================
 class function TxPLAddress.RandomInstance : string;
 var n: integer;
-    const ss: string = 'abcdefghjkmnpqrstuvwxyz';                              // list all the charcaters you want to use
+const ss: string = 'abcdefghjkmnpqrstuvwxyz';                                  // list all the charcaters you want to use
 begin
    Result :='';
    for n:=1 to 8 do                                                            // Longueur volontairement limitée à 8 chars
@@ -208,16 +208,12 @@ begin
 end;
 
 function TxPLTargetAddress.MatchesGroup(const aGroupSet : TStringList): boolean;
-var i : integer;
+var s : string;
 begin
-
-//   with TxPLConfigItem(aGroupSet) do begin
-//   with aGroupSet do begin
-      result := IsGroup;
-      if result then
-         for i := 0 to Pred(aGroupSet.Count) do
-             result := result or (aGroupSet[i] = RawxPL);
-//   end;
+   result := IsGroup;
+   if result then
+      for s in aGroupSet do
+          result := result or (s = RawxPL);
 end;
 
 initialization // =============================================================

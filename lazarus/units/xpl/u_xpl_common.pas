@@ -231,16 +231,15 @@ procedure ReadObjectFromFile(const aFileName: string; const aObject: TComponent)
 var fStream: TFileStream;
     mStream: TMemoryStream;
 begin
-    mStream := TMemoryStream.Create;
     fStream := TFileStream.Create(aFileName, fmOpenRead);
-    try
-       ObjectTextToBinary(fStream,mStream);
-       mStream.Position := 0;
-       mStream.ReadComponent(aObject);
-    finally
-      mStream.Free;
-      fStream.Free;
+    if fStream.Size > 0 then begin
+          mStream := TMemoryStream.Create;
+          ObjectTextToBinary(fStream,mStream);
+          mStream.Position := 0;
+          mStream.ReadComponent(aObject);
+          mStream.Free;
     end;
+    fStream.Free;
 end;
 
 function GetVendorNameEvent: string;

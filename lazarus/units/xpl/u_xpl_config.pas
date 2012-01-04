@@ -56,10 +56,10 @@ begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
-   fConfigList    := TConfigListStat.Create(self);
+   fConfigList := TConfigListStat.Create(self);
    fConfigCurrent := TConfigCurrentStat.Create(self);
    fConfigCurrent.newconf := TxPLAddress.InitInstanceByDefault;
-   fConfigCurrent.interval:=K_XPL_DEFAULT_HBEAT;
+   fConfigCurrent.interval := K_XPL_DEFAULT_HBEAT;
 end;
 
 function TxPLCustomConfig.Get_FilterSet: TStringList;

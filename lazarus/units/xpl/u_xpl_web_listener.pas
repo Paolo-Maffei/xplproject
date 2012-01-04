@@ -33,6 +33,11 @@ type
       TWebCallReplaceTag       = function(const aDevice : string; const aParam : string; aValue : string; const aVariable : string; out ReplaceString : string) : boolean of object;
       TWebCallReplaceArrayedTag= function(const aDevice : string; const aValue : string; const aVariable : string; ReturnList : TStringList) : boolean of object;
 
+      { TWebServer =============================================================}
+      TWebServer = class(TIdHTTPServer)
+         public
+            constructor Create(const aOwner : TComponent);
+      end;
       { TxPLWebListener }
 
       TxPLWebListener = class(TxPLListener)
@@ -72,6 +77,31 @@ uses IdStack
 const
 //   K_CONFIG_LIB_SERVER_ROOT = 'webroot';
   K_HBEAT_ME_WEBPORT = 'webport';
+
+  // TWebServer =================================================================
+  constructor TWebServer.Create(const aOwner: TComponent);
+  begin
+     inherited Create(aOwner);
+
+     with Bindings.Add do begin                                                  // Dynamically assign port
+          IP:=K_IP_LOCALHOST;
+          ClientPortMin := XPL_BASE_DYNAMIC_PORT;
+          ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
+          Port := 0;
+     end;
+
+     //if TxPLApplication(Owner).Settings.ListenOnAddress<>K_IP_LOCALHOST then with Bindings.Add do begin
+     //     IP:=TxPLApplication(Owner).Settings.ListenOnAddress;
+     //     ClientPortMin := XPL_BASE_DYNAMIC_PORT;
+     //     ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
+     //     Port := 0;
+     // end;
+
+      AutoStartSession := True;
+      SessionTimeOut := 600000;
+      SessionState := True;
+  end;
+
 { Utility functions ============================================================}
 //function StringListToHtml(aSList : TStrings) : widestring;
 //begin
