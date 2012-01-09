@@ -59,9 +59,9 @@ uses  IdStack
       ;
 
 // ============================================================================
-const K_SENDING_TEMPO       : Integer = 50;                                    // Temporisation to avoid message flooding
-      K_SIZE_ERROR          = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
-      K_USING_DEFAULT       = 'xPL settings not set, using defaults';
+const K_SENDING_TEMPO = 50;                                                    // Temporisation to avoid message flooding
+      K_SIZE_ERROR    = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
+      K_USING_DEFAULT = 'xPL settings not set, using defaults';
 
 // TxPLUDPClient ==============================================================
 procedure TxPLUDPClient.InitComponent;

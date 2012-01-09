@@ -44,8 +44,6 @@ type // TxPLSender ============================================================
         function  PrepareMessage(const aMsgType: TxPLMessageType; const aSchema : TxPLSchema; const aTarget : TxPLTargetAddress = nil) : TxPLCustomMessage; overload;
 
         procedure SendHBeatRequestMsg;
-        //procedure SendOSDBasic(const aString : string);
-        //procedure SendLOGBasic(const aLevel : TEventType; const aString : string);
      published
         property FragmentMgr : TFragmentManager read fFragMgr;
      end;
@@ -149,26 +147,6 @@ begin
    Send(HBeatReq);
    HBeatReq.Free;
 end;
-
-//procedure TxPLSender.SendOSDBasic(const aString: string);
-//var OSD : TOSDBasic;
-//begin
-//   OSD := TOSDBasic.Create(nil);
-//   OSD.Command := 'write';
-//   OSD.Text    := aString;
-//   Send(OSD);
-//   OSD.Free;
-//end;
-//
-//procedure TxPLSender.SendLOGBasic(const aLevel : TEventType; const aString: string);
-//var LOGMSg : TLogBasic;
-//begin
-//   LOGMSg := TLogBasic.Create(nil);
-//   LOGMSg.Type_ := aLevel;
-//   LOGMSg.Text := aString;
-//   Send(LOGMSg);
-//   LOGMSg.Free;
-//end;
 
 end.
 

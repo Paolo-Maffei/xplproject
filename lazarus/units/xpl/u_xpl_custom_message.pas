@@ -41,8 +41,8 @@ type { TxPLCustomMessage =====================================================}
         function    IsValid      : boolean; override;
         function    MustFragment : boolean;
 
-        procedure LoadFromFile(aFileName : string);
-        procedure SaveToFile(aFileName : string);
+        procedure LoadFromFile(const aFileName : string);
+        procedure SaveToFile(const aFileName : string);
 
      published
         property Body   : TxPLBody read fBody  ;
@@ -62,7 +62,7 @@ constructor TxPLCustomMessage.Create(const aOwner : TComponent; const aRawxPL : 
 begin
    inherited Create(aOwner);
 
-   fBody   := TxPLBody.Create(self);
+   fBody := TxPLBody.Create(self);
    fTimeStamp := now;
 
    if aRawxPL<>'' then RawXPL := aRawXPL;
@@ -120,7 +120,7 @@ procedure TxPLCustomMessage.Set_RawXPL(const AValue: string);
 var LeMessage : string;
     HeadEnd, BodyStart, BodyEnd : integer;
 begin
-   LeMessage        := AnsiReplaceText(aValue,#13,'');                            // Delete all CR
+   LeMessage        := AnsiReplaceText(aValue,#13,'');                         // Delete all CR
    HeadEnd          := AnsiPos('}',LeMessage);
    BodyStart        := Succ(PosEx('{',LeMessage,HeadEnd));
    BodyEnd          := LastDelimiter('}',LeMessage);
@@ -128,16 +128,15 @@ begin
    Body.RawxPL      := Copy(LeMessage,BodyStart,BodyEnd-BodyStart);
 end;
 
-procedure TxPLCustomMessage.SaveToFile(aFileName: string);
+procedure TxPLCustomMessage.SaveToFile(const aFileName: string);
 begin
    StreamObjectToFile(aFileName, self);
 end;
 
-procedure TxPLCustomMessage.LoadFromFile(aFileName: string);
+procedure TxPLCustomMessage.LoadFromFile(const aFileName: string);
 begin
    ReadObjectFromFile(aFileName, self);
 end;
-
 
 initialization // =============================================================
    Classes.RegisterClass(TxPLCustomMessage);
