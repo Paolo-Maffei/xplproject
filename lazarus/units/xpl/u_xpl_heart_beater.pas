@@ -22,39 +22,58 @@ uses Classes
      ;
 
 type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfNone);
+     TConnectionStatus = (discovering, connected, csNone);
 
      // TxPLHeartBeater =======================================================
-     TxPLHeartBeater = class( TxPLTimer )
+
+     { TxPLConnHandler }
+
+     TxPLConnHandler = class(TComponent)
      private
+        fTimer : TxPLTimer;
         fRate : TxPLRateFrequency;
         FNoHubTimerCount : integer;
 
+        function GetConnectionStatus: TConnectionStatus;
+        procedure SetConnectionStatus(const AValue: TConnectionStatus);
         procedure Set_Rate(const AValue: TxPLRateFrequency);
         procedure Tick({%H-}sender : TObject);
      public
         constructor Create(AOwner: TComponent); override;
+        function StatusAsStr : string;
      published
-        property Rate : TxPLRateFrequency read fRate write Set_Rate;
+        property Rate : TxPLRateFrequency write Set_Rate;
+        property Status : TConnectionStatus read GetConnectionStatus write SetConnectionStatus;
      end;
 
 implementation // =============================================================
-uses u_xpl_custom_listener;
+uses TypInfo
+     , u_xpl_custom_listener
+     , u_xpl_application
+     ;
+
+const K_NETWORK_STATUS = 'xPL Network status : %s';
 
 // Hub and listener constants =================================================
 const NOHUB_HBEAT     : Integer = 3;                                           // seconds between HBEATs until hub is detected
       NOHUB_LOWERFREQ : Integer = 30;                                          // lower frequency probing for hub
       NOHUB_TIMEOUT   : Integer = 120;                                         // after these nr of seconds lower the probing frequency to NOHUB_LOWERFREQ
 
-constructor TxPLHeartBeater.create(AOwner: TComponent);
+constructor TxPLConnHandler.create(AOwner: TComponent);
 begin
    Assert(aOwner is TxPLCustomListener);
    inherited;
-   OnTimer          := {$ifdef fpc}@{$endif}Tick;
+   fTimer := TxPLApplication(aOwner).TimerPool.Add(0,{$ifdef fpc}@{$endif}Tick);
    fNoHubTimerCount := 0;
    Rate := rfNone;
 end;
 
-procedure TxPLHeartBeater.Tick(sender: TObject);
+function TxPLConnHandler.StatusAsStr: string;
+begin
+   Result := Format(K_NETWORK_STATUS, [GetEnumName(TypeInfo(TConnectionStatus), Ord(Status))]);
+end;
+
+procedure TxPLConnHandler.Tick(sender: TObject);
 begin
    with TxPLCustomListener(Owner) do begin
       if ConnectionStatus <> connected then begin
@@ -68,13 +87,13 @@ begin
    end;
 end;
 
-procedure TxPLHeartBeater.Set_Rate(const AValue: TxPLRateFrequency);
+procedure TxPLConnHandler.Set_Rate(const AValue: TxPLRateFrequency);
    procedure Set_Interval(aInterval : {$ifdef fpc}integer{$else}cardinal{$endif});
    begin
-       if Interval <> aInterval then begin
-          Enabled  := False;
-          Interval := aInterval;
-          Enabled  := True;
+       if fTimer.Interval <> aInterval then begin
+          fTimer.Enabled  := False;
+          fTimer.Interval := aInterval;
+          fTimer.Enabled  := True;
        end;
    end;
 begin
@@ -89,5 +108,22 @@ begin
         rfConfig       : Set_Interval(TxPLCustomListener(owner).Config.Interval*60*1000);
    end;
 end;
+
+function TxPLConnHandler.GetConnectionStatus: TConnectionStatus;
+begin
+    if (fRate in [rfDiscovering,rfNoHubLowFreq]) then result := Discovering
+    else if (fRate in [rfRandom, rfConfig]) then result := Connected;
+end;
+
+procedure TxPLConnHandler.SetConnectionStatus(const AValue: TConnectionStatus);
+begin
+   if Status<>aValue then begin
+      if aValue = connected then
+          Rate := rfConfig
+       else
+          Rate := rfDiscovering;
+   end;
+end;
+
 end.
 

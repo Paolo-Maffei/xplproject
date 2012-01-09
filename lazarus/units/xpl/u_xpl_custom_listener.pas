@@ -1,4 +1,5 @@
 unit u_xpl_custom_listener;
+
 {==============================================================================
   UnitName      = uxPLListener
   UnitDesc      = xPL Listener object and function
@@ -25,6 +26,7 @@ interface
 
 uses Classes
      , SysUtils
+     , u_xpl_common
      , u_xpl_udp_socket
      , u_xpl_message
      , u_xpl_config
@@ -34,223 +36,235 @@ uses Classes
      , fpc_delphi_compat
      ;
 
-type TConnectionStatus = (discovering,connected, csNone);
+type TxPLReceivedEvent = procedure(const axPLMsg: TxPLMessage) of object;
+     TxPLConfigDone = procedure(const aConfig: TxPLCustomConfig) of object;
+     TxPLHBeatPrepare = procedure(const aBody: TxPLBody) of object;
 
-type  TxPLReceivedEvent = procedure(const axPLMsg : TxPLMessage) of object;
-      TxPLConfigDone    = procedure(const aConfig : TxPLCustomConfig)  of object;
-      TxPLHBeatPrepare  = procedure(const aBody   : TxPLBody) of object;
-      TxPLJoinedNed     = procedure of object;
+  // TxPLCustomListener ===================================================
 
-      // TxPLCustomListener ===================================================
+  TxPLCustomListener = class(TxPLSender)
+  private
+    fConfig: TxPLCustomConfig;
+    fCfgFname: string;
+    fProbingTimer: TxPLTimer;
+    IncomingSocket: TxPLUDPServer;
+    Connection: TxPLConnHandler;
+    procedure NoAnswerReceived({%H-}Sender: TObject);
+  protected
+    function Get_ConnectionStatus: TConnectionStatus;
+    procedure Set_ConnectionStatus(const aValue : TConnectionStatus); virtual;
 
-      TxPLCustomListener = class(TxPLSender)
-      private
-        fConfig        : TxPLCustomConfig;
-        fCfgFname      : string;
-        fProbingTimer  : TxPLTimer;
-        IncomingSocket : TxPLUDPServer;
-        HBeat          : TxPLHeartBeater;
-        function Get_ConnectionStatus: TConnectionStatus;
-        procedure  NoAnswerReceived({%H-}sender : TObject);
-     public
-        OnxPLReceived     : TxPLReceivedEvent;
-        OnPreProcessMsg   : TxPLReceivedEvent;
-        OnxPLConfigDone   : TxPLConfigDone   ;
-        OnxPLHBeatPrepare : TxPLHBeatPrepare ;
-        OnxPLHBeatApp     : TxPLReceivedEvent;
-        OnxPLJoinedNet    : TxPLJoinedNed;
+  public
+    OnxPLReceived: TxPLReceivedEvent;
+    OnPreProcessMsg: TxPLReceivedEvent;
+    OnxPLConfigDone: TxPLConfigDone;
+    OnxPLHBeatPrepare: TxPLHBeatPrepare;
+    OnxPLHBeatApp: TxPLReceivedEvent;
+    OnxPLJoinedNet: TNoParamEvent;
 
-        Constructor Create(const aOwner : TComponent); reintroduce;
-        Destructor  Destroy; override;
+    constructor Create(const aOwner: TComponent); reintroduce;
+    destructor Destroy; override;
 
-        procedure SaveConfig; dynamic;
-        procedure LoadConfig; dynamic;
+    procedure SaveConfig; dynamic;
+    procedure LoadConfig; dynamic;
 
-        procedure HandleConfigMessage(aMessage : TxPLMessage); dynamic;
-        procedure SendHeartBeatMessage; dynamic;
-        function  ConnectionStatusAsStr : string;
-        procedure Set_ConnectionStatus(const aValue : TConnectionStatus); virtual;
+    procedure HandleConfigMessage(aMessage: TxPLMessage); dynamic;
+    procedure SendHeartBeatMessage; dynamic;
+    function ConnectionStatusAsStr: string;
 
-        procedure UpdateConfig; dynamic;
-        function  DoHBeatApp    (const aMessage : TxPLMessage) : boolean; dynamic;
-        function  DoxPLReceived (const aMessage : TxPLMessage) : boolean; dynamic;
-        procedure UDPRead(const aString : string);
-        procedure Listen;
-     published
-        property Config : TxPLCustomConfig read fConfig;
-        property ConnectionStatus : TConnectionStatus read Get_ConnectionStatus write Set_ConnectionStatus stored false;
-     end;
 
-implementation { ==============================================================}
+    procedure UpdateConfig; dynamic;
+    function DoHBeatApp(const aMessage: TxPLMessage): boolean; dynamic;
+    function DoxPLReceived(const aMessage: TxPLMessage): boolean; dynamic;
+    procedure UDPRead(const aString: string);
+    procedure Listen;
+  published
+    property Config: TxPLCustomConfig read fConfig;
+    property ConnectionStatus : TConnectionStatus read Get_ConnectionStatus write Set_ConnectionStatus stored false;
+  end;
+
+implementation // =============================================================
+
 uses u_xpl_schema
-     , u_xpl_common
      , u_xpl_messages
-     , typinfo
      ;
 
-const K_MSG_BIND_OK       = 'Listening on %s:%u';
-      K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
-      K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
-      K_MSG_IP_ERROR      = 'Socket unable to bind to IP Addresses';
-      K_MSG_UDP_ERROR     = 'Unable to initialize incoming UDP server';
-      K_MSG_CONFIG_RECEIVED = 'Config received from %s and saved';
-      K_MSG_CONF_ERROR      = 'Badly formed or incomplete config information received';
-      K_NETWORK_STATUS      = 'xPL Network status : %s';
+const
+  K_MSG_BIND_OK = 'Listening on %s:%u';
+  K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
+  K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
+  K_MSG_IP_ERROR = 'Socket unable to bind to IP Addresses';
+  K_MSG_UDP_ERROR = 'Unable to initialize incoming UDP server';
+  K_MSG_CONFIG_RECEIVED = 'Config received from %s and saved';
+  K_MSG_CONF_ERROR = 'Badly formed or incomplete config information received';
 
 // TxPLCustomListener =========================================================
-constructor TxPLCustomListener.Create(const aOwner : TComponent);
+constructor TxPLCustomListener.Create(const aOwner: TComponent);
 begin
-   inherited;
-   fConfig    := TxPLCustomConfig.Create(self);
+  inherited;
 
-   fCfgFname  := Folders.DeviceDir + Adresse.VD + '.cfg';
-
-   fProbingTimer := TxPLTimer.Create(self);
-   fProbingTimer.Interval := 10 * 1000;                                        // Let say 10 sec is needed to receive an answer
-   fProbingTimer.OnTimer  := {$ifdef fpc}@{$endif}NoAnswerReceived;
+  fConfig := TxPLCustomConfig.Create(self);
+  fCfgFname := Folders.DeviceDir + Adresse.VD + '.cfg';
+  fProbingTimer := TimerPool.Add(9 * 1000, {$ifdef fpc}@{$endif}NoAnswerReceived); // Let say 9 sec is needed to receive an answer
 end;
 
-destructor TxPLCustomListener.destroy;
+destructor TxPLCustomListener.Destroy;
 begin
-   if ConnectionStatus = connected then SendHeartBeatMessage;
-   IncomingSocket.Active:=false;                                               // Be sure no more message will be heart
-   SaveConfig;
-   inherited destroy;
+  if Connection.Status = connected then SendHeartBeatMessage;
+  IncomingSocket.Active := False;                                              // Be sure no more message will be heard
+  SaveConfig;
+  inherited Destroy;
 end;
 
 function TxPLCustomListener.ConnectionStatusAsStr: string;
 begin
-   Result := Format(K_NETWORK_STATUS,[GetEnumName(TypeInfo(TConnectionStatus),Ord(ConnectionStatus))]);
+   result := Connection.StatusAsStr;
 end;
 
 procedure TxPLCustomListener.SaveConfig;
 begin
-   StreamObjectToFile(fCfgFName,self);
-   Log(etInfo,K_MSG_CONFIG_WRITEN,[fCfgFName]);
+  StreamObjectToFile(fCfgFName, self);
+  Log(etInfo, K_MSG_CONFIG_WRITEN, [fCfgFName]);
 end;
 
 procedure TxPLCustomListener.LoadConfig;
 begin
-   ReadObjectFromFile(fCfgFName,self);
-   Adresse.Instance := Config.Instance;
-   Log(etInfo,K_MSG_CONFIG_LOADED,[Adresse.RawxPL]);
+  ReadObjectFromFile(fCfgFName, self);
+  Adresse.Instance := Config.Instance;
+  Log(etInfo, K_MSG_CONFIG_LOADED, [Adresse.RawxPL]);
 end;
 
 procedure TxPLCustomListener.UpdateConfig;
 begin
-   LoadConfig;
-   if fConfig.IsValid then begin
-      if ConnectionStatus = connected then SendHeartBeatMessage;
-      if Assigned(OnxPLConfigDone)    then OnxPLConfigDone(fConfig);
-   end;
+  LoadConfig;
+  if fConfig.IsValid then begin
+    if Connection.Status = connected then
+      SendHeartBeatMessage;
+    if Assigned(OnxPLConfigDone) then
+      OnxPLConfigDone(fConfig);
+  end;
 end;
 
 procedure TxPLCustomListener.Listen;
 begin
-   try
-     IncomingSocket:=TxPLUDPServer.create(self,{$ifdef fpc}@{$endif}UDPRead);
-     If IncomingSocket.Active then begin                                       // Lets be sure we found an address to bind to
-        HBeat := TxPLHeartBeater.Create(self);
-        Log(etInfo,K_MSG_BIND_OK,[IncomingSocket.Bindings[0].IP,IncomingSocket.Bindings[0].Port]);
+  try
+    IncomingSocket := TxPLUDPServer.Create(self);
+    if IncomingSocket.Active then
+    begin                                       // Lets be sure we found an address to bind to
+      IncomingSocket.OnReceived := {$ifdef fpc}@{$endif}UDPRead;
+      Connection := TxPLConnHandler.Create(self);
+      Log(etInfo, K_MSG_BIND_OK, [IncomingSocket.Bindings[0].IP,IncomingSocket.Bindings[0].Port]);
 
-        if not FileExists(fCfgFName) then SaveConfig;
-        UpdateConfig;
-        ConnectionStatus := discovering;                                       // Consider we've not reached any xPL network at this time
-
-     end
-     else Log(etError,K_MSG_IP_ERROR);
-   except
-     Log(etError, K_MSG_UDP_ERROR);
-   end;
+      if not FileExists(fCfgFName) then SaveConfig;
+      UpdateConfig;
+      ConnectionStatus := discovering;
+    end
+    else
+      Log(etError, K_MSG_IP_ERROR);
+  except
+    Log(etError, K_MSG_UDP_ERROR);
+  end;
 end;
 
-procedure TxPLCustomListener.NoAnswerReceived(sender: TObject);                // This procedure is called by the probing
+procedure TxPLCustomListener.NoAnswerReceived(Sender: TObject);                // This procedure is called by the probing
 begin                                                                          // timer when we're waiting unsuccessfully
-   ConnectionStatus := discovering;                                            // for the heart beat I sent
+  ConnectionStatus := discovering;                                             // for the heart beat I sent
 end;
 
-function TxPLCustomListener.Get_ConnectionStatus: TConnectionStatus;
+function TxPLCustomListener.Get_ConnectionStatus : TConnectionStatus;
 begin
-   result := csNone;
-   if not Assigned(HBeat) then exit;
-   if ((HBeat.Rate = rfDiscovering) or (Hbeat.Rate = rfNoHubLowFreq)) then result := discovering
-   else if ((HBeat.Rate = rfRandom) or (HBeat.Rate = rfConfig)) then result := connected;
+  if Assigned(Connection) then result := Connection.Status
+                          else result := csNone
 end;
 
 procedure TxPLCustomListener.SendHeartBeatMessage;
-var i : integer;
+var
+  i: integer;
 begin
-   with THeartBeatMsg.Create(self) do begin
-        for i:=0 to IncomingSocket.Bindings.Count-1 do begin
-            Port := IncomingSocket.Bindings[i].Port;
-            Remote_Ip := IncomingSocket.Bindings[i].IP;
-            if   Assigned(OnxPLHBeatPrepare) and (Config.IsValid) then OnxPLHBeatPrepare(Body);
-            Send;
-        end;
+  with THeartBeatMsg.Create(self) do begin
+    for i := 0 to IncomingSocket.Bindings.Count - 1 do
+    begin
+      Port := IncomingSocket.Bindings[i].Port;
+      Remote_Ip := IncomingSocket.Bindings[i].IP;
+      if Assigned(OnxPLHBeatPrepare) and (Config.IsValid) then
+        OnxPLHBeatPrepare(Body);
+      Send;
+    end;
 
-        fProbingTimer.Enabled := True;
-        Free;
-   end;
+    fProbingTimer.Enabled := True;
+    Free;
+  end;
 end;
 
 procedure TxPLCustomListener.HandleConfigMessage(aMessage: TxPLMessage);
 begin
-   if not Adresse.Equals(aMessage.Target) or (aMessage.MessageType<>cmnd) then exit;
+  if not Adresse.Equals(aMessage.Target) or (aMessage.MessageType <> cmnd)
+     then exit;
 
-   if aMessage is TConfigCurrentCmnd then
-         Send(Config.CurrentConfig)
-   else if aMessage is TConfigListCmnd then
-      Send(Config.ConfigList)
-   else if aMessage is TConfigResponseCmnd then begin
-        Config.CurrentConfig.Body.Assign(aMessage.Body);
-        if fConfig.IsValid then begin
-           Log(etInfo,K_MSG_CONFIG_RECEIVED,[aMessage.Source.RawxPL]);
-           SaveConfig;
-           UpdateConfig;
-        end else
-           Log(etError, K_MSG_CONF_ERROR);
-   end;
+  if aMessage is TConfigCurrentCmnd then
+    Send(Config.CurrentConfig)
+  else if aMessage is TConfigListCmnd then
+    Send(Config.ConfigList)
+  else if aMessage is TConfigResponseCmnd then
+  begin
+    Config.CurrentConfig.Body.Assign(aMessage.Body);
+    if fConfig.IsValid then
+    begin
+      Log(etInfo, K_MSG_CONFIG_RECEIVED, [aMessage.Source.RawxPL]);
+      SaveConfig;
+      UpdateConfig;
+    end
+    else
+      Log(etError, K_MSG_CONF_ERROR);
+  end;
 
-   ConnectionStatus := connected;
+  ConnectionStatus := connected;
 end;
 
-procedure TxPLCustomListener.UDPRead(const aString : string);
-var aMessage : TxPLMessage;
+procedure TxPLCustomListener.UDPRead(const aString: string);
+var
+  aMessage: TxPLMessage;
 begin
-   if csDestroying in ComponentState then exit;   fProbingTimer.Enabled := false;                                             // Stop waiting anything, I received a message
-   aMessage := MessageBroker(aString);
-   with aMessage do try
-      if Assigned(OnPreprocessMsg) then OnPreprocessMsg(aMessage);
-      if (Adresse.Equals(Target)) or (Target.Isgeneric) then begin            // It is directed to me
+  if csDestroying in ComponentState then
+    exit;
+  fProbingTimer.Enabled := False;                                              // Stop waiting, I received a message
+  aMessage := MessageBroker(aString);
+  with aMessage do
+    try
+      if Assigned(OnPreprocessMsg) then
+        OnPreprocessMsg(aMessage);
+      if (Adresse.Equals(Target)) or (Target.Isgeneric) then
+      begin                                                                    // It is directed to me
+        if Adresse.Equals(Source) then
+          ConnectionStatus := connected                                        // I heard something from me : I'm connected
+        else if aMessage is THeartBeatReq then
+          Connection.Rate := rfRandom
+        else if aMessage is TFragmentMsg then
+          FragmentMgr.Handle(TFragmentMsg(aMessage))
+        else if Schema.IsConfig then
+          HandleConfigMessage(aMessage);
 
-//         if (aMessage is THeartBeatMsg) and
-         if Adresse.Equals(Source) then ConnectionStatus := connected         // I heard something from me : I'm connected
-         else if aMessage is THeartBeatReq then HBeat.Rate := rfRandom
-         else if aMessage is TFragmentMsg  then FragmentMgr.Handle(TFragmentMsg(aMessage))
-         else if Schema.IsConfig then HandleConfigMessage(aMessage);
-
-         if ( MatchesFilter(Config.FilterSet) and Config.IsValid ) and (not Adresse.Equals(Source)) then
-            if not DoHBeatApp(aMessage)
-               then DoxPLReceived(aMessage);
+        if (MatchesFilter(Config.FilterSet) and Config.IsValid) and
+          (not Adresse.Equals(Source)) then
+          if not DoHBeatApp(aMessage) then
+            DoxPLReceived(aMessage);
 
       end;
-      finally
-          Free;
-   end;
+    finally
+      Free;
+    end;
 end;
 
-procedure TxPLCustomListener.Set_ConnectionStatus(const aValue : TConnectionStatus);
+procedure TxPLCustomListener.Set_ConnectionStatus(const aValue: TConnectionStatus);
 begin
-   if ConnectionStatus<>aValue then begin
-      if aValue = connected then
-         HBeat.Rate := rfConfig
-      else
-         HBeat.Rate := rfDiscovering;
-      Log(etInfo,ConnectionStatusAsStr);
-      if (aValue = connected) and not Config.IsValid
-         then Log(etInfo,'Configuration pending');
-      if Assigned(OnxPLJoinedNet) then OnxPLJoinedNet;
-   end;
+  if Connection.Status <> aValue then begin
+     Connection.Status := aValue;
+     Log(etInfo, Connection.StatusAsStr);
+     if (aValue = connected) and not Config.IsValid then
+        Log(etInfo, 'Configuration pending');
+     if Assigned(OnxPLJoinedNet) then
+        OnxPLJoinedNet;
+  end;
 end;
 
 {------------------------------------------------------------------------
@@ -263,26 +277,20 @@ end;
  ------------------------------------------------------------------------}
 function TxPLCustomListener.DoHBeatApp(const aMessage: TxPLMessage): boolean;
 begin
-   result := false;
-   if not (aMessage is THeartBeatMsg) then exit;
+  Result := (aMessage is THeartBeatMsg) and not(aMessage.Source.Equals(Adresse));
 
-   if aMessage.Source.Equals(Adresse)  then exit;
-
-   if Assigned(OnxPLHBeatApp) then OnxPLHBeatApp( aMessage);
-
-   result := true;
+  if Result and Assigned(OnxPLHBeatApp)
+     then OnxPLHBeatApp(aMessage);
 end;
 
 function TxPLCustomListener.DoxPLReceived(const aMessage: TxPLMessage): boolean;
 begin
-   result := false;
-   if Assigned(OnxPLReceived) then begin
-      OnxPLReceived( aMessage);
-      Result := true;
-   end;
+  Result := Assigned(OnxPLReceived);
+  if Result then OnxPLReceived(aMessage);
 end;
 
 initialization // =============================================================
-   Classes.RegisterClass(TxPLCustomListener);
+  Classes.RegisterClass(TxPLCustomListener);
 
 end.
+

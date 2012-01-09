@@ -73,9 +73,10 @@ type // TxPLAddress ===========================================================
 const K_ADDR_ANY_TARGET = '*';
 
 implementation // =============================================================
-uses IdStack
-     , SysUtils
+uses SysUtils
      , StrUtils
+     , IdStack
+     , u_xpl_application
      , fpc_delphi_compat
      ;
 

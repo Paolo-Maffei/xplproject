@@ -63,6 +63,7 @@ uses frm_xplappslauncher
      , u_xpl_custom_listener
      , u_xpl_application
      , u_xpl_gui_resource
+     , u_xpl_heart_beater
      , Process
      ;
 
@@ -192,4 +193,4 @@ begin
 end;
 
 end.
-
+
