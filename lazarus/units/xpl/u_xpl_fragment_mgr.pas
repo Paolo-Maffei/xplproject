@@ -11,10 +11,10 @@ interface
 
 uses Classes
      , SysUtils
+     , fpc_delphi_compat
      , u_xpl_message
      , u_xpl_address
      , u_xpl_messages
-     , fpc_delphi_compat
      , u_xpl_collection
      ;
 
@@ -48,7 +48,7 @@ type // TFragmentFactory ======================================================
      TFragmentManager = class(TComponent)
      private
         fCounter : integer;
-        fTimer    : TxPLTimer;
+        fTimer  : TxPLTimer;
         fFactoryList : TFactoryCollection;
 
         procedure TimerCheck(Sender : TObject);
@@ -69,6 +69,7 @@ uses StrUtils
      , u_xpl_schema
      , u_xpl_sender
      , u_xpl_common
+     , u_xpl_application
 //     , jclStrings
      , DateUtils
      ;
@@ -81,9 +82,10 @@ begin
    fCounter := 0;
    fFactoryList := TFactoryCollection.Create(self);
 
-   fTimer          := TxPLTimer.Create(self);
-   fTimer.Interval := 3 * 1000;
-   fTimer.OnTimer  := {$ifdef fpc}@{$endif}TimerCheck;
+   fTimer := TxPLApplication(aOwner).TimerPool.Add(3*1000,{$ifdef fpc}@{$endif}TimerCheck);
+//   fTimer          := TxPLTimer.Create(self);
+//   fTimer.Interval := 3 * 1000;
+//   fTimer.OnTimer  := {$ifdef fpc}@{$endif}TimerCheck;
 end;
 
 function TFragmentManager.Fragment(const aMessage: TxPLMessage) : TFragmentFactory;

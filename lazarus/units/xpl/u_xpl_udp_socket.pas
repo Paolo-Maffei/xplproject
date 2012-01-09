@@ -4,12 +4,6 @@ unit u_xpl_udp_socket;
   UnitDesc      = xPL specific UDP networking management handling
   UnitCopyright = GPL by Clinique / xPL Project
  ==============================================================================
- 0.91 : Created from specific code parts of uxplmessage and uxpllistener to
-        isolate xPL logic (message, listener) from UDP logic.
- 0.92 : Removed all calls to Indy gStack witch has big problems in determining
-        localaddresses - replaced by synamisc
- 0.93 : Added exception handling on received udp message and size control on
-        sent messages
  }
 
 {$ifdef fpc}
@@ -22,129 +16,112 @@ uses Classes
      , IdGlobal
      , IdUDPClient
      , IdUDPServer
-     , IdHTTPServer
      , IdSocketHandle
      , u_xpl_common
      ;
 
-type { TxPLUDPClient ==========================================================}
-     TxPLUDPClient = class(TIdUDPClient)                                        // Connexion used to send xPL messages
+type // TxPLUDPClient =========================================================
+     TxPLUDPClient = class(TIdUDPClient)                                       // Connexion used to send xPL messages
         private
            fLastSentTime : TDateTime;
+
+        protected
+           procedure InitComponent; override;
+
         public
-           constructor Create(const aOwner : TComponent; const aBroadCastAddress : string);
            procedure   Send(const AData: string); overload;
      end;
 
-     { TxPLUDPServer ==========================================================}
-     TxPLUDPServer = class(TIdUDPServer)                                        // Connexion used to listen to xPL messages
+     // TxPLUDPServer =========================================================
+     TxPLUDPServer = class(TIdUDPServer)                                       // Specialized connexion used to listen to xPL messages
         private
            fOnReceived : TStrParamEvent;
 
-           procedure AddBinding(const aIP : string; const aPort : integer);
         protected
            procedure DoUDPRead({%H-}AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle); override;
            procedure DoOnUDPException({%H-}AThread: TIdUDPListenerThread; {%H-}ABinding: TIdSocketHandle; const AMessage : String; const {%H-}AExceptionClass : TClass); override;
+
         public
-           constructor Create(
-                       const aOwner : TComponent;
-                       const aReceivedProc : TStrParamEvent;                    // Callback procedure used to deliver read messages
-                       const aPort : integer = 0);                              // Port used for the binding, 0 = dynamic
+           constructor Create(const AOwner: TComponent; const aMinPort : integer = XPL_MIN_PORT; const aMaxPort : integer = XPL_MAX_PORT); reintroduce;
 
         published
-           property    Bindings: TIdSocketHandles read FBindings;               // Inherited property
+           property OnReceived : TStrParamEvent read fOnReceived write fOnReceived;
+
      end;
 
 implementation //==============================================================
 uses  IdStack
       , SysUtils
       , StrUtils
-      , uxPLConst
       , DateUtils
+      , uxPLConst
       , u_xpl_application
       ;
 
-// =============================================================================
-const XPL_BASE_DYNAMIC_PORT : Integer = 50000;                                  // First port used to try to open the listening port
-      XPL_BASE_PORT_RANGE   : Integer = 512;                                    //       Range of port to scan for trying to bind socket
-      K_SENDING_TEMPO       : Integer = 50;                                     // Temporisation to avoid message flooding
+// ============================================================================
+const K_SENDING_TEMPO       : Integer = 50;                                    // Temporisation to avoid message flooding
       K_SIZE_ERROR          = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
-      K_USING_DEFAULT       = 'xPL settings not set, using default';
+      K_USING_DEFAULT       = 'xPL settings not set, using defaults';
 
-// TxPLUDPClient ===============================================================
-constructor TxPLUDPClient.Create(const aOwner : TComponent; const aBroadCastAddress : string);
+// TxPLUDPClient ==============================================================
+procedure TxPLUDPClient.InitComponent;
 begin
-   inherited Create(aOwner);
+   inherited;
+
    BroadcastEnabled := True;
    Port := XPL_UDP_BASE_PORT;
-   Host := aBroadCastAddress;
+   Host := TxPLApplication(Owner).Settings.BroadCastAddress;
    fLastSentTime := now;
 end;
 
 procedure TxPLUDPClient.Send(const AData: string);
 var Tempo : integer;
 begin
-   if length(aData) > XPL_MAX_MSG_SIZE
-      then xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
-      else begin
-         Tempo := MillisecondsBetween(fLastSentTime, now);
-         if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
-         inherited Send(aData);
-         fLastSentTime := now;
-      end;
+   if length(aData) <= XPL_MAX_MSG_SIZE then begin
+      Tempo := MillisecondsBetween(fLastSentTime, now);
+      if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
+      inherited Send(aData);
+      fLastSentTime := now;
+   end else
+      xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
 end;
 
 // TxPLUDPServer ===============================================================
-constructor TxPLUDPServer.Create(const aOwner : TComponent; const aReceivedProc : TStrParamEvent; const aPort : integer = 0);
-{$ifdef mswindows}
-var i : integer;
-{$endif}
+constructor TxPLUDPServer.Create(const AOwner: TComponent; const aMinPort : integer = XPL_MIN_PORT; const aMaxPort : integer = XPL_MAX_PORT);
+var address : string;
 begin
    inherited Create(aOwner);
-   Bindings.Clear;
-   BufferSize  := XPL_MAX_MSG_SIZE;
-   fOnReceived := aReceivedProc;
-   if not TxPLApplication(aOwner).Settings.IsValid then xPLApplication.Log(etWarning,K_USING_DEFAULT);
-   with TxPLApplication(aOwner).Settings do begin
-      {$ifdef mswindows}
-         i := LocalAddresses.Count-1;
-         while i>=0 do begin
-            if ListenOnAll or (LocalAddresses[i] = ListenOnAddress)
-               then AddBinding(LocalAddresses[i], aPort);
-            dec(i);
-         end;
-      {$else}                                                                  // Don't understand why this is needed to work
-//         AddBinding('eth0', aPort);                                          // under linux. Tried 127.0.0.1, Local ip address...
-         AddBinding(ListenOnAddress,aPort);                                    // only ETH0 seams to let incoming message pass in
-      {$endif}
-   end;
-   Active := (Bindings.Count > 0);
-end;
 
-procedure TxPLUDPServer.AddBinding(const aIP : string; const aPort : integer);
-begin
-   with Bindings.Add do begin
-      IP   := aIP;
-      Port := aPort;
-      if aPort = 0 then begin                                                   // Dynamically assign port
-         ClientPortMin := XPL_BASE_DYNAMIC_PORT;
-         ClientPortMax := ClientPortMin + XPL_BASE_PORT_RANGE;
-      end;
+   BufferSize := XPL_MAX_MSG_SIZE;
+   DefaultPort := 0;
+
+   with xPLApplication.Settings do begin
+      if not IsValid then xPLApplication.Log(etWarning,K_USING_DEFAULT);
+
+      for address in LocalAddresses do
+          if ListenOnAll or (address = ListenOnAddress) then with Bindings.Add do begin
+             IP := address;
+             ClientPortMin := aMinPort;
+             ClientPortMax := aMaxPort;
+          end;
    end;
+
+   Active := (Bindings.Count > 0);
 end;
 
 procedure TxPLUDPServer.DoUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 begin
-   with TxPLApplication(Owner).Settings do
-        if (ListenToAny) or
-           (ListenToLocal) and (LocalAddresses.IndexOf(aBinding.PeerIP) >= 0) or
-           (AnsiPos(aBinding.PeerIP, ListenToAddresses) > 0)
-        then fOnReceived(BytesToString(AData));
+   with xPLApplication.Settings do
+      if Assigned(fOnReceived) and (
+         ((ListenToAny) or                                                     // Accept all senders
+         (ListenToLocal and (LocalAddresses.IndexOf(aBinding.PeerIP) >= 0)) or // or only accept local to this machine senders
+         (AnsiPos(aBinding.PeerIP, ListenToAddresses) > 0)))                   // or sender present in specified list
+      then fOnReceived(BytesToString(AData));
 end;
 
 procedure TxPLUDPServer.DoOnUDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
 begin
-   xPLApplication.Log(etWarning,ClassName + ' : ' + AnsiReplaceStr(aMessage,#13,' '));
+   xPLApplication.Log(etWarning,'%s : %s',[ClassName,AnsiReplaceStr(aMessage,#13,' ')]);
 end;
 
 end.

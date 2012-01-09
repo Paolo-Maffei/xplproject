@@ -19,6 +19,7 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      StrArray = array of string;
 
      TStrParamEvent = procedure(const aString : string) of object;
+     TNoParamEvent  = procedure of object;
 
      TxPLMessageType = (cmnd, stat, trig);
 
@@ -63,13 +64,11 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      function GetVendorNameEvent : string;
      function GetApplicationEvent : string;
 
-const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml';   // File where app versions are registered
-      XPL_UDP_BASE_PORT     : Integer = 3865;                                   // Port used by devices to send messages
-      XPL_MAX_MSG_SIZE      : Integer = 1500;                                   // Maximum size of a xpl message
-
-var  LocalAddresses     : TStringList;
-     InstanceInitStyle  : TInstanceInitStyle;
-     //AllowMultiInstance : boolean;
+const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml'; // File where app versions are registered
+      XPL_UDP_BASE_PORT     : Integer = 3865;                                  // Port used by devices to send messages
+      XPL_MAX_MSG_SIZE      : Integer = 1500;                                  // Maximum size of a xpl message
+      XPL_MIN_PORT = 50000;                                                    // First port used to try to open the listening port
+      XPL_MAX_PORT = 50512;                                                    // Max port used to try to open the listening port
 
 implementation  //=============================================================
 uses StrUtils

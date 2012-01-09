@@ -22,24 +22,6 @@ unit uxPLConst;
 
 interface
 
-//const
-//   K_BODY_ELMT_VALUE_MAX_LEN = 128;
-
-//type
-   //tsVendor   = string[8];
-   //tsDevice   = string[8];
-   //tsInstance = string[16];
-   //tsAddress  = string[8 + 1 + 8 + 1 + 16];
-   //tsClass    = string[8];
-   //tsType     = string[8];
-   //tsSchema   = string[8 + 1 + 8];
-   //tsMsgType  = string;                       //string[8];
-//   tsBodyElmtName  = string[16];
-//   tsBodyElmtValue = string[K_BODY_ELMT_VALUE_MAX_LEN];
-
-//   tsFilter   = string[8 + 1 + 8 + 1 + 8 + 1 + 16 + 1 + 8 + 1 + 8];             //   aMsgType.aVendor.aDevice.aInstance.aClass.aType
-
-
 const
    // File extensions ==========================================================
    K_FEXT_LOG         = '.log';

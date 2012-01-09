@@ -127,6 +127,7 @@ begin
       FreeAndNil(proc);
    end;
 {$endif}
+   if result.Count = 0 then result.Add('127.0.0.1');
 end;
 
 initialization // =============================================================

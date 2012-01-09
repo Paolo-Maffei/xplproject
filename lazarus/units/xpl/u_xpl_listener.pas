@@ -13,17 +13,18 @@ unit u_xpl_listener;
 
 interface
 
-uses Classes, SysUtils,
-     u_configuration_record,
-     u_xPL_Message,
-     u_xPL_Config,
-     u_xPL_Body,
-     u_xpl_custom_listener;
+uses Classes
+     , SysUtils
+     , u_xpl_common
+     , u_configuration_record
+     , u_xPL_Message
+     , u_xPL_Config
+     , u_xPL_Body
+     , u_xpl_custom_listener
+     , u_xpl_heart_beater
+     ;
 
-type TxPLPrereqMet = procedure of object;
-
-     { TxPLListener }
-
+type // TxPLListener ==========================================================
      TxPLListener = class(TxPLCustomListener)
       protected
         fDiscovered : TConfigurationRecordList;
@@ -32,7 +33,7 @@ type TxPLPrereqMet = procedure of object;
         fPrereqList : TStringList;
         function Is_PrereqMet: boolean;
       public
-        OnxPLPrereqMet     : TxPLPrereqMet    ;                                 // Called when needed modules has been seen on the xPL network
+        OnxPLPrereqMet     : TNoParamEvent;                                    // Called when needed modules has been seen on the xPL network
 
         constructor Create(const aOwner : TComponent); dynamic; overload;
         destructor destroy; override;
@@ -46,7 +47,7 @@ type TxPLPrereqMet = procedure of object;
         procedure OnDie(Sender : TObject); dynamic;
      end;
 
-implementation { ==============================================================}
+implementation // =============================================================
 uses u_xpl_header
      , u_xpl_schema
      , u_xpl_messages
