@@ -2359,10 +2359,30 @@ inherited frmLogger: TfrmLogger
       Align = alClient
       ClientHeight = 374
       ClientWidth = 309
-      DesignLeft = 499
-      DesignTop = 81
+      inherited edtSource: TTIEdit
+        Width = 247
+      end
+      inherited edtTarget: TTIEdit
+        Width = 156
+      end
       inherited edtBody: TTIMemo
-        Width = 251
+        Height = 206
+        Width = 246
+      end
+      inherited ckGeneric: TTICheckBox
+        Left = 220
+      end
+      inherited Label6: TLabel
+        Top = 348
+      end
+      inherited edtHop: TTISpinEdit
+        Top = 341
+      end
+      inherited lblTS: TTILabel
+        Top = 363
+      end
+      inherited lblSize: TTILabel
+        Top = 363
       end
     end
   end

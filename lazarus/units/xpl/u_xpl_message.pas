@@ -35,7 +35,6 @@ type // TxPLMessage ===========================================================
         function  ElementByName(const anItem : string) : string;
         procedure ReadFromJSON (const aCom : TCommandType);
 
-        //procedure Format_SensorBasic(const aDevice : string; const aType : string; const aCurrent : string); Replaced by TSensorBasic in u_xpl_messages
      published
         property MsgName : string read fMsgName write fMsgName;
      end;
@@ -97,12 +96,5 @@ begin
    for item in aCom.Elements do
        Body.AddKeyValuePairs([TElementType(item).Name],[TElementType(item).default_]);
 end;
-
-//procedure TxPLMessage.Format_SensorBasic(const aDevice: string; const aType: string; const aCurrent: string);
-//begin
-//   Body.ResetValues;
-//   Schema.RawxPL := 'sensor.basic';
-//   Body.AddKeyValuePairs(['device','type','current'],[aDevice,aType,aCurrent]);
-//end;
 
 end.

@@ -69,16 +69,11 @@ const K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10
 implementation //==============================================================
 uses SysUtils
      , typinfo
-     , RegExpr
      , StrUtils
      ;
 
 // ============================================================================
-const K_RE_HEADER_FORMAT  = '(xpl-(stat|cmnd|trig)).+[{\n](.+)[=](.+)[\n](.+)[=](.+)[\n](.+)[=](.+)[\n][}][\n](.+)[\n]';
-      K_MSG_HEADER_HOP    = 'hop';
-      K_MSG_HEADER_SOURCE = 'source';
-      K_MSG_HEADER_TARGET = 'target';
-      K_FMT_FILTER        = '%s.%s.%s';
+const K_FMT_FILTER        = '%s.%s.%s';
 
 // TxPLHeader Object ==========================================================
 constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string = '');
@@ -148,12 +143,12 @@ begin
 end;
 
 function TxPLHeader.MatchesFilter(aFilterSet: TStringList): boolean;
-var i : integer;
+var filter : string;
 begin
    result := (aFilterSet.Count = 0);
    if not result then                                                           // if filters are present
-      for i:= 0 to Pred(aFilterSet.Count) do                                    // check if at least one matches
-          result := result or xPLMatches(aFilterSet[i], SourceFilter);
+      for filter in aFilterSet do                                               // check if at least one matches
+          result := result or xPLMatches(filter, SourceFilter);
 end;
 
 function TxPLHeader.IsValid: boolean;
@@ -172,7 +167,7 @@ end;
 
 procedure TxPLHeader.Set_Hop(const AValue: integer);
 begin                                                                           // Rule of xPL  : hop is <= 9
-   if (aValue>=1) and (aValue<=9) then fHop := aValue;
+   if (aValue in [1..9]) then fHop := aValue;
 end;
 
 procedure TxPLHeader.Set_MessageType(const AValue: TxPLMessageType);
@@ -199,26 +194,18 @@ begin
 end;
 
 procedure TxPLHeader.Set_RawXpl(const aRawXPL : string);
-var i : integer;
 begin
    ResetValues;
-   with TRegExpr.Create do try
-        Expression := K_RE_HEADER_FORMAT;
-        if Exec(AnsiLowerCase(aRawXPL)) then begin
-           MessageType := StrToMsgType(Match[1]);
-           i := 3;
-           while i<=7 do begin
-              Case AnsiIndexStr(Match[i],[K_MSG_HEADER_HOP,K_MSG_HEADER_SOURCE,K_MSG_HEADER_TARGET]) of
-                   0 : fHop := StrToInt(Match[i+1]);
-                   1 : Source.RawxPL := Match[i+1];
-                   2 : Target.RawxPL := Match[i+1];
-              end;
-              inc(i,2);
-           end;
-           Schema.RawxPL := Match[9];
-        end;
+
+   with TStringList.Create do try
+        DelimitedText:= AnsiReplaceText(AnsiLowerCase(aRawxPL),'}'#10,'schema=');
+        MessageType := StrToMsgType(Strings[0]);
+        fHop := StrToInt(Values['hop']);
+        fSource.RawxPL := Values['source'];
+        fTarget.RawxPL := Values['target'];
+        fSchema.RawxPL := Values['schema'];
    finally
-        Destroy;
+        free;
    end;
 end;
 

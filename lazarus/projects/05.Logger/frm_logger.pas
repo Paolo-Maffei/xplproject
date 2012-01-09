@@ -44,12 +44,12 @@ type
     mnuSendMessage: TMenuItem;
     Panel1:    TPanel;
     mnuTreeView: TPopupMenu;
-    MessageFrame: TTMessageFrame;
     mnuListView: TPopupMenu;
     Panel2: TPanel;
     Panel5: TPanel;
     seSleep: TSpinEdit;
     tbMacro: TToolBar;
+    MessageFrame: TTMessageFrame;
     ToolBar2: TToolBar;
     ToolButton102: TToolButton;
     tbListen: TToolButton;

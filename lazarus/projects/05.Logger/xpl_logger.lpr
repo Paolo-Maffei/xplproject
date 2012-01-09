@@ -2,18 +2,20 @@ program xpl_logger;
 
 {$mode objfpc}{$H+}
 {$ASSERTIONS ON}
-{$DEFINE UseCThreads}
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
   Interfaces, // this includes the LCL widgetset
   Forms, pl_rx, pl_kcontrols, lazcontrols,
   frm_logger,
   u_xpl_application,
   logger_listener,
-  xpl_win, frm_logger_config;
+  xpl_win
+  , frm_logger_config
+  , frame_message
+  ;
 
 {$R *.res}
 
@@ -28,4 +30,4 @@ begin
 
    xPLApplication.Free;
 end.
-
+

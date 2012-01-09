@@ -45,7 +45,7 @@ type
 
   published
     property TheMessage : TxPLCustomMessage read fMessage write Set_Message;
-    property ReadOnly   : boolean     read fReadOnly write Set_ReadOnly;
+    property ReadOnly   : boolean read fReadOnly write Set_ReadOnly;
   end; 
 
 implementation //==============================================================
@@ -129,4 +129,4 @@ initialization //==============================================================
   {$I msgtype.lrs}
 
 end.
-
+

@@ -7,9 +7,10 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
-  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, u_xPL_Message_gui,
-  u_xpl_message, frame_message, KHexEditor, SynEdit,  SynHighlighterPas,
-  SynEditSearch, v_xplmsg_opendialog, RTTICtrls,{%H-}RxAboutDialog, Frm_Template ;
+  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage{%H-},
+  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, SynEdit,
+  SynHighlighterPas, SynEditSearch, v_xplmsg_opendialog, RTTICtrls,
+  RxAboutDialog{%H-}, Frm_Template ;
 
 type
 
@@ -25,7 +26,6 @@ type
     ckDevice: TCheckBox;
     acSend: TAction;
     HexEditor: TKHexEditor;
-    Label4: TLabel;
     MenuItem1: TMenuItem;
     MenuItem2: TMenuItem;
     MenuItem3: TMenuItem;
@@ -35,6 +35,7 @@ type
     acSave: TAction;
     PageControl1: TPageControl;
     mmoPSScript: TSynEdit;
+    Panel1: TPanel;
     popCommands: TPopupMenu;
     popCopy: TPopupMenu;
     popFunctions: TPopupMenu;
@@ -56,6 +57,7 @@ type
     procedure acLoadExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
     procedure acSendExecute(Sender: TObject);
+    procedure edtBodyEditingDone(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -199,7 +201,7 @@ begin
    FrameMessage.EdtBody.SelStart := p + Length(TMenuItem(sender).Caption) -1;
 end;
 
-procedure TFrmxPLMessage.DisplayMessage;
+procedure TfrmxPLMessage.DisplayMessage;
 var Stream : TStringStream;
 begin
    with xPLMessage do begin
@@ -292,6 +294,11 @@ begin
    backAddress.Free;
 end;
 
+procedure TfrmxPLMessage.edtBodyEditingDone(Sender: TObject);
+begin
+  FrameMessage.edtBodyEditingDone(Sender);
+end;
+
 procedure TfrmxPLMessage.acSaveExecute(Sender: TObject);
 begin
    if SaveMessage.Execute then xPLMessage.SaveToFile(SaveMessage.FileName);
@@ -372,4 +379,4 @@ end;
 
 end.
 
-
+
