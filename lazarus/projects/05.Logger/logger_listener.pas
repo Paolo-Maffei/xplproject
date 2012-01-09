@@ -34,7 +34,6 @@ type TMessageList = TList;
         constructor Create; reintroduce;
         destructor  Destroy; override;
 
-        procedure   Set_ConnectionStatus(const aValue : TConnectionStatus); override;
         function    Message(const i : integer) : TxPLMessage;
 
      published
@@ -84,11 +83,6 @@ begin
    if fListen=AValue then exit;
    fListen:=AValue;
    if fListen then fLogStart := now;
-end;
-
-procedure TLoggerListener.Set_ConnectionStatus(const aValue: TConnectionStatus);
-begin
-   inherited Set_ConnectionStatus(aValue);
 end;
 
 function TLoggerListener.Message(const i: integer): TxPLMessage;
