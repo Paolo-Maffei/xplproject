@@ -6,22 +6,20 @@ interface
 
 uses classes
      , IdUDPClient
-     , u_xpl_custom_message
      , u_xpl_messages
      , u_xpl_udp_socket
      , u_xpl_application
-     , fpc_delphi_compat
+     , u_xpl_custom_message
      ;
 
 // =============================================================================
 type TPortList = TStringList;
 
-     { TxPLHub ================================================================}
+     // TxPLHub ===============================================================
      TxPLHub = class(TxPLApplication)
      private
         fInSocket   : TxPLUDPServer;                                              // Connexion used to listen incoming messages
         fSocketList : TPortList;
-        fTimer      : TxPLTimer;
         fMessage    : TxPLCustomMessage;
         fLocalIP    : string;
 
@@ -36,13 +34,13 @@ type TPortList = TStringList;
 
 implementation // =============================================================
 uses SysUtils
+     , CustApp
      , IdUDPBase
      , IdSocketHandle
-     , CustApp
      ;
 
 // ============================================================================
-const K_ERROR_SETTINGS = 'xPL Settings may not be set ';
+const K_ERROR_SETTINGS = 'Network settings may not be set ';
       K_ERROR_PORT     = 'Unabled to bind port %d : a hub may already be present';
       K_STARTED        = 'Hub started and listening on %s:%d';
       K_RELEASING      = 'No activity on port %s, released';
@@ -56,10 +54,11 @@ procedure TxPLHub.Start;                                                       /
 var Binding : TCollectionItem;
 begin                                                                          //   First  : xPLSettings not set
    try                                                                         //   Second : XPL_UDP_BASE_PORT not free
-      fInSocket := TxPLUDPServer.Create(self,@UDPRead, XPL_UDP_BASE_PORT);
+      fInSocket := TxPLUDPServer.Create(self,XPL_UDP_BASE_PORT,XPL_UDP_BASE_PORT);
       fInSocket.BufferSize := ID_UDP_BUFFERSIZE;                               // Remove xPL limit at hub level : the hub should relay without limiting to 1500 bytes
       if fInSocket.Active then begin
-         fLocalIP  := fInSocket.Bindings[0].IP;
+         fInSocket.OnReceived := @UDPRead;
+         fLocalIP := fInSocket.Bindings[0].IP;
          for Binding in fInSocket.Bindings do
              with TIdSocketHandle(Binding) do Log(etInfo,K_STARTED,[IP,Port]);
 
@@ -68,10 +67,7 @@ begin                                                                          /
          fSocketList := TPortList.Create;
          fSocketList.OwnsObjects := true;
 
-         fTimer := TxPLTimer.Create(self);
-         fTimer.Interval:= 60 * 1000;                                          // By specification, check every minute
-         fTimer.OnTimer := @OnTimer;
-         fTimer.StartTimer;
+         xPLApplication.TimerPool.Add(60*1000, @OnTimer).StartTimer;           // By specification, check every minute
       end
       else
          Log(etError,K_ERROR_SETTINGS);
@@ -107,17 +103,17 @@ var remoteip, port : string;
 begin
    remoteip := aHBeatMsg.Remote_Ip;
    if remoteip='' then remoteip := fLocalIp;
-   {$ifdef unix}                                                                // Related to pb under linux, see
-      if remoteip = Settings.ListenOnAddress then remoteip := fLocalIP;         // xpl_udp_socket line # 131
+   {$ifdef unix}                                                               // Related to pb under linux, see
+      if remoteip = Settings.ListenOnAddress then remoteip := fLocalIP;        // xpl_udp_socket line # 131
    {$endif}
 
    for Binding in fInSocket.Bindings do begin
        if (TIdSocketHandle(Binding).IP = remoteip) then                        // The message is sent from a device located on one of my net cards
          if (aHBeatMsg.Port<>-1) then begin
             port := IntToStr(aHBeatMsg.Port);
-            i := fSocketList.IndexOfName(port);                                   // Search for the current port
+            i := fSocketList.IndexOfName(port);                                // Search for the current port
 
-            if i=-1 then begin                                                    // If not found
+            if i=-1 then begin                                                 // If not found
                aSocket := TIdUDPClient.Create(self);
                aSocket.Port:=StrToInt(port);
                i := fSocketList.AddObject(port+'=',aSocket);

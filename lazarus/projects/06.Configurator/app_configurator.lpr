@@ -18,16 +18,15 @@ uses
   ;
 
 {$IFDEF WINDOWS}{$R app_configurator.rc}{$ENDIF}
-{$R *.res}
 
 begin
   Application.Title:='xPL configurator';
   Application.Initialize;
 
   xPLApplication := TConfigListener.Create(Application);
-  xPLGUIResource := TxPLGUIResource.Create;
   Application.CreateForm(TfrmConfigurator, frmConfigurator);
   Application.Run;
 
+  xPLApplication.Free;
 end.
-
+

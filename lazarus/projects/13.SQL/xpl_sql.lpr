@@ -8,7 +8,7 @@ uses
      cthreads,
   {$ENDIF}{$ENDIF}
      u_xpl_console_app,
-     sql_listener;
+     sql_listener, u_xpl_db_listener;
 
 {$R *.res}
 

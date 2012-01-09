@@ -12,19 +12,19 @@ uses {$define UseCThreads}
         {$ENDIF}
      {$ENDIF}
      u_xpl_hub
+     , u_xpl_application
      , u_xpl_console_app;
 
 // ============================================================================
 var HubApplication : TxPLConsoleApp;
-    xPLHub         : TxPLHub;
 
 // ============================================================================
 begin
    HubApplication := TxPLConsoleApp.Create(nil);
 
-   xPLHub := TxPLHub.Create(HubApplication);
+   xPLApplication := TxPLHub.Create(HubApplication);
    try
-      xPLHub.Start;
+      TxPLHub(xPLApplication).Start;
    except                                                                      // Catch errors that can appear when
    end;                                                                        // starting the listener
 
