@@ -42,10 +42,10 @@
 -- See the accompanying ReadMe.txt file for additional information.
 -- @class module
 -- @name xPLGirder
--- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.5, xPLGirder.
+-- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.6, xPLGirder.
 
-local Version = '0.1.5'
+local Version = '0.1.6'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
