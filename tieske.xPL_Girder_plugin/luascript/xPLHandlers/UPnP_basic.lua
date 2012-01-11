@@ -39,8 +39,8 @@
 -- along with xPLGirder.  If not, see <a href="http://www.gnu.org/licenses/">http://www.gnu.org/licenses/</a>.
 -- <br/><br/>
 -- See the accompanying ReadMe.txt file for additional information.
--- @copyright 2011 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.5, xPLGirder.
+-- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
+-- @release Version 0.1.6, xPLGirder.
 
 require 'Classes.DelayedExecutionDispatcher'
 require 'thread'

@@ -199,7 +199,7 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
-xx-jan-2012 version 0.1.6 by Thijs Schreijer
+03-jan-2012 version 0.1.6 by Thijs Schreijer
          Added 6 lua events to the xPLGirder component;
             - xPLMessage
             - xPLHandlerLoaded
