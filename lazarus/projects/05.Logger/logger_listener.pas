@@ -44,8 +44,6 @@ type TMessageList = TList;
      end;
 
 implementation // ==============================================================
-uses RegExpr
-     ;
 
 { TLoggerListener =============================================================}
 constructor TLoggerListener.Create;

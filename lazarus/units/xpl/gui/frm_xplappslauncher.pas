@@ -35,9 +35,7 @@ var frmAppLauncher: TfrmAppLauncher;
 
 implementation { =====================================================================}
 uses Process
-     , u_xpl_address
      , u_xpl_application
-     , u_xpl_gui_resource
      , u_xpl_collection
      ;
 

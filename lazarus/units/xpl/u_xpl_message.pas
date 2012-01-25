@@ -20,10 +20,7 @@ unit u_xpl_message;
 
 interface
 
-uses classes,
-     u_xPL_Custom_Message,
-     u_xpl_schema,
-     u_xPL_Body,
+uses u_xpl_custom_message,
      u_xml_plugins;
 
 type // TxPLMessage ===========================================================
@@ -39,15 +36,15 @@ type // TxPLMessage ===========================================================
         property MsgName : string read fMsgName write fMsgName;
      end;
 
-const K_KEYWORDS : Array[0..11] of String = ( 'TIMESTAMP','DATE_YMD','DATE_UK','DATE_US','DATE','DAY',
-                                              'MONTH','YEAR','TIME','HOUR','MINUTE','SECOND');
+const K_KEYWORDS : Array[0..11] of String = ( 'TIMESTAMP','DATE_YMD','DATE_UK',
+                                              'DATE_US','DATE','DAY', 'MONTH',
+                                              'YEAR','TIME','HOUR','MINUTE','SECOND');
 
 implementation // =============================================================
-Uses SysUtils
-     , RegExpr
+Uses Classes
+     , SysUtils
      , StrUtils
      , u_xpl_common
-     , uxPLConst
      ;
 
 // TxPLMessage ================================================================
@@ -62,26 +59,36 @@ begin
 end;
 
 function TxPLMessage.ProcessedxPL: string;
-const K_RE_VARIABLE    = '{[s|S][y|Y][s|S]::(.*?)}';
-      K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd',
+const K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd',
                                               'dd/mm/yyyy','mm/dd/yyyy','dd',
                                               'dd/mm/yyyy', 'm','yyyy',
                                               'hh:nn:ss','hh','nn','ss');
-
-var rep : string;
-    bLoop   : boolean;
+var b,e : integer;
+    constant, rep  : string;
 begin
-   result := RawxPL;
-   with TRegExpr.Create do begin
-        Expression := K_RE_VARIABLE;
-        bLoop := Exec(Result);
-        while bLoop do begin
-              rep := K_FORMATS[AnsiIndexStr(AnsiUpperCase(Match[1]),K_KEYWORDS)];
-              result := StringReplace( result, Match[0], FormatDateTime(rep,now),[rfReplaceAll,rfIgnoreCase]);
-              bLoop := ExecNext;
-        end;
-        Free;
+   result := AnsiReplaceStr(RawxPL, '{VDI}', source.RawxPL);
+   result := AnsiReplaceStr(result, '{INSTANCE}', source.Instance);
+   result := AnsiReplaceStr(result, '{DEVICE}', source.Device);
+   result := AnsiReplaceStr(result, '{SCHEMA}', Schema.RawxPL);
+
+   b := AnsiPos('{SYS::',result);
+   while b<>0 do begin
+      inc(b,6);
+      e := PosEx('}',result, b);
+      constant := Copy(result,b, e-b);
+      rep := K_FORMATS[AnsiIndexStr(AnsiUpperCase(constant),K_KEYWORDS)];
+      result := StringReplace( result, '{SYS::' + constant+'}', FormatDateTime(rep,now),[rfReplaceAll,rfIgnoreCase]);
+      b := PosEx('{SYS::',result,b);
    end;
+
+   //b := AnsiPos('{XPL::',result);               // Same to do with global variables for {xpl::globalname}
+   //while b<>0 do begin
+   //   inc(b,6);
+   //   e := PosEx('}',result, b);
+   //   constant := Copy(result,b, e-b);
+   //    ...
+   //   b := PosEx('{XPL::',result,b);
+   //end;
 end;
 
 procedure TxPLMessage.ReadFromJSON(const aCom: TCommandType);

@@ -13,7 +13,8 @@ uses {$define UseCThreads}
      {$ENDIF}
      u_xpl_hub
      , u_xpl_application
-     , u_xpl_console_app;
+     , u_xpl_console_app
+     ;
 
 // ============================================================================
 var HubApplication : TxPLConsoleApp;
