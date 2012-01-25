@@ -16,7 +16,7 @@ interface
 uses
   Classes,
   SysUtils,
-  u_xPL_Message;
+  u_xpl_Message;
 
 type TButtonOption = (
                 boLoad,

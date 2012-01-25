@@ -14,8 +14,6 @@ uses SysUtils
      , u_xpl_common
      , u_xpl_vendor_file
      , u_timer_pool
-     , fpc_delphi_compat
-     , lin_win_compat
      ;
 
 type // TxPLApplication =======================================================
@@ -49,11 +47,12 @@ type // TxPLApplication =======================================================
      end;
 
 var xPLApplication : TxPLApplication;
-    LocalAddresses : TStringList;
     InstanceInitStyle : TInstanceInitStyle;
 
 implementation // =============================================================
 uses IdStack
+     , lin_win_compat
+     , fpc_delphi_compat
      ;
 
 // ============================================================================
@@ -119,10 +118,5 @@ end;
 initialization // =============================================================
    InstanceInitStyle := iisHostName;                                           // Will use hostname as instance default name
 
-   LocalAddresses := TStringList.Create;
-   LocalAddresses.Assign(IPAddresses);
-
-finalization // ===============================================================
-   LocalAddresses.Free;
 
 end.

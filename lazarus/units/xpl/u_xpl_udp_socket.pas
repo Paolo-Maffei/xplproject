@@ -54,14 +54,17 @@ uses  IdStack
       , SysUtils
       , StrUtils
       , DateUtils
+      , lin_win_compat
       , uxPLConst
       , u_xpl_application
       ;
 
+var LocalAddresses : TStringList;
+
 // ============================================================================
 const K_SENDING_TEMPO = 50;                                                    // Temporisation to avoid message flooding
       K_SIZE_ERROR    = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
-      K_USING_DEFAULT = 'xPL settings not set, using defaults';
+      K_USING_DEFAULT = 'xPL network settings not set, using defaults';
 
 // TxPLUDPClient ==============================================================
 procedure TxPLUDPClient.InitComponent;
@@ -81,6 +84,7 @@ begin
       Tempo := MillisecondsBetween(fLastSentTime, now);
       if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
       inherited Send(aData);
+//        Broadcast(aData,XPL_UDP_BASE_PORT);
       fLastSentTime := now;
    end else
       xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
@@ -95,11 +99,12 @@ begin
    BufferSize := XPL_MAX_MSG_SIZE;
    DefaultPort := 0;
 
-   with xPLApplication.Settings do begin
+   with TxPLApplication(aOwner).Settings do begin
       if not IsValid then xPLApplication.Log(etWarning,K_USING_DEFAULT);
 
       for address in LocalAddresses do
-          if ListenOnAll or (address = ListenOnAddress) then with Bindings.Add do begin
+          if ListenOnAll or (address = ListenOnAddress) then
+          with Bindings.Add do begin
              IP := address;
              ClientPortMin := aMinPort;
              ClientPortMax := aMaxPort;
@@ -113,7 +118,7 @@ procedure TxPLUDPServer.DoUDPRead(AThread: TIdUDPListenerThread; const AData: TI
 begin
    with xPLApplication.Settings do
       if Assigned(fOnReceived) and (
-         ((ListenToAny) or                                                     // Accept all senders
+         (ListenToAny or                                                       // Don't check, accept all
          (ListenToLocal and (LocalAddresses.IndexOf(aBinding.PeerIP) >= 0)) or // or only accept local to this machine senders
          (AnsiPos(aBinding.PeerIP, ListenToAddresses) > 0)))                   // or sender present in specified list
       then fOnReceived(BytesToString(AData));
@@ -123,6 +128,13 @@ procedure TxPLUDPServer.DoOnUDPException(AThread: TIdUDPListenerThread; ABinding
 begin
    xPLApplication.Log(etWarning,'%s : %s',[ClassName,AnsiReplaceStr(aMessage,#13,' ')]);
 end;
+
+initialization // =============================================================
+   LocalAddresses := TStringList.Create;
+   LocalAddresses.Assign(IPAddresses);
+
+finalization // ===============================================================
+   LocalAddresses.Free;
 
 end.
 

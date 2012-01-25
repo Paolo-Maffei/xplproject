@@ -6,22 +6,23 @@ unit u_xpl_xhcp;
 
 interface
 
-uses
-  Classes, SysUtils, IdTelnetServer
+uses Classes
+     , SysUtils
+     , IdTelnetServer
      , IdTelnet;
 
 type
      TXHCPDataAvailEvent = procedure (const ansType : integer; const Buffer: TStringList) of object;
 
        { TXHCPServer ============================================================}
-     TXHCPServer = class(TIdTelnetServer)                                       // Connexion used to listen XHCP messages
+     TXHCPServer = class(TIdTelnetServer)
         public
            constructor Create(const aOwner : TComponent);
      end;
 
      { TXHCPClient }
 
-     TXHCPClient = class(TIdTelnet)
+     TXHCPClient = class(TIdTelnet)                                            // Connexion used to listen XHCP messages
      private
         fOnAnswerAvailable : TXHCPDataAvailEvent;
         BigBuff : TStringList;

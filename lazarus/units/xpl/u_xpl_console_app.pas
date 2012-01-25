@@ -19,7 +19,8 @@ type TxPLConsoleApp = class(TCustomApplication)
      end;
 
 implementation // =============================================================
-uses Keyboard;
+uses Keyboard
+     , u_xpl_application;
 
 const K_STR_1 = 'Quitting the application...';
       K_STR_2 = 'Press "q" to quit.';
@@ -41,7 +42,7 @@ end;
 
 destructor TxPLConsoleApp.Destroy;
 begin
-   writeln(K_STR_1);
+   xPLApplication.Log(etInfo,K_STR_1);
    DoneKeyboard;
 
    inherited Destroy;
@@ -54,7 +55,7 @@ end;
 procedure TxPLConsoleApp.Run;
 begin
    InitKeyboard;
-   writeln(K_STR_2);
+   xPLApplication.Log(etInfo,K_STR_2);
 
    inherited Run;
 end;
