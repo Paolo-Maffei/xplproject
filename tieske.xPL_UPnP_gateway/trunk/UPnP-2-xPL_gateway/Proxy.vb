@@ -882,7 +882,8 @@ Public Class Proxy
                             End If
                         End While
                         If s IsNot Nothing Then
-                            Proxy.AddKeyValue(xmsg, Proxy.GetProxy(s).ID.ToString, v)
+                            varID = Proxy.GetProxy(s).ID
+                            Proxy.AddKeyValue(xmsg, varID.ToString, v)
                             log = log & vbCrLf & "      " & varID.ToString & " = " & v
                             s = Nothing
                         Else
