@@ -19,11 +19,11 @@ type
 
  TxPLDBListener = class(TxPLCustomListener)
      private
-        SQLConnection : TZConnection;
         SQLQuery      : TZQuery;
         procedure ConnectToDatabase(const aSchema : string);
 
      protected
+        SQLConnection : TZConnection;
         fTestTableName : string;                                               // Table name that will validate presence of database schema
         fSchemaCreation: TStringList;
 
@@ -60,7 +60,7 @@ begin
    fSchemaCreation := TStringList.Create;
    Config.DefineItem(rsHostname, TxPLConfigItemType.config, 1, 'localhost');
    Config.DefineItem(rsUsername, TxPLConfigItemType.config, 1, 'root');
-   Config.DefineItem(rsPassword, TxPLConfigItemType.config, 1, '');
+   Config.DefineItem(rsPassword, TxPLConfigItemType.config, 1, 'root');
    Config.DefineItem(rsDatabase, TxPLConfigItemType.config, 1, 'xpl');
 end;
 

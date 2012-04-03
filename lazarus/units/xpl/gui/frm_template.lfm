@@ -1,7 +1,7 @@
 object FrmTemplate: TFrmTemplate
-  Left = 595
+  Left = 493
   Height = 472
-  Top = 285
+  Top = 181
   Width = 708
   Caption = 'FrmTemplate'
   ClientHeight = 472
@@ -9,32 +9,6 @@ object FrmTemplate: TFrmTemplate
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
   LCLVersion = '0.9.31'
-  object StatusBar1: TStatusBar
-    Left = 0
-    Height = 23
-    Hint = 'Clic to open log viewer'
-    Top = 449
-    Width = 708
-    Panels = <    
-      item
-        Bevel = pbNone
-        Width = 20
-      end    
-      item
-        Width = 500
-      end>
-    ParentShowHint = False
-    SimplePanel = False
-    ShowHint = True
-  end
-  object imgBullet: TImage
-    Left = 88
-    Height = 24
-    Top = 32
-    Width = 24
-    BorderSpacing.InnerBorder = 4
-    Center = True
-  end
   object ToolBar: TToolBar
     Left = 0
     Height = 25
@@ -49,7 +23,7 @@ object FrmTemplate: TFrmTemplate
     Flat = False
     List = True
     ShowCaptions = True
-    TabOrder = 1
+    TabOrder = 0
     object ToolButton9: TToolButton
       Left = 1
       Top = 0
@@ -93,6 +67,28 @@ object FrmTemplate: TFrmTemplate
       Width = 30
       NumGlyphs = 0
       OnClick = AppButtonClick
+    end
+  end
+  object StatusBar: TplStatusBar
+    Left = 0
+    Height = 24
+    Top = 448
+    Width = 708
+    Panels = <    
+      item
+        Width = 26
+      end    
+      item
+        Width = 50
+      end>
+    SimplePanel = False
+    object imgBullet: TImage
+      Left = 0
+      Height = 24
+      Top = 0
+      Width = 24
+      BorderSpacing.InnerBorder = 4
+      Center = True
     end
   end
   object ActionList: TActionList
@@ -167,4 +163,4 @@ object FrmTemplate: TFrmTemplate
     left = 112
     top = 144
   end
-end
+end

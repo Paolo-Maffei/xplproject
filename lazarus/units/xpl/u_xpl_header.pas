@@ -18,53 +18,54 @@ unit u_xPL_Header;
 
 interface
 
-uses Classes,
-     u_xpl_address,
-     u_xpl_schema,
-     u_xpl_common;
+uses Classes
+     , u_xpl_address
+     , u_xpl_schema
+     , u_xpl_common
+     ;
 
 type // TxPLHeader ============================================================
      TxPLHeader = class(TComponent, IxPLCommon, IxPLRaw)
      private
-       fSource  : TxPLAddress;
-       fTarget  : TxPLTargetAddress;
-       fSchema  : TxPLSchema;
-       fMsgType : TxPLMessageType;
-       fHop     : integer;
+        fSource  : TxPLAddress;
+        fTarget  : TxPLTargetAddress;
+        fSchema  : TxPLSchema;
+        fMsgType : TxPLMessageType;
+        fHop     : integer;
 
-       function  Get_RawxPL : string;
-       procedure Set_Hop(const AValue: integer);
+        function  Get_RawxPL : string;
+        procedure Set_Hop(const AValue: integer);
 
-       procedure Set_RawxPL(const aRawXPL : string);
-       procedure Set_MessageType(const AValue: TxPLMessageType);
-       procedure Set_Schema(const AValue: TxPLSchema);
-       procedure Set_Source(const AValue: TxPLAddress);
-       procedure Set_Target(const AValue: TxPLTargetAddress);
+        procedure Set_RawxPL(const aRawXPL : string);
+        procedure Set_MessageType(const AValue: TxPLMessageType);
+        procedure Set_Schema(const AValue: TxPLSchema);
+        procedure Set_Source(const AValue: TxPLAddress);
+        procedure Set_Target(const AValue: TxPLTargetAddress);
+     protected
+        procedure MessageTypeFromStr(const aString : string); dynamic;
+        function MessageTypeToStr : string; dynamic;
      public
-       constructor Create(aOwner : TComponent; const aFilter : string = ''); reintroduce;
-       destructor  Destroy; override;
+        constructor Create(aOwner : TComponent; const aFilter : string = ''); reintroduce;
+        destructor  Destroy; override;
 
-       procedure   Assign(aHeader : TPersistent); override;
+        procedure   Assign(aHeader : TPersistent); override;
+        procedure   ResetValues; dynamic;
+        function    IsValid : boolean; dynamic;
 
-       procedure   ResetValues;
-       function    IsValid : boolean; dynamic;
+        procedure   Reply;
+        function    MatchesFilter(aFilterSet : TStringList) : boolean;
+        function    SourceFilter : string;                                       // Returns a message like a filter string
+        function    TargetFilter : string;
 
-       procedure   Reply;
-       function    MatchesFilter(aFilterSet : TStringList) : boolean;
-       function    SourceFilter : string;                                       // Returns a message like a filter string
-       function    TargetFilter : string;
-
-       property    RawxPL      : string         read Get_RawxPL write Set_RawxPL;
-
+        property    RawxPL      : string         read Get_RawxPL write Set_RawxPL;
+        property MsgTypeAsStr : string read MessageTypeToStr write MessageTypeFromStr;
      published
-       property MessageType : TxPLMessageType   read fMsgType   write Set_MessageType;
-       property hop         : integer           read fHop       write Set_Hop;
-       property source      : TxPLAddress       read fSource    write Set_Source;
-       property target      : TxPLTargetAddress read fTarget    write Set_Target;
-       property schema      : TxPLSchema        read fSchema    write Set_Schema;
+        property MessageType : TxPLMessageType   read fMsgType write Set_MessageType;
+        property hop         : integer           read fHop     write Set_Hop;
+        property source      : TxPLAddress       read fSource  write Set_Source;
+        property target      : TxPLTargetAddress read fTarget  write Set_Target;
+        property schema      : TxPLSchema        read fSchema  write Set_Schema;
      end;
-
-const K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10'%s'#10;
 
 implementation //==============================================================
 uses SysUtils
@@ -77,24 +78,20 @@ const K_FMT_FILTER        = '%s.%s.%s';
 
 // TxPLHeader Object ==========================================================
 constructor TxPLHeader.Create(aOwner: TComponent; const aFilter: string = '');
-var  sFlt : TStringList;
 begin
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
-   if aFilter <> '' then begin
-      sFlt := TStringList.Create;
-      try
-         sFlt.Delimiter := '.';
-         sFlt.StrictDelimiter := True;
-         sFlt.DelimitedText := aFilter;                                         // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
-         fSource := TxPLAddress.Create(sFlt[1],sFlt[2],sFlt[3]);                // Creates source and target with the same informations
-         fTarget := TxPLTargetAddress.Create(fSource);
-         MessageType := StrToMsgType(sFlt[0]);
-         fSchema := TxPLSchema.Create(sFlt[4],sFlt[5]);
+   if aFilter <> '' then with TStringList.Create do try
+      Delimiter := '.';
+      StrictDelimiter := True;
+      DelimitedText := aFilter;                                             // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
+      fSource := TxPLAddress.Create(Strings[1],Strings[2],Strings[3]);  // Creates source and target with the same informations
+      fTarget := TxPLTargetAddress.Create(fSource);
+      MsgTypeAsStr := Strings[0];
+      fSchema := TxPLSchema.Create(Strings[4],Strings[5]);
       finally
-        sFlt.Free;
-      end;
+         Free;
    end else begin
       fSource := TxPLAddress.Create;
       fTarget := TxPLTargetAddress.Create;
@@ -162,7 +159,7 @@ end;
 function TxPLHeader.Get_RawxPL: string;
 begin
    Result := Format( K_MSG_HEADER_FORMAT,
-                     [ MsgTypeToStr(MessageType), Hop, Source.RawxPL, Target.RawxPL, Schema.RawxPL ]);
+                     [ MsgTypeAsStr, Hop, Source.RawxPL, Target.RawxPL, Schema.RawxPL ]);
 end;
 
 procedure TxPLHeader.Set_Hop(const AValue: integer);
@@ -199,7 +196,7 @@ begin
 
    with TStringList.Create do try
         DelimitedText:= AnsiReplaceText(AnsiLowerCase(aRawxPL),'}'#10,'schema=');
-        MessageType := StrToMsgType(Strings[0]);
+        MsgTypeAsStr := Strings[0];
         fHop := StrToInt(Values['hop']);
         fSource.RawxPL := Values['source'];
         fTarget.RawxPL := Values['target'];
@@ -211,12 +208,24 @@ end;
 
 function TxPLHeader.SourceFilter : string;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-   result := Format(K_FMT_FILTER,[MsgTypeToStr(MessageType),Source.AsFilter,Schema.AsFilter]);
+   result := Format(K_FMT_FILTER,[MsgTypeAsStr,Source.AsFilter,Schema.AsFilter]);
 end;
 
 function TxPLHeader.TargetFilter : string;  // a string like :  aMsgType.aVendor.aDevice.aInstance.aClass.aType
 begin
-   result := Format(K_FMT_FILTER,[MsgTypeToStr(MessageType),Target.AsFilter,Schema.AsFilter]);
+   result := Format(K_FMT_FILTER,[MsgTypeAsStr,Target.AsFilter,Schema.AsFilter]);
+end;
+
+procedure TxPLHeader.MessageTypeFromStr(const aString: string);
+var s : string;
+begin
+   s := AnsiRightStr(aString, length(aString) - 4);                             // Removes 'xpl-'
+   MessageType := TxPLMessageType(GetEnumValue(TypeInfo(TxPLMessageType), s));
+end;
+
+function TxPLHeader.MessageTypeToStr: string;
+begin
+   result := 'xpl-' + GetEnumName(TypeInfo(TxPLMessageType),Ord(MessageType));
 end;
 
 initialization // =============================================================

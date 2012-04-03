@@ -34,7 +34,7 @@ type // TxPLApplication =======================================================
         function FullTitle   : string;
 
         procedure RegisterMe;
-        Procedure Log (const EventType : TEventType; const Msg : String); overload;
+        Procedure Log (const EventType : TEventType; const Msg : String); overload; dynamic;
         Procedure Log (const EventType : TEventType; const Fmt : String; const Args : Array of const); overload;
 
         property Settings  : TxPLSettings       read fSettings;
@@ -73,14 +73,13 @@ begin
 
    fSettings   := TxPLSettings.Create(self);
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
-   fTimerPool  := TTimerPool.Create;
+   fTimerPool  := TTimerPool.Create(self);
    RegisterMe;
 end;
 
 destructor TxPLApplication.Destroy;
 begin
    if Assigned(fFolders)       then fFolders.Free;
-   fTimerPool.Free;
    fAdresse.Free;
    inherited;
 end;

@@ -1,6 +1,7 @@
 unit dlg_config;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -58,7 +59,7 @@ begin
 end;
 
 initialization
-  {$I dlg_config.lrs}
+  { $ I dlg_config.lrs}
 
 end.
 

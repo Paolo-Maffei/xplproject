@@ -50,7 +50,6 @@ type
 
 implementation //==============================================================
 uses u_xpl_header
-     , u_xpl_common
      , typinfo
      ;
 
@@ -59,7 +58,8 @@ procedure TTMessageFrame.cbMsgTypeEditingDone(Sender: TObject);
 begin
   if Assigned(fMessage) then
   try
-     Image2.Picture.LoadFromLazarusResource(MsgTypeToStr(fMessage.MessageType));
+//     Image2.Picture.LoadFromLazarusResource(MsgTypeToStr(fMessage.MessageType));
+    Image2.Picture.LoadFromLazarusResource(fMessage.MsgTypeAsStr);
   except                                                                       // The ressource may not be present for the searched class of messages
   end;
 end;
@@ -117,7 +117,6 @@ begin
    edtTarget.Link.TIPropertyName := 'rawxpl';
    edtSchema.Link.TIPropertyName := 'rawxpl';
    edtBody.Link.TIPropertyName   := 'Strings';
-   cbMsgType.Link.TIPropertyName := 'MessageType';
    ckGeneric.Link.TIPropertyName := 'isgeneric';
    edtHop.Link.TIPropertyName    := 'hop';
    lblTS.Link.TIPropertyName     := 'timestamp';
