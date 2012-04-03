@@ -21,7 +21,7 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      TStrParamEvent = procedure(const aString : string) of object;
      TNoParamEvent  = procedure of object;
 
-     TxPLMessageType = (cmnd, stat, trig);
+     TxPLMessageType = (cmnd, stat, trig, any);
 
      IxPLCommon = Interface(IInterface)
         procedure  Assign(aSchema : TPersistent);
@@ -39,9 +39,11 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
 
      TxPLDateTimeStamp = class(TIdDateTimeStamp)
      private
+       function GetDateTime: TDateTime; reintroduce;
        function GetAsRawxPL: string;
      published
         property RawxPL : string read GetAsRawxPL;
+        property DateTime : TDateTime read GetDateTime;
      end;
 
      function StreamToString(Stream : TStream) : String;
@@ -52,8 +54,8 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      function xPLLevelToEventType(const aLevel : string) : TEventType;
      function EventTypeToxPLLevel(const aType : TEventType) : string;
 
-     function MsgTypeToStr(const aMsgType : TxPLMessageType) : string;
-     function StrToMsgType(const aString : string) : TxPLMessageType;
+//     function MsgTypeToStr(const aMsgType : TxPLMessageType) : string;
+//     function StrToMsgType(const aString : string) : TxPLMessageType;
 
      function XPLDt2DateTime(const aDateTime : string) : TDateTime;
      function DateTime2XPLDt(const aDateTime : TDateTime) : string;
@@ -69,6 +71,7 @@ const K_DEFAULT_ONLINESTORE    = 'http://glh33.free.fr/?dl_name=clinique.xml'; /
       XPL_MAX_MSG_SIZE      : Integer = 1500;                                  // Maximum size of a xpl message
       XPL_MIN_PORT = 50000;                                                    // First port used to try to open the listening port
       XPL_MAX_PORT = 50512;                                                    // Max port used to try to open the listening port
+      K_MSG_HEADER_FORMAT = '%s'#10'{'#10'hop=%u'#10'source=%s'#10'target=%s'#10'}'#10'%s'#10;
 
 implementation  //=============================================================
 uses StrUtils
@@ -82,21 +85,21 @@ const    K_LOG_INF = 'inf';
          K_LOG_ERR = 'err';
 
 // ============================================================================
-//const K_LEN : Array [0..2] of integer = (8,8,16);                              // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+//const K_LEN : Array [0..2] of integer = (8,8,16);                            // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
 // ============================================================================
 
-function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
-begin
-   result := K_MSG_TYPE_HEAD + GetEnumName(TypeInfo(TxPLMessageType),Ord(aMsgType));
-end;
+//function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
+//begin
+//   result := K_MSG_TYPE_HEAD + GetEnumName(TypeInfo(TxPLMessageType),Ord(aMsgType));
+//end;
 
-function StrToMsgType(const aString : string) : TxPLMessageType; inline;
-var s : string;
-begin
-   s := AnsiRightStr(aString, length(aString) - 4);                             // Removes 'xpl-'
-   result := TxPLMessageType(GetEnumValue(TypeInfo(TxPLMessageType), s));
-end;
+//function StrToMsgType(const aString : string) : TxPLMessageType; inline;
+//var s : string;
+//begin
+//   s := AnsiRightStr(aString, length(aString) - 4);                             // Removes 'xpl-'
+//   result := TxPLMessageType(GetEnumValue(TypeInfo(TxPLMessageType), s));
+//end;
 
 // ============================================================================
 function compareContents(msOne,msTwo:TMemoryStream):boolean ;
@@ -265,6 +268,11 @@ begin
 end;
 
 { TxPLDateTimeStamp }
+
+function TxPLDateTimeStamp.GetDateTime: TDateTime;
+begin
+   result := XPLDt2DateTime(RawxPL);
+end;
 
 function TxPLDateTimeStamp.GetAsRawxPL: string;
 begin

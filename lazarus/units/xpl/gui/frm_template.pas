@@ -8,7 +8,7 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, Buttons, RTTICtrls,
-  u_xPL_Collection, RxAboutDialog;
+  TplStatusBarUnit, u_xPL_Collection, RxAboutDialog;
 
 type { TFrmTemplate ==========================================================}
   TFrmTemplate = class(TForm)
@@ -30,7 +30,7 @@ type { TFrmTemplate ==========================================================}
     Panel4: TPanel;
     AboutDlg: TRxAboutDialog;
     AppButton: TSpeedButton;
-    StatusBar1: TStatusBar;
+    StatusBar: TplStatusBar;
     ToolBar: TToolBar;
     ToolButton1: TToolButton;
     ToolButton9: TToolButton;
@@ -147,11 +147,6 @@ begin
    XMLPropStorage.FileName := xPLApplication.Folders.DeviceDir + 'settings.xml';
    XMLPropStorage.Restore;
 
-   imgBullet.Parent := StatusBar1;
-   imgBullet.Center := true;
-   imgBullet.Width  := StatusBar1.Panels[0].Width;
-   imgBullet.Height := StatusBar1.Panels[0].Width;
-
    lblModuleName.Link.TIObject := xPLApplication.Adresse;
    lblModuleName.Link.TIPropertyName:= 'RawxPL';
 
@@ -172,7 +167,7 @@ begin
    sl.Free;
 
    acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
-   if acCoreConfigure.Visible then acCoreConfigure.ImageIndex:=K_IMG_PREFERENCE;
+   if acCoreConfigure.Visible then acCoreConfigure.ImageIndex := K_IMG_PREFERENCE;
    AppButton.Glyph.Assign(Application.Icon);
 end;
 
@@ -188,8 +183,8 @@ end;
 
 procedure TFrmTemplate.OnLogEvent(const aString : string);
 begin
-   if Assigned(StatusBar1.Panels) then
-      StatusBar1.Panels[1].Text := aString;
+   if Assigned(StatusBar.Panels) then
+      StatusBar.Panels[1].Text := aString;
 end;
 
 end.

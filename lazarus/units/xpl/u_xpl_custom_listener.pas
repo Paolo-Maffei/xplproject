@@ -68,16 +68,18 @@ type TxPLReceivedEvent = procedure(const axPLMsg: TxPLMessage) of object;
 
            procedure SaveConfig; dynamic;
            procedure LoadConfig; dynamic;
+           procedure UpdateConfig; dynamic;
+           procedure Listen; dynamic;
 
            procedure HandleConfigMessage(aMessage: TxPLMessage); dynamic;
            procedure SendHeartBeatMessage; dynamic;
            function ConnectionStatusAsStr: string;
 
-           procedure UpdateConfig; dynamic;
+
            function DoHBeatApp(const aMessage: TxPLMessage): boolean; dynamic;
            function DoxPLReceived(const aMessage: TxPLMessage): boolean; dynamic;
            procedure UDPRead(const aString: string);
-           procedure Listen;
+
         published
            property Config: TxPLCustomConfig read fConfig;
            property ConnectionStatus : TConnectionStatus read Get_ConnectionStatus write Set_ConnectionStatus stored false;

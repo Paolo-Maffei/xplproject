@@ -53,16 +53,15 @@ begin
    if anItem = 'Schema' then result := Schema.RawxPL;
    if anItem = 'Source' then result := Source.RawxPL;
    if anItem = 'Target' then result := Target.RawxPL;
-   if anItem = 'Type'   then result := MsgTypeToStr(MessageType);
+   if anItem = 'Type'   then result := MsgTypeAsStr; //MsgTypeToStr(MessageType);
    if anItem = 'Body'   then result := Body.RawxPL;
    if anItem = 'TimeStamp' then result := DateTimeToStr(TimeStamp);
 end;
 
 function TxPLMessage.ProcessedxPL: string;
-const K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd',
-                                              'dd/mm/yyyy','mm/dd/yyyy','dd',
-                                              'dd/mm/yyyy', 'm','yyyy',
-                                              'hh:nn:ss','hh','nn','ss');
+const K_FORMATS  : Array[0..11] of String = ( 'yyyymmddhhnnss','yyyy/mm/dd', 'dd/mm/yyyy',
+                                              'mm/dd/yyyy','dd/mm/yyyy','dd', 'm',
+                                              'yyyy', 'hh:nn:ss','hh','nn','ss');
 var b,e : integer;
     constant, rep  : string;
 begin
@@ -96,7 +95,8 @@ var item : TCollectionItem;
 begin
    ResetValues;
    MsgName := aCom.name;
-   MessageType := StrToMsgType(K_MSG_TYPE_HEAD + aCom.msg_type);
+//   MessageType := StrToMsgType(K_MSG_TYPE_HEAD + aCom.msg_type);
+   MsgTypeAsStr := K_MSG_TYPE_HEAD + aCom.msg_type;
    Target.IsGeneric := true;
    Schema.RawxPL := aCom.msg_schema;
 

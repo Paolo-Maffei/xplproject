@@ -82,10 +82,7 @@ begin
    fCounter := 0;
    fFactoryList := TFactoryCollection.Create(self);
 
-   fTimer := TxPLApplication(aOwner).TimerPool.Add(3*1000,{$ifdef fpc}@{$endif}TimerCheck);
-//   fTimer          := TxPLTimer.Create(self);
-//   fTimer.Interval := 3 * 1000;
-//   fTimer.OnTimer  := {$ifdef fpc}@{$endif}TimerCheck;
+   fTimer := TxPLApplication(Owner).TimerPool.Add(3*1000,{$ifdef fpc}@{$endif}TimerCheck);
 end;
 
 function TFragmentManager.Fragment(const aMessage: TxPLMessage) : TFragmentFactory;
