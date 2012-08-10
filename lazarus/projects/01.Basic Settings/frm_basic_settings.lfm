@@ -2268,10 +2268,6 @@ inherited frmBasicSettings: TfrmBasicSettings
     FFFF
   }
   OnCreate = FormCreate
-  inherited StatusBar1: TStatusBar
-    Top = 305
-    Width = 385
-  end
   inherited ToolBar: TToolBar
     Width = 385
     TabOrder = 7
@@ -2417,4 +2413,4 @@ inherited frmBasicSettings: TfrmBasicSettings
       Action = acReload
     end
   end
-end
+end
