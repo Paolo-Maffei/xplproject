@@ -1,12 +1,12 @@
 program xpl_balloon;
 
 uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+  {$IFDEF UNIX}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
   {$IFNDEF CONSOLE_APP}
      Interfaces, // this includes the LCL widgetset
-     Forms, pl_rx, runtimetypeinfocontrols,
+     Forms, pl_rx, runtimetypeinfocontrols, pl_excontrols,
      frm_balloon,
   {$ENDIF}
      xplnotifier,
@@ -33,4 +33,4 @@ begin
    xPLGUIResource.Free;
    xPLApplication.Free;
 end.
-
+

@@ -14,11 +14,8 @@ uses Classes
      , uxmpp
      ;
 
-type
-
-{ TxPLjabberListener }
-
- TxPLjabberListener = class(TxPLCustomListener)
+type // TxPLjabberListener ====================================================
+     TxPLjabberListener = class(TxPLCustomListener)
      private
         fXMPP : TXMPP;
         fRoster : TStringList;
@@ -103,18 +100,33 @@ begin
 end;
 
 procedure TxPLjabberListener.DoOnLoggin(Sender: TObject);
+var aMsg : TLogBasic;
 begin
-   SendLOGBasic('inf', 'successfully connected to ' + fXMPP.Host);
+   aMsg := TLogBasic.Create(self);
+   aMsg.Type_ := etInfo;
+   aMsg.Text  := 'successfully connected to ' + fXMPP.Host;
+   Send(aMsg);
+   aMsg.Free;
 end;
 
 procedure TxPLjabberListener.DoOnLogout(Sender: TObject);
+var aMsg : TLogBasic;
 begin
-   SendLOGBasic('inf', 'disconnected from ' + fXMPP.Host);
+   aMsg := TLogBasic.Create(self);
+   aMsg.Type_ := etInfo;
+   aMsg.Text  := 'disconnected from ' + fXMPP.Host;
+   Send(aMsg);
+   aMsg.Free;
 end;
 
 procedure TxPLjabberListener.DoOnError(Sender: TObject; Value: string);
+var aMsg : TLogBasic;
 begin
-   SendLOGBasic('err',value);
+   aMsg := TLogBasic.Create(self);
+   aMsg.Type_ := etError;
+   aMsg.Text  := value;
+   Send(aMsg);
+   aMsg.Free;
 end;
 
 procedure TxPLjabberListener.Process(const aMessage: TxPLMessage);
@@ -192,4 +204,4 @@ end;
 
 
 end.
-
+

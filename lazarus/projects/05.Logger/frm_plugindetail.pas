@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Buttons, StdCtrls, ActnList, ovcurl, u_xml_plugins, Dlg_Template;
+  Buttons, StdCtrls, ActnList, ovcurl, u_xml_plugins, Dlg_Template;
 
 type
 
@@ -73,4 +73,4 @@ begin
 end;
 
 end.
-
+

@@ -7,7 +7,7 @@ uses
   cthreads,
   {$ENDIF}
   Interfaces
-  , Forms, pl_rx
+  , Forms, pl_rx, pl_excontrols
   , u_xpl_application
   , u_xpl_listener
   , u_xpl_gui_resource
@@ -18,6 +18,8 @@ uses
   ;
 
 {$IFDEF WINDOWS}{$R app_configurator.rc}{$ENDIF}
+
+{$R *.res}
 
 begin
   Application.Title:='xPL configurator';

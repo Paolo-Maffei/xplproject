@@ -5,20 +5,17 @@ unit frm_logger;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, RTTICtrls, RTTIGrids,
-  {%H-} XMLPropStorage, {%H-} RxAboutDialog, uxPLConst, frm_template, frame_message,
-  logger_listener, u_xpl_header;
+uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+     Dialogs, ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
+     u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, RTTICtrls, RTTIGrids,
+     {%H-} XMLPropStorage, {%H-} RxAboutDialog, uxPLConst, frm_template,
+     frame_message, logger_listener, u_xpl_header;
 
-type
-
-  { TfrmLogger }
-  TfrmLogger = class(TFrmTemplate)
-    acAppSettings: TAction;
-    acLogging: TAction;
-    acPluginDetail: TAction;
+type // TfrmLogger  ===========================================================
+     TfrmLogger = class(TFrmTemplate)
+        acAppSettings: TAction;
+        acLogging: TAction;
+        acPluginDetail: TAction;
     acDiscoverNetwork: TAction;
     acShowMessage: TAction;
     acConversation: TAction;
@@ -114,7 +111,6 @@ implementation { TFrmLogger ====================================================
 uses u_configuration_record
      , StrUtils
      , u_xpl_message_gui
-     , dlg_config
      , frm_logger_config
      , u_xPL_Address
      , u_xpl_gui_resource
@@ -240,7 +236,7 @@ begin
    with TxPLListener(xPLApplication) do begin
       ToolButton3.Down:=TLoggerListener(xPLApplication).fLogAtStartUp;
       ListenExecute(self);
-      StatusBar1.Panels[1].Text := ConnectionStatusAsStr;
+      StatusBar.Panels[1].Text := ConnectionStatusAsStr;
    end;
 end;
 
@@ -280,12 +276,12 @@ begin
    sl := TStringList.Create;
 
      if tvMessages.Selected.Parent = nil then                                  // We're on one of the roots
-         StatusBar1.Panels[2].Text := '*.*.*.*.*.*'
+         StatusBar.Panels[2].Text := '*.*.*.*.*.*'
       else if (tvMessages.Selected.Parent = ConNode) then begin                // We're on a conversation node
         sl.DelimitedText:=tvMessages.Selected.Text;
         header.source.RawxPL:=sl[0];
         header.Target.RawxPL:=sl[1];
-        StatusBar1.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
+        StatusBar.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
       end else begin
         Sl.Delimiter:= '.';
         Sl.DelimitedText:=AnsiReplaceStr(tvMessages.Selected.GetTextPath,'/','.'); // Truncate the path
@@ -293,15 +289,15 @@ begin
            if (sl.Count>1) then header.source.Vendor := sl[1];
            if (sl.Count>2) then header.source.Device := sl[2];
            if (sl.Count>3) then header.source.Instance:= sl[3];
-           StatusBar1.Panels[2].Text := '*.' + header.Source.AsFilter + '.*.*';
+           StatusBar.Panels[2].Text := '*.' + header.Source.AsFilter + '.*.*';
         end else begin
            if (sl.Count>1) then header.MessageType   := StrToMsgType(sl[1]);
            if (sl.Count>2) then header.schema.Classe := sl[2];
            if (sl.Count>3) then header.schema.Type_  := sl[3];
-           StatusBar1.Panels[2].Text := header.SourceFilter;
+           StatusBar.Panels[2].Text := header.SourceFilter;
         end;
         if Assigned(tvMessages.Selected.Parent.Data) then begin             // We're at a device level
-           StatusBar1.Panels[2].Text := StatusBar1.Panels[2].Text + ',device=' + tvMessages.Selected.Text;
+           StatusBar.Panels[2].Text := StatusBar.Panels[2].Text + ',device=' + tvMessages.Selected.Text;
         end;
         result := Header.Source.AsFilter;
       end;
@@ -374,7 +370,7 @@ begin
      end;
   end;
 
-  StatusBar1.Panels[3].Text := StatusString;
+  StatusBar.Panels[3].Text := StatusString;
 
   if tvMessages.Selected <> MacNode then DisplayFilteredMessage(axPLMessage);  // The macro node doesn't need to be updated
 end;
@@ -384,11 +380,11 @@ var sl : TStringList;
     sFilter : string;
 begin
   sl := TStringList.Create;
-  sl.DelimitedText := StatusBar1.Panels[2].Text;
+  sl.DelimitedText := StatusBar.Panels[2].Text;
   if FrmLoggerConfig.rgFilterBy.ItemIndex = 0 then sFilter := aMsg.SourceFilter else sFilter := aMsg.TargetFilter;
   if sl.Count = 1 then                                                         // We're at VDI or Message level
     begin
-       if xPLMatches(StatusBar1.Panels[2].Text, sFilter) then AddToTreeView(TxPLMessage(aMsg));
+       if xPLMatches(StatusBar.Panels[2].Text, sFilter) then AddToTreeView(TxPLMessage(aMsg));
     end else begin                                                             // We're in conversation or device=xxx level
        if AnsiContainsText(sl[1],'device=') then begin                         // We're in device =
           if xPLMatches(sl[0], sFilter) then begin
@@ -450,7 +446,7 @@ procedure TfrmLogger.mnuSendMessageClick(Sender: TObject);
 var aMsg : TxPLMessage;
     aHeader : TxPLHeader;
 begin
-   aHeader := TxPLHeader.Create(self,StatusBar1.Panels[2].Text);               // The header of the created message is derived from current active filter
+   aHeader := TxPLHeader.Create(self,StatusBar.Panels[2].Text);               // The header of the created message is derived from current active filter
    aMsg := TxPLMessage.Create(self);
    aMsg.Assign(aHeader);
    with TxPLMessageGUI(aMsg) do begin
@@ -546,8 +542,6 @@ end;
 
 procedure TfrmLogger.tvMessagesChange(Sender: TObject; Node: TTreeNode);
 var ConfElmts: TConfigurationRecord;
-    i:     integer;
-    aMenu: tmenuitem;
 begin
    if (Node<>nil) and (Node.Data <> nil) then begin
       ConfElmts := TConfigurationRecord(Node.Data);

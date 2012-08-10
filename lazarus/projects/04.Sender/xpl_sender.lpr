@@ -13,7 +13,7 @@ uses
      {$ENDIF}
   {$ENDIF}
   Interfaces,
-  Forms, pl_kcontrols, pl_rx
+  Forms, pl_kcontrols, pl_rx, pl_excontrols
   , u_xpl_application
   , u_xpl_sender
   , u_xpl_message_GUI

@@ -8,19 +8,20 @@ uses
      cthreads,
   {$ENDIF}{$ENDIF}
      u_xpl_console_app,
+     u_xpl_application,
      sql_listener, u_xpl_db_listener;
 
 {$R *.res}
 
 var MySQLApp : TxPLConsoleApp;
-    Listener : TxPLSQLListener;
+//    Listener : TxPLSQLListener;
 
 begin
    MySQLApp := TxPLConsoleApp.Create(nil);
-   Listener := TxPLSQLListener.Create(MySQLApp);
+   xPLApplication := TxPLSQLListener.Create(MySQLApp);
 
-   MySQLApp.Title := Listener.AppName;
-   Listener.Listen;
+   MySQLApp.Title := xPLApplication.AppName;
+   TxPLSQLListener(xPLApplication).Listen;
 
    MySQLApp.Run;
    MySQLApp.Free;

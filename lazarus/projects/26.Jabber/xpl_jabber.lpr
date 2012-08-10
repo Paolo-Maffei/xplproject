@@ -7,22 +7,24 @@ uses
   {$IFDEF UNIX}
      cthreads,
   {$ENDIF}
-     u_xpl_console_app,
-     jabber_listener;
+     u_xpl_console_app
+     , u_xpl_application
+     , jabber_listener
+     ;
+
+var MyjabberApp : TxPLConsoleApp;
 
 {$R *.res}
 
-var MyjabberApp : TxPLConsoleApp;
-    Listener : TxPLjabberListener;
-
 begin
    MyjabberApp := TxPLConsoleApp.Create(nil);
-   Listener := TxPLjabberListener.Create(MyjabberApp);
+   xPLApplication := TxPLjabberListener.Create(MyjabberApp);
 
-   MyjabberApp.Title := Listener.AppName;
-   Listener.Listen;
+   MyjabberApp.Title := xPLApplication.AppName;
+   TxPLJabberListener(xPLApplication).Listen;
 
    MyjabberApp.Run;
    MyjabberApp.Free;
+
 end.
 

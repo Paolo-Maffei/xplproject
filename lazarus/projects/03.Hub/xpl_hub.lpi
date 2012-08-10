@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <RevisionNr Value="1"/>
-      <BuildNr Value="7"/>
+      <BuildNr Value="8"/>
       <StringTable CompanyName="clinique" ProductName="xPL Hub" InternalName="hub" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -54,12 +54,12 @@
     </Units>
   </ProjectOptions>
   <CompilerOptions>
-    <Version Value="10"/>
+    <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="C:\pp\packages\fcl-base\src\win\;$(ProjOutDir)"/>
+      <IncludeFiles Value="\usr\lib\codetyphon\fpsrc\packages\fcl-base\src\;$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\..\units\xpl;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\general"/>
-      <UnitOutputDirectory Value="..\..\..\lazout"/>
+      <UnitOutputDirectory Value="\home\glhopital\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -67,12 +67,6 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <Linking>
-      <Debugging>
-        <GenerateDebugInfo Value="True"/>
-        <DebugInfoType Value="dsAuto"/>
-      </Debugging>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
@@ -105,4 +99,4 @@
       </Item7>
     </Exceptions>
   </Debugging>
-</CONFIG>
+</CONFIG>

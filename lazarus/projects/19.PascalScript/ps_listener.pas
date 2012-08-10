@@ -193,10 +193,10 @@ begin
                 aSchema, '{'+#10+aBody+#10+'}');
 end;
 
-function TxPLPSListener.MessageType: string;
-begin
-   result := MsgTypeToStr(xPLMessage.MessageType);
-end;
+//function TxPLPSListener.MessageType: string;
+//begin
+//   result := MsgTypeToStr(xPLMessage.MessageType);
+//end;
 
 function TxPLPSListener.MessageSender: string;
 begin
@@ -345,4 +345,4 @@ end;
 // ============================================================================
 
 end.
-
+
