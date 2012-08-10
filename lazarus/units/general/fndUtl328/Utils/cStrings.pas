@@ -4,7 +4,7 @@ unit cStrings;
 {                                                                              }
 {                             Ansi Strings v3.39                               }
 {                                                                              }
-{             This unit is copyright © 1999-2004 by David J Butler             }
+{             This unit is copyright Â© 1999-2004 by David J Butler             }
 {                                                                              }
 {                  This unit is part of Delphi Fundamentals.                   }
 {                   Its original file name is cStrings.pas                     }

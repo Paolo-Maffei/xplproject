@@ -4,7 +4,7 @@ unit cUtils;
 {                                                                              }
 {                    Miscellaneous utility functions v3.36                     }
 {                                                                              }
-{             This unit is copyright © 2000-2004 by David J Butler             }
+{             This unit is copyright Â© 2000-2004 by David J Butler             }
 {                                                                              }
 {                  This unit is part of Delphi Fundamentals.                   }
 {                     Its original file name is cUtils.pas                     }
