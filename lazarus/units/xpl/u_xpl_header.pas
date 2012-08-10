@@ -56,6 +56,7 @@ type // TxPLHeader ============================================================
         function    MatchesFilter(aFilterSet : TStringList) : boolean;
         function    SourceFilter : string;                                       // Returns a message like a filter string
         function    TargetFilter : string;
+        function    HeaderFilter : string;
 
         property    RawxPL      : string         read Get_RawxPL write Set_RawxPL;
         property MsgTypeAsStr : string read MessageTypeToStr write MessageTypeFromStr;
@@ -196,11 +197,13 @@ begin
 
    with TStringList.Create do try
         DelimitedText:= AnsiReplaceText(AnsiLowerCase(aRawxPL),'}'#10,'schema=');
-        MsgTypeAsStr := Strings[0];
-        fHop := StrToInt(Values['hop']);
-        fSource.RawxPL := Values['source'];
-        fTarget.RawxPL := Values['target'];
-        fSchema.RawxPL := Values['schema'];
+        if Count >= 5 then begin                                                // The message header contains at least enough fields
+           MsgTypeAsStr := Strings[0];
+           fHop := StrToInt(Values['hop']);
+           fSource.RawxPL := Values['source'];
+           fTarget.RawxPL := Values['target'];
+           fSchema.RawxPL := Values['schema'];
+        end;
    finally
         free;
    end;
@@ -216,6 +219,11 @@ begin
    result := Format(K_FMT_FILTER,[MsgTypeAsStr,Target.AsFilter,Schema.AsFilter]);
 end;
 
+function TxPLHeader.HeaderFilter: string;
+begin
+   result := Format('%s.%s.%s.%s',[MsgTypeAsStr,Source.AsFilter,Target.AsFilter,Schema.AsFilter]);
+end;
+
 procedure TxPLHeader.MessageTypeFromStr(const aString: string);
 var s : string;
 begin
@@ -225,10 +233,12 @@ end;
 
 function TxPLHeader.MessageTypeToStr: string;
 begin
-   result := 'xpl-' + GetEnumName(TypeInfo(TxPLMessageType),Ord(MessageType));
+   if MessageType<>any then
+      result := 'xpl-' + GetEnumName(TypeInfo(TxPLMessageType),Ord(MessageType))
+   else result := '*';
 end;
 
 initialization // =============================================================
    Classes.RegisterClass(TxPLHeader);
 
-end.
+end.

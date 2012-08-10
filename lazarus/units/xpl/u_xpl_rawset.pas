@@ -106,6 +106,7 @@ end;
 function TxPLRawSet.AsFilter: string;
 var i : integer;
 begin
+   Result := '';
    for i := 0 to Pred(fRawxPL.Count) do
        Result := Result + IfThen( fRawxPL[i] <> '', fRawxPL[i], '*') + '.';
    Result := AnsiLeftStr(Result,length(Result)-1);                             // drop last '.'
@@ -122,4 +123,4 @@ begin
 end;
 
 end.
-
+

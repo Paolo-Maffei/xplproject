@@ -12,6 +12,9 @@ uses Classes
      ;
 
 const K_MSG_TYPE_HEAD = 'xpl-';
+      MAX_KEY_LEN   = 16;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+      MAX_VALUE_LEN = 1400;                                                    // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
+
 
 Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
 
@@ -54,8 +57,8 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
      function xPLLevelToEventType(const aLevel : string) : TEventType;
      function EventTypeToxPLLevel(const aType : TEventType) : string;
 
-//     function MsgTypeToStr(const aMsgType : TxPLMessageType) : string;
-//     function StrToMsgType(const aString : string) : TxPLMessageType;
+     function MsgTypeToStr(const aMsgType : TxPLMessageType) : string;
+     function StrToMsgType(const aString : string) : TxPLMessageType;
 
      function XPLDt2DateTime(const aDateTime : string) : TDateTime;
      function DateTime2XPLDt(const aDateTime : TDateTime) : string;
@@ -89,17 +92,19 @@ const    K_LOG_INF = 'inf';
                                                                                // Compatible for both schema (8,8) and address (8,8,16)
 // ============================================================================
 
-//function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
-//begin
-//   result := K_MSG_TYPE_HEAD + GetEnumName(TypeInfo(TxPLMessageType),Ord(aMsgType));
-//end;
+function MsgTypeToStr(const aMsgType : TxPLMessageType) : string; inline;      // Takes cmnd, stat or trig and outputs xpl-cmnd...
+begin
+   if aMsgType = any
+      then result := '*'
+      else result := K_MSG_TYPE_HEAD + GetEnumName(TypeInfo(TxPLMessageType),Ord(aMsgType));
+end;
 
-//function StrToMsgType(const aString : string) : TxPLMessageType; inline;
-//var s : string;
-//begin
-//   s := AnsiRightStr(aString, length(aString) - 4);                             // Removes 'xpl-'
-//   result := TxPLMessageType(GetEnumValue(TypeInfo(TxPLMessageType), s));
-//end;
+function StrToMsgType(const aString : string) : TxPLMessageType; inline;
+var s : string;
+begin
+   s := AnsiRightStr(aString, length(aString) - 4);                             // Removes 'xpl-'
+   result := TxPLMessageType(GetEnumValue(TypeInfo(TxPLMessageType), s));
+end;
 
 // ============================================================================
 function compareContents(msOne,msTwo:TMemoryStream):boolean ;
@@ -257,6 +262,9 @@ end;
 function XPLDt2DateTime(const aDateTime : string) : TDateTime;
 var year, month, day, hour, minute, secs : integer;
 begin
+   result := 0;
+   if length(aDateTime) < 14 then exit;
+
    year  := StrToInt(AnsiMidStr(aDateTime, 1, 4));
    month := StrToInt(AnsiMidStr(aDateTime, 5, 2));
    day   := StrToInt(AnsiMidStr(aDateTime, 7, 2));
@@ -281,4 +289,4 @@ begin
 end;
 
 end.
-
+

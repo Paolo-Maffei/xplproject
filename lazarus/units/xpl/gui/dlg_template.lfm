@@ -1,7 +1,7 @@
 object DlgTemplate: TDlgTemplate
-  Left = 460
+  Left = 32
   Height = 254
-  Top = 208
+  Top = 389
   Width = 448
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSizeToolWin
@@ -46,20 +46,21 @@ object DlgTemplate: TDlgTemplate
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
-  OnShow = FormShow
+  OnCreate = FormCreate
   SessionProperties = 'Height;Left;Top;Width;lvApps.Columns'
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object DlgToolbar: TToolBar
     Left = 0
-    Height = 26
+    Height = 24
     Top = 0
     Width = 448
+    AutoSize = True
     ButtonHeight = 24
     ButtonWidth = 80
     Caption = 'ToolBar2'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esRaised
-    Flat = False
+    EdgeBorders = []
+    EdgeInner = esNone
+    EdgeOuter = esNone
     List = True
     ShowCaptions = True
     TabOrder = 0
@@ -86,4 +87,4 @@ object DlgTemplate: TDlgTemplate
       OnExecute = DlgacCloseExecute
     end
   end
-end
+end

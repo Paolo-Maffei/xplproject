@@ -92,6 +92,7 @@ uses u_xpl_custom_message
      , typInfo
      , u_xpl_schema
      , u_xpl_common
+     , u_xpl_processor
      , u_xpl_gui_resource
      , u_xpl_application
      , u_xpl_sender
@@ -176,7 +177,7 @@ procedure TfrmxPLMessage.InitFunctionsMenu;
 var ch : string;
 begin
    popFunctions.Items.Clear;
-   for ch in K_KEYWORDS do
+   for ch in K_PROCESSOR_KEYWORDS do
        popFunctions.Items.Insert(0,NewItem('{SYS::' + ch + '}',0,false,true,@FunctionExecute,0,''));
 end;
 
@@ -249,7 +250,7 @@ begin
    edtMsgName.Link.TIPropertyName := 'MsgName';
 
    FrameMessage.ReadOnly := edtMsgName.ReadOnly;
-   StatusBar1.Visible    := false;
+   StatusBar.Visible := false;
 
    ToolButton9.Visible   := (OnCloseQuery <> nil);
    Panel4.Visible := ToolButton9.Visible;                                       // Hide the modulename container if not needed
@@ -379,4 +380,4 @@ end;
 
 end.
 
-
+

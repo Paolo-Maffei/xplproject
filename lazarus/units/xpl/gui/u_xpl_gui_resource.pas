@@ -26,11 +26,13 @@ type // TxPLGUIResource =======================================================
 var xPLGUIResource : TxPLGUIResource;
 
 var K_IMG_THREAD, K_IMG_pkg_installed, K_IMG_NETWORK, K_IMG_MAIL_FORWARD,
-    K_IMG_MESSAGE, K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND, K_IMG_PREFERENCE,
-    K_IMG_LOUPE, K_IMG_CE_PROCEDURE, K_IMG_SYNCHRONIZE, K_IMG_EDIT_ADD, K_IMG_BUILD, K_IMG_TEST,
-    K_IMG_EDIT_REMOVE, K_IMG_DOCUMENT_SAVE, K_IMG_DOCUMENT_OPEN, K_IMG_RECORD,
-    K_IMG_MENU_RUN, K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE, K_IMG_TRASH,
-    K_IMG_RED_BADGE, K_IMG_RECONNECT, K_IMG_DISCONNECt, K_IMG_OK, K_IMG_CANCEL : integer;
+    K_IMG_MESSAGE, K_IMG_STAT, K_IMG_EDIT_FIND, K_IMG_TRIG, K_IMG_CMND,
+    K_IMG_PREFERENCE, K_IMG_LOUPE, K_IMG_CE_PROCEDURE, K_IMG_SYNCHRONIZE,
+    K_IMG_EDIT_ADD, K_IMG_BUILD, K_IMG_TEST, K_IMG_EDIT_REMOVE,
+    K_IMG_DOCUMENT_SAVE, K_IMG_DOCUMENT_OPEN, K_IMG_RECORD, K_IMG_REFRESH,
+    K_IMG_MENU_RUN, K_IMG_BLUE_BADGE, K_IMG_ORANGE_BADGE, K_IMG_GREEN_BADGE,
+    K_IMG_TRASH, K_IMG_RED_BADGE, K_IMG_RECONNECT, K_IMG_DISCONNECt,
+    K_IMG_PREVIOUS, K_IMG_NEXT, K_IMG_OK, K_IMG_CANCEL,K_IMG_EDIT : integer;
 
 implementation // =============================================================
 uses Forms
@@ -62,7 +64,7 @@ begin
       fImages16.AddLazarusResource('menu_exit');                               // 1
       fImages16.AddLazarusResource('menu_information');                        // 2
       K_IMG_DOCUMENT_SAVE := fImages16.AddLazarusResource('laz_save');         // 3
-      fImages16.AddLazarusResource('laz_refresh');                             // 4
+      K_IMG_REFRESH := fImages16.AddLazarusResource('laz_refresh');                             // 4
       K_IMG_CE_PROCEDURE := fImages16.AddLazarusResource('ce_procedure');      // 5
       K_IMG_MENU_RUN := fImages16.AddLazarusResource('menu_run');              // 6
       K_IMG_pkg_installed := fImages16.AddLazarusResource('pkg_installed');    // 7
@@ -112,6 +114,9 @@ begin
       K_IMG_RECORD := fImages16.AddLazarusResource('record');
       K_IMG_BUILD := fImages16.AddLazarusResource('menu_build');
       K_IMG_TEST := fImages16.AddLazarusResource('menu_test');
+      K_IMG_PREVIOUS := fImages16.AddLazarusResource('resultset_previous');
+      K_IMG_NEXT := fImages16.AddLazarusResource('resultset_next');
+      K_IMG_EDIT := fImages16.AddLazarusResource('page_edit');
    end;
 end;
 
@@ -123,4 +128,4 @@ finalization
    FreeAndNil(xPLGUIResource);
 
 end.
-
+
