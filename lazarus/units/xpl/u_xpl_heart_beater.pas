@@ -111,8 +111,10 @@ end;
 
 function TxPLConnHandler.GetConnectionStatus: TConnectionStatus;
 begin
-    if (fRate in [rfDiscovering,rfNoHubLowFreq]) then result := Discovering
-    else if (fRate in [rfRandom, rfConfig]) then result := Connected;
+   case fRate of
+        rfDiscovering,rfNoHubLowFreq : result := Discovering;
+        rfRandom,rfConfig : result := Connected;
+   end;
 end;
 
 procedure TxPLConnHandler.SetConnectionStatus(const AValue: TConnectionStatus);
@@ -126,4 +128,4 @@ begin
 end;
 
 end.
-
+

@@ -76,9 +76,7 @@ uses sysutils
      ;
 
 // ============================================================================
-const MAX_KEY_LEN   = 16;                                                      // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
-      MAX_VALUE_LEN = 1400;                                                    // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
-      K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
+const K_MSG_BODY_FORMAT     = '{'#10'%s}'#10;
       K_BODY_ELMT_DELIMITER = '=';
 
 // TxPLBody ===================================================================

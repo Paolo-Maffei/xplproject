@@ -36,7 +36,7 @@ type { TxPLCustomMessage =====================================================}
 
         procedure   Assign(aMessage : TPersistent); override;
         procedure   AssignHeader(aMessage : TxPLCustomMessage);
-        procedure   ResetValues;
+        procedure   ResetValues; //override;
         function    IsLifeSign   : boolean; inline;
         function    IsValid      : boolean; override;
         function    MustFragment : boolean;
@@ -141,4 +141,4 @@ end;
 initialization // =============================================================
    Classes.RegisterClass(TxPLCustomMessage);
 
-end.
+end.

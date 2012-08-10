@@ -7,7 +7,6 @@ interface
 uses Classes
      , SysUtils
      , CustApp
-     , fpTimer
      ;
 
 type TxPLConsoleApp = class(TCustomApplication)
@@ -20,7 +19,8 @@ type TxPLConsoleApp = class(TCustomApplication)
 
 implementation // =============================================================
 uses Keyboard
-     , u_xpl_application;
+     , u_xpl_application
+     ;
 
 const K_STR_1 = 'Quitting the application...';
       K_STR_2 = 'Press "q" to quit.';
@@ -61,4 +61,4 @@ begin
 end;
 
 end.
-
+

@@ -1,7 +1,7 @@
 inherited frmxPLMessage: TfrmxPLMessage
-  Left = 397
+  Left = 474
   Height = 387
-  Top = 76
+  Top = 225
   Width = 615
   BorderIcons = [biSystemMenu]
   BorderStyle = bsDialog
@@ -12,10 +12,6 @@ inherited frmxPLMessage: TfrmxPLMessage
   OnDestroy = FormDestroy
   OnShow = FormShow
   ShowInTaskBar = stAlways
-  inherited StatusBar1: TStatusBar
-    Top = 364
-    Width = 615
-  end
   inherited ToolBar: TToolBar
     Height = 49
     Width = 615
@@ -38,7 +34,7 @@ inherited frmxPLMessage: TfrmxPLMessage
       ImageIndex = 20
     end
     object tbOk: TToolButton[5]
-      Left = 259
+      Left = 258
       Top = 0
       Caption = '&Ok'
       ImageIndex = 15
@@ -51,7 +47,7 @@ inherited frmxPLMessage: TfrmxPLMessage
       ImageIndex = 16
     end
     object tbCommands: TToolButton[7]
-      Left = 177
+      Left = 179
       Top = 0
       Caption = 'Commands'
       DropdownMenu = popCommands
@@ -60,7 +56,7 @@ inherited frmxPLMessage: TfrmxPLMessage
       Style = tbsDropDown
     end
     object tbFunctions: TToolButton[8]
-      Left = 105
+      Left = 106
       Top = 0
       Caption = 'Functions'
       DropdownMenu = popFunctions
@@ -69,32 +65,36 @@ inherited frmxPLMessage: TfrmxPLMessage
       Style = tbsDropDown
     end
     object ckLoop: TCheckBox[9]
-      Left = 339
+      Left = 334
       Height = 48
       Top = 0
-      Width = 76
+      Width = 81
       Align = alRight
       Caption = 'Loop Send'
       TabOrder = 1
     end
     object ToolButton2: TToolButton[10]
-      Left = 100
+      Left = 101
       Top = 0
       Width = 5
       Caption = 'ToolButton2'
       Style = tbsDivider
     end
     object ToolButton4: TToolButton[11]
-      Left = 289
+      Left = 288
       Top = 0
       Width = 10
       Caption = 'ToolButton4'
       Style = tbsSeparator
     end
   end
-  object PageControl1: TPageControl[3]
+  inherited StatusBar: TplStatusBar
+    Top = 363
+    Width = 615
+  end
+  object PageControl1: TPageControl[2]
     Left = 0
-    Height = 315
+    Height = 314
     Top = 49
     Width = 615
     ActivePage = TabSheet1
@@ -103,57 +103,69 @@ inherited frmxPLMessage: TfrmxPLMessage
     TabOrder = 0
     object TabSheet1: TTabSheet
       Caption = 'Message Elements'
-      ClientHeight = 287
-      ClientWidth = 607
+      ClientHeight = 281
+      ClientWidth = 609
       inline FrameMessage: TTMessageFrame
-        Height = 253
+        Height = 247
         Top = 34
-        Width = 607
+        Width = 609
         Align = alClient
-        ClientHeight = 253
-        ClientWidth = 607
+        ClientHeight = 247
+        ClientWidth = 609
         inherited edtSource: TTIEdit
-          Width = 309
+          Height = 25
+          Width = 311
         end
         inherited edtTarget: TTIEdit
-          Width = 218
+          Height = 25
+          Width = 220
+        end
+        inherited edtSchema: TTIEdit
+          Height = 25
+        end
+        inherited Label10: TLabel
+          Width = 30
         end
         inherited edtBody: TTIMemo
-          Height = 63
-          Width = 540
+          Height = 57
+          Width = 542
           OnChange = edtBodyEditingDone
           OnEditingDone = edtBodyEditingDone
         end
+        inherited cbMsgType: TTIComboBox
+          Height = 27
+        end
         inherited ckGeneric: TTICheckBox
-          Left = 282
+          Left = 284
         end
         inherited Label6: TLabel
-          Top = 205
+          Top = 199
         end
         inherited edtHop: TTISpinEdit
-          Top = 198
+          Height = 25
+          Top = 190
         end
         inherited lblTS: TTILabel
-          Top = 220
+          Top = 214
         end
         inherited lblSize: TTILabel
-          Top = 220
+          Top = 214
         end
       end
       object Panel1: TPanel
         Left = 0
         Height = 34
         Top = 0
-        Width = 607
+        Width = 609
         Align = alTop
         Alignment = taLeftJustify
         Caption = 'Description'
         ClientHeight = 34
-        ClientWidth = 607
+        ClientWidth = 609
         TabOrder = 1
         object edtMsgName: TTIEdit
           Left = 84
-          Height = 23
+          Height = 25
           Top = 6
           Width = 326
           TabOrder = 0
@@ -162,8 +174,8 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsRaw: TTabSheet
       Caption = 'Raw'
-      ClientHeight = 323
-      ClientWidth = 615
+      ClientHeight = 281
+      ClientWidth = 609
       object HexEditor: TKHexEditor
         Left = 0
         Height = 323
@@ -185,8 +197,8 @@ inherited frmxPLMessage: TfrmxPLMessage
     end
     object tsPSScript: TTabSheet
       Caption = 'PSScript Handling'
-      ClientHeight = 323
-      ClientWidth = 615
+      ClientHeight = 281
+      ClientWidth = 609
       object ckDevice: TCheckBox
         Left = 8
         Height = 19
@@ -237,50 +249,24 @@ inherited frmxPLMessage: TfrmxPLMessage
         Gutter.Width = 12
         Gutter.MouseActions = <        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 13
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcOnMainGutterClick
           end        
           item
-            Shift = []
-            ShiftMask = []
             Button = mbRight
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 12
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcContextMenu
           end>
         RightGutter.Width = 0
         RightGutter.MouseActions = <        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccAny
             ClickDir = cdDown
-            Command = 13
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcOnMainGutterClick
           end        
           item
-            Shift = []
-            ShiftMask = []
             Button = mbRight
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 12
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcContextMenu
           end>
         Highlighter = SynPasSyn1
         Keystrokes = <        
@@ -706,159 +692,104 @@ inherited frmxPLMessage: TfrmxPLMessage
           end>
         MouseActions = <        
           item
-            Shift = []
             ShiftMask = [ssShift, ssAlt]
-            Button = mbLeft
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 1
+            Command = emcStartSelections
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
             Shift = [ssShift]
             ShiftMask = [ssShift, ssAlt]
-            Button = mbLeft
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 1
+            Command = emcStartSelections
             MoveCaret = True
             Option = 1
-            Priority = 0
           end        
           item
             Shift = [ssAlt]
             ShiftMask = [ssShift, ssAlt]
-            Button = mbLeft
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 3
+            Command = emcStartColumnSelections
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
             Shift = [ssShift, ssAlt]
             ShiftMask = [ssShift, ssAlt]
-            Button = mbLeft
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 3
+            Command = emcStartColumnSelections
             MoveCaret = True
             Option = 1
-            Priority = 0
           end        
           item
-            Shift = []
-            ShiftMask = []
             Button = mbRight
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 12
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcContextMenu
           end        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccDouble
             ClickDir = cdDown
-            Command = 6
+            Command = emcSelectWord
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccTriple
             ClickDir = cdDown
-            Command = 7
+            Command = emcSelectLine
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
             ClickCount = ccQuad
             ClickDir = cdDown
-            Command = 8
+            Command = emcSelectPara
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
-            Shift = []
-            ShiftMask = []
             Button = mbMiddle
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 10
+            Command = emcPasteSelection
             MoveCaret = True
-            Option = 0
-            Priority = 0
           end        
           item
             Shift = [ssCtrl]
             ShiftMask = [ssShift, ssAlt, ssCtrl]
-            Button = mbLeft
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 11
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcMouseLink
           end>
         MouseSelActions = <        
           item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
-            ClickCount = ccSingle
             ClickDir = cdDown
-            Command = 9
-            MoveCaret = False
-            Option = 0
-            Priority = 0
+            Command = emcStartDragMove
           end>
         Lines.Strings = (
           'mmoPSScript'
         )
         VisibleSpecialChars = [vscSpace, vscTabAtLast]
         BracketHighlightStyle = sbhsBoth
+        BracketMatchColor.Background = clNone
+        BracketMatchColor.Foreground = clNone
+        BracketMatchColor.Style = [fsBold]
+        FoldedCodeColor.Background = clNone
+        FoldedCodeColor.Foreground = clGray
+        FoldedCodeColor.FrameColor = clGray
+        MouseLinkColor.Background = clNone
+        MouseLinkColor.Foreground = clBlue
+        LineHighlightColor.Background = clNone
+        LineHighlightColor.Foreground = clNone
         inline TSynGutterPartList
           object TSynGutterSeparator
             Width = 2
+            MouseActions = <>
           end
           object TSynGutterCodeFolding
             MouseActions = <            
               item
-                Shift = []
-                ShiftMask = []
                 Button = mbRight
-                ClickCount = ccSingle
-                ClickDir = cdUp
-                Command = 16
-                MoveCaret = False
-                Option = 0
-                Priority = 0
+                Command = emcCodeFoldContextMenu
               end            
               item
-                Shift = []
                 ShiftMask = [ssShift]
                 Button = mbMiddle
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 14
-                MoveCaret = False
-                Option = 0
-                Priority = 0
+                Command = emcCodeFoldCollaps
               end            
               item
                 Shift = [ssShift]
@@ -866,58 +797,36 @@ inherited frmxPLMessage: TfrmxPLMessage
                 Button = mbMiddle
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 14
-                MoveCaret = False
+                Command = emcCodeFoldCollaps
                 Option = 1
-                Priority = 0
               end            
               item
-                Shift = []
-                ShiftMask = []
-                Button = mbLeft
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 0
-                MoveCaret = False
-                Option = 0
-                Priority = 0
+                Command = emcNone
               end>
             MarkupInfo.Background = clNone
             MarkupInfo.Foreground = clGray
             MouseActionsExpanded = <            
               item
-                Shift = []
-                ShiftMask = []
-                Button = mbLeft
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 14
-                MoveCaret = False
-                Option = 0
-                Priority = 0
+                Command = emcCodeFoldCollaps
               end>
             MouseActionsCollapsed = <            
               item
                 Shift = [ssCtrl]
                 ShiftMask = [ssCtrl]
-                Button = mbLeft
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 15
-                MoveCaret = False
-                Option = 0
-                Priority = 0
+                Command = emcCodeFoldExpand
               end            
               item
-                Shift = []
                 ShiftMask = [ssCtrl]
-                Button = mbLeft
                 ClickCount = ccAny
                 ClickDir = cdDown
-                Command = 15
-                MoveCaret = False
+                Command = emcCodeFoldExpand
                 Option = 1
-                Priority = 0
               end>
           end
         end
@@ -934,7 +843,7 @@ inherited frmxPLMessage: TfrmxPLMessage
       end
     end
   end
-  inherited ActionList: TActionList[4]
+  inherited ActionList: TActionList[3]
     left = 464
     top = 80
     object acSave: TAction[3]
@@ -968,25 +877,25 @@ inherited frmxPLMessage: TfrmxPLMessage
     inherited acCoreConfigure: TAction[8]
     end
   end
-  inherited xPLMenu: TPopupMenu[5]
+  inherited xPLMenu: TPopupMenu[4]
     left = 464
     top = 32
   end
-  inherited XMLPropStorage: TXMLPropStorage[6]
+  inherited XMLPropStorage: TXMLPropStorage[5]
     left = 464
     top = 136
   end
-  inherited AboutDlg: TRxAboutDialog[7]
+  inherited AboutDlg: TRxAboutDialog[6]
     left = 576
   end
-  inherited AppMenu: TPopupMenu[8]
+  inherited AppMenu: TPopupMenu[7]
     left = 520
     top = 136
     object MenuItem2: TMenuItem[0]
       Caption = 'New Item1'
     end
   end
-  object SynPasSyn1: TSynPasSyn[9]
+  object SynPasSyn1: TSynPasSyn[8]
     Enabled = False
     AsmAttri.FrameEdges = sfeAround
     CommentAttri.Foreground = clGreen
@@ -1005,14 +914,14 @@ inherited frmxPLMessage: TfrmxPLMessage
     left = 576
     top = 80
   end
-  object popCommands: TPopupMenu[10]
+  object popCommands: TPopupMenu[9]
     left = 520
     top = 32
     object MenuItem1: TMenuItem
       Caption = 'New Item1'
     end
   end
-  object popCopy: TPopupMenu[11]
+  object popCopy: TPopupMenu[10]
     left = 576
     top = 136
     object mnuCopyMessage: TMenuItem
@@ -1028,11 +937,11 @@ inherited frmxPLMessage: TfrmxPLMessage
       OnClick = mnuCopyFilterClick
     end
   end
-  object popFunctions: TPopupMenu[12]
+  object popFunctions: TPopupMenu[11]
     left = 520
     top = 80
     object MenuItem3: TMenuItem
       Caption = 'New Item1'
     end
   end
-end
+end
