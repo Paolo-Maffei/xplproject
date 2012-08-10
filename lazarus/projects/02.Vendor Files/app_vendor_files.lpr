@@ -8,7 +8,7 @@ uses
   {$ENDIF}{$ENDIF}
   Interfaces
   , Forms
-  , pl_rx
+  , pl_rx, pl_excontrols
   , frm_vendor_files
   , u_xpl_application
   ;

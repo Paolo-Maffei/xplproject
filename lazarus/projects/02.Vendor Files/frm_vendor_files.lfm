@@ -4314,22 +4314,6 @@ inherited frmvendorfiles: Tfrmvendorfiles
     FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF
   }
   OnCreate = FormCreate
-  inherited StatusBar1: TStatusBar
-    Top = 351
-    Width = 665
-    AutoSize = False
-    Panels = <    
-      item
-        Bevel = pbNone
-        Width = 80
-      end    
-      item
-        Width = 250
-      end    
-      item
-        Width = 50
-      end>
-  end
   inherited ToolBar: TToolBar
     Width = 665
     TabOrder = 3
@@ -4345,14 +4329,31 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Action = acUpdateList
     end
     object ToolButton3: TToolButton[5]
-      Left = 168
+      Left = 172
       Top = 0
       Action = acDownload
     end
   end
-  object lvPlugins: TListView[3]
+  inherited StatusBar: TplStatusBar
+    Top = 350
+    Width = 665
+    Panels = <    
+      item
+        Width = 26
+      end    
+      item
+        Width = 100
+      end    
+      item
+        Width = 100
+      end    
+      item
+        Width = 100
+      end>
+  end
+  object lvPlugins: TListView[2]
     Left = 0
-    Height = 254
+    Height = 253
     Top = 97
     Width = 665
     Align = alClient
@@ -4373,14 +4374,14 @@ inherited frmvendorfiles: Tfrmvendorfiles
       end    
       item
         Caption = 'Update'
-        Width = 150
+        Width = 173
       end>
     PopupMenu = popPluginList
     TabOrder = 0
     ViewStyle = vsReport
     OnSelectItem = lvPluginsSelectItem
   end
-  object Panel2: TPanel[4]
+  object Panel2: TPanel[3]
     Left = 0
     Height = 72
     Top = 25
@@ -4401,17 +4402,17 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Left = 8
       Height = 16
       Top = 39
-      Width = 183
+      Width = 192
       Caption = 'Reference location of plugins.xml :'
       ParentColor = False
     end
     object cbLocations: TComboBox
       Left = 200
-      Height = 23
+      Height = 27
       Top = 39
       Width = 453
       Anchors = [akTop, akLeft, akRight]
-      ItemHeight = 15
+      ItemHeight = 0
       TabOrder = 0
     end
     object ProgressBar1: TProgressBar
@@ -4423,7 +4424,7 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Visible = False
     end
   end
-  inherited ActionList: TActionList[5]
+  inherited ActionList: TActionList[4]
     left = 16
     top = 128
     object acSelectAll: TAction[3]
@@ -4462,17 +4463,17 @@ inherited frmvendorfiles: Tfrmvendorfiles
     inherited acCoreConfigure: TAction[9]
     end
   end
-  inherited xPLMenu: TPopupMenu[6]
+  inherited xPLMenu: TPopupMenu[5]
     left = 112
     top = 248
   end
-  inherited XMLPropStorage: TXMLPropStorage[7]
+  inherited XMLPropStorage: TXMLPropStorage[6]
     left = 240
     top = 264
   end
-  inherited AboutDlg: TRxAboutDialog[8]
+  inherited AboutDlg: TRxAboutDialog[7]
   end
-  inherited AppMenu: TPopupMenu[9]
+  inherited AppMenu: TPopupMenu[8]
     object MenuItem6: TMenuItem[0]
       Action = acUpdateList
     end
@@ -4480,7 +4481,7 @@ inherited frmvendorfiles: Tfrmvendorfiles
       Action = acDownload
     end
   end
-  object popPluginList: TPopupMenu[10]
+  object popPluginList: TPopupMenu[9]
     left = 336
     top = 192
     object MenuItem3: TMenuItem
@@ -4503,4 +4504,4 @@ inherited frmvendorfiles: Tfrmvendorfiles
       OnClick = acViewXMLExecute
     end
   end
-end
+end

@@ -82,9 +82,9 @@ begin
    acViewXML.Enabled := (lvPlugins.Selected.ImageIndex = K_IMG_GREEN_BADGE);
 
    plug := TPluginType(lvPlugins.Selected.Data);
-   StatusBar1.Panels[0].Text := 'Version : '     + plug.Version;
-   StatusBar1.Panels[1].Text := 'Info : '     + plug.Info_URL;
-   StatusBar1.Panels[2].Text := 'Plugin URL : ' + plug.Plugin_URL;
+   StatusBar.Panels[1].Text := 'Version : '     + plug.Version;
+   StatusBar.Panels[2].Text := 'Info : '     + plug.Info_URL;
+   StatusBar.Panels[3].Text := 'Plugin URL : ' + plug.Plugin_URL;
 end;
 
 procedure Tfrmvendorfiles.acDeselectExecute(Sender: TObject);
@@ -182,4 +182,4 @@ begin
 end;
 
 end.
-
+
