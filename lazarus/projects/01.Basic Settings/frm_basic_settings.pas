@@ -39,8 +39,8 @@ implementation //===============================================================
 uses StrUtils
      , u_xpl_gui_resource
      , u_xpl_application
-     , u_xpl_common
      , app_basic_settings_common
+     , lin_win_compat
      ;
 
 // TFrmMain Object =============================================================
@@ -54,7 +54,7 @@ procedure TfrmBasicSettings.acReloadExecute(Sender: TObject);
 var address : string;
 
 begin
-   e_ListenOn.Items.Assign(LocalAddresses);
+   e_ListenOn.Items.Assign(IPAddresses);
 
    e_BroadCast.Items.Clear;
    e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
@@ -105,4 +105,4 @@ begin
 end;
 
 end.
-
+
