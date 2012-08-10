@@ -75,6 +75,7 @@ begin
    IdHTTP.OnWorkEnd          := WorkEnd;
    IdHTTP.OnWork             := Work;
    XMLStream                 := TMemoryStream.Create;
+   XMLStream.SetSize(64000);
 end;
 
 procedure TDownloader.HeadersAvailable(Sender: TObject; AHeaders: TIdHeaderList; var VContinue: Boolean);
@@ -147,4 +148,4 @@ end;
 
 
 end.
-
+

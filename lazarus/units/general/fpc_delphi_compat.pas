@@ -10,7 +10,7 @@ uses {$ifdef fpc}
         {$ifdef mswindows}
         fpTimer in 'C:/pp/packages/fcl-base/src/fptimer.pp'
         {$else}
-        fpTimer in '/usr/share/fpcsrc/packages/fcl-base/src/fptimer.pp'
+        fpTimer in '/usr/lib/codetyphon/fpcsrc/packages/fcl-base/src/fptimer.pp'
         {$endif}
      {$else}
      ExtCtrls,
@@ -167,4 +167,4 @@ finalization // ===============================================================
    VersionInfo.Free;
 
 end.
-
+
