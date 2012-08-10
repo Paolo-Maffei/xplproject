@@ -12,7 +12,7 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <BuildNr Value="1"/>
+      <BuildNr Value="2"/>
       <StringTable CompanyName="clinique" ProductName="xPL jabber" InternalName="jabber" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -44,15 +44,15 @@
         <PackageName Value="pl_indycomp"/>
       </Item4>
     </RequiredPackages>
-    <Units Count="116">
+    <Units Count="120">
       <Unit0>
         <Filename Value="xpl_jabber.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_jabber"/>
         <EditorIndex Value="0"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="2"/>
-        <CursorPos X="22" Y="16"/>
+        <TopLine Value="1"/>
+        <CursorPos X="32" Y="9"/>
         <UsageCount Value="217"/>
         <Loaded Value="True"/>
       </Unit0>
@@ -331,10 +331,12 @@
       <Unit36>
         <Filename Value="..\..\units\xpl\u_xpl_sender.pas"/>
         <UnitName Value="u_xpl_sender"/>
+        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="135"/>
-        <CursorPos X="48" Y="149"/>
-        <UsageCount Value="9"/>
+        <TopLine Value="9"/>
+        <CursorPos X="6" Y="28"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
       </Unit36>
       <Unit37>
         <Filename Value="..\..\..\units\xpl\u_xpl_custom_listener.pas"/>
@@ -442,10 +444,11 @@
       <Unit50>
         <Filename Value="jabber_listener.pas"/>
         <UnitName Value="jabber_listener"/>
+        <IsVisibleTab Value="True"/>
         <EditorIndex Value="1"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="8"/>
-        <CursorPos X="34" Y="21"/>
+        <TopLine Value="53"/>
+        <CursorPos X="1" Y="125"/>
         <UsageCount Value="52"/>
         <Loaded Value="True"/>
       </Unit50>
@@ -532,10 +535,10 @@
       <Unit61>
         <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
         <UnitName Value="u_xpl_custom_listener"/>
-        <EditorIndex Value="2"/>
+        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="15"/>
-        <CursorPos X="16" Y="28"/>
+        <TopLine Value="142"/>
+        <CursorPos X="1" Y="161"/>
         <UsageCount Value="10"/>
         <Loaded Value="True"/>
       </Unit61>
@@ -543,9 +546,9 @@
         <Filename Value="..\..\units\xpl\u_xpl_application.pas"/>
         <UnitName Value="u_xpl_application"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="41"/>
-        <CursorPos X="40" Y="56"/>
-        <UsageCount Value="5"/>
+        <TopLine Value="31"/>
+        <CursorPos X="5" Y="49"/>
+        <UsageCount Value="10"/>
       </Unit62>
       <Unit63>
         <Filename Value="..\..\units\general\fpc_delphi_compat.pas"/>
@@ -566,10 +569,12 @@
       <Unit65>
         <Filename Value="..\..\units\xpl\u_xpl_message.pas"/>
         <UnitName Value="u_xpl_message"/>
+        <EditorIndex Value="8"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="21"/>
-        <CursorPos X="34" Y="30"/>
+        <TopLine Value="42"/>
+        <CursorPos X="42" Y="60"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit65>
       <Unit66>
         <Filename Value="..\..\units\xpl\u_xpl_common.pas"/>
@@ -737,13 +742,10 @@
       <Unit87>
         <Filename Value="..\..\units\xpl\u_xpl_udp_socket.pas"/>
         <UnitName Value="u_xpl_udp_socket"/>
-        <IsVisibleTab Value="True"/>
-        <EditorIndex Value="3"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="118"/>
+        <TopLine Value="104"/>
         <CursorPos X="1" Y="124"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit87>
       <Unit88>
         <Filename Value="C:\lazarus\components\pl_Indy\source\base\IdBaseComponent.pas"/>
@@ -798,9 +800,9 @@
         <Filename Value="..\..\units\xpl\u_xpl_console_app.pas"/>
         <UnitName Value="u_xpl_console_app"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="23"/>
-        <CursorPos X="6" Y="31"/>
-        <UsageCount Value="5"/>
+        <TopLine Value="29"/>
+        <CursorPos X="6" Y="23"/>
+        <UsageCount Value="10"/>
       </Unit94>
       <Unit95>
         <Filename Value="..\..\units\xpl\u_xpl_settings.pas"/>
@@ -813,18 +815,22 @@
       <Unit96>
         <Filename Value="uxmpp.pas"/>
         <UnitName Value="uxmpp"/>
+        <EditorIndex Value="2"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="1214"/>
-        <CursorPos X="18" Y="1119"/>
+        <TopLine Value="251"/>
+        <CursorPos X="1" Y="261"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit96>
       <Unit97>
         <Filename Value="..\..\units\xpl\u_xpl_messages.pas"/>
         <UnitName Value="u_xpl_messages"/>
+        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
-        <TopLine Value="59"/>
-        <CursorPos X="61" Y="83"/>
+        <TopLine Value="40"/>
+        <CursorPos X="1" Y="1"/>
         <UsageCount Value="14"/>
+        <Loaded Value="True"/>
       </Unit97>
       <Unit98>
         <Filename Value="C:\pp\rtl\objpas\sysutils\osutilsh.inc"/>
@@ -914,32 +920,26 @@
       <Unit109>
         <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\pl_Synapse\source\ssl_openssl.pas"/>
         <UnitName Value="ssl_openssl"/>
-        <EditorIndex Value="4"/>
         <WindowIndex Value="0"/>
         <TopLine Value="484"/>
         <CursorPos X="27" Y="485"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit109>
       <Unit110>
         <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\pl_Synapse\source\blcksock.pas"/>
         <UnitName Value="blcksock"/>
-        <EditorIndex Value="6"/>
         <WindowIndex Value="0"/>
         <TopLine Value="1421"/>
         <CursorPos X="14" Y="1421"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit110>
       <Unit111>
         <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\pl_Indy\source\base\IdThread.pas"/>
         <UnitName Value="IdThread"/>
-        <EditorIndex Value="5"/>
         <WindowIndex Value="0"/>
         <TopLine Value="404"/>
         <CursorPos X="1" Y="417"/>
         <UsageCount Value="10"/>
-        <Loaded Value="True"/>
       </Unit111>
       <Unit112>
         <Filename Value="..\..\..\..\..\..\usr\share\fpcsrc\packages\fcl-base\src\custapp.pp"/>
@@ -973,40 +973,164 @@
         <CursorPos X="1" Y="229"/>
         <UsageCount Value="10"/>
       </Unit115>
+      <Unit116>
+        <Filename Value="..\..\units\xpl\u_xpl_processor.pas"/>
+        <UnitName Value="u_xpl_processor"/>
+        <EditorIndex Value="7"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="1"/>
+        <CursorPos X="1" Y="30"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit116>
+      <Unit117>
+        <Filename Value="..\99.OPC\units\u_xpl_extended_processor.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="u_xpl_extended_processor"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="76"/>
+        <CursorPos X="8" Y="98"/>
+        <UsageCount Value="22"/>
+      </Unit117>
+      <Unit118>
+        <Filename Value="..\..\..\..\..\..\..\usr\lib\codetyphon\fpcsrc\rtl\objpas\sysutils\osutilsh.inc"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="30"/>
+        <CursorPos X="43" Y="57"/>
+        <UsageCount Value="10"/>
+      </Unit118>
+      <Unit119>
+        <Filename Value="saslauth.pas"/>
+        <UnitName Value="saslauth"/>
+        <EditorIndex Value="3"/>
+        <WindowIndex Value="0"/>
+        <TopLine Value="73"/>
+        <CursorPos X="1" Y="1"/>
+        <UsageCount Value="10"/>
+        <Loaded Value="True"/>
+      </Unit119>
     </Units>
-    <JumpHistory Count="8" HistoryIndex="7">
+    <JumpHistory Count="30" HistoryIndex="29">
       <Position1>
-        <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\pl_Indy\source\base\IdThread.pas"/>
-        <Caret Line="417" Column="1" TopLine="404"/>
+        <Filename Value="xpl_jabber.lpr"/>
+        <Caret Line="25" Column="1" TopLine="1"/>
       </Position1>
       <Position2>
         <Filename Value="xpl_jabber.lpr"/>
-        <Caret Line="23" Column="1" TopLine="3"/>
+        <Caret Line="27" Column="1" TopLine="1"/>
       </Position2>
       <Position3>
-        <Filename Value="..\..\..\..\..\..\usr\lib\codetyphon\lazarus\components\pl_Indy\source\base\IdThread.pas"/>
-        <Caret Line="417" Column="1" TopLine="404"/>
+        <Filename Value="xpl_jabber.lpr"/>
+        <Caret Line="27" Column="1" TopLine="1"/>
       </Position3>
       <Position4>
-        <Filename Value="xpl_jabber.lpr"/>
-        <Caret Line="23" Column="1" TopLine="3"/>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="18" Column="6" TopLine="1"/>
       </Position4>
       <Position5>
-        <Filename Value="xpl_jabber.lpr"/>
-        <Caret Line="9" Column="11" TopLine="1"/>
+        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
+        <Caret Line="44" Column="6" TopLine="11"/>
       </Position5>
       <Position6>
         <Filename Value="xpl_jabber.lpr"/>
-        <Caret Line="16" Column="22" TopLine="2"/>
+        <Caret Line="20" Column="18" TopLine="1"/>
       </Position6>
       <Position7>
-        <Filename Value="jabber_listener.pas"/>
-        <Caret Line="21" Column="34" TopLine="8"/>
+        <Filename Value="xpl_jabber.lpr"/>
+        <Caret Line="22" Column="39" TopLine="1"/>
       </Position7>
       <Position8>
-        <Filename Value="..\..\units\xpl\u_xpl_custom_listener.pas"/>
-        <Caret Line="28" Column="16" TopLine="15"/>
+        <Filename Value="xpl_jabber.lpr"/>
+        <Caret Line="23" Column="18" TopLine="1"/>
       </Position8>
+      <Position9>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="137" Column="8" TopLine="124"/>
+      </Position9>
+      <Position10>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="135" Column="1" TopLine="124"/>
+      </Position10>
+      <Position11>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="136" Column="1" TopLine="124"/>
+      </Position11>
+      <Position12>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="137" Column="1" TopLine="124"/>
+      </Position12>
+      <Position13>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="139" Column="1" TopLine="51"/>
+      </Position13>
+      <Position14>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="59" Column="1" TopLine="63"/>
+      </Position14>
+      <Position15>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="91" Column="1" TopLine="75"/>
+      </Position15>
+      <Position16>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="92" Column="1" TopLine="75"/>
+      </Position16>
+      <Position17>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="93" Column="1" TopLine="75"/>
+      </Position17>
+      <Position18>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="94" Column="1" TopLine="75"/>
+      </Position18>
+      <Position19>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="95" Column="1" TopLine="75"/>
+      </Position19>
+      <Position20>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="96" Column="1" TopLine="75"/>
+      </Position20>
+      <Position21>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="97" Column="1" TopLine="75"/>
+      </Position21>
+      <Position22>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="98" Column="1" TopLine="1"/>
+      </Position22>
+      <Position23>
+        <Filename Value="uxmpp.pas"/>
+        <Caret Line="1" Column="1" TopLine="250"/>
+      </Position23>
+      <Position24>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="59" Column="1" TopLine="41"/>
+      </Position24>
+      <Position25>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="91" Column="1" TopLine="73"/>
+      </Position25>
+      <Position26>
+        <Filename Value="uxmpp.pas"/>
+        <Caret Line="258" Column="1" TopLine="251"/>
+      </Position26>
+      <Position27>
+        <Filename Value="uxmpp.pas"/>
+        <Caret Line="259" Column="1" TopLine="251"/>
+      </Position27>
+      <Position28>
+        <Filename Value="uxmpp.pas"/>
+        <Caret Line="260" Column="1" TopLine="251"/>
+      </Position28>
+      <Position29>
+        <Filename Value="uxmpp.pas"/>
+        <Caret Line="261" Column="1" TopLine="251"/>
+      </Position29>
+      <Position30>
+        <Filename Value="jabber_listener.pas"/>
+        <Caret Line="100" Column="1" TopLine="1"/>
+      </Position30>
     </JumpHistory>
   </ProjectOptions>
   <CompilerOptions>
@@ -1015,7 +1139,7 @@
     <SearchPaths>
       <IncludeFiles Value="$(ProjOutDir)"/>
       <OtherUnitFiles Value="..\..\units\xpl;..\..\units\xpl\xml;..\..\units\general;..\..\units\general\indy;\usr\lib\codetyphon\lazarus\components\pl_Synapse\source\"/>
-      <UnitOutputDirectory Value="..\..\..\lazout"/>
+      <UnitOutputDirectory Value="\home\glhopital\lazout"/>
     </SearchPaths>
     <Parsing>
       <SyntaxOptions>
@@ -1023,13 +1147,6 @@
         <UseAnsiStrings Value="False"/>
       </SyntaxOptions>
     </Parsing>
-    <Linking>
-      <Options>
-        <Win32>
-          <GraphicApplication Value="True"/>
-        </Win32>
-      </Options>
-    </Linking>
     <Other>
       <CompilerMessages>
         <UseMsgFile Value="True"/>
@@ -1038,7 +1155,7 @@
     </Other>
   </CompilerOptions>
   <Debugging>
-    <BreakPoints Count="2">
+    <BreakPoints Count="12">
       <Item1>
         <Kind Value="bpkSource"/>
         <WatchScope Value="wpsGlobal"/>
@@ -1053,6 +1170,76 @@
         <Source Value="C:\pp\rtl\objpas\dateutil.inc"/>
         <Line Value="1482"/>
       </Item2>
+      <Item3>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="135"/>
+      </Item3>
+      <Item4>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="184"/>
+      </Item4>
+      <Item5>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="163"/>
+      </Item5>
+      <Item6>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="150"/>
+      </Item6>
+      <Item7>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="125"/>
+      </Item7>
+      <Item8>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="115"/>
+      </Item8>
+      <Item9>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="105"/>
+      </Item9>
+      <Item10>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="jabber_listener.pas"/>
+        <Line Value="83"/>
+      </Item10>
+      <Item11>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="uxmpp.pas"/>
+        <Line Value="274"/>
+      </Item11>
+      <Item12>
+        <Kind Value="bpkSource"/>
+        <WatchScope Value="wpsLocal"/>
+        <WatchKind Value="wpkWrite"/>
+        <Source Value="uxmpp.pas"/>
+        <Line Value="258"/>
+      </Item12>
     </BreakPoints>
     <Watches Count="4">
       <Item1>

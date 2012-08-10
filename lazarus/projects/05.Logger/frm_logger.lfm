@@ -2268,7 +2268,7 @@ inherited frmLogger: TfrmLogger
   OnCreate = FormCreate
   OnDestroy = FormDestroy
   SessionProperties = 'dgMessages.Columns;Left;Top;tvMessages.Width;dgMessages.Width'
-  inherited StatusBar1: TStatusBar
+  inherited StatusBar: TPLStatusBar
     Top = 417
     Width = 869
     Panels = <    

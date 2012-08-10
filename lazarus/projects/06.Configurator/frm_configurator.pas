@@ -79,6 +79,7 @@ uses uxPLConst
      , u_xpl_address
      , configurator_listener
      , u_xpl_custom_listener
+     , u_xpl_heart_beater
      ;
 
 const //=======================================================================

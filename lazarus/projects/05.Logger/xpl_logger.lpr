@@ -8,7 +8,7 @@ uses
   cthreads,
   {$ENDIF}
   Interfaces, // this includes the LCL widgetset
-  Forms, pl_rx, pl_kcontrols, lazcontrols,
+  Forms, pl_rx, pl_kcontrols, lazcontrols, pl_excontrols,
   frm_logger,
   u_xpl_application,
   logger_listener,

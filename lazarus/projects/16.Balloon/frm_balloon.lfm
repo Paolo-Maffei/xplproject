@@ -1,7 +1,7 @@
 inherited FrmBalloon: TFrmBalloon
   Left = 123
   Height = 229
-  Top = 52
+  Top = 210
   Width = 602
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSizeToolWin
@@ -117,19 +117,19 @@ inherited FrmBalloon: TFrmBalloon
   SessionProperties = 'acDisplayMessageWindow.Checked;Left;Top;Width;Height'
   ShowInTaskBar = stNever
   Visible = True
-  inherited StatusBar1: TStatusBar
-    Top = 206
-    Width = 602
-  end
   inherited ToolBar: TToolBar
     Width = 602
     inherited Panel4: TPanel
       Left = 402
     end
   end
-  object dgMessages: TStringGrid[3]
+  inherited StatusBar: TplStatusBar
+    Top = 205
+    Width = 602
+  end
+  object dgMessages: TStringGrid[2]
     Left = 0
-    Height = 181
+    Height = 180
     Top = 25
     Width = 602
     Align = alClient
@@ -139,22 +139,18 @@ inherited FrmBalloon: TFrmBalloon
       item
         MinSize = 120
         Title.Caption = 'TimeStamp'
-        Title.PrefixOption = poNone
       end    
       item
         MinSize = 80
         Title.Caption = 'Schema'
-        Title.PrefixOption = poNone
       end    
       item
         MinSize = 70
         Title.Caption = 'Source'
-        Title.PrefixOption = poNone
       end    
       item
         MinSize = 50
         Title.Caption = 'Body'
-        Title.PrefixOption = poNone
       end>
     DefaultColWidth = 20
     DefaultRowHeight = 20
@@ -165,23 +161,23 @@ inherited FrmBalloon: TFrmBalloon
     TitleStyle = tsNative
     OnDrawCell = dgMessagesDrawCell
   end
-  inherited ActionList: TActionList[4]
+  inherited ActionList: TActionList[3]
     object acDisplayMessageWindow: TAction[4]
       AutoCheck = True
       Caption = 'Display Message Window'
       OnExecute = acDisplayWindow
     end
   end
-  inherited xPLMenu: TPopupMenu[5]
+  inherited xPLMenu: TPopupMenu[4]
   end
-  inherited XMLPropStorage: TXMLPropStorage[6]
+  inherited XMLPropStorage: TXMLPropStorage[5]
     OnRestoreProperties = XMLPropStorageRestoreProperties
   end
-  inherited AboutDlg: TRxAboutDialog[7]
+  inherited AboutDlg: TRxAboutDialog[6]
   end
-  inherited AppMenu: TPopupMenu[8]
+  inherited AppMenu: TPopupMenu[7]
   end
-  object TrayIcon1: TTrayIcon[9]
+  object TrayIcon1: TTrayIcon[8]
     PopUpMenu = xPLMenu
     Icon.Data = {
       BE0C00000000010001002020000000001800A80C000016000000280000002000
@@ -291,4 +287,4 @@ inherited FrmBalloon: TFrmBalloon
     left = 232
     top = 64
   end
-end
+end

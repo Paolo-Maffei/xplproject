@@ -9,6 +9,7 @@ uses Classes
      , u_xpl_listener
      , u_xpl_message
      , u_xpl_custom_listener
+     , u_xpl_heart_beater
      , u_configuration_record
      ;
 

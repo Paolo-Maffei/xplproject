@@ -1,16 +1,12 @@
 inherited frmConfigurator: TfrmConfigurator
-  Left = 19
+  Left = 91
   Height = 577
-  Top = 147
+  Top = 285
   Width = 616
   Caption = 'frmConfigurator'
   ClientHeight = 577
   ClientWidth = 616
   OnCreate = FormCreate
-  inherited StatusBar1: TStatusBar
-    Top = 554
-    Width = 616
-  end
   inherited ToolBar: TToolBar
     Width = 616
     inherited Panel4: TPanel
@@ -22,39 +18,43 @@ inherited frmConfigurator: TfrmConfigurator
       Action = acDiscoverNetwork
     end
     object ToolButton11: TToolButton[5]
-      Left = 167
+      Left = 173
       Top = 0
       Width = 10
       Caption = 'ToolButton10'
       Style = tbsSeparator
     end
     object ToolButton8: TToolButton[6]
-      Left = 177
+      Left = 183
       Top = 0
       Action = acClear
     end
   end
-  object Splitter1: TSplitter[3]
+  inherited StatusBar: TplStatusBar
+    Top = 553
+    Width = 616
+  end
+  object Splitter1: TSplitter[2]
     Left = 0
-    Height = 529
+    Height = 528
     Top = 25
     Width = 5
   end
-  object Panel2: TPanel[4]
+  object Panel2: TPanel[3]
     Left = 190
-    Height = 529
+    Height = 528
     Top = 25
     Width = 426
     Align = alClient
     BevelOuter = bvLowered
-    ClientHeight = 529
+    ClientHeight = 528
     ClientWidth = 426
     TabOrder = 3
     object Label1: TLabel
-      Left = 8
+      Left = 9
       Height = 16
       Top = 30
-      Width = 75
+      Width = 78
       Caption = 'Device name :'
       ParentColor = False
     end
@@ -76,7 +76,7 @@ inherited frmConfigurator: TfrmConfigurator
       Left = 16
       Height = 16
       Top = 131
-      Width = 86
+      Width = 91
       Caption = 'Last Heartbeat : '
       ParentColor = False
     end
@@ -84,7 +84,7 @@ inherited frmConfigurator: TfrmConfigurator
       Left = 18
       Height = 16
       Top = 153
-      Width = 40
+      Width = 43
       Caption = 'Die at : '
       ParentColor = False
     end
@@ -119,7 +119,7 @@ inherited frmConfigurator: TfrmConfigurator
       ShowCaptions = True
       TabOrder = 1
       object ToolButton12: TToolButton
-        Left = 67
+        Left = 68
         Top = 0
         Width = 5
         Caption = 'ToolButton3'
@@ -136,17 +136,17 @@ inherited frmConfigurator: TfrmConfigurator
         Action = acSaveConfig
       end
       object ToolButton7: TToolButton
-        Left = 72
+        Left = 73
         Top = 0
         Action = acSendConfig
       end
       object ToolButton4: TToolButton
-        Left = 111
+        Left = 113
         Top = 0
         Action = acRequestConfig
       end
       object ToolButton13: TToolButton
-        Left = 106
+        Left = 108
         Top = 0
         Width = 5
         Caption = 'ToolButton9'
@@ -160,12 +160,20 @@ inherited frmConfigurator: TfrmConfigurator
       inherited PageControl1: TPageControl
         ActivePage = nil
         TabIndex = -1
+        inherited tsCoreItems: TTabSheet
+          ClientHeight = 317
+          ClientWidth = 398
+        end
+        inherited tsSpecific: TTabSheet
+          ClientHeight = 317
+          ClientWidth = 398
+        end
       end
     end
   end
-  object tvDevices: TTreeView[5]
+  object tvDevices: TTreeView[4]
     Left = 5
-    Height = 529
+    Height = 528
     Top = 25
     Width = 185
     Align = alLeft
@@ -176,21 +184,21 @@ inherited frmConfigurator: TfrmConfigurator
     OnClick = lbDevicesClick
     Options = [tvoAutoExpand, tvoAutoItemHeight, tvoHideSelection, tvoKeepCollapsedNodes, tvoShowButtons, tvoShowLines, tvoShowRoot, tvoToolTips, tvoThemedDraw]
   end
-  inherited ActionList: TActionList[6]
+  inherited ActionList: TActionList[5]
     left = 16
     top = 32
   end
-  inherited xPLMenu: TPopupMenu[7]
+  inherited xPLMenu: TPopupMenu[6]
     left = 16
     top = 88
   end
-  inherited XMLPropStorage: TXMLPropStorage[8]
+  inherited XMLPropStorage: TXMLPropStorage[7]
   end
-  inherited AboutDlg: TRxAboutDialog[9]
+  inherited AboutDlg: TRxAboutDialog[8]
   end
-  inherited AppMenu: TPopupMenu[10]
+  inherited AppMenu: TPopupMenu[9]
   end
-  object AppActionList: TActionList[13]
+  object AppActionList: TActionList[10]
     left = 16
     top = 160
     object acDiscoverNetwork: TAction
