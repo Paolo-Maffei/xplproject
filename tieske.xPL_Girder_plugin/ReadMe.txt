@@ -199,6 +199,9 @@ When the plugin does not work as expected check the following;
 ============================================================================
 8 - Changelog
 ============================================================================
+26-nov-2012 version 0.1.7 by Thijs Schreijer
+         Fixed the send function, this prevented the component from 
+         connecting to the xPL hub occasionally
 03-jan-2012 version 0.1.6 by Thijs Schreijer
          Added 6 lua events to the xPLGirder component;
             - xPLMessage

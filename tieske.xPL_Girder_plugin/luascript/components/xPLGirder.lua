@@ -43,9 +43,9 @@
 -- @class module
 -- @name xPLGirder
 -- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.6, xPLGirder.
+-- @release Version 0.1.7, xPLGirder.
 
-local Version = '0.1.6'
+local Version = '0.1.7'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'
@@ -696,9 +696,17 @@ local xPLGirder = Super:New ( {
             error ("Must provide a message string, call as; SendMessage( self, MsgString )", 2)
         end
         if type(msg) == "string" then
-            local result, error = self.Receiver:sendto(msg,self.xPLBroadcastAddress, XPL_PORT)
+            -- create socket
+            local skt, emsg = socket.udp()            -- create and prepair socket
+            if skt == nil then
+                -- failure
+                print ("Failed to send xPL message, cannot create UDP socket; " .. emsg)
+                return
+            end
+            skt:setoption("broadcast", true)
+            local result, emsg = skt:sendto(msg, self.xPLBroadcastAddress, XPL_PORT)
             if not result then
-                print ("Error sending xPL message: " .. tostring(error))
+                print ("Error sending xPL message: " .. tostring(emsg))
             end
         elseif type(msg) == "table" then
 ----------------------------
