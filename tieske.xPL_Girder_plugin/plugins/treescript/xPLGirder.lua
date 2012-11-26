@@ -38,7 +38,7 @@
 -- <br/><br/>
 -- See the accompanying ReadMe.txt file for additional information.
 -- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.7, xPLGirder.
+-- @release Version 0.1.8, xPLGirder.
 
 
 -- This file contains 2 actions;  specific message and the event message

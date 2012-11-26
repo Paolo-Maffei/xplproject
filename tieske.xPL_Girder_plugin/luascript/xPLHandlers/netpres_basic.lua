@@ -1,13 +1,10 @@
 ------------------------------------------------------------------------------------------------
 -- xPLGirder is a Girder component to connect Girder to an xPL network.
 -- <br/><br/>
--- This file is an xPL message handler for <code>sensor.basic</code> messages. A Girder event
--- will be raised, the value will be in payload 1, any additional fields provided will be stored
--- in payload 2-4. The events will be raised only for <strong>value changes</strong> so not for
--- every message received.<br/>
--- The sensors can be accessed through <code>xPLGirder.Handlers.SensorBasic.sensors</code>. For 
--- example, to list all sensors type; <code>table.print(xPLGirder.Handlers.SensorBasic.sensors)</code> in the
--- lua console.
+-- This file is an xPL message handler for <code>netpres.basic</code> messages. It will raise
+-- Girder events on Arrival and Departure events, with payloads; arrival/departure, name, pickled msg.
+-- See <a href="https://github.com/Tieske/LuaxPL">https://github.com/Tieske/LuaxPL</a> for the <code>netpresence.lua</code> sample utility included
+-- with the LuaxPL framework.
 -- <br/><br/>
 -- xPLGirder is free software: you can redistribute it and/or modify
 -- it under the terms of the GNU General Public License as published by
@@ -25,13 +22,13 @@
 -- @release Version 0.1.8, xPLGirder.
 
 
+require 'thread'
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
 
-
 local myNewHandler = {
 
-	ID = "SensorBasic",		-- enter a unique string to identify this handler
+	ID = "NetPresenceBasic",		-- enter a unique string to identify this handler
 
 
 
@@ -50,20 +47,20 @@ local myNewHandler = {
 	]]--
 
 	Filters = {
-		"xpl-trig.*.*.*.sensor.basic",
-		"xpl-stat.*.*.*.sensor.basic",
+		"*.*.*.*.netpres.basic"
 	},
 
 	Initialize = function (self)
 		-- function called upon initialization of this handler
-		self.sensors = {}	-- reset table with sensor values
+		print ("Initializing the xPL handler ID: " .. self.ID)
 	end,
 
 	ShutDown = function (self)
 		-- function called upon shuttingdown this handler
+		print ("Shutting down the xPL handler ID: " .. self.ID)
 	end,
 
-	MessageHandler = function (self, msg, filter)
+	_MessageHandler = function (self, msg, filter)
 		--[[
 		The handler function below will handle the actual message. The parameters are the xPL message
 		and the filter string that passed the message.
@@ -90,32 +87,15 @@ local myNewHandler = {
 			end
 		end
 
-		-- add your code here to handle the actual message
-		-- create a unique sensor ID by using the address and sensor type together
-		local sensorID = msg.source .. ': ' .. (GetValueByKey('device') or 'unknown device') .. ', ' .. (GetValueByKey('type') or 'unknown type')
-		local newVal = GetValueByKey('current')
+		local done = false
+		if msg.type == "xpl-trig" then
+			local deparr = GetValueByKey('type')
+			local devname = GetValueByKey('name')
 
-		if (self.sensors[sensorID] == nil) or (self.sensors[sensorID] ~= newVal) then
-			-- first time we get this sensor, or value is different than before
-			self.sensors[sensorID] = newVal
-			local pld = {}
-			local p = 2
-			local i
-			pld[1] = newVal
-
-			for i = 1,table.getn(msg.body) do
-				local k = msg.body[i].key
-				if k ~= 'device' and k ~= 'type' and k~= 'current' and p <= 4 then
-					-- found an unknown key, append its value in the next payload
-					pld[p] = msg.body[i].value
-					p = p + 1
-				end
-			end
-
-			gir.TriggerEvent('Sensor update ' .. sensorID, xPLEventDevice, pld[1], pld[2], pld[3], pld[4] )
+			local eventstring = deparr .. ' of network device ' .. devname
+			gir.TriggerEvent(eventstring, xPLEventDevice, deparr, devname, pickle(msg))
+			done = true
 		end
-
-
 
 		-- Determine the return value
 		-- false: The standard xPLGirder event will still be created (if all other handlers also
@@ -123,8 +103,35 @@ local myNewHandler = {
 		-- true:  The standard xPLGirder event is suppressed, this should be used when the handler
 		--        has created a more specific event from the xPL message than the regular xPLGirder
 		--        event.
-		return true
+		return done
 	end,
+
+	-- Mutex and functions to lock/unlock the handler and make the MessageHandler thread-save
+	_lock = thread.newmutex(),
+	Lock = function (self)
+		self._lock:lock()
+	end,
+	Unlock = function (self)
+		self._lock:unlock()
+	end,
+	MessageHandler = function (self, msg, filter)
+		-- protected handler to run only singular, other threads can only enter after this call completed
+		self:Lock()
+		local result = false
+		local s,r = pcall(self._MessageHandler, self, msg, filter)
+		if s then	-- success
+			result = r
+		else	-- failure
+			-- error was returned from handler
+			print("xPLHandler " .. self.ID .. " had a lua error;" .. r)
+			print("while handling the following xPL message;")
+			table.print(msg)
+			gir.LogMessage(xPLGirder.Name, self.ID .. ' failed while processing a message, see lua console', 2)
+		end
+		self:Unlock()
+		return result
+	end,
+
 }
 
 
