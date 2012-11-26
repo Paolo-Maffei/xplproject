@@ -43,9 +43,9 @@
 -- @class module
 -- @name xPLGirder
 -- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.7, xPLGirder.
+-- @release Version 0.1.8, xPLGirder.
 
-local Version = '0.1.7'
+local Version = '0.1.8'
 local PluginID = 10124
 local PluginName = 'xPLGirder'
 local Global = 'xPLGirder'

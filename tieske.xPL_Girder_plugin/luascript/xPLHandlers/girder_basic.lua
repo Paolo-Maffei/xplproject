@@ -33,7 +33,7 @@
 -- <br/><br/>
 -- See the accompanying ReadMe.txt file for additional information.
 -- @copyright 2011-2012 Richard A Fox Jr., Thijs Schreijer
--- @release Version 0.1.7, xPLGirder.
+-- @release Version 0.1.8, xPLGirder.
 
 
 local xPLEventDevice = 10124	-- when raising events, use this as source to set it to xPLGirder
