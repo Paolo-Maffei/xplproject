@@ -32,6 +32,7 @@ type // TxPLApplication =======================================================
 
         function AppName     : string;
         function FullTitle   : string;
+        function SettingsFile : string;
 
         procedure RegisterMe;
         Procedure Log (const EventType : TEventType; const Msg : String); overload; dynamic;
@@ -50,13 +51,13 @@ var xPLApplication : TxPLApplication;
     InstanceInitStyle : TInstanceInitStyle;
 
 implementation // =============================================================
-uses IdStack
-     , lin_win_compat
+uses lin_win_compat
      , fpc_delphi_compat
      ;
 
 // ============================================================================
-const K_FULL_TITLE          = '%s v%s by %s (build %s)';
+const K_FULL_TITLE = '%s v%s by %s (build %s)';
+//      K_STOP_INSTANCE = 'Stopping %s is already running';
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
@@ -66,12 +67,11 @@ begin
 
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
    fVersion := GetVersion;
-
    fFolders  := TxPLFolders.Create(fAdresse);
 
    Log(etInfo,FullTitle);
-
    fSettings   := TxPLSettings.Create(self);
+
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
    fTimerPool  := TTimerPool.Create(self);
    RegisterMe;
@@ -79,7 +79,7 @@ end;
 
 destructor TxPLApplication.Destroy;
 begin
-   if Assigned(fFolders)       then fFolders.Free;
+   if Assigned(fFolders) then fFolders.Free;
    fAdresse.Free;
    inherited;
 end;
@@ -101,11 +101,16 @@ begin
    Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
 end;
 
+function TxPLApplication.SettingsFile: string;
+begin
+   Result := Folders.DeviceDir + 'settings.xml';
+end;
+
 Procedure TxPLApplication.Log(const EventType : TEventType; const Msg : String);
 begin
-   SystemLog(EventType,Msg);
+   LogInSystem(EventType,Msg);
    if IsConsole then writeln(FormatDateTime('dd/mm hh:mm:ss',now),' ',EventTypeToxPLLevel(EventType),' ',Msg);
-   if EventType = etError then Raise Exception.Create(Msg);
+   if EventType = etError then Halt;
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
 end;
 
@@ -117,5 +122,4 @@ end;
 initialization // =============================================================
    InstanceInitStyle := iisHostName;                                           // Will use hostname as instance default name
 
-
-end.
+end.
