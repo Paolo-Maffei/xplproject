@@ -105,6 +105,8 @@ const
   K_XML_STR_Cacheentry      = 'cacheentry';
   K_XML_STR_Cacheobjectn    = 'cacheobjectname';
   K_XML_STR_Cacheprefix     = 'cacheprefix';
+  K_XML_STR_StatusTag       = 'statustag';
+  K_XML_STR_DeviceType      = 'devicetype';
   K_XML_STR_Fieldmap        = 'fieldmap';
   K_XML_STR_Filter          = 'filter';
   K_XML_STR_Xpltagname      = 'xpltagname';
@@ -291,4 +293,4 @@ end;
 
 
 end.
-
+
