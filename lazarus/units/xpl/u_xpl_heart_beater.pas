@@ -24,10 +24,7 @@ uses Classes
 type TxPLRateFrequency = (rfDiscovering, rfNoHubLowFreq, rfRandom, rfConfig, rfNone);
      TConnectionStatus = (discovering, connected, csNone);
 
-     // TxPLHeartBeater =======================================================
-
-     { TxPLConnHandler }
-
+     // TxPLConnHandler =======================================================
      TxPLConnHandler = class(TComponent)
      private
         fTimer : TxPLTimer;
