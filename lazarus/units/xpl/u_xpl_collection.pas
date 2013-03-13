@@ -56,8 +56,6 @@ type
    TxPLCustomCollection = TxPLCollection<TxPLCollectionItem>;
 
 implementation // =============================================================
-uses StrUtils
-     ;
 
 // ============================================================================
 function IsValidName(const Ident: string): boolean;
@@ -75,8 +73,7 @@ begin
    end ;
 end ;
 
-{ TxPLCollectionItem }
-
+// TxPLCollectionItem =========================================================
 function TxPLCollectionItem.GetDisplayName: string;
 begin
    Result:=fDisplayName;
@@ -120,6 +117,7 @@ begin
    end;
 end;
 
+// TxPLCollection =============================================================
 constructor TxPLCollection<T>.Create(aOwner : TPersistent);
 begin
    inherited Create(T);
@@ -153,7 +151,8 @@ begin
          s := 'Item' + IntToStr(i);
          inc(i);
       until GetItemId(s)=-1;
-      Result.DisplayName := IfThen(aName<>'',aName,s);
+      if aName<>'' then Result.DisplayName := aName
+                   else Result.DisplayName := s;
    end
    else
       Result := Get_Items(i);
@@ -178,6 +177,6 @@ end;
 
 initialization
    Classes.RegisterClass(TxPLCollectionItem);
-//   Classes.RegisterClass(TxPLCollection);
-end.
 
+end.
+
