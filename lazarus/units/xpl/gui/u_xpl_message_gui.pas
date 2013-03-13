@@ -50,7 +50,7 @@ begin
    with TfrmxPLMessage.Create(Application) do try
         xPLMessage := self;
         buttonOptions := options;
-        edtMsgName.ReadOnly := false;
+        FrameMessage.edtSource.ReadOnly := false;
         tsRaw.TabVisible := bAdvancedMode;
         tsPSScript.TabVisible := tsRaw.Visible;
         if bModal then ShowModal else Show;
@@ -90,4 +90,4 @@ end;
 
 
 end.
-
+
