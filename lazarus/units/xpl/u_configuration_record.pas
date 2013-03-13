@@ -6,22 +6,21 @@ unit u_Configuration_Record;
 
 interface
 
-uses
-  Classes,
-  SysUtils,
-  fgl,
-  fpTimer,
-  u_xml_plugins,
-  u_xpl_address,
-  u_xpl_config,
-  u_xpl_messages,
-  u_xpl_application,
-  u_xpl_custom_message;
+uses Classes,
+     SysUtils,
+     fgl,
+     fpc_delphi_compat,
+     u_xml_plugins,
+     u_xpl_address,
+     u_xpl_config,
+     u_xpl_messages,
+     u_xpl_application,
+     u_xpl_custom_message;
 
 type { TConfigurationRecord ==================================================}
     TConfigurationRecord = class(TPersistent)
     protected
-        fTimer      : TfpTimer;
+        fTimer      : TxPLTimer;
     private
         fPlug_Detail: TDeviceType;
         fAddress    : TxPLAddress;
@@ -58,7 +57,8 @@ implementation // =============================================================
 
 uses DateUtils,
      uxPLConst,
-     u_xpl_schema;
+     u_xpl_schema
+     ;
 
 { TConfigurationRecord }
 constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
@@ -70,11 +70,9 @@ begin
    fPlug_Detail := aOwner.VendorFile.FindDevice(aHBeatMsg.source);
 
    HBeatReceived(aHBeatMsg);
-   fOnDied      := aDieProc;
+   fOnDied := aDieProc;
    if fOnDied<>nil then begin
-      fTimer := TfpTimer.Create(nil);
-      fTimer.Interval := 60 * 1000;
-      fTimer.OnTimer  := @OnTimer;
+      fTimer := xPLApplication.TimerPool.Add(60 * 1000, {$ifdef fpc}@{$endif}OnTimer);
       fTimer.Enabled  := true;
    end;
 end;
@@ -95,7 +93,6 @@ destructor TConfigurationRecord.Destroy;
 begin
    Address.Free;
    fConfig.Free;
-   if Assigned(fTimer) then fTimer.Free;
    inherited;
 end;
 
@@ -120,4 +117,4 @@ begin
 end;
 
 end.
-
+
