@@ -8,9 +8,10 @@ interface
 uses {$ifdef fpc}
         vInfo,
         {$ifdef mswindows}
-        fpTimer in 'C:/pp/packages/fcl-base/src/fptimer.pp'
+        fpTimer
         {$else}
-        fpTimer in '/usr/lib/codetyphon/fpcsrc/packages/fcl-base/src/fptimer.pp'
+        //lTimer                                                           // je tente l'utilisation de ltimer (lNet) à la place de fptimer qui a un memory leak dans la version employée
+        fpTimer13012
         {$endif}
      {$else}
      ExtCtrls,
@@ -25,9 +26,10 @@ uses {$ifdef fpc}
     function GetProductName : string;
     function GetMacAddress : string;
     function GetCommonAppDataPath : string;
+    function HostName : string;
 
 type {$ifdef fpc}
-        TxPLTimer = class(TfpTimer);
+        TxPLTimer = class(TFPTimer);
         TxPLVersionInfo = class(TVersionInfo);
      {$else}                                                              // This is declared only for delphi versions
         TxPLTimer = class(TTimer);
@@ -40,7 +42,13 @@ var VersionInfo        : TxPLVersionInfo;
 implementation // ==============================================================
 Uses Classes
      , SysUtils
-     , u_xpl_common
+     , LSUtils
+     , StrUtils
+     {$ifdef mswindows}
+     , IdStack
+     {$else}
+     , Unix
+     {$endif}
      {$ifdef fpc}
         {$ifdef mswindows}
            , Windirs
@@ -51,6 +59,22 @@ Uses Classes
      , SHFolder
      {$endif}
      ;
+
+// ============================================================================
+function HostName : string;
+begin
+   {$ifdef mswindows}
+   TIdStack.IncUsage;
+   try
+       Result := GStack.HostName;
+   finally
+       TIdStack.DecUsage;
+   end;
+   {$else}
+   Result := GetHostName;
+   {$endif}
+   Result := AnsiLowerCase(Result);
+end;
 
 // ============================================================================
 function BuildDate: string;
@@ -87,54 +111,9 @@ begin
    Assert(length(result)>0,'ProductName in Version Info is missing');
 end;
 
-function GetMacAddress: string;                                                // This code comes from LSUtils (lazsolutions)
-const CLSUtilsFormatMACMask = '%2.2x%2.2x%2.2x%2.2x%2.2x%2.2x';                // and have been extracted because original package
-{$IFDEF MSWINDOWS}                                                             // implies uses of Windows, thus creating dependency
-type                                                                           // on gui application
-  TCreateGUIDFunction = function(AGUID: PGUID): LongInt; stdcall;
-{$ENDIF}
-var
-  VGUID1, VGUID2: TGUID;
-{$IFDEF MSWINDOWS}
-  VLibHandle: TLibHandle;
-  VCreateGUIDFunction: TCreateGUIDFunction;
-{$ENDIF}
+function GetMacAddress: string;
 begin
-{$IFDEF MSWINDOWS}
-  VLibHandle := LoadLibrary('rpcrt4.dll');
-  try
-    if VLibHandle <> NilHandle then
-    begin
-      VCreateGUIDFunction := TCreateGUIDFunction(GetProcedureAddress(VLibHandle,
-        'UuidCreateSequential'));
-      if Assigned(VCreateGUIDFunction) then
-{$ENDIF}
-        if (
-{$IFDEF UNIX}
-          CreateGUID
-{$ENDIF}
-{$IFDEF MSWINDOWS}
-          VCreateGUIDFunction
-{$ENDIF}
-          ({$IFDEF MSWINDOWS}@{$ENDIF}VGUID1) = 0) and (
-{$IFDEF UNIX}
-          CreateGUID
-{$ENDIF}
-{$IFDEF MSWINDOWS}
-          VCreateGUIDFunction
-{$ENDIF}
-          ({$IFDEF MSWINDOWS}@{$ENDIF}VGUID2) = 0) and
-          (VGUID1.D4[2] = VGUID2.D4[2]) and (VGUID1.D4[3] = VGUID2.D4[3]) and
-          (VGUID1.D4[4] = VGUID2.D4[4]) and (VGUID1.D4[5] = VGUID2.D4[5]) and
-          (VGUID1.D4[6] = VGUID2.D4[6]) and (VGUID1.D4[7] = VGUID2.D4[7]) then
-            Result := Format(CLSUtilsFormatMACMask, [VGUID1.D4[2], VGUID1.D4[3],
-                        VGUID1.D4[4], VGUID1.D4[5], VGUID1.D4[6], VGUID1.D4[7]]);
-{$IFDEF MSWINDOWS}
-    end;
-  finally
-    UnloadLibrary(VLibHandle);
-  end;
-{$ENDIF}
+   Result := AnsiLowerCase(AnsiReplaceStr(lsGetMacAddress,'-',''));
 end;
 
 function GetCommonAppDataPath : string;
@@ -155,13 +134,7 @@ begin
 end;
 
 initialization // =============================================================
-{$ifdef fpc}
-   OnGetVendorName      := @GetVendorNameEvent;                                // These functions are not known of Delphi and
-   OnGetApplicationName := @GetApplicationEvent;                               // are present here for linux behaviour consistency
-   VersionInfo          := TxPLVersionInfo.Create;
-{$else}
-   VersionInfo          := TxPLVersionInfo.Create(ParamStr(0));
-{$endif}
+   VersionInfo := TxPLVersionInfo.Create{$ifndef fpc}(ParamStr(0)){$endif};
 
 finalization // ===============================================================
    VersionInfo.Free;

@@ -13,8 +13,8 @@ uses Classes
      ;
 
    procedure GetProxySettings(out bEnabled : boolean; out sServer : string);
-   procedure SystemLog (const EventType : TEventType; const Msg : String);
-   function  IPAddresses : TStringList;
+   procedure LogInSystem (const EventType : TEventType; const Msg : String);
+   procedure GetIPAddresses(const aStringList : TStrings);
 
 implementation // =============================================================
 uses fpc_delphi_compat
@@ -22,8 +22,7 @@ uses fpc_delphi_compat
      , windows                                                                 // Needed on delphi to define KEY_READ
      {$endif}
      {$ifdef unix}
-     , IdSysLog
-     , IdSysLogMessage
+     , SystemLog
      , Process
      , StrUtils
      {$else}
@@ -33,11 +32,8 @@ uses fpc_delphi_compat
      {$endif}
      ;
 
-var  {$ifdef unix}
-        fIdSysLog: TIdSysLog;
-        fIdSysLogMessage : TIdSysLogMessage;
-     {$else}
-        fEventLog : TEventLog;
+  {$ifndef unix}
+var        fEventLog : TEventLog;
      {$endif}
 
 // ============================================================================
@@ -70,16 +66,18 @@ begin
 end;
 
 //=============================================================================
-procedure SystemLog (const EventType : TEventType; const Msg : String);
+procedure LogInSystem (const EventType : TEventType; const Msg : String);
+var logInfo : longint;
 begin
 {$ifdef unix}
-   fIdSysLogMessage.Msg.Text := GetDevice + ':' + Msg;
    Case EventType of
-        etInfo    : fIdSysLogMessage.Severity := slInformational;
-        etWarning : fIdSysLogMessage.Severity := slWarning;
-        etError   : fIdSysLogMessage.Severity := slError;
+        etCustom  : logInfo := LOG_NOTICE;
+        etDebug   : logInfo := LOG_DEBUG;
+        etInfo    : logInfo := LOG_INFO;
+        etWarning : logInfo := LOG_WARNING;
+        etError   : logInfo := LOG_ERR;
    end;
-   fIdSysLog.SendLogMessage(fIdSysLogMessage);
+   syslog(loginfo,'%s',[pchar(Msg)]);
 {$else}
    fEventLog.Log(EventType,Msg);
 {$endif}
@@ -90,7 +88,7 @@ end;
 {$endif}
 
 // ============================================================================
-function IPAddresses : TStringList;
+procedure GetIPAddresses(const aStringList : TStrings);
 {$ifndef mswindows}
 var proc : TProcess;
     slOutput : TStringList;
@@ -100,14 +98,13 @@ var proc : TProcess;
 begin
 {$ifdef mswindows}
    TIdStack.IncUsage;
-   result := TStringList(GStack.LocalAddresses);
+   aStringList.Assign(GStack.LocalAddresses);
 {$else}
    proc := TProcess.Create(nil);
    try
       slOutput := TStringList.Create;
-      result   := TStringList.Create;
       try
-         proc.CommandLine := 'ifconfig';
+         proc.Executable := 'ifconfig';
          proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
          proc.Execute;
          slOutput.LoadFromStream(proc.Output);
@@ -117,28 +114,21 @@ begin
                 s := AnsiRightStr(s,Length(s)-(Start+8));
                 Start := Pos(' ',s);
                 s := AnsiLeftStr(s,Pred(Start));
-                Result.Add(s);
+                aStringList.Add(s);
              end;
          end;
       finally
-         FreeAndNil(slOutput);
+         slOutput.Free;
       end;
    finally
-      FreeAndNil(proc);
+      proc.Free;
    end;
 {$endif}
-   if result.Count = 0 then result.Add('127.0.0.1');
+   if aStringList.Count = 0 then aStringList.Add('127.0.0.1');
 end;
 
 initialization // =============================================================
-{$ifdef unix}
-   fIdSysLog := nil;
-   fIdSysLog := TIdSysLog.Create(nil);
-   fIdSysLog.Port := 514;
-   fIdSysLog.Host := '127.0.0.1';
-   fIdSysLog.Active := True;
-   fIdSysLogMessage := TIdSysLogMessage.Create(nil);
-{$else}
+{$ifdef mswindows}
    fEventLog := TEventLog.Create(nil);
    fEventLog.DefaultEventType:=etInfo;
    fEventLog.LogType:=ltSystem;
@@ -147,12 +137,10 @@ initialization // =============================================================
    fEventlog.RegisterMessageFile('');
 {$endif}
 
-finalization
-{$ifdef unix}
-   fIdSysLogMessage.Free;
-   fIdSysLog.Free;
-{$else}
+finalization // ===============================================================
+
+{$ifdef mswindows}
    fEventLog.Free;
 {$endif}
 
-end.
+end.

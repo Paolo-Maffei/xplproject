@@ -16,22 +16,13 @@ type // TTimerPool ============================================================
      public
         constructor Create(aOwner : TComponent); override;
         destructor  Destroy; override;
-//        destructor Destroy; override;
         function Add(const aInterval : integer; const aHandler : TNotifyEvent) : TxPLTimer; reintroduce;
-        procedure Del(aTimer : TxPLTimer);
+        procedure Del(const aTimer : TxPLTimer);
      end;
 
 implementation
 
 // TTimerPool =================================================================
-
-
-//destructor TTimerPool.Destroy;
-//begin
-//   while Count<>0 do TxPLTimer(Self.Items[0]).Free;                       // Free all instances left
-//   inherited Destroy;
-//end;
-
 constructor TTimerPool.Create(aOwner: TComponent);
 begin
    inherited Create(aOwner);
@@ -40,8 +31,8 @@ end;
 
 destructor TTimerPool.Destroy;
 begin
-   fList.Free;
-   inherited Destroy;
+   fList.Free;                                                                 // Will free all left timers
+   inherited;
 end;
 
 function TTimerPool.Add(const aInterval: integer; const aHandler: TNotifyEvent): TxPLTimer;
@@ -52,11 +43,12 @@ begin
    fList.Add(result);
 end;
 
-procedure TTimerPool.Del(aTimer: TxPLTimer);
+procedure TTimerPool.Del(const aTimer: TxPLTimer);
 begin
+   aTimer.Enabled := false;
    fList.Remove(aTimer);
-   FreeAndNil(aTimer);
+   aTimer.Free;
 end;
 
 end.
-
+
