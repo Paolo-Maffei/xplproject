@@ -48,6 +48,7 @@ const
    // Websites =================================================================
    K_XPL_VENDOR_SEED_LOCATION = 'http://xplproject.org.uk/plugins';             // URL where to download the main plugin file
    K_XPL_VENDOR_SEED_FILE     = 'plugins' + K_FEXT_XML;
+   K_XPL_SCHEMA_COLL_FILE     = 'xpl-schema-collection' + K_FEXT_XML;
 
    // Configuration modes ======================================================
 
@@ -158,4 +159,4 @@ const
 implementation
 
 end.
-
+
