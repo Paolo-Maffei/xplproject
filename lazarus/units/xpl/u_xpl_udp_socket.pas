@@ -84,7 +84,6 @@ begin
       Tempo := MillisecondsBetween(fLastSentTime, now);
       if Tempo < K_SENDING_TEMPO then Sleep(K_SENDING_TEMPO-Tempo);
       inherited Send(aData);
-//        Broadcast(aData,XPL_UDP_BASE_PORT);
       fLastSentTime := now;
    end else
       xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
@@ -131,10 +130,10 @@ end;
 
 initialization // =============================================================
    LocalAddresses := TStringList.Create;
-   LocalAddresses.Assign(IPAddresses);
+   GetIPAddresses(LocalAddresses);
 
 finalization // ===============================================================
    LocalAddresses.Free;
 
 end.
-
+
