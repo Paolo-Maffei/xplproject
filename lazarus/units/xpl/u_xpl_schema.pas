@@ -45,15 +45,14 @@ var  // Core xPL Schema ======================================================
 
 implementation // =============================================================
 uses SysUtils
+     , u_xpl_common
      ;
 
 // TxPLSchema Object ==========================================================
 constructor TxPLSchema.Create(const aClasse : string = ''; const aType : string = '');
 begin
    inherited Create;
-   SetLength(fMaxSizes,2);
-   fMaxSizes[0] := 8;
-   fMaxSizes[1] := 8;
+   fMaxSizes := IntArray.Create(8,8);
    ResetValues;
    if aClasse<>'' then Classe := aClasse;
    if aType<>''   then Type_  := aType;
@@ -74,8 +73,7 @@ begin
    Result := (Classe = 'fragment');
 end;
 
-// ============================================================================
-initialization
+initialization // =============================================================
    Classes.RegisterClass(TxPLSchema);
 
    Schema_ConfigApp    := TxPLSchema.Create('config','app');
@@ -88,5 +86,15 @@ initialization
    Schema_FragBasic    := TxPLSchema.Create('fragment','basic');
    Schema_FragReq      := TxPLSchema.Create('fragment','request');
 
-end.
+finalization // ===============================================================
+   Schema_ConfigApp.Free;
+   Schema_ConfigCurr.Free;
+   Schema_ConfigList.Free;
+   Schema_ConfigResp.Free;
+   Schema_HBeatApp.Free;
+   Schema_HBeatEnd.Free;
+   Schema_HBeatReq.Free;
+   Schema_FragBasic.Free;
+   Schema_FragReq.Free;
 
+end.
