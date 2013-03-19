@@ -4,21 +4,21 @@ unit u_xpl_console_app;
 
 interface
 
-uses Classes
-     , SysUtils
-     , CustApp
-     ;
+uses CustApp;
 
-type TxPLConsoleApp = class(TCustomApplication)
+type // TxPLConsoleApp ========================================================
+     TxPLConsoleApp = class(TCustomApplication)
      protected
         procedure DoRun; override;
      public
-        destructor  Destroy;                      override;
-        procedure   Run;                          reintroduce;
+        destructor  Destroy; override;
+        procedure   Run;  reintroduce;
      end;
 
 implementation // =============================================================
 uses Keyboard
+     , Classes
+     , SysUtils
      , u_xpl_application
      ;
 
@@ -28,14 +28,11 @@ const K_STR_1 = 'Quitting the application...';
 
 // TxPLConsoleApp =============================================================
 procedure TxPLConsoleApp.DoRun;
-var k : TKeyEvent;
 begin
    inherited DoRun;
 
-   if PollKeyEvent<>0 then begin
-      K := TranslateKeyEvent(GetKeyEvent);
-      if KeyEventToString(K) = 'q' then terminate;
-   end;
+   if (PollKeyEvent<>0) and (KeyEventToString(TranslateKeyEvent(GetKeyEvent)) = 'q')
+      then terminate;
 
    CheckSynchronize(500);
 end;
