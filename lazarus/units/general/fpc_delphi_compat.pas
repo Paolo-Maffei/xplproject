@@ -10,7 +10,6 @@ uses {$ifdef fpc}
         {$ifdef mswindows}
         fpTimer
         {$else}
-        //lTimer                                                           // je tente l'utilisation de ltimer (lNet) à la place de fptimer qui a un memory leak dans la version employée
         fpTimer13012
         {$endif}
      {$else}
@@ -42,7 +41,7 @@ var VersionInfo        : TxPLVersionInfo;
 implementation // ==============================================================
 Uses Classes
      , SysUtils
-     , LSUtils
+     , lin_win_compat
      , StrUtils
      {$ifdef mswindows}
      , IdStack
@@ -113,7 +112,7 @@ end;
 
 function GetMacAddress: string;
 begin
-   Result := AnsiLowerCase(AnsiReplaceStr(lsGetMacAddress,'-',''));
+   Result := AnsiLowerCase(AnsiReplaceStr(lin_win_compat.GetMacAddress,':',''));
 end;
 
 function GetCommonAppDataPath : string;
