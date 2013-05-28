@@ -169,7 +169,11 @@ begin
           end;
    end;
 
-   Active := (Bindings.Count > 0);
+   try
+      Active := (Bindings.Count > 0);
+   except
+      On E : Exception do xPLApplication.Log(etError,E.Message);
+   end;
 end;
 
 function TxPLUDPServer.InternalCheckIncoming(const aPeerIP: string): boolean;
