@@ -6,50 +6,49 @@ interface
 
 uses Classes
      , SysUtils
+     , fgl
      , u_xpl_message
      , u_xpl_custom_listener
      ;
 
-type TMessageList = TList;
+type TMessageList = specialize TFPGObjectList<TxPLMessage>;
 
-     { TLoggerListener }
-
+     // TLoggerListener =======================================================
      TLoggerListener = class(TxPLCustomListener)
      private
         fListen : boolean;
         fLogStart : TDateTime;
-
-        function Get_MessageCount: integer;
+        fMessageList : TMessageList;
+        fLogAtStartUp : boolean;
+        fMessageLimit : integer;
 
         procedure OnPreprocessMessage(const aMessage : TxPLMessage);
         procedure Set_Listen(const AValue: boolean);
      public
-        fLogAtStartUp : boolean;
-        fMessageLimit : integer;
 
-        MessageList : TMessageList;
-        fooMessage  : TxPLMessage;
         OnMessage   : TxPLReceivedEvent;
 
         constructor Create; reintroduce;
         destructor  Destroy; override;
 
-        function    Message(const i : integer) : TxPLMessage;
-
-     published
-        property MessageCount : integer read Get_MessageCount stored false;
-        property Listening    : boolean read fListen write Set_Listen stored false;
-        property LogStart     : TDateTime read fLogStart stored false;
-
+     public
+        property Listening    : boolean read fListen write Set_Listen;
+        property LogStart     : TDateTime read fLogStart;
+        property MessageList  : TMessageList read fMessageList;
+        property LogAtStartup : boolean read fLogAtStartup write fLogAtStartup;
+        property MessageLimit : integer read fmessageLimit write fMessageLimit;
      end;
 
 implementation // ==============================================================
+uses u_xpl_messages
+     ;
 
-{ TLoggerListener =============================================================}
+// TLoggerListener =============================================================
 constructor TLoggerListener.Create;
 begin
    inherited Create(nil);
-   MessageList := TMessageList.Create;
+   fMessageList := TMessageList.Create;
+   fMessageList.FreeObjects:=true;
    OnPreProcessMsg := @OnPreprocessMessage;
    if fMessageLimit = 0 then fMessageLimit := 1000;
 end;
@@ -60,33 +59,23 @@ begin
    inherited;
 end;
 
-function TLoggerListener.Get_MessageCount: integer;
-begin
-   result := MessageList.Count;
-end;
-
 procedure TLoggerListener.OnPreprocessMessage(const aMessage: TxPLMessage);
 begin
    if fListen then begin
-      fooMessage := TxPLMessage.Create(self);
-      fooMessage.Assign(aMessage);
-      MessageList.Add(fooMessage);
-      if MessageList.Count>fMessageLimit then MessageList.Delete(0);
-      if Assigned(OnMessage) then OnMessage(fooMessage);
+      MessageList.Add(MessageBroker(aMessage.RawxPL));
+      if Assigned(OnMessage) then OnMessage(MessageList.Last);
+      if MessageList.Count>fMessageLimit
+         then MessageList.Delete(0);
   end;
 end;
 
 procedure TLoggerListener.Set_Listen(const AValue: boolean);
 begin
-   if fListen=AValue then exit;
-   fListen:=AValue;
-   if fListen then fLogStart := now;
-end;
-
-function TLoggerListener.Message(const i: integer): TxPLMessage;
-begin
-   result := TxPLMessage(MessageList[i]);
+   if fListen<>AValue then begin
+      fListen:=AValue;
+      if fListen then fLogStart := now;
+   end;
 end;
 
 end.
-
+

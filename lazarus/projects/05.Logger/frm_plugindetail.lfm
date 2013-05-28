@@ -1,91 +1,100 @@
 inherited frmPluginDetail: TfrmPluginDetail
   Left = 261
-  Height = 274
+  Height = 316
   Top = 301
-  Width = 418
+  Width = 477
   BorderIcons = []
   BorderStyle = bsToolWindow
   Caption = 'Vendor Plugin details'
-  ClientHeight = 274
-  ClientWidth = 418
+  ClientHeight = 316
+  ClientWidth = 477
   OnShow = FormShow
-  inherited DlgToolbar: TToolBar
-    Width = 418
+  inherited DlgBottomBar: TPanel
+    Top = 269
+    Width = 465
+    ClientWidth = 465
+    TabOrder = 8
+    inherited DlgtbClose: TLSBitBtn
+      Left = 410
+    end
+  end
+  inherited DlgToolBar: TPanel
+    Width = 465
     TabOrder = 7
   end
-  object Label1: TLabel[1]
+  object Label1: TLabel[2]
     Left = 6
-    Height = 16
+    Height = 17
     Top = 32
-    Width = 39
+    Width = 49
     Caption = 'Vendor'
     ParentColor = False
   end
-  object Label2: TLabel[2]
+  object Label2: TLabel[3]
     Left = 7
-    Height = 16
+    Height = 17
     Top = 63
-    Width = 36
+    Width = 44
     Caption = 'Device'
     ParentColor = False
   end
-  object Label3: TLabel[3]
+  object Label3: TLabel[4]
     Left = 8
-    Height = 16
+    Height = 17
     Top = 96
-    Width = 27
+    Width = 32
     Caption = 'Type'
     ParentColor = False
   end
-  object Label4: TLabel[4]
-    Left = 216
-    Height = 16
+  object Label4: TLabel[5]
+    Left = 248
+    Height = 17
     Top = 32
-    Width = 47
+    Width = 61
     Caption = 'Platform'
     ParentColor = False
   end
-  object Label5: TLabel[5]
-    Left = 216
-    Height = 16
+  object Label5: TLabel[6]
+    Left = 248
+    Height = 17
     Top = 64
-    Width = 74
+    Width = 95
     Caption = 'Stable version'
     ParentColor = False
   end
-  object Label6: TLabel[6]
-    Left = 216
-    Height = 16
+  object Label6: TLabel[7]
+    Left = 248
+    Height = 17
     Top = 96
-    Width = 65
+    Width = 83
     Caption = 'Beta version'
     ParentColor = False
   end
-  object Label7: TLabel[7]
+  object Label7: TLabel[8]
     Left = 8
-    Height = 16
+    Height = 17
     Top = 128
-    Width = 61
+    Width = 78
     Caption = 'Description'
     ParentColor = False
   end
-  object Label9: TLabel[8]
+  object Label9: TLabel[9]
     Left = 6
-    Height = 16
+    Height = 17
     Top = 208
-    Width = 60
+    Width = 74
     Caption = 'Device Info'
     ParentColor = False
   end
-  object Label10: TLabel[9]
+  object Label10: TLabel[10]
     Left = 6
-    Height = 16
+    Height = 17
     Top = 240
-    Width = 55
+    Width = 68
     Caption = 'Download'
     ParentColor = False
   end
-  object DBText1: TLabel[10]
+  object DBText1: TLabel[11]
     Left = 80
     Height = 1
     Top = 208
@@ -94,7 +103,7 @@ inherited frmPluginDetail: TfrmPluginDetail
     ParentColor = False
     ParentFont = False
   end
-  object DBText2: TLabel[11]
+  object DBText2: TLabel[12]
     Left = 80
     Height = 1
     Top = 240
@@ -103,56 +112,56 @@ inherited frmPluginDetail: TfrmPluginDetail
     ParentColor = False
     ParentFont = False
   end
-  object edtVendor: TEdit[12]
-    Left = 72
-    Height = 23
+  object edtVendor: TEdit[13]
+    Left = 96
+    Height = 27
     Top = 32
     Width = 139
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 0
   end
-  object edtDeviceId: TEdit[13]
-    Left = 72
-    Height = 23
+  object edtDeviceId: TEdit[14]
+    Left = 96
+    Height = 27
     Top = 63
     Width = 139
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 1
   end
-  object edtDevicePlatform: TEdit[14]
-    Left = 296
-    Height = 23
+  object edtDevicePlatform: TEdit[15]
+    Left = 352
+    Height = 27
     Top = 32
     Width = 112
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 2
   end
-  object edtDeviceStableVersion: TEdit[15]
-    Left = 296
-    Height = 23
+  object edtDeviceStableVersion: TEdit[16]
+    Left = 352
+    Height = 27
     Top = 63
     Width = 112
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 3
   end
-  object edtDeviceBetaVersion: TEdit[16]
-    Left = 296
-    Height = 23
+  object edtDeviceBetaVersion: TEdit[17]
+    Left = 352
+    Height = 27
     Top = 96
     Width = 112
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 4
   end
-  object edtDeviceDescription: TMemo[17]
-    Left = 72
+  object edtDeviceDescription: TMemo[18]
+    Left = 96
     Height = 72
     Top = 128
-    Width = 334
+    Width = 368
     Color = clBtnFace
     Lines.Strings = (
       'edtDeviceDescription'
@@ -160,17 +169,17 @@ inherited frmPluginDetail: TfrmPluginDetail
     ReadOnly = True
     TabOrder = 5
   end
-  object edtDeviceType_: TEdit[18]
-    Left = 72
-    Height = 23
+  object edtDeviceType_: TEdit[19]
+    Left = 96
+    Height = 27
     Top = 96
     Width = 139
     Color = clBtnFace
     ReadOnly = True
     TabOrder = 6
   end
-  object DeviceInfoURL: TOvcURL[19]
-    Left = 72
+  object DeviceInfoURL: TOvcURL[20]
+    Left = 96
     Height = 1
     Top = 208
     Width = 1
@@ -180,8 +189,8 @@ inherited frmPluginDetail: TfrmPluginDetail
     ParentFont = False
     Transparent = True
   end
-  object DeviceDownloadURL: TOvcURL[20]
-    Left = 72
+  object DeviceDownloadURL: TOvcURL[21]
+    Left = 96
     Height = 1
     Top = 240
     Width = 1
@@ -191,6 +200,12 @@ inherited frmPluginDetail: TfrmPluginDetail
     ParentFont = False
     Transparent = True
   end
-  inherited DlgActions: TActionList[21]
+  inherited XMLPropStorage1: TXMLPropStorage[22]
+    left = 56
+    top = 272
   end
-end
+  inherited DlgActions: TActionList[23]
+    left = 176
+    top = 272
+  end
+end

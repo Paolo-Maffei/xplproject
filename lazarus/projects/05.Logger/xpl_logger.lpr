@@ -7,14 +7,12 @@ uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
+//  heaptrc,
   Interfaces, // this includes the LCL widgetset
-  Forms, pl_rx, pl_kcontrols, lazcontrols, pl_excontrols,
+  Forms, pl_rx, pl_kcontrols, lazcontrols, pl_excontrols, pl_lnetcomp,
   frm_logger,
-  u_xpl_application,
-  logger_listener,
-  xpl_win
-  , frm_logger_config
-  , frame_message
+  u_xpl_application, xpl_win,
+  logger_listener, frm_logger_config, frame_message
   ;
 
 {$R *.res}
@@ -24,10 +22,10 @@ begin
 
    xPLApplication := TLoggerListener.Create;
    Application.CreateForm(TfrmLogger, frmLogger);
-   Application.CreateForm(TFrmLoggerConfig, FrmLoggerConfig);
+   Application.CreateForm(TfrmLoggerConfig,frmLoggerConfig);
    Application.Icon := FrmLogger.Icon;
    Application.Run;
 
    xPLApplication.Free;
 end.
-
+
