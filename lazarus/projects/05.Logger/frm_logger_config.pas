@@ -8,28 +8,26 @@ interface
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
   ComCtrls, ActnList, StdCtrls, ExtCtrls, Spin, XMLPropStorage, Buttons, Grids,
-   RTTICtrls, dlg_config;
+   RTTICtrls, LSControls, dlg_template;
 
 type
 
   { TFrmLoggerConfig }
 
-  TFrmLoggerConfig = class(TDlgConfig)
+  TFrmLoggerConfig = class(TDlgTemplate)
     ckFilter: TCheckBox;
     ckSimpleTree: TCheckBox;
     ckIcons: TCheckBox;
     ckShowPreview: TCheckBox;
     ckStartAtLaunch: TCheckBox;
-    GUIGroup: TGroupBox;
-    FilterGroup: TGroupBox;
     Label2: TLabel;
     mmoFilter: TMemo;
+    PageControl1: TPageControl;
     rgFilterBy: TRadioGroup;
     seMaxPool: TSpinEdit;
-    TICheckBox1: TTICheckBox;
-    tsFilters: TTabSheet;
     tsGUI: TTabSheet;
-    XMLPropStorage: TXMLPropStorage;
+    tsFiltering: TTabSheet;
+    TICheckBox1: TTICheckBox;
     procedure FormCreate(Sender: TObject);
     procedure XMLPropStorageRestoreProperties(Sender: TObject);
   end;
@@ -48,18 +46,13 @@ uses u_xpl_application
 procedure ShowDlgLoggerConfig;
 begin
    if not Assigned(FrmLoggerConfig) then Application.CreateForm(TFrmLoggerConfig, FrmLoggerConfig);
-   FrmLoggerConfig.frameConfig1.SetConfigCurrent(TxPLCustomListener(xPLApplication).Config.CurrentConfig);
    FrmLoggerConfig.ShowModal;
 end;
 
 procedure TFrmLoggerConfig.FormCreate(Sender: TObject);
 begin                                                                          // Correction of bug FS#60 : don't let settings
    inherited;
-   XMLPropStorage.FileName := xPLApplication.Folders.DeviceDir + 'settings.xml';
-   XMLPropStorage.Restore;                                                      // go anywhere, force it to be in the xpl app directory
    frmLogger.ApplySettings(self);
-   GUIGroup.Parent := tsGUI;
-   FilterGroup.Parent := tsFilters;
 end;
 
 procedure TFrmLoggerConfig.XMLPropStorageRestoreProperties(Sender: TObject);
@@ -68,4 +61,4 @@ begin
 end;
 
 end.
-
+

@@ -6,13 +6,13 @@ unit frm_logger;
 interface
 
 uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-     Dialogs, ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-     u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, RTTICtrls, RTTIGrids,
-     {%H-} XMLPropStorage, {%H-} RxAboutDialog, uxPLConst, frm_template,
-     frame_message, logger_listener, u_xpl_header;
+  Dialogs, ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
+  RTTICtrls, RTTIGrids, RxAboutDialog, LSControls, uxPLConst, frm_template,
+  frame_message, logger_listener, u_xpl_header;
 
 type // TfrmLogger  ===========================================================
-     TfrmLogger = class(TFrmTemplate)
+     TfrmLogger = class(TFrmTemplate,IFPObserver)
         acAppSettings: TAction;
         acLogging: TAction;
         acPluginDetail: TAction;
@@ -22,11 +22,18 @@ type // TfrmLogger  ===========================================================
     acResend: TAction;
     acPlay: TAction;
     acAddToMacro: TAction;
-    acAssembleFragments: TAction;
     acAddFilter: TAction;
+    acClean: TAction;
+    acListen: TAction;
+    acMacro: TAction;
+    acAssembleFragments: TAction;
+    Clear: TAction;
     ckLoop: TCheckBox;
     dgMessages: TStringGrid;
+    BtnListen: TLSSpeedButton;
+    BtnClear: TLSBitBtn;
     Label4: TLabel;
+    lblFilter: TLabel;
     MenuItem1: TMenuItem;
     MenuItem19: TMenuItem;
     MenuItem2: TMenuItem;
@@ -36,7 +43,7 @@ type // TfrmLogger  ===========================================================
     MenuItem6: TMenuItem;
     MenuItem7: TMenuItem;
     MenuItem8: TMenuItem;
-    MenuItem9: TMenuItem;
+    mnuExport: TMenuItem;
     mnuCommands: TMenuItem;
     mnuSendMessage: TMenuItem;
     Panel1:    TPanel;
@@ -55,15 +62,11 @@ type // TfrmLogger  ===========================================================
     ToolButton7: TToolButton;
     ToolButton92: TToolButton;
     BtnRefresh: TBitBtn;
-    Clear:     TAction;
-    Load:      TAction;
     acExport:    TAction;
     SaveDialog: TSaveDialog;
     sgStats:   TStringGrid;
     Splitter1: TSplitter;
     Splitter2: TSplitter;
-    ToolButton3: TToolButton;
-    ToolButton6: TToolButton;
     tvMessages: TTreeView;
     procedure acAddFilterExecute(Sender: TObject);
     procedure acAddToMacroExecute(Sender: TObject);
@@ -88,6 +91,7 @@ type // TfrmLogger  ===========================================================
     procedure mnuTreeViewPopup(Sender: TObject);
     procedure tvMessagesChange(Sender: TObject; Node: TTreeNode);
     procedure tvMessagesClick(Sender: TObject);
+    procedure tvMessagesDeletion(Sender: TObject; Node: TTreeNode);
     procedure tvMessagesSelectionChanged(Sender: TObject);
     procedure acLaunchMyConfig(Sender: TObject);
   private
@@ -103,6 +107,7 @@ type // TfrmLogger  ===========================================================
   public
     procedure ApplySettings(Sender: TObject);
     procedure OnJoinedEvent; override;
+    Procedure FPOObservedChanged(ASender : TObject; Operation : TFPObservedOperation; Data : Pointer);
   end;
 
 var frmLogger: TfrmLogger;
@@ -133,10 +138,13 @@ const K_ROOT_NODE_NAME = 'Network';
 
 // ======================================================================================
 procedure TfrmLogger.FormCreate(Sender: TObject);
-var aMenu : TMenuItem;
-    column : TCollectionItem;
+var column : TCollectionItem;
 begin
    inherited;
+   SetButtonImage(BtnClear,acClean,K_IMG_CLEAN);
+   SetButtonImage(BtnListen,acListen,K_IMG_RECORD);
+   BtnListen.AllowAllUp:=true;
+   BtnListen.GroupIndex:=1;
 
    TLoggerListener(xPLApplication).OnMessage := @OnMessageReceived;
    MacroList := TMessageList.Create;
@@ -145,15 +153,11 @@ begin
 
    TxPLListener(xPLApplication).Listen;
 
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acExport;
-   AppMenu.Items.Insert(0,aMenu);
-
    mnuListView.Images:= xPLGUIResource.Images16;
    acConversation.ImageIndex := K_IMG_THREAD;
    acResend.ImageIndex:=K_IMG_MAIL_FORWARD;
    acShowMessage.ImageIndex := K_IMG_EDIT_FIND;
-   ToolButton3.ImageIndex:=K_IMG_RECORD;
+//   BtnListen.ImageIndex:=K_IMG_RECORD;
    tbMacro.Images := xPLGUIResource.Images16;
    acPlay.ImageIndex:=K_IMG_MENU_RUN;
 
@@ -163,18 +167,19 @@ begin
    MessageFrame.ReadOnly:=true;
    tvMessagesClick(self);
 
-   acCoreConfigure.OnExecute := @acLaunchMyConfig;                          // Override standard config dialog
+   acAppConfigure.OnExecute := @acLaunchMyConfig;                          // Override standard config dialog
 
 end;
 
 procedure TfrmLogger.FormDestroy(Sender: TObject);
 begin
    MacroList.Free;
+   inherited;
 end;
 
 procedure TfrmLogger.acAddToMacroExecute(Sender: TObject);
 begin
-   MacroList.Add(dgMessages.Objects[0,dgMessages.Row]);
+   MacroList.Add(TxPLMessage(dgMessages.Objects[0,dgMessages.Row]));
    MacNode.Text := Format('Macro (%d elts)',[MacroList.Count]);
 end;
 
@@ -234,15 +239,29 @@ procedure TfrmLogger.OnJoinedEvent;
 begin
    inherited;
    with TxPLListener(xPLApplication) do begin
-      ToolButton3.Down:=TLoggerListener(xPLApplication).fLogAtStartUp;
+      BtnListen.Down:=TLoggerListener(xPLApplication).LogAtStartUp;
       ListenExecute(self);
-      StatusBar.Panels[1].Text := ConnectionStatusAsStr;
+      lblLog.Caption := ConnectionStatusAsStr;
+   end;
+end;
+
+procedure TfrmLogger.FPOObservedChanged(ASender: TObject; Operation: TFPObservedOperation; Data: Pointer);
+var i,j : integer;
+begin
+   if Operation = ooFree then begin
+      for i:=0 to dgMessages.RowCount-1 do begin
+         if dgMessages.Objects[0,i] = aSender then begin
+            dgMessages.Objects[0,i] := nil;
+            dgMessages.DeleteRow(i);
+            Exit;
+         end;
+      end;
    end;
 end;
 
 procedure TfrmLogger.ListenExecute(Sender: TObject);
 begin
-   TLoggerListener(xPLApplication).Listening := ToolButton3.Down;
+   TLoggerListener(xPLApplication).Listening := BtnListen.Down;
 end;
 
 function TfrmLogger.StatusString: string;
@@ -250,8 +269,8 @@ var i: extended;
 begin
    with TLoggerListener(xPLApplication) do begin
         i := integer(Trunc((Now - LogStart) / (1 / 24 / 60)));
-        Result := Format('Logged %d messages in %s secs',[MessageCount,TimeToStr(Now-LogStart)]);
-        if i<>0 then Result += Format(' (%n msg/min',[MessageCount/i]);
+        Result := Format('Logged %d messages in %s secs',[MessageList.Count,TimeToStr(Now-LogStart)]);
+        if i<>0 then Result += Format(' (%n msg/min',[MessageList.Count/i]);
    end;
 end;
 
@@ -260,10 +279,10 @@ var i: integer;
 begin
    dgMessages.RowCount := dgMessages.RowCount+1;
    dgMessages.Objects[0,dgMessages.RowCount-1] := axPLMessage;
+   axPLMessage.FPOAttachObserver(self);
    for i := 0 to 5 do
        dgMessages.Cells[i+1,dgMessages.RowCount-1] :=
           axPLMessage.ElementByName(dgMessages.Columns[i].Title.Caption);
-
 end;
 
 function TfrmLogger.UpdateFilter : string;
@@ -276,12 +295,12 @@ begin
    sl := TStringList.Create;
 
      if tvMessages.Selected.Parent = nil then                                  // We're on one of the roots
-         StatusBar.Panels[2].Text := '*.*.*.*.*.*'
+         lblFilter.Caption := '*.*.*.*.*.*'
       else if (tvMessages.Selected.Parent = ConNode) then begin                // We're on a conversation node
         sl.DelimitedText:=tvMessages.Selected.Text;
         header.source.RawxPL:=sl[0];
         header.Target.RawxPL:=sl[1];
-        StatusBar.Panels[2].Text := header.Source.RawxPL + ',' + header.Target.RawxPL;
+        lblFilter.Caption := header.Source.RawxPL + ',' + header.Target.RawxPL;
       end else begin
         Sl.Delimiter:= '.';
         Sl.DelimitedText:=AnsiReplaceStr(tvMessages.Selected.GetTextPath,'/','.'); // Truncate the path
@@ -289,15 +308,15 @@ begin
            if (sl.Count>1) then header.source.Vendor := sl[1];
            if (sl.Count>2) then header.source.Device := sl[2];
            if (sl.Count>3) then header.source.Instance:= sl[3];
-           StatusBar.Panels[2].Text := '*.' + header.Source.AsFilter + '.*.*';
+           lblFilter.Caption := '*.' + header.Source.AsFilter + '.*.*';
         end else begin
            if (sl.Count>1) then header.MessageType   := StrToMsgType(sl[1]);
            if (sl.Count>2) then header.schema.Classe := sl[2];
            if (sl.Count>3) then header.schema.Type_  := sl[3];
-           StatusBar.Panels[2].Text := header.SourceFilter;
+           lblFilter.Caption := header.SourceFilter;
         end;
         if Assigned(tvMessages.Selected.Parent.Data) then begin             // We're at a device level
-           StatusBar.Panels[2].Text := StatusBar.Panels[2].Text + ',device=' + tvMessages.Selected.Text;
+           lblFilter.Caption := lblFilter.Caption + ',device=' + tvMessages.Selected.Text;
         end;
         result := Header.Source.AsFilter;
       end;
@@ -308,19 +327,20 @@ end;
 procedure TfrmLogger.ClearExecute(Sender: TObject);
 begin
    ResetTreeView;
-   dgMessages.RowCount:=1;
    ListenExecute(self);
    if tvMessages.Selected = MacNode then begin
       MacroList.Clear;
       if Assigned(MacNode) then MacNode.Text := 'Macro';
-   end else TLoggerListener(xPLApplication).MessageList.Clear;
+   end
+   else
+      TLoggerListener(xPLApplication).MessageList.Clear;
 end;
 
 procedure TfrmLogger.ApplySettings(Sender: TObject);                           // Correction bug FS#39 , This method is also called by frmAppSettings
 begin                                                                          //    after having load the application default setup
    with FrmLoggerConfig do begin
-        TLoggerListener(xPLApplication).fMessageLimit := seMaxPool.Value;
-        TLoggerListener(xPLApplication).fLogAtStartUp := ckStartAtLaunch.Checked;
+        TLoggerListener(xPLApplication).MessageLimit := seMaxPool.Value;
+        TLoggerListener(xPLApplication).LogAtStartUp := ckStartAtLaunch.Checked;
         ListenExecute(self);
         Panel1.Visible := ckShowPreview.Checked;
         tvMessagesSelectionChanged(Sender);
@@ -370,21 +390,21 @@ begin
      end;
   end;
 
-  StatusBar.Panels[3].Text := StatusString;
+  lblLog.Caption := StatusString;
 
   if tvMessages.Selected <> MacNode then DisplayFilteredMessage(axPLMessage);  // The macro node doesn't need to be updated
 end;
 
-procedure TFrmLogger.DisplayFilteredMessage(const aMsg : TxPLCustomMessage);
+procedure TfrmLogger.DisplayFilteredMessage(const aMsg: TxPLCustomMessage);
 var sl : TStringList;
     sFilter : string;
 begin
   sl := TStringList.Create;
-  sl.DelimitedText := StatusBar.Panels[2].Text;
+  sl.DelimitedText := lblFilter.Caption;
   if FrmLoggerConfig.rgFilterBy.ItemIndex = 0 then sFilter := aMsg.SourceFilter else sFilter := aMsg.TargetFilter;
   if sl.Count = 1 then                                                         // We're at VDI or Message level
     begin
-       if xPLMatches(StatusBar.Panels[2].Text, sFilter) then AddToTreeView(TxPLMessage(aMsg));
+       if xPLMatches(lblFilter.Caption, sFilter) then AddToTreeView(TxPLMessage(aMsg));
     end else begin                                                             // We're in conversation or device=xxx level
        if AnsiContainsText(sl[1],'device=') then begin                         // We're in device =
           if xPLMatches(sl[0], sFilter) then begin
@@ -446,14 +466,14 @@ procedure TfrmLogger.mnuSendMessageClick(Sender: TObject);
 var aMsg : TxPLMessage;
     aHeader : TxPLHeader;
 begin
-   aHeader := TxPLHeader.Create(self,StatusBar.Panels[2].Text);               // The header of the created message is derived from current active filter
+   aHeader := TxPLHeader.Create(self,lblFilter.Caption);               // The header of the created message is derived from current active filter
    aMsg := TxPLMessage.Create(self);
    aMsg.Assign(aHeader);
    with TxPLMessageGUI(aMsg) do begin
         Source.Assign(xPLApplication.Adresse);
         Body.ResetValues;
         Body.AddKeyValuePairs(['key'], ['value']);                             // 2.0.3
-        ShowForEdit([boSave, boSend]);
+        ShowForEdit([boSave, boSend, boClose]);
   end;
    aHeader.Free;
 end;
@@ -486,8 +506,6 @@ begin
    aFrag := TFragBasicMsg.Create(self,TxPLMessage(dgMessages.Objects[0,dgMessages.Selection.Top]));
    fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.GetFactory(aFrag.Identifier);
    if Assigned(fFragFactory) then begin
-//   aMsg := TxPLMessageGUI(dgMessages.Objects[0,dgMessages.Selection.Top]);
-//   fFragFactory := TLoggerListener(xPLApplication).FragmentMgr.AddFragment(TFragmentBasicMsg(aMsg));
      if fFragFactory.IsCompleted then begin
         aMsg := TxPLMessageGUI(fFragFactory.Assembled);
         if Assigned(aMsg) then aMsg.ShowForEdit([boClose, boSave, boCopy, boSend], false);
@@ -510,6 +528,11 @@ begin
    mnuCommands.Visible       := acPluginDetail.Visible;
    tbMacro.Visible           := (tvMessages.Selected = MacNode);
    acAddFilter.Visible       := (tvMessages.Selected.HasAsParent(MsgNode) and (not tvMessages.Selected.HasChildren));
+end;
+
+procedure TfrmLogger.tvMessagesDeletion(Sender: TObject; Node: TTreeNode);
+begin
+   TConfigurationRecord(Node.Data).Free;
 end;
 
 procedure TfrmLogger.mnuListViewPopup(Sender: TObject);                        // Correction bug #FS68
@@ -542,6 +565,8 @@ end;
 
 procedure TfrmLogger.tvMessagesChange(Sender: TObject; Node: TTreeNode);
 var ConfElmts: TConfigurationRecord;
+    i : integer;
+    aMenu : TMenuItem;
 begin
    if (Node<>nil) and (Node.Data <> nil) then begin
       ConfElmts := TConfigurationRecord(Node.Data);
@@ -549,7 +574,7 @@ begin
       mnuCommands.Enabled    := acPluginDetail.Enabled;
       if mnuCommands.Enabled then begin
          if ConfElmts.plug_detail <> nil then begin
-            {$IFDEF WINDOWS}(* At the time, don't understand why this fails under linux *)
+            { $ IFDEF WINDOWS}(* At the time, don't understand why this fails under linux *)
             mnuCommands.Clear;
             for i := 0 to ConfElmts.plug_detail.Commands.Count - 1 do begin
                 aMenu := TMenuItem.Create(self);
@@ -557,7 +582,7 @@ begin
                 aMenu.OnClick := @mnuCommandClick;
                 mnuCommands.Add(aMenu);
             end;
-            {$ENDIF}
+            { $ ENDIF}
             mnuCommands.Enabled := (mnuCommands.Count > 0);
          end;
       end;
@@ -651,9 +676,5 @@ begin
       MessageFrame.TheMessage := aMsg;
    end;
 end;
-
-initialization // =============================================================
-  { $ I class.lrs}
-  { $ I msgtype.lrs}
 
 end.

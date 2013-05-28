@@ -61,15 +61,15 @@ procedure TfrmPluginDetail.FormShow(Sender: TObject);
 begin
    inherited;
 
-   edtDeviceBetaVersion.Text    := Configuration.beta_version;
-   edtDeviceDescription.Text    := Configuration.Description;
-   edtDevicePlatform.Text       := Configuration.platform_;
-   edtDeviceStableVersion.Text  := Configuration.Version;
-   edtDeviceType_.Text          := Configuration.type_;
-   edtDeviceId.Text             := Configuration.Device;
-   edtVendor.Text               := Configuration.Vendor;
-   DeviceInfoURL.URL            := Configuration.info_url;
-   DeviceDownloadURL.URL        := Configuration.download_url;
+   edtDeviceBetaVersion.Text   := Configuration.beta_version;
+   edtDeviceDescription.Text   := Configuration.Description;
+   edtDevicePlatform.Text      := Configuration.platform_;
+   edtDeviceStableVersion.Text := Configuration.Version;
+   edtDeviceType_.Text         := Configuration.type_;
+   edtDeviceId.Text            := Configuration.Device;
+   edtVendor.Text              := Configuration.Vendor;
+   DeviceInfoURL.URL           := Configuration.info_url;
+   DeviceDownloadURL.URL       := Configuration.download_url;
 end;
 
 end.
