@@ -5,69 +5,99 @@ unit frm_template;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ExtCtrls, ActnList, Menus, XMLPropStorage, Buttons, RTTICtrls,
-  TplStatusBarUnit, u_xPL_Collection, RxAboutDialog;
+uses Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
+     ExtCtrls, ActnList, Menus, Buttons, StdCtrls, RTTICtrls, LSControls,
+     u_xPL_Collection, RxAboutDialog, Dlg_Template;
 
-type { TFrmTemplate ==========================================================}
-  TFrmTemplate = class(TForm)
-    acAbout: TAction;
-    acInstalledApps: TAction;
-    acQuit: TAction;
-    acCoreConfigure: TAction;
-    ActionList: TActionList;
-    imgBullet: TImage;
-    lblModuleName: TTILabel;
-    MnuItem1: TMenuItem;
-    MenuItem13: TMenuItem;
-    MenuItem15: TMenuItem;
-    MenuItem16: TMenuItem;
-    MenuItem17: TMenuItem;
-    mnuLaunch: TMenuItem;
-    mnuAllApps: TMenuItem;
-    mnuNull2: TMenuItem;
-    Panel4: TPanel;
-    AboutDlg: TRxAboutDialog;
-    AppButton: TSpeedButton;
-    StatusBar: TplStatusBar;
-    ToolBar: TToolBar;
-    ToolButton1: TToolButton;
-    ToolButton9: TToolButton;
-    XMLPropStorage: TXMLPropStorage;
-    xPLMenu: TPopupMenu;
-    AppMenu: TPopupMenu;
-    procedure acAboutExecute(Sender: TObject);
-    procedure acCoreConfigureExecute(Sender: TObject);
-    procedure acInstalledAppsExecute(Sender: TObject);
-    procedure acQuitExecute(Sender: TObject);
-    procedure AppButtonClick(Sender: TObject);
-    procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
-    procedure FormCreate(Sender: TObject);
-    procedure ToolButton9Click(Sender: TObject);
-  private
-    procedure acCommonToolsExecute(Sender : TObject);
-    procedure AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
-  public
-    procedure OnJoinedEvent; virtual;
-    procedure OnLogEvent(const aString : string); virtual;
-  end; 
-
-var FrmTemplate: TFrmTemplate;
+type // TFrmTemplate ==========================================================
+     TFrmTemplate = class(TDlgTemplate)
+        acAbout: TAction;
+        acInstalledApps: TAction;
+        acCoreConfigure: TAction;
+        acAppConfigure: TAction;
+        lblLog: TLabel;
+        lblModuleName: TTILabel;
+        AppMenu: TMenuItem;
+        FormMenu: TMainMenu;
+        imgStatus: TLSImage;
+        mnuCoreConfigure: TMenuItem;
+        mnuAppConfigure: TMenuItem;
+        xPLMenu: TMenuItem;
+        mnuConfigure: TMenuItem;
+        mnuAbout: TMenuItem;
+        mnuNull4: TMenuItem;
+        mnuNull3: TMenuItem;
+        mnuClose: TMenuItem;
+        mnuLaunch: TMenuItem;
+        mnuAllApps: TMenuItem;
+        mnuNull2: TMenuItem;
+        AboutDlg: TRxAboutDialog;
+        procedure acAboutExecute(Sender: TObject);
+        procedure acCoreConfigureExecute(Sender: TObject);
+        procedure acInstalledAppsExecute(Sender: TObject);
+        procedure FormCloseQuery(Sender: TObject; var CanClose: boolean);
+        procedure FormCreate(Sender: TObject);
+        procedure FormShow(Sender: TObject);
+     private
+        procedure acCommonToolsExecute(Sender : TObject);
+        procedure AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
+     public
+        procedure OnJoinedEvent; virtual;
+        procedure OnLogEvent(const aString : string); virtual;
+     end;
 
 implementation // =============================================================
 
 uses frm_xplappslauncher
      , dlg_config
      , lcltype
+     , u_xpl_gui_resource
      , u_xpl_custom_listener
      , u_xpl_application
-     , u_xpl_gui_resource
      , u_xpl_heart_beater
      , Process
      ;
 
-{ TFrmTemplate ===============================================================}
+// TFrmTemplate ===============================================================
+procedure TFrmTemplate.FormCreate(Sender: TObject);
+var sl : TxPLCustomCollection;
+begin
+   inherited;
+
+   FormMenu.Images := DlgActions.Images;
+   ImgStatus.Images := DlgActions.Images;
+   ImgStatus.ImageIndex := K_IMG_XPL;
+
+   lblModuleName.Link.TIObject := xPLApplication.Adresse;
+   lblModuleName.Link.TIPropertyName:= 'RawxPL';
+
+   xPLApplication.OnLogEvent := @OnLogEvent;
+
+   Caption := xPLApplication.AppName;
+
+   sl := xPLApplication.Settings.GetxPLAppList;
+      AddSubMenuElmt(sl,'basicset');
+      AddSubMenuElmt(sl,'vendfile');
+      AddSubMenuElmt(sl,'piedit');
+      AddSubMenuElmt(sl,'sender');
+      AddSubMenuElmt(sl,'logger');
+   sl.Free;
+
+   acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
+   lblModuleName.Visible := acCoreConfigure.Visible;                           // This control has no meaning for non listener apps
+   if acCoreConfigure.Visible then begin
+      acCoreConfigure.ImageIndex := K_IMG_PREFERENCE;
+      TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
+   end;
+end;
+
+procedure TFrmTemplate.FormShow(Sender: TObject);
+begin
+   inherited;
+   acAppConfigure.Visible := Assigned(acAppConfigure.OnExecute);
+   mnuConfigure.Visible := acAppConfigure.Visible or acCoreConfigure.Visible;
+end;
+
 procedure TFrmTemplate.acAboutExecute(Sender: TObject);
 const license = 'license.txt';
       readme  = 'readme.txt';
@@ -101,24 +131,9 @@ begin
    ShowDlgConfig;
 end;
 
-procedure TFrmTemplate.acQuitExecute(Sender: TObject);
-begin
-   Close;
-end;
-
 procedure TFrmTemplate.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
    CanClose := (Application.MessageBox('Do you want to quit ?', 'Confirm', MB_YESNO) = idYes)
-end;
-
-procedure TFrmTemplate.ToolButton9Click(Sender: TObject);
-begin
-   xPLMenu.PopUp;
-end;
-
-procedure TFrmTemplate.AppButtonClick(Sender: TObject);
-begin
-   AppMenu.Popup;
 end;
 
 procedure TFrmTemplate.AddSubMenuElmt(const aColl : TxPLCustomCollection; const aName : string);
@@ -136,56 +151,17 @@ begin
     end;
 end;
 
-procedure TFrmTemplate.FormCreate(Sender: TObject);
-var sl : TxPLCustomCollection;
-begin
-   ToolBar.Images := xPLGUIResource.Images16;
-   xPLMenu.Images := ToolBar.Images;
-   AppMenu.Images := ToolBar.Images;
-   AppMenu.Items.Clear;
-
-   XMLPropStorage.FileName := xPLApplication.Folders.DeviceDir + 'settings.xml';
-   XMLPropStorage.Restore;
-
-   lblModuleName.Link.TIObject := xPLApplication.Adresse;
-   lblModuleName.Link.TIPropertyName:= 'RawxPL';
-
-   if xPLApplication is TxPLCustomListener then
-      TxPLCustomListener(xPLApplication).OnxPLJoinedNet := @OnJoinedEvent;
-   lblModuleName.Visible := (xPLApplication is TxPLCustomListener);            // This control has no meaning for non listener apps
-
-   xPLApplication.OnLogEvent := @OnLogEvent;
-
-   Caption := xPLApplication.AppName;
-
-   sl := xPLApplication.Settings.GetxPLAppList;
-      AddSubMenuElmt(sl,'basicset');
-      AddSubMenuElmt(sl,'vendfile');
-      AddSubMenuElmt(sl,'piedit');
-      AddSubMenuElmt(sl,'sender');
-      AddSubMenuElmt(sl,'logger');
-   sl.Free;
-
-   acCoreConfigure.Visible := (xPLApplication is TxPLCustomListener);
-   if acCoreConfigure.Visible then acCoreConfigure.ImageIndex := K_IMG_PREFERENCE;
-   AppButton.Glyph.Assign(Application.Icon);
-end;
-
 procedure TFrmTemplate.OnJoinedEvent;
-var picture_index : integer;
 begin
-   with TxPLCustomListener(xPLApplication) do begin
-      if ConnectionStatus = connected then picture_index := K_IMG_RECONNECT
-                                      else picture_index := K_IMG_DISCONNECT;
-      xPLGUIResource.Images16.GetBitmap(picture_index,imgBullet.Picture.Bitmap);
-   end;
+   if TxPLCustomListener(xPLApplication).ConnectionStatus = connected
+      then imgStatus.ImageIndex := K_IMG_RECONNECT
+      else imgStatus.ImageIndex := K_IMG_DISCONNECT;
 end;
 
 procedure TFrmTemplate.OnLogEvent(const aString : string);
 begin
-   if Assigned(StatusBar.Panels) then
-      StatusBar.Panels[1].Text := aString;
+   LblLog.Caption := aString;
 end;
 
 end.
-
+

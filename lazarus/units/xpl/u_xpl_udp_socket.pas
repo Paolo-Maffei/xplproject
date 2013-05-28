@@ -18,6 +18,7 @@ uses Classes
      , IdUDPServer
      , IdSocketHandle
      , u_xpl_common
+     , uIP
      ;
 
 type // TxPLUDPClient =========================================================
@@ -38,19 +39,41 @@ type // TxPLUDPClient =========================================================
            fOnReceived : TStrParamEvent;
 
         protected
+           function InternalGetUsableAddress(const aIPAdd : TIPAddress) : string; virtual; abstract;
+           function InternalCheckIncoming(const {%H-}aPeerIP : string) : boolean; virtual;
+           function InternalGetMaxBufferSize : integer; virtual; abstract;
            procedure DoUDPRead({%H-}AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle); override;
            procedure DoOnUDPException({%H-}AThread: TIdUDPListenerThread; {%H-}ABinding: TIdSocketHandle; const AMessage : String; const {%H-}AExceptionClass : TClass); override;
+           procedure AfterBind(Sender: TObject);
+           procedure BeforeBind(AHandle: TIdSocketHandle);
 
         public
            constructor Create(const AOwner: TComponent; const aMinPort : integer = XPL_MIN_PORT; const aMaxPort : integer = XPL_MAX_PORT); reintroduce;
 
         published
            property OnReceived : TStrParamEvent read fOnReceived write fOnReceived;
+     end;
 
+     // THubServer ============================================================
+     THubServer = class(TxPLUDPServer)
+     protected
+         function InternalGetUsableAddress(const aIPAdd : TIPAddress) : string; override;
+         function InternalCheckIncoming(const aPeerIP : string) : boolean; override;
+         function InternalGetMaxBufferSize : integer; override;
+     public
+        constructor Create(const AOwner: TComponent); reintroduce;
+     end;
+
+     // TAppServer ============================================================
+     TAppServer = class(TxPLUDPServer)
+     protected
+         function InternalGetUsableAddress(const aIPAdd : TIPAddress) : string; override;
+         function InternalGetMaxBufferSize : integer; override;
      end;
 
 implementation //==============================================================
 uses  IdStack
+      , IdUDPBase
       , SysUtils
       , StrUtils
       , DateUtils
@@ -59,10 +82,9 @@ uses  IdStack
       , u_xpl_application
       ;
 
-var LocalAddresses : TStringList;
-
 // ============================================================================
 const K_SENDING_TEMPO = 50;                                                    // Temporisation to avoid message flooding
+      XPL_UDP_BASE_PORT= 3865;
       K_SIZE_ERROR    = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
       K_USING_DEFAULT = 'xPL network settings not set, using defaults';
 
@@ -89,22 +111,59 @@ begin
       xPLApplication.Log(etWarning,K_SIZE_ERROR,[ClassName, length(aData), XPL_MAX_MSG_SIZE])
 end;
 
+// TxPLHubServer ==============================================================
+constructor THubServer.Create(const AOwner: TComponent);
+begin
+   inherited Create(aOwner,XPL_UDP_BASE_PORT,XPL_UDP_BASE_PORT);
+end;
+
+function THubServer.InternalGetUsableAddress(const aIPAdd: TIPAddress): string;
+begin                                                                          // hub will listen on broadcast addresses
+   Result := aIPAdd.BroadCast;
+end;
+
+function THubServer.InternalCheckIncoming(const aPeerIP: string): boolean;
+begin
+   with xPLApplication.Settings do
+        Result := ListenToAny or
+                  (ListenToLocal and Assigned(LocalIPAddresses.GetByIP(aPeerIP))) or
+                  (AnsiPos(aPeerIP,ListenToAddresses) > 0);
+   Result := Result and inherited;
+end;
+
+function THubServer.InternalGetMaxBufferSize: integer;
+begin
+   Result := ID_UDP_BUFFERSIZE;                                                // Remove xPL limit at hub level : the hub should relay without limiting to 1500 bytes
+end;
+
+// TxPLAppServer ==============================================================
+function TAppServer.InternalGetUsableAddress(const aIPAdd: TIPAddress): string;
+begin                                                                         // apps will listen on specific addresses
+   Result := aIPAdd.Address;
+end;
+
+function TAppServer.InternalGetMaxBufferSize: integer;
+begin
+   Result := XPL_MAX_MSG_SIZE;
+end;
+
 // TxPLUDPServer ===============================================================
 constructor TxPLUDPServer.Create(const AOwner: TComponent; const aMinPort : integer = XPL_MIN_PORT; const aMaxPort : integer = XPL_MAX_PORT);
-var address : string;
+var address : TIPAddress;
 begin
    inherited Create(aOwner);
-
-   BufferSize := XPL_MAX_MSG_SIZE;
+   BufferSize := InternalGetMaxBufferSize;
    DefaultPort := 0;
-
+   OnUDPException:=@DoOnUDPException;
+   OnAfterBind:=@AfterBind;
+   OnBeforeBind:=@BeforeBind;
    with TxPLApplication(aOwner).Settings do begin
       if not IsValid then xPLApplication.Log(etWarning,K_USING_DEFAULT);
 
-      for address in LocalAddresses do
-          if ListenOnAll or (address = ListenOnAddress) then
+      for address in LocalIPAddresses do
+          if ListenOnAll or (address.Address = ListenOnAddress) then
           with Bindings.Add do begin
-             IP := address;
+             IP := InternalGetUsableAddress(Address);
              ClientPortMin := aMinPort;
              ClientPortMax := aMaxPort;
           end;
@@ -113,14 +172,15 @@ begin
    Active := (Bindings.Count > 0);
 end;
 
+function TxPLUDPServer.InternalCheckIncoming(const aPeerIP: string): boolean;
+begin
+   Result := Assigned(fOnReceived);
+end;
+
 procedure TxPLUDPServer.DoUDPRead(AThread: TIdUDPListenerThread; const AData: TIdBytes; ABinding: TIdSocketHandle);
 begin
-   with xPLApplication.Settings do
-      if Assigned(fOnReceived) and (
-         (ListenToAny or                                                       // Don't check, accept all
-         (ListenToLocal and (LocalAddresses.IndexOf(aBinding.PeerIP) >= 0)) or // or only accept local to this machine senders
-         (AnsiPos(aBinding.PeerIP, ListenToAddresses) > 0)))                   // or sender present in specified list
-      then fOnReceived(BytesToString(AData));
+   if InternalCheckIncoming(aBinding.PeerIP)
+      then fOnReceived(BytesToString(aData));
 end;
 
 procedure TxPLUDPServer.DoOnUDPException(AThread: TIdUDPListenerThread; ABinding: TIdSocketHandle; const AMessage: String; const AExceptionClass: TClass);
@@ -128,12 +188,15 @@ begin
    xPLApplication.Log(etWarning,'%s : %s',[ClassName,AnsiReplaceStr(aMessage,#13,' ')]);
 end;
 
-initialization // =============================================================
-   LocalAddresses := TStringList.Create;
-   GetIPAddresses(LocalAddresses);
+procedure TxPLUDPServer.AfterBind(Sender: TObject);
+begin
+   xPLApplication.Log(etInfo,'Connected',[]);;
+end;
 
-finalization // ===============================================================
-   LocalAddresses.Free;
+procedure TxPLUDPServer.BeforeBind(AHandle: TIdSocketHandle);
+begin
+   xPLApplication.Log(etInfo,'Binding on %s:%d',[aHandle.IP,aHandle.ClientPortMin]);
+end;
 
 end.
 

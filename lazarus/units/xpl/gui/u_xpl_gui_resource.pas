@@ -129,7 +129,6 @@ initialization // =============================================================
    {$I menu.lrs}     // Interface icons
    {$I class.lrs}    // Message classes
    {$I msgtype.lrs}  // Message types
-   {$I objects.lrs}  // Object classes
    xPLGUIResource := TxPLGUIResource.Create;
 
 finalization // ===============================================================

@@ -8,8 +8,8 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
-        <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\xpl\xml;..\..\xpl\gui;$(LazarusDir)\lcl\units\$(TargetCPU)-$(TargetOS);.."/>
-        <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+        <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\xpl\gui;..\xml;..\..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc;..\..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc\base"/>
+        <UnitOutputDirectory Value="\home\glhopital\lazout"/>
       </SearchPaths>
       <Parsing>
         <SyntaxOptions>
@@ -37,44 +37,42 @@
         <UnitName Value="v_msgtype_radio"/>
       </Item2>
       <Item3>
-        <Filename Value="v_class_combo.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="v_class_combo"/>
-      </Item3>
-      <Item4>
-        <Filename Value="..\..\general\MStringGrid.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="MStringGrid"/>
-      </Item4>
-      <Item5>
-        <Filename Value="v_msgbody_stringgrid.pas"/>
-        <HasRegisterProc Value="True"/>
-        <UnitName Value="v_msgbody_stringgrid"/>
-      </Item5>
-      <Item6>
         <Filename Value="ucontrols.pas"/>
         <HasRegisterProc Value="True"/>
         <UnitName Value="uControls"/>
+      </Item3>
+      <Item4>
+        <Filename Value="v_msgbody_stringgrid.pas"/>
+        <HasRegisterProc Value="True"/>
+        <UnitName Value="v_msgbody_stringgrid"/>
+      </Item4>
+      <Item5>
+        <Filename Value="frame_config.lfm"/>
+        <Type Value="LFM"/>
+      </Item5>
+      <Item6>
+        <Filename Value="frame_config.pas"/>
+        <UnitName Value="frame_config"/>
       </Item6>
     </Files>
     <Type Value="RunAndDesignTime"/>
-    <RequiredPkgs Count="3">
+    <RequiredPkgs Count="2">
       <Item1>
         <PackageName Value="sup_object"/>
       </Item1>
       <Item2>
         <PackageName Value="pl_dcpcomp"/>
       </Item2>
-      <Item3>
-        <PackageName Value="pl_indycomp"/>
-      </Item3>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir)"/>
+      <UnitPath Value="$(PkgOutDir);..;."/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>
       <IgnoreBinaries Value="False"/>
     </PublishOptions>
+    <CustomOptions Items="ExternHelp" Version="2">
+      <_ExternHelp Items="Count"/>
+    </CustomOptions>
   </Package>
 </CONFIG>

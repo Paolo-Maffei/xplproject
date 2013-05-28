@@ -246,7 +246,7 @@ var child : TDOMNode;
 begin
    child := fRootNode.FirstChild;
    repeat
-      if TDOMElement(Child).GetAttribute(fKeyName) = aName then begin
+      if TDOMElement(Child).GetAttribute(UnicodeString(fKeyName)) = UnicodeString(aName) then begin
          fRootNode.RemoveChild(child);
          child := nil;
       end else child := child.NextSibling;

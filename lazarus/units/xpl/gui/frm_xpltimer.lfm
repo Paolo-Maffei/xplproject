@@ -1,43 +1,43 @@
 object frmxPLTimer: TfrmxPLTimer
-  Left = 4
+  Left = 79
   Height = 272
-  Top = 222
+  Top = 457
   Width = 351
   BorderStyle = bsToolWindow
   Caption = 'frmxPLTimer'
   ClientHeight = 272
   ClientWidth = 351
   OnShow = FormShow
-  LCLVersion = '0.9.31'
+  LCLVersion = '1.1'
   object Label3: TLabel
     Left = 16
-    Height = 16
+    Height = 17
     Top = 40
-    Width = 42
+    Width = 50
     Caption = 'Name : '
     ParentColor = False
   end
   object Label2: TLabel
     Left = 17
-    Height = 16
+    Height = 17
     Top = 136
-    Width = 53
+    Width = 66
     Caption = 'Duration :'
     ParentColor = False
   end
   object Label5: TLabel
     Left = 16
-    Height = 16
+    Height = 17
     Top = 168
-    Width = 62
+    Width = 77
     Caption = 'Frequence :'
     ParentColor = False
   end
   object Label6: TLabel
     Left = 16
-    Height = 16
+    Height = 17
     Top = 104
-    Width = 72
+    Width = 88
     Caption = 'Timer Mode :'
     ParentColor = False
   end
@@ -94,20 +94,19 @@ object frmxPLTimer: TfrmxPLTimer
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFF
         FF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00FFFFFF00
       }
-      NumGlyphs = 0
       OnClick = sbOkClick
     end
   end
   object tiName: TTIEdit
     Left = 96
-    Height = 23
+    Height = 27
     Top = 40
     Width = 152
     TabOrder = 1
   end
   object tiMode: TTIComboBox
     Left = 96
-    Height = 23
+    Height = 29
     Top = 104
     Width = 152
     HistoryCaseSensitive = False
@@ -117,21 +116,21 @@ object frmxPLTimer: TfrmxPLTimer
   end
   object tiDuration: TTISpinEdit
     Left = 96
-    Height = 23
+    Height = 27
     Top = 136
     Width = 50
     TabOrder = 3
   end
   object tiFrequence: TTISpinEdit
     Left = 96
-    Height = 23
+    Height = 27
     Top = 168
     Width = 50
     TabOrder = 4
   end
   object tiStatus: TTIComboBox
     Left = 96
-    Height = 23
+    Height = 29
     Top = 72
     Width = 152
     HistoryCaseSensitive = False
@@ -140,24 +139,24 @@ object frmxPLTimer: TfrmxPLTimer
   end
   object lblMode: TLabel
     Left = 16
-    Height = 16
+    Height = 17
     Top = 72
-    Width = 33
+    Width = 43
     Caption = 'Status'
     ParentColor = False
   end
   object Label1: TLabel
     Left = 17
-    Height = 16
+    Height = 17
     Top = 200
-    Width = 55
+    Width = 70
     Caption = 'Start Time'
     ParentColor = False
   end
   object tiStart: TTILabel
     Left = 98
-    Height = 1
+    Height = 17
     Top = 202
-    Width = 1
+    Width = 44
   end
-end
+end

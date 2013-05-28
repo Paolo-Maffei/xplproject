@@ -83,12 +83,12 @@ type // THeartBeatMsg =========================================================
         property From : string read Get_From write Set_From;
      end;
 
-     TSensorBasic = class(TxPLMessage)
+     { TTimerBasic }
+
+     TTimerBasic = class(TxPLMessage)
      private
        function Get_Device : string;
        function Get_Current : string;
-       function Get_Type : string;
-       procedure Set_Type(const AValue: string);
        procedure Set_Current(const AValue: string);
        procedure Set_Device(const aValue : string);
      public
@@ -96,12 +96,49 @@ type // THeartBeatMsg =========================================================
      published
         property Device  : string read Get_Device write Set_Device;
         property Current : string read Get_Current write Set_Current;
-        property Type_  : string read Get_Type write Set_Type;
      end;
+
+     { TSensorBasic }
+     // http://xplproject.org.uk/wiki/index.php?title=Schema_-_SENSOR.BASIC
+     TSensorType = ( utUndefined, utBattery,  utCount, utCurrent, utDirection,
+                              utDistance,  utEnergy,   utFan,   utGeneric, utHumidity,
+                              utInput,     utOutput,   utPower, utPressure,utSetpoint,
+                              utSpeed,     utTemp,     utUV,    utVoltage, utVolume,
+                              utWeight, utPresence );
+const     TSensorTypeLib : array[TSensorType] of string = ( 'undefined', 'battery',  'count', 'current', 'direction',
+                            'distance',  'energy',   'fan',   'generic', 'humidity',
+                            'input',     'output',   'power', 'pressure','setpoint',
+                            'speed',     'temp',     'uv',    'voltage', 'volume',
+                            'weight','presence' );
+
+ TSensorUnits : Array[TSensorType] of String = ('','%','','A','°','m','kWh','rpm',
+                                             '','%','','','kW','N/m²','°C','mph',
+                                             '°C','','V','m3','kg','');
+type TSensorBasic = class(TxPLMessage)
+     private
+       function Get_Device : string;
+       function Get_Current : string;
+       function Get_Type : TSensorType;
+       function Get_Units: string;
+       procedure Set_Type(const AValue: TSensorType);
+       procedure Set_Current(const AValue: string);
+       procedure Set_Device(const aValue : string);
+       procedure Set_Units(const AValue: string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+        function SensorName : string;
+     published
+        property Device  : string read Get_Device write Set_Device;
+        property Current : string read Get_Current write Set_Current;
+        property Type_  : TSensorType read Get_Type write Set_Type;
+        property Units : string read Get_Units write Set_Units;
+     end;
+
+
 
      { TConfigMessageFamily }
 
-     TConfigMessageFamily = class(TxPLMessage)
+type     TConfigMessageFamily = class(TxPLMessage)
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      end;
 
@@ -137,13 +174,12 @@ type // THeartBeatMsg =========================================================
         function  get_newconf: string;
         procedure set_interval(const AValue: integer);
         procedure set_newconf(const AValue: string);
+        function  GetMultiValued(const aValue : string) : TStringList;
+        procedure SlChanged(Sender : TObject);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
         destructor  Destroy; override;
         function  IsCoreValue(const aIndex : integer) : boolean;
-
-        procedure SlChanged(Sender : TObject);
-        function  GetMultiValued(const aValue : string) : TStringList;
      published
         property newconf : string read get_newconf write set_newconf stored false;
         property interval: integer read get_interval write set_interval stored false;
@@ -296,9 +332,43 @@ begin
      aMsg.Schema.RawxPL = 'rcvmsg.basic' then result := TReceivemsgBasic.Create(nil,aRawxPL)
    else if
      aMsg.Schema.RawxPL = 'sensor.basic' then result := TSensorBasic.Create(nil,aRawxPL)
+     else if
+       aMsg.Schema.RawxPL = 'timer.basic' then result := TTimerBasic.Create(nil,aRawxPL)
    else result := aMsg;
 
    if result<>aMsg then aMsg.Free;
+end;
+
+{ TTimerBasic }
+function TTimerBasic.Get_Device: string;
+begin
+   result := Body.GetValueByKey('device','');
+end;
+
+function TTimerBasic.Get_Current: string;
+begin
+   result := Body.GetValueByKey('current','');
+end;
+
+procedure TTimerBasic.Set_Current(const AValue: string);
+begin
+   Body.SetValueByKey('current',aValue);
+end;
+
+procedure TTimerBasic.Set_Device(const AValue: string);
+begin
+   Body.SetValueByKey('device',aValue);
+end;
+
+constructor TTimerBasic.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.RawxPL := 'timer.basic';
+      Target.IsGeneric := True;
+      MessageType      := stat;
+      Body.AddKeyValuePairs( ['device','current'],['','']);
+   end;
 end;
 
 // TConfigMessageFamily =======================================================
@@ -398,7 +468,11 @@ begin
 end;
 
 destructor TConfigResponseCmnd.Destroy;
+var i : integer;
 begin
+   for i:=0 to Pred(fMultivalued.Count) do
+       if Assigned(fMultiValued.Objects[i]) then
+            TStringList(fMultiValued.Objects[i]).Free;
    fMultiValued.Free;
    inherited Destroy;
 end;
@@ -487,7 +561,7 @@ begin
    result := AnsiIndexStr(Body.Keys[aIndex],K_CONFIG_RESPONSE_KEYS) <>-1;
 end;
 
-{ TSendmsgBasic }
+// TSensorBasic ===============================================================
 constructor TSensorBasic.Create(const aOwner: TComponent; const aRawxPL: string);
 begin
    inherited Create(aOwner,aRawxPL);
@@ -499,14 +573,37 @@ begin
    end;
 end;
 
+function TSensorBasic.SensorName: string;
+begin
+//   result := Source.AsFilter + '.' + Device;
+   result := Device;
+end;
+
 function TSensorBasic.Get_Device: string;
 begin
    result := Body.GetValueByKey('device','');
 end;
 
-function TSensorBasic.Get_Type: string;
+procedure TSensorBasic.Set_Device(const AValue: string);
 begin
-   result := Body.GetValueByKey('type','');
+   Body.SetValueByKey('device',aValue);
+end;
+
+function TSensorBasic.Get_Type: TSensorType;
+var s : string;
+    i : integer;
+begin
+   s := Body.GetValueByKey('type','');
+   i := AnsiIndexStr(AnsiLowerCase(s),TSensorTypeLib);
+   if i=-1 then i := 0;
+   Result := TSensorType(i);
+end;
+
+procedure TSensorBasic.Set_Type(const AValue: TSensorType);
+var {%H-}foo : string;
+begin
+   Body.SetValueByKey('type',TSensorTypeLib[aValue]);
+   foo := Get_Units;                                                           // Will set the default unit for current value
 end;
 
 function TSensorBasic.Get_Current: string;
@@ -519,17 +616,22 @@ begin
    Body.SetValueByKey('current',aValue);
 end;
 
-procedure TSensorBasic.Set_Type(const AValue: string);
+procedure TSensorBasic.Set_Units(const AValue: string);
 begin
-   Body.SetValueByKey('type',aValue);
+   Body.SetValueByKey('units',aValue);
 end;
 
-procedure TSensorBasic.Set_Device(const AValue: string);
+function TSensorBasic.Get_Units: string;
 begin
-   Body.SetValueByKey('device',aValue);
+   result := Body.GetValueByKey('units','');
+   if AnsiSameText(result,'') then begin                                       // Si aucune unité indiquée, on renvoie celle par
+      result  := TSensorUnits[Type_];                                          // défaut pour le type courant
+      if not AnsiSameText(result,'') then
+         Set_Units(result);                                                    // on indique l'unité dans le body au passage
+   end;
 end;
 
-{ TSendmsgBasic }
+// TSendmsgBasic ==============================================================
 constructor TSendmsgBasic.Create(const aOwner: TComponent; const aRawxPL: string);
 begin
    inherited Create(aOwner,aRawxPL);
@@ -915,4 +1017,4 @@ begin
 end;
 
 end.
-
+

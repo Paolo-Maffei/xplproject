@@ -1,163 +1,127 @@
 object TMessageFrame: TTMessageFrame
   Left = 0
-  Height = 267
+  Height = 321
   Top = 0
-  Width = 379
-  ClientHeight = 267
-  ClientWidth = 379
+  Width = 525
+  ClientHeight = 321
+  ClientWidth = 525
   TabOrder = 0
-  DesignLeft = 1474
-  DesignTop = 407
-  object Label5: TLabel
-    Left = 4
-    Height = 16
-    Top = 8
-    Width = 28
-    Caption = 'Type'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
+  DesignLeft = 102
+  DesignTop = 164
   object Image2: TImage
-    Left = 224
+    Left = 487
     Height = 25
     Top = 8
-    Width = 24
-  end
-  object Label7: TLabel
-    Left = 4
-    Height = 16
-    Top = 40
-    Width = 40
-    Caption = 'Source'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object edtSource: TTIEdit
-    Left = 56
-    Height = 23
-    Top = 40
-    Width = 317
-    Anchors = [akTop, akLeft, akRight]
-    TabOrder = 1
-  end
-  object Label8: TLabel
-    Left = 4
-    Height = 16
-    Top = 68
-    Width = 38
-    Caption = 'Target'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object edtTarget: TTIEdit
-    Left = 56
-    Height = 23
-    Top = 68
-    Width = 226
-    Anchors = [akTop, akLeft, akRight]
-    TabOrder = 2
-  end
-  object Label9: TLabel
-    Left = 4
-    Height = 16
-    Top = 97
-    Width = 45
-    Caption = 'Schema'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object edtSchema: TTIEdit
-    Left = 56
-    Height = 23
-    Top = 97
-    Width = 164
-    OnEditingDone = edtSchemaEditingDone
-    OnExit = edtSchemaEditingDone
-    TabOrder = 4
+    Width = 25
+    Anchors = [akTop, akRight]
+    Center = True
   end
   object Image1: TImage
-    Left = 224
+    Left = 487
+    Height = 25
+    Top = 104
+    Width = 25
+    Anchors = [akTop, akRight]
+    Center = True
+  end
+  object edtSource: TLSEdit
+    Left = 8
+    Height = 27
+    Top = 40
+    Width = 504
+    Anchors = [akTop, akLeft, akRight]
+    FocusColor = clMoneyGreen
+    PlaceHolder = 'Source'
+    OnEditingDone = edtSourceEditingDone
+    TabOrder = 1
+    ValidationColor = clGradientActiveCaption
+    ValidationType = vtExit
+  end
+  object cbTarget: TLSComboBox
+    Left = 8
+    Height = 29
+    Top = 72
+    Width = 504
+    Anchors = [akTop, akLeft, akRight]
+    ItemHeight = 0
+    OnEditingDone = cbTargetEditingDone
+    TabOrder = 2
+    Text = 'Target'
+  end
+  object cbSchema: TLSComboBox
+    Left = 8
+    Height = 29
+    Top = 104
+    Width = 472
+    Anchors = [akTop, akLeft, akRight]
+    ItemHeight = 0
+    OnEditingDone = cbSchemaEditingDone
+    TabOrder = 3
+    Text = 'Schema'
+  end
+  object sbMessage: TStatusBar
+    Left = 0
     Height = 21
-    Top = 99
-    Width = 24
+    Top = 300
+    Width = 525
+    Panels = <    
+      item
+        Text = 'Hop'
+        Width = 50
+      end    
+      item
+        Text = 'X'
+        Width = 30
+      end    
+      item
+        Text = '| Size'
+        Width = 40
+      end    
+      item
+        Text = 'XXXXY'
+        Width = 50
+      end    
+      item
+        Text = ' | TimeStamp'
+        Width = 100
+      end    
+      item
+        Width = 200
+      end>
+    SimplePanel = False
+    SizeGrip = False
   end
-  object Label10: TLabel
-    Left = 4
-    Height = 16
-    Top = 128
-    Width = 29
-    Caption = 'Body'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object edtBody: TTIMemo
-    Left = 56
-    Height = 99
-    Top = 128
-    Width = 316
+  object edtBody: TLSMemo
+    Left = 8
+    Height = 160
+    Top = 136
+    Width = 504
     Anchors = [akTop, akLeft, akRight, akBottom]
     Color = clNone
-    Link.Options = [ploReadOnIdle]
     OnEditingDone = edtBodyEditingDone
     ScrollBars = ssAutoBoth
+    TabOrder = 5
     WordWrap = False
   end
-  object cbMsgType: TTIComboBox
-    Left = 56
-    Height = 23
+  object cbMsgType: TLSComboBox
+    Left = 8
+    Height = 27
     Top = 8
-    Width = 164
-    HistoryCaseSensitive = False
-    MaxHistoryCount = 0
-    OnEditingDone = cbMsgTypeEditingDone
+    Width = 472
+    Anchors = [akTop, akLeft, akRight]
+    AutoComplete = True
+    AutoCompleteText = [cbactEnabled, cbactEndOfLineComplete, cbactSearchAscending]
+    AutoDropDown = True
+    DropDownCount = 3
+    ItemHeight = 0
+    Items.Strings = (
+      'xpl-cmnd'
+      'xpl-stat'
+      'xpl-trig'
+    )
+    OnChange = cbMsgTypeEditingDone
+    Required = True
+    Style = csDropDownList
     TabOrder = 0
   end
-  object ckGeneric: TTICheckBox
-    Left = 290
-    Height = 19
-    Top = 68
-    Width = 78
-    Anchors = [akTop, akRight]
-    Caption = 'Send To all'
-    PropertyNameAsCaption = False
-    TabOrder = 3
-  end
-  object Label6: TLabel
-    Left = 4
-    Height = 16
-    Top = 241
-    Width = 24
-    Anchors = [akLeft, akBottom]
-    Caption = 'Hop'
-    Font.Style = [fsBold]
-    ParentColor = False
-    ParentFont = False
-  end
-  object edtHop: TTISpinEdit
-    Left = 56
-    Height = 23
-    Top = 234
-    Width = 50
-    Anchors = [akLeft, akBottom]
-    TabOrder = 6
-  end
-  object lblTS: TTILabel
-    Left = 120
-    Height = 1
-    Top = 256
-    Width = 1
-    Anchors = [akLeft, akBottom]
-  end
-  object lblSize: TTILabel
-    Left = 232
-    Height = 1
-    Top = 256
-    Width = 1
-    Anchors = [akLeft, akBottom]
-  end
-end
+end

@@ -7,6 +7,7 @@ unit u_xpl_custom_message;
  ==============================================================================
  0.95 : First Release
  1.0  : Now descendant of TxPLHeader
+ 1.5  : Added fControlInput property to override read/write controls needed for OPC
  }
 
 {$ifdef fpc}
@@ -30,7 +31,8 @@ type { TxPLCustomMessage =====================================================}
         function  Get_RawXPL: string;
         function  Get_Size: integer;
         procedure Set_RawXPL(const AValue: string);
-
+     protected
+        procedure Set_ControlInput(const AValue: boolean); override;
      public
         constructor Create(const aOwner : TComponent; const aRawxPL : string = ''); reintroduce;
 
@@ -43,7 +45,6 @@ type { TxPLCustomMessage =====================================================}
 
         procedure LoadFromFile(const aFileName : string);
         procedure SaveToFile(const aFileName : string);
-
      published
         property Body   : TxPLBody read fBody  ;
         property RawXPL : string   read Get_RawXPL  write Set_RawXPL stored false;
@@ -121,11 +122,17 @@ var LeMessage : string;
     HeadEnd, BodyStart, BodyEnd : integer;
 begin
    LeMessage        := AnsiReplaceText(aValue,#13,'');                         // Delete all CR
-   HeadEnd          := AnsiPos('}',LeMessage);
-   BodyStart        := Succ(PosEx('{',LeMessage,HeadEnd));
+   HeadEnd          := AnsiPos(#10'}',LeMessage) + 1;
+   BodyStart        := Succ(PosEx('{'#10,LeMessage,HeadEnd));
    BodyEnd          := LastDelimiter('}',LeMessage);
    inherited RawxPL := AnsiLeftStr(LeMessage,BodyStart-2);
    Body.RawxPL      := Copy(LeMessage,BodyStart,BodyEnd-BodyStart);
+end;
+
+procedure TxPLCustomMessage.Set_ControlInput(const AValue: boolean);
+begin
+   inherited Set_ControlInput(AValue);
+   Body.ControlInput := aValue;
 end;
 
 procedure TxPLCustomMessage.SaveToFile(const aFileName: string);

@@ -17,19 +17,19 @@ TxPLMsgTypeRadio = class(TRadioGroup)
         //function GetIsValid: boolean;
         //function GetMessageType : string;
         //procedure SetMessageType(const AValue: string);
-        procedure SetShowAny(const AValue: boolean);
+        //procedure SetShowAny(const AValue: boolean);
      public
         constructor create(aOwner : TComponent); override;
         //property ItemIndex : tsMsgType read GetMessageType write SetMessageType;
         //property IsValid   : boolean         read GetIsValid;
      published
-        property bShowAny : boolean read FShowAny write SetShowAny;
+        property bShowAny : boolean read FShowAny; // write SetShowAny;
      end;
 
      procedure Register;
 
 implementation
-uses u_xpl_common;
+//uses u_xpl_common;
 
 procedure Register;
 begin
@@ -53,16 +53,16 @@ begin
   inherited ItemIndex := Ord(tsMsgType);
 end;*)
 
-procedure TxPLMsgTypeRadio.SetShowAny(const AValue: boolean);
-var mt : TxPLMessageType;
-begin
-  FShowAny := aValue;
-  Items.Clear ;
-  for mt:=Low(TxPLMessageType) to High(TxPLMessageType) do
-      Items.Add(MsgTypeToStr(mt));
-  if FShowAny then Items.Add('Any');
-  Columns := Items.Count ;
-end;
+//procedure TxPLMsgTypeRadio.SetShowAny(const AValue: boolean);
+//var mt : TxPLMessageType;
+//begin
+//  FShowAny := aValue;
+//  Items.Clear ;
+//  for mt:=Low(TxPLMessageType) to High(TxPLMessageType) do
+//      Items.Add(MsgTypeToStr(mt));
+//  if FShowAny then Items.Add('Any');
+//  Columns := Items.Count ;
+//end;
 
 constructor TxPLMsgTypeRadio.create(aOwner: TComponent);
 begin
@@ -73,4 +73,4 @@ begin
 end;
 
 end.
-
+

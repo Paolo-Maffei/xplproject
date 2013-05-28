@@ -10,6 +10,7 @@ unit u_xPL_Header;
  1.00 : Suppressed usage of uRegExTools to correct bug #FS47
  1.1    Switched schema from Body to Header
         optimizations in SetRawxPL to avoid inutile loops
+ 1.5  : Added fControlInput property to override read/write controls needed for OPC
  }
 
 {$ifdef fpc}
@@ -33,6 +34,7 @@ type // TxPLHeader ============================================================
         fMsgType : TxPLMessageType;
         fHop     : integer;
 
+        function Get_ControlInput: boolean;
         function  Get_RawxPL : string;
         procedure Set_Hop(const AValue: integer);
 
@@ -44,6 +46,7 @@ type // TxPLHeader ============================================================
      protected
         procedure MessageTypeFromStr(const aString : string); dynamic;
         function MessageTypeToStr : string; dynamic;
+        procedure Set_ControlInput(const AValue: boolean); dynamic;
      public
         constructor Create(aOwner : TComponent; const aFilter : string = ''); reintroduce;
         destructor  Destroy; override;
@@ -58,8 +61,9 @@ type // TxPLHeader ============================================================
         function    TargetFilter : string;
         function    HeaderFilter : string;
 
-        property    RawxPL      : string         read Get_RawxPL write Set_RawxPL;
+        property RawxPL : string read Get_RawxPL write Set_RawxPL;
         property MsgTypeAsStr : string read MessageTypeToStr write MessageTypeFromStr;
+        property ControlInput : boolean read Get_ControlInput write Set_ControlInput;
      published
         property MessageType : TxPLMessageType   read fMsgType write Set_MessageType;
         property hop         : integer           read fHop     write Set_Hop;
@@ -163,6 +167,18 @@ begin
                      [ MsgTypeAsStr, Hop, Source.RawxPL, Target.RawxPL, Schema.RawxPL ]);
 end;
 
+function TxPLHeader.Get_ControlInput: boolean;
+begin
+   result := Source.ControlInput;
+end;
+
+procedure TxPLHeader.Set_ControlInput(const AValue: boolean);
+begin
+   Source.ControlInput := aValue;
+   Target.ControlInput := aValue;
+   Schema.ControlInput := aValue;
+end;
+
 procedure TxPLHeader.Set_Hop(const AValue: integer);
 begin                                                                           // Rule of xPL  : hop is <= 9
    if (aValue in [1..9]) then fHop := aValue;
@@ -196,7 +212,7 @@ begin
    ResetValues;
 
    with TStringList.Create do try
-        DelimitedText:= AnsiReplaceText(AnsiLowerCase(aRawxPL),'}'#10,'schema=');
+        DelimitedText:= AnsiReplaceText(AnsiLowerCase(aRawxPL),#10'}'#10,#10'schema=');
         if Count >= 5 then begin                                                // The message header contains at least enough fields
            MsgTypeAsStr := Strings[0];
            fHop := StrToInt(Values['hop']);

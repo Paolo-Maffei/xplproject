@@ -69,6 +69,7 @@ begin
    MsgName := aCom.name;
    MsgTypeAsStr := K_MSG_TYPE_HEAD + aCom.msg_type;
    Target.IsGeneric := true;
+   source.RawxPL := TCommandsType(aCom.Collection).DV + '.instance' ;
    Schema.RawxPL := aCom.msg_schema;
 
    for item in aCom.Elements do

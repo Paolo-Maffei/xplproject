@@ -5,46 +5,45 @@ unit dlg_config;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, ExtCtrls, Menus, Dlg_Template,
-  frame_config, u_xpl_messages;
+uses Classes, SysUtils, FileUtil, LSControls, LResources, Forms, Controls,
+  Graphics, Dialogs, ComCtrls, ActnList, ExtCtrls, Menus, Dlg_Template, frame_config;
 
-type
-
-  { TDlgConfig }
-
-  TDlgConfig = class(TDlgTemplate)
-    DlgacApply: TAction;
-    frameConfig1: TframeConfig;
-    ToolButton1: TToolButton;
-    procedure DlgacApplyExecute(Sender: TObject);
-  private
-    { private declarations }
-  public
-    { public declarations }
-  end;
+type // TDlgConfig ============================================================
+     TDlgConfig = class(TDlgTemplate)
+        DlgacApply: TAction;
+        BtnApply: TLSBitBtn;
+        frameConfig1: TframeConfig;
+        ToolButton1: TToolButton;
+        procedure DlgacApplyExecute(Sender: TObject);
+        procedure FormCreate(Sender: TObject);
+     end;
 
   procedure ShowDlgConfig;
 
-implementation
-
+implementation // =============================================================
 uses u_xpl_config
      , u_xpl_custom_listener
+     , u_xpl_gui_resource
      , u_xpl_application
+     , u_xpl_messages
      ;
 
 var DlgConfig: TDlgConfig;
 
 // ============================================================================
-procedure ShowDlgConfig; //(const Current : TConfigCurrentStat);
+procedure ShowDlgConfig;
 begin
    if not Assigned(DlgConfig) then Application.CreateForm(TDlgConfig, DlgConfig);
    DlgConfig.frameConfig1.SetConfigCurrent(TxPLCustomListener(xPLApplication).Config.CurrentConfig);
    DlgConfig.ShowModal;
 end;
 
-{ TDlgConfig }
+// TDlgConfig =================================================================
+procedure TDlgConfig.FormCreate(Sender: TObject);
+begin
+   inherited;
+   SetButtonImage(BtnApply,DlgAcApply,K_IMG_DOCUMENT_SAVE);
+end;
 
 procedure TDlgConfig.DlgacApplyExecute(Sender: TObject);
 var Msg : TConfigResponseCmnd;
@@ -58,8 +57,5 @@ begin
    Msg.Free;
 end;
 
-initialization
-  { $ I dlg_config.lrs}
-
 end.
-
+

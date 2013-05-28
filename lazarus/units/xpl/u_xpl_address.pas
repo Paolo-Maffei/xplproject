@@ -31,11 +31,8 @@ type // TxPLAddress ===========================================================
         function  Get_RawxPL : string; virtual;
         procedure Set_VD(const AValue: string);
 
-        class function RandomInstance : string;
-        class function HostNmInstance : string;
-        class function MacAddInstance : string;
-
      public
+
         constructor Create(const axPLAddress : TxPLAddress); overload;
         constructor Create(const aVendor : string = ''; const aDevice : string = ''; const aInstance : string = '' ); overload;
 
@@ -75,7 +72,6 @@ const K_ADDR_ANY_TARGET = '*';
 implementation // =============================================================
 uses SysUtils
      , StrUtils
-     , IdStack
      , u_xpl_application
      , fpc_delphi_compat
      ;
@@ -84,36 +80,20 @@ uses SysUtils
 const   K_DEF_GROUP       = 'xpl-group';
 
 // General Helper function ====================================================
-class function TxPLAddress.RandomInstance : string;
-var n: integer;
-const ss: string = 'abcdefghjkmnpqrstuvwxyz';                                  // list all the charcaters you want to use
-begin
-   Result :='';
-   for n:=1 to 8 do                                                            // Longueur volontairement limitée à 8 chars
-       Result := Result +ss[random(length(ss))+1];
-end;
-
-class function TxPLAddress.HostNmInstance : string;
-begin
-   TIdStack.IncUsage;
-   try
-       Result := AnsiLowerCase(GStack.HostName);
-   finally
-       TIdStack.DecUsage;
-   end;                                                                        // Old method using pwhostname, replaced by Indy
-end;
-
-class function TxPLAddress.MacAddInstance : string;
-begin
-   result := GetMacAddress;                                                    // Another usefull method
-end;
-
 class function TxPLAddress.InitInstanceByDefault : string;
+   function RandomInstance : string;
+   var n: integer;
+   const ss: string = 'abcdefghjkmnpqrstuvwxyz';                                  // list all the charcaters you want to use
+   begin
+      Result :='';
+      for n:=1 to 8 do                                                            // Longueur volontairement limitée à 8 chars
+          Result := Result +ss[random(length(ss))+1];
+   end;
 begin
    case InstanceInitStyle of
         iisRandom     : result := RandomInstance;
-        iisHostName   : result := HostNmInstance;
-        iisMacAddress : result := MacAddInstance;
+        iisHostName   : result := HostName;
+        iisMacAddress : result := GetMacAddress;
    end;
 end;
 
@@ -193,7 +173,7 @@ end;
 
 procedure TxPLTargetAddress.Set_RawxPL(const AValue: string);
 begin
-   if aValue = K_ADDR_ANY_TARGET then ResetValues
+   if (aValue = K_ADDR_ANY_TARGET) and ControlInput then ResetValues
                                  else inherited;
 end;
 
@@ -222,5 +202,4 @@ initialization // =============================================================
    Classes.RegisterClass(TxPLAddress);
    Classes.RegisterClass(TxPLTargetAddress);
 
-end.
-
+end.

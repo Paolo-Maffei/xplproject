@@ -1,30 +1,29 @@
-unit FileName;
+unit datetime;
 interface
 uses
   SysUtils, PropEdits, Controls, Classes;
 
 Type
-  TFileNameProperty = class(TStringProperty)
+  TExDateTimeProperty = class(TDateTimeProperty)
   public
     function GetAttributes: TPropertyAttributes; override;
     procedure Edit; override;
   end;
 
-  //procedure Register;
 
 implementation
 uses
   Dialogs
   , Forms;
 
-    function TFileNameProperty.GetAttributes: TPropertyAttributes;
+    function TExDateTimeProperty.GetAttributes: TPropertyAttributes;
   begin
-    Result := [paDialog]
+    Result := [paValueList,paDialog]
   end {GetAttributes};
 
-  procedure TFileNameProperty.Edit;
+  procedure TExDateTimeProperty.Edit;
   begin
-    with TOpenDialog.Create(Application) do
+    with TOpenDialog.Create(nil) do
     try
       Title := GetName; { name of property as OpenDialog caption }
       Filename := GetValue;
@@ -37,9 +36,5 @@ uses
     end
   end {Edit};
 
-  //procedure Register;
-  //begin
-  //  RegisterPropertyEditor(TypeInfo(TFileName),TxPLAction_Execute, 'FileName', TFileNameProperty);
-  //end;
 end.
-
+

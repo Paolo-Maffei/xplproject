@@ -10,7 +10,7 @@ uses
   {$define usezlib}
   {$define useopenssl}
 {$ENDIF}
-  Classes, SysUtils, IdURI;
+  Classes, IdURI;
 type
   TProtHandler = class(TObject)
   protected
@@ -35,7 +35,7 @@ end;
 
 destructor TProtHandler.Destroy;
 begin
-  FreeAndNil(FLogData);
+  FLogData.Free;
 end;
 
 end.

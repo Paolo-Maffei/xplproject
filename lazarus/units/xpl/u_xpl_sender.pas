@@ -56,7 +56,7 @@ uses u_xpl_message
 constructor TxPLSender.create(const aOwner : TComponent);
 begin
    inherited;
-   fSocket  := TxPLUDPClient.Create(self); //, Settings.BroadCastAddress);
+   fSocket  := TxPLUDPClient.Create(self);
    fFragMgr := TFragmentManager.Create(self);
 end;
 
@@ -85,7 +85,8 @@ begin
 
 end;
 
-procedure TxPLSender.SendMessage(const aMsgType : TxPLMessageType; const aDest : string; const aSchema : string; const aRawBody : string; const bClean : boolean = false);
+procedure TxPLSender.SendMessage(const aMsgType: TxPLMessageType; const aDest,
+  aSchema, aRawBody: string; const bClean: boolean);
 var aMsg : TxPLCustomMessage;
 begin
    aMsg := PrepareMessage(aMsgType,aSchema,aDest);
@@ -149,4 +150,4 @@ begin
 end;
 
 end.
-
+

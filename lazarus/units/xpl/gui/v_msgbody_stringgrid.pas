@@ -37,13 +37,11 @@ type
 
         procedure SelectEditor; override;
         procedure EditingDone;  override;
-//        procedure ModeToggle( Sender: TObject );
-
 
         procedure NewLine(aKey, aValue : string);
         procedure NewLine(aLine : string);
-        procedure Assign(const aBody   : TxPLBody); overload;
-        procedure CopyTo(const aBody   : TxPLBody);
+        procedure Assign(aBody   : TxPLBody); overload;
+        procedure CopyTo(aBody   : TxPLBody);
         function  GetKey(aRow : integer) : string;
         function  GetValue(aRow : integer) : string;
         function  GetKeyValuePair(aRow : integer) : string;
@@ -210,20 +208,16 @@ begin
    sl.Free;
 end;
 
-procedure TBodyMessageGrid.Assign(const aBody: TxPLBody);
+procedure TBodyMessageGrid.Assign(aBody: TxPLBody);
 var i : integer;
 begin
      Clear;
      fReferencedBody := aBody;
-     for i:=0 to aBody.ItemCount-1 do begin
+     for i:=0 to Pred(aBody.ItemCount) do
          NewLine(aBody.Keys[i],aBody.Values[i]);
-//         if fReferencedBody.Labels[i]<>'' then Cells[K_sg_LAB_COL,i+1] := fReferencedBody.Labels[i]
-//                                          else Cells[K_sg_LAB_COL,i+1] := fReferencedBody.Keys[i];
-
-     end;
 end;
 
-procedure TBodyMessageGrid.CopyTo(const aBody: TxPLBody);
+procedure TBodyMessageGrid.CopyTo(aBody: TxPLBody);
 var i : integer;
     ch : string;
 begin
@@ -308,4 +302,4 @@ begin
 end;}
 
 end.
-
+

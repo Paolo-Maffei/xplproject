@@ -25,7 +25,7 @@ implementation
 // TTimerPool =================================================================
 constructor TTimerPool.Create(aOwner: TComponent);
 begin
-   inherited Create(aOwner);
+   inherited;
    fList := TList.Create;
 end;
 

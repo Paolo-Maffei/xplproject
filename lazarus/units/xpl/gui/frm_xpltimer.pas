@@ -1,6 +1,7 @@
 unit frm_xplTimer;
 
 {$mode objfpc}{$H+}
+{$r *.lfm}
 
 interface
 
@@ -79,8 +80,6 @@ begin
    tiDuration.Enabled  := (tiMode.Text = 'descending');
 end;
 
-initialization
- {$I frm_xpltimer.lrs}
 
 end.
-
+

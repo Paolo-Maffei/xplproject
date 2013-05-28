@@ -12,25 +12,26 @@ uses Classes
      , SysUtils
      ;
 
+const K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
+
    procedure GetProxySettings(out bEnabled : boolean; out sServer : string);
    procedure LogInSystem (const EventType : TEventType; const Msg : String);
-   procedure GetIPAddresses(const aStringList : TStrings);
    function GetMacAddress : string;
 
 implementation // =============================================================
-uses fpc_delphi_compat
-     {$ifndef fpc}
-     , windows                                                                 // Needed on delphi to define KEY_READ
+uses {$ifndef fpc}
+     windows ,                                                                 // Needed on delphi to define KEY_READ
      {$endif}
      {$ifdef unix}
-     , SystemLog
+     SystemLog
      , Process
      , StrUtils
      {$else}
-     , EventLog
+     EventLog
      , Registry
      , IdStack
      {$endif}
+     , uIP
      ;
 
   {$ifndef unix}
@@ -126,46 +127,6 @@ end;
 {$ifdef mswindows}
 {$R C:/pp/packages/fcl-base/src/win/fclel.res}                                 // Load resource strings for windows event log
 {$endif}
-
-// ============================================================================
-procedure GetIPAddresses(const aStringList : TStrings);
-{$ifndef mswindows}
-var proc : TProcess;
-    slOutput : TStringList;
-    start : integer;
-    s : string;
-{$endif}
-begin
-{$ifdef mswindows}
-   TIdStack.IncUsage;
-   aStringList.Assign(GStack.LocalAddresses);
-{$else}
-   proc := TProcess.Create(nil);
-   try
-      slOutput := TStringList.Create;
-      try
-         proc.Executable := 'ifconfig';
-         proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
-         proc.Execute;
-         slOutput.LoadFromStream(proc.Output);
-         for s in slOutput do begin
-             Start := Pos('inet adr',s);
-             if Start<>0 then begin
-                s := AnsiRightStr(s,Length(s)-(Start+8));
-                Start := Pos(' ',s);
-                s := AnsiLeftStr(s,Pred(Start));
-                aStringList.Add(s);
-             end;
-         end;
-      finally
-         slOutput.Free;
-      end;
-   finally
-      proc.Free;
-   end;
-{$endif}
-   if aStringList.Count = 0 then aStringList.Add('127.0.0.1');
-end;
 
 initialization // =============================================================
 {$ifdef mswindows}
