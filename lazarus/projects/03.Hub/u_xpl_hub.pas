@@ -5,7 +5,6 @@ unit u_xpl_hub;
 interface
 
 uses classes
-     , IdUDPClient
      , u_xpl_messages
      , u_xpl_udp_socket
      , u_xpl_application
@@ -18,10 +17,9 @@ type TPortList = TStringList;
      // TxPLHub ===============================================================
      TxPLHub = class(TxPLApplication)
      private
-        fInSocket   : TxPLUDPServer;                                           // Connexion used to listen incoming messages
+        fInSocket   : THubServer;                                           // Connexion used to listen incoming messages
         fSocketList : TPortList;
         fMessage    : TxPLCustomMessage;
-        fLocalIP    : string;
 
         procedure HandleDevice (const aHBeatMsg : THeartBeatMsg);
         procedure UDPRead      (const aString : string);
@@ -35,32 +33,24 @@ type TPortList = TStringList;
 implementation // =============================================================
 uses SysUtils
      , CustApp
-     , IdUDPBase
+     , uIP
+     , IdUDPClient
      ;
 // ============================================================================
 const K_ERROR_SETTINGS = 'Network settings may not be set ';
-      K_ERROR_PORT     = 'Unabled to bind port %d : a hub may already be present';
-      K_STARTED        = 'Hub started';
-      K_LISTENING      = 'Listening on %s:%d';
+      K_ERROR_PORT     = 'Unabled to bind on port 3865 : a hub may already be present';
       K_RELEASING      = 'No activity on port %s, released';
       K_DISCOVERED     = 'Discovered %s %s on %s';
       K_INVALID_PORT   = 'Discovered %s but invalid port (%s) in message body';
       K_VERBOSE        = '%s => %s, %s';
-      XPL_UDP_BASE_PORT= 3865;
 
 // ============================================================================
 procedure TxPLHub.Start;                                                       // Two reason not to start :
-var i : integer;
 begin                                                                          //   First  : xPLSettings not set
    try                                                                         //   Second : XPL_UDP_BASE_PORT not free
-      fInSocket := TxPLUDPServer.Create(self,XPL_UDP_BASE_PORT,XPL_UDP_BASE_PORT);
-      fInSocket.BufferSize := ID_UDP_BUFFERSIZE;                               // Remove xPL limit at hub level : the hub should relay without limiting to 1500 bytes
+      fInSocket := THubServer.Create(self);
       if fInSocket.Active then begin
          fInSocket.OnReceived := @UDPRead;
-         Log(etInfo,K_STARTED);
-         fLocalIP := fInSocket.Bindings[0].IP;
-         for i := 0 to Pred(fInSocket.Bindings.Count) do
-             Log(etInfo,K_LISTENING,[fInSocket.Bindings[i].IP,fInSocket.Bindings[i].Port]);
 
          fMessage  := TxPLCustomMessage.Create(self);
 
@@ -72,7 +62,7 @@ begin                                                                          /
       else
          Log(etError,K_ERROR_SETTINGS);
    except
-      Log(etError,K_ERROR_PORT,[XPL_UDP_BASE_PORT]);
+      Log(etError,K_ERROR_PORT,[]);
    end;
 end;
 
@@ -85,7 +75,6 @@ end;
 procedure TxPLHub.UDPRead(const aString: string);
 var i  : integer;
 begin
-
    fMessage.RawXPL := aString;                                                 // Check if it is a heart beat
    if fMessage.IsLifeSign then HandleDevice(THeartBeatMsg(fMessage));          // if this is the case, see if I already recorded it
 
@@ -102,19 +91,17 @@ var remoteip, port : string;
     c,i       : integer;
 begin
    remoteip := aHBeatMsg.Remote_Ip;
-   if remoteip='' then remoteip := fLocalIp;
-   {$ifdef unix}                                                               // Related to pb under linux, see
-      if remoteip = Settings.ListenOnAddress then remoteip := fLocalIP;        // xpl_udp_socket line # 131
-   {$endif}
+   if remoteip='' then remoteip := LocalIPAddresses.Items[0].Address;          // assume cases when the hbeat doesn't contain the remote_ip body element
 
    for c:=0 to Pred(fInSocket.Bindings.Count) do begin
-       if (fInSocket.Bindings[c].IP = remoteip) then                           // The message is sent from a device located on one of my net cards
+       if Assigned(LocalIPAddresses.GetByIP(remoteIP)) then                     // The message is sent from a device located on one of my net cards
          if (aHBeatMsg.Port<>-1) then begin
             port := IntToStr(aHBeatMsg.Port);
             i := fSocketList.IndexOfName(port);                                // Search for the current port
 
             if i=-1 then begin                                                 // If not found
                aSocket := TIdUDPClient.Create(self);
+               aSocket.Host:=remoteIP;
                aSocket.Port:=StrToInt(port);
                i := fSocketList.AddObject(port+'=',aSocket);
                Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
@@ -139,4 +126,4 @@ begin
 end;
 
 end.
-
+

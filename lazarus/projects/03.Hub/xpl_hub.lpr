@@ -5,11 +5,10 @@ program xpl_hub;
 {$endif}
 {$R *.res}
 
-uses {$define UseCThreads}
+uses heaptrc,
      {$IFDEF UNIX}
-        {$IFDEF UseCThreads}
            cthreads,
-        {$ENDIF}
+           cwstring,
      {$ENDIF}
      u_xpl_hub
      , u_xpl_application
@@ -24,12 +23,9 @@ begin
    HubApplication := TxPLConsoleApp.Create(nil);
 
    xPLApplication := TxPLHub.Create(HubApplication);
-   try
-      TxPLHub(xPLApplication).Start;
-   except                                                                      // Catch errors that can appear when
-   end;                                                                        // starting the listener
+   TxPLHub(xPLApplication).Start;
 
    HubApplication.Run;
    HubApplication.Free;
 end.
-
+
