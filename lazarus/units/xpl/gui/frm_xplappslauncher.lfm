@@ -1,51 +1,75 @@
 inherited frmAppLauncher: TfrmAppLauncher
-  Left = 47
+  Left = 137
   Height = 232
-  Top = 233
-  Width = 536
+  Top = 221
+  Width = 579
   Caption = 'Installed xPL Apps'
   ClientHeight = 232
-  ClientWidth = 536
+  ClientWidth = 579
+  OnCreate = FormCreate
   OnShow = FormShow
-  inherited DlgToolbar: TToolBar
-    Width = 536
+  inherited DlgToolBar: TPanel
+    Top = 185
+    Width = 567
+    ClientWidth = 567
     TabOrder = 1
-    object ToolButton1: TToolButton[2]
-      Left = 86
-      Top = 0
-      Action = acLaunch
-      ImageIndex = 6
+    inherited DlgtbClose: TLSBitBtn
+      Left = 512
+    end
+    object DlgTbLaunch: TLSBitBtn[1]
+      Left = 6
+      Height = 29
+      Top = 6
+      Width = 59
+      Action = FrmAcLaunch
+      AutoSize = True
+      ImageIndex = 2
+      Layout = blGlyphBottom
+      ShortCut = 0
+      TabOrder = 1
     end
   end
   object lvApps: TListView[1]
-    Left = 0
-    Height = 206
-    Top = 26
-    Width = 536
+    Left = 6
+    Height = 173
+    Top = 6
+    Width = 567
     Align = alClient
+    BorderSpacing.Around = 6
     Columns = <    
       item
+        AutoSize = True
         Caption = 'Name'
-        Width = 150
       end    
       item
+        AutoSize = True
         Caption = 'Vendor'
+        Width = 59
       end    
       item
+        AutoSize = True
         Caption = 'Version'
+        Width = 61
       end    
       item
         Caption = 'Path'
-        Width = 275
+        Width = 395
       end>
+    ScrollBars = ssAutoBoth
     TabOrder = 0
     ViewStyle = vsReport
-    OnDblClick = lvAppsDblClick
+    OnDblClick = DlgTbLaunchClick
   end
-  inherited DlgActions: TActionList[2]
-    object acLaunch: TAction[1]
-      Caption = 'Launch...'
-      OnExecute = acLaunchExecute
+  inherited XMLPropStorage1: TXMLPropStorage[2]
+    left = 88
+    top = 48
+  end
+  inherited DlgActions: TActionList[3]
+    left = 280
+    top = 72
+    object FrmAcLaunch: TAction[1]
+      Caption = '&Launch'
+      OnExecute = DlgTbLaunchClick
     end
   end
-end
+end

@@ -1,12 +1,12 @@
 object DlgTemplate: TDlgTemplate
-  Left = 32
-  Height = 254
-  Top = 389
-  Width = 448
+  Left = 268
+  Height = 272
+  Top = 175
+  Width = 519
   BorderIcons = [biSystemMenu]
   BorderStyle = bsSizeToolWin
-  ClientHeight = 254
-  ClientWidth = 448
+  ClientHeight = 272
+  ClientWidth = 519
   Icon.Data = {
     7E04000000000100010010100000010020006804000016000000280000001000
     0000200000000100200000000000000400006400000064000000000000000000
@@ -46,44 +46,65 @@ object DlgTemplate: TDlgTemplate
     0000000000000000000000000000000000000000000000000000000000000000
     0000
   }
+  OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  SessionProperties = 'Height;Left;Top;Width;lvApps.Columns'
+  OnShow = FormShow
+  SessionProperties = 'Height;Left;Top;Width'
   LCLVersion = '1.1'
-  object DlgToolbar: TToolBar
-    Left = 0
-    Height = 24
-    Top = 0
-    Width = 448
+  object DlgBottomBar: TPanel
+    Left = 6
+    Height = 41
+    Top = 225
+    Width = 507
+    Align = alBottom
     AutoSize = True
-    ButtonHeight = 24
-    ButtonWidth = 80
-    Caption = 'ToolBar2'
-    EdgeBorders = []
-    EdgeInner = esNone
-    EdgeOuter = esNone
-    List = True
-    ShowCaptions = True
+    BorderSpacing.Around = 6
+    BevelOuter = bvSpace
+    BevelWidth = 6
+    ClientHeight = 41
+    ClientWidth = 507
+    Color = clMenuBar
+    ParentColor = False
     TabOrder = 0
-    object DlgtbClose: TToolButton
-      Left = 1
-      Top = 0
-      Action = DlgacClose
-      ImageIndex = 1
-    end
-    object DlgSeparator: TToolButton
-      Left = 81
-      Top = 0
-      Width = 5
-      Caption = 'DlgSeparator'
-      Style = tbsDivider
+    object DlgtbClose: TLSBitBtn
+      Left = 452
+      Height = 29
+      Top = 6
+      Width = 49
+      Align = alRight
+      AutoSize = True
+      Caption = 'Close'
+      ImageIndex = 2
+      Layout = blGlyphBottom
+      OnClick = DlgacCloseExecute
+      ShortCut = 0
+      TabOrder = 0
     end
   end
+  object DlgToolBar: TPanel
+    Left = 6
+    Height = 4
+    Top = 6
+    Width = 507
+    Align = alTop
+    AutoSize = True
+    BorderSpacing.Around = 6
+    BevelOuter = bvSpace
+    BevelWidth = 2
+    Color = clMenuBar
+    ParentColor = False
+    TabOrder = 1
+  end
+  object XMLPropStorage1: TXMLPropStorage
+    StoredValues = <>
+    left = 64
+    top = 80
+  end
   object DlgActions: TActionList
-    left = 24
-    top = 40
-    object DlgacClose: TAction
-      Caption = 'Close'
-      ImageIndex = 0
+    left = 200
+    top = 104
+    object DlgAcClose: TAction
+      Caption = '&Close'
       OnExecute = DlgacCloseExecute
     end
   end

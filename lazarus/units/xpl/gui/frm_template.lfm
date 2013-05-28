@@ -1,166 +1,147 @@
-object FrmTemplate: TFrmTemplate
-  Left = 493
-  Height = 472
-  Top = 181
-  Width = 708
+inherited FrmTemplate: TFrmTemplate
+  Left = 101
+  Top = 162
   Caption = 'FrmTemplate'
-  ClientHeight = 472
-  ClientWidth = 708
+  ClientHeight = 249
+  Menu = FormMenu
   OnCloseQuery = FormCloseQuery
   OnCreate = FormCreate
-  LCLVersion = '0.9.31'
-  object ToolBar: TToolBar
-    Left = 0
-    Height = 25
-    Top = 0
-    Width = 708
-    AutoSize = True
-    ButtonHeight = 24
-    ButtonWidth = 30
-    Caption = 'ToolBar'
-    EdgeBorders = [ebBottom]
-    EdgeOuter = esNone
-    Flat = False
-    List = True
-    ShowCaptions = True
-    TabOrder = 0
-    object ToolButton9: TToolButton
-      Left = 1
-      Top = 0
-      DropdownMenu = xPLMenu
-      ImageIndex = 0
-      OnClick = ToolButton9Click
-    end
-    object Panel4: TPanel
-      Left = 508
-      Height = 24
-      Top = 0
-      Width = 200
-      Align = alRight
-      BevelOuter = bvNone
-      BorderWidth = 3
-      ClientHeight = 24
-      ClientWidth = 200
-      TabOrder = 0
-      object lblModuleName: TTILabel
-        Left = 3
-        Height = 18
-        Top = 3
-        Width = 194
-        Align = alClient
-        Alignment = taRightJustify
-        Font.Style = [fsBold]
-        ParentFont = False
-      end
-    end
-    object ToolButton1: TToolButton
-      Left = 61
-      Top = 0
-      Width = 5
-      Caption = 'ToolButton1'
-      Style = tbsDivider
-    end
-    object AppButton: TSpeedButton
-      Left = 31
-      Height = 24
-      Top = 0
-      Width = 30
-      NumGlyphs = 0
-      OnClick = AppButtonClick
-    end
-  end
-  object StatusBar: TplStatusBar
-    Left = 0
-    Height = 24
-    Top = 448
-    Width = 708
-    Panels = <    
-      item
-        Width = 26
-      end    
-      item
-        Width = 50
-      end>
-    SimplePanel = False
-    object imgBullet: TImage
-      Left = 0
-      Height = 24
-      Top = 0
-      Width = 24
-      BorderSpacing.InnerBorder = 4
+  OnShow = FormShow
+  inherited DlgBottomBar: TPanel
+    Top = 202
+    object imgStatus: TLSImage[1]
+      Left = 6
+      Height = 29
+      Top = 6
+      Width = 16
+      Align = alLeft
+      AutoSize = True
+      BorderSpacing.Right = 6
       Center = True
+      Picture.Data = {
+        1754506F727461626C654E6574776F726B477261706869639502000089504E47
+        0D0A1A0A0000000D49484452000000100000001008060000001FF3FF61000000
+        1974455874536F6674776172650041646F626520496D616765526561647971C9
+        653C000002374944415478DA8C935F4853511CC7BFF736F241890C7A2BB106D5
+        4346B02B8A35356942162106D5CBA8971E8210371F224AB6860FF6302AE8B594
+        30A4449DD4B61B3449E6D2B02D1FA64165D916149B4C876CD3ED6EBFCEB985FD
+        617F3A702E87F33BDFCFB9DFDFEF7704FCC768BEE9A25C8E406CAD600BBAB521
+        54EDAB19AFADAB6F2F296EB438C91B2192BF10391689863F10493D325D375D26
+        362016131FB3B9E992B10D66FB28A26B19BC0EA7E05B4AE0427B13BC951DEA99
+        A20085FD766C391E3E7FB603F7069F62C7D675A41505B1B50433A2940678AD6D
+        D263976F772E190BB59C3805C7B349948B49AC24D2100514063C1CE8A7F96090
+        E7CCFFCA76521A7F31535541F1D0417D0B667D6FB092CA308090FFD6E1C1FBE4
+        0FBC25535727FDB1AD3BCA92699DF81E3A37B64C865E378FE978127F978A25AC
+        C12253606A82AE99AFA807FE61EB9A6D3213CB9B311570BCF7B98E97AAFF3DD1
+        D07C62B1AEC7F59798DB59F86907BFF637632A8037892F4A547B7584FA6689EE
+        4EC73E375A5508B3F380D999A36E5317E5B3ABF601FF44E280F9E2698C8D8C22
+        9229AFD6371C5E3A627193768F164F1E0DC07EFB8E54A85222416065D9C04234
+        0BE319035ECA4EAC625BF5819AFD9F3A3D0A6ED955B1BF2080F7767C5D412697
+        C3C755A0D5A047D0EB41BAAC726F99984531B10AE00F63C8E9438681B2CCE9D7
+        940687EA257C9B9B81E746AB54EAAD682A76EE9A34041C4D535E111A522008CC
+        9420223CED3096BA9D0FDE4E5A36B7E789BD6333594CCC0BF04380010061D814
+        C7444E42C60000000049454E44AE426082
+      }
+    end
+    object lblLog: TLabel[2]
+      Left = 28
+      Height = 29
+      Top = 6
+      Width = 424
+      Align = alClient
+      Layout = tlCenter
+      ParentColor = False
     end
   end
-  object ActionList: TActionList
-    left = 40
-    top = 88
-    object acQuit: TAction
-      Category = 'xPL'
-      Caption = 'Quit'
-      Hint = 'Quit the application'
-      ImageIndex = 1
-      OnExecute = acQuitExecute
+  inherited DlgToolBar: TPanel
+    Height = 21
+    ClientHeight = 21
+    object lblModuleName: TTILabel[0]
+      Left = 391
+      Height = 17
+      Top = 2
+      Width = 114
+      Align = alRight
+      Alignment = taRightJustify
+      Font.Style = [fsBold]
+      Layout = tlCenter
+      ParentFont = False
     end
-    object acAbout: TAction
+  end
+  inherited XMLPropStorage1: TXMLPropStorage
+    left = 128
+    top = 32
+  end
+  inherited DlgActions: TActionList
+    left = 240
+    top = 32
+    object acAbout: TAction[1]
       Category = 'xPL'
       Caption = 'About...'
       ImageIndex = 2
       OnExecute = acAboutExecute
     end
-    object acInstalledApps: TAction
+    object acInstalledApps: TAction[2]
       Category = 'xPL'
       Caption = 'Installed xPL apps'
       ImageIndex = 5
       OnExecute = acInstalledAppsExecute
     end
-    object acCoreConfigure: TAction
+    object acCoreConfigure: TAction[3]
       Category = 'xPL'
-      Caption = 'Application settings'
+      Caption = 'xPL settings'
       ImageIndex = 38
       OnExecute = acCoreConfigureExecute
     end
-  end
-  object xPLMenu: TPopupMenu
-    left = 40
-    top = 144
-    object MnuItem1: TMenuItem
-      Action = acCoreConfigure
-    end
-    object mnuLaunch: TMenuItem
-      Caption = 'Launch...'
-      object mnuAllApps: TMenuItem
-        Action = acInstalledApps
-      end
-      object mnuNull2: TMenuItem
-        Caption = '-'
-      end
-    end
-    object MenuItem16: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem13: TMenuItem
-      Action = acAbout
-    end
-    object MenuItem15: TMenuItem
-      Caption = '-'
-    end
-    object MenuItem17: TMenuItem
-      Action = acQuit
+    object acAppConfigure: TAction[4]
+      Caption = 'Application'
     end
   end
-  object XMLPropStorage: TXMLPropStorage
-    StoredValues = <>
-    left = 40
-    top = 208
-  end
-  object AboutDlg: TRxAboutDialog
+  object AboutDlg: TRxAboutDialog[4]
     Options = [radLicenseTab, radShowImageLogo]
     Caption = 'About'
-    left = 40
+    left = 24
     top = 32
   end
-  object AppMenu: TPopupMenu
-    left = 112
-    top = 144
+  object FormMenu: TMainMenu[5]
+    left = 336
+    top = 32
+    object xPLMenu: TMenuItem
+      Caption = 'xPL'
+      object mnuConfigure: TMenuItem
+        Caption = 'Configure...'
+        ImageIndex = 38
+        object mnuCoreConfigure: TMenuItem
+          Action = acCoreConfigure
+        end
+        object mnuAppConfigure: TMenuItem
+          Action = acAppConfigure
+        end
+      end
+      object mnuLaunch: TMenuItem
+        Caption = 'Launch...'
+        object mnuAllApps: TMenuItem
+          Action = acInstalledApps
+        end
+        object mnuNull2: TMenuItem
+          Caption = '-'
+        end
+      end
+      object mnuNull3: TMenuItem
+        Caption = '-'
+      end
+      object mnuAbout: TMenuItem
+        Action = acAbout
+      end
+      object mnuNull4: TMenuItem
+        Caption = '-'
+      end
+      object mnuClose: TMenuItem
+        Action = DlgAcClose
+      end
+    end
+    object AppMenu: TMenuItem
+      Caption = 'Application'
+    end
   end
-end
+end

@@ -1,54 +1,89 @@
 inherited DlgConfig: TDlgConfig
   Left = 188
-  Height = 381
-  Top = 31
-  Width = 364
+  Height = 397
+  Top = 106
   Caption = 'Application Configuration'
-  ClientHeight = 381
-  ClientWidth = 364
-  OnShow = FormShow
-  inherited DlgToolbar: TToolBar
-    Width = 364
-    object ToolButton1: TToolButton[2]
-      Left = 86
-      Top = 0
+  ClientHeight = 397
+  OnCreate = FormCreate
+  inherited DlgBottomBar: TPanel
+    Top = 350
+  end
+  inherited DlgToolBar: TPanel
+    Height = 33
+    ClientHeight = 33
+    TabOrder = 2
+    object ToolButton1: TToolButton[0]
+      Left = 2
+      Top = 2
       Action = DlgacApply
     end
+    object BtnApply: TLSBitBtn[1]
+      Left = 2
+      Height = 29
+      Top = 2
+      Width = 51
+      Align = alLeft
+      AutoSize = True
+      Caption = 'Apply'
+      ImageIndex = 2
+      Layout = blGlyphBottom
+      ShortCut = 0
+      TabOrder = 0
+    end
   end
-  inline frameConfig1: TframeConfig[1]
+  inline frameConfig1: TframeConfig[2]
     Left = 2
-    Top = 25
-    Width = 360
-    Align = alBottom
+    Height = 299
+    Top = 45
+    Width = 515
+    Align = alClient
     BorderSpacing.Around = 2
-    ClientWidth = 360
+    ClientHeight = 299
+    ClientWidth = 515
     TabOrder = 1
     inherited PageControl1: TPageControl
-      Width = 353
-      ActivePage = nil
-      Align = alLeft
-      TabIndex = -1
+      Height = 295
+      Width = 511
+      ActivePage = frameConfig1.tsCoreItems
+      TabIndex = 0
       inherited tsCoreItems: TTabSheet
-        ClientWidth = 345
+        ClientHeight = 264
+        ClientWidth = 507
+        inherited edtInstance: TEdit
+          Width = 360
+        end
+        inherited mmoFilters: TMemo
+          Width = 360
+        end
+        inherited mmoGroups: TMemo
+          Height = 92
+          Width = 360
+        end
       end
       inherited tsSpecific: TTabSheet
-        ClientWidth = 345
+        ClientHeight = 264
+        ClientWidth = 507
         inherited HBDetail: TBodyMessageGrid
-          Width = 345
+          Width = 507
+        end
+        inherited Memo1: TMemo
+          Top = 206
+          Width = 507
         end
       end
     end
   end
-  inherited DlgActions: TActionList[2]
-    left = 288
-    top = 0
-    inherited DlgacClose: TAction
-      OnExecute = DlgacCloseExecute
-    end
+  inherited XMLPropStorage1: TXMLPropStorage[3]
+    left = 24
+    top = 232
+  end
+  inherited DlgActions: TActionList[4]
+    left = 56
+    top = 288
     object DlgacApply: TAction[1]
       Caption = 'Apply'
       ImageIndex = 15
       OnExecute = DlgacApplyExecute
     end
   end
-end
+end

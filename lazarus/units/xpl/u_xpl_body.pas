@@ -11,6 +11,7 @@ unit u_xpl_body;
  1.02 : Added auto cut / reassemble of long body variable into multiple lines
  1.03 : Added AddKeyValuePairs
  1.04 : Class renamed TxPLBody
+ 1.5  : Added fControlInput property to override read/write controls needed for OPC
 }
 
 {$ifdef fpc}
@@ -26,6 +27,7 @@ uses Classes
 type // TxPLBody ==============================================================
      TxPLBody = class(TComponent, IxPLCommon, IxPLRaw)
         private
+           fControlInput : boolean;
            fKeys,
            fValues,
            fStrings : TStringList;
@@ -37,10 +39,10 @@ type // TxPLBody ==============================================================
            function  IsValidValue(const aValue : string) : boolean;
 
            function  Get_RawxPL : string;
-           function  Get_Strings: TStringList;
+           function  Get_Strings: TStrings;
            procedure Set_Keys(const AValue: TStringList);
            procedure Set_RawxPL(const AValue: string);
-           procedure Set_Strings(const AValue: TStringList);
+           procedure Set_Strings(const AValue: TStrings);
            procedure Set_Values(const AValue: TStringList);
         public
            constructor Create(aOwner : TComponent); override;
@@ -63,11 +65,12 @@ type // TxPLBody ==============================================================
            procedure SetValueByKey(const aKeyValue, aDefVal : string);
 
            property ItemCount : integer     read GetCount;
+           property ControlInput : boolean  read fControlInput write fControlInput;
         published
            property Keys      : TStringList read fKeys       write Set_Keys;
            property Values    : TStringList read fValues     write Set_Values;
            property RawxPL    : string      read Get_RawxPL  write Set_RawxPL  stored false;
-           property Strings   : TStringList read Get_Strings write Set_Strings stored false;
+           property Strings   : TStrings read Get_Strings write Set_Strings stored false;
         end;
 
 implementation // =============================================================
@@ -84,10 +87,10 @@ constructor TxPLBody.Create(aOwner : TComponent);
 begin
    inherited;
    include(fComponentStyle,csSubComponent);
-
-   fKeys   := TStringList.Create;
-   fValues := TStringList.Create;
-   fStrings:= TStringList.Create;
+   fControlInput := true;
+   fKeys    := TStringList.Create;
+   fValues  := TStringList.Create;
+   fStrings := TStringList.Create;
 end;
 
 destructor TxPLBody.destroy;
@@ -147,12 +150,14 @@ begin
    if Source is TxPLBody then begin
       Set_Keys(TxPLBody(Source).Keys);
       Set_Values(TxPLBody(Source).Values);
+      fControlInput := TxPLBody(Source).ControlInput;
    end else inherited;
 end;
 
 function TxPLBody.IsValid: boolean;
 var s : string;
 begin
+   if not fControlInput then exit(true);
    result := true;
    for s in Keys do result := result and IsValidKey(s);
    for s in Values do result := result and IsValidValue(s);
@@ -171,17 +176,18 @@ begin
    result := Format(K_MSG_BODY_FORMAT,[AnsiReplaceStr(Strings.Text,#13,'')]);
 end;
 
-function TxPLBody.Get_Strings: TStringList;
+function TxPLBody.Get_Strings: TStrings;
 var i : integer;
 begin
    fStrings.Assign(fKeys);
-   for i:= 0 to Pred(ItemCount) do
-       fStrings[i] := fStrings[i] + '=' + Values[i];
+   if fControlInput then
+      for i:= 0 to Pred(ItemCount) do
+          fStrings[i] := fStrings[i] + '=' + Values[i];
 
    result := fStrings;
 end;
 
-procedure TxPLBody.Set_Strings(const AValue: TStringList);
+procedure TxPLBody.Set_Strings(const AValue: TStrings);
 begin
    RawxPL := AnsiReplaceStr(aValue.Text,#13,#10);
 end;
@@ -248,7 +254,13 @@ begin
    sl.Delimiter:=#10;                                                          // use LF as delimiter
    sl.StrictDelimiter := true;
    sl.DelimitedText:=AnsiReplaceStr(aValue,#13,'');                            // get rid of CR
-   for ch in sl do if (length(ch)>0) then AddKeyValue(ch);
+   for ch in sl do
+      if length(ch)>0 then
+         if fControlInput then AddKeyValue(ch)
+                          else begin
+                               Keys.Append(ch);
+                               Values.Append('');
+                          end;
    sl.free;
 end;
 
@@ -257,4 +269,4 @@ initialization
    Classes.RegisterClass(TxPLBody);
 
 end.
-
+

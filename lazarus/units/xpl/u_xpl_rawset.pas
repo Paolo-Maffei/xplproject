@@ -1,4 +1,11 @@
 unit u_xpl_rawset;
+{==============================================================================
+  UnitName      = u_xpl_rawset
+  UnitDesc      = Generic class used to hold header message elements
+  UnitCopyright = GPL by Clinique / xPL Project
+ ==============================================================================
+ 1.5  : Added fControlInput property to override read/write controls needed for OPC
+ }
 
 {$ifdef fpc}
    {$mode objfpc}{$H+}
@@ -15,9 +22,9 @@ type // TxPLRawSet ============================================================
      TxPLRawSet = class(TInterfacedPersistent, IxPLCommon, IxPLRaw)
      protected
         fRawxPL   : TStringList;
-        fMaxSizes : Array of integer;
+        fMaxSizes : IntArray;
         fOnRawError : TStrParamEvent;
-
+        fControlInput : boolean;
         procedure   Set_RawxPL(const AValue: string);
         function    Get_RawxPL: string;
      public
@@ -29,11 +36,13 @@ type // TxPLRawSet ============================================================
         procedure   Assign(aRawSet : TPersistent); override;
         function    Equals(const aRawSet : TxPLRawSet) : boolean; reintroduce; overload;
         function    IsValid : boolean;
+        function    IsEmpty : boolean;
 
         function    AsFilter : string; virtual;
 
         function  Get_Element(AIndex: integer): string; virtual;
         procedure Set_Element(AIndex: integer; const AValue: string); virtual;
+        property  ControlInput : boolean read fControlInput write fControlInput;
      published
         property RawxPL : string read Get_RawxPL write Set_RawxPL stored false;
      end;
@@ -46,6 +55,7 @@ uses StrUtils
 constructor TxPLRawSet.Create;
 begin
    inherited Create;
+   fControlInput := true;
    fRawxPL := TStringList.Create;
    fRawxPL.Delimiter:='.';
    ResetValues;
@@ -58,17 +68,23 @@ begin
 end;
 
 procedure TxPLRawSet.ResetValues;
-var i : integer;
+var i,m : integer;
+
 begin
    fRawxPL.Clear;
-   For i := 0 to High(fMaxSizes) do fRawxPL.Add('');
+   if fControlInput
+      then m := High(fMaxSizes)
+      else m := 0;
+   For i := 0 to m do fRawxPL.Add('');
 end;
 
 procedure TxPLRawSet.Assign(aRawSet: TPersistent);
 begin
   if aRawSet is TxPLRawSet
-     then fRawxPL.Assign(TxPLRawSet(aRawSet).fRawxPL)
-     else inherited;
+     then begin
+          fRawxPL.Assign(TxPLRawSet(aRawSet).fRawxPL);
+          fControlInput := TxPLRawSet(aRawSet).ControlInput;
+     end else inherited;
 end;
 
 function TxPLRawSet.Equals(const aRawSet: TxPLRawSet): boolean;
@@ -78,7 +94,8 @@ end;
 
 function TxPLRawSet.Get_RawxPL: string;
 begin
-   Result := fRawxPL.DelimitedText
+   if fControlInput then Result := fRawxPL.DelimitedText
+                    else Result := fRawxPL[0];
 end;
 
 procedure TxPLRawSet.Set_RawxPL(const AValue: string);
@@ -88,7 +105,8 @@ begin
    ResetValues;
    list := TStringList.Create;
    list.Delimiter := fRawxPL.Delimiter;
-   list.DelimitedText := aValue;
+   if fControlInput then list.DelimitedText := aValue
+                    else list.Text := aValue;
 
    For i := 0 to Pred(list.count) do Set_Element(i,list[i]);
    list.free;
@@ -97,10 +115,22 @@ end;
 function TxPLRawSet.IsValid: boolean;
 var i : integer;
 begin
+   if not fControlInput then exit(true);
    Result := fRawxPL.Count <> 0;                                               // At this level, check we have elements
    for i := 0 to Pred(fRawxPL.Count) do
        Result := Result and IsValidxPLIdent(fRawxPL[i])                        // they are valid xPL syntax elements
                         and (length(fRawxPL[i])<=fMaxSizes[i]);                // and conform to max element size
+end;
+
+function TxPLRawSet.IsEmpty: boolean;
+var i : integer;
+begin
+   i := Pred(fRawxPL.Count);
+   result := true;
+   while result and (i>=0) do begin
+         result := result and AnsiSameText(fRawxPL[i],'');
+         dec(i);
+   end;
 end;
 
 function TxPLRawSet.AsFilter: string;
@@ -122,5 +152,4 @@ begin
    fRawxPL[aIndex] := AnsiLowerCase(aValue);
 end;
 
-end.
-
+end.

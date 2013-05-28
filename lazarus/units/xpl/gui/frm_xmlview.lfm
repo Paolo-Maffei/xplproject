@@ -1,24 +1,48 @@
 inherited frmXMLView: TfrmXMLView
-  Left = 72
+  Left = 144
   Height = 352
-  Top = 219
-  Width = 704
+  Top = 141
+  Width = 740
   ActiveControl = SynEdit
   BorderIcons = [biMinimize, biMaximize]
   Caption = 'frmXMLView'
   ClientHeight = 352
-  ClientWidth = 704
+  ClientWidth = 740
+  OnCreate = FormCreate
   OnShow = FormShow
-  inherited DlgToolbar: TToolBar
-    Width = 704
-    TabOrder = 1
+  inherited DlgBottomBar: TPanel
+    Top = 305
+    Width = 728
+    ClientWidth = 728
+    TabOrder = 2
+    inherited DlgtbClose: TLSBitBtn
+      Left = 673
+    end
   end
-  inline SynEdit: TSynEdit[1]
-    Left = 0
-    Height = 326
-    Top = 26
-    Width = 704
+  inherited DlgToolBar: TPanel
+    Height = 33
+    Width = 728
+    ClientHeight = 33
+    ClientWidth = 728
+    object BtnSave: TLSBitBtn[0]
+      Left = 2
+      Height = 29
+      Top = 2
+      Width = 43
+      Action = DlgAcSave
+      AutoSize = True
+      Layout = blGlyphBottom
+      ShortCut = 0
+      TabOrder = 0
+    end
+  end
+  inline SynEdit: TSynEdit[2]
+    Left = 6
+    Height = 254
+    Top = 45
+    Width = 728
     Align = alClient
+    BorderSpacing.Around = 6
     Font.Height = -13
     Font.Name = 'Courier New'
     Font.Pitch = fpFixed
@@ -26,53 +50,27 @@ inherited frmXMLView: TfrmXMLView
     ParentColor = False
     ParentFont = False
     TabOrder = 0
-    Gutter.Width = 57
+    Gutter.Width = 0
     Gutter.MouseActions = <    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccAny
         ClickDir = cdDown
-        Command = 13
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcOnMainGutterClick
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbRight
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 12
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcContextMenu
       end>
     RightGutter.Width = 0
     RightGutter.MouseActions = <    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccAny
         ClickDir = cdDown
-        Command = 13
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcOnMainGutterClick
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbRight
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 12
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcContextMenu
       end>
     Highlighter = SynXMLSyn
     Keystrokes = <    
@@ -498,126 +496,71 @@ inherited frmXMLView: TfrmXMLView
       end>
     MouseActions = <    
       item
-        Shift = []
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 1
+        Command = emcStartSelections
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssShift]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 1
+        Command = emcStartSelections
         MoveCaret = True
         Option = 1
-        Priority = 0
       end    
       item
         Shift = [ssAlt]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 3
+        Command = emcStartColumnSelections
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssShift, ssAlt]
         ShiftMask = [ssShift, ssAlt]
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 3
+        Command = emcStartColumnSelections
         MoveCaret = True
         Option = 1
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbRight
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 12
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcContextMenu
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccDouble
         ClickDir = cdDown
-        Command = 6
+        Command = emcSelectWord
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccTriple
         ClickDir = cdDown
-        Command = 7
+        Command = emcSelectLine
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
         ClickCount = ccQuad
         ClickDir = cdDown
-        Command = 8
+        Command = emcSelectPara
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
-        Shift = []
-        ShiftMask = []
         Button = mbMiddle
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 10
+        Command = emcPasteSelection
         MoveCaret = True
-        Option = 0
-        Priority = 0
       end    
       item
         Shift = [ssCtrl]
         ShiftMask = [ssShift, ssAlt, ssCtrl]
-        Button = mbLeft
-        ClickCount = ccSingle
-        ClickDir = cdUp
-        Command = 11
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcMouseLink
       end>
     MouseSelActions = <    
       item
-        Shift = []
-        ShiftMask = []
-        Button = mbLeft
-        ClickCount = ccSingle
         ClickDir = cdDown
-        Command = 9
-        MoveCaret = False
-        Option = 0
-        Priority = 0
+        Command = emcStartDragMove
       end>
     Lines.Strings = (
       'SynEdit'
@@ -625,118 +568,36 @@ inherited frmXMLView: TfrmXMLView
     VisibleSpecialChars = [vscSpace, vscTabAtLast]
     ReadOnly = True
     ScrollBars = ssAutoBoth
+    SelectedColor.BackPriority = 50
+    SelectedColor.ForePriority = 50
+    SelectedColor.FramePriority = 50
+    SelectedColor.BoldPriority = 50
+    SelectedColor.ItalicPriority = 50
+    SelectedColor.UnderlinePriority = 50
     BracketHighlightStyle = sbhsBoth
-    inline TSynGutterPartList
-      object TSynGutterMarks
-        Width = 24
-      end
-      object TSynGutterLineNumber
-        Width = 17
-        MouseActions = <>
-        MarkupInfo.Background = clBtnFace
-        MarkupInfo.Foreground = clNone
-        DigitCount = 2
-        ShowOnlyLineNumbersMultiplesOf = 1
-        ZeroStart = False
-        LeadingZeros = False
-      end
-      object TSynGutterChanges
-        Width = 4
-        ModifiedColor = 59900
-        SavedColor = clGreen
-      end
-      object TSynGutterSeparator
-        Width = 2
-      end
-      object TSynGutterCodeFolding
-        MouseActions = <        
-          item
-            Shift = []
-            ShiftMask = []
-            Button = mbRight
-            ClickCount = ccSingle
-            ClickDir = cdUp
-            Command = 16
-            MoveCaret = False
-            Option = 0
-            Priority = 0
-          end        
-          item
-            Shift = []
-            ShiftMask = [ssShift]
-            Button = mbMiddle
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
-            Option = 0
-            Priority = 0
-          end        
-          item
-            Shift = [ssShift]
-            ShiftMask = [ssShift]
-            Button = mbMiddle
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
-            Option = 1
-            Priority = 0
-          end        
-          item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 0
-            MoveCaret = False
-            Option = 0
-            Priority = 0
-          end>
-        MarkupInfo.Background = clNone
-        MarkupInfo.Foreground = clGray
-        MouseActionsExpanded = <        
-          item
-            Shift = []
-            ShiftMask = []
-            Button = mbLeft
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 14
-            MoveCaret = False
-            Option = 0
-            Priority = 0
-          end>
-        MouseActionsCollapsed = <        
-          item
-            Shift = [ssCtrl]
-            ShiftMask = [ssCtrl]
-            Button = mbLeft
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 15
-            MoveCaret = False
-            Option = 0
-            Priority = 0
-          end        
-          item
-            Shift = []
-            ShiftMask = [ssCtrl]
-            Button = mbLeft
-            ClickCount = ccAny
-            ClickDir = cdDown
-            Command = 15
-            MoveCaret = False
-            Option = 1
-            Priority = 0
-          end>
-      end
+    BracketMatchColor.Background = clNone
+    BracketMatchColor.Foreground = clNone
+    BracketMatchColor.Style = [fsBold]
+    FoldedCodeColor.Background = clNone
+    FoldedCodeColor.Foreground = clGray
+    FoldedCodeColor.FrameColor = clGray
+    MouseLinkColor.Background = clNone
+    MouseLinkColor.Foreground = clBlue
+    LineHighlightColor.Background = clNone
+    LineHighlightColor.Foreground = clNone
+    OnChange = SynEditChange
+    inline SynLeftGutterPartList1: TSynGutterPartList
     end
   end
-  inherited DlgActions: TActionList[2]
+  inherited XMLPropStorage1: TXMLPropStorage[3]
   end
-  object SynXMLSyn: TSynXMLSyn[3]
+  inherited DlgActions: TActionList[4]
+    object DlgAcSave: TAction[1]
+      Caption = '&Save'
+      OnExecute = DlgAcSaveExecute
+    end
+  end
+  object SynXMLSyn: TSynXMLSyn[5]
     DefaultFilter = 'Documents XML (*.xml,*.xsd,*.xsl,*.xslt,*.dtd)|*.xml;*.xsd;*.xsl;*.xslt;*.dtd'
     Enabled = False
     ElementAttri.FrameEdges = sfeAround

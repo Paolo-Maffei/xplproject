@@ -55,6 +55,7 @@ type // TFragmentFactory ======================================================
         function  FragmentName(const aAddress : TxPLAddress; const aId : integer) : string;
      public
         Constructor Create(const aOwner : TComponent); reintroduce;
+        Destructor Destroy; override;
         function    Fragment(const aMessage : TxPLMessage) : TFragmentFactory;
         function    AddFragment (const aMessage : TFragBasicMsg) : TFragmentFactory;
         function    GetFactory(const aFragIdent : string) : TFragmentFactory;
@@ -70,19 +71,23 @@ uses StrUtils
      , u_xpl_sender
      , u_xpl_common
      , u_xpl_application
-//     , jclStrings
      , DateUtils
      ;
 
 // TFragmentManager ===========================================================
 constructor TFragmentManager.Create(const aOwner : TComponent);
 begin
-   Assert(aOwner is TxPLSender);
    inherited Create(aOwner);
    fCounter := 0;
    fFactoryList := TFactoryCollection.Create(self);
 
    fTimer := TxPLApplication(Owner).TimerPool.Add(3*1000,{$ifdef fpc}@{$endif}TimerCheck);
+end;
+
+destructor TFragmentManager.Destroy;
+begin
+   fFactoryList.Free;
+   inherited Destroy;
 end;
 
 function TFragmentManager.Fragment(const aMessage: TxPLMessage) : TFragmentFactory;
@@ -95,8 +100,6 @@ end;
 
 function TFragmentManager.AddFragment(const aMessage: TFragBasicMsg) : TFragmentFactory;
 begin
-//   Result := nil;
-//   Result := fFactoryList.FindItemName(aMessage.Identifier);
    Result := GetFactory(aMessage.Identifier);
    if Result = nil then
       Result := fFactoryList.Add(aMessage.Identifier);
@@ -263,7 +266,10 @@ end;
 destructor TFragmentFactory.Destroy;
 begin
    fFragList.Free;
-   if Assigned(fSource) then fSource.Free;
+   if Assigned(fSource)
+      then fSource.Free;
+   if Assigned(fAssembled)
+      then fAssembled.Free;
    inherited;
 end;
 

@@ -8,7 +8,6 @@ interface
 
 uses Classes
      , SysUtils
-     , IdDateTimeStamp
      ;
 
 const K_MSG_TYPE_HEAD = 'xpl-';
@@ -40,14 +39,14 @@ Type TInstanceInitStyle = (iisRandom, iisHostName, iisMacAddress);
 
      { TxPLDateTimeStamp }
 
-     TxPLDateTimeStamp = class(TIdDateTimeStamp)
-     private
-       function GetDateTime: TDateTime; reintroduce;
-       function GetAsRawxPL: string;
-     published
-        property RawxPL : string read GetAsRawxPL;
-        property DateTime : TDateTime read GetDateTime;
-     end;
+     //TxPLDateTimeStamp = class(TIdDateTimeStamp)
+     //private
+     //  function GetDateTime: TDateTime; reintroduce;
+     //  function GetAsRawxPL: string;
+     //published
+     //   property RawxPL : string read GetAsRawxPL;
+     //   property DateTime : TDateTime read GetDateTime;
+     //end;
 
      function StreamToString(Stream : TStream) : String;
      function compareContents(msOne,msTwo:TMemoryStream):boolean ;
@@ -86,6 +85,8 @@ uses StrUtils
 const    K_LOG_INF = 'inf';
          K_LOG_WRN = 'wrn';
          K_LOG_ERR = 'err';
+         K_LOG_DBG = 'dbg';
+         K_LOG_CST = '';
 
 // ============================================================================
 //const K_LEN : Array [0..2] of integer = (8,8,16);                            // xPL Rule : http://xplproject.org.uk/wiki/index.php?title=XPL_Specification_Document
@@ -192,9 +193,10 @@ end;
 function EventTypeToxPLLevel(const aType: TEventType): string;
 begin
    Case aType of
-        etInfo    : result := K_LOG_INF;
         etWarning : result := K_LOG_WRN;
         etError   : result := K_LOG_ERR;
+        etDebug   : result := K_LOG_DBG;
+        etCustom  : result := K_LOG_CST;
         else result := K_LOG_INF;
    end;
 end;
@@ -276,17 +278,23 @@ begin
 end;
 
 { TxPLDateTimeStamp }
+//
+//function TxPLDateTimeStamp.GetDateTime: TDateTime;
+//begin
+//   result := XPLDt2DateTime(RawxPL);
+//end;
+//
+//function TxPLDateTimeStamp.GetAsRawxPL: string;
+//begin
+//    Result := Format('%.4d%.2d%.2d%.2d%.2d%.2d',
+//           [year,monthofYear,dayofmonth,HourOf24Day,MinuteOfHour,SecondOfMinute]);
+//end;
 
-function TxPLDateTimeStamp.GetDateTime: TDateTime;
-begin
-   result := XPLDt2DateTime(RawxPL);
-end;
+initialization
+{$ifdef fpc}
+   OnGetVendorName      := @GetVendorNameEvent;                                // These functions are not known of Delphi and
+   OnGetApplicationName := @GetApplicationEvent;                               // are present here for linux behaviour consistency
+{$endif}
 
-function TxPLDateTimeStamp.GetAsRawxPL: string;
-begin
-    Result := Format('%.4d%.2d%.2d%.2d%.2d%.2d',
-           [year,monthofYear,dayofmonth,HourOf24Day,MinuteOfHour,SecondOfMinute]);
-end;
 
-end.
-
+end.

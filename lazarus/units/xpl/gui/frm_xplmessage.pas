@@ -7,57 +7,64 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, StdCtrls,
-  ExtCtrls, EditBtn, Menus, ActnList, ComCtrls, Buttons, XMLPropStorage{%H-},
-  u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor, SynEdit,
-  SynHighlighterPas, SynEditSearch, v_xplmsg_opendialog, RTTICtrls,
-  RxAboutDialog{%H-}, Frm_Template ;
+  ExtCtrls, Menus, ActnList, ComCtrls, Buttons,
+  IDEWindowIntf, u_xPL_Message_gui, u_xpl_message, frame_message, KHexEditor,
+  SynEdit, SynHighlighterPas, SynEditSearch, v_xplmsg_opendialog,
+  RTTICtrls, LSControls, Frm_Template;
 
 type
 
   { TfrmxPLMessage }
   TfrmxPLMessage = class(TFrmTemplate)
-    acLoad: TAction;
-    acClose: TAction;
+    acSave: TAction;
     acPaste: TAction;
-    ckLoop: TCheckBox;
+    acSend: TAction;
+    acLoad: TAction;
+    acCopyMessage: TAction;
+    acCopySourceAddress: TAction;
+    acCopyFilterString: TAction;
+    ckLoop: TAction;
     ckBody: TCheckBox;
     ckMsgType: TCheckBox;
     ckInstance: TCheckBox;
     ckDevice: TCheckBox;
-    acSend: TAction;
-    HexEditor: TKHexEditor;
+    BtnLoop: TLSSpeedButton;
     MenuItem1: TMenuItem;
+    MenuItem10: TMenuItem;
+    MenuItem11: TMenuItem;
+    MenuItem12: TMenuItem;
+    popFunctions: TMenuItem;
+    popCommands: TMenuItem;
+    MenuItem4: TMenuItem;
+    MenuItem5: TMenuItem;
+    MenuItem6: TMenuItem;
+    MenuItem7: TMenuItem;
+    MenuItem8: TMenuItem;
+    MenuItem9: TMenuItem;
+    tbSendMessage: TLSBitBtn;
+    tbOk: TLSBitBtn;
+    tbCancel: TLSBitBtn;
+    HexEditor: TKHexEditor;
     MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
     mnuCopyMessage: TMenuItem;
     mnuCopyAddress: TMenuItem;
     mnuCopyFilter: TMenuItem;
-    acSave: TAction;
     PageControl1: TPageControl;
     mmoPSScript: TSynEdit;
-    Panel1: TPanel;
-    popCommands: TPopupMenu;
-    popCopy: TPopupMenu;
-    popFunctions: TPopupMenu;
     SynPasSyn1: TSynPasSyn;
     TabSheet1: TTabSheet;
-    edtMsgName: TTIEdit;
     FrameMessage: TTMessageFrame;
     tbFunctions: TToolButton;
     ToolButton2: TToolButton;
     ToolButton4: TToolButton;
     tsRaw: TTabSheet;
     tsPSScript: TTabSheet;
-    tbOk: TToolButton;
-    tbCancel: TToolButton;
     ToolButton3: TToolButton;
     SaveMessage: TxPLMsgSaveDialog;
     OpenMessage: TxPLMsgOpenDialog;
-    tbCommands: TToolButton;
     procedure acLoadExecute(Sender: TObject);
     procedure ckDeviceChange(Sender: TObject);
     procedure acSendExecute(Sender: TObject);
-    procedure edtBodyEditingDone(Sender: TObject);
     procedure FormCreate(Sender: TObject);
     procedure FormDestroy(Sender: TObject);
     procedure FormShow(Sender: TObject);
@@ -65,17 +72,12 @@ type
     procedure mnuCopyAddressClick(Sender: TObject);
     procedure mnuCopyFilterClick(Sender: TObject);
     procedure acSaveExecute(Sender: TObject);
-    procedure tbCommandsClick(Sender: TObject);
-    procedure tbCopyClick(Sender: TObject);
-    procedure tbFunctionsClick(Sender: TObject);
-    procedure tbOkClick(Sender: TObject);
     procedure tbPasteClick(Sender: TObject);
 
   private
     arrCommandes : TList;
     procedure InitPluginsMenu;
     procedure InitFunctionsMenu;
-    procedure InitAppMenu;
     procedure PluginCommandExecute ( Sender: TObject );
     procedure FunctionExecute( Sender : TObject);
     procedure DisplayMessage;
@@ -106,6 +108,14 @@ procedure TfrmxPLMessage.FormCreate(Sender: TObject);
 begin
    inherited;
 
+   acLoad.ImageIndex := K_IMG_DOCUMENT_OPEN;
+   acPaste.ImageIndex := K_IMG_PASTE;
+   acSend.ImageIndex := K_IMG_MAIL_FORWARD;
+   acSave.ImageIndex := K_IMG_DOCUMENT_SAVE;
+
+   SetButtonImage(tbSendMessage,acSend,K_IMG_MAIL_FORWARD);
+   SetButtonImage(BtnLoop,ckLoop,K_IMG_LOOP);
+
    SaveMessage := TxPLMsgSaveDialog.Create(self);
    OpenMessage := TxPLMsgOpenDialog.Create(self);
 
@@ -113,7 +123,6 @@ begin
 
    InitPluginsMenu;
    InitFunctionsMenu;
-   InitAppMenu;
 end;
 
 procedure TfrmxPLMessage.FormDestroy(Sender: TObject);
@@ -122,40 +131,20 @@ begin
    inherited;
 end;
 
-procedure TfrmxPLMessage.InitAppMenu;
-var aMenu : TMenuItem;
-begin
-   AppMenu.Items.Clear;
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acPaste;
-   AppMenu.Items.Insert(0,aMenu);
-
-   AppMenu.Items.Insert(0,NewItem('Copy...',0,false,true,@tbCopyClick,0,'Copy'));
-   AppMenu.Items.Insert(0,NewLine);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acSave;
-   AppMenu.Items.Insert(0,aMenu);
-
-   aMenu := TMenuItem.Create(self);
-   aMenu.Action := acLoad;
-   AppMenu.Items.Insert(0,aMenu);
-end;
-
 procedure TfrmxPLMessage.InitPluginsMenu;
 var aMenu,aSubMenu, aSubSubMenu : TMenuItem;
     Commande: TCommandType;
     plug, item, item2 : TCollectionItem;
     device : TDeviceType;
 begin
-   if xPLApplication.VendorFile.Plugins <> nil then begin
-      popCommands.Items.Clear;
+   popCommands.Enabled := (xPLApplication.VendorFile.Plugins <> nil);
+   if popCommands.Enabled then begin
+      popCommands.Clear;
       for plug in xPLApplication.VendorFile.Plugins do begin
           aMenu := NewItem(TPluginType(plug).Vendor,0,false,true,nil,0,'');
-          popCommands.Items.Insert(0,aMenu);
+          popCommands.Insert(0,aMenu);
           if TPluginType(plug).Present then
-          for item in (TPluginType(plug).Devices) do begin
+          for item in TPluginType(plug).Devices do begin
               Device := TDeviceType(item);
               aSubMenu := NewItem(Device.Id_,0,false,true,nil,0,'');
               aMenu.Add(aSubMenu);
@@ -169,22 +158,20 @@ begin
           end;
           if aMenu.Count = 0 then aMenu.Free;
       end;
-   end
-      else tbCommands.Enabled:=false;
+   end;
 end;
 
 procedure TfrmxPLMessage.InitFunctionsMenu;
 var ch : string;
 begin
-   popFunctions.Items.Clear;
+   popFunctions.Clear;
    for ch in K_PROCESSOR_KEYWORDS do
-       popFunctions.Items.Insert(0,NewItem('{SYS::' + ch + '}',0,false,true,@FunctionExecute,0,''));
+       popFunctions.Insert(0,NewItem('{SYS::' + ch + '}',0,false,true,@FunctionExecute,0,''));
 end;
 
 procedure TfrmxPLMessage.PluginCommandExecute(Sender: TObject);
 var Command : TCommandType;
 begin
-   TabSheet1.SetFocus;                                                            // Ne pas rester dans un controle RTTI, ce qui pose un pb de rafraichissement
    Command := TCommandType(ArrCommandes[TMenuItem(sender).Tag]);
    xPLMessage.ReadFromJSON(Command);
    DisplayMessage;
@@ -223,56 +210,47 @@ begin
    FrameMessage.TheMessage := xPLMessage;
 end;
 
-procedure TfrmxPLMessage.tbCopyClick(Sender: TObject);
-begin
-   popCopy.PopUp;
-end;
-
-procedure TfrmxPLMessage.tbFunctionsClick(Sender: TObject);
-begin
-   popFunctions.PopUp;
-end;
-
 procedure TfrmxPLMessage.FormShow(Sender: TObject);
 begin
+   inherited;
+
    PageControl1.ActivePage := TabSheet1;
    acLoad.Visible  := (boLoad in buttonOptions);
    acSave.Visible  := (boSave in buttonOptions);
-   acPaste.Visible := not edtMsgName.ReadOnly;
    acSend.Visible  := (boSend in buttonOptions);
-   ckLoop.Visible  := acSend.Visible;
-   tbCommands.Visible := not edtMsgName.ReadOnly;
+   BtnLoop.Visible  := acSend.Visible;
    tbOk.Visible       := (boOk in buttonOptions);
    tbCancel.Visible   := tbOk.Visible;
-   acClose.Visible    := (boClose in buttonOptions);
+   DlgAcClose.Visible := (boClose in buttonOptions);
    if not acLoad.Visible then OnCloseQuery := nil;
-   edtMsgName.Link.TIObject := xPLMessage;
-   edtMsgName.Link.TIPropertyName := 'MsgName';
 
-   FrameMessage.ReadOnly := edtMsgName.ReadOnly;
-   StatusBar.Visible := false;
+   FrameMessage.ReadOnly := FrameMessage.edtSource.ReadOnly;
+   popCommands.Visible := not FrameMessage.edtSource.ReadOnly;
+   acPaste.Visible := not FrameMessage.edtSource.ReadOnly;
 
-   ToolButton9.Visible   := (OnCloseQuery <> nil);
-   Panel4.Visible := ToolButton9.Visible;                                       // Hide the modulename container if not needed
-   if not ToolButton9.Visible then begin
-      BorderStyle := bsSizeToolWin;
-   end;
+//   AppButton.Visible   := (OnCloseQuery <> nil);
+//   Panel4.Visible := AppButton.Visible;                                       // Hide the modulename container if not needed
+//   if not AppButton.Visible then
+//      BorderStyle := bsSizeToolWin;
 
    DisplayMessage;
 end;
 
 procedure TfrmxPLMessage.mnuCopyMessageClick(Sender: TObject);
 begin
+   xPLMessage.Assign(FrameMessage.TheMessage);
    Clipboard.AsText := xPLMessage.RawxPL;
 end;
 
 procedure TfrmxPLMessage.mnuCopyAddressClick(Sender: TObject);
 begin
+   xPLMessage.Assign(FrameMessage.TheMessage);
    Clipboard.AsText := xPLMessage.Source.RawxPL;
 end;
 
 procedure TfrmxPLMessage.mnuCopyFilterClick(Sender: TObject);
 begin
+   xPLMessage.Assign(FrameMessage.TheMessage);
    Clipboard.AsText := xPLMessage.SourceFilter;
 end;
 
@@ -285,35 +263,27 @@ end;
 procedure TfrmxPLMessage.acSendExecute(Sender: TObject);
 var backAddress : TxPLAddress;
 begin
+   xPLMessage.Assign(FrameMessage.TheMessage);
    backAddress := TxPLAddress.Create(xPLApplication.Adresse);
    xPLApplication.Adresse.Assign(xPLMessage.Source);
    repeat
       TxPLSender(xPLApplication).Send(xPLMessage);
+      TxPLSender(xPLApplication).Log(etInfo,'%s : <%s> sent',[DateTimeToStr(now),xPLMessage.schema.RawxPL]);
       Application.ProcessMessages;
-   until not ckLoop.Checked;
+   until not BtnLoop.Down;
    xPLApplication.Adresse.Assign(backAddress);
    backAddress.Free;
 end;
 
-procedure TfrmxPLMessage.edtBodyEditingDone(Sender: TObject);
-begin
-  FrameMessage.edtBodyEditingDone(Sender);
-end;
-
 procedure TfrmxPLMessage.acSaveExecute(Sender: TObject);
 begin
+   xPLMessage.Assign(FrameMessage.TheMessage);
    if SaveMessage.Execute then xPLMessage.SaveToFile(SaveMessage.FileName);
-end;
-
-procedure TfrmxPLMessage.tbCommandsClick(Sender: TObject);
-begin
-   popCommands.PopUp;
 end;
 
 procedure TfrmxPLMessage.acLoadExecute(Sender: TObject);
 begin
    if not OpenMessage.Execute then exit;
-   edtMsgName.SetFocus;
    xPLMessage.LoadFromFile(OpenMessage.FileName);
    DisplayMessage;
 end;
@@ -370,12 +340,6 @@ begin
      mmoPSScript.Lines.Add('begin');
      mmoPSScript.Lines.Add('   // Your code here');
      mmoPSScript.Lines.Add('end;');
-
-end;
-
-procedure TfrmxPLMessage.tbOkClick(Sender: TObject);
-begin
-   Close;
 end;
 
 end.

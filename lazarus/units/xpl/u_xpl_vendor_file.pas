@@ -34,23 +34,27 @@ type { TxPLVendorSeedFile ====================================================}
      TxPLVendorSeedFile = class(TComponent)
      private
         fFolders    : TxPLFolders;
-        fStatus     : boolean;
         fLocations  : TLocationsType;
         fPlugins    : TPluginsType;
+        fSchemas    : TSchemaCollection;
+        function GetLocations: TLocationsType;
+        function GetPlugins: TPluginsType;
+        function GetSchemas: TSchemaCollection;
      public
-        constructor create(const aOwner : TComponent ;const aFolders : TxPLFolders); reintroduce;
+        constructor Create(const aOwner : TComponent ;const aFolders : TxPLFolders); reintroduce;
         destructor  Destroy; override;
-        procedure   Load;
         function    FileName : string; inline;                                 // File name of the current vendor plugin file
+        function    SchemaFile : string; inline;
 
         function UpdatedTS : TDateTime;                                        // Renamed to avoid conflict with ancestors
         function Update(const sLocation : string = K_XPL_VENDOR_SEED_LOCATION) : boolean; // Reloads the seed file from website
         function FindDevice(const aAddress : TxPLAddress) : TDeviceType;
 
-        property IsValid   : boolean           read fStatus;
+        function IsValid   : boolean;
      published
-        property Locations : TLocationsType read fLocations;
-        property Plugins   : TPluginsType   read fPlugins;
+        property Locations : TLocationsType read GetLocations;
+        property Plugins   : TPluginsType   read GetPlugins;
+        property Schemas   : TSchemaCollection read GetSchemas;
      end;
 
 implementation //==============================================================
@@ -60,19 +64,23 @@ uses RegExpr
      ;
 
 // TxPLVendorSeedFile =========================================================
-constructor TxPLVendorSeedFile.create(const aOwner : TComponent; const aFolders: TxPLFolders);
+constructor TxPLVendorSeedFile.Create(const aOwner : TComponent; const aFolders: TxPLFolders);
 begin
    inherited Create(aOwner);
-   fStatus  := false;
    fFolders := aFolders;
-   Load;
 end;
 
-destructor TxPLVendorSeedFile.destroy;
+destructor TxPLVendorSeedFile.Destroy;
 begin
    if assigned(fLocations) then fLocations.Free;
-   if assigned(fPlugins)   then fPlugins.Free;
+   if assigned(fPlugins) then fPlugins.Free;
+   if assigned(fSchemas) then fSchemas.Free;
    inherited;
+end;
+
+function TxPLVendorSeedFile.IsValid : boolean;
+begin
+   Result := Assigned(Locations) and Assigned(Plugins);
 end;
 
 function TxPLVendorSeedFile.FileName: string;
@@ -80,21 +88,51 @@ begin
    result := fFolders.PluginDir + K_XPL_VENDOR_SEED_FILE;
 end;
 
-procedure TxPLVendorSeedFile.Load;
+function TxPLVendorSeedFile.SchemaFile : string;
+begin
+   result := fFolders.PluginDir + K_XPL_SCHEMA_COLL_FILE;
+end;
+
+function TxPLVendorSeedFile.GetSchemas: TSchemaCollection;
 var SO : ISuperObject;
 begin
-   if not FileExists(FileName) then
-      TxPLApplication(Owner).Log(etWarning,'Vendor file absent, please consider updating it')
-   else
-   try
-      fStatus := True;                                                         // Settings correctly initialised and loaded
-
-      SO := XMLParseFile(FileName,true);
-
-      fPlugins := TPluginsType.Create(so, TxPLApplication(Owner).Folders.PluginDir);
-      fLocations := TLocationsType.Create(so);
-   except
+   if not Assigned(fSchemas) then begin
+      if not FileExists(SchemaFile) then
+         TxPLApplication(Owner).Log(etWarning,'Schema collection file absent, please consider downloading it')
+      else begin
+         SO := XMLParseFile(SchemaFile,true);
+         fSchemas := TSchemaCollection.Create(so, TxPLApplication(Owner).Folders.PluginDir);
+      end;
    end;
+   Result := fSchemas;
+end;
+
+function TxPLVendorSeedFile.GetLocations: TLocationsType;
+var SO : ISuperObject;
+begin
+   if not Assigned(fLocations) then begin
+      if not FileExists(FileName) then
+         TxPLApplication(Owner).Log(etWarning,'Vendor file absent, please consider updating it')
+      else begin
+         SO := XMLParseFile(FileName,true);
+         fLocations := TLocationsType.Create(so);
+      end;
+   end;
+   Result := fLocations;
+end;
+
+function TxPLVendorSeedFile.GetPlugins: TPluginsType;
+var SO : ISuperObject;
+begin
+   if not Assigned(fPlugins) then begin
+      if not FileExists(FileName) then
+         TxPLApplication(Owner).Log(etWarning,'Vendor file absent, please consider updating it')
+      else begin
+         SO := XMLParseFile(FileName,true);
+         fPlugins := TPluginsType.Create(so, TxPLApplication(Owner).Folders.PluginDir);
+      end;
+   end;
+   Result := fPlugins;
 end;
 
 function TxPLVendorSeedFile.UpdatedTS: TDateTime;
@@ -122,70 +160,5 @@ begin
                    result := TDeviceType(dev);
 end;
 
-//function TxPLVendorSeedFile.UpdatePlugin(const aPluginName: string) : boolean;
-//var i : LongWord;
-//    url : string;
-//begin
-//   i := 0;
-//   while (i<Plugins.Count) do begin
-//      if Plugins[i].Name = aPluginName then begin
-//         url := Plugins[i].URL;
-//         if not AnsiEndsStr(K_FEXT_XML, url) then url += K_FEXT_XML;
-////            Result := HTTPDownload(url,GetPluginFilePath(aPluginName));
-//            Result := HTTPDownload(url, Plugins[i].FileName);
-//            break;
-//      end;
-//      inc(i);
-//   end;
-//end;
-
-//function TxPLVendorSeedFile.VendorFile(const aVendor: tsVendor): TXMLpluginType;
-//var i : LongWord;
-//    fn : string;
-//begin
-//   result := nil;
-//   if Plugins<>nil then begin
-//      i := 0;
-//   while (i< Plugins.Count) and (result=nil) do begin
-//         if Plugins[i].Vendor = aVendor then begin
-//            fn := fFolders.PluginDir + AnsilowerCase(aVendor) + K_FEXT_XML;
-//            if fileexists(fn) then begin
-//               result := TXMLPluginType.Create(fn);
-//               if not result.valid then FreeAndNil(result);
-//            end;
-//         end;
-//         inc(i);
-//      end;
-//   end;
-//end;
-
-//function TxPLVendorSeedFile.GetDevice(const aAddress : TxPLAddress): TXMLDeviceType;
-//var vf : TXMLPluginType;
-//    i : integer;
-//begin
-//   result := nil;
-//   vf := VendorFile(aAddress.Vendor);
-//   if not assigned(vf) then exit;
-//
-//   for i:=0 to vf.Count-1 do
-//       if vf[i].Id = (aAddress.VD) then result := vf[i];
-//end;
-
-//function TxPLVendorSeedFile.GetPluginFilePath(const aPluginName : string) : string;
-//var item : TCollectionItem;
-//begin
-//   result := '';
-//   for item in Plugins do begin
-//       if TPluginType(item).Name = aPluginName then begin
-//          result := fFolders.PluginDir +
-//                    AnsiRightStr( TPluginType(item).URL,
-//                                  length(TPluginType(item).Url)-LastDelimiter('/',TPluginType(item).URL)
-//                    ) + K_FEXT_XML;
-//          break;
-//       end;
-//   end;
-//end;
-
-
 end.
-
+

@@ -12,32 +12,31 @@ unit frm_xplappslauncher;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ComCtrls, ActnList, Buttons, dlg_template;
+uses Classes, SysUtils, LSControls, LResources, Forms, Controls, Graphics,
+     ComCtrls, ActnList, Buttons, ExtCtrls, dlg_template;
 
-type
+type // TfrmAppLauncher =======================================================
+     TfrmAppLauncher = class(TDlgTemplate)
+        FrmAcLaunch: TAction;
+        DlgTbLaunch: TLSBitBtn;
+        lvApps: TListView;
+        procedure DlgTbLaunchClick(Sender: TObject);
+        procedure FormCreate(Sender: TObject);
+        procedure FormShow(Sender: TObject);
+     end;
 
-  { TfrmAppLauncher }
+     procedure ShowFrmAppLauncher;
 
-  TfrmAppLauncher = class(TDlgTemplate)
-    acLaunch: TAction;
-    lvApps: TListView;
-    ToolButton1: TToolButton;
-    procedure acLaunchExecute(Sender: TObject);
-    procedure FormShow(Sender: TObject);
-    procedure lvAppsDblClick(Sender: TObject);
-  end;
-
-  procedure ShowFrmAppLauncher;
-
-var frmAppLauncher: TfrmAppLauncher;
-
-implementation { =====================================================================}
+implementation //==============================================================
 uses Process
+     , FileUtil
+     , Dialogs
      , u_xpl_application
      , u_xpl_collection
+     , u_xpl_gui_resource
      ;
+
+var frmAppLauncher: TfrmAppLauncher;
 
 // ============================================================================
 procedure ShowFrmAppLauncher;
@@ -48,12 +47,19 @@ begin
 end;
 
 // Form procedures ============================================================
+procedure TfrmAppLauncher.FormCreate(Sender: TObject);
+begin
+   inherited;
+   SetButtonImage(DlgTbLaunch,FrmAcLaunch,K_IMG_MENU_RUN);
+end;
+
 procedure TfrmAppLauncher.FormShow(Sender: TObject);
 var sl : TxPLCustomCollection;
     path, version, nicename : string;
     i : integer;
 begin
    inherited;
+
    lvApps.Items.Clear;
    sl  := xPLApplication.Settings.GetxPLAppList;
    for i := 0 to sl.Count -1 do begin
@@ -67,23 +73,23 @@ begin
    sl.Free;
 end;
 
-procedure TfrmAppLauncher.acLaunchExecute(Sender: TObject);
+procedure TfrmAppLauncher.DlgTbLaunchClick(Sender: TObject);
+var filename : string;
 begin
    if lvApps.Selected = nil then exit;
+   filename := lvApps.Selected.SubItems[2];
 
-   with TProcess.Create(nil) do try
-      Executable := lvApps.Selected.SubItems[2];
-      Execute;
-   finally
-      Free;
-   end;
-end;
-
-procedure TfrmAppLauncher.lvAppsDblClick(Sender: TObject);
-begin
-   acLaunchExecute(self);
-   DlgAcClose.Execute;
+   if FileExists(filename) then
+      with TProcess.Create(nil) do try
+           Executable := filename;
+           Execute;
+      finally
+           Free;
+           DlgTbClose.Click;
+      end
+   else
+      ShowMessage('File not found : ' + FileName);
 end;
 
 end.
-
+

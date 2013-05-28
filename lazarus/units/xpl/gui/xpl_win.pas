@@ -2,26 +2,24 @@
   This source is only used to compile and install the package.
  }
 
-unit xpl_win; 
+unit xpl_win;
 
 interface
 
 uses
-  v_xplmsg_opendialog, v_msgtype_radio, v_class_combo, MStringGrid, 
-  v_msgbody_stringgrid, uControls, LazarusPackageIntf;
+   v_xplmsg_opendialog, v_msgtype_radio, uControls, v_msgbody_stringgrid, 
+   frame_config, LazarusPackageIntf;
 
 implementation
 
-procedure Register; 
+procedure Register;
 begin
-  RegisterUnit('v_xplmsg_opendialog', @v_xplmsg_opendialog.Register); 
-  RegisterUnit('v_msgtype_radio', @v_msgtype_radio.Register); 
-  RegisterUnit('v_class_combo', @v_class_combo.Register); 
-  RegisterUnit('MStringGrid', @MStringGrid.Register); 
-  RegisterUnit('v_msgbody_stringgrid', @v_msgbody_stringgrid.Register); 
-  RegisterUnit('uControls', @uControls.Register); 
-end; 
+  RegisterUnit('v_xplmsg_opendialog', @v_xplmsg_opendialog.Register);
+  RegisterUnit('v_msgtype_radio', @v_msgtype_radio.Register);
+  RegisterUnit('uControls', @uControls.Register);
+  RegisterUnit('v_msgbody_stringgrid', @v_msgbody_stringgrid.Register);
+end;
 
 initialization
-  RegisterPackage('xpl_win', @Register); 
+  RegisterPackage('xpl_win', @Register);
 end.

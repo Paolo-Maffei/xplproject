@@ -11,35 +11,82 @@ unit dlg_template;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ComCtrls, ActnList, Buttons;
+uses Classes, SysUtils, LSControls, LResources, Forms, Controls, Graphics,
+     ActnList, Buttons, XMLPropStorage, ExtCtrls;
 
 type // TDlgTemplate ==========================================================
      TDlgTemplate = class(TForm)
-        DlgacClose: TAction;
+        DlgAcClose: TAction;
         DlgActions: TActionList;
-        DlgtbClose: TToolButton;
-        DlgToolbar: TToolBar;
-        DlgSeparator: TToolButton;
+        DlgtbClose: TLSBitBtn;
+        DlgBottomBar: TPanel;
+        DlgToolBar: TPanel;
+        XMLPropStorage1: TXMLPropStorage;
         procedure DlgacCloseExecute(Sender: TObject);
+        procedure FormCloseQuery(Sender: TObject; var {%H-}CanClose: boolean);
         procedure FormCreate(Sender: TObject);
+        procedure FormShow(Sender: TObject);
+     protected
+        procedure SetButtonImage(const aButton : TLSBitBtn; const aAction : TAction; const aImgIndex : integer);
+        procedure SetButtonImage(const aButton : TLSSpeedButton; const aAction : TAction; const aImgIndex : integer); overload;
+        procedure SetButtonImage(const aButton : TLSBitBtn; const aImgIndex : integer); overload;
      end;
 
 implementation //==============================================================
 uses u_xpl_gui_resource
+     , u_xpl_application
      ;
 
 // Form procedures ============================================================
+procedure TDlgTemplate.FormCreate(Sender: TObject);
+begin
+   inherited;
+
+   DlgActions.Images := xPLGUIResource.Images16;
+
+   SetButtonImage(DlgTbClose, DlgAcClose, K_IMG_CLOSE);
+
+   if Assigned(xPLApplication) then begin
+      XMLPropStorage1.FileName := xPLApplication.SettingsFile;
+      XMLPropStorage1.Restore;
+   end;
+end;
+
+procedure TDlgTemplate.FormShow(Sender: TObject);
+begin
+   inherited;
+   DlgToolBar.Visible := DlgToolBar.Height > 6;                                // si > 6 c'est qu'il y a des composants dans la barre, je n'ai pas réussi à le faire avec componentcount<>0
+end;
+
+procedure TDlgTemplate.SetButtonImage(const aButton: TLSBitBtn; const aAction : TAction; const aImgIndex: integer);
+begin
+   aAction.ImageIndex := aImgIndex;
+   aButton.Action := aAction;
+   aButton.Layout:= blGlyphLeft;
+end;
+
+procedure TDlgTemplate.SetButtonImage(const aButton: TLSSpeedButton; const aAction: TAction; const aImgIndex: integer);
+begin
+   aAction.ImageIndex := aImgIndex;
+   aButton.Action := aAction;
+   aButton.Layout:= blGlyphLeft;
+end;
+
+procedure TDlgTemplate.SetButtonImage(const aButton: TLSBitBtn; const aImgIndex: integer);
+begin
+   aButton.Images := DlgActions.Images;
+   aButton.ImageIndex := aImgIndex;
+   aButton.Layout := blGlyphleft;
+end;
+
 procedure TDlgTemplate.DlgacCloseExecute(Sender: TObject);
 begin
    Close;
 end;
 
-procedure TDlgTemplate.FormCreate(Sender: TObject);
+procedure TDlgTemplate.FormCloseQuery(Sender: TObject; var CanClose: boolean);
 begin
-   inherited;
-   DlgToolbar.Images := xPLGUIResource.Images16;
+   XMLPropStorage1.Save;
 end;
 
 end.

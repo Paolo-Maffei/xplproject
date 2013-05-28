@@ -46,7 +46,7 @@ type TxPLReceivedEvent = procedure(const axPLMsg: TxPLMessage) of object;
            fConfig: TxPLCustomConfig;
            fCfgFname: string;
            fProbingTimer: TxPLTimer;
-           IncomingSocket: TxPLUDPServer;
+           IncomingSocket: TAppServer;
            Connection: TxPLConnHandler;
 
           procedure NoAnswerReceived({%H-}Sender: TObject);
@@ -149,7 +149,7 @@ procedure TxPLCustomListener.Listen;
 var i : integer;
 begin
    try
-      IncomingSocket := TxPLUDPServer.Create(self);
+      IncomingSocket := TAppServer.Create(self);
       if IncomingSocket.Active then begin                                      // Lets be sure we found an address to bind to
          IncomingSocket.OnReceived := {$ifdef fpc}@{$endif}UDPRead;
          Connection := TxPLConnHandler.Create(self);
@@ -188,7 +188,7 @@ begin
           Send;
       end;
 
-      fProbingTimer.Enabled := True;
+      fProbingTimer.Enabled := not (csDestroying in ComponentState);           // Don't wait for an answer if I'm leaving
       Free;
    end;
 end;
@@ -214,6 +214,7 @@ end;
 procedure TxPLCustomListener.UDPRead(const aString: string);
 var aMessage: TxPLMessage;
 begin
+   CheckSynchronize;
    if csDestroying in ComponentState then exit;
 
    fProbingTimer.Enabled := False;                                             // Stop waiting, I received a message
@@ -263,7 +264,8 @@ end;
 function TxPLCustomListener.DoxPLReceived(const aMessage: TxPLMessage): boolean;
 begin
    Result := Assigned(OnxPLReceived);
-   if Result then OnxPLReceived(aMessage);
+   if Result then
+      OnxPLReceived(aMessage);
 end;
 
 initialization // =============================================================

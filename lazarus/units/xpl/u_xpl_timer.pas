@@ -105,6 +105,18 @@ begin
   fFrequency := 0;
 end;
 
+procedure TxPLTimer.Set_Mode(const AValue: TTimerMode);
+begin
+  if fMode = AValue then exit;
+  fMode := AValue;
+  if (fMode = Recurrent) and (fFrequency < 1) then fFrequency := 1;
+end;
+
+function TxPLTimer.StatusAsStr: string;
+begin
+  Result := GetEnumName(TypeInfo(TTimerStatus), Ord(Status));
+end;
+
 procedure TxPLTimer.InitComponent(const aMsg : TxPLMessage);
 begin
    DisplayName  :=  aMsg.Body.GetValueByKey('device');
@@ -125,18 +137,6 @@ begin
                          else fEnd_Time := fStart_Time;
 
    Status := started;
-end;
-
-function TxPLTimeR.StatusAsStr: string;
-begin
-  Result := GetEnumName(TypeInfo(TTimerStatus), Ord(Status));
-end;
-
-procedure TxPLTimer.Set_Mode(const AValue: TTimerMode);
-begin
-  if fMode = AValue then exit;
-  fMode := AValue;
-  if (fMode = Recurrent) and (fFrequency < 1) then fFrequency := 1;
 end;
 
 procedure TxPLTimer.Set_Status(const aStatus: TTimerStatus);
@@ -207,4 +207,4 @@ initialization
   Schema_TimerRequest := TxPLSchema.Create('timer','request');
 
 end.
-
+
