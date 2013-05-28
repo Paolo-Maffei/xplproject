@@ -5,7 +5,7 @@ program xpl_hub;
 {$endif}
 {$R *.res}
 
-uses heaptrc,
+uses //heaptrc,
      {$IFDEF UNIX}
            cthreads,
            cwstring,
