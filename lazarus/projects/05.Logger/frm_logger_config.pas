@@ -7,7 +7,7 @@ interface
 
 uses
   Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, ActnList, StdCtrls, ExtCtrls, Spin, XMLPropStorage, Buttons, Grids,
+  ComCtrls, ActnList, StdCtrls, ExtCtrls, Spin, Buttons, Grids,
    RTTICtrls, LSControls, dlg_template;
 
 type

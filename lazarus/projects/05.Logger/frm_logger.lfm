@@ -131,6 +131,7 @@ inherited frmLogger: TfrmLogger
         Width = 288
       end
       inherited cbMsgType: TLSComboBox
+        Height = 31
         Width = 256
       end
     end

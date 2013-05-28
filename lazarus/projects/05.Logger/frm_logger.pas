@@ -7,8 +7,8 @@ interface
 
 uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
   Dialogs, ActnList, Menus, ComCtrls, Grids, StdCtrls, Buttons, u_xPL_Config,
-  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin, XMLPropStorage,
-  RTTICtrls, RTTIGrids, RxAboutDialog, LSControls, uxPLConst, frm_template,
+  u_xpl_custom_message, u_xPL_Message, ExtCtrls, Spin,
+  RTTICtrls, RTTIGrids, LSControls, uxPLConst, frm_template,
   frame_message, logger_listener, u_xpl_header;
 
 type // TfrmLogger  ===========================================================
@@ -246,7 +246,7 @@ begin
 end;
 
 procedure TfrmLogger.FPOObservedChanged(ASender: TObject; Operation: TFPObservedOperation; Data: Pointer);
-var i,j : integer;
+var i : integer;
 begin
    if Operation = ooFree then begin
       for i:=0 to dgMessages.RowCount-1 do begin
