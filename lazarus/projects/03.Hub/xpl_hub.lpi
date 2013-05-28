@@ -17,8 +17,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="8"/>
+      <MinorVersionNr Value="5"/>
+      <BuildNr Value="7"/>
       <StringTable CompanyName="clinique" ProductName="xPL Hub" InternalName="hub" ProductVersion="1.0.0.1"/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -37,28 +37,30 @@
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="2">
+    <RequiredPackages Count="1">
       <Item1>
         <PackageName Value="sup_object"/>
       </Item1>
-      <Item2>
-        <PackageName Value="pl_indycomp"/>
-      </Item2>
     </RequiredPackages>
-    <Units Count="1">
+    <Units Count="2">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_hub"/>
       </Unit0>
+      <Unit1>
+        <Filename Value="..\..\..\..\..\..\..\usr\lib\codetyphon\fpcsrc\packages\fcl-base\src\fptimer.pp"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="fpTimer"/>
+      </Unit1>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="\usr\lib\codetyphon\fpsrc\packages\fcl-base\src\;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl;..\..\units\general\RegExpr;..\..\units\xpl\xml;..\..\units\general"/>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="..\..\units\xpl;..\..\units\general;..\..\units\xpl\xml;..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc"/>
       <UnitOutputDirectory Value="\home\glhopital\lazout"/>
     </SearchPaths>
     <Parsing>
