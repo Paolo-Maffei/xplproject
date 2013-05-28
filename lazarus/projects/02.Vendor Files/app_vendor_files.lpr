@@ -2,13 +2,14 @@ program app_vendor_files;
 
 {$mode objfpc}{$H+}
 
-uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
+uses // heaptrc ,
+
+  {$IFDEF UNIX}
   cthreads,
-  {$ENDIF}{$ENDIF}
+  {$ENDIF}
   Interfaces
   , Forms
-  , pl_rx, pl_excontrols
+  , pl_rx, pl_excontrols, pl_lnetcomp
   , frm_vendor_files
   , u_xpl_application
   ;
@@ -23,4 +24,4 @@ begin
   Application.Run;
 
 end.
-
+
