@@ -5,14 +5,15 @@ unit frm_basic_settings;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons, XMLPropStorage{%H-},
-  RTTICtrls, frm_template, RxAboutDialog{%H-};
+uses Classes, SysUtils, RTTICtrls, LSControls, LResources, Forms,
+  Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList,
+  Buttons, frm_template;
 
 type { TfrmBasicSettings =====================================================}
      TfrmBasicSettings = class(TFrmTemplate)
-        acReload: TAction;
+        btnSave: TLSBitBtn;
+        FrmAcSave: TAction;
+        FrmAcReload: TAction;
         cbListenTo: TComboBox;
         edtListenTo: TEdit;
         e_BroadCast: TComboBox;
@@ -20,7 +21,6 @@ type { TfrmBasicSettings =====================================================}
         Label3: TLabel;
         Label4: TLabel;
         Label5: TLabel;
-        acSaveSettings: TAction;
         MenuItem1: TMenuItem;
         MenuItem2: TMenuItem;
         StaticText1: TStaticText;
@@ -30,36 +30,48 @@ type { TfrmBasicSettings =====================================================}
         procedure acReloadExecute(Sender: TObject);
         procedure acSaveSettingsExecute(Sender: TObject);
         procedure cbListenToChange(Sender: TObject);
+        procedure e_ListenOnChange(Sender: TObject);
         procedure FormCreate(Sender: TObject);
      end;
 
 var frmBasicSettings: TfrmBasicSettings;
 
-implementation //===============================================================
+implementation //==============================================================
 uses StrUtils
      , u_xpl_gui_resource
      , u_xpl_application
-     , app_basic_settings_common
      , lin_win_compat
+     , uIP
      ;
+
+// ============================================================================
+
+const K_ALL_IPS_JOCKER       = '*** ALL IP Addresses ***';
+      COMMENT_LINE           = 'Your network settings have been saved.'#10#13+
+                               #10#13'Note that your computer should use a fixed IP Address'#10#13+
+                               #10#13'Linux users : changes will be available when quitting the application'#10#13;
 
 // TFrmMain Object =============================================================
 procedure TfrmBasicSettings.FormCreate(Sender: TObject);
 begin
    inherited;
+   FrmAcReload.ImageIndex := K_IMG_REFRESH;
+   SetButtonImage(BtnSave,FrmAcSave,K_IMG_DOCUMENT_SAVE);
    acReloadExecute(self);
 end;
 
 procedure TfrmBasicSettings.acReloadExecute(Sender: TObject);
-var address : string;
-
+var AddObj : TIPAddress;
 begin
-   e_ListenOn.Items.Assign(IPAddresses);
+   e_ListenOn.Items.Clear;
 
+   e_ListenOn.Items.Clear;
    e_BroadCast.Items.Clear;
    e_BroadCast.Items.Add(K_IP_GENERAL_BROADCAST);
-
-   for address in e_ListenOn.Items do e_BroadCast.Items.Add( MakeBroadCast ( address ));
+   for AddObj in LocalIPAddresses do begin
+        e_ListenOn.Items.Add(AddObj.Address);
+        e_BroadCast.Items.Add(AddObj.BroadCast);
+   end;
 
    e_ListenOn.Items.Insert(0,K_ALL_IPS_JOCKER);
 
@@ -79,6 +91,7 @@ begin
          end;
       cbListenToChange(self);
    end;
+   FrmAcSave.Enabled := false;
 end;
 
 procedure TfrmBasicSettings.acSaveSettingsExecute(Sender: TObject);
@@ -102,6 +115,15 @@ procedure TfrmBasicSettings.cbListenToChange(Sender: TObject);
 begin
    edtListenTo.Visible := (cbListenTo.ItemIndex = 2);
    if edtListenTo.Visible then edtListenTo.SetFocus;
+end;
+
+procedure TfrmBasicSettings.e_ListenOnChange(Sender: TObject);
+var IPA  : TIPAddress;
+begin
+   FrmAcSave.Enabled := true;
+   IPA := LocalIPAddresses.GetByIP(e_ListenOn.Text);
+   if Assigned(IPA) then
+      e_BroadCast.Text := IPA.BroadCast;
 end;
 
 end.
