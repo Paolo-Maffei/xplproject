@@ -17,8 +17,8 @@
       <UseVersionInfo Value="True"/>
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
-      <RevisionNr Value="1"/>
-      <BuildNr Value="4"/>
+      <MinorVersionNr Value="5"/>
+      <BuildNr Value="2"/>
       <StringTable CompanyName="clinique" ProductName="xPL Basic Settings" InternalName="basicset" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -36,36 +36,28 @@
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
-    <RequiredPackages Count="9">
+    <RequiredPackages Count="7">
       <Item1>
-        <PackageName Value="sup_object"/>
+        <PackageName Value="pl_lazsolutions"/>
       </Item1>
       <Item2>
-        <PackageName Value="pl_excontrols"/>
+        <PackageName Value="pl_rx"/>
       </Item2>
       <Item3>
-        <PackageName Value="FCL"/>
+        <PackageName Value="pl_excontrols"/>
       </Item3>
       <Item4>
-        <PackageName Value="pl_rx"/>
+        <PackageName Value="runtimetypeinfocontrols"/>
       </Item4>
       <Item5>
-        <PackageName Value="RunTimeTypeInfoControls"/>
-        <MinVersion Minor="1" Valid="True"/>
+        <PackageName Value="FCL"/>
       </Item5>
       <Item6>
-        <PackageName Value="LCLBase"/>
-        <MinVersion Major="1" Release="1" Valid="True"/>
+        <PackageName Value="LCL"/>
       </Item6>
       <Item7>
-        <PackageName Value="pl_synapsepkg"/>
+        <PackageName Value="sup_object"/>
       </Item7>
-      <Item8>
-        <PackageName Value="pl_indycomp"/>
-      </Item8>
-      <Item9>
-        <PackageName Value="LCL"/>
-      </Item9>
     </RequiredPackages>
     <Units Count="2">
       <Unit0>
@@ -87,8 +79,8 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="..\..\units\xpl\res\pictures;$(ProjOutDir)"/>
-      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general;..\..\units\general\RegExpr;..\..\units\xpl"/>
+      <IncludeFiles Value="..\..\units\xpl\res\pictures"/>
+      <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general;..\..\units\xpl;..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc"/>
       <UnitOutputDirectory Value="\home\glhopital\lazout"/>
     </SearchPaths>
     <Parsing>

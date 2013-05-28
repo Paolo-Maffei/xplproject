@@ -1,11 +1,11 @@
 program app_basic_settings;
 
-uses {$IFDEF UNIX}
-        {$IFDEF UseCThreads}
-           cthreads,
-        {$ENDIF}
-     {$ENDIF}
-     Forms, pl_rx, runtimetypeinfocontrols, pl_excontrols
+uses cthreads
+     //, heaptrc                                                               // Debugging : find memory leaks
+     , Forms
+     , runtimetypeinfocontrols
+     , pl_excontrols
+     , pl_rx
      , frm_basic_settings
      , u_xpl_application
      , Interfaces;
@@ -19,4 +19,4 @@ begin
    Application.CreateForm(TfrmBasicSettings, frmBasicSettings);
    Application.Run;
 end.
-
+
