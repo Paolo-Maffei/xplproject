@@ -41,7 +41,6 @@ const K_ERROR_SETTINGS = 'Network settings may not be set ';
       K_ERROR_PORT     = 'Unabled to bind on port 3865 : a hub may already be present';
       K_RELEASING      = 'No activity on port %s, released';
       K_DISCOVERED     = 'Discovered %s %s on %s';
-      K_INVALID_PORT   = 'Discovered %s but invalid port (%s) in message body';
       K_VERBOSE        = '%s => %s, %s';
 
 // ============================================================================
@@ -93,22 +92,21 @@ begin
    remoteip := aHBeatMsg.Remote_Ip;
    if remoteip='' then remoteip := LocalIPAddresses.Items[0].Address;          // assume cases when the hbeat doesn't contain the remote_ip body element
 
-   for c:=0 to Pred(fInSocket.Bindings.Count) do begin
-       if Assigned(LocalIPAddresses.GetByIP(remoteIP)) then                     // The message is sent from a device located on one of my net cards
-         if (aHBeatMsg.Port<>-1) then begin
-            port := IntToStr(aHBeatMsg.Port);
-            i := fSocketList.IndexOfName(port);                                // Search for the current port
+   if not Assigned(LocalIPAddresses.GetByIP(remoteIP)) then exit;              // The message is sent from a device located on one of my net cards
 
-            if i=-1 then begin                                                 // If not found
-               aSocket := TIdUDPClient.Create(self);
-               aSocket.Host:=remoteIP;
-               aSocket.Port:=StrToInt(port);
-               i := fSocketList.AddObject(port+'=',aSocket);
-               Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
-            end;
-            fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
-         end else
-            Log(etWarning,K_INVALID_PORT,[aHBeatMsg.AppName,aHBeatMsg.port]);
+   for c:=0 to Pred(fInSocket.Bindings.Count) do
+       if (aHBeatMsg.Port<>-1) then begin
+          port := IntToStr(aHBeatMsg.Port);
+          i := fSocketList.IndexOfName(port);                                // Search for the current port
+
+          if i=-1 then begin                                                 // If not found
+             aSocket := TIdUDPClient.Create(self);
+             aSocket.Host:=remoteIP;
+             aSocket.Port:=StrToInt(port);
+             i := fSocketList.AddObject(port+'=',aSocket);
+             Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
+          end;
+          fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
        end;
 end;
 
