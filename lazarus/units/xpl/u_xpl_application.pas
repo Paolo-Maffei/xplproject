@@ -8,6 +8,7 @@ interface
 
 uses SysUtils
      , Classes
+     , CustApp
      , u_xpl_address
      , u_xpl_folders
      , u_xpl_settings
@@ -26,6 +27,7 @@ type // TxPLApplication =======================================================
         fPluginList : TxPLVendorSeedFile;
         fVersion    : string;
         fTimerPool  : TTimerPool;
+        function GetApplication: TCustomApplication;
      public
         constructor Create(const aOwner : TComponent); reintroduce;
         destructor  Destroy; override;
@@ -45,6 +47,7 @@ type // TxPLApplication =======================================================
         property OnLogEvent: TStrParamEvent     read fOnLogEvent write fOnLogEvent;
         property VendorFile: TxPLVendorSeedFile read fPluginList;
         property TimerPool : TTimerPool read fTimerPool;
+        property Application : TCustomApplication read GetApplication;
      end;
 
 var xPLApplication : TxPLApplication;
@@ -62,6 +65,9 @@ const K_FULL_TITLE = '%s v%s by %s (build %s)';
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
 begin
+   if not (aOwner is TCustomApplication) then
+      Raise Exception.Create('Owner must be TCustomApplication');
+
    inherited Create(aOwner);
    include(fComponentStyle,csSubComponent);
 
@@ -70,7 +76,10 @@ begin
    fFolders  := TxPLFolders.Create(fAdresse);
 
    Log(etInfo,FullTitle);
-   fSettings   := TxPLSettings.Create(self);
+   if TCustomApplication(Owner).HasOption('i') then
+      fSettings := TxPLCommandLineSettings.Create(self)
+   else
+      fSettings := TxPLRegistrySettings.Create(self);
 
    fPluginList := TxPLVendorSeedFile.Create(self,Folders);
    fTimerPool  := TTimerPool.Create(self);
@@ -84,11 +93,19 @@ begin
    inherited;
 end;
 
+function TxPLApplication.GetApplication: TCustomApplication;
+begin
+   Result := Owner as TCustomApplication;
+end;
+
 procedure TxPLApplication.RegisterMe;
 var aPath, aVersion, aNiceName : string;
 begin
-   Settings.GetAppDetail(Adresse.Vendor, Adresse.Device,aPath,aVersion, aNiceName);
-   if aVersion < Version then Settings.SetAppDetail(Adresse.Vendor,Adresse.Device,Version)
+   if Settings is TxPLRegistrySettings then with TxPLRegistrySettings(Settings) do begin
+      GetAppDetail(Adresse.Vendor, Adresse.Device,aPath,aVersion, aNiceName);
+      if aVersion < Version
+         then SetAppDetail(Adresse.Vendor,Adresse.Device,Version)
+   end;
 end;
 
 function TxPLApplication.AppName : string;
@@ -106,7 +123,7 @@ begin
    Result := Folders.DeviceDir + 'settings.xml';
 end;
 
-Procedure TxPLApplication.Log(const EventType : TEventType; const Msg : String);
+procedure TxPLApplication.Log(const EventType: TEventType; const Msg: String);
 begin
    LogInSystem(EventType,Msg);
    if IsConsole then writeln(FormatDateTime('dd/mm hh:mm:ss',now),' ',EventTypeToxPLLevel(EventType),' ',Msg);
@@ -114,7 +131,7 @@ begin
    if Assigned(fOnLogEvent) then OnLogEvent(Msg);
 end;
 
-Procedure TxPLApplication.Log(const EventType : TEventType; const Fmt : String; const Args : Array of const);
+procedure TxPLApplication.Log(const EventType: TEventType; const Fmt: String; const Args: array of const);
 begin
    Log(EventType,Format(Fmt,Args));
 end;

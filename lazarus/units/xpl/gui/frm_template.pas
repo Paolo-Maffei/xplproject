@@ -55,6 +55,7 @@ uses frm_xplappslauncher
      , u_xpl_custom_listener
      , u_xpl_application
      , u_xpl_heart_beater
+     , u_xpl_settings
      , Process
      ;
 
@@ -75,7 +76,7 @@ begin
 
    Caption := xPLApplication.AppName;
 
-   sl := xPLApplication.Settings.GetxPLAppList;
+   sl := TxPLRegistrySettings(xPLApplication.Settings).GetxPLAppList;
       AddSubMenuElmt(sl,'basicset');
       AddSubMenuElmt(sl,'vendfile');
       AddSubMenuElmt(sl,'piedit');
@@ -143,7 +144,7 @@ var item : TxPLCollectionItem;
 begin
     item := aColl.FindItemName(aName);
     if assigned(item) then begin
-       xPLApplication.Settings.GetAppDetail(item.Value,Item.DisplayName,path,version,nicename);
+       TxPLRegistrySettings(xPLApplication.Settings).GetAppDetail(item.Value,Item.DisplayName,path,version,nicename);
        aMenu := NewItem( nicename,0, false, (xPLApplication.Adresse.Device<>aName),
                          @acCommonToolsExecute, 0, '');
        aMenu.Hint    := path;

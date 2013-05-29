@@ -16,7 +16,7 @@ const K_IP_GENERAL_BROADCAST : string = '255.255.255.255';
 
    procedure GetProxySettings(out bEnabled : boolean; out sServer : string);
    procedure LogInSystem (const EventType : TEventType; const Msg : String);
-   function GetMacAddress : string;
+   //function GetMacAddress : string;
 
 implementation // =============================================================
 uses {$ifndef fpc}
@@ -39,43 +39,43 @@ var        fEventLog : TEventLog;
      {$endif}
 
 // ============================================================================
-function GetMacAddress : string;
-{$ifndef mswindows}
-var proc : TProcess;
-    slOutput : TStringList;
-    start : integer;
-    s : string;
-{$endif}
-begin
-   Result := '';
-{$ifdef mswindows}
-   // to define a suitable way to do it in windows
-{$else}
-   proc := TProcess.Create(nil);
-   try
-      slOutput := TStringList.Create;
-      try
-         proc.Executable := 'ifconfig';
-         proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
-         proc.Execute;
-         slOutput.LoadFromStream(proc.Output);
-         for s in slOutput do begin
-             Start := Pos('HWaddr',s);
-             if Start<>0 then begin
-                s := AnsiRightStr(s,Length(s)-(Start+6));
-                Start := Pos(' ',s);
-                s := AnsiLeftStr(s,Pred(Start));
-                result := s;
-             end;
-         end;
-      finally
-         slOutput.Free;
-      end;
-   finally
-      proc.Free;
-   end;
-{$endif}
-end;
+//function GetMacAddress : string;                                             // Replaced by uIP unit
+//{$ifndef mswindows}
+//var proc : TProcess;
+//    slOutput : TStringList;
+//    start : integer;
+//    s : string;
+//{$endif}
+//begin
+//   Result := '';
+//{$ifdef mswindows}
+//   // to define a suitable way to do it in windows
+//{$else}
+//   proc := TProcess.Create(nil);
+//   try
+//      slOutput := TStringList.Create;
+//      try
+//         proc.Executable := 'ifconfig';
+//         proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
+//         proc.Execute;
+//         slOutput.LoadFromStream(proc.Output);
+//         for s in slOutput do begin
+//             Start := Pos('HWaddr',s);
+//             if Start<>0 then begin
+//                s := AnsiRightStr(s,Length(s)-(Start+6));
+//                Start := Pos(' ',s);
+//                s := AnsiLeftStr(s,Pred(Start));
+//                result := s;
+//             end;
+//         end;
+//      finally
+//         slOutput.Free;
+//      end;
+//   finally
+//      proc.Free;
+//   end;
+//{$endif}
+//end;
 
 // ============================================================================
 procedure GetProxySettings(out bEnabled: boolean; out sServer: string);

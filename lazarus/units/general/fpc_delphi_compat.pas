@@ -43,6 +43,7 @@ Uses Classes
      , SysUtils
      , lin_win_compat
      , StrUtils
+     , uIP
      {$ifdef mswindows}
      , IdStack
      {$else}
@@ -112,7 +113,8 @@ end;
 
 function GetMacAddress: string;
 begin
-   Result := AnsiLowerCase(AnsiReplaceStr(lin_win_compat.GetMacAddress,':',''));
+   if LocalIPAddresses.Count = 0 then Raise Exception.Create('No network card detected');
+   Result := AnsiLowerCase(AnsiReplaceStr(LocalIPAddresses.Items[0].HWAddr,':',''));
 end;
 
 function GetCommonAppDataPath : string;

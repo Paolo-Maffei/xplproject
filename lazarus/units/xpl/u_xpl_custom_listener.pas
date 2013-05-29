@@ -89,6 +89,7 @@ implementation // =============================================================
 
 uses u_xpl_schema
      , u_xpl_messages
+     , CustApp
      ;
 
 const K_MSG_BIND_OK = 'Listening on %s:%u';
@@ -272,4 +273,4 @@ initialization // =============================================================
   Classes.RegisterClass(TxPLCustomListener);
 
 end.
-
+

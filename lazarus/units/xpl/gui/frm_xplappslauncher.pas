@@ -33,6 +33,7 @@ uses Process
      , Dialogs
      , u_xpl_application
      , u_xpl_collection
+     , u_xpl_settings
      , u_xpl_gui_resource
      ;
 
@@ -61,16 +62,18 @@ begin
    inherited;
 
    lvApps.Items.Clear;
-   sl  := xPLApplication.Settings.GetxPLAppList;
-   for i := 0 to sl.Count -1 do begin
-       xPLApplication.Settings.GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version, nicename);
-       if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
-            if NiceName<>'' then Caption := NiceName
-                            else Caption := sl[i].DisplayName;
-            SubItems.DelimitedText:= Sl[i].Value + ',' + version + ',' + path;
-       end;
+   with TxPLRegistrySettings(xPLApplication.Settings) do begin
+        sl  := GetxPLAppList;
+        for i := 0 to sl.Count -1 do begin
+            GetAppDetail(sl.Items[i].Value,sl.Items[i].DisplayName,path,version, nicename);
+            if path <> Application.ExeName then with lvApps.Items.Add do begin     // Avoid presenting myself in the app list
+               if NiceName<>'' then Caption := NiceName
+                               else Caption := sl[i].DisplayName;
+               SubItems.DelimitedText:= Sl[i].Value + ',' + version + ',' + path;
+            end;
+        end;
+        sl.Free;
    end;
-   sl.Free;
 end;
 
 procedure TfrmAppLauncher.DlgTbLaunchClick(Sender: TObject);
