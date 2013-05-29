@@ -17,7 +17,7 @@ type TPortList = TStringList;
      // TxPLHub ===============================================================
      TxPLHub = class(TxPLApplication)
      private
-        fInSocket   : THubServer;                                           // Connexion used to listen incoming messages
+        fInSocket   : THubServer;                                              // Connexion used to listen incoming messages
         fSocketList : TPortList;
         fMessage    : TxPLCustomMessage;
 
@@ -81,7 +81,7 @@ begin
       writeln( Format(K_VERBOSE,[fMessage.source.RawxPL,fMessage.target.RawxPL,fMessage.schema.RawxPL]));
 
    for i:=0 to Pred(fSocketList.Count) do
-       TIdUDPClient(fSocketList.Objects[i]).Send(aString);                     // relaying the message
+      TIdUDPClient(fSocketList.Objects[i]).Send(aString);                      // relaying the message
 end;
 
 procedure TxPLHub.HandleDevice(const aHBeatMsg : THeartBeatMsg);
@@ -97,9 +97,9 @@ begin
    for c:=0 to Pred(fInSocket.Bindings.Count) do
        if (aHBeatMsg.Port<>-1) then begin
           port := IntToStr(aHBeatMsg.Port);
-          i := fSocketList.IndexOfName(port);                                // Search for the current port
+          i := fSocketList.IndexOfName(port);                                  // Search for the current port
 
-          if i=-1 then begin                                                 // If not found
+          if i=-1 then begin                                                   // If not found
              aSocket := TIdUDPClient.Create(self);
              aSocket.Host:=remoteIP;
              aSocket.Port:=StrToInt(port);
