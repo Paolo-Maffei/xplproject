@@ -27,113 +27,187 @@ uses Registry
 type // TxPLSettings ==========================================================
      TxPLSettings = class(TComponent)
      private
-        fRegistry : TRegistry;
         fProxyEnable : boolean;
         fProxyServer,
         fBroadCastAddress,
         fListenOnAddress ,
         fListenToAddresses : string;
 
-        function  Get_ListenOnAll     : boolean;
-        function  Get_ListenToAny     : boolean;
-        function  Get_ListenToLocal   : boolean;
+        function  GetListenOnAll     : boolean;
+        function  GetListenToAny     : boolean;
+        function  GetListenToLocal   : boolean;
 
-        procedure Set_ListenOnAll      (const bValue : boolean);
-        procedure Set_ListenToLocal    (const bValue : boolean);
-        procedure Set_ListenToAny      (const bValue : boolean);
-        procedure Set_ListenOnAddress  (const AValue: string);
-        procedure Set_ListenToAddresses(const AValue: string);
-        procedure Set_BroadCastAddress (const AValue: string);
+     public
+        constructor Create(AOwner: TComponent); override;
+        //destructor  Destroy; override;
+        procedure InitComponent; virtual; abstract;
+        function    IsValid : boolean;
+
+     published
+        property ListenToAny       : boolean read GetListenToAny;
+        property ListenToLocal     : boolean read GetListenToLocal;
+        property ListenOnAll       : boolean read GetListenOnAll;
+        property ListenOnAddress   : string  read fListenOnAddress;
+        property ListenToAddresses : string  read fListenToAddresses;
+        property BroadCastAddress  : string  read fBroadCastAddress;
+        property ProxyEnable       : boolean read fProxyEnable;
+        property ProxyServer       : string  read fProxyServer;
+     end;
+
+     // TxPLCommandLineSettings ==============================================
+     TxPLCommandLineSettings = class(TxPLSettings)
+     public
+        procedure InitComponent; override;
+     end;
+
+     // TxPLRegistrySettings ==================================================
+     TxPLRegistrySettings = class(TxPLSettings)
+     private
+        fRegistry : TRegistry;
 
         function  ReadKeyString (const aKeyName : string; const aDefault : string = '') : string;
         procedure WriteKeyString(const aKeyName : string; const aValue : string);
-     public
-        constructor Create(AOwner: TComponent); override;
-        procedure   InitComponent;
-        destructor  Destroy; override;
 
-        function    IsValid : boolean;
+        procedure SetListenOnAll      (const bValue : boolean);
+        procedure SetListenToLocal    (const bValue : boolean);
+        procedure SetListenToAny      (const bValue : boolean);
+        procedure SetListenOnAddress  (const AValue: string);
+        procedure SetListenToAddresses(const AValue: string);
+        procedure SetBroadCastAddress (const AValue: string);
+     public
+        procedure InitComponent; override;
+        destructor Destroy; override;
 
         function GetxPLAppList : TxPLCustomCollection;
 
         procedure GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion, aProdName : string);
         procedure SetAppDetail(const aVendor, aDevice, aVersion: string);
-
+        function Registry : TRegistry;
      published
-        property ListenToAny       : boolean read Get_ListenToAny     write Set_ListenToAny;
-        property ListenToLocal     : boolean read Get_ListenToLocal   write Set_ListenToLocal;
-        property ListenOnAll       : boolean read Get_ListenOnAll     write Set_ListenOnAll;
-        property ListenOnAddress   : string  read fListenOnAddress    write Set_ListenOnAddress;
-        property ListenToAddresses : string  read fListenToAddresses  write Set_ListenToAddresses;
-        property BroadCastAddress  : string  read fBroadCastAddress   write Set_BroadCastAddress;
-        property ProxyEnable       : boolean read fProxyEnable;
-        property ProxyServer       : string  read fProxyServer;
+        property ListenToAny       : boolean read GetListenToAny     write SetListenToAny;
+        property ListenToLocal     : boolean read GetListenToLocal   write SetListenToLocal;
+        property ListenOnAll       : boolean read GetListenOnAll     write SetListenOnAll;
+        property ListenOnAddress   : string  read fListenOnAddress    write SetListenOnAddress;
+        property ListenToAddresses : string  read fListenToAddresses  write SetListenToAddresses;
+        property BroadCastAddress  : string  read fBroadCastAddress   write SetBroadCastAddress;
      end;
 
-implementation // ======================================================================
+implementation // =============================================================
 uses SysUtils
      , StrUtils
      , u_xpl_application
      , uxPLConst
+     , uIP
      , fpc_delphi_compat
      , lin_win_compat
+     , CustApp
      {$ifndef fpc}
      , windows                                                                 // Needed on delphi to define KEY_READ
      {$endif}
      ;
 
-const // Registry Key and values constants =============================================
-   K_XPL_ROOT_KEY               = '\Software\xPL\';
-   K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                            // \software\xpl\vendor\device\
-   K_LOG_INFO                   = 'xPL settings loaded : %s,%s,%s';
-   K_XPL_REG_VERSION_KEY        = 'version';
-   K_XPL_REG_PRODUCT_NAME       = 'productname';
-   K_XPL_REG_PATH_KEY           = 'path';
-   K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
-   K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
-   K_REGISTRY_BROADCAST         = 'BroadcastAddress';
-   K_REGISTRY_LISTENON          = 'ListenOnAddress';
-   K_REGISTRY_LISTENTO          = 'ListenToAddresses';
+const // Registry Key and values constants ====================================
+     K_XPL_ROOT_KEY               = '\Software\xPL\';
+     K_XPL_FMT_APP_KEY            = K_XPL_ROOT_KEY + '%s\%s\';                 // \software\xpl\vendor\device\
+     K_LOG_INFO                   = 'xPL settings loaded : %s,%s,%s';
+     K_XPL_REG_VERSION_KEY        = 'version';
+     K_XPL_REG_PRODUCT_NAME       = 'productname';
+     K_XPL_REG_PATH_KEY           = 'path';
+     K_XPL_SETTINGS_NETWORK_ANY   = 'ANY';
+     K_XPL_SETTINGS_NETWORK_LOCAL = 'ANY_LOCAL';
+     K_REGISTRY_BROADCAST         = 'BroadcastAddress';
+     K_REGISTRY_LISTENON          = 'ListenOnAddress';
+     K_REGISTRY_LISTENTO          = 'ListenToAddresses';
 
 // TxPLSettings =================================================================
 constructor TxPLSettings.Create(aOwner : TComponent);
 begin
-   inherited;
+  inherited;
 
-   fRegistry := TRegistry.Create(KEY_READ);
-   InitComponent;
+  InitComponent;
+
+  TxPLApplication(Owner).Log(etInfo,K_LOG_INFO, [fBroadCastAddress,fListenOnAddress,fListenToAddresses]);
+  GetProxySettings(fProxyEnable,fProxyServer);                                // Stub to load informations depending upon the OS
 end;
 
-procedure TxPLSettings.InitComponent;
+function TxPLSettings.GetListenToLocal : boolean;
+begin
+  result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_LOCAL)
+end;
+
+function TxPLSettings.GetListenToAny : boolean;
+begin
+  result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_ANY)
+end;
+
+function TxPLSettings.GetListenOnAll : boolean;
+begin
+  result := AnsiIndexStr( ListenOnAddress,
+                          [K_XPL_SETTINGS_NETWORK_ANY,K_XPL_SETTINGS_NETWORK_LOCAL] )
+                          <> -1 ;
+end;
+
+function TxPLSettings.IsValid: Boolean;                                        // Just checks that all basic values
+begin                                                                          // have been initialized
+  result := (length(BroadCastAddress ) *
+             length(ListenOnAddress  ) *
+             length(ListenToAddresses)) <>0;
+end;
+
+// TxPLCommandLineSettings ====================================================
+procedure TxPLCommandLineSettings.InitComponent;
+var AddrObj : TIPAddress = nil;
+    OptionValue : string;
+    app : TCustomApplication;
+
+begin
+   OptionValue := TxPLApplication(Owner).Application.GetOptionValue('i');
+   AddrObj := LocalIPAddresses.GetByIntName(OptionValue);
+   if not Assigned(AddrObj) then
+      Raise Exception.Create('Invalid network interface specified in -i parameter')
+   else begin
+      fBroadCastAddress := AddrObj.BroadCast;
+      fListenOnAddress := AddrObj.Address;
+      fListenToAddresses := K_XPL_SETTINGS_NETWORK_ANY;
+   end;
+end;
+
+// TxPLRegistrySettings =======================================================
+function TxPLRegistrySettings.Registry: TRegistry;
+begin
+   if not Assigned(fRegistry) then
+      fRegistry := TRegistry.Create(KEY_READ);
+   Result := fRegistry;
+end;
+
+procedure TxPLRegistrySettings.InitComponent;
 begin
    fBroadCastAddress := ReadKeyString(K_REGISTRY_BROADCAST,'255.255.255.255');
    fListenOnAddress  := ReadKeyString(K_REGISTRY_LISTENON,K_XPL_SETTINGS_NETWORK_ANY);
    fListenToAddresses:= ReadKeyString(K_REGISTRY_LISTENTO,K_XPL_SETTINGS_NETWORK_ANY);
-
-   TxPLApplication(Owner).Log(etInfo,K_LOG_INFO, [fBroadCastAddress,fListenOnAddress,fListenToAddresses]);
-
-   GetProxySettings(fProxyEnable,fProxyServer);                                // Stub to load informations depending upon the OS
 end;
 
-destructor TxPLSettings.Destroy;
+destructor TxPLRegistrySettings.Destroy;
 begin
-   fRegistry.CloseKey;
-   fRegistry.Free;
+   if Assigned(Registry) then begin
+      Registry.CloseKey;
+      Registry.Free;
+   end;
    inherited;
 end;
 
-function TxPLSettings.ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
+function TxPLRegistrySettings.ReadKeyString(const aKeyName : string; const aDefault : string = '') : string;
 begin
-   fRegistry.RootKey := HKEY_LOCAL_MACHINE;
-   fRegistry.OpenKey(K_XPL_ROOT_KEY,True);
-   result := fRegistry.ReadString(aKeyName);
-   if result = '' then result := aDefault;
+   Registry.RootKey := HKEY_LOCAL_MACHINE;
+   Registry.OpenKey(K_XPL_ROOT_KEY,True);
+   Result := Registry.ReadString(aKeyName);
+   if Result = '' then Result := aDefault;
 end;
 
-procedure TxPLSettings.WriteKeyString(const aKeyName : string; const aValue : string);
+procedure TxPLRegistrySettings.WriteKeyString(const aKeyName : string; const aValue : string);
 begin
-   fRegistry.Access :=KEY_WRITE;
-   with fRegistry do try
+   Registry.Access := KEY_WRITE;
+   with Registry do try
       RootKey := HKEY_LOCAL_MACHINE;
       OpenKey(K_XPL_ROOT_KEY,True);
       try
@@ -141,68 +215,44 @@ begin
       except
       end;
    finally
-      Access:=KEY_READ;
+      Access := KEY_READ;
    end;
 end;
 
-function TxPLSettings.Get_ListenToLocal : boolean;
-begin
-   result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_LOCAL)
-end;
-
-procedure TxPLSettings.Set_ListenToLocal(const bValue : boolean);
+procedure TxPLRegistrySettings.SetListenToLocal(const bValue : boolean);
 begin
    ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL);
 end;
 
-function TxPLSettings.Get_ListenToAny : boolean;
-begin
-   result := (ListenToAddresses = K_XPL_SETTINGS_NETWORK_ANY)
-end;
-
-procedure TxPLSettings.Set_ListenToAny(const bValue : boolean);
+procedure TxPLRegistrySettings.SetListenToAny(const bValue : boolean);
 begin
    ListenToAddresses := IfThen(bValue,K_XPL_SETTINGS_NETWORK_ANY) ;
 end;
 
-function TxPLSettings.Get_ListenOnAll : boolean;
-begin
-   result := AnsiIndexStr( ListenOnAddress,
-                           [K_XPL_SETTINGS_NETWORK_ANY,K_XPL_SETTINGS_NETWORK_LOCAL] )
-                           <> -1 ;
-end;
-
-procedure TxPLSettings.Set_ListenOnAll(const bValue : boolean);
+procedure TxPLRegistrySettings.SetListenOnAll(const bValue : boolean);
 begin
    ListenOnAddress := IfThen(bValue,K_XPL_SETTINGS_NETWORK_LOCAL);
 end;
 
-procedure TxPLSettings.Set_ListenToAddresses(const AValue: string);
+procedure TxPLRegistrySettings.SetListenToAddresses(const AValue: string);
 begin
    fListenToAddresses := aValue;
    WriteKeyString(K_REGISTRY_LISTENTO,aValue);
 end;
 
-procedure TxPLSettings.Set_ListenOnAddress(const AValue: string);
+procedure TxPLRegistrySettings.SetListenOnAddress(const AValue: string);
 begin
    fListenOnAddress := aValue;
    WriteKeyString(K_REGISTRY_LISTENON,aValue);
 end;
 
-procedure TxPLSettings.Set_BroadCastAddress(const AValue: string);
+procedure TxPLRegistrySettings.SetBroadCastAddress(const AValue: string);
 begin
    fBroadCastAddress := aValue;
    WriteKeyString(K_REGISTRY_BROADCAST,aValue);
 end;
 
-function TxPLSettings.IsValid: Boolean;                                        // Just checks that all basic values
-begin                                                                          // have been initialized
-   result := (length(BroadCastAddress ) *
-              length(ListenOnAddress  ) *
-              length(ListenToAddresses)) <>0;
-end;
-
-function TxPLSettings.GetxPLAppList : TxPLCustomCollection;
+function TxPLRegistrySettings.GetxPLAppList : TxPLCustomCollection;
 var aVendorListe, aAppListe : TStringList;
     vendor, app : string;
     item : TxPLCollectionItem;
@@ -210,13 +260,13 @@ begin
    aVendorListe := TStringList.Create;
    aAppListe    := TStringList.Create;
    result := TxPLCustomCollection.Create(nil);
-   fRegistry.RootKey := HKEY_LOCAL_MACHINE;
-   fRegistry.OpenKey(K_XPL_ROOT_KEY ,True);
-   fRegistry.GetKeyNames(aVendorListe);
+   Registry.RootKey := HKEY_LOCAL_MACHINE;
+   Registry.OpenKey(K_XPL_ROOT_KEY ,True);
+   Registry.GetKeyNames(aVendorListe);
    for vendor in aVendorListe do begin
-       fRegistry.OpenKey(K_XPL_ROOT_KEY,False);
-       fRegistry.OpenKey(vendor,False);
-       fRegistry.GetKeyNames(aAppListe);
+       Registry.OpenKey(K_XPL_ROOT_KEY,False);
+       Registry.OpenKey(vendor,False);
+       Registry.GetKeyNames(aAppListe);
        for app in aAppListe do begin
           item := Result.Add(app);
           item.Value := vendor;
@@ -226,9 +276,9 @@ begin
    aAppListe.Free;
 end;
 
-procedure TxPLSettings.GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion, aProdName: string);
+procedure TxPLRegistrySettings.GetAppDetail(const aVendor, aDevice : string; out aPath, aVersion, aProdName: string);
 begin
-   with fRegistry do begin
+   with Registry do begin
       RootKey := HKEY_LOCAL_MACHINE;
       OpenKey (K_XPL_ROOT_KEY, False);
       OpenKey (aVendor, True);                                                 // At the time, you can't read this
@@ -239,10 +289,10 @@ begin
    end;
 end;
 
-procedure TxPLSettings.SetAppDetail(const aVendor, aDevice, aVersion: string);
+procedure TxPLRegistrySettings.SetAppDetail(const aVendor, aDevice, aVersion: string);
 begin
-   fRegistry.Access  := KEY_WRITE;
-   with fRegistry do try
+   Registry.Access := KEY_WRITE;
+   with Registry do try
       RootKey := HKEY_LOCAL_MACHINE;
       OpenKey(Format(K_XPL_FMT_APP_KEY,[aVendor,aDevice]),True);
       try
@@ -256,4 +306,4 @@ begin
    end;
 end;
 
-end.
+end.

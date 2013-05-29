@@ -150,10 +150,6 @@ begin
    edtSource.ReadOnly := AValue;
    cbMsgType.ReadOnly := AValue;
    cbMsgType.Enabled  := not AValue;
-//   cbTarget.ReadOnly := aValue;
-//   cbMsgType.Enabled  := cbMsgType.Enabled;
-//   cbSchema.ReadOnly := aValue;
-//   cbMsgType.Enabled  := cbMsgType.Enabled;
 end;
 
 procedure TTMessageFrame.SetTargets(const aValue: TStringList);

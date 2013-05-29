@@ -14,21 +14,25 @@ uses Classes
 
 type // TIPAddress ============================================================
      TIPAddress = class(TObject)
+        fIntName : string;                                                     // interface name eth0, lo, wlan0...
+        fHWAddr : string;                                                      // Hardware address
         fIdIPAddress : TIdIPAddress;
-        fNetMask : string;
-        fBroadCast : string;
-        fAddrClass : string;
-        fPrefix : integer;
+        fNetMask : string;                                                     // Netmask
+        fBroadCast : string;                                                   // broadcast address
      private
+        fPrefix: integer;
         function GetAddress: string;
+        procedure SetAddress(const aValue: string);
      public
-        constructor Create(const aIP : string);
+        constructor Create(const aIP : string); overload;
         destructor Destroy; override;
      published
-        property Address : string read GetAddress;
+        property Address : string read GetAddress write SetAddress;
         property BroadCast : string read fBroadCast write fBroadCast;
         property NetMask : string read fNetMask write fNetMask;
         property Prefix : integer read fPrefix write fPrefix;
+        property IntName : string read fIntName write fIntName;
+        property HWAddr : string read fHWAddr write fHWAddr;
      end;
 
      // TIPAddresses ==========================================================
@@ -39,6 +43,7 @@ type // TIPAddress ============================================================
      public
         constructor Create;
         function GetByIP(const aIP : string) : TIPAddress;
+        function GetByIntName(const aInterface : string) : TIPAddress;
      end;
 
      function LocalIPAddresses : TIPAddresses;
@@ -47,7 +52,6 @@ type // TIPAddress ============================================================
 // ============================================================================
 implementation
 uses Process
-     , StrUtils
      , RegExpr
      ;
 
@@ -60,12 +64,6 @@ begin
       fLocalAddresses := TIPAddresses.Create;
    end;
    Result := fLocalAddresses;
-end;
-
-// ============================================================================
-function MakeBroadCast(const aAddress : string) : string;                      // transforms a.b.c.d in a.b.c.255
-begin                                                                          // approximative, but works on small cases like in home automation
-   result := LeftStr(aAddress,LastDelimiter('.',aAddress)) + '255';
 end;
 
 // TIPAddress =================================================================
@@ -83,7 +81,15 @@ end;
 
 function TIPAddress.GetAddress: string;
 begin
-   Result := fIdIPAddress.IPAsString;
+   Result := '';
+   if Assigned(fIdIPAddress) then
+      Result := fIdIPAddress.IPAsString;
+end;
+
+procedure TIPAddress.SetAddress(const aValue: string);
+begin
+   if not Assigned(fIdIPAddress) then
+      fIdIPAddress := TIdIPAddress.MakeAddressObject(aValue);
 end;
 
 // TIPAddresses ===============================================================
@@ -102,9 +108,18 @@ begin
        if o.Address = aIP then Result := o;
 end;
 
+function TIPAddresses.GetByIntName(const aInterface: string): TIPAddress;
+var o : TIPAddress;
+begin
+   Result := nil;
+   for o in Self do
+       if o.IntName = aInterface then Result := o;
+end;
+
 procedure TIPAddresses.BuildList;
 {$ifndef mswindows}
 var proc : TProcess;
+    bContinue : boolean;
     slOutput : TStringList;
     re : TRegExpr;
     s : string;
@@ -112,31 +127,41 @@ var proc : TProcess;
 {$endif}
 begin
 {$ifdef mswindows}
-   TIdStack.IncUsage;
+   TIdStack.IncUsage;                                                          // as of now, this has to be adapted under windows
    aStringList.Assign(GStack.LocalAddresses);
 {$else}
    proc := TProcess.Create(nil);
+   slOutput := TStringList.Create;
+   re := TRegExpr.Create;
+   proc.Executable := 'ifconfig';
+   proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
+
    try
-      slOutput := TStringList.Create;
-      try
-         proc.Executable := 'ifconfig';
-         proc.Options := proc.Options + [poWaitOnExit, poUsePipes, poNoConsole,poStderrToOutput];
+      proc.Execute;                                                           // collect all network interfaces and hardware addresses
+      slOutput.LoadFromStream(proc.Output);
+      re.Expression := '(.*?) .*?HWaddr (.*?) ';
+      for s in slOutput do
+          if re.Exec(s) then begin
+             address := TIPAddress.Create;
+             address.HWAddr := re.Match[2];
+             address.IntName:= re.Match[1];
+             Add(address);
+          end;
+
+      for address in Self do begin
+         proc.Parameters.Text:=Address.IntName;
          proc.Execute;
          slOutput.LoadFromStream(proc.Output);
-         re := TRegExpr.Create;
          re.Expression := ' (.*?):([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) (.*?):([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}) (.*?):([0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})';
-         for s in slOutput do
-             if re.Exec(s) then begin
-                address := TIPAddress.Create(re.Match[2]);
-                address.NetMask := re.Match[6];
-                address.BroadCast := re.Match[4];
-                Add(address);
-             end;
-      finally
-         slOutput.Free;
-         re.Free;
+         if re.Exec(slOutput.Text) then begin
+            Address.Address :=re.Match[2];
+            Address.NetMask := re.Match[6];
+            Address.BroadCast := re.Match[4];
+         end;
       end;
    finally
+      re.Free;
+      slOutput.Free;
       proc.Free;
    end;
 {$endif}
