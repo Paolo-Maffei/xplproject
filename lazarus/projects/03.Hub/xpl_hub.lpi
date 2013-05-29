@@ -33,7 +33,7 @@
     <RunParams>
       <local>
         <FormatVersion Value="1"/>
-        <CommandLineParams Value="-v"/>
+        <CommandLineParams Value="-v -i eth0"/>
         <LaunchingApplication PathPlusParams="\usr\X11R6\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
       </local>
     </RunParams>
@@ -42,17 +42,12 @@
         <PackageName Value="sup_object"/>
       </Item1>
     </RequiredPackages>
-    <Units Count="2">
+    <Units Count="1">
       <Unit0>
         <Filename Value="xpl_hub.lpr"/>
         <IsPartOfProject Value="True"/>
         <UnitName Value="xpl_hub"/>
       </Unit0>
-      <Unit1>
-        <Filename Value="..\..\..\..\..\..\..\usr\lib\codetyphon\fpcsrc\packages\fcl-base\src\fptimer.pp"/>
-        <IsPartOfProject Value="True"/>
-        <UnitName Value="fpTimer"/>
-      </Unit1>
     </Units>
   </ProjectOptions>
   <CompilerOptions>
