@@ -28,7 +28,7 @@ type TMessageList = specialize TFPGObjectList<TxPLMessage>;
 
         OnMessage   : TxPLReceivedEvent;
 
-        constructor Create; reintroduce;
+        constructor Create(const aOwner: TComponent); reintroduce;
         destructor  Destroy; override;
 
      public
@@ -44,9 +44,9 @@ uses u_xpl_messages
      ;
 
 // TLoggerListener =============================================================
-constructor TLoggerListener.Create;
+constructor TLoggerListener.Create(const aOwner: TComponent);
 begin
-   inherited Create(nil);
+   inherited Create(aOwner);
    fMessageList := TMessageList.Create;
    fMessageList.FreeObjects:=true;
    OnPreProcessMsg := @OnPreprocessMessage;

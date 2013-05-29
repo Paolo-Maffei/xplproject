@@ -107,7 +107,7 @@ type // TfrmLogger  ===========================================================
   public
     procedure ApplySettings(Sender: TObject);
     procedure OnJoinedEvent; override;
-    Procedure FPOObservedChanged(ASender : TObject; Operation : TFPObservedOperation; Data : Pointer);
+    Procedure FPOObservedChanged(ASender : TObject; Operation : TFPObservedOperation; {%H-}Data : Pointer);
   end;
 
 var frmLogger: TfrmLogger;
