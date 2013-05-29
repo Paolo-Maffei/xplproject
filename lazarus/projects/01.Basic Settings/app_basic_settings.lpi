@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="2"/>
+      <BuildNr Value="3"/>
       <StringTable CompanyName="clinique" ProductName="xPL Basic Settings" InternalName="basicset" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
