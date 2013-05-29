@@ -20,7 +20,7 @@ uses
 begin
    Application.Initialize;
 
-   xPLApplication := TLoggerListener.Create;
+   xPLApplication := TLoggerListener.Create(Application);
    Application.CreateForm(TfrmLogger, frmLogger);
    Application.CreateForm(TfrmLoggerConfig,frmLoggerConfig);
    Application.Icon := FrmLogger.Icon;
