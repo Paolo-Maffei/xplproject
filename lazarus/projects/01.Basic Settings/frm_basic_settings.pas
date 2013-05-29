@@ -40,6 +40,7 @@ implementation //==============================================================
 uses StrUtils
      , u_xpl_gui_resource
      , u_xpl_application
+     , u_xpl_settings
      , lin_win_compat
      , uIP
      ;
@@ -96,7 +97,7 @@ end;
 
 procedure TfrmBasicSettings.acSaveSettingsExecute(Sender: TObject);
 begin
-   with xPLApplication.Settings do begin
+   with TxPLRegistrySettings(xPLApplication.Settings) do begin
         BroadCastAddress := e_BroadCast.text;
         ListenOnAll := (e_ListenOn.Text = K_ALL_IPS_JOCKER);
         if not ListenOnAll then ListenOnAddress := e_ListenOn.Text;
@@ -107,7 +108,7 @@ begin
              2 : ListenToAddresses := edtListenTo.Text;
         end;
         ShowMessage(COMMENT_LINE);
-        InitComponent;                                                         // Reload the xPLApplication settings
+        //InitComponent;                                                         // Reload the xPLApplication settings
    end;
 end;
 
