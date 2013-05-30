@@ -18,9 +18,8 @@ unit u_xpl_custom_listener;
  1.03 : Added detection of lost xPL network connectivity
 }
 
-{$ifdef fpc}
-{$mode objfpc}{$H+}{$M+}
-{$endif}
+{$i xpl.inc}
+{$M+}
 
 interface
 
@@ -86,16 +85,12 @@ type TxPLReceivedEvent = procedure(const axPLMsg: TxPLMessage) of object;
         end;
 
 implementation // =============================================================
-
 uses u_xpl_schema
      , u_xpl_messages
-     , CustApp
      ;
 
-const K_MSG_BIND_OK = 'Listening on %s:%u';
-      K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
+const K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
       K_MSG_CONFIG_WRITEN = 'Configuration saved to %s';
-      K_MSG_IP_ERROR = 'Socket unable to bind to IP Addresses';
       K_MSG_UDP_ERROR = 'Unable to initialize incoming UDP server';
       K_MSG_CONFIG_RECEIVED = 'Config received from %s and saved';
       K_MSG_CONF_ERROR = 'Badly formed or incomplete config information received';
@@ -147,24 +142,18 @@ begin
 end;
 
 procedure TxPLCustomListener.Listen;
-var i : integer;
 begin
    try
       IncomingSocket := TAppServer.Create(self);
-      if IncomingSocket.Active then begin                                      // Lets be sure we found an address to bind to
-         IncomingSocket.OnReceived := {$ifdef fpc}@{$endif}UDPRead;
-         Connection := TxPLConnHandler.Create(self);
-         for i:=0 to Pred(IncomingSocket.Bindings.Count) do
-             Log(etInfo, K_MSG_BIND_OK, [IncomingSocket.Bindings[i].IP,IncomingSocket.Bindings[i].Port]);
-
-         if not FileExists(fCfgFName) then SaveConfig;
-         UpdateConfig;
-         ConnectionStatus := discovering;
-      end else
-         Log(etError, K_MSG_IP_ERROR);
    except
       Log(etError, K_MSG_UDP_ERROR);
    end;
+
+   IncomingSocket.OnReceived := {$ifdef fpc}@{$endif}UDPRead;
+   Connection := TxPLConnHandler.Create(self);
+   if not FileExists(fCfgFName) then SaveConfig;
+   UpdateConfig;
+   ConnectionStatus := discovering;
 end;
 
 procedure TxPLCustomListener.NoAnswerReceived(Sender: TObject);                // This procedure is called by the probing

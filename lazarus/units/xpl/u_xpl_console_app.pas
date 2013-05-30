@@ -1,6 +1,6 @@
 unit u_xpl_console_app;
 
-{$mode objfpc}
+{$i xpl.inc}
 
 interface
 
@@ -24,7 +24,6 @@ uses Keyboard
 
 const K_STR_1 = 'Quitting the application...';
       K_STR_2 = 'Press "q" to quit.';
-
 
 // TxPLConsoleApp =============================================================
 procedure TxPLConsoleApp.DoRun;

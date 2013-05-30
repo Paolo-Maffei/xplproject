@@ -111,9 +111,9 @@ const     TSensorTypeLib : array[TSensorType] of string = ( 'undefined', 'batter
                             'speed',     'temp',     'uv',    'voltage', 'volume',
                             'weight','presence' );
 
- TSensorUnits : Array[TSensorType] of String = ('','%','','A','°','m','kWh','rpm',
-                                             '','%','','','kW','N/m²','°C','mph',
-                                             '°C','','V','m3','kg','');
+ TSensorUnits : Array[TSensorType] of String = ('','%','','A','Deg','m','kWh','rpm',
+                                             '','%','','','kW','N/m2','DegC','mph',
+                                             'DegC','','V','m3','kg','');
 type TSensorBasic = class(TxPLMessage)
      private
        function Get_Device : string;

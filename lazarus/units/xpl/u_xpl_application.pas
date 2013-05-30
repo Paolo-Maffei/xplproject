@@ -1,8 +1,7 @@
 unit u_xpl_application;
 
-{$ifdef fpc}
-   {$mode objfpc}{$H+}{$M+}
-{$endif}
+{$i xpl.inc}
+{$M+}
 
 interface
 
@@ -59,16 +58,14 @@ uses lin_win_compat
      ;
 
 // ============================================================================
-const K_FULL_TITLE = '%s v%s by %s (build %s)';
-//      K_STOP_INSTANCE = 'Stopping %s is already running';
+const AppTitle = '%s v%s by %s (build %s)'{$IFDEF DEBUG} + ' - DEBUG' {$ENDIF};
 
 // TxPLAppFramework ===========================================================
 constructor TxPLApplication.Create(const aOwner : TComponent);
 begin
-   if not (aOwner is TCustomApplication) then
-      Raise Exception.Create('Owner must be TCustomApplication');
-
    inherited Create(aOwner);
+   Assert(aOwner is TCustomApplication,'Owner must be TCustomApplication type');
+
    include(fComponentStyle,csSubComponent);
 
    fAdresse := TxPLAddress.Create(GetVendor,GetDevice);
@@ -115,7 +112,7 @@ end;
 
 function TxPLApplication.FullTitle : string;
 begin
-   Result := Format(K_FULL_TITLE,[AppName,fVersion,Adresse.Vendor,BuildDate]);
+   Result := Format(AppTitle,[AppName,fVersion ,Adresse.Vendor,BuildDate]);
 end;
 
 function TxPLApplication.SettingsFile: string;

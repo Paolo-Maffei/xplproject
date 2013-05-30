@@ -13,9 +13,7 @@ unit u_xpl_settings;
         if we don't have enough rights
  }
 
-{$ifdef fpc}
-{$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
 
 interface
 
@@ -158,18 +156,15 @@ end;
 procedure TxPLCommandLineSettings.InitComponent;
 var AddrObj : TIPAddress = nil;
     OptionValue : string;
-    app : TCustomApplication;
-
 begin
    OptionValue := TxPLApplication(Owner).Application.GetOptionValue('i');
    AddrObj := LocalIPAddresses.GetByIntName(OptionValue);
-   if not Assigned(AddrObj) then
-      Raise Exception.Create('Invalid network interface specified in -i parameter')
-   else begin
+   if Assigned(AddrObj) and AddrObj.IsValid then begin
       fBroadCastAddress := AddrObj.BroadCast;
       fListenOnAddress := AddrObj.Address;
       fListenToAddresses := K_XPL_SETTINGS_NETWORK_ANY;
-   end;
+   end else
+      TxPLApplication(Owner).Log(etError,'Invalid interface name specified (%s)',[OptionValue]);
 end;
 
 // TxPLRegistrySettings =======================================================

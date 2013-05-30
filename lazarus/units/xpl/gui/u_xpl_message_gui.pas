@@ -9,7 +9,7 @@ unit u_xpl_message_GUI;
         functions
  }
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 
 interface
 
