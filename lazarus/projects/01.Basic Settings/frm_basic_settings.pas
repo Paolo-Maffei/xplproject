@@ -1,15 +1,15 @@
 unit frm_basic_settings;
 
-{$mode objfpc}{$H+}
+{$i xPL.inc}
 {$R *.lfm}
 
 interface
 
-uses Classes, SysUtils, RTTICtrls, LSControls, LResources, Forms,
-  Controls, Graphics, Dialogs, ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList,
-  Buttons, frm_template;
+uses Classes, SysUtils, RTTICtrls, LSControls, LResources, Forms, Controls,
+     Graphics, Dialogs, ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons,
+     frm_template;
 
-type { TfrmBasicSettings =====================================================}
+type // TfrmBasicSettings =====================================================
      TfrmBasicSettings = class(TFrmTemplate)
         btnSave: TLSBitBtn;
         FrmAcSave: TAction;

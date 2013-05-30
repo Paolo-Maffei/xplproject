@@ -1,25 +1,19 @@
 program xpl_sender;
 
-{$mode objfpc}{$H+}
-{$DEFINE FPC}
-{$IFDEF UNIX} {$DEFINE UseCThreds} {$ENDIF}
+{$i xpl.inc}
 {$R *.res}
 
 
-uses
-  {$IFDEF UNIX}
-     {$IFDEF UseCThreads}
-     cthreads,
+uses {$IFDEF DEBUG}
+        heaptrc,
      {$ENDIF}
-  {$ENDIF}
-  Interfaces,
-  Forms, pl_kcontrols, pl_rx, pl_excontrols
-  , u_xpl_application
-  , u_xpl_sender
-  , u_xpl_message_GUI
-  ;
+     {$IFDEF UNIX}
+        cthreads,
+     {$ENDIF}
+  Interfaces, Forms, pl_luicontrols, pl_kcontrols, pl_excontrols,
+  pl_rx, pl_lnetcomp, u_xpl_application, u_xpl_sender, u_xpl_message_GUI;
 
-var  xPLMessageGUI : TxPLMessageGUI;
+var xPLMessageGUI : TxPLMessageGUI;
 
 begin
    Application.Initialize;
@@ -37,4 +31,4 @@ begin
    xPLMessageGUI.Destroy ;
 
 end.
-
+
