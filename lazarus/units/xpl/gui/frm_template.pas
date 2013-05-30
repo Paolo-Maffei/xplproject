@@ -1,6 +1,6 @@
 unit frm_template;
 
-{$mode objfpc}{$H+}
+{$i xPL.inc}
 {$r *.lfm}
 
 interface
@@ -47,7 +47,6 @@ type // TFrmTemplate ==========================================================
      end;
 
 implementation // =============================================================
-
 uses frm_xplappslauncher
      , dlg_config
      , lcltype

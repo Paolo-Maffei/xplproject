@@ -6,9 +6,8 @@ unit u_xpl_udp_socket;
  ==============================================================================
  }
 
-{$ifdef fpc}
-{$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
+{$M+}
 
 interface
 
@@ -87,6 +86,8 @@ const K_SENDING_TEMPO = 50;                                                    /
       XPL_UDP_BASE_PORT= 3865;
       K_SIZE_ERROR    = '%s : message size (%d bytes) exceeds xPL limit (%d bytes)';
       K_USING_DEFAULT = 'xPL network settings not set, using defaults';
+      K_MSG_IP_ERROR = 'Socket unable to bind to IP Addresses';
+      K_MSG_BIND_OK = 'Listening on %s:%u';
 
 // TxPLUDPClient ==============================================================
 procedure TxPLUDPClient.InitComponent;
@@ -171,6 +172,7 @@ begin
 
    try
       Active := (Bindings.Count > 0);
+      if not Active then xPLApplication.Log(etError,K_MSG_IP_ERROR);
    except
       On E : Exception do xPLApplication.Log(etError,E.Message);
    end;
@@ -193,13 +195,15 @@ begin
 end;
 
 procedure TxPLUDPServer.AfterBind(Sender: TObject);
+var socket : TCollectionItem;
 begin
-   xPLApplication.Log(etInfo,'Connected',[]);;
+   For socket in Bindings do with TIdSocketHandle(socket) do
+       xPLApplication.Log(etInfo, K_MSG_BIND_OK, [IP,Port]);
 end;
 
 procedure TxPLUDPServer.BeforeBind(AHandle: TIdSocketHandle);
 begin
-   xPLApplication.Log(etInfo,'Binding on %s:%d',[aHandle.IP,aHandle.ClientPortMin]);
+   xPLApplication.Log(etInfo,'Binding on %s:[%d-%d]',[aHandle.IP,aHandle.ClientPortMin,aHandle.ClientPortMax]);
 end;
 
 end.

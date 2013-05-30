@@ -9,9 +9,7 @@
   C:\pp\packages\fcl-base\src\ dans les paths du projet
   }
 
-{$ifdef fpc}
-{$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
 
 interface
 

@@ -6,8 +6,8 @@ unit frm_XMLView;
 interface
 
 uses Classes, SysUtils, LResources, Forms, Controls, Graphics, Dialogs,
-  ActnList, ExtCtrls, SynHighlighterXML, SynEdit, SynHighlighterAny,
-  LSControls, dlg_template;
+     ActnList, ExtCtrls, SynHighlighterXML, SynEdit, SynHighlighterAny,
+     LSControls, dlg_template;
 
 type // TfrmXMLView ===========================================================
      TfrmXMLView = class(TDlgTemplate)
