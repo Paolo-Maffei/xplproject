@@ -1,6 +1,6 @@
 unit frm_logger;
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 {$r *.lfm}
 
 interface
@@ -352,6 +352,7 @@ var anode1, anode2 : TTreeNode;
     s : string;
 begin
   Application.ProcessMessages;
+  Assert(Assigned(FrmLoggerConfig));
 
   if (FrmLoggerConfig.ckFilter.Checked) and (FrmLoggerConfig.mmoFilter.Lines.IndexOf(axPLMessage.Schema.RawxPL) <> -1) then exit;
 

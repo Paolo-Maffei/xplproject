@@ -18,7 +18,7 @@
       <AutoIncrementBuild Value="True"/>
       <MajorVersionNr Value="4"/>
       <MinorVersionNr Value="5"/>
-      <BuildNr Value="3"/>
+      <BuildNr Value="4"/>
       <StringTable CompanyName="clinique" ProductName="xPL Basic Settings" InternalName="basicset" ProductVersion=""/>
     </VersionInfo>
     <BuildModes Count="1">
@@ -79,7 +79,7 @@
     <Version Value="11"/>
     <PathDelim Value="\"/>
     <SearchPaths>
-      <IncludeFiles Value="..\..\units\xpl\res\pictures"/>
+      <IncludeFiles Value="..\..\units\xpl\res\pictures;..\..\units\xpl"/>
       <OtherUnitFiles Value="..\..\units\xpl\gui;..\..\units\xpl\xml;..\..\units\general;..\..\units\xpl;..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc"/>
       <UnitOutputDirectory Value="\home\glhopital\lazout"/>
     </SearchPaths>

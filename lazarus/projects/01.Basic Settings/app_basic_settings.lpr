@@ -1,7 +1,9 @@
 program app_basic_settings;
 
 uses cthreads
-     //, heaptrc                                                               // Debugging : find memory leaks
+     {$ifdef DEBUG}
+     , heaptrc
+     {$endif}
      , Forms
      , runtimetypeinfocontrols
      , pl_excontrols

@@ -1,6 +1,6 @@
 unit u_xpl_hub;
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 
 interface
 
@@ -35,34 +35,28 @@ uses SysUtils
      , CustApp
      , uIP
      , IdUDPClient
+     , u_xpl_common
      ;
 // ============================================================================
-const K_ERROR_SETTINGS = 'Network settings may not be set ';
-      K_ERROR_PORT     = 'Unabled to bind on port 3865 : a hub may already be present';
+const K_ERROR_PORT     = 'Unabled to bind on port 3865 : a hub may already be present';
       K_RELEASING      = 'No activity on port %s, released';
-      K_DISCOVERED     = 'Discovered %s %s on %s';
-      K_VERBOSE        = '%s => %s, %s';
+      K_DISCOVERED     = 'Adding client: %s:%s %s "%s"';
+      K_VERBOSE        = ' [%s/%s: %s -> %s %s]';
 
 // ============================================================================
 procedure TxPLHub.Start;                                                       // Two reason not to start :
 begin                                                                          //   First  : xPLSettings not set
    try                                                                         //   Second : XPL_UDP_BASE_PORT not free
       fInSocket := THubServer.Create(self);
-      if fInSocket.Active then begin
-         fInSocket.OnReceived := @UDPRead;
-
-         fMessage  := TxPLCustomMessage.Create(self);
-
-         fSocketList := TPortList.Create;
-         fSocketList.OwnsObjects := true;
-
-         xPLApplication.TimerPool.Add(60*1000, @OnTimer).StartTimer;           // By specification, check every minute
-      end
-      else
-         Log(etError,K_ERROR_SETTINGS);
    except
       Log(etError,K_ERROR_PORT,[]);
    end;
+   fInSocket.OnReceived := @UDPRead;
+   fMessage  := TxPLCustomMessage.Create(self);
+   fSocketList := TPortList.Create;
+   fSocketList.OwnsObjects := true;
+
+   xPLApplication.TimerPool.Add(60*1000, @OnTimer).StartTimer;           // By specification, check every minute
 end;
 
 destructor TxPLHub.Destroy;
@@ -72,13 +66,19 @@ begin
 end;
 
 procedure TxPLHub.UDPRead(const aString: string);
-var i  : integer;
+var i : integer;
 begin
    fMessage.RawXPL := aString;                                                 // Check if it is a heart beat
    if fMessage.IsLifeSign then HandleDevice(THeartBeatMsg(fMessage));          // if this is the case, see if I already recorded it
 
    if TCustomApplication(Owner).HasOption('v') then
-      writeln( Format(K_VERBOSE,[fMessage.source.RawxPL,fMessage.target.RawxPL,fMessage.schema.RawxPL]));
+      Log(etInfo,K_VERBOSE,[ MsgTypeToStr(fMessage.MessageType),
+                                  fMessage.schema.RawxPL,
+                                  fMessage.source.RawxPL,
+                                  fMessage.target.RawxPL,
+                                  fMessage.Body.Values.DelimitedText
+                                  ]);
+
 
    for i:=0 to Pred(fSocketList.Count) do
       TIdUDPClient(fSocketList.Objects[i]).Send(aString);                      // relaying the message
@@ -104,7 +104,7 @@ begin
              aSocket.Host:=remoteIP;
              aSocket.Port:=StrToInt(port);
              i := fSocketList.AddObject(port+'=',aSocket);
-             Log(etInfo,K_DISCOVERED,[aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL,port]);
+             Log(etInfo,K_DISCOVERED,[remoteIP,port, aHBeatMsg.AppName, aHBeatMsg.Source.RawxPL]);
           end;
           fSocketList.ValueFromIndex[i] := DateTimeToStr(Now + (aHBeatMsg.Interval * 2 +1)/(60*24));
        end;

@@ -1,54 +1,50 @@
 unit frm_vendor_files;
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 {$r *.lfm}
 
 interface
 
 uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
-  Dialogs, ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons,
-  XMLPropStorage, RTTICtrls, RxAboutDialog, LSControls, frm_template;
+     Dialogs, ExtCtrls, StdCtrls, ComCtrls, Menus, ActnList, Buttons,
+     XMLPropStorage, RTTICtrls, RxAboutDialog, LSControls, frm_template;
 
-type
-
-  { Tfrmvendorfiles }
-
-  Tfrmvendorfiles = class(TFrmTemplate)
-    acSelectAll: TAction;
-    acDeselect: TAction;
-    acInvert: TAction;
-    acDownload: TAction;
-    acUpdateList: TAction;
-    acViewXML: TAction;
-    cbLocations: TComboBox;
-    BtnDownload: TLSBitBtn;
-    Label1: TLabel;
-    lvPlugins: TListView;
-    MenuItem1: TMenuItem;
-    MenuItem2: TMenuItem;
-    MenuItem3: TMenuItem;
-    MenuItem4: TMenuItem;
-    MenuItem5: TMenuItem;
-    MenuItem6: TMenuItem;
-    MenuItem7: TMenuItem;
-    ClientZone: TPanel;
-    popPluginList: TPopupMenu;
-    ProgressBar1: TProgressBar;
-    StatusBar: TStatusBar;
-    ToolButton2: TToolButton;
-    ToolButton3: TToolButton;
-    procedure acDeselectExecute(Sender: TObject);
-    procedure acDownloadExecute(Sender: TObject);
-    procedure acInvertExecute(Sender: TObject);
-    procedure acReloadExecute(Sender: TObject);
-    procedure acSelectAllExecute(Sender: TObject);
-    procedure acUpdateListExecute(Sender: TObject);
-    procedure acViewXMLExecute(Sender: TObject);
-    procedure FormCreate(Sender: TObject);
-    procedure lvPluginsItemChecked(Sender: TObject; Item: TListItem);
-    procedure lvPluginsSelectItem(Sender: TObject; {%H-}Item: TListItem; {%H-}Selected: Boolean);
-
-  end; 
+type // Tfrmvendorfiles =======================================================
+     Tfrmvendorfiles = class(TFrmTemplate)
+       acSelectAll: TAction;
+       acDeselect: TAction;
+       acInvert: TAction;
+       acDownload: TAction;
+       acUpdateList: TAction;
+       acViewXML: TAction;
+       cbLocations: TComboBox;
+       BtnDownload: TLSBitBtn;
+       Label1: TLabel;
+       lvPlugins: TListView;
+       MenuItem1: TMenuItem;
+       MenuItem2: TMenuItem;
+       MenuItem3: TMenuItem;
+       MenuItem4: TMenuItem;
+       MenuItem5: TMenuItem;
+       MenuItem6: TMenuItem;
+       MenuItem7: TMenuItem;
+       ClientZone: TPanel;
+       popPluginList: TPopupMenu;
+       ProgressBar1: TProgressBar;
+       StatusBar: TStatusBar;
+       ToolButton2: TToolButton;
+       ToolButton3: TToolButton;
+       procedure acDeselectExecute(Sender: TObject);
+       procedure acDownloadExecute(Sender: TObject);
+       procedure acInvertExecute(Sender: TObject);
+       procedure acReloadExecute(Sender: TObject);
+       procedure acSelectAllExecute(Sender: TObject);
+       procedure acUpdateListExecute(Sender: TObject);
+       procedure acViewXMLExecute(Sender: TObject);
+       procedure FormCreate(Sender: TObject);
+       procedure lvPluginsItemChecked(Sender: TObject; Item: TListItem);
+       procedure lvPluginsSelectItem(Sender: TObject; {%H-}Item: TListItem; {%H-}Selected: Boolean);
+     end;
 
 var frmvendorfiles: Tfrmvendorfiles;
 
@@ -115,8 +111,7 @@ end;
 procedure Tfrmvendorfiles.acSelectAllExecute(Sender: TObject);
 var Item : TListItem;
 begin
-   for Item in lvPlugins.Items do
-      Item.Checked := true;
+   for Item in lvPlugins.Items do Item.Checked := true;
    lvPluginsItemChecked(self,nil);
 end;
 

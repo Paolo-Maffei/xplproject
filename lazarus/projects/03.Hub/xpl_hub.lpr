@@ -1,14 +1,14 @@
 program xpl_hub;
 
-{$ifdef fpc}
-   {$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
 {$R *.res}
 
-uses //heaptrc,
+uses {$IFDEF DEBUG}
+        heaptrc,
+     {$ENDIF}
      {$IFDEF UNIX}
-           cthreads,
-           cwstring,
+        cthreads,
+        cwstring,
      {$ENDIF}
      u_xpl_hub
      , u_xpl_application
