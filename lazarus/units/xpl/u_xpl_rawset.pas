@@ -7,9 +7,7 @@ unit u_xpl_rawset;
  1.5  : Added fControlInput property to override read/write controls needed for OPC
  }
 
-{$ifdef fpc}
-   {$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
 
 interface
 

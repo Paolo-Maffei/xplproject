@@ -30,15 +30,16 @@ procedure TxPLConsoleApp.DoRun;
 begin
    inherited DoRun;
 
-   if (PollKeyEvent<>0) and (KeyEventToString(TranslateKeyEvent(GetKeyEvent)) = 'q')
-      then terminate;
+   if (PollKeyEvent<>0) and (KeyEventToString(TranslateKeyEvent(GetKeyEvent)) = 'q') then begin
+      xPLApplication.Log(etInfo,K_STR_1);
+      terminate;
+   end;
 
    CheckSynchronize(500);
 end;
 
 destructor TxPLConsoleApp.Destroy;
 begin
-   xPLApplication.Log(etInfo,K_STR_1);
    DoneKeyboard;
 
    inherited Destroy;
@@ -50,10 +51,19 @@ end;
 
 procedure TxPLConsoleApp.Run;
 begin
-   InitKeyboard;
-   xPLApplication.Log(etInfo,K_STR_2);
-
-   inherited Run;
+   if HasOption('h') then begin
+      writeln ('Usage:');
+      writeln (chr(9),Exename, ' [flags] [options]');
+      writeln (chr(9),'where valid flags are:');
+      writeln (chr(9),'  -h        - show this help text');
+      writeln (chr(9),'  -v        - verbose mode');
+      writeln (chr(9),'and valid options are (default shown in brackets):');
+      writeln (chr(9),'  -i if0    - the interface for xPL messages');
+   end else begin
+      InitKeyboard;
+      xPLApplication.Log(etInfo,K_STR_2);
+      inherited Run;
+   end;
 end;
 
 end.

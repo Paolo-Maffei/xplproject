@@ -2,9 +2,7 @@
 
 // These classes handle specific class of messages and their behaviour
 
-{$ifdef fpc}
-   {$mode objfpc}{$H+}
-{$endif}
+{$i xpl.inc}
 
 interface
 
@@ -20,82 +18,111 @@ type // THeartBeatMsg =========================================================
 
      TOsdBasic = class(TxPLMessage)
      private
-       function Get_Column: integer;
-       function Get_Command: string;
-       function Get_Delay: integer;
-       function Get_Row: integer;
-       function Get_Text: string;
-       procedure Set_Column(const AValue: integer);
-       procedure Set_Command(const AValue: string);
-       procedure Set_Delay(const AValue: integer);
-       procedure Set_Row(const AValue: integer);
-       procedure Set_Text(const AValue: string);
+       function GetColumn: integer;
+       function GetCommand: string;
+       function GetDelay: integer;
+       function GetRow: integer;
+       function GetText: string;
+       procedure SetColumn(const AValue: integer);
+       procedure SetCommand(const AValue: string);
+       procedure SetDelay(const AValue: integer);
+       procedure SetRow(const AValue: integer);
+       procedure SetText(const AValue: string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      published
-        property Command : string read Get_Command write Set_Command;
-        property Text  : string read Get_Text write Set_Text;
-        property Row  : integer read Get_Row write Set_Row;
-        property Column  : integer read Get_Column write Set_Column;
-        property Delay : integer read Get_Delay write Set_Delay;
+        property Command : string read GetCommand write SetCommand;
+        property Text  : string read GetText write SetText;
+        property Row  : integer read GetRow write SetRow;
+        property Column  : integer read GetColumn write SetColumn;
+        property Delay : integer read GetDelay write SetDelay;
      end;
 
      { TLogBasic }
 
-     TLogBasic = class(TxPLMessage)
+     { TDawnDuskBasic }
+     TDawnDuskStatusType = (dawn,dusk,noon);
+     TDayNightStatusType = (day,night);
+
+     { TDawnDuskBasicTrig }
+
+     TDawnDuskBasicTrig = class(TxPLMessage)
      private
-       function Get_Code: string;
-       function Get_Text: string;
-       function Get_Type: TEventType;
-       procedure Set_Code(const AValue: string);
-       procedure Set_Text(const AValue: string);
-       procedure Set_Type(const AValue: TEventType);
+       function GetStatus: TDawnDuskStatusType;
+       procedure SetStatus(aValue: TDawnDuskStatusType);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      published
-        property Type_ : TEventType read Get_Type write Set_Type;
-        property Text  : string read Get_Text write Set_Text;
-        property Code  : string read Get_Code write Set_Code;
+        property Status  : TDawnDuskStatusType read GetStatus write SetStatus;
+     end;
+
+     { TDawnDuskBasicStat }
+
+     TDawnDuskBasicStat = class(TxPLMessage)
+     private
+       function GetStatus: TDayNightStatusType;
+       procedure SetStatus(aValue: TDayNightStatusType);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Status  : TDayNightStatusType read GetStatus write SetStatus;
+     end;
+
+
+     TLogBasic = class(TxPLMessage)
+     private
+       function GetCode: string;
+       function GetText: string;
+       function GetType: TEventType;
+       procedure SetCode(const AValue: string);
+       procedure SetText(const AValue: string);
+       procedure SetType(const AValue: TEventType);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Type_ : TEventType read GetType write SetType;
+        property Text  : string read GetText write SetText;
+        property Code  : string read GetCode write SetCode;
      end;
 
      TSendmsgBasic = class(TxPLMessage)
      private
-       function Get_Text: string;
-       function Get_To: string;
-       procedure Set_Text(const AValue: string);
-       procedure Set_To(const AValue: string);
+       function GetText: string;
+       function GetTo: string;
+       procedure SetText(const AValue: string);
+       procedure SetTo(const AValue: string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      published
-        property Text  : string read Get_Text write Set_Text;
-        property To_  : string read Get_To write Set_To;
+        property Text  : string read GetText write SetText;
+        property To_  : string read GetTo write SetTo;
      end;
 
      { TReceiveMsgBasic }
 
      TReceiveMsgBasic = class(TSendmsgBasic)
      private
-       function Get_From: string;
-       procedure Set_From(AValue: string);
+       function GetFrom: string;
+       procedure SetFrom(AValue: string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      published
-        property From : string read Get_From write Set_From;
+        property From : string read GetFrom write SetFrom;
      end;
 
      { TTimerBasic }
 
      TTimerBasic = class(TxPLMessage)
      private
-       function Get_Device : string;
-       function Get_Current : string;
-       procedure Set_Current(const AValue: string);
-       procedure Set_Device(const aValue : string);
+       function GetDevice : string;
+       function GetCurrent : string;
+       procedure SetCurrent(const AValue: string);
+       procedure SetDevice(const aValue : string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      published
-        property Device  : string read Get_Device write Set_Device;
-        property Current : string read Get_Current write Set_Current;
+        property Device  : string read GetDevice write SetDevice;
+        property Current : string read GetCurrent write SetCurrent;
      end;
 
      { TSensorBasic }
@@ -116,22 +143,22 @@ const     TSensorTypeLib : array[TSensorType] of string = ( 'undefined', 'batter
                                              'DegC','','V','m3','kg','');
 type TSensorBasic = class(TxPLMessage)
      private
-       function Get_Device : string;
-       function Get_Current : string;
-       function Get_Type : TSensorType;
-       function Get_Units: string;
-       procedure Set_Type(const AValue: TSensorType);
-       procedure Set_Current(const AValue: string);
-       procedure Set_Device(const aValue : string);
-       procedure Set_Units(const AValue: string);
+       function GetDevice : string;
+       function GetCurrent : string;
+       function GetType : TSensorType;
+       function GetUnits: string;
+       procedure SetType(const AValue: TSensorType);
+       procedure SetCurrent(const AValue: string);
+       procedure SetDevice(const aValue : string);
+       procedure SetUnits(const AValue: string);
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
         function SensorName : string;
      published
-        property Device  : string read Get_Device write Set_Device;
-        property Current : string read Get_Current write Set_Current;
-        property Type_  : TSensorType read Get_Type write Set_Type;
-        property Units : string read Get_Units write Set_Units;
+        property Device  : string read GetDevice write SetDevice;
+        property Current : string read GetCurrent write SetCurrent;
+        property Type_  : TSensorType read GetType write SetType;
+        property Units : string read GetUnits write SetUnits;
      end;
 
 
@@ -167,13 +194,13 @@ type     TConfigMessageFamily = class(TxPLMessage)
      private
         fMultiValued : TStringList;
 
-        function Get_Filters : TStringList;
-        function Get_Groups : TStringList;
+        function GetFilters : TStringList;
+        function GetGroups : TStringList;
         procedure Read_Multivalued(const aListIndex : integer);
-        function  get_interval: integer;
-        function  get_newconf: string;
-        procedure set_interval(const AValue: integer);
-        procedure set_newconf(const AValue: string);
+        function  Getinterval: integer;
+        function  Getnewconf: string;
+        procedure Setinterval(const AValue: integer);
+        procedure Setnewconf(const AValue: string);
         function  GetMultiValued(const aValue : string) : TStringList;
         procedure SlChanged(Sender : TObject);
      public
@@ -181,10 +208,10 @@ type     TConfigMessageFamily = class(TxPLMessage)
         destructor  Destroy; override;
         function  IsCoreValue(const aIndex : integer) : boolean;
      published
-        property newconf : string read get_newconf write set_newconf stored false;
-        property interval: integer read get_interval write set_interval stored false;
-        property filters : TStringList read Get_Filters stored false; //write Set_Filters stored false;
-        property groups  : TStringList read Get_Groups stored false; // write Set_Groups stored false;
+        property newconf : string read Getnewconf write Setnewconf stored false;
+        property interval: integer read Getinterval write Setinterval stored false;
+        property filters : TStringList read GetFilters stored false; //write SetFilters stored false;
+        property groups  : TStringList read GetGroups stored false; // write SetGroups stored false;
      end;
 
      TConfigCurrentStat = class(TConfigResponseCmnd)
@@ -204,29 +231,41 @@ type     TConfigMessageFamily = class(TxPLMessage)
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
      end;
 
+     { TDawnDuskReq }
+
+     TDawnDuskReq = class(TxPLMessage)
+     private
+        function GetQuery: string;
+        procedure SetQuery(aValue: string);
+     public
+        constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
+     published
+        property Query : string read GetQuery write SetQuery;
+     end;
+
      THeartBeatMsg = class(TxPLMessage)
      private
-        function  Get_AppName: string;
-        function  Get_Interval: integer;
-        function  Get_port: integer;
-        function  Get_remote_ip: string;
-        function  Get_Version: string;
-        procedure Set_AppName(const AValue: string);
-        procedure Set_Interval(const AValue: integer);
-        procedure Set_port(const AValue: integer);
-        procedure Set_remote_ip(const AValue: string);
-        procedure Set_Version(const AValue: string);
+        function  GetAppName: string;
+        function  GetInterval: integer;
+        function  Getport: integer;
+        function  Getremote_ip: string;
+        function  GetVersion: string;
+        procedure SetAppName(const AValue: string);
+        procedure SetInterval(const AValue: integer);
+        procedure Setport(const AValue: integer);
+        procedure Setremote_ip(const AValue: string);
+        procedure SetVersion(const AValue: string);
 
      public
         constructor Create(const aOwner: TComponent; const aRawxPL : string = ''); reintroduce;
         procedure   Send;
 
      published
-        property interval : integer read Get_Interval  write Set_Interval;
-        property port     : integer read Get_port      write Set_port;
-        property remote_ip: string  read Get_remote_ip write Set_remote_ip;
-        property appname  : string  read Get_AppName   write Set_AppName;
-        property version  : string  read Get_Version   write Set_Version;
+        property interval : integer read GetInterval  write SetInterval;
+        property port     : integer read Getport      write Setport;
+        property remote_ip: string  read Getremote_ip write Setremote_ip;
+        property appname  : string  read GetAppName   write SetAppName;
+        property version  : string  read GetVersion   write SetVersion;
      end;
 
      // TFragmentReq ==========================================================
@@ -237,20 +276,19 @@ type     TConfigMessageFamily = class(TxPLMessage)
      end;
 
      TFragmentReqMsg = class(TFragmentMsg)
-
      private
-        function Get_Message: integer;
-        function Get_Parts: IntArray;
-        procedure Set_Message(const AValue: integer);
-        procedure Set_Parts(const AValue: IntArray);
+        function GetMessage: integer;
+        function GetParts: IntArray;
+        procedure SetMessage(const AValue: integer);
+        procedure SetParts(const AValue: IntArray);
 
      public
         constructor Create(const aOwner : TComponent); overload;
 
         procedure AddPart(const aPart : integer);
      published
-        property Parts : IntArray read Get_Parts write Set_Parts;
-        property Message : integer read Get_Message write Set_Message;
+        property Parts : IntArray read GetParts write SetParts;
+        property Message : integer read GetMessage write SetMessage;
      end;
 
      { TFragmentBasicMsg }
@@ -259,9 +297,9 @@ type     TConfigMessageFamily = class(TxPLMessage)
      private
         fPartNum, fPartMax, fUniqueId : integer;
 
-        procedure Set_PartMax(const AValue: integer);
-        procedure Set_PartNum(const AValue: integer);
-        procedure Set_UniqueId(const AValue: integer);
+        procedure SetPartMax(const AValue: integer);
+        procedure SetPartNum(const AValue: integer);
+        procedure SetUniqueId(const AValue: integer);
 
         procedure ReadPartIdElements;
         procedure WritePartIdElements;
@@ -273,9 +311,9 @@ type     TConfigMessageFamily = class(TxPLMessage)
         function    ToMessage  : TxPLMessage;
         function    IsValid    : boolean; reintroduce;
 
-        property    PartNum  : integer read fPartNum  write Set_PartNum;
-        property    PartMax  : integer read fPartMax  write Set_PartMax;
-        property    UniqueId : integer read fUniqueId write Set_UniqueId;
+        property    PartNum  : integer read fPartNum  write SetPartNum;
+        property    PartMax  : integer read fPartMax  write SetPartMax;
+        property    UniqueId : integer read fUniqueId write SetUniqueId;
      end;
 
      function MessageBroker(const aRawxPL : string) : TxPLMessage;
@@ -284,6 +322,7 @@ type     TConfigMessageFamily = class(TxPLMessage)
 implementation
 
 uses StrUtils
+     , TypInfo
      , u_xpl_schema
      , u_xpl_sender
      , u_xpl_custom_listener
@@ -323,6 +362,12 @@ begin
    else if
      (aMsg.Schema.Equals(Schema_ConfigCurr)) and (aMsg.MessageType = stat) then result := TConfigCurrentStat.Create(nil,aRawxPL)
    else if
+     (aMsg.Schema.Equals(Schema_DDBasic)) and (aMsg.MessageType = trig) then result := TDawnDuskBasicTrig.Create(nil,aRawxPL)
+   else if
+     (aMsg.Schema.Equals(Schema_DDBasic)) and (aMsg.MessageType = stat) then result := TDawnDuskBasicStat.Create(nil,aRawxPL)
+     else if
+     (aMsg.Schema.Equals(Schema_DDRequest)) and (aMsg.MessageType = cmnd) then result := TDawnDuskReq.Create(nil,aRawxPL)
+   else if
      aMsg.Schema.RawxPL = 'log.basic' then result := TLogBasic.Create(nil,aRawxPL)
    else if
      aMsg.Schema.RawxPL = 'osd.basic' then result := TOsdBasic.Create(nil,aRawxPL)
@@ -339,23 +384,101 @@ begin
    if result<>aMsg then aMsg.Free;
 end;
 
+{ TDawnDuskBasicStat }
+
+function TDawnDuskBasicStat.GetStatus: TDayNightStatusType;
+begin
+   if Body.GetValueByKey('status')='day' then Result := day
+   else if Body.GetValueByKey('status')='night' then Result := night;
+end;
+
+procedure TDawnDuskBasicStat.SetStatus(aValue: TDayNightStatusType);
+begin
+   case aValue of
+        day : Body.SetValueByKey('status','day');
+        night : Body.SetValueByKey('status','night');
+   end;
+end;
+
+constructor TDawnDuskBasicStat.Create(const aOwner: TComponent;
+   const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.Assign(Schema_DDBasic);
+      Target.IsGeneric := True;
+      MessageType      := stat;
+      Body.AddKeyValuePairs( ['type','status'],['daynight','']);
+   end;
+end;
+
+{ TDawnDuskReq }
+
+function TDawnDuskReq.GetQuery: string;
+begin
+   Result := Body.GetValueByKey('query');
+end;
+
+procedure TDawnDuskReq.SetQuery(aValue: string);
+begin
+   Body.SetValueByKey('query',aValue);
+end;
+
+constructor TDawnDuskReq.Create(const aOwner: TComponent; const aRawxPL: string
+   );
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.Assign(Schema_DDRequest);
+      Target.IsGeneric := True;
+      MessageType      := cmnd;
+      Body.AddKeyValuePairs( ['command','query'],['status','daynight']);
+   end;
+end;
+
+{ TDawnDuskBasicTrig }
+
+function TDawnDuskBasicTrig.GetStatus: TDawnDuskStatusType;
+var s : string;
+begin
+   s := Body.GetValueByKey('status');
+   if s = 'dawn' then Result := dawn
+   else if s ='dusk' then Result := dusk;
+end;
+
+procedure TDawnDuskBasicTrig.SetStatus(aValue: TDawnDuskStatusType);
+begin
+   Body.SetValueByKey('status',GetEnumName(TypeInfo(TDawnDuskStatusType),Ord(aValue)));
+end;
+
+constructor TDawnDuskBasicTrig.Create(const aOwner: TComponent; const aRawxPL: string);
+begin
+   inherited Create(aOwner,aRawxPL);
+   if aRawxPL='' then begin
+      Schema.Assign(Schema_DDBasic);
+      Target.IsGeneric := True;
+      MessageType      := trig;
+      Body.AddKeyValuePairs( ['type','status'],['dawndusk','']);
+   end;
+end;
+
 { TTimerBasic }
-function TTimerBasic.Get_Device: string;
+function TTimerBasic.GetDevice: string;
 begin
    result := Body.GetValueByKey('device','');
 end;
 
-function TTimerBasic.Get_Current: string;
+function TTimerBasic.GetCurrent: string;
 begin
    result := Body.GetValueByKey('current','');
 end;
 
-procedure TTimerBasic.Set_Current(const AValue: string);
+procedure TTimerBasic.SetCurrent(const AValue: string);
 begin
    Body.SetValueByKey('current',aValue);
 end;
 
-procedure TTimerBasic.Set_Device(const AValue: string);
+procedure TTimerBasic.SetDevice(const AValue: string);
 begin
    Body.SetValueByKey('device',aValue);
 end;
@@ -477,12 +600,12 @@ begin
    inherited Destroy;
 end;
 
-function TConfigResponseCmnd.Get_Filters : TStringList;
+function TConfigResponseCmnd.GetFilters : TStringList;
 begin
    result := GetMultiValued('filter');
 end;
 
-function TConfigResponseCmnd.Get_Groups : TStringList;
+function TConfigResponseCmnd.GetGroups : TStringList;
 begin
    result := GetMultiValued('group');
 end;
@@ -536,22 +659,22 @@ begin
    aSL.EndUpdate;
 end;
 
-function TConfigResponseCmnd.get_interval: integer;
+function TConfigResponseCmnd.Getinterval: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey('interval',''),-1);
 end;
 
-function TConfigResponseCmnd.get_newconf: string;
+function TConfigResponseCmnd.Getnewconf: string;
 begin
    result := Body.GetValueByKey('newconf','');
 end;
 
-procedure TConfigResponseCmnd.set_interval(const AValue: integer);
+procedure TConfigResponseCmnd.Setinterval(const AValue: integer);
 begin
    Body.SetValueByKey('interval',IntToStr(aValue));
 end;
 
-procedure TConfigResponseCmnd.set_newconf(const AValue: string);
+procedure TConfigResponseCmnd.Setnewconf(const AValue: string);
 begin
    Body.SetValueByKey('newconf',aValue);
 end;
@@ -579,17 +702,17 @@ begin
    result := Device;
 end;
 
-function TSensorBasic.Get_Device: string;
+function TSensorBasic.GetDevice: string;
 begin
    result := Body.GetValueByKey('device','');
 end;
 
-procedure TSensorBasic.Set_Device(const AValue: string);
+procedure TSensorBasic.SetDevice(const AValue: string);
 begin
    Body.SetValueByKey('device',aValue);
 end;
 
-function TSensorBasic.Get_Type: TSensorType;
+function TSensorBasic.GetType: TSensorType;
 var s : string;
     i : integer;
 begin
@@ -599,35 +722,35 @@ begin
    Result := TSensorType(i);
 end;
 
-procedure TSensorBasic.Set_Type(const AValue: TSensorType);
+procedure TSensorBasic.SetType(const AValue: TSensorType);
 var {%H-}foo : string;
 begin
    Body.SetValueByKey('type',TSensorTypeLib[aValue]);
-   foo := Get_Units;                                                           // Will set the default unit for current value
+   foo := GetUnits;                                                           // Will set the default unit for current value
 end;
 
-function TSensorBasic.Get_Current: string;
+function TSensorBasic.GetCurrent: string;
 begin
    result := Body.GetValueByKey('current','');
 end;
 
-procedure TSensorBasic.Set_Current(const AValue: string);
+procedure TSensorBasic.SetCurrent(const AValue: string);
 begin
    Body.SetValueByKey('current',aValue);
 end;
 
-procedure TSensorBasic.Set_Units(const AValue: string);
+procedure TSensorBasic.SetUnits(const AValue: string);
 begin
    Body.SetValueByKey('units',aValue);
 end;
 
-function TSensorBasic.Get_Units: string;
+function TSensorBasic.GetUnits: string;
 begin
    result := Body.GetValueByKey('units','');
    if AnsiSameText(result,'') then begin                                       // Si aucune unité indiquée, on renvoie celle par
       result  := TSensorUnits[Type_];                                          // défaut pour le type courant
       if not AnsiSameText(result,'') then
-         Set_Units(result);                                                    // on indique l'unité dans le body au passage
+         SetUnits(result);                                                    // on indique l'unité dans le body au passage
    end;
 end;
 
@@ -643,22 +766,22 @@ begin
    end;
 end;
 
-function TSendmsgBasic.Get_To: string;
+function TSendmsgBasic.GetTo: string;
 begin
    result := Body.GetValueByKey('to','');
 end;
 
-function TSendmsgBasic.Get_Text: string;
+function TSendmsgBasic.GetText: string;
 begin
    result := Body.GetValueByKey('body');
 end;
 
-procedure TSendmsgBasic.Set_Text(const AValue: string);
+procedure TSendmsgBasic.SetText(const AValue: string);
 begin
    Body.SetValueByKey('body',aValue);
 end;
 
-procedure TSendmsgBasic.Set_To(const AValue: string);
+procedure TSendmsgBasic.SetTo(const AValue: string);
 begin
    Body.SetValueByKey('to',aValue);
 end;
@@ -675,12 +798,12 @@ begin
    end;
 end;
 
-function TReceiveMsgBasic.Get_From: string;
+function TReceiveMsgBasic.GetFrom: string;
 begin
    result := Body.GetValueByKey('from','');
 end;
 
-procedure TReceiveMsgBasic.Set_From(AValue: string);
+procedure TReceiveMsgBasic.SetFrom(AValue: string);
 begin
    Body.SetValueByKey('from',aValue);
 end;
@@ -697,85 +820,85 @@ begin
    end;
 end;
 
-function TLogBasic.Get_Code: string;
+function TLogBasic.GetCode: string;
 begin
    result := Body.GetValueByKey('code','');
 end;
 
-function TLogBasic.Get_Text: string;
+function TLogBasic.GetText: string;
 begin
    result := Body.GetValueByKey('text');
 end;
 
-function TLogBasic.Get_Type: TEventType;
+function TLogBasic.GetType: TEventType;
 begin
    result := xPLLevelToEventType(Body.GetValueByKey('type'));
 end;
 
-procedure TLogBasic.Set_Code(const AValue: string);
+procedure TLogBasic.SetCode(const AValue: string);
 begin
    Body.SetValueByKey('code',aValue);
 end;
 
-procedure TLogBasic.Set_Text(const AValue: string);
+procedure TLogBasic.SetText(const AValue: string);
 begin
    Body.SetValueByKey('text',aValue);
 end;
 
-procedure TLogBasic.Set_Type(const AValue: TEventType);
+procedure TLogBasic.SetType(const AValue: TEventType);
 begin
    Body.SetValueByKey('type',EventTypeToxPLLevel(aValue));
 end;
 
 { TOsdBasic }
 
-function TOsdBasic.Get_Column: integer;
+function TOsdBasic.GetColumn: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey('column'),0);
 end;
 
-function TOsdBasic.Get_Command: string;
+function TOsdBasic.GetCommand: string;
 begin
    result := Body.GetValueByKey('command','write');
 end;
 
-function TOsdBasic.Get_Delay: integer;
+function TOsdBasic.GetDelay: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey('delay'),-1);
 end;
 
-function TOsdBasic.Get_Row: integer;
+function TOsdBasic.GetRow: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey('row'),0);
 end;
 
-function TOsdBasic.Get_Text: string;
+function TOsdBasic.GetText: string;
 begin
    result := Body.GetValueByKey('text');
 end;
 
-procedure TOsdBasic.Set_Column(const AValue: integer);
+procedure TOsdBasic.SetColumn(const AValue: integer);
 begin
    Body.SetValueByKey('column',IntToStr(aValue));
 end;
 
-procedure TOsdBasic.Set_Command(const AValue: string);
+procedure TOsdBasic.SetCommand(const AValue: string);
 begin
    Body.SetValueByKey('command',aValue);
 end;
 
-procedure TOsdBasic.Set_Delay(const AValue: integer);
+procedure TOsdBasic.SetDelay(const AValue: integer);
 begin
-   if Get_Delay=-1 then Body.AddKeyValue('delay=');
+   if GetDelay=-1 then Body.AddKeyValue('delay=');
    Body.SetValueByKey('delay',IntToStr(aValue));
 end;
 
-procedure TOsdBasic.Set_Row(const AValue: integer);
+procedure TOsdBasic.SetRow(const AValue: integer);
 begin
    Body.SetValueByKey('row',IntToStr(aValue));
 end;
 
-procedure TOsdBasic.Set_Text(const AValue: string);
+procedure TOsdBasic.SetText(const AValue: string);
 begin
    Body.SetValueByKey('text',aValue);
 end;
@@ -813,21 +936,21 @@ begin
    end;
 end;
 
-procedure TFragBasicMsg.Set_PartMax(const AValue: integer);
+procedure TFragBasicMsg.SetPartMax(const AValue: integer);
 begin
    if aValue = fPartMax then exit;
    fPartMax := aValue;
    WritePartIdElements;
 end;
 
-procedure TFragBasicMsg.Set_PartNum(const AValue: integer);
+procedure TFragBasicMsg.SetPartNum(const AValue: integer);
 begin
    if aValue = fPartNum then exit;
    fPartNum := aValue;
    WritePartIdElements;
 end;
 
-procedure TFragBasicMsg.Set_UniqueId(const AValue: integer);
+procedure TFragBasicMsg.SetUniqueId(const AValue: integer);
 begin
    if aValue = fUniqueId then exit;
    fUniqueId := aValue;
@@ -894,12 +1017,12 @@ begin
    Body.AddKeyValuePairs( ['command',K_FRAGREQ_ME_MESSAGE], ['resend','']);
 end;
 
-function TFragmentReqMsg.Get_Message: integer;
+function TFragmentReqMsg.GetMessage: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey(K_FRAGREQ_ME_MESSAGE),-1);
 end;
 
-function TFragmentReqMsg.Get_Parts: IntArray;
+function TFragmentReqMsg.GetParts: IntArray;
 var i : integer;
 
 begin
@@ -911,7 +1034,7 @@ begin
        end;
 end;
 
-procedure TFragmentReqMsg.Set_Message(const AValue: integer);
+procedure TFragmentReqMsg.SetMessage(const AValue: integer);
 begin
    Body.SetValueByKey(K_FRAGREQ_ME_MESSAGE,IntToStr(aValue));
 end;
@@ -921,7 +1044,7 @@ begin
    Body.AddKeyValue('part=' + IntToStr(aPart));
 end;
 
-procedure TFragmentReqMsg.Set_Parts(const AValue: IntArray);
+procedure TFragmentReqMsg.SetParts(const AValue: IntArray);
 var i : integer;
 begin
    for i:=low(aValue) to high(aValue) do AddPart(aValue[i]);
@@ -965,53 +1088,53 @@ begin
       TxPLSender(Owner).Send(self);
 end;
 
-function THeartBeatMsg.Get_AppName: string;
+function THeartBeatMsg.GetAppName: string;
 begin
    result := Body.GetValueByKey('appname','');
 end;
 
-function THeartBeatMsg.Get_Interval: integer;
+function THeartBeatMsg.GetInterval: integer;
 begin
    result := StrToIntDef(Body.GetValueByKey(K_HBEAT_ME_INTERVAL),MIN_HBEAT);
 end;
 
-function THeartBeatMsg.Get_port: integer;
+function THeartBeatMsg.Getport: integer;
 begin
    Assert(Body.GetValueByKey(K_HBEAT_ME_PORT,'')<>'');
    result := StrToIntDef(Body.GetValueByKey(K_HBEAT_ME_PORT),-1);
 end;
 
-function THeartBeatMsg.Get_remote_ip: string;
+function THeartBeatMsg.Getremote_ip: string;
 begin
    result := Body.GetValueByKey(K_HBEAT_ME_REMOTEIP);
 end;
 
-function THeartBeatMsg.Get_Version: string;
+function THeartBeatMsg.GetVersion: string;
 begin
    result := Body.GetValueByKey('version','');
 end;
 
-procedure THeartBeatMsg.Set_AppName(const AValue: string);
+procedure THeartBeatMsg.SetAppName(const AValue: string);
 begin
    Body.SetValueByKey('appname',aValue);
 end;
 
-procedure THeartBeatMsg.Set_Interval(const AValue: integer);
+procedure THeartBeatMsg.SetInterval(const AValue: integer);
 begin
    Body.SetValueByKey(K_HBEAT_ME_INTERVAL,IntToStr(aValue));
 end;
 
-procedure THeartBeatMsg.Set_port(const AValue: integer);
+procedure THeartBeatMsg.Setport(const AValue: integer);
 begin
    Body.SetValueByKey(K_HBEAT_ME_PORT,IntToStr(aValue));
 end;
 
-procedure THeartBeatMsg.Set_remote_ip(const AValue: string);
+procedure THeartBeatMsg.Setremote_ip(const AValue: string);
 begin
    Body.SetValueByKey(K_HBEAT_ME_REMOTEIP,aValue);
 end;
 
-procedure THeartBeatMsg.Set_Version(const AValue: string);
+procedure THeartBeatMsg.SetVersion(const AValue: string);
 begin
    Body.SetValueByKey('version',aValue);
 end;
