@@ -1,13 +1,16 @@
 program xpl_balloon;
 
+{$i xpl.inc}
+
 uses
   {$IFDEF UNIX}
   cthreads,
   {$ENDIF}
+//  heaptrc,
   {$IFNDEF CONSOLE_APP}
      Interfaces, // this includes the LCL widgetset
      Forms, pl_rx, runtimetypeinfocontrols, pl_excontrols,
-     frm_balloon,
+     pl_luicontrols, frm_balloon,
   {$ENDIF}
      xplnotifier,
      SysUtils,
@@ -22,15 +25,11 @@ uses
 
 begin
    Application.Initialize;
-   Application.ShowMainForm:=false;
 
-   xPLApplication := TxPLCustomListener.Create(nil);
-   xPLGUIResource := TxPLGUIResource.Create;
-
+   xPLApplication := TxPLCustomListener.Create(Application);
    Application.CreateForm(TFrmBalloon, FrmBalloon);
    Application.Run;
 
-   xPLGUIResource.Free;
    xPLApplication.Free;
 end.
 

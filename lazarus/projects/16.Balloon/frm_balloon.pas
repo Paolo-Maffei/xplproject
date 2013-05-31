@@ -4,36 +4,32 @@ unit frm_balloon;
 
 interface
 
-uses
-  Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics, Dialogs,
-  ComCtrls, Menus, ExtCtrls, ActnList, Grids, RTTICtrls, fpTimer, xplNotifier,
-  u_xpl_message, frm_template;
+uses Classes, SysUtils, FileUtil, LResources, Forms, Controls, Graphics,
+  Dialogs, ComCtrls, Menus, ExtCtrls, ActnList, Grids, Buttons, PopupNotifier,
+  XMLPropStorage, RTTICtrls, fpTimer, u_xpl_message, frm_template,
+  fpc_delphi_compat;
 
-type
-
-  { TFrmBalloon }
-
-  TFrmBalloon = class(TFrmTemplate)
-    acDisplayMessageWindow: TAction;
-    dgMessages: TStringGrid;
-    TrayIcon1: TTrayIcon;
-    procedure acDisplayWindow(Sender : TObject);
-    procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; {%H-}aState: TGridDrawState);
-    procedure FormCreate(Sender: TObject);
-    procedure FormDestroy(Sender: TObject);
-    procedure XMLPropStorageRestoreProperties(Sender: TObject);
-  private
-    MessageQueue : TStringList;
-    lockedby     : string;
-    fTimer       : TfpTimer;
-    fNotifier    : TxPLPopupNotifier;
-    procedure Display(const aTitle, aText : string; const aLevel : TEventType; const bTimed : boolean = true; const aDelay : integer = -1);
-  public
-    procedure OnTimer(Sender: TObject);
-    procedure OnReceive(const axPLMsg: TxPLMessage);
-    procedure CheckQueue;
-    procedure Display(aMessage : string);
-  end;
+type // TFrmBalloon ===========================================================
+     TFrmBalloon = class(TFrmTemplate)
+        acDisplayMessageWindow: TAction;
+        dgMessages: TStringGrid;
+        btnClear: TToolButton;
+        PopupNotifier1: TPopupNotifier;
+        procedure btnClearClick(Sender: TObject);
+        procedure dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; {%H-}aState: TGridDrawState);
+        procedure FormCreate(Sender: TObject);
+        procedure FormDestroy(Sender: TObject);
+     private
+        MessageQueue : TStringList;
+        lockedby     : string;
+        fTimer       : TxPLTimer;
+        procedure Display(const aTitle, aText : string; const aLevel : TEventType; const bTimed : boolean = true; const aDelay : integer = -1);
+     public
+        procedure OnTimer(Sender: TObject);
+        procedure OnReceive(const axPLMsg: TxPLMessage);
+        procedure CheckQueue;
+        procedure Display(aMessage : string);
+     end;
 
 var
   FrmBalloon: TFrmBalloon;
@@ -48,6 +44,7 @@ uses uxPLConst
      , u_xpl_common
      , u_xpl_messages
      , StrUtils
+     , typInfo
      ;
 
 // ============================================================================
@@ -61,10 +58,7 @@ begin
    inherited;
    MessageQueue := TStringList.Create;
 
-   fTimer       := TfpTimer.Create(self);
-   fTimer.OnTimer:=@OnTimer;
-
-   fNotifier    := TxPLPopupNotifier.Create(self);
+   fTimer := xPLApplication.TimerPool.Add(0,@OnTimer);
 
    with TxPLCustomListener(xPLApplication) do begin
      OnxPLReceived:=@OnReceive;
@@ -74,23 +68,31 @@ begin
      Listen;
    end;
 
-   TrayIcon1.Visible := True;
+//   TrayIcon1.Visible := True;
 
    aMenu := TMenuItem.Create(self);
    aMenu.Action := acDisplayMessageWindow;
-   xPLMenu.Items.Insert(0,aMenu);
+   xPLMenu.Insert(0,aMenu);
 
-   AppButton.Visible:=false;
+   AppMenu.Visible:=false;
+   btnClear.ImageIndex := 4;
 
    dgMessages.Columns[0].Width := 130;
    dgMessages.Columns[1].Width := 50;
    dgMessages.Columns[2].Width := 150;
    dgMessages.Columns[3].Width := 300;
+   Display('Started',xPLApplication.FullTitle,etInfo)
 end;
 
-procedure TFrmBalloon.acDisplayWindow(Sender: TObject);
+procedure TFrmBalloon.btnClearClick(Sender: TObject);
+var i : integer;
+    aMsg : TxPLMessage;
 begin
-   Self.Visible := acDisplayMessageWindow.Checked;
+   for i:=1 to dgMessages.Rowcount-1 do begin
+       aMsg := dgMessages.Objects[0,i] as TxPLMessage;
+       aMsg.Free;
+   end;
+   dgMessages.RowCount := 1;
 end;
 
 procedure TFrmBalloon.dgMessagesDrawCell(Sender: TObject; aCol, aRow: Integer; aRect: TRect; aState: TGridDrawState);
@@ -119,21 +121,15 @@ end;
 
 procedure TFrmBalloon.FormDestroy(Sender: TObject);
 begin
-    fTimer.Free;
-    fNotifier.Free;
+    btnClearClick(self);
     MessageQueue.Free;
     inherited;
-end;
-
-procedure TFrmBalloon.XMLPropStorageRestoreProperties(Sender: TObject);
-begin
-    acDisplayWindow(self);
 end;
 
 
 procedure TFrmBalloon.OnTimer(Sender : TObject);
 begin
-   fNotifier.Hide;
+   popupnotifier1.Hide;
    fTimer.Enabled:=false;
    CheckQueue;
 end;
@@ -167,15 +163,15 @@ end;
 
 procedure TFrmBalloon.Display(const aTitle, aText : string; const aLevel : TEventType; const bTimed : boolean = true; const aDelay: integer = -1);
 begin
-   fNotifier.Title := aTitle;
-   fNotifier.Text  := AnsiReplaceStr(aText,'\n',#13#10);
-   fNotifier.level := aLevel;
+   popupnotifier1.Text:= AnsiReplaceStr(aText,'\n',#13#10);;
+   popupnotifier1.Title:=aTitle;
+   popupnotifier1.Icon.LoadFromLazarusResource(GetEnumName(TypeInfo(TEventType),Ord(aLevel)));
+   popupnotifier1.Show;
    if bTimed then begin
       if aDelay = -1 then fTimer.Interval := StrToInt(TxPLCustomListener(xPLApplication).Config.GetItemValue(K_CONFIG_SHOWSEC)) * 1000
                      else fTimer.Interval := aDelay * 1000;
       fTimer.StartTimer;
    end;
-   fNotifier.Show;
 end;
 
 procedure TFrmBalloon.OnReceive(const axPLMsg: TxPLMessage);
@@ -183,7 +179,6 @@ var code, initialmessage : string;
     Broked : TxPLMessage;
     bHandled, bTimed : boolean;
 begin
-   acDisplayWindow(self);
    initialmessage := axPLMsg.RawxPL;
    bHandled := false;
    Broked   := MessageBroker(initialmessage);
@@ -238,4 +233,4 @@ initialization
   {$I frm_balloon.lrs}
 
 end.
-
+
