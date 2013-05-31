@@ -9,9 +9,8 @@ unit u_xPL_Schema;
  3.00 : Descendent from TPersistent
 }
 
-{$ifdef fpc}
-   {$mode objfpc}{$H+}{$M+}
-{$endif}
+{$i xpl.inc}
+{$M+}
 
 interface
 
@@ -35,6 +34,8 @@ type // TxPLSchema ============================================================
 var  // Core xPL Schema ======================================================
      Schema_ConfigApp,
      Schema_ConfigCurr,
+     Schema_DDBasic,
+     Schema_DDRequest,
      Schema_ConfigList,
      Schema_ConfigResp,
      Schema_HBeatApp,
@@ -76,15 +77,17 @@ end;
 initialization // =============================================================
    Classes.RegisterClass(TxPLSchema);
 
-   Schema_ConfigApp    := TxPLSchema.Create('config','app');
-   Schema_HBeatApp     := TxPLSchema.Create('hbeat','app');
-   Schema_HBeatEnd     := TxPLSchema.Create('hbeat','end');
-   Schema_HBeatReq     := TxPLSchema.Create('hbeat','request');
-   Schema_ConfigCurr   := TxPLSchema.Create('config','current');
-   Schema_ConfigList   := TxPLSchema.Create('config','list');
-   Schema_ConfigResp   := TxPLSchema.Create('config','response');
-   Schema_FragBasic    := TxPLSchema.Create('fragment','basic');
-   Schema_FragReq      := TxPLSchema.Create('fragment','request');
+   Schema_ConfigApp  := TxPLSchema.Create('config','app');
+   Schema_HBeatApp   := TxPLSchema.Create('hbeat','app');
+   Schema_HBeatEnd   := TxPLSchema.Create('hbeat','end');
+   Schema_HBeatReq   := TxPLSchema.Create('hbeat','request');
+   Schema_ConfigCurr := TxPLSchema.Create('config','current');
+   Schema_ConfigList := TxPLSchema.Create('config','list');
+   Schema_ConfigResp := TxPLSchema.Create('config','response');
+   Schema_FragBasic  := TxPLSchema.Create('fragment','basic');
+   Schema_FragReq    := TxPLSchema.Create('fragment','request');
+   Schema_DDBasic    := TxPLSchema.Create('dawndusk','basic');
+   Schema_DDRequest  := TxPLSchema.Create('dawndusk','request');
 
 finalization // ===============================================================
    Schema_ConfigApp.Free;
@@ -96,5 +99,7 @@ finalization // ===============================================================
    Schema_HBeatReq.Free;
    Schema_FragBasic.Free;
    Schema_FragReq.Free;
+   Schema_DDBasic.Free;
+   Schema_DDRequest.Free;
 
 end.

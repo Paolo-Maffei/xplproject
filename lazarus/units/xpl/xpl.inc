@@ -1,5 +1,9 @@
 {$DEFINE DEBUG}
 
+{$IFDEF UNIX}
+   {$DEFINE UseCThreads}
+{$ENDIF}
+
 {$IFDEF DEBUG}
    {$ASSERTIONS ON}
    {$OPTIMIZATION OFF}
@@ -14,4 +18,5 @@
 
 {$ifdef fpc}
    {$mode objfpc}{$H+}
+   {$COPERATORS ON}
 {$endif}
