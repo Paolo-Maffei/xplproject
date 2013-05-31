@@ -1,28 +1,29 @@
 program xpl_dawndusk;
 
-{$APPTYPE CONSOLE}
-{$mode objfpc}{$H+}
-
-uses
-  {$IFDEF UNIX}{$IFDEF UseCThreads}
-     cthreads,
-  {$ENDIF}{$ENDIF}
-     u_xpl_console_app,
-     dawndusk_listener;
-
+{$i xpl.inc}
 {$R *.res}
 
+uses {$IFDEF UseCThreads}
+     cthreads,
+     {$ENDIF}
+     {$IFDEF DEBUG}
+     heaptrc,
+     {$ENDIF}
+     u_xpl_console_app,
+     dawndusk_listener,
+     u_xpl_application
+     ;
+
 var MyDawnDuskApp : TxPLConsoleApp;
-    Listener : TxPLDawnDuskListener;
 
 begin
    MyDawnDuskApp := TxPLConsoleApp.Create(nil);
-   Listener := TxPLDawnDuskListener.Create(MyDawnDuskApp);
+   xPLApplication := TxPLDawnDuskListener.Create(MyDawnDuskApp);
 
-   MyDawnDuskApp.Title := Listener.AppName;
-   Listener.Listen;
+   MyDawnDuskApp.Title := xPLApplication.AppName;
+   TxPLDawnDuskListener(xPLApplication).Listen;
 
    MyDawnDuskApp.Run;
    MyDawnDuskApp.Free;
 end.
-
+

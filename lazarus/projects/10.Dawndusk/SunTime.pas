@@ -26,7 +26,8 @@ unit SunTime;
 interface
 
 uses
-  Windows,SysUtils, Classes;
+  //Windows,
+  SysUtils, Classes;
 
 type
 
@@ -810,4 +811,4 @@ begin
 end;
 
 end.
-
+
