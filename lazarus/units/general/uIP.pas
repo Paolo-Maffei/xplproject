@@ -1,8 +1,6 @@
 unit uIP;
 
-{$ifdef fpc}
-{$mode objfpc}{$H+}
-{$endif}
+{$i xPL.inc}
 
 interface
 
@@ -26,6 +24,7 @@ type // TIPAddress ============================================================
      public
         constructor Create(const aIP : string); overload;
         destructor Destroy; override;
+        function IsValid : boolean;
      published
         property Address : string read GetAddress write SetAddress;
         property BroadCast : string read fBroadCast write fBroadCast;
@@ -79,6 +78,11 @@ begin
    inherited;
 end;
 
+function TIPAddress.IsValid: boolean;
+begin
+   Result := (length(Address) * length(BroadCast)) <> 0
+end;
+
 function TIPAddress.GetAddress: string;
 begin
    Result := '';
@@ -119,7 +123,6 @@ end;
 procedure TIPAddresses.BuildList;
 {$ifndef mswindows}
 var proc : TProcess;
-    bContinue : boolean;
     slOutput : TStringList;
     re : TRegExpr;
     s : string;

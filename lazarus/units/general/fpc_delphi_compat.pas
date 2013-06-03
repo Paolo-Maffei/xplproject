@@ -1,7 +1,7 @@
 unit fpc_delphi_compat;
 
 {Unit holding behaviour differences between fpc and delphi}
-{$mode delphi}
+{$i xpl.inc}
 
 interface
 
