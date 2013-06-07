@@ -1,6 +1,6 @@
 unit frame_config;
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 {$r *.lfm}
 
 interface
@@ -118,4 +118,4 @@ begin
 end;
 
 end.
-
+
