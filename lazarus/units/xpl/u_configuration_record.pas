@@ -1,8 +1,8 @@
-// This unit is common to Configurator and Logger apps, listener object
+ // This unit is common to Configurator and Logger apps, listener object
 
 unit u_Configuration_Record;
 
-{$mode objfpc}{$H+}
+{$i xpl.inc}
 
 interface
 
@@ -24,6 +24,7 @@ type { TConfigurationRecord ==================================================}
     private
         fPlug_Detail: TDeviceType;
         fAddress    : TxPLAddress;
+        fInterval   : Integer;
         fLastHBeat  : TDateTime;
         fConfig     : TxPLCustomConfig;
         fDieAt      : TDateTime;
@@ -34,7 +35,8 @@ type { TConfigurationRecord ==================================================}
         function Get_XMLCfgAvail: boolean;
         procedure OnTimer({%h-}sender : TObject);
      public
-        constructor Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
+        constructor Create(const aOwner : TxPLApplication; const aAddress: TxPLAddress; const aDieProc : TNotifyEvent);
+        constructor Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);overload;
         destructor  Destroy; override;
 
         procedure HBeatReceived(const aHBeatMsg : THeartBeatMsg);
@@ -49,6 +51,7 @@ type { TConfigurationRecord ==================================================}
         property Plug_Detail  : TDeviceType      read fPlug_Detail;
         property WaitingConf  : boolean          read fWaitingConf  write fWaitingConf;
         property OnDied       : TNotifyEvent     read fOnDied       write fOnDied;
+        property Interval     : integer          read fInterval;
      end;
 
      TConfigurationRecordList = specialize TFPGMap<string,TConfigurationRecord>;
@@ -61,15 +64,14 @@ uses DateUtils,
      ;
 
 { TConfigurationRecord }
-constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
+constructor TConfigurationRecord.Create(const aOwner: TxPLApplication; const aAddress: TxPLAddress; const aDieProc : TNotifyEvent);
 begin
    inherited Create;
-   fAddress     := TxPLAddress.Create(aHBeatMsg.Source);
+   fAddress     := TxPLAddress.Create(aAddress);
    fConfig      := TxPLCustomConfig.Create(nil);
+   fPlug_Detail := aOwner.VendorFile.FindDevice(aAddress);
+   fInterval    := -1;
 
-   fPlug_Detail := aOwner.VendorFile.FindDevice(aHBeatMsg.source);
-
-   HBeatReceived(aHBeatMsg);
    fOnDied := aDieProc;
    if fOnDied<>nil then begin
       fTimer := xPLApplication.TimerPool.Add(60 * 1000, {$ifdef fpc}@{$endif}OnTimer);
@@ -77,11 +79,18 @@ begin
    end;
 end;
 
+constructor TConfigurationRecord.Create(const aOwner : TxPLApplication; const aHBeatMsg : THeartBeatMsg; const aDieProc : TNotifyEvent);
+begin
+   Create(aOwner,aHBeatMsg.Source,aDieProc);
+   HBeatReceived(aHBeatMsg);
+end;
+
 procedure TConfigurationRecord.HBeatReceived(const aHBeatMsg : THeartBeatMsg);
 begin
    fLastHBeat := now;
+   fInterval := aHBeatMsg.Interval;
    if not aHBeatMsg.Schema.Equals(Schema_HBeatEnd)
-      then fDieAt := IncMinute( fLastHBeat, 2 * Int64(Succ(aHBeatMsg.Interval))) // Defined by specifications as dead-line limit)
+      then fDieAt := IncMinute( fLastHBeat, 2 * Int64(Succ(Interval)))         // Defined by specifications as dead-line limit)
       else begin
         fDieAt := now;
         OnTimer(self);
@@ -91,7 +100,7 @@ end;
 
 destructor TConfigurationRecord.Destroy;
 begin
-   Address.Free;
+   fAddress.Free;
    fConfig.Free;
    inherited;
 end;
