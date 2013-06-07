@@ -87,6 +87,7 @@ type TxPLReceivedEvent = procedure(const axPLMsg: TxPLMessage) of object;
 implementation // =============================================================
 uses u_xpl_schema
      , u_xpl_messages
+     , u_xpl_application
      ;
 
 const K_MSG_CONFIG_LOADED = 'Configuration loaded for %s';
@@ -143,6 +144,7 @@ end;
 
 procedure TxPLCustomListener.Listen;
 begin
+   Assert(Assigned(xPLApplication),'Please instantiate your listener using xPLApplication');
    try
       IncomingSocket := TAppServer.Create(self);
    except
