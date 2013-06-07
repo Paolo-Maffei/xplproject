@@ -112,7 +112,7 @@ type TChoiceType = class(TCollectionItem)
         function  Get_Items(Index : integer) : TCommandType;
 
         property Items[Index : integer] : TCommandType read Get_Items; default;
-        property DV : string read fDV;
+        property DV : string read fDV;                                         // gives back vendor-device string
      end;
 
       { TConfigItemsType }
