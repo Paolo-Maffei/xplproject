@@ -8,6 +8,7 @@
       <Version Value="11"/>
       <PathDelim Value="\"/>
       <SearchPaths>
+        <IncludeFiles Value="..\..\xpl"/>
         <OtherUnitFiles Value="..\..\general;..;..\editors;..\..\general\ssversionchecker;..\..\xpl\gui;..\xml;..\..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc;..\..\..\..\..\..\development\3RDParty\indy-10.2.0.3\fpc\base"/>
         <UnitOutputDirectory Value="\home\glhopital\lazout"/>
       </SearchPaths>
@@ -65,7 +66,8 @@
       </Item2>
     </RequiredPkgs>
     <UsageOptions>
-      <UnitPath Value="$(PkgOutDir);..;."/>
+      <IncludePath Value="\home\glhopital\01.SourceSafe\08.Lazarus\SVN\units\xpl"/>
+      <UnitPath Value="$(PkgOutDir);\home\glhopital\01.SourceSafe\08.Lazarus\SVN\units\xpl\gui;\home\glhopital\01.SourceSafe\08.Lazarus\SVN\units\xpl\xml;\home\glhopital\01.SourceSafe\08.Lazarus\SVN\units\xpl;\home\glhopital\01.SourceSafe\08.Lazarus\SVN\units\general"/>
     </UsageOptions>
     <PublishOptions>
       <Version Value="2"/>
