@@ -1,0 +1,252 @@
+<?xml version="1.0"?>
+<CONFIG>
+  <ProjectOptions>
+    <Version Value="9"/>
+    <PathDelim Value="\"/>
+    <General>
+      <SessionStorage Value="InProjectDir"/>
+      <MainUnit Value="0"/>
+      <Title Value="xPLRFX"/>
+      <ResourceType Value="res"/>
+      <UseXPManifest Value="True"/>
+      <Icon Value="0"/>
+    </General>
+    <i18n>
+      <EnableI18N LFM="False"/>
+    </i18n>
+    <VersionInfo>
+      <UseVersionInfo Value="True"/>
+      <StringTable CompanyName="DHS" InternalName="xPLRFX" ProductName="xPLRFX" ProductVersion=""/>
+    </VersionInfo>
+    <BuildModes Count="1">
+      <Item1 Name="Default" Default="True"/>
+    </BuildModes>
+    <PublishOptions>
+      <Version Value="2"/>
+      <IncludeFileFilter Value="*.(pas|pp|inc|lfm|lpr|lrs|lpi|lpk|sh|xml)"/>
+      <ExcludeFileFilter Value="*.(bak|ppu|o|so);*~;backup"/>
+    </PublishOptions>
+    <RunParams>
+      <local>
+        <FormatVersion Value="1"/>
+        <LaunchingApplication PathPlusParams="\usr\bin\xterm -T 'Lazarus Run Output' -e $(LazarusDir)\tools\runwait.sh $(TargetCmdLine)"/>
+      </local>
+    </RunParams>
+    <RequiredPackages Count="2">
+      <Item1>
+        <PackageName Value="LazSerialPort"/>
+      </Item1>
+      <Item2>
+        <PackageName Value="LCL"/>
+      </Item2>
+    </RequiredPackages>
+    <Units Count="30">
+      <Unit0>
+        <Filename Value="xPLRFX.lpr"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="xPLRFX"/>
+      </Unit0>
+      <Unit1>
+        <Filename Value="main.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="MainForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="main"/>
+      </Unit1>
+      <Unit2>
+        <Filename Value="RFXUnits\uxPLRFX.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX"/>
+      </Unit2>
+      <Unit3>
+        <Filename Value="RFXUnits\uxPLRFXConst.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFXConst"/>
+      </Unit3>
+      <Unit4>
+        <Filename Value="RFXUnits\uxPLRFXMessages.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFXMessages"/>
+      </Unit4>
+      <Unit5>
+        <Filename Value="RFXUnits\uxPLRFX_0x10.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x10"/>
+      </Unit5>
+      <Unit6>
+        <Filename Value="RFXUnits\uxPLRFX_0x11.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x11"/>
+      </Unit6>
+      <Unit7>
+        <Filename Value="RFXUnits\uxPLRFX_0x12.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x12"/>
+      </Unit7>
+      <Unit8>
+        <Filename Value="RFXUnits\uxPLRFX_0x14.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x14"/>
+      </Unit8>
+      <Unit9>
+        <Filename Value="RFXUnits\uxPLRFX_0x15.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x15"/>
+      </Unit9>
+      <Unit10>
+        <Filename Value="RFXUnits\uxPLRFX_0x18.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x18"/>
+      </Unit10>
+      <Unit11>
+        <Filename Value="RFXUnits\uxPLRFX_0x19.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x19"/>
+      </Unit11>
+      <Unit12>
+        <Filename Value="RFXUnits\uxPLRFX_0x20.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x20"/>
+      </Unit12>
+      <Unit13>
+        <Filename Value="RFXUnits\uxPLRFX_0x28.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x28"/>
+      </Unit13>
+      <Unit14>
+        <Filename Value="RFXUnits\uxPLRFX_0x30.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x30"/>
+      </Unit14>
+      <Unit15>
+        <Filename Value="RFXUnits\uxPLRFX_0x50.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x50"/>
+      </Unit15>
+      <Unit16>
+        <Filename Value="RFXUnits\uxPLRFX_0x51.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x51"/>
+      </Unit16>
+      <Unit17>
+        <Filename Value="RFXUnits\uxPLRFX_0x52.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x52"/>
+      </Unit17>
+      <Unit18>
+        <Filename Value="RFXUnits\uxPLRFX_0x53.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x53"/>
+      </Unit18>
+      <Unit19>
+        <Filename Value="RFXUnits\uxPLRFX_0x54.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x54"/>
+      </Unit19>
+      <Unit20>
+        <Filename Value="RFXUnits\uxPLRFX_0x55.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x55"/>
+      </Unit20>
+      <Unit21>
+        <Filename Value="RFXUnits\uxPLRFX_0x56.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x56"/>
+      </Unit21>
+      <Unit22>
+        <Filename Value="RFXUnits\uxPLRFX_0x57.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x57"/>
+      </Unit22>
+      <Unit23>
+        <Filename Value="RFXUnits\uxPLRFX_0x58.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x58"/>
+      </Unit23>
+      <Unit24>
+        <Filename Value="RFXUnits\uxPLRFX_0x59.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x59"/>
+      </Unit24>
+      <Unit25>
+        <Filename Value="RFXUnits\uxPLRFX_0x5A.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x5A"/>
+      </Unit25>
+      <Unit26>
+        <Filename Value="RFXUnits\uxPLRFX_0x5B.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x5B"/>
+      </Unit26>
+      <Unit27>
+        <Filename Value="RFXUnits\uxPLRFX_0x5D.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x5D"/>
+      </Unit27>
+      <Unit28>
+        <Filename Value="RFXUnits\uxPLRFX_0x70.pas"/>
+        <IsPartOfProject Value="True"/>
+        <UnitName Value="uxPLRFX_0x70"/>
+      </Unit28>
+      <Unit29>
+        <Filename Value="about.pas"/>
+        <IsPartOfProject Value="True"/>
+        <ComponentName Value="AboutForm"/>
+        <HasResources Value="True"/>
+        <ResourceBaseClass Value="Form"/>
+        <UnitName Value="about"/>
+      </Unit29>
+    </Units>
+  </ProjectOptions>
+  <CompilerOptions>
+    <Version Value="11"/>
+    <PathDelim Value="\"/>
+    <Target>
+      <Filename Value="xPLRFX"/>
+    </Target>
+    <SearchPaths>
+      <IncludeFiles Value="$(ProjOutDir)"/>
+      <OtherUnitFiles Value="RFXUnits;..\..\RAD Studio\Projects\dhsv2\dhsv2constants\xplunits;C:\lazarus\fpc\2.6.2\indy\fpc\;..\..\sf_xplunits;..\..\sf_indy\fpc"/>
+      <UnitOutputDirectory Value="lib\$(TargetCPU)-$(TargetOS)"/>
+    </SearchPaths>
+    <CodeGeneration>
+      <SmartLinkUnit Value="True"/>
+    </CodeGeneration>
+    <Linking>
+      <Debugging>
+        <GenerateDebugInfo Value="False"/>
+        <UseLineInfoUnit Value="False"/>
+        <StripSymbols Value="True"/>
+      </Debugging>
+      <LinkSmart Value="True"/>
+      <Options>
+        <Win32>
+          <GraphicApplication Value="True"/>
+        </Win32>
+      </Options>
+    </Linking>
+    <Other>
+      <CompilerMessages>
+        <MsgFileName Value=""/>
+      </CompilerMessages>
+      <CompilerPath Value="$(CompPath)"/>
+    </Other>
+  </CompilerOptions>
+  <Debugging>
+    <Exceptions Count="4">
+      <Item1>
+        <Name Value="EAbort"/>
+      </Item1>
+      <Item2>
+        <Name Value="ECodetoolError"/>
+      </Item2>
+      <Item3>
+        <Name Value="EFOpenError"/>
+      </Item3>
+      <Item4>
+        <Name Value="Exception"/>
+      </Item4>
+    </Exceptions>
+  </Debugging>
+</CONFIG>
