@@ -227,6 +227,7 @@ Public Class xplhalMgrBase
                                     .[Operator] = xml.GetAttribute("operator")
                                     .Value = xml.GetAttribute("value")
                                 End With
+                                x.params.Add(newparams)
                             Case "globalCondition"
                                 ReDim Preserve Conditions(Conditions.Length)
                                 Conditions(Conditions.Length - 1) = New DeterminatorRule.DeterminatorCondition
